@@ -20,6 +20,7 @@
 
    Copyright, 1993, Brent Benson.  All Rights Reserved.
    0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
+   0.6 revisions copyright 2001, Douglas M. Auclair. All Rights Reserved.
 
    Permission to use, copy, and modify this software and its
    documentation is hereby granted only under the following terms and
@@ -36,7 +37,6 @@
 
 #include "object.h"
 
-/* void init_misc_prims (void); */
 Object make_eof_object (void);
 Object make_unspecified_object (void);
 Object make_uninit_slot (void);

@@ -20,6 +20,7 @@
 
    Copyright, 1993, Brent Benson.  All Rights Reserved.
    0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
+   0.6 revisions copyright 2001, Douglas M. Auclair. All Rights Reserved.
 
    Permission to use, copy, and modify this software and its
    documentation is hereby granted only under the following terms and
@@ -36,31 +37,11 @@
 #include "alloc.h"
 #include "prim.h"
 
-#ifdef PRE_REFACTORED
-static Object quit (void);
-
-static struct primitive misc_prims[] =
-{
-    {"quit", prim_0, quit},
-    {"bye", prim_0, quit},
-};
-
-void
-init_misc_prims (void)
-{
-  int num = sizeof (misc_prims) / sizeof (struct primitive);
-  init_prims (num, misc_prims);
-}
-#endif
-
 Object
 make_eof_object (void)
 {
 #ifndef SMALL_OBJECTS
-    Object obj;
-
-    obj = allocate_object (sizeof (struct object));
-
+    Object obj = allocate_object (sizeof (struct object));
     TYPE (obj) = EndOfFile;
     return (obj);
 #else
@@ -84,10 +65,7 @@ Object
 make_uninit_slot (void)
 {
 #ifndef SMALL_OBJECTS
-    Object obj;
-
-    obj = allocate_object (sizeof (struct object));
-
+    Object obj = allocate_object (sizeof (struct object));
     TYPE (obj) = UninitializedSlotValue;
     return (obj);
 #else
@@ -100,10 +78,7 @@ make_uninit_slot (void)
 Object
 make_exit (Object sym)
 {
-    Object obj;
-
-    obj = allocate_object (sizeof (struct exitproc));
-
+    Object obj = allocate_object (sizeof (struct exitproc));
     EXITTYPE (obj) = Exit;
     EXITSYM (obj) = sym;
     EXITRET (obj) = (jmp_buf *) checking_malloc (sizeof (jmp_buf));
@@ -113,20 +88,9 @@ make_exit (Object sym)
 Object
 make_unwind (Object body)
 {
-    Object obj;
-
-    obj = allocate_object (sizeof (struct unwind));
-
+    Object obj = allocate_object (sizeof (struct unwind));
     UNWINDTYPE (obj) = Unwind;
     UNWINDBODY (obj) = body;
     return (obj);
 }
-
-#ifdef PRE_REFACTORED
-static Object
-quit (void)
-{
-    exit (0);
-}
-#endif
 

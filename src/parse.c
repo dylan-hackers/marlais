@@ -65,14 +65,6 @@ parse_object (FILE * fp, int debug)
   yydebug = debug;
   parse_value_ptr = &parse_value;
   if (yyparse () == 0) {
-#ifdef ALLOW_CLASSIC_SYNTAX
-    if (echo_prefix && !load_file_context) {
-      fprintf (stderr, "==> ");
-      print_object (standard_error_stream, parse_value, 1);
-      fprintf (stderr, "\n");
-      fflush (stderr);
-    }
-#endif
     return parse_value;
   } else {
     warning ("Parser failed in inexplicable way", parse_value, NULL);

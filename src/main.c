@@ -572,7 +572,6 @@ initialize_marlais (void)
   init_stream_prims ();
   init_read_prims ();
   init_table_prims ();
-  /* init_misc_prims (); */
   init_char_prims ();
   init_deque_prims ();
   init_array_prims ();
