@@ -55,6 +55,7 @@ extern Object standard_output_stream;
 extern Object print_symbol;
 extern char* prompt;
 extern char* current_prompt;
+extern int sequence_num;
 
 static char prompt_buf[20];
 
@@ -348,11 +349,16 @@ error (char *msg,...)
 			   : parse_object (stdin, 0)))
 		   && (obj != eof_object)) {
 		obj = eval (obj);
-#ifdef OUTPUT_MARKER
 		if (obj != unspecified_object) {
-		    fprintf (stdout, OUTPUT_MARKER);
+		    Object symbol;
+		    char symbol_name[12];
+		    
+		    snprintf (symbol_name, 12, "$l%i", sequence_num);
+		    symbol = make_symbol (symbol_name);
+		    add_top_level_binding (symbol, obj, 1);
+		    fprintf (stdout, " $l%i = ", sequence_num);
+		    sequence_num++;
 		}
-#endif
 		if (TYPE (obj) == Values) {
 		    print_obj (standard_output_stream, obj);
 		    if (VALUESNUM (obj)) {

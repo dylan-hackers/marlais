@@ -70,6 +70,7 @@ void initialize_reservered_word_symbols (void);
 void initialize_marlais (void);
 extern Object binding_stack;
 extern FILE *yyin;
+extern int yylineno;
 
 #ifdef MACOS
 int getopt (int argc, char *argv[], const char *options);
@@ -107,6 +108,7 @@ char *prompt_continuation = "> ";
 char *current_prompt;
 static int debug = 0;
 int echo_prefix = 0;
+int sequence_num = 0;
 
 int
 main (int argc, char *argv[])
@@ -233,14 +235,16 @@ main (int argc, char *argv[])
 		   : parse_object (stdin, debug)))
 	   && (obj != eof_object)) {
 	obj = eval (obj);
-#ifdef OUTPUT_MARKER
 	if (obj != unspecified_object) {
-	    fprintf (stdout, OUTPUT_MARKER);
+	    Object symbol;
+	    char symbol_name[12];
+	    
+	    snprintf (symbol_name, 12, "$l%i", sequence_num);
+	    symbol = make_symbol (symbol_name);
+	    add_top_level_binding (symbol, obj, 1);
+	    fprintf (stdout, " $l%i = ", sequence_num);
+	    sequence_num++;
 	}
-#endif
-#if 0
-	print_obj (obj);
-#endif
 	if (TYPE (obj) == Values) {
 	    print_obj (standard_output_stream, obj);
 	    if (VALUESNUM (obj)) {
