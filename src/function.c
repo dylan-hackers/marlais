@@ -52,8 +52,6 @@
 extern Object x_symbol;
 
 #define PARSING_KEYS_THE_OLD_WAY 1
-/* #define PARSING_REST_PARAMETERS_THE_OLD_WAY 1 */
-/* #define PARSING_REQUIRED_PARAMETERS_THE_OLD_WAY 1 */
 
 /* local function prototypes */
 
@@ -136,6 +134,12 @@ keyword_list_insert (Object *list, Object key_binding)
     *tmp_ptr = cons (key_binding, *tmp_ptr);
 }
 
+static int
+next_parameter_is(Object params, Object type)
+{
+  return PAIRP(params) && (CAR(params) == type);
+}
+
 static void
 parse_function_required_parameters (Object *params, Object *tmp_ptr)
 {
@@ -166,7 +170,7 @@ parse_function_required_parameters (Object *params, Object *tmp_ptr)
 static void
 parse_method_next_parameter (Object meth_obj, Object *params)
 {
-  if (PAIRP (*params) && CAR (*params) == next_symbol) {
+  if (next_parameter_is(*params, next_symbol)) {
     *params = CDR (*params);
     if (PAIRP (*params)) {
       METHNEXTMETH (meth_obj) = CAR (*params);
@@ -183,7 +187,7 @@ static void
 parse_function_rest_parameter (Object fn_obj, Object *params,
 			       void (*assign_fn)(Object, Object))
 {
-  if (PAIRP (*params) && CAR (*params) == hash_rest_symbol) {
+  if (next_parameter_is(*params, hash_rest_symbol)) {
     *params = CDR (*params);
     if (PAIRP (*params)) {
       assign_fn (fn_obj, CAR (*params));
@@ -194,6 +198,66 @@ parse_function_rest_parameter (Object fn_obj, Object *params,
     }
   } else {
     assign_fn (fn_obj, NULL);
+  }
+}
+
+static void
+gf_rest_assign(Object gf_obj, Object val)
+{
+  GFRESTPARAM (gf_obj) = val;
+}
+
+static void
+gf_rest_return_assign(Object gf_obj, Object params)
+{
+  if(params == NULL) return;
+  if (PAIRP (CAR (params))) {
+    GFRESTVALUES (gf_obj) = eval (SECOND (CAR (params)));
+  } else {
+    GFRESTVALUES (gf_obj) = object_class;
+  }
+}
+
+static void
+method_rest_assign(Object meth_obj, Object val)
+{
+  METHRESTPARAM (meth_obj) = val;
+}
+
+static void
+method_rest_return_assign(Object meth_obj, Object params)
+{
+  if(params == NULL) return;
+  if (PAIRP (CAR (params))) {
+    METHRESTVALUES (meth_obj) = eval (SECOND (CAR (params)));
+  } else {
+    METHRESTVALUES (meth_obj) = object_class;
+  }
+}
+
+static void
+parse_function_return_parameters(Object functor, Object* params, 
+				 Object* tmp_ptr)
+{
+  Object entry, result_type;
+
+  *params = CDR (*params);
+  *tmp_ptr = make_empty_list ();
+
+  while (PAIRP (*params)) {	/* CONTAINS BREAK! */
+    entry = CAR (*params);
+    if (entry == hash_rest_symbol) {
+      break;
+    }
+    if (PAIRP (entry)) {
+      result_type = eval (SECOND (entry));
+    } else {
+      result_type = object_class;
+    }
+
+    (*tmp_ptr) = cons (result_type, make_empty_list ());
+    tmp_ptr = &CDR (*tmp_ptr);
+    *params = CDR (*params);
   }
 }
 
@@ -297,67 +361,14 @@ xform_gf_key_param(Object gf_obj, Object entry)
 }
 
 static void
-gf_rest_assign(Object gf_obj, Object val)
-{
-  GFRESTPARAM (gf_obj) = val;
-}
-
-static void
-method_rest_assign(Object meth_obj, Object val)
-{
-  METHRESTPARAM (meth_obj) = val;
-}
-
-static void
 parse_generic_function_parameters (Object gf_obj, Object params)
 {
-  Object entry, *tmp_ptr, result_type;
+  Object entry, *tmp_ptr;
 
   tmp_ptr = &GFREQPARAMS (gf_obj);
 
-#ifdef PARSING_REQUIRED_PARAMETERS_THE_OLD_WAY
-  *tmp_ptr = make_empty_list ();
-
-  /* first get required params */
-  while (PAIRP (params)) {	/* CONTAINS BREAK! */
-    entry = CAR (params);
-    if (entry == hash_rest_symbol || entry == key_symbol ||
-	entry == hash_values_symbol) {
-      break;
-    }
-    if (PAIRP (entry)) {
-      (*tmp_ptr) = cons (listem (CAR (entry),
-				 eval (SECOND (entry)),
-				 NULL),
-			 make_empty_list ());
-    } else {
-      *tmp_ptr = cons (listem (entry, object_class, NULL),
-		       make_empty_list ());
-    }
-    tmp_ptr = &CDR (*tmp_ptr);
-    params = CDR (params);
-  }
-#else
   parse_function_required_parameters(&params, tmp_ptr);
-#endif
-
-#ifdef PARSING_REST_PARAMETERS_THE_OLD_WAY
-  /* next look for rest parameter */
-  if (PAIRP (params) && CAR (params) == hash_rest_symbol) {
-    params = CDR (params);
-    if (PAIRP (params)) {
-      GFRESTPARAM (gf_obj) = CAR (params);
-      params = CDR (params);
-    } else {
-      error ("generic function #rest designator not followed by a parameter", 
-	     NULL);
-    }
-  } else {
-    GFRESTPARAM (gf_obj) = NULL;
-  }
-#else
   parse_function_rest_parameter(gf_obj, &params, gf_rest_assign);
-#endif
 
 #ifdef PARSING_KEYS_THE_OLD_WAY
   /* next look for key parameters */
@@ -404,49 +415,59 @@ parse_generic_function_parameters (Object gf_obj, Object params)
 				xform_gf_key_param);
 #endif
 
+#ifdef PARSE_RETURN_PARAMS_THE_OLD_WAY
   /* now get return value types */
   if (PAIRP (params) && CAR (params) == hash_values_symbol) {
     params = CDR (params);
-	GFRESTVALUES (gf_obj) = NULL;
-	tmp_ptr = &GFREQVALUES (gf_obj);
-	*tmp_ptr = make_empty_list ();
+    GFRESTVALUES (gf_obj) = NULL;
+    tmp_ptr = &GFREQVALUES (gf_obj);
+    *tmp_ptr = make_empty_list ();
 
-	/* first get required return values */
-	/* first get required return values */
-	while (PAIRP (params)) {	/* CONTAINS BREAK! */
-	    entry = CAR (params);
-	    if (entry == hash_rest_symbol) {
-		break;
-	    }
-	    if (PAIRP (entry)) {
-		result_type = eval (SECOND (entry));
-	    } else {
-		result_type = object_class;
-	    }
+    /* first get required return values */
+    while (PAIRP (params)) {	/* CONTAINS BREAK! */
+      entry = CAR (params);
+      if (entry == hash_rest_symbol) {
+	break;
+      }
+      if (PAIRP (entry)) {
+	result_type = eval (SECOND (entry));
+      } else {
+	result_type = object_class;
+      }
 
-	    (*tmp_ptr) = cons (result_type, make_empty_list ());
-	    tmp_ptr = &CDR (*tmp_ptr);
-	    params = CDR (params);
-	}
-
-	/* next look for rest parameter */
-	if (PAIRP (params) && CAR (params) == hash_rest_symbol) {
-	    params = CDR (params);
-	    if (PAIRP (params)) {
-		if (PAIRP (CAR (params))) {
-		    GFRESTVALUES (gf_obj) = eval (SECOND (CAR (params)));
-		} else {
-		    GFRESTVALUES (gf_obj) = object_class;
-		}
-		params = CDR (params);
-	    } else {
-		error ("generic function #rest designator not followed by a parameter", NULL);
-	    }
-	}
-    } else {			/* no values specified */
-	GFREQVALUES (gf_obj) = make_empty_list ();
-	GFRESTVALUES (gf_obj) = object_class;
+      (*tmp_ptr) = cons (result_type, make_empty_list ());
+      tmp_ptr = &CDR (*tmp_ptr);
+      params = CDR (params);
     }
+    
+    /* next look for rest parameter */
+    if (PAIRP (params) && CAR (params) == hash_rest_symbol) {
+      params = CDR (params);
+      if (PAIRP (params)) {
+	if (PAIRP (CAR (params))) {
+	  GFRESTVALUES (gf_obj) = eval (SECOND (CAR (params)));
+	} else {
+	  GFRESTVALUES (gf_obj) = object_class;
+	}
+	params = CDR (params);
+      } else {
+	error ("generic function #rest designator not followed by a parameter",
+	       NULL);
+      }
+    }
+  }
+#else
+  if(next_parameter_is(params, hash_values_symbol)) {
+    GFRESTVALUES (gf_obj) = NULL;
+    tmp_ptr = &GFREQVALUES (gf_obj);
+    parse_function_return_parameters(gf_obj, &params, tmp_ptr);
+    parse_function_rest_parameter(gf_obj, &params, gf_rest_return_assign);
+  }
+#endif
+  else {			/* no values specified */
+    GFREQVALUES (gf_obj) = make_empty_list ();
+    GFRESTVALUES (gf_obj) = object_class;
+  }
 
     if (PAIRP (params)) {
 	error ("objects encountered after parameter list", params, NULL);
@@ -494,63 +515,9 @@ parse_method_parameters (Object meth_obj, Object params)
 
   tmp_ptr = &METHREQPARAMS (meth_obj);
 
-#ifdef PARSING_REQUIRED_PARAMETERS_THE_OLD_WAY
-  *tmp_ptr = make_empty_list ();
-
-  /* first get required params */
-  while (PAIRP (params)) {	/* CONTAINS BREAK! */
-    entry = CAR (params);
-    if (entry == hash_rest_symbol || entry == key_symbol ||
-	entry == hash_values_symbol || entry == next_symbol) {
-      break;
-    }
-    if (PAIRP (entry)) {
-      (*tmp_ptr) = cons (listem (CAR (entry),
-				 eval (SECOND (entry)),
-				 NULL),
-			 make_empty_list ());
-    } else {
-      *tmp_ptr = cons (listem (entry, object_class, NULL),
-		       make_empty_list ());
-    }
-    tmp_ptr = &CDR (*tmp_ptr);
-    params = CDR (params);
-  }
-
-  /* look for next-method parameter */
-  if (PAIRP (params) && CAR (params) == next_symbol) {
-    params = CDR (params);
-    if (PAIRP (params)) {
-      METHNEXTMETH (meth_obj) = CAR (params);
-      params = CDR (params);
-    } else {
-      error ("generic function #next designator not followed by a parameter", NULL);
-    }
-  } else {
-    METHNEXTMETH (meth_obj) = next_method_symbol;
-  }
-#else
   parse_function_required_parameters(&params, tmp_ptr);
   parse_method_next_parameter(meth_obj, &params);
-#endif
-
-#ifdef PARSING_REST_PARAMETERS_THE_OLD_WAY
-  /* next look for rest parameter */
-  if (PAIRP (params) && CAR (params) == hash_rest_symbol) {
-    params = CDR (params);
-    if (PAIRP (params)) {
-      METHRESTPARAM (meth_obj) = CAR (params);
-      params = CDR (params);
-    } else {
-      error ("generic function #rest designator not followed by a parameter", 
-	     NULL);
-    }
-  } else {
-    METHRESTPARAM (meth_obj) = NULL;
-  }
-#else
   parse_function_rest_parameter(meth_obj, &params, method_rest_assign);
-#endif
 
 #ifdef PARSING_KEYS_THE_OLD_WAY
   /* next look for key parameters */
@@ -607,7 +574,7 @@ parse_method_parameters (Object meth_obj, Object params)
   parse_function_key_parameters(meth_obj, &params, method_keys, do_method_key,
 				xform_method_key_param);
 #endif
-
+#ifdef PARSE_RETURN_PARAMS_THE_OLD_WAY
   /* now get return value types */
   if (PAIRP (params) && CAR (params) == hash_values_symbol) {
     params = CDR (params);
@@ -646,7 +613,18 @@ parse_method_parameters (Object meth_obj, Object params)
 	error ("function #rest designator not followed by a parameter", NULL);
       }
     }
-  } else {
+  }
+
+#else
+  if(next_parameter_is(params, hash_values_symbol)) {
+    METHRESTVALUES (meth_obj) = NULL;
+    tmp_ptr = &METHREQVALUES (meth_obj);
+    parse_function_return_parameters(meth_obj, &params, tmp_ptr);
+    parse_function_rest_parameter(meth_obj, &params,method_rest_return_assign);
+  }
+#endif
+
+  else {
     METHREQVALUES (meth_obj) = make_empty_list ();
     METHRESTVALUES (meth_obj) = object_class;
   }
