@@ -20,6 +20,7 @@
 
    Copyright, 1993, Brent Benson.  All Rights Reserved.
    0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
+   0.6 Revisions Copyright 2001, Douglas M. Auclair.  All Rights Reserved.
 
    Permission to use, copy, and modify this software and its
    documentation is hereby granted only under the following terms and
@@ -33,13 +34,14 @@
 
 #include "vector.h"
 
+#include "globaldefs.h"
 #include "alloc.h"
-#include "collection.h"
 #include "error.h"
 #include "list.h"
 #include "number.h"
 #include "prim.h"
 #include "symbol.h"
+#include "sequence.h"
 
 /* primitives */
 
@@ -55,7 +57,6 @@ static struct primitive vector_prims[] =
 };
 
 /* function definitions */
-
 void
 init_vector_prims (void)
 {
@@ -116,6 +117,7 @@ make_vector_driver (Object args)
   int size;
   Object size_obj, fill_obj;
 
+#ifdef PRE_REFACTORED
   size = 0;
   size_obj = NULL;
   fill_obj = NULL;
@@ -141,6 +143,9 @@ make_vector_driver (Object args)
   if (!fill_obj) {
     fill_obj = false_object;
   }
+#else
+  make_sequence_driver(args, &size, &size_obj, &fill_obj, "<vector>");
+#endif
   return make_vector (size, fill_obj);
 }
 

@@ -20,6 +20,7 @@
 
    Copyright, 1993, Brent Benson.  All Rights Reserved.
    0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
+   0.6 Revisions Copyright 2001, Douglas M. Auclair.  All Rights Reserved.
 
    Permission to use, copy, and modify this software and its
    documentation is hereby granted only under the following terms and
@@ -35,11 +36,12 @@
 
 #include "apply.h"
 #include "boolean.h"
-#include "collection.h"
+#include "globaldefs.h"
 #include "error.h"
 #include "number.h"
 #include "prim.h"
 #include "symbol.h"
+#include "sequence.h"
 
 /* globals */
 
@@ -94,7 +96,6 @@ init_list_prims (void)
     init_prims (num, list_prims);
 }
 
-
 #ifndef SMALL_OBJECTS
 
 /*
@@ -146,14 +147,14 @@ make_pair_driver (Object args)
     return cons (false_object, false_object);	/* who knows ?? */
 }
 
-/* This gets called with (make <list> args)
- */
+/* This gets called with (make <list> args) */
 Object
 make_list_driver (Object args)
 {
     int size;
     Object size_obj, fill_obj, res;
 
+#ifdef PRE_REFACTORED
     size = 0;
     size_obj = NULL;
     fill_obj = NULL;
@@ -163,19 +164,25 @@ make_list_driver (Object args)
 	} else if (FIRST (args) == fill_keyword) {
 	    fill_obj = SECOND (args);
 	} else {
-	    error ("make: unsupported keyword for <list> class", FIRST (args), NULL);
+	    error ("make: unsupported keyword for <list> class", 
+		   FIRST (args), NULL);
 	}
 	args = CDR (CDR (args));
     }
     if (size_obj) {
 	if (!INTEGERP (size_obj)) {
-	    error ("make: value of size: argument must be an integer", size_obj, NULL);
+	    error ("make: value of size: argument must be an integer", 
+		   size_obj, NULL);
 	}
 	size = INTVAL (size_obj);
     }
     if (!fill_obj) {
 	fill_obj = false_object;
     }
+#else
+    make_sequence_driver(args, &size, &size_obj, &fill_obj, "<list>");
+#endif
+
     /* actually fabricate the list */
     if (size == 0) {
 	return (make_empty_list ());
@@ -192,9 +199,7 @@ make_list_driver (Object args)
 Object
 cons (Object car, Object cdr)
 {
-    Object obj;
-
-    obj = allocate_object (sizeof (struct pair));
+    Object obj = allocate_object (sizeof (struct pair));
 
     PAIRTYPE (obj) = Pair;
     CAR (obj) = car;
@@ -214,9 +219,26 @@ cdr (Object lst)
     return (EMPTYLISTP (lst) ? lst : CDR (lst));
 }
 
+#ifndef PRE_REFACTORED
+static Object nth(Object lst, Object default_ob, const char* where,
+		  int test, Object (*fn)(Object))
+{
+    if (test) {
+	return (*fn)(lst);
+    } else if (default_ob == default_object) {
+	char err_msg[80];
+	sprintf(err_msg, "list has no %s element", where);
+	return error (err_msg, lst, NULL);
+    } else {
+	return default_ob;
+    }
+}
+#endif
+
 static Object
 first (Object lst, Object default_ob)
 {
+#ifdef PRE_REFACTORED
     if (PAIRP (lst)) {
 	return (CAR (lst));
     } else if (default_ob == default_object) {
@@ -224,6 +246,9 @@ first (Object lst, Object default_ob)
     } else {
 	return default_ob;
     }
+#else
+  return nth(lst, default_ob, "first", PAIRP(lst), car);
+#endif
 }
 
 Object
@@ -235,6 +260,7 @@ second (Object lst)
 static Object
 second_d (Object lst, Object default_ob)
 {
+#ifdef PRE_REFACTORED
     if (PAIRP (lst) && PAIRP (CDR (lst))) {
 	return (SECOND (lst));
     } else if (default_ob == default_object) {
@@ -242,6 +268,9 @@ second_d (Object lst, Object default_ob)
     } else {
 	return default_ob;
     }
+#else
+  return nth(lst, default_ob, "second", PAIRP(lst) && PAIRP(CDR(lst)), second);
+#endif
 }
 
 Object
@@ -253,6 +282,7 @@ third (Object lst)
 static Object
 third_d (Object lst, Object default_ob)
 {
+#ifdef PRE_REFACTORED
     if (PAIRP (lst) && PAIRP (CDR (lst)) && PAIRP (CDR (CDR (lst)))) {
 	return (THIRD (lst));
     } else if (default_ob == default_object) {
@@ -260,6 +290,11 @@ third_d (Object lst, Object default_ob)
     } else {
 	return default_ob;
     }
+#else
+  return nth(lst, default_ob, "third", 
+	     PAIRP (lst) && PAIRP (CDR (lst)) && PAIRP (CDR (CDR (lst))),
+	     third);
+#endif
 }
 
 Object
@@ -342,9 +377,7 @@ member (Object obj, Object lst)
 Object
 member_p (Object obj, Object lst, Object test)
 {
-    Object l;
-
-    l = lst;
+    Object l = lst;
     while (!EMPTYLISTP (l)) {
 	if (test != false_object) {
 	    if (apply (test, listem (obj, CAR (l), NULL)) != false_object) {
@@ -396,6 +429,7 @@ list_reduce (Object fun, Object init, Object lst)
 Object
 list_reduce1 (Object fun, Object lst)
 {
+#ifdef PRE_REFACTORED
     Object val;
 
     val = CAR (lst);
@@ -405,6 +439,9 @@ list_reduce1 (Object fun, Object lst)
 	lst = CDR (lst);
     }
     return (val);
+#else
+    return list_reduce(fun, CAR(lst), CDR(lst));
+#endif
 }
 
 int
@@ -511,7 +548,7 @@ list_element_setter (Object pair, Object index, Object obj)
 	i++;
 	lst = CDR (lst);
     }
-    return error ("element-setter: index to large for list",
+    return error ("element-setter: index too large for list",
 		  pair,
 		  index,
 		  NULL);

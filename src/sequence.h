@@ -1,6 +1,5 @@
 /*
-
-   collection.h
+   sequence.h
 
    This software is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,7 +17,9 @@
 
    Original copyright notice follows:
 
-   Copyright, 1994, Joseph N. Wilson.  All Rights Reserved.
+   Copyright, 1993, Brent Benson.  All Rights Reserved.
+   0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
+   0.6 Revisions Copyright 2001, Douglas M. Auclair.  All Rights Reserved.
 
    Permission to use, copy, and modify this software and its
    documentation is hereby granted only under the following terms and
@@ -30,4 +31,15 @@
 
  */
 
-extern Object size_keyword, fill_keyword, default_object;
+/* general operations that all sequences (vectors, deques, etc) use */ 
+
+#ifndef SEQUENCE_H
+#define SEQUENCE_H
+
+#include "object.h"
+
+void make_sequence_driver(Object args, 
+			  int* sz, Object* sz_obj, Object* fill, 
+			  const char* type);
+
+#endif

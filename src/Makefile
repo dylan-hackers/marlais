@@ -20,6 +20,7 @@
 #
 # Copyright, 1993, Brent Benson.  All Rights Reserved.
 # 0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
+# 0.6 Revisions Copyright 2001, Douglas M. Auclair.  All Rights Reserved.
 #
 # Permission to use, copy, and modify this software and its
 # documentation is hereby granted only under the following terms and
@@ -29,13 +30,10 @@
 # documentation.  Users of this software agree to the terms and
 # conditions set forth in this notice.
 
-# !include <ntwin32.mak>	#NT
-
 #####
 # initialization file (change this to suite your installation)
 #
-INIT_FILE=/usr/local/share/marlais/init.dylan#NOT-NT
-# INIT_FILE=c:/marlais/init.dyl#NT
+INIT_FILE=/usr/local/share/marlais/init.dylan
 
 #INIT_FILE_FLAG = -DINIT_FILE=\"$(INIT_FILE)\"
 INIT_FILE_FLAG = -DINIT_FILE=\"$(INIT_FILE)\" -DINFIX_INIT_FILE
@@ -63,7 +61,6 @@ SHELL = /bin/sh
 # If your system has no readline support, remove this
 #
 READLINE_FLAGS = -DHAVE_READLINE#NOT-NT
-#READLINE_FLAGS = #NT
 
 ##########################################
 ### Interpreter Customization Features ###
@@ -97,13 +94,13 @@ PRECEDENCE_FLAG = -DUSE_LL_PRECEDENCE
 
 ##########################################
 
-VERSION = 0.6.4
-RLOG_VERSION = marlais_0_6_4
-PREVIOUS_VERSION = 0.6.3
-PREVIOUS_RLOG_VERSION = marlais_0_6_3
+VERSION = 0.6.4a
+RLOG_VERSION = marlais_0_6_4a
+PREVIOUS_VERSION = 0.6.4
+PREVIOUS_RLOG_VERSION = marlais_0_6_4
 PREVIOUS_VERSION_DIR = $(PROGRAM)-$(PREVIOUS_VERSION)
 PATCHFILE = $(PROGRAM)-$(PREVIOUS_VERSION)-$(VERSION).diff
-INCDIRS = gc 
+INCDIRS = gc
 
 MARLAIS_FLAGS = $(SYS_FLAG) \
 	$(STRCASECMP_FLAG) \
@@ -117,14 +114,11 @@ MARLAIS_FLAGS = $(SYS_FLAG) \
 	$(PRECEDENCE_FLAG) \
 	 -DVERSION=\"$(VERSION)\"
 
-CC=gcc #NOT-NT
-# CC=$(cc) #NT
+CC=gcc
 
-CFLAGS= -g -I$(INCDIRS) $(MARLAIS_FLAGS) $(CEXTRAS) #NOT-NT
-# CFLAGS= $(cdebug) $(cvars) $(cflags) -i$(INCDIRS) $(MARLAIS_FLAGS) #NT
+CFLAGS= -g -I$(INCDIRS) $(MARLAIS_FLAGS) $(CEXTRAS)
 
-LIBS=-ltermcap -lreadline -lm #NOT-NT
-# LIBS=	#NT
+LIBS=-ltermcap -lreadline -lm
 
 FLEXFLAGS = -I
 BYACCFLAGS = -d -v -t
@@ -159,6 +153,7 @@ OBJS = 	alloc.o \
 	prim.o \
 	print.o \
 	read.o \
+	sequence.o \
 	slot.o \
 	stream.o \
 	symbol.o \
@@ -168,7 +163,7 @@ OBJS = 	alloc.o \
 	values.o \
 	vector.o
 
-GCOBJS = gc/gc.a
+GCOBJS = $(INCDIRS)/gc.a
 
 CSRCS = alloc.c \
 	apply.c \
@@ -199,6 +194,7 @@ CSRCS = alloc.c \
 	prim.c \
 	print.c \
 	read.c \
+	sequence.c \
 	slot.c \
 	stream.c \
 	symbol.c \
@@ -220,7 +216,6 @@ SRCS = 	$(CSRCS) \
 	classprec.h \
 	classprec-clos.h \
 	classprec-ll.h \
-	collection.h \
 	deque.h \
 	dylan_lexer.h \
 	error.h \
@@ -238,6 +233,7 @@ SRCS = 	$(CSRCS) \
 	prim.h \
 	print.h \
 	read.h \
+	sequence.h \
 	slot.h \
 	stream.h \
 	symbol.h \
@@ -290,12 +286,10 @@ NO_RCS_FILES = \
 	lex.yy.c \
 	NT_MAKEFILE
 
-PROGRAM = marlais#NOT-NT
-# PROGRAM = marlais.exe#NT
+PROGRAM = marlais
 
 $(PROGRAM): $(OBJS) $(GCOBJS)
-	$(CC) $(CFLAGS) -o $(PROGRAM) $ $(OBJS) $(GCOBJS) $(LIBS) #NOT-NT
-# 	$(link) $(ldebug) -subsystem:console -out $(PROGRAM) $(OBJS) $(GCOBJS) $(LIBS) #NT
+	$(CC) $(CFLAGS) -o $(PROGRAM) $ $(OBJS) $(GCOBJS) $(LIBS)
 
 # a target for building parser/scanner on the Mac under MachTen.
 mac: dylan.tab.c lex.yy.c
@@ -311,13 +305,8 @@ dylan.tab.c: dylan.y
 	mv y.tab.c dylan.tab.c
 	mv y.tab.h dylan.tab.h
 
-gc/gc.a:			#NOT-NT
-	cd gc; $(MAKE) CC=$(CC)	#NOT-NT
-
-# gc/gc.lib:			#NT
-# 	cd gc			#NT
-# 	$(MAKE) -f NT_MAKEFILE	#NT
-# 	cd ..			#NT
+$(INCDIRS)/gc.a:
+	cd $(INCDIRS); $(MAKE) CC=$(CC)
 
 NT_MAKEFILE: Makefile
 	mv NT_MAKEFILE NT_MAKEFILE.bak
@@ -328,7 +317,7 @@ clean:
 
 real_clean: clean
 	rm dylan.tab.c lex.yy.c
-	cd gc; $(MAKE) clean
+	cd $(INCDIRS); $(MAKE) clean
 
 
 depend:
@@ -363,14 +352,14 @@ ChangeLog: RCS/*
 	rlog -r$(PREVIOUS_RLOG_VERSION): RCS/* > ChangeLog
 
 # dependencies
-alloc.o : alloc.c alloc.h object.h env.h symbol.h gc/gc.h error.h 
+alloc.o : alloc.c alloc.h object.h env.h symbol.h $(INCDIRS)/gc.h error.h 
 apply.o : apply.c apply.h object.h alloc.h env.h class.h symbol.h eval.h error.h \
   function.h keyword.h list.h print.h prim.h syntax.h table.h values.h vector.h 
 array.o : array.c array.h object.h alloc.h env.h error.h list.h number.h prim.h \
   symbol.h 
 boolean.o : boolean.c boolean.h object.h prim.h 
 bytestring.o : bytestring.c bytestring.h object.h alloc.h env.h character.h \
-  collection.h error.h number.h prim.h symbol.h 
+  error.h number.h prim.h symbol.h 
 character.o : character.c character.h object.h number.h prim.h 
 class.o : class.c class.h symbol.h object.h alloc.h env.h apply.h array.h boolean.h \
   bytestring.h classprec.h classprec-ll.h deque.h error.h eval.h function.h globaldefs.h \
@@ -381,8 +370,8 @@ classprec-ll.o : classprec-ll.c classprec.h classprec-ll.h object.h class.h \
   symbol.h error.h list.h 
 classprec.o : classprec.c classprec-ll.c classprec.h classprec-ll.h object.h \
   class.h symbol.h error.h list.h 
-deque.o : deque.c deque.h object.h collection.h error.h list.h prim.h symbol.h 
-dylan.tab.o : dylan.tab.c boolean.h object.h bytestring.h error.h gc/gc.h globaldefs.h \
+deque.o : deque.c deque.h object.h error.h list.h prim.h symbol.h 
+dylan.tab.o : dylan.tab.c boolean.h object.h bytestring.h error.h $(INCDIRS)/gc.h globaldefs.h \
   list.h number.h symbol.h table.h vector.h yystype.h dylan_lexer.h 
 env.o : env.c env.h object.h alloc.h bytestring.h class.h symbol.h error.h eval.h \
   function.h keyword.h list.h prim.h print.h table.h 
@@ -399,7 +388,7 @@ function.o : function.c function.h object.h apply.h class.h symbol.h env.h error
 keyword.o : keyword.c keyword.h object.h bytestring.h list.h prim.h symbol.h 
 lex.yy.o : lex.yy.c alloc.h object.h env.h bytestring.h character.h dylan.tab.h \
   globaldefs.h list.h number.h symbol.h yystype.h dylan_lexer.h 
-list.o : list.c list.h object.h apply.h boolean.h collection.h error.h number.h \
+list.o : list.c list.h object.h apply.h boolean.h error.h number.h \
   prim.h symbol.h 
 macintosh.o : macintosh.c macintosh.h object.h /local/lib/gcc-lib/sparc-sun-sunos4.1.3/2.4.5/include/string.h \
   number.h values.h error.h foreign_ptr.h 
@@ -424,8 +413,8 @@ syntax.o : syntax.c syntax.h object.h alloc.h env.h apply.h boolean.h bytestring
   class.h symbol.h error.h eval.h keyword.h list.h function.h misc.h number.h \
   print.h table.h values.h 
 sys.o : sys.c sys.h object.h bytestring.h error.h number.h prim.h values.h 
-table.o : table.c table.h object.h alloc.h env.h apply.h collection.h error.h \
+table.o : table.c table.h object.h alloc.h env.h apply.h error.h \
   list.h number.h prim.h symbol.h 
 values.o : values.c values.h object.h alloc.h env.h error.h list.h prim.h 
-vector.o : vector.c vector.h object.h alloc.h env.h collection.h error.h list.h \
+vector.o : vector.c vector.h object.h alloc.h env.h error.h list.h \
   number.h prim.h symbol.h 

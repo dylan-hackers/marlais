@@ -42,10 +42,6 @@ INIT_FILE_FLAG = -DINIT_FILE=\"$(INIT_FILE)\" -DINFIX_INIT_FILE
 ### Operating System Configuration ###
 #
 
-# Flag to distinguish Solaris from SunOS 4
-# Uncomment if your system runs Solaris
-#
-# SYS_FLAG = -D__SunOS_5__
 SYS_FLAG =
 
 # Use following if your c library does not include strcasecmp
@@ -90,13 +86,14 @@ PRECEDENCE_FLAG = -DUSE_LL_PRECEDENCE
 
 ##########################################
 
-VERSION = 0.6.4
-RLOG_VERSION = marlais_0_6_4
-PREVIOUS_VERSION = 0.6.3
-PREVIOUS_RLOG_VERSION = marlais_0_6_3
+VERSION = 0.6.4a
+RLOG_VERSION = marlais_0_6_4a
+PREVIOUS_VERSION = 0.6.4
+PREVIOUS_RLOG_VERSION = marlais_0_6_4
 PREVIOUS_VERSION_DIR = $(PROGRAM)-$(PREVIOUS_VERSION)
 PATCHFILE = $(PROGRAM)-$(PREVIOUS_VERSION)-$(VERSION).diff
-INCDIRS = gc 
+GCDIR = gc
+INCDIRS = $(GCDIR)
 
 MARLAIS_FLAGS = $(SYS_FLAG) \
 	$(STRCASECMP_FLAG) \
@@ -107,10 +104,11 @@ MARLAIS_FLAGS = $(SYS_FLAG) \
 	$(MISC_FLAGS) \
 	$(METHOD_CACHING_FLAG) \
 	$(PRECEDENCE_FLAG) \
-	 -DVERSION=\"$(VERSION)\"
+	 -DVERSION=\"$(VERSION)\" \
+	-I$(INCDIRS)
 
 CC=$(cc)
-CFLAGS= $(cdebug) $(cvars) $(cflags) -Igc -I$(INCDIRS) $(MARLAIS_FLAGS)
+CFLAGS= $(cdebug) $(cvars) $(cflags) $(MARLAIS_FLAGS)
 LIBS=
 
 FLEXFLAGS = -I
@@ -146,6 +144,7 @@ OBJS = 	alloc.obj \
 	prim.obj \
 	print.obj \
 	read.obj \
+	sequence.obj \
 	slot.obj \
 	stream.obj \
 	symbol.obj \
@@ -156,7 +155,7 @@ OBJS = 	alloc.obj \
 	vector.obj \
 	getopt.obj
 
-GCOBJS = gc/gc.lib
+GCOBJS = $(GCDIR)/gc.lib
 
 CSRCS = alloc.c \
 	apply.c \
@@ -187,6 +186,7 @@ CSRCS = alloc.c \
 	prim.c \
 	print.c \
 	read.c \
+	sequence.c \
 	slot.c \
 	stream.c \
 	symbol.c \
@@ -227,6 +227,7 @@ SRCS = 	$(CSRCS) \
 	prim.h \
 	print.h \
 	read.h \
+	sequence.h \
 	slot.h \
 	stream.h \
 	symbol.h \
@@ -293,8 +294,8 @@ dylan.tab.h: dylan.tab.c
 #	mv y.tab.c dylan.tab.c
 #	mv y.tab.h dylan.tab.h
 
-gc/gc.lib:
-	cd gc
+$(GCDIR)/gc.lib:
+	cd $(GCDIR)
 	$(MAKE) -f NT_MAKEFILE
 	cd ..
 
@@ -303,7 +304,7 @@ clean:
 
 real_clean: clean
 	rm dylan.tab.c
-	cd gc; $(MAKE) clean
+	cd $(GCDIR); $(MAKE) clean
 
 
 depend:
@@ -338,7 +339,7 @@ ChangeLog: RCS/*
 	rlog -r$(PREVIOUS_RLOG_VERSION): RCS/* > ChangeLog
 
 # dependencies
-alloc.o : alloc.c alloc.h object.h env.h symbol.h gc/gc.h error.h 
+alloc.o : alloc.c alloc.h object.h env.h symbol.h $(INCDIRS)/gc.h error.h 
 apply.o : apply.c apply.h object.h alloc.h env.h class.h symbol.h eval.h error.h \
   function.h keyword.h list.h print.h prim.h syntax.h table.h values.h vector.h 
 array.o : array.c array.h object.h alloc.h env.h error.h list.h number.h prim.h \
@@ -357,7 +358,7 @@ classprec-ll.o : classprec-ll.c classprec.h classprec-ll.h object.h class.h \
 classprec.o : classprec.c classprec-ll.c classprec.h classprec-ll.h object.h \
   class.h symbol.h error.h list.h 
 deque.o : deque.c deque.h object.h collection.h error.h list.h prim.h symbol.h 
-dylan.tab.o : dylan.tab.c boolean.h object.h bytestring.h error.h gc/gc.h globaldefs.h \
+dylan.tab.o : dylan.tab.c boolean.h object.h bytestring.h error.h $(INCDIRS)/gc.h globaldefs.h \
   list.h number.h symbol.h table.h vector.h yystype.h dylan_lexer.h 
 env.o : env.c env.h object.h alloc.h bytestring.h class.h symbol.h error.h eval.h \
   function.h keyword.h list.h prim.h print.h table.h 

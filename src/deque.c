@@ -20,6 +20,7 @@
 
    Copyright, 1993, Brent Benson.  All Rights Reserved.
    0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
+   0.6 Revisions Copyright 2001, Douglas M. Auclair.  All Rights Reserved.
 
    Permission to use, copy, and modify this software and its
    documentation is hereby granted only under the following terms and
@@ -33,11 +34,12 @@
 
 #include "deque.h"
 
-#include "collection.h"
+#include "globaldefs.h"
 #include "error.h"
 #include "list.h"
 #include "prim.h"
 #include "symbol.h"
+#include "sequence.h"
 
 /* primitives */
 
@@ -112,6 +114,7 @@ make_deque_driver (Object args)
   int size;
   Object size_obj, fill_obj, first, last, deq;
 
+#ifdef PRE_REFACTORED
   size = 0;
   size_obj = NULL;
   fill_obj = false_object;
@@ -134,6 +137,10 @@ make_deque_driver (Object args)
     }
     size = INTVAL (size_obj);
   }
+#else
+  make_sequence_driver(args, &size, &size_obj, &fill_obj, "<deque>");
+#endif
+
   deq = make_deque ();
   /* actually fabricate the list representing the deque */
   if (size--) {

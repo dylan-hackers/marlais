@@ -1,6 +1,5 @@
 /*
-
-   prim.h
+   sequence.c
 
    This software is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -32,13 +31,37 @@
 
  */
 
-#ifndef PRIM_H
-#define PRIM_H
+/* general operations that all sequences (vectors, deques, etc) use */ 
 
-#include "object.h"
+#include "sequence.h"
+#include "globaldefs.h"
+#include "error.h"
 
-void init_prims (int num, struct primitive prims[]);
-Object make_primitive (char *name, enum primtype type, Object (*fun) ());
-Object apply_prim (Object prim, Object args);
+void make_sequence_driver(Object args, 
+	int* size, Object* size_obj, Object* fill_obj,
+	const char* type)
+{
+  *size = 0;
+  *size_obj = NULL;
+  *fill_obj = false_object;
 
-#endif
+  while (!EMPTYLISTP (args)) {
+    if (FIRST (args) == size_keyword) {
+      *size_obj = SECOND (args);
+    } else if (FIRST (args) == fill_keyword) {
+      *fill_obj = SECOND (args);
+    } else {
+      char err_msg[80];
+      sprintf(err_msg, "make: unsupported keyword for %s class", type);
+      error (err_msg, FIRST (args), NULL);
+    }
+    args = CDR (CDR (args));
+  }
+  if (*size_obj) {
+    if (!INTEGERP (*size_obj)) {
+      error ("make: value of size: argument must be an integer",
+	     size_obj, NULL);
+    }
+    *size = INTVAL (*size_obj);
+  }
+}
