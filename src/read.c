@@ -1,5 +1,9 @@
 /* read.c -- see COPYRIGHT for use */
 
+/* so, like, this whole file is to be reworked */
+
+#ifdef NO_COMMON_DYLAN_SPEC
+
 #include <stdio.h>
 #include <ctype.h>
 #ifdef sun
@@ -46,12 +50,16 @@ static struct primitive read_prims[] =
 
 /* function definitions */
 
+#endif
 void
 init_read_prims (void)
 {
+#ifdef NO_COMMON_DYLAN_SPEC
   int num = sizeof (read_prims) / sizeof (struct primitive);
   init_prims (num, read_prims);
+#endif
 }
+#ifdef NO_COMMON_DYLAN_SPEC
 
 static Object
 infix_read_object (FILE * fp)
@@ -173,3 +181,5 @@ read_char (Object stream)
     return (make_character (ch));
   }
 }
+
+#endif
