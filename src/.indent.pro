@@ -1,2 +1,0 @@
-	-bad -bap -br -ce -ss -pcs -i4
-	-TObject
