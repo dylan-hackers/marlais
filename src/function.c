@@ -51,8 +51,6 @@
 
 extern Object x_symbol;
 
-/* #define PARSING_KEYS_THE_OLD_WAY 1 */
-
 /* local function prototypes */
 
 static Object generic_function_make (Object arglist);
@@ -369,51 +367,8 @@ parse_generic_function_parameters (Object gf_obj, Object params)
 
   parse_function_required_parameters(&params, tmp_ptr);
   parse_function_rest_parameter(gf_obj, &params, gf_rest_assign);
-
-#ifdef PARSING_KEYS_THE_OLD_WAY
-  /* next look for key parameters */
-  GFKEYPARAMS (gf_obj) = make_empty_list ();
-  if (PAIRP (params) && CAR (params) == key_symbol) {
-    GFPROPS (gf_obj) |= GFKEYSMASK;
-    params = CDR (params);
-    while (PAIRP (params) && (CAR (params) != hash_values_symbol)) {
-      /* CONTAINS BREAK! */
-      entry = CAR (params);
-      if (entry == allkeys_symbol) {
-	break;
-      }
-      /* get a keyword-parameter */
-      if (SYMBOLP (entry)) {
-	keyword_list_insert (&GFKEYPARAMS (gf_obj),
-			     listem (symbol_to_keyword (entry),
-				     entry,
-				     false_object,
-				     NULL));
-      } else if (PAIRP (entry) && is_param_name (CAR (entry)) &&
-		 list_length (entry) == 2) {
-	keyword_list_insert (&GFKEYPARAMS (gf_obj),
-			     listem (param_name_to_keyword (CAR (entry)),
-				     CAR (entry),
-				     SECOND (entry),
-				     NULL));
-      } else if (PAIRP (entry) && KEYWORDP (CAR (entry)) &&
-		 list_length (entry) == 3) {
-	keyword_list_insert (&GFKEYPARAMS (gf_obj), entry);
-      }
-      params = CDR (params);
-    }
-    if (PAIRP (params) && CAR (params) == allkeys_symbol) {
-      GFPROPS (gf_obj) |= GFALLKEYSMASK;
-      params = CDR (params);
-      if (PAIRP (params) && CAR (params) != hash_values_symbol) {
-	error ("parameters follow #all-keys", params);
-      }
-    }
-  }
-#else
   parse_function_key_parameters(gf_obj, &params, gf_keys, do_gf_key, 
 				xform_gf_key_param);
-#endif
 
   if(next_parameter_is(params, hash_values_symbol)) {
     GFRESTVALUES (gf_obj) = NULL;
@@ -474,62 +429,8 @@ parse_method_parameters (Object meth_obj, Object params)
   parse_function_required_parameters(&params, tmp_ptr);
   parse_method_next_parameter(meth_obj, &params);
   parse_function_rest_parameter(meth_obj, &params, method_rest_assign);
-
-#ifdef PARSING_KEYS_THE_OLD_WAY
-  /* next look for key parameters */
-  METHKEYPARAMS (meth_obj) = make_empty_list ();
-  if (PAIRP (params) && CAR (params) == key_symbol) {
-    params = CDR (params);
-    while (PAIRP (params) && (CAR (params) != hash_values_symbol)) {
-      /* CONTAINS BREAK! */
-      entry = CAR (params);
-      if (entry == allkeys_symbol) {
-	break;
-      }
-      /* get a keyword-parameter pair */
-      if (SYMBOLP (entry)) {
-	keyword_list_insert (&METHKEYPARAMS (meth_obj),
-			     listem (param_name_to_keyword (entry),
-				     entry,
-				     false_object,
-				     NULL));
-      } else if (PAIRP (entry) && is_param_name (CAR (entry)) &&
-		 list_length (entry) == 2) {
-	keyword_list_insert (&METHKEYPARAMS (meth_obj),
-			     listem (param_name_to_keyword (CAR (entry)),
-				     CAR (entry),
-				     SECOND (entry),
-				     NULL));
-      } else if (PAIRP (entry) && KEYWORDP (CAR (entry))) {
-	int entry_length = list_length (entry);
-	
-	if (entry_length == 3) {
-	  /* key: key-name value */
-	  keyword_list_insert (&METHKEYPARAMS (meth_obj), entry);
-	} else if (entry_length == 2) {
-	  /* key: key-name */
-	  keyword_list_insert (&METHKEYPARAMS (meth_obj),
-			       listem (CAR (entry),
-				       SECOND (entry),
-				       false_object,
-				       NULL));
-	}
-      }
-      params = CDR (params);
-    }
-  }
-  if (PAIRP (params) && CAR (params) == allkeys_symbol) {
-    METHPROPS (meth_obj) |= METHALLKEYSMASK;
-    params = CDR (params);
-    if (PAIRP (params) && CAR (params) != hash_values_symbol) {
-      error ("parameters follow #all-keys", params);
-    }
-  }
-
-#else
   parse_function_key_parameters(meth_obj, &params, method_keys, do_method_key,
 				xform_method_key_param);
-#endif
 
   if(next_parameter_is(params, hash_values_symbol)) {
     METHRESTVALUES (meth_obj) = NULL;
@@ -750,8 +651,7 @@ add_method (Object generic, Object method)
 
     new_specs = function_specializers (method);
 
-/* check method for fit with generic specializers
- */
+/* check method for fit with generic specializers */
     old_specs = function_specializers (generic);
 
 #ifdef USE_METHOD_CACHING
@@ -976,15 +876,13 @@ applicable_method_p (Object argfun, Object sample_args, int strict_check)
 	args = function_arguments (fun);
 	specs = function_specializers (fun);
 
-	/* Are there more sample args than required args?
-	 */
+	/* Are there more sample args than required args? */
 	num_required = INTVAL (FIRSTVAL (args));
 	if (list_length (sample_args) < num_required) {
 	    return (false_object);
 	}
 	/* Do the types of the required args match the
-	   types of the sample args?
-	 */
+	   types of the sample args? */
 	samples = sample_args;
 	for (i = 0; i < num_required; ++i) {
 	    if (!instance (CAR (samples), CAR (specs))) {
@@ -996,8 +894,8 @@ applicable_method_p (Object argfun, Object sample_args, int strict_check)
 	}
 
 	if (PAIRP (samples)) {
-	    keywords = THIRDVAL (args);
-	    /* If the method accepts keywords, make sure supplied keywords match */
+	  keywords = THIRDVAL (args);
+	  /* If the method accepts keywords, make sure supplied keywords match */
 	    if (PAIRP (keywords) || keywords == all_symbol) {
 		if (keywords == all_symbol) {
 		    check_keywords = 0;
@@ -1029,8 +927,7 @@ applicable_method_p (Object argfun, Object sample_args, int strict_check)
 		return (false_object);
 	    }
 	}
-	/* We passed all of the tests.
-	 */
+	/* We passed all of the tests. */
 	return (true_object);
     }
 }
@@ -1077,8 +974,7 @@ recalc_next_methods (Object fun, Object meth, Object sample_args)
 	sorted_methods = CDR (sorted_methods);
     }
     /* need to check for replacement of myself leaving my new self in the list
-     * (If you can dig that)
-     */
+     * (If you can dig that) */
     if (!EMPTYLISTP (sorted_methods)) {
 	/* my handle should point to my new self (if there is one) */
 	if (HDLOBJ (METHHANDLE (meth)) == (CAR (sorted_methods))) {
@@ -1153,8 +1049,7 @@ possible_method (Object meth, Object class_list)
 	return (0);
     }
     /* Are the classes of the required args supertypes of the
-     * class list?
-     */
+     * class list? */
     samples = class_list;
     for (i = 0; i < num_required; ++i) {
 	if (!subtype (CAR (samples), broad_class (CAR (specs)))) {
@@ -1164,8 +1059,7 @@ possible_method (Object meth, Object class_list)
 	specs = CDR (specs);
     }
 
-    /* We passed all of the tests.
-     */
+    /* We passed all of the tests. */
     return (1);
 }
 
@@ -1290,8 +1184,7 @@ sort_driver (Object *pmeth1, Object *pmeth2)
     return specializer_compare (specs1, specs2);
 }
 
-/* It is assumed that s1 and s2 have the same length.
- */
+/* It is assumed that s1 and s2 have the same length. */
 static int
 same_specializers (Object s1, Object s2)
 {
