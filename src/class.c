@@ -1114,6 +1114,8 @@ objectclass (Object obj)
 	return (object_handle_class);
     case ForeignPtr:
 	return (foreign_pointer_class);		/* <pcb> */
+    case UninitializedSlotValue:
+	return (object_class);
     default:
 	return error ("object-class: don't know class of object", obj, NULL);
     }
