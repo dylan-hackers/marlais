@@ -223,11 +223,13 @@ main (int argc, char *argv[])
 #ifdef DO_NOT_LOAD_COMMON_DYLAN_SPEC
 #else
   {
-#define COMMON_DYLAN_FILE "lib/common-dylan.dylan"
-    char* common_dylan = getenv("MARLAIS_LIB_DIR");
-    if(!common_dylan) {
-      common_dylan = COMMON_DYLAN_FILE;
+#define COMMON_DYLAN_LIB_DIR "common"
+    char* lib_dir = getenv("MARLAIS_LIB_DIR");
+    char common_dylan[256];
+    if(!lib_dir) {
+      lib_dir = COMMON_DYLAN_LIB_DIR;
     }
+    sprintf(common_dylan, "%s/common-dylan.dylan", lib_dir);
     load(make_byte_string(common_dylan));
   }
 #endif
