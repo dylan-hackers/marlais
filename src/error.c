@@ -64,7 +64,7 @@ static char prompt_buf[20];
 #define ERROR   1
 #define DEFAULT 2
 
-#if (!defined __NetBSD__) && (!defined __linux__) && (!defined _HP_UX) && (!defined __hpux) && (!defined _WIN32)
+#if (!defined __NetBSD__) && (!defined __linux__) && (!defined _HP_UX) && (!defined __hpux) && (!defined _WIN32) && (!defined __APPLE__)
 extern char *sys_siglist[];
 
 #else

@@ -118,7 +118,7 @@ CC=gcc
 
 CFLAGS= -g -I$(INCDIRS) $(MARLAIS_FLAGS) $(CEXTRAS)
 
-LIBS=-ltermcap -lreadline -lm
+LIBS=-lncurses -lreadline -lm
 
 FLEXFLAGS = -I
 BYACCFLAGS = -d -v -t

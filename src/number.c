@@ -50,7 +50,7 @@
 
 #if defined(_CX_UX) || defined(MACOS) || defined(sgi) || defined(_HP_UX) \
 || defined(__hpux) || defined(__SunOS_5__) || defined(__linux__) \
-|| defined(_WIN32) || defined(mips)
+|| defined(_WIN32) || defined(mips) || defined(__APPLE__)
 #define NO_DOUBLE_INT_ARITH
 #endif
 
