@@ -9,8 +9,11 @@ readme		- This file.
 common/		- contains the Dylan files that make up the (almost) 
 		  Common-Dylan IO library (MARLAIS_LIB_DIR points to it)
 
-The following files can be used to build marlais-0.6.3 from the
+The following files can be used to build marlais-0.6.4-io-beta from the
 source distribution with Visual C++ 6:
 
 getopt.c
+dylan.tab.c
+dylan.tab.h
+lex.yy.c
 makefile
