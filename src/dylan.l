@@ -777,7 +777,7 @@ get_nonws_symbol (char *text)
 	     start_ptr++);
 	for (end_ptr = start_ptr;
 	     *end_ptr != ' ' && *end_ptr != '\t' && *end_ptr != '\f'
-		&& *end_ptr != '\v' && *end_ptr != '\r' *end_ptr != '\n';
+		&& *end_ptr != '\v' && *end_ptr != '\r' && *end_ptr != '\n';
              end_ptr++);
 	buf_ptr = buffer =
 		(char *) checking_malloc((end_ptr - start_ptr + 1) * sizeof (char));
