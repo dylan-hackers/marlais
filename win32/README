@@ -1,10 +1,13 @@
-This is a Win32 binary of version 0.6.3 of the Marlais (almost)Dylan
+This is a Win32 binary of version 0.6.4-io-beta of the Marlais (almost)Dylan
 interpreter.  It has been tested under Windows ME.
 
-init.dylan  - Initialization file (in c:\marlais or pointed to by MARLAIS_INIT.
-marlais.bat - A batch file that sets MARLAIS_INIT and runs marlais.exe
-marlais.exe - The executable.
-readme      - This file.
+init.dylan      - Initialization file (in c:\marlais or pointed to 
+                  by MARLAIS_INIT).
+marlais.bat	- A batch file that sets MARLAIS_INIT and runs marlais.exe
+marlais.exe	- The executable.
+readme		- This file.
+common/		- contains the Dylan files that make up the (almost) 
+		  Common-Dylan IO library (MARLAIS_LIB_DIR points to it)
 
 The following files can be used to build marlais-0.6.3 from the
 source distribution with Visual C++ 6:

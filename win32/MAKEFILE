@@ -1,34 +1,7 @@
 #
 # Marlais Makefile
 #
-
-# This software is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Library General Public
-# License as published by the Free Software Foundation; either
-# version 2 of the License, or (at your option) any later version.
-#
-# This software is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Library General Public License for more details.
-#
-# You should have received a copy of the GNU Library General Public
-# License along with this software; if not, write to the Free
-# Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-#
-# Original copyright notice follows:
-#
-# Copyright, 1993, Brent Benson.  All Rights Reserved.
-# 0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
-# 0.6 revisions copyright 2001, Douglas M. Auclair. All Rights Reserved.
-#
-# Permission to use, copy, and modify this software and its
-# documentation is hereby granted only under the following terms and
-# conditions.  Both the above copyright notice and this permission
-# notice must appear in all copies of the software, derivative works
-# or modified version, and both notices must appear in supporting
-# documentation.  Users of this software agree to the terms and
-# conditions set forth in this notice.
+# see COPYRIGHT for use of this file
 
 !include <ntwin32.mak>
 
@@ -93,7 +66,7 @@ PREVIOUS_RLOG_VERSION = marlais_0_6_4
 PREVIOUS_VERSION_DIR = $(PROGRAM)-$(PREVIOUS_VERSION)
 PATCHFILE = $(PROGRAM)-$(PREVIOUS_VERSION)-$(VERSION).diff
 GCDIR = gc
-INCDIRS = $(GCDIR)
+INCDIRS = $(GCDIR)/include
 
 MARLAIS_FLAGS = $(SYS_FLAG) \
 	$(STRCASECMP_FLAG) \
@@ -209,7 +182,6 @@ SRCS = 	$(CSRCS) \
 	classprec.h \
 	classprec-clos.h \
 	classprec-ll.h \
-	collection.h \
 	deque.h \
 	dylan_lexer.h \
 	error.h \
@@ -346,7 +318,7 @@ array.o : array.c array.h object.h alloc.h env.h error.h list.h number.h prim.h 
   symbol.h 
 boolean.o : boolean.c boolean.h object.h prim.h 
 bytestring.o : bytestring.c bytestring.h object.h alloc.h env.h character.h \
-  collection.h error.h number.h prim.h symbol.h 
+  error.h number.h prim.h symbol.h 
 character.o : character.c character.h object.h number.h prim.h 
 class.o : class.c class.h symbol.h object.h alloc.h env.h apply.h array.h boolean.h \
   bytestring.h classprec.h classprec-ll.h deque.h error.h eval.h function.h globaldefs.h \
@@ -357,7 +329,7 @@ classprec-ll.o : classprec-ll.c classprec.h classprec-ll.h object.h class.h \
   symbol.h error.h list.h 
 classprec.o : classprec.c classprec-ll.c classprec.h classprec-ll.h object.h \
   class.h symbol.h error.h list.h 
-deque.o : deque.c deque.h object.h collection.h error.h list.h prim.h symbol.h 
+deque.o : deque.c deque.h object.h error.h list.h prim.h symbol.h 
 dylan.tab.o : dylan.tab.c boolean.h object.h bytestring.h error.h $(INCDIRS)/gc.h globaldefs.h \
   list.h number.h symbol.h table.h vector.h yystype.h dylan_lexer.h 
 env.o : env.c env.h object.h alloc.h bytestring.h class.h symbol.h error.h eval.h \
@@ -375,7 +347,7 @@ function.o : function.c function.h object.h apply.h class.h symbol.h env.h error
 keyword.o : keyword.c keyword.h object.h bytestring.h list.h prim.h symbol.h 
 lex.yy.o : lex.yy.c alloc.h object.h env.h bytestring.h character.h dylan.tab.h \
   globaldefs.h list.h number.h symbol.h yystype.h dylan_lexer.h 
-list.o : list.c list.h object.h apply.h boolean.h collection.h error.h number.h \
+list.o : list.c list.h object.h apply.h boolean.h error.h number.h \
   prim.h symbol.h 
 macintosh.o : macintosh.c macintosh.h object.h /local/lib/gcc-lib/sparc-sun-sunos4.1.3/2.4.5/include/string.h \
   number.h values.h error.h foreign_ptr.h 
@@ -400,8 +372,8 @@ syntax.o : syntax.c syntax.h object.h alloc.h env.h apply.h boolean.h bytestring
   class.h symbol.h error.h eval.h keyword.h list.h function.h misc.h number.h \
   print.h table.h values.h 
 sys.o : sys.c sys.h object.h bytestring.h error.h number.h prim.h values.h 
-table.o : table.c table.h object.h alloc.h env.h apply.h collection.h error.h \
+table.o : table.c table.h object.h alloc.h env.h apply.h error.h \
   list.h number.h prim.h symbol.h 
 values.o : values.c values.h object.h alloc.h env.h error.h list.h prim.h 
-vector.o : vector.c vector.h object.h alloc.h env.h collection.h error.h list.h \
+vector.o : vector.c vector.h object.h alloc.h env.h error.h list.h \
   number.h prim.h symbol.h 
