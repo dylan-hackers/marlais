@@ -239,10 +239,10 @@ main (int argc, char *argv[])
 	    Object symbol;
 	    char symbol_name[12];
 	    
-	    snprintf (symbol_name, 12, "$l%i", sequence_num);
+	    snprintf (symbol_name, 12, "$%i", sequence_num);
 	    symbol = make_symbol (symbol_name);
 	    add_top_level_binding (symbol, obj, 1);
-	    fprintf (stdout, " $l%i = ", sequence_num);
+	    fprintf (stdout, " $%i = ", sequence_num);
 	    sequence_num++;
 	}
 	if (TYPE (obj) == Values) {

@@ -225,7 +225,7 @@ leadALPHA	[a-zA-Z]{anyCHAR}*
 leadNUMERIC	[0-9]{anyCHAR}*
 leadGRAPHIC	[!&\*<=>\|\^\$%@_]{anyCHAR}*
 OPSYMS		[-~\+\*\/\^=\<\>&\|]|([\<\>=:~]=)
-SYMBOL		{leadALPHA}|({leadNUMERIC}[a-zA-Z]{leadALPHA})|([!&\*<=>\|\^\$%@_]{anyCHAR}*{leadALPHA})
+SYMBOL		{leadALPHA}|({leadNUMERIC}[a-zA-Z]{leadALPHA})|([!&\*<=>\|\^\$%@_]{anyCHAR}*{leadALPHA})|(\${anyCHAR}*)
 STRING		\"([^\\\"]|(\\(.|\n)))*\"
 
 %x INI KEY VAL ETC
