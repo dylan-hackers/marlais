@@ -141,7 +141,7 @@ int signal_response[32] =
      ERROR,				/* exceeded file size limit */
      ERROR,				/* virtual time alarm */
      ERROR,				/* profiling time alar */
-     ERROR,				/* window changed */
+     DEFAULT,				/* window changed */
      DEFAULT,			/* resource lost (eg, record-lock lost) */
      ERROR,				/* user defined signal 1 */
      ERROR				/* user defined signal 2 */
