@@ -39,6 +39,13 @@ static char sccsid[] = "@(#)getopt.c	4.13 (Berkeley) 2/23/91";
 #include <stdlib.h>
 #include <string.h>
 
+/* as windows doesn't have snprintf, we'll provide our own */
+void snprintf(char* str, int len, char* fmt, int val)
+{
+  sprintf(str, fmt, val);
+}
+
+
 char *index (char *s, char c);
 char *rindex(const char *p, int ch);
 
