@@ -80,11 +80,6 @@ static Object define_generic_function_eval (Object form);
 static Object define_method_eval (Object form);
 static Object define_function_eval (Object form);
 static Object define_module_eval (Object form);
-
-#ifdef DEFINE_TEST
-static Object define_test_eval (Object form);
-#endif
-
 static Object dotimes_eval (Object form);
 static Object for_eval (Object form);
 static Object get_variable (Object var_spec);
@@ -124,22 +119,10 @@ static Object unless_eval (Object form);
 static Object until_eval (Object form);
 static Object unwind_protect_eval (Object form);
 
-#ifdef LISPY_DYLAN
-static Object when_eval (Object form);
-#endif
-
 static Object while_eval (Object form);
 static Object local_bind_eval (Object form);
 static Object local_bind_rec_eval (Object form);
 static Object unbinding_begin_eval (Object form);
-
-#ifdef DEFINE_TEST
-static Object process_test_result (Object name, Object options,
-				   Object doc_string, Object result);
-static Object record_failure (Object name, Object doc_string, Object result);
-static Object record_success (Object name, Object doc_string, Object result);
-static Object record_disabled (Object name, Object doc_string);
-#endif
 
 static char *syntax_operators[] =
 {
@@ -160,9 +143,6 @@ static char *syntax_operators[] =
     "define-method",
     "define-function",
     "define-module",
-#ifdef DEFINE_TEST
-    "define-test",
-#endif
     "dotimes",
     "for",
     "for-each",
@@ -178,9 +158,6 @@ static char *syntax_operators[] =
     "unless",
     "until",
     "unwind-protect",
-#ifdef LISPY_DYLAN
-    "when",
-#endif
     "while",
     "\"local-bind",
     "\"local-bind-rec",
@@ -206,9 +183,6 @@ static syntax_fun syntax_functions[] =
     define_method_eval,
     define_function_eval,
     define_module_eval,
-#ifdef DEFINE_TEST
-    define_test_eval,
-#endif
     dotimes_eval,
     for_eval,
     for_each_eval,
@@ -224,9 +198,6 @@ static syntax_fun syntax_functions[] =
     unless_eval,
     until_eval,
     unwind_protect_eval,
-#ifdef LISPY_DYLAN
-    when_eval,
-#endif
     while_eval,
     local_bind_eval,
     local_bind_rec_eval,
@@ -1927,25 +1898,6 @@ unwind_protect_eval (Object form)
   return (ret);
 }
 
-#ifdef LISPY_DYLAN
-/*** DMA: when? is that CL or Dylan too? */
-static Object
-when_eval (Object form)
-{
-  Object test, body;
-
-  if (EMPTYLISTP (CDR (form))) {
-    error ("when: missing forms", form, NULL);
-  }
-  test = SECOND (form);
-  body = CDR (CDR (form));
-  if (eval (test) != false_object) {
-    return eval_body (body, false_object);
-  }
-  return (false_object);
-}
-#endif
-
 static Object
 while_eval (Object form)
 {
@@ -1966,175 +1918,6 @@ while_eval (Object form)
   }
   return (false_object);
 }
-
-#ifdef DEFINE_TEST
-static Object ___passed_test_list;
-static Object ___failed_test_list;
-static Object ___disabled_test_list;
-static Object ___failure_format_string;
-static Object ___success_format_string;
-static Object ___disabled_format_string;
-static Object ___fail_symbol;
-static Object ___pass_symbol;
-static Object ___disabled_symbol;
-static Object ___no_handler_symbol;
-static Object ___signal_symbol;
-
-static Object
-define_test_eval (Object form)
-{
-  Object test_name, test_options, doc_string, test_form;
-  Object exit_obj, ret;
-  int old_no_debug = NoDebug;
-  Object cache_env = the_env;
-
-  NoDebug = 1;
-
-  if (___passed_test_list == NULL) {
-    ___passed_test_list = make_symbol ("*passed-test-list*");
-    add_top_level_binding (___passed_test_list, make_empty_list (), 0);
-    
-    ___failed_test_list = make_symbol ("*failed-test-list*");
-    add_top_level_binding (___failed_test_list, make_empty_list (), 0);
-    
-    ___disabled_test_list = make_symbol ("*disabled-test-list*");
-    add_top_level_binding (___disabled_test_list, make_empty_list (), 0);
-    
-    ___failure_format_string =
-      make_byte_string ("\nFailed:  %= %= with result %=.");
-    ___success_format_string =
-      make_byte_string ("\nPassed:  %= %= with result %=.");
-    ___disabled_format_string =
-      make_byte_string ("\nDisabled:  %= %=.");
-    ___disabled_symbol = make_symbol ("disabled");
-    ___fail_symbol = make_symbol ("fail");
-    ___pass_symbol = make_symbol ("pass");
-    
-    ___disabled_symbol = make_keyword ("disabled:");
-    ___no_handler_symbol = make_keyword ("no-handler:");
-    ___signal_symbol = make_keyword ("signal:");
-  }
-  if (list_length (form) != 5) {
-    error ("define-test: bad argument list", form);
-  }
-  form = CDR (form);
-  test_name = CAR (form);
-  form = CDR (form);
-  test_options = CAR (form);
-  form = CDR (form);
-  doc_string = CAR (form);
-  form = CDR (form);
-  test_form = CAR (form);
-  
-  if (!SYMBOLP (test_name)) {
-    error ("define-test: first argument must be the test name",
-	   test_name, NULL);
-  }
-  if (!LISTP (test_options)) {
-    error ("define-test: second argument must be a list of options",
-	   test_options, NULL);
-  }
-  if (!BYTESTRP (doc_string)) {
-    error ("define-test: third argument must be documenting string",
-	   doc_string, NULL);
-  }
-  if (doc_string == empty_string) {
-    doc_string = find_keyword_val (description_symbol, test_options);
-    if (doc_string == NULL)
-      doc_string = empty_string;
-  }
-  if (member (___disabled_symbol, test_options)) {
-    return record_disabled (test_name, doc_string);
-  } else if (member (___no_handler_symbol, test_options)) {
-    return process_test_result (test_name, map (eval, test_options),
-				doc_string, eval (test_form));
-  } else {
-    exit_obj = make_exit (signal_symbol);
-    ret = (Object) setjmp (*EXITRET (exit_obj));
-    push_scope (CAR (form));
-    add_binding (signal_symbol, exit_obj, 1, the_env);
-    EXITBINDING (exit_obj) = the_env->bindings[0];
-    if (!ret) {
-      ret = eval (test_form);
-      pop_scope ();
-    } else {
-      pop_scope ();
-    }
-    the_env = cache_env;
-    NoDebug = old_no_debug;
-    return process_test_result (test_name, map (eval, test_options),
-				doc_string, ret);
-  }
-}
-
-static Object
-process_test_result (Object name, Object options, Object doc_string,
-		     Object result)
-{
-  Object signal_opt;
-
-  signal_opt = find_keyword_val (___signal_symbol, options);
-  if (signal_opt) {
-    if (!instance (result, signal_opt)) {
-      warning ("Signalled error class incorrect", signal_opt, NULL);
-    }
-    if (instance (result, error_class)) {
-      return record_success (name, doc_string, result);
-    }
-    return record_failure (name, doc_string, result);
-  } else if (result == true_object) {
-    return record_success (name, doc_string, result);
-  } else {
-    return record_failure (name, doc_string, result);
-  }
-}
-
-
-static Object
-record_failure (Object name, Object doc_string, Object result)
-{
-  struct frame *old_env = the_env;
-
-  the_env = module_binding (dylan_user_symbol)->namespace;
-    
-  format (standard_output_stream, ___failure_format_string,
-	  listem (name, doc_string, result, NULL));
-  modify_value (___failed_test_list,
-		cons (name, symbol_value (___failed_test_list)));
-  the_env = old_env;
-  return ___fail_symbol;
-}
-
-static Object
-record_success (Object name, Object doc_string, Object test_result)
-{
-  struct frame *old_env = the_env;
-
-  the_env = module_binding (dylan_user_symbol)->namespace;
-
-  format (standard_output_stream, ___success_format_string,
-	  listem (name, doc_string, test_result, NULL));
-  modify_value (___passed_test_list,
-		cons (name, symbol_value (___passed_test_list)));
-  the_env = old_env;
-  return ___pass_symbol;
-}
-
-static Object
-record_disabled (Object name, Object doc_string)
-{
-  struct frame *old_env = the_env;
-
-  the_env = module_binding (dylan_user_symbol)->namespace;
-
-  format (standard_output_stream, ___disabled_format_string,
-	  listem (name, doc_string, NULL));
-  modify_value (___disabled_test_list,
-		cons (name, symbol_value (___disabled_test_list)));
-  the_env = old_env;
-  return ___disabled_symbol;
-}
-#endif
 
 static Object
 car (Object lst)
