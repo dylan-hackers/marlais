@@ -20,6 +20,7 @@
 
    Copyright, 1993, Brent Benson.  All Rights Reserved.
    0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
+   0.6 Revisions Copyright 2001, Douglas M. Auclair.  All Rights Reserved.
 
    Permission to use, copy, and modify this software and its
    documentation is hereby granted only under the following terms and
@@ -62,85 +63,76 @@ Object standard_error_stream;
 void
 init_stream_prims (void)
 {
-    int num;
-
-    num = sizeof (stream_prims) / sizeof (struct primitive);
-
-    init_prims (num, stream_prims);
+  int num = sizeof (stream_prims) / sizeof (struct primitive);
+  init_prims (num, stream_prims);
 }
 
 Object
 make_stream (enum streamtype type, FILE * fp)
 {
-    Object obj;
+  Object obj = allocate_object (sizeof (struct stream));
 
-    obj = allocate_object (sizeof (struct stream));
-
-    STREAMTYPE (obj) = Stream;
-    STREAMSTYPE (obj) = type;
-    STREAMFP (obj) = fp;
-    return (obj);
+  STREAMTYPE (obj) = Stream;
+  STREAMSTYPE (obj) = type;
+  STREAMFP (obj) = fp;
+  return (obj);
 }
 
 Object
 open_input_file (Object filename)
 {
-    FILE *fp;
-    char *str;
-
-    str = BYTESTRVAL (filename);
-    fp = fopen (str, "r");
-    if (!fp) {
-	error ("open-input-file: could not open file", filename, NULL);
-    }
-    return (make_stream (Input, fp));
+  FILE *fp;
+  char *str = BYTESTRVAL (filename);
+  fp = fopen (str, "r");
+  if (!fp) {
+    error ("open-input-file: could not open file", filename, NULL);
+  }
+  return (make_stream (Input, fp));
 }
 
 Object
 open_output_file (Object filename)
 {
-    FILE *fp;
-    char *str;
-
-    str = BYTESTRVAL (filename);
-    fp = fopen (str, "w");
-    if (!fp) {
-	error ("open-output-file: could not open file", filename, NULL);
-    }
-    return (make_stream (Output, fp));
+  FILE *fp;
+  char *str = BYTESTRVAL (filename);
+  fp = fopen (str, "w");
+  if (!fp) {
+    error ("open-output-file: could not open file", filename, NULL);
+  }
+  return (make_stream (Output, fp));
 }
 
 Object
 close_stream (Object stream)
 {
-    fclose (STREAMFP (stream));
-    return (unspecified_object);
+  fclose (STREAMFP (stream));
+  return (unspecified_object);
 }
 
 static Object
 eof_object_p (Object obj)
 {
-    if (obj == eof_object) {
-	return (true_object);
-    } else {
-	return (false_object);
-    }
+  if (obj == eof_object) {
+    return (true_object);
+  } else {
+    return (false_object);
+  }
 }
 
 static Object
 standard_input (void)
 {
-    return (standard_input_stream);
+  return (standard_input_stream);
 }
 
 static Object
 standard_output (void)
 {
-    return (standard_output_stream);
+  return (standard_output_stream);
 }
 
 static Object
 standard_error (void)
 {
-    return (standard_error_stream);
+  return (standard_error_stream);
 }

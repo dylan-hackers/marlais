@@ -129,17 +129,27 @@ end method initialize;
 // streams
 //
 
-define method open-input-file (s :: <string>)
-  %open-input-file(s);
-end method open-input-file;
+//define method open-input-file (s :: <string>)
+//  %open-input-file(s);
+//end method open-input-file;
 
-define method open-output-file (s :: <string>)
-  %open-output-file(s);
-end method open-output-file;
+//define method open-output-file (s :: <string>)
+//  %open-output-file(s);
+//end method open-output-file;
 
-define method close-stream (s :: <stream>)
+define class <positionable-stream> (<stream>) end;
+define class <buffered-stream> (<stream>) end;
+
+define class <file-stream> (<buffered-stream>, <positionable-stream>)
+ // slots go here
+end class <file-stream>;
+
+// define method initialize
+// initialize will call the %open-stream functions
+
+define method close (s :: <stream>)
   %close-stream(s);
-end method close-stream;
+end method close;
 
 define method eof-object? (obj)
   %eof-object?(obj);
