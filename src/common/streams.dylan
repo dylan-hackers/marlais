@@ -3,6 +3,9 @@ copyright: (c) 2001, LGPL, Douglas M. Auclair (see "copyright" file)
 
 // source file history:
 // 08-28-2001 dma started file
+// 08-31-2001 dma added <stream>, as it's no longer built into the interpreter
+
+define abstract class <stream> (<object>) end;
 
 //------------------------POSITIONABLE-STREAM-------------------------------
 define abstract class <positionable-stream> (<stream>)

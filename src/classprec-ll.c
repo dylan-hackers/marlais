@@ -1,42 +1,16 @@
-/*
-
-   classprec-ll.c
-
-   This software is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This software is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public
-   License along with this software; if not, write to the Free
-   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-   Original copyright notice follows:
-
-   Copyright, 1994, Joseph N. Wilson.  All Rights Reserved.
-
-   Permission to use, copy, and modify this software and its
-   documentation is hereby granted only under the following terms and
-   conditions.  Both the above copyright notice and this permission
-   notice must appear in all copies of the software, derivative works
-   or modified version, and both notices must appear in supporting
-   documentation.  Users of this software agree to the terms and
-   conditions set forth in this notice.
-
- */
+/* classprec-ll.c -- see COPYRIGHT for use */
 
 #include "alloc.h"
 #include "classprec.h"
 #include "error.h"
 #include "list.h"
+#include "number.h"
 #include "print.h"
+#include "stream.h"
 
+#ifdef NO_COMMON_DYLAN_SPEC
 extern Object standard_error_stream;
+#endif
 
 /* local functions */
 static prec_graph build_l_graph (Object class, Object direct_superclasses);
@@ -149,12 +123,21 @@ print_graph (prec_graph graph)
     index = 0;
     for (i = 0; i < graph.num_classes; i++) {
 	printf ("  class: ");
+#ifdef NO_COMMON_DYLAN_SPEC
 	print_obj (standard_error_stream, graph.class_vec[i]);
+#else
+	print_obj (make_integer(STDERR), graph.class_vec[i]);
+#endif
 	printf ("   successors:\n");
 	for (j = 0; j < graph.succ_size; j++, index++) {
 	    if (graph.succ_vec[index] != -1) {
 		printf ("              ");
+#ifdef NO_COMMON_DYLAN_SPEC
 		print_obj (standard_error_stream, graph.class_vec[graph.succ_vec[index]]);
+#else
+		print_obj (make_integer(STDERR),
+                           graph.class_vec[graph.succ_vec[index]]);
+#endif
 		printf ("\n");
 	    }
 	}
@@ -331,7 +314,11 @@ print_l_list (l_list arg, prec_graph graph)
     printf ("l-list :size = %d", arg.size);
     for (i = 0; i < arg.size; i++) {
 	printf ("       [%d] = ", i);
+#ifdef NO_COMMON_DYLAN_SPEC
 	print_obj (standard_error_stream, graph.class_vec[arg.vec[i]]);
+#else
+	print_obj (make_integer(STDERR), graph.class_vec[arg.vec[i]]);
+#endif
 	printf ("\n");
     }
 }
