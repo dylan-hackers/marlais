@@ -1,5 +1,13 @@
 (Modifications are listed in order from most recent to least recent.)
 
+New in release 0.6.4
+
+* Removed some more classic syntax code in print.c; eliminated factored out
+  code for method creation in syntax.c.
+
+* define_constant_eval no longer returns the constant binding name -- this
+  had confused the top-level-values binding mechanism.
+
 New in release 0.6.3
 
 * Added some new command-line switches and backend behavior, so that marlais
