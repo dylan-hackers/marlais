@@ -20,6 +20,7 @@
 
    Copyright, 1993, Brent Benson.  All Rights Reserved.
    0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
+   0.6 Revisions Copyright 2001, Douglas M. Auclair. All Rights Reserved.
 
    Permission to use, copy, and modify this software and its
    documentation is hereby granted only under the following terms and
@@ -36,12 +37,13 @@
 #include "bytestring.h"
 
 #include "alloc.h"
+#include "globaldefs.h"
 #include "character.h"
-#include "collection.h"
 #include "error.h"
 #include "number.h"
 #include "prim.h"
 #include "symbol.h"
+#include "sequence.h"
 
 /* primitives */
 
@@ -69,20 +71,14 @@ static struct primitive string_prims[] =
 void
 init_string_prims (void)
 {
-    int num;
-
-    num = sizeof (string_prims) / sizeof (struct primitive);
-
+    int num = sizeof (string_prims) / sizeof (struct primitive);
     init_prims (num, string_prims);
-
 }
 
 Object
 make_byte_string (char *str)
 {
-    Object obj;
-
-    obj = allocate_object (sizeof (struct byte_string));
+    Object obj = allocate_object (sizeof (struct byte_string));
 
     BYTESTRTYPE (obj) = ByteString;
     BYTESTRSIZE (obj) = strlen (str);
@@ -93,50 +89,56 @@ make_byte_string (char *str)
 Object
 make_string_driver (Object args)
 {
-    int size, i;
-    char fill;
-    Object size_obj, fill_obj, res;
+  int size, i;
+  char fill;
+  Object size_obj, fill_obj, res;
 
-    size = 0;
-    size_obj = NULL;
-    fill_obj = NULL;
-    while (!EMPTYLISTP (args)) {
-	if (FIRST (args) == size_keyword) {
-	    size_obj = SECOND (args);
-	} else if (FIRST (args) == fill_keyword) {
-	    fill_obj = SECOND (args);
-	} else {
-	    error ("make: unsupported keyword for <string> class", FIRST (args), NULL);
-	}
-	args = CDR (CDR (args));
-    }
-    if (size_obj) {
-	if (!INTEGERP (size_obj)) {
-	    error ("make: value of size: argument must be an integer", size_obj, NULL);
-	}
-	size = INTVAL (size_obj);
-    }
-    if (fill_obj) {
-	if (!CHARP (fill_obj)) {
-	    error ("make: value of fill: must be a character for <string> class", fill_obj, NULL);
-	}
-	fill = CHARVAL (fill_obj);
+#ifdef PRE_REFACTORED
+  size = 0;
+  size_obj = NULL;
+  fill_obj = NULL;
+  while (!EMPTYLISTP (args)) {
+    if (FIRST (args) == size_keyword) {
+      size_obj = SECOND (args);
+    } else if (FIRST (args) == fill_keyword) {
+      fill_obj = SECOND (args);
     } else {
-	fill = 'a';
+      error ("make: unsupported keyword for <string> class", FIRST (args), NULL);
     }
-
-    /* actually fabricate the string */
-    res = allocate_object (sizeof (struct byte_string));
-
-    BYTESTRTYPE (res) = ByteString;
-    BYTESTRSIZE (res) = size;
-    BYTESTRVAL (res) = (char *) checking_malloc ((size * sizeof (char)) + 1);
-
-    for (i = 0; i < size; ++i) {
-	BYTESTRVAL (res)[i] = fill;
+    args = CDR (CDR (args));
+  }
+  if (size_obj) {
+    if (!INTEGERP (size_obj)) {
+      error ("make: value of size: argument must be an integer", size_obj, NULL);
     }
-    BYTESTRVAL (res)[i] = '\0';
-    return (res);
+    size = INTVAL (size_obj);
+  }
+#else
+  make_sequence_driver(args, &size, &size_obj, &fill_obj, "<string>");
+#endif
+
+  if (fill_obj) {
+    if (!CHARP (fill_obj)) {
+      error ("make: value of fill: must be a character for <string> class", 
+	     fill_obj, NULL);
+    }
+    fill = CHARVAL (fill_obj);
+  } else {
+    fill = 'a';
+  }
+
+  /* actually fabricate the string */
+  res = allocate_object (sizeof (struct byte_string));
+
+  BYTESTRTYPE (res) = ByteString;
+  BYTESTRSIZE (res) = size;
+  BYTESTRVAL (res) = (char *) checking_malloc ((size * sizeof (char)) + 1);
+
+  for (i = 0; i < size; ++i) {
+    BYTESTRVAL (res)[i] = fill;
+  }
+  BYTESTRVAL (res)[i] = '\0';
+  return (res);
 }
 
 /* primitives */

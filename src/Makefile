@@ -301,7 +301,7 @@ lex.yy.c: dylan.l dylan.tab.h
 dylan.tab.h: dylan.tab.c
 
 dylan.tab.c: dylan.y
-	byacc $(BYACCFLAGS) dylan.y
+	yacc $(BYACCFLAGS) dylan.y
 	mv y.tab.c dylan.tab.c
 	mv y.tab.h dylan.tab.h
 
