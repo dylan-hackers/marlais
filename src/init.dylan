@@ -1542,7 +1542,7 @@ define method concatenate (s :: <list>, #rest more-sequences)
 	  if (empty? (more))
 	    s;
 	  else
-	    help (append2 (s, more.head), more.tail);
+	    help (%list-append (s, more.head), more.tail);
 	  end if;
 	end method help;
   help (s, more-sequences);
@@ -2036,7 +2036,7 @@ define method concatenate (s :: <string>, #rest more-strings)
   if (empty? (more-strings))
     s
   else
-    apply (concatenate, pair (append2(s, more-strings.head),
+    apply (concatenate, pair (%string-append2(s, more-strings.head),
 			      more-strings.tail));
   end if;
 end method concatenate;
