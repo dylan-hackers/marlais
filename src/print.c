@@ -47,7 +47,9 @@ static struct primitive print_prims[] =
     {"%print", prim_2, print_obj},
     {"%princ", prim_2, print_obj_escaped},
     {"%format", prim_3, format},
-    {"%write-char", prim_2, write_char},
+#ifdef PRE_REFACTORED
+  {"%write-char", prim_2, write_char},
+#endif
 };
 
 /* function definitions */
@@ -976,6 +978,7 @@ print_stream (Object out_stream, Object stream)
     }
 }
 
+#ifdef PRE_REFACTORED
 static Object
 write_char (Object ch, Object stream_list)
 {
@@ -992,6 +995,7 @@ write_char (Object ch, Object stream_list)
 
     return (unspecified_object);
 }
+#endif
 
 static void
 print_type_name (Object stream, Object obj, int escaped)
