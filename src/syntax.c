@@ -49,6 +49,7 @@
 #include "misc.h"
 #include "number.h"
 #include "print.h"
+#include "stream.h"
 #include "symbol.h"
 #include "table.h"
 #include "values.h"
@@ -2148,7 +2149,7 @@ record_failure (Object name, Object doc_string, Object result)
 
     the_env = module_binding (dylan_user_symbol)->namespace;
 
-    format (true_object, ___failure_format_string,
+    format (standard_output_stream, ___failure_format_string,
 	    listem (name, doc_string, result, NULL));
     modify_value (___failed_test_list,
 		  cons (name, symbol_value (___failed_test_list)));
@@ -2163,7 +2164,7 @@ record_success (Object name, Object doc_string, Object test_result)
 
     the_env = module_binding (dylan_user_symbol)->namespace;
 
-    format (true_object, ___success_format_string,
+    format (standard_output_stream, ___success_format_string,
 	    listem (name, doc_string, test_result, NULL));
     modify_value (___passed_test_list,
 		  cons (name, symbol_value (___passed_test_list)));
@@ -2178,7 +2179,7 @@ record_disabled (Object name, Object doc_string)
 
     the_env = module_binding (dylan_user_symbol)->namespace;
 
-    format (true_object, ___disabled_format_string,
+    format (standard_output_stream, ___disabled_format_string,
 	    listem (name, doc_string, NULL));
     modify_value (___disabled_test_list,
 		  cons (name, symbol_value (___disabled_test_list)));

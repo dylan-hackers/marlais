@@ -101,7 +101,7 @@ define method warning (msg :: <string>, #rest args)
 end method warning;
 
 define method cerror (#rest args)
-  format(#t, "cerror: called with arguments %=", args);
+  format(*standard-error*, "cerror: called with arguments %=", args);
 end method cerror;
 
 define method signal (#rest args)
@@ -161,7 +161,7 @@ define method object-princ (stream, obj)
   %princ (stream, obj);
 end method object-princ;
 
-define method format (stream, s :: <string>, #rest args)
+define method format (stream :: <stream>, s :: <string>, #rest args)
   %format(stream, s, args);
 end method format;
 

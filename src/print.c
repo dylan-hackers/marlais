@@ -878,10 +878,12 @@ format (Object stream, Object str, Object rest)
     char *cstr;
     int i;
 
-    if (stream == true_object) {
-	fp = stdout;
-	stream = standard_output_stream;
-    } else if (OUTPUTSTREAMP (stream)) {
+/** DMA -- tightening requirements on format
+    * if (stream == true_object) {
+	* fp = stdout;
+	* stream = standard_output_stream;
+    } else ***/
+    if (OUTPUTSTREAMP (stream)) {
 	fp = STREAMFP (stream);
     } else {
 	error ("format: cannot send output to non-stream", stream, NULL);
