@@ -123,7 +123,7 @@ CC=gcc #NOT-NT
 CFLAGS= -g -I$(INCDIRS) $(MARLAIS_FLAGS) $(CEXTRAS) #NOT-NT
 # CFLAGS= $(cdebug) $(cvars) $(cflags) -i$(INCDIRS) $(MARLAIS_FLAGS) #NT
 
-LIBS=-lm -lreadline #NOT-NT
+LIBS=-ltermcap -lreadline -lm #NOT-NT
 # LIBS=	#NT
 
 FLEXFLAGS = -I
