@@ -55,6 +55,10 @@ module: dylan
 // ---------------------------------------------------------------------
 // 07/01/2001 dma Marlais now under sourceforge developement
 // 07/29/2001 dma Added format-out and standard streams
+// 08/21/2001 dma Worked the type system:  added type-union, changed
+//                class-for-copy to type-for-copy, added abstract? keyword
+//                for make(<class>).  Removed some unused and non-DRM-
+//                compliant bindings.
 //
 
 define method make (c :: <class>, #rest args, #key, #all-keys)
@@ -202,10 +206,10 @@ define method function-specializers (func :: <function>)
   %function-specializers(func);
 end method function-specializers;
 
-define method function-values (func :: <function>)
+define method function-return-values (func :: <function>)
  => (type-sequence :: <sequence>, rest-value :: <object>);
   %function-values(func);
-end method function-values;
+end method function-return-values;
 
 define method function-arguments (f :: <function>)
   %function-arguments(f);
@@ -301,7 +305,7 @@ end method \=;
 define constant \~= =
   method (o1, o2)
     ~(o1 = o2);
-  end method;	
+  end method;
 
 // IRM definition:  < is a generic function.
 
@@ -326,9 +330,9 @@ define constant \>= =
     ~(o1 < o2);
   end method;
 
-define method =hash (obj)
-  %=hash(obj);
-end method =hash;
+// define method =hash (obj)
+//   %=hash(obj);
+// end method =hash;
 
 //
 // classes
@@ -377,7 +381,7 @@ end method seal;
 
 define constant slot-initialized? =
   method (obj, slot)
-    ~(id? (slot(obj), %uninitialized-slot-value));
+     slot(obj) ~== %uninitialized-slot-value;
   end method;
 
 
@@ -393,9 +397,9 @@ define method union (t1 :: <type>, t2 :: <type>)
   %union-type(list(t1, t2));
 end method union;
 
-define method union* (#rest args)
-  union(head(args), apply(union, tail(args)));
-end method union*;
+// define method union* (#rest args)
+//   union(head(args), apply(union, tail(args)));
+// end method union*;
 
 //
 // collections
@@ -552,7 +556,7 @@ define method map3* (functions :: <collection>,
   finally
     new;
   end for;
-end method map2*;
+end method map3*;
 
 //
 // map the function forward-iteration-protocol across collections
@@ -937,7 +941,6 @@ define method key-test (sequence :: <sequence>)
   \==;
 end method key-test;
 
-
 //
 // most general methods for sequence GFs
 
@@ -1238,53 +1241,55 @@ define method sort (s :: <sequence>, #key test = \<, stable = #t)
 end method sort;
 
 define method sort!(a :: <sequence>, #key test = \<, stable = #f)
+  let quicksort! = 
+   method(a, test)
+     local method sort-partition(l, r)
+        let i = l; let j = r;
+        let x = a[truncate/(l + r, 2)];
+        until (i > j)
+          while (test(a[i], x)) i := i + 1 end;
+          while (test(x, a[j])) j := j - 1 end;
+          if (i <= j)
+            let w = a[i];
+            a[i] := a[j];
+            a[j] := w;
+            i := i + 1; 
+	    j := j - 1;
+          end if;
+        end until;
+        if (l < j) sort-partition(l,j) end;
+        if (i < r) sort-partition(i,r) end;
+       end method sort-partition;
+       sort-partition(0, a.size - 1);
+       a
+    end method;
+
+  let insertion-sort! =
+    method(a, test)
+      for (i from 1 below a.size)
+        let x = a[i];
+        let j = i - 1;
+        while (j >= 0 & test(x, a[j]))
+          a[j + 1] := a[j];
+          j := j - 1;
+        end while;
+        a[j + 1] := x;
+      end for;
+      a
+    end method;
   (if (stable) insertion-sort! else quicksort! end)(a, test)
 end method sort!;
 
-define method quicksort!(a, test)
-  local method sort-partition(l, r)
-    let i = l; let j = r;
-    let x = a[truncate/(l + r, 2)];
-      until (i > j)
-      while (test(a[i], x)) i := i + 1 end;
-      while (test(x, a[j])) j := j - 1 end;
-      if (i <= j)
-        let w = a[i];
-        a[i] := a[j];
-        a[j] := w;
-        i := i + 1; j := j - 1;
-      end if;
-    end until;
-    if (l < j) sort-partition(l,j) end;
-    if (i < r) sort-partition(i,r) end;
-  end method sort-partition;
-  sort-partition(0, a.size - 1);
-  a
-end method quicksort!;
-
-define method insertion-sort!(a, test)
-  for (i from 1 below a.size)
-    let x = a[i];
-    let j = i - 1;
-    while (j >= 0 & test(x, a[j]))
-      a[j + 1] := a[j];
-      j := j - 1;
-    end while;
-    a[j + 1] := x;
-  end for;
-  a
-end method insertion-sort!;
-
 define method first (s :: <sequence>, #key default = %default-object)
-	element(s, 0, default: default);
+  element(s, 0, default: default);
 end method first;
 
 define method second (s :: <sequence>, #key default = %default-object)
-	element(s, 1, default: default);
+  element(s, 1, default: default);
 end method second;
 
 define method third (s :: <sequence>, #key default = %default-object)
-	element(s, 2, default: default);
+  element(s, 2, default: default);
 end method third;
 
 define method first-setter (el, s :: <sequence>)
@@ -1560,16 +1565,13 @@ end method remove-duplicates;
 
 //(define-method remove-duplicates! ((l <list>) #key (test id?)) 'unimplemented)
 
-
-
-
 //(define-method concatenate-as ((c <class>) (l <list>) #rest more-sequences) 'unimplemented)
 
-define generic append2 (obj1, obj2);
+// define generic append2 (obj1, obj2);
 
-define method append2 (l1 :: <list>, l2 :: <list>)
-  %list-append(l1, l2);
-end method append2;
+// define method append2 (l1 :: <list>, l2 :: <list>)
+//   %list-append(l1, l2);
+// end method append2;
 
 define method concatenate (s :: <list>, #rest more-sequences)
   local method help (s :: <sequence>, more :: <list>)
@@ -1628,9 +1630,9 @@ define method size (l :: <list>)
   %list-length(l);
 end method size;
 
-define method length (l :: <list>)
-  %list-length(l);
-end method length;
+// define method length (l :: <list>)
+//   %list-length(l);
+// end method length;
 
 define method empty? (l == #())
   #t;
@@ -1996,9 +1998,9 @@ define method \= (r1 :: <range>, r2 :: <range>)
   r1.from = r2.from & r1.by = r2.by & r1.size = r2.size;
 end method \=;
 
-define method =hash (r :: <range>)
-  =hash (r.from) + =hash (r.by) + =hash (r.size);
-end method =hash;
+// define method =hash (r :: <range>)
+//   =hash (r.from) + =hash (r.by) + =hash (r.size);
+// end method =hash;
 
 define method reverse! (f :: <range>)
   if (r.size)
@@ -2076,9 +2078,9 @@ define method size (s :: <string>)
   %string-size(s);
 end method size;
 
-define method length (s :: <string>)
-  %string-size(s);
-end method length;
+// define method length (s :: <string>)
+//   %string-size(s);
+// end method length;
 
 define method concatenate (s :: <string>, #rest more-strings)
   if (empty? (more-strings))
@@ -2089,9 +2091,9 @@ define method concatenate (s :: <string>, #rest more-strings)
   end if;
 end method concatenate;
 
-define method append2 (s1 :: <string>, s2 :: <string>)
-  %string-append2(s1, s2);
-end method append2;
+// define method append2 (s1 :: <string>, s2 :: <string>)
+//   %string-append2(s1, s2);
+// end method append2;
 
 define method as (ic == <small-integer>, s :: <string>)
   let zero = as(<small-integer>, '0');
@@ -2194,13 +2196,13 @@ define method dimensions (v :: <vector>)
   list (%vector-size (v));
 end method dimensions;
 
-define method length (v :: <vector>)
-  %vector-size (v);
-end method length;
+// define method length (v :: <vector>)
+//   %vector-size (v);
+// end method length;
 
-define method append2 (v1 :: <vector>, v2 :: <vector>)
-  %vector-append2 (v1, v2);
-end method append2;
+// define method append2 (v1 :: <vector>, v2 :: <vector>)
+//   %vector-append2 (v1, v2);
+// end method append2;
 
 //
 // iteration protocol
@@ -2255,11 +2257,11 @@ end method final-state;
 // jnw@cis.ufl.edu
 //
 
-//define class <stretchy-vector> (<stretchy-collection>, <vector>)
+// define class <stretchy-vector> (<stretchy-collection>, <vector>)
 //  slot rep :: <vector>;
 //  slot size, init-keyword: size:;
 //  slot fill, init-keyword: fill:;
-//end class <stretchy-vector>;
+// end class <stretchy-vector>;
 
 //
 // table.dyl
@@ -3274,6 +3276,10 @@ end method always;
 define method eval(obj)
   %eval (obj);
 end method eval;
+
+define method type-union(#rest types)
+  apply(%union-type, types);
+end method type-union;
 
 //  Temporary home for COMMON-DYLAN definitions
 define variable *standard-error* :: <stream> = %standard-error();

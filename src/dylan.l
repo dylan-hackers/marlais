@@ -84,6 +84,7 @@ struct resword
 	Object *symbol;
 };
 
+/* #define NUM_COREWORDS 9 */
 #define NUM_COREWORDS 8
 
 struct resword coreword_table [NUM_COREWORDS] =
@@ -95,6 +96,7 @@ struct resword coreword_table [NUM_COREWORDS] =
 	{"let", LET, &let_symbol},
 	{"local", LOCAL, &local_symbol},
 	{"method", METHOD, &method_symbol},
+	/* {"function", FUNCTION, &function_symbol},   DMA */
 	{"otherwise", OTHERWISE, &otherwise_symbol},
 };
 
@@ -113,7 +115,7 @@ struct resword begin_word_table [NUM_BEGIN_WORDS] =
 	{"while", WHILE, &while_symbol},
 };
 
-#define NUM_DEFINING_WORDS	7
+#define NUM_DEFINING_WORDS	6
 
 struct resword defining_word_table [NUM_DEFINING_WORDS] =
 {
@@ -123,7 +125,6 @@ struct resword defining_word_table [NUM_DEFINING_WORDS] =
 	{"module", MODULE, &module_symbol},	
 	{"test", TEST, &test_symbol},
 	{"variable", VARIABLE, &variable_symbol},
-	{"function", FUNCTION, &function_symbol},  /* DMA */
 };
 
 
@@ -225,7 +226,7 @@ alphaCHAR	[a-zA-Z]
 leadALPHA	[a-zA-Z]{anyCHAR}*
 leadNUMERIC	[0-9]{anyCHAR}*
 leadGRAPHIC	[!&\*<=>\|\^\$%@_]{anyCHAR}*
-OPSYMS		[-~\+\*\/\^=\<\>&\|]|([\<\>=:~]=)
+OPSYMS		[-~\+\*\/\^=\<\>&\|]|([\<\>=:~]=)|(~==)
 SYMBOL		{leadALPHA}|({leadNUMERIC}[a-zA-Z]{leadALPHA})|([!&\*<=>\|\^\$%@_]{anyCHAR}*{leadALPHA})|(\${anyCHAR}*)
 STRING		\"([^\\\"]|(\\(.|\n)))*\"
 
@@ -650,8 +651,8 @@ init_reserved_word_symbols (void)
 int
 which_operator( char *string, int length)
 {
-    if (length == 1) {
-	switch (*string) {
+  if (length == 1) {
+    switch (*string) {
 	case '+':
 	    yylval = plus_symbol;
 	    break;
@@ -687,7 +688,7 @@ which_operator( char *string, int length)
 	    break;
 	}
 	return *string;
-    } else {
+    } else if (length == 2) {
 	switch (*string) {
 	case '<':
 	    yylval = lesser_equal_symbol;
@@ -705,7 +706,11 @@ which_operator( char *string, int length)
 	    yylval = colon_equal_symbol;
 	    return COLON_EQUAL;
 	}
+    } else if(length == 3) {
+      yylval = not_equal_equal_symbol;
+      return NOT_EQUAL_EQUAL;
     }
+	
     /*
      * If control gets here, we're really in trouble.
      */

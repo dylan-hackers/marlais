@@ -126,7 +126,7 @@ static int allocation_word (Object word);
 
 %right	COLON_EQUAL	/* := */
 %left	'&' '|'
-%left	GREATER_EQUAL LESSER_EQUAL '>' '<' NOT_EQUAL EQUAL_EQUAL '='
+%left	GREATER_EQUAL LESSER_EQUAL '>' '<' NOT_EQUAL NOT_EQUAL_EQUAL EQUAL_EQUAL '='
 %left	'-' '+'
 %left	'/' '*'
 %left	'^'
@@ -147,7 +147,7 @@ static int allocation_word (Object word);
 %token	HASH_T HASH_F HASH_BRACKET HASH_PAREN
 %token	HASH_NEXT HASH_REST HASH_KEY HASH_ALL_KEYS
 
-%token	DEFINE END GENERIC HANDLER LET LOCAL METHOD OTHERWISE
+%token	DEFINE END GENERIC HANDLER LET LOCAL METHOD FUNCTION OTHERWISE
 
 /*
  * Wait for macros to include this general approach
@@ -156,7 +156,7 @@ static int allocation_word (Object word);
  */	
 
 /*   %token	DEFINING_WORD */
-%token CLASS CONSTANT LIBRARY MODULE VARIABLE TEST FUNCTION
+%token CLASS CONSTANT LIBRARY MODULE VARIABLE TEST
 
 /* CLASS intermediate words */
 %token SLOT
@@ -188,7 +188,6 @@ defining_word
 	| MODULE
 	| VARIABLE
 	| TEST
-	| FUNCTION
 
 /* Program Structure */
 
@@ -297,6 +296,8 @@ expression
 	| expression '>' expression
 		{ $$ = listem ($2, $1, $3, NULL); }
 	| expression NOT_EQUAL expression
+		{ $$ = listem ($2, $1, $3, NULL); }
+	| expression NOT_EQUAL_EQUAL expression
 		{ $$ = listem ($2, $1, $3, NULL); }
 	| expression EQUAL_EQUAL expression
 		{ $$ = listem ($2, $1, $3, NULL); }
@@ -800,8 +801,8 @@ defining_form
 		/* worry about modifiers later. */
 		{ $$ = cons (define_method_symbol, $4); }
 
-/* HACK: we should never allow modifiers for DEFINE FUNCTION */
 	| DEFINE modifiers_opt FUNCTION function_definition
+		/* worry about modifiers later. */
 		{ $$ = cons (define_function_symbol, $4); }
 
 	| DEFINE modifiers_opt GENERIC generic_function_definition

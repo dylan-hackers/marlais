@@ -32,7 +32,7 @@
  */
 
 #ifndef PRIM_H
-#define PRIM_h
+#define PRIM_H
 
 #include "object.h"
 

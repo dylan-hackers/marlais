@@ -61,98 +61,98 @@ unsigned char chartable[1 << sizeof (char) * 8];
 void
 init_symbol_prims (void)
 {
-    int c;
+  int c;
 
-    for (c = 0; c < (1 << sizeof (char) * 8); c++) {
-	chartable[c] = tolower (c);
-    }
+  for (c = 0; c < (1 << sizeof (char) * 8); c++) {
+    chartable[c] = tolower (c);
+  }
 }
 
 Object
 make_symbol (char *name)
 {
-    Object obj;
+  Object obj;
 
-    obj = intern_symbol (name);
-    return (obj);
+  obj = intern_symbol (name);
+  return (obj);
 }
 
 Object
 make_keyword (char *name)
 {
-    Object obj;
+  Object obj;
 
-    obj = intern_symbol (name);
-    SYMBOLTYPE (obj) = Keyword;
-    return (obj);
+  obj = intern_symbol (name);
+  SYMBOLTYPE (obj) = Keyword;
+  return (obj);
 }
 
 
 Object
 make_setter_symbol (Object sym)
 {
-    char *name;
+  char *name;
 
-    name = allocate_string (sizeof (char) * (1 + strlen (SYMBOLNAME (sym)) +
-					     strlen ("-setter")));
+  name = allocate_string (sizeof (char) * (1 + strlen (SYMBOLNAME (sym)) +
+					   strlen ("-setter")));
 
-    strcpy (name, SYMBOLNAME (sym));
-    strcat (name, "-setter");
-    return (make_symbol (name));
+  strcpy (name, SYMBOLNAME (sym));
+  strcat (name, "-setter");
+  return (make_symbol (name));
 }
 
 #ifdef NO_STRCASECMP
 int
 strcasecmp (unsigned char *s1, unsigned char *s2)
 {
-    while ((chartable[*s1] == chartable[*s2++])) {
-	if (!chartable[*s1++])
-	    return 0;
-    }
-    return (chartable[*s1] - chartable[*--s2]);
+  while ((chartable[*s1] == chartable[*s2++])) {
+    if (!chartable[*s1++])
+      return 0;
+  }
+  return (chartable[*s1] - chartable[*--s2]);
 }
 #endif
 
 static Object
 intern_symbol (char *name)
 {
-    int i;
-    unsigned h;
-    struct symtab *entry;
-    Object sym;
+  int i;
+  unsigned h;
+  struct symtab *entry;
+  Object sym;
 
-    h = i = 0;
-    while (name[i]) {
-	h += tolower (name[i++]);
-    }
+  h = i = 0;
+  while (name[i]) {
+    h += tolower (name[i++]);
+  }
 /*
    h = h % SYMTAB_SIZE;
  */
 
-    /* Works only if SYMTAB_SIZE is a power of 2 */
-    h &= (SYMTAB_SIZE - 1);
+  /* Works only if SYMTAB_SIZE is a power of 2 */
+  h &= (SYMTAB_SIZE - 1);
 
-    entry = symbol_table[h];
-    while (entry) {
+  entry = symbol_table[h];
+  while (entry) {
 #ifdef NO_STRCASECMP
-	if (strcasecmp ((unsigned char *) name,
-			(unsigned char *) SYMBOLNAME (entry->sym)) == 0) {
+    if (strcasecmp ((unsigned char *) name,
+		    (unsigned char *) SYMBOLNAME (entry->sym)) == 0) {
 #else
-	if (strcasecmp (name, SYMBOLNAME (entry->sym)) == 0) {
+    if (strcasecmp (name, SYMBOLNAME (entry->sym)) == 0) {
 #endif
-	    return (entry->sym);
-	}
-	entry = entry->next;
+      return (entry->sym);
     }
+    entry = entry->next;
+  }
 
     /* not found, create new entry for it. */
-    sym = allocate_object (sizeof (struct symbol));
+  sym = allocate_object (sizeof (struct symbol));
 
-    SYMBOLTYPE (sym) = Symbol;
-    SYMBOLNAME (sym) = checking_strdup (name);
-    entry = (struct symtab *) allocate_symtab ();
-    entry->sym = sym;
-    entry->next = symbol_table[h];
-    symbol_table[h] = entry;
-    return (sym);
+  SYMBOLTYPE (sym) = Symbol;
+  SYMBOLNAME (sym) = checking_strdup (name);
+  entry = (struct symtab *) allocate_symtab ();
+  entry->sym = sym;
+  entry->next = symbol_table[h];
+  symbol_table[h] = entry;
+  return (sym);
 }

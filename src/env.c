@@ -89,143 +89,146 @@ static void fill_imports_table_from_property_set (Object imports_table,
 static struct frame *
 initialize_namespace (Object owner)
 {
-    struct frame *frame;
+  struct frame *frame;
 
-    frame = (struct frame *) allocate_frame ();
-    frame->size = TOP_LEVEL_SIZE;
-    frame->owner = owner;
-    frame->bindings =
-	(struct binding **) checking_malloc (TOP_LEVEL_SIZE * sizeof (struct binding));
+  frame = (struct frame *) allocate_frame ();
+  frame->size = TOP_LEVEL_SIZE;
+  frame->owner = owner;
+  frame->bindings =
+    (struct binding **) checking_malloc (TOP_LEVEL_SIZE * sizeof (struct binding));
 
-    frame->next = NULL;
-    frame->top_level_env = frame->bindings;
-    return frame;
+  frame->next = NULL;
+  frame->top_level_env = frame->bindings;
+  return frame;
+}
+
+void add_top_level_binding(Object sym, Object val, int constant)
+{
+  add_top_lvl_binding1(sym, val, constant, 1);
 }
 
 void
-add_top_level_binding (Object sym, Object val, int constant)
+add_top_lvl_binding1(Object sym, Object val, int constant, int exported)
 {
-    struct binding *binding, *old_binding;
-    int i;
-    unsigned h;
-    char *str;
+  struct binding *binding, *old_binding;
+  int i;
+  unsigned h;
+  char *str;
 
-    binding = (struct binding *) allocate_binding ();
-    if (PAIRP (sym)) {
-	binding->sym = CAR (sym);
-	binding->type = eval (SECOND (sym));
-    } else {
-	binding->sym = sym;
-	binding->type = object_class;
-    }
+  binding = (struct binding *) allocate_binding ();
+  if (PAIRP (sym)) {
+    binding->sym = CAR (sym);
+    binding->type = eval (SECOND (sym));
+  } else {
+    binding->sym = sym;
+    binding->type = object_class;
+  }
 
-    binding->props &= !IMPORTED_BINDING;
+  binding->props &= !IMPORTED_BINDING;
 
-    /* Just for now */
+  /* Just for now, hide all bindings starting with '%' */
+  if(exported)
     binding->props |= EXPORTED_BINDING;
-    /* */
 
-    if (constant) {
-	binding->props |= CONSTANT_BINDING;
-    }
-    old_binding = symbol_binding_top_level (binding->sym);
-    if (old_binding != NULL) {
-	warning ("Symbol already defined. Previous value",
-		 sym,
-		 *(old_binding->val),
-		 NULL);
-    }
-    binding->val = (Object *) allocate_object (sizeof (Object *));
+  if (constant) {
+    binding->props |= CONSTANT_BINDING;
+  }
+  old_binding = symbol_binding_top_level (binding->sym);
+  if (old_binding != NULL) {
+    warning ("Symbol already defined. Previous value", sym,
+	     *(old_binding->val), NULL);
+  }
+  binding->val = (Object *) allocate_object (sizeof (Object *));
+  
+  *(binding->val) = val;
 
-    *(binding->val) = val;
-
-    i = h = 0;
-    str = SYMBOLNAME (binding->sym);
-    while (str[i]) {
-	h += str[i++];
-    }
+  i = h = 0;
+  str = SYMBOLNAME (binding->sym);
+  while (str[i]) {
+    h += str[i++];
+  }
 /*
    h = h % TOP_LEVEL_SIZE;
  */
 
-    /* Works only if TOP_LEVEL_SIZE is a power of 2 */
-    h &= (TOP_LEVEL_SIZE - 1);
+  /* Works only if TOP_LEVEL_SIZE is a power of 2 */
+  h &= (TOP_LEVEL_SIZE - 1);
 
-    binding->next = the_env->top_level_env[h];
-    the_env->top_level_env[h] = binding;
+  binding->next = the_env->top_level_env[h];
+  the_env->top_level_env[h] = binding;
 
-    if (trace_bindings) {
-	print_obj (standard_error_stream, sym);
-    }
+  if (trace_bindings) {
+    print_obj (standard_error_stream, sym);
+  }
 }
 
 void
 push_scope (Object owner)
 {
-    struct frame *frame;
+  struct frame *frame;
 
-    /* push a new frame */
-    frame = (struct frame *) allocate_frame ();
-    frame->owner = owner;
-    frame->size = 0;
-    frame->bindings = NULL;
-    frame->next = the_env;
-    frame->top_level_env = the_env->top_level_env;
-    the_env = frame;
-    eval_stack->frame = frame;
+  /* push a new frame */
+  frame = (struct frame *) allocate_frame ();
+  frame->owner = owner;
+  frame->size = 0;
+  frame->bindings = NULL;
+  frame->next = the_env;
+  frame->top_level_env = the_env->top_level_env;
+  the_env = frame;
+  eval_stack->frame = frame;
 }
 
 void
 pop_scope (void)
 {
-    the_env = the_env->next;
+  the_env = the_env->next;
 }
 
 void
 add_bindings (Object syms, Object vals, int constant, struct frame *to_frame)
 {
-    struct frame *frame;
-    struct binding *binding;
-    int num_bindings, i;
-    Object sym_list;
+  struct frame *frame;
+  struct binding *binding;
+  int num_bindings, i;
+  Object sym_list;
 
-    sym_list = syms;
-    num_bindings = 0;
-    while (!EMPTYLISTP (sym_list)) {
-	num_bindings++;
-	sym_list = CDR (sym_list);
+  sym_list = syms;
+  num_bindings = 0;
+  while (!EMPTYLISTP (sym_list)) {
+    num_bindings++;
+    sym_list = CDR (sym_list);
+  }
+
+  frame = to_frame;
+
+  frame->bindings = (struct binding **)
+    checking_realloc (frame->bindings,
+		      (frame->size + num_bindings) * sizeof(struct binding *));
+  
+  for (i = 0; i < num_bindings; ++i) {
+    if ((!syms) || (!vals)) {
+      error ("mismatched number of symbols and values", NULL);
     }
+    binding = (struct binding *) allocate_binding ();
+    binding->sym = CAR (syms);
+    /* ??? */
+    binding->type = object_class;
+    binding->val = (Object *) allocate_object (sizeof (Object *));
+    
+    *(binding->val) = CAR (vals);
 
-    frame = to_frame;
-
-    frame->bindings = (struct binding **)
-	checking_realloc (frame->bindings,
-		  (frame->size + num_bindings) * sizeof (struct binding *));
-
-    for (i = 0; i < num_bindings; ++i) {
-	if ((!syms) || (!vals)) {
-	    error ("mismatched number of symbols and values", NULL);
-	}
-	binding = (struct binding *) allocate_binding ();
-	binding->sym = CAR (syms);
-/* ??? */
-	binding->type = object_class;
-	binding->val = (Object *) allocate_object (sizeof (Object *));
-
-	*(binding->val) = CAR (vals);
-
-	binding->props &= !IMPORTED_BINDING;
-	/* Just for now */
-	binding->props |= EXPORTED_BINDING;
-	if (constant) {
-	    binding->props |= CONSTANT_BINDING;
-	}
-	frame->bindings[i + frame->size] = binding;
-
-	syms = CDR (syms);
-	vals = CDR (vals);
+    binding->props &= !IMPORTED_BINDING;
+    /* Just for now */
+    binding->props |= EXPORTED_BINDING;
+    if (constant) {
+      binding->props |= CONSTANT_BINDING;
     }
-    frame->size += num_bindings;
+    frame->bindings[i + frame->size] = binding;
+    
+    syms = CDR (syms);
+    vals = CDR (vals);
+  }
+  frame->size += num_bindings;
 }
 
 void

@@ -1122,6 +1122,7 @@ extern Object collection_class, sequence_class, mutable_sequence_class;
 extern Object mutable_collection_class;
 extern Object list_class, empty_list_class, pair_class, string_class;
 extern Object byte_string_class, vector_class, simple_object_vector_class;
+extern Object stretchy_vector_class;
 extern Object explicit_key_collection_class, mutable_explicit_key_collection_class;
 extern Object table_class, deque_class, array_class;
 extern Object condition_class;

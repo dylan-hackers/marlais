@@ -46,7 +46,7 @@ extern int last_class_index;
 void init_class_prims (void);
 void init_class_hierarchy (void);
 Object make_class (Object class_object, Object supers, Object slot_descriptors,
-		   char *debug_name);
+		   Object abstract_p, char *debug_name);
 void make_uninstantiable (Object class);
 void make_primary (Object class);
 Object make_instance (Object class, Object *initializers);
