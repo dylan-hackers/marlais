@@ -1,66 +1,11 @@
 module: dylan
+copyright: (c) 2001, Marlais Hackers, LGPL (see "COPYRIGHT" file)
 
 //
 // init.dylan
 //
-// This software is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
-//
-// This software is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this software; if not, write to the Free
-// Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-//
-// Original copyright notice follows:
-//
-// Copyright, 1993, Brent Benson.  All Rights Reserved.
-// 0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
-// 0.6 Revisions Copyright 2001, Douglas M. Auclair.  All Rights Reserved.
-//
-// Permission to use, copy, and modify this software and its
-// documentation is hereby granted only under the following terms and
-// conditions.  Both the above copyright notice and this permission
-// notice must appear in all copies of the software, derivative works
-// or modified version, and both notices must appear in supporting
-// documentation.  Users of this software agree to the terms and
-// conditions set forth in this notice.
-//
-// jnw@cis.ufl.edu
-// http://www.cis.ufl.edu/~jnw/
-//
-// Translated to infix syntax by Patrick C. Beard (beard@cs.ucdavis.edu)
-// and by jnw.
-//
-// <Revision History>
-// 12/05/94  pcb  Fixed bug in next-state(state, s :: <string>).
-// 12/16/94  pcb  Converted setter argument ordering.
-// 12/21/94  pcb  Made forward/backward-iteration-protocol reflect 
-//		  setter ordering.
-// 12/21/94  pcb  Fixed as (new-class :: <class>, c :: <collection>) bug. 
-// 12/24/94  jnw  Fixed key-sequence and made it use iter protocol components.
-//                Mod'd state functions for <vector>, <string>, <array> to
-//                  use <integer-state> type.
-// 12/26/94  jnw  Tidied up end words.
-//                Added gf definitions for zero?, positive?, negative?
-//                Removed quotient and integer divide.
-//                Added modulo method for <double-float>
-//                Added floor, ceiling, round, floor/, ceiling/, round/,
-//                  and truncate/
-//                Fixed bogus variable name use in modulo
-// 03/10/95  pcb  Added support for <big-integer> class (again).
-// ---------------------------------------------------------------------
-// 07/01/2001 dma Marlais now under sourceforge developement
-// 07/29/2001 dma Added format-out and standard streams
-// 08/21/2001 dma Worked the type system:  added type-union, changed
-//                class-for-copy to type-for-copy, added abstract? keyword
-//                for make(<class>).  Removed some unused and non-DRM-
-//                compliant bindings.  Made sure functions are not primitive.
+// Revision History
+// 08-28-2001 dma started file
 //
 
 define method make (c :: <class>, #rest args, #key, #all-keys)
@@ -124,86 +69,6 @@ end method signal;
 
 define method initialize (instance, #key, #all-keys)
 end method initialize;
-
-//
-// streams
-//
-
-//define method open-input-file (s :: <string>)
-//  %open-input-file(s);
-//end method open-input-file;
-
-//define method open-output-file (s :: <string>)
-//  %open-output-file(s);
-//end method open-output-file;
-
-define class <positionable-stream> (<stream>) end;
-define class <buffered-stream> (<stream>) end;
-
-define class <file-stream> (<buffered-stream>, <positionable-stream>)
- // slots go here
-end class <file-stream>;
-
-// define method initialize
-// initialize will call the %open-stream functions
-
-define method close (s :: <stream>)
-  %close-stream(s);
-end method close;
-
-define method eof-object? (obj)
-  %eof-object?(obj);
-end method eof-object?;
-
-define variable *standard-output* :: <stream> = %standard-output();
-
-define method print (obj)
-  object-princ(*standard-output*, obj);
-  %princ(*standard-output*, "\n");
-end method print;
-
-define method object-print (stream, obj)
-  %print (stream, obj);
-end method object-print;
-
-define method print* (obj, #rest args)
-  print (obj);
-  unless (empty? (args))
-    print* (args);
-  end unless;
-end method print*;
-
-define method princ (obj)
-  %princ (*standard-output*, obj);
-end method princ;
-
-define method object-princ (stream, obj)
-  %princ (stream, obj);
-end method object-princ;
-
-define method format (stream :: <stream>, s :: <string>, #rest args)
-  %format(stream, s, args);
-end method format;
-
-define method write-char (c :: <character>, #rest maybe-stream)
-  %write-char(c, maybe-stream);
-end method write-char;
-
-define method read (#rest stream)
-  if (empty?(stream))
-    %read();
-  else
-    %read(head(stream));
-  end if;
-end method read;
-
-define method read-char (#rest stream)
-  if (empty?(stream))
-    %read-char();
-  else
-    %read-char(head(stream));
-  end if;
-end method read-char;
 
 define method generic-function-methods (gf :: <generic-function>)
   %generic-function-methods(gf);
@@ -1099,12 +964,12 @@ define method remove-duplicates (s :: <sequence>, #key test = \==)
 end method remove-duplicates;
 
 define method copy-sequence (s :: <sequence>,
-				 #key start = 0, end: finish = s.size - 1)
-  if (finish > s.size - 1)
+				 #key start = 0, end: finish = s.size)
+  if (finish > s.size)
        error ("Not enough elements in sequence to be copied,\ncopy-sequence",
 	      s, "start: ", start, "end:", finish);
   end if;
-  let new = make (type-for-copy (s), size: finish - start + 1);
+  let new = make (type-for-copy (s), size: finish - start);
   let (new-initial-state,
        new-limit,
        new-next-state,
@@ -2974,7 +2839,7 @@ define method remainder (i1 :: <integer>, i2 :: <integer>)
   %remainder-int (i1, i2);
 end method remainder;
 
-// Thanks for Marty Hall for making the following get in init.dyl
+// Thanks for Marty Hall for making the following get into this file
 //
 // Exponentiation has the following caveats:
 //
@@ -3200,12 +3065,3 @@ end method eval;
 define method type-union(#rest types)
   apply(%union-type, types);
 end method type-union;
-
-//  Temporary home for COMMON-DYLAN definitions
-define variable *standard-error* :: <stream> = %standard-error();
-define variable *standard-input* :: <stream> = %standard-input();
-
-define constant format-out = curry(format, *standard-output*);
-
-// eof
-// princ("at eof.");

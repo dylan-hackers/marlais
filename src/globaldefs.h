@@ -180,7 +180,11 @@ extern Object method_class;
 extern Object exit_function_class;
 extern Object unwind_protect_function_class;
 extern Object class_class;
+
+#ifndef COMMON_DYLAN_SPEC
 extern Object stream_class;
+#endif
+
 extern Object table_entry_class;
 extern Object deque_entry_class;
 extern Object limited_int_class;

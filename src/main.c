@@ -1,36 +1,4 @@
-/*
-
-   main.c
-
-   This software is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This software is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public
-   License along with this software; if not, write to the Free
-   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-   Original copyright notice follows:
-
-   Copyright, 1993, Brent Benson.  All Rights Reserved.
-   0.4 & 0.5 Revision Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
-   0.6 Revision Copyright 2001, Douglas M. Auclair. All Rights Reserved.
-
-   Permission to use, copy, and modify this software and its
-   documentation is hereby granted only under the following terms and
-   conditions.  Both the above copyright notice and this permission
-   notice must appear in all copies of the software, derivative works
-   or modified version, and both notices must appear in supporting
-   documentation.  Users of this software agree to the terms and
-   conditions set forth in this notice.
-
- */
+/* main.c -- see COPYRIGHT for use */
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -83,7 +51,7 @@ int getopt (int argc, char *argv[], const char *options);
 #endif
 
 #ifndef VERSION
-#define VERSION "0.6.2"
+#define VERSION "0.6.4a"
 #endif
 
 #ifdef MACOS
@@ -127,7 +95,7 @@ static void print_top_level_constant(Object obj, int bind_p)
     sequence_num++;
   }
   apply (eval (print_symbol),
-	 listem (standard_output_stream, obj, NULL));
+	 listem (obj, standard_output_stream, NULL));
   fprintf (stdout, "\n");
 }
 
@@ -229,18 +197,19 @@ main (int argc, char *argv[])
   /* error catch for initialization code */
   err = setjmp (error_return);
   if (err) {
-    printf ("; error in initialization code -- exiting.\n");
+    printf ("error in initialization code -- exiting.\n");
     exit (1);
   }
 
   /* load initialization code */
   if (!do_not_load_init_file) {
     init_file = getenv ("MARLAIS_INIT");
-    if (!init_file) {
+    if(!init_file) {
       init_file = INIT_FILE;
     }
-    i_load (make_byte_string (init_file));
+    load(make_byte_string (init_file));
   }
+
   set_module (new_module (dylan_user_symbol));
   current_module ()->exported_bindings = all_symbol;
 
@@ -250,6 +219,18 @@ main (int argc, char *argv[])
 	      empty_string,
 	      make_empty_list (),
 	      all_symbol);
+
+#ifdef DO_NOT_LOAD_COMMON_DYLAN_SPEC
+#else
+  {
+#define COMMON_DYLAN_FILE "lib/common-dylan.dylan"
+    char* common_dylan = getenv("MARLAIS_LIB_DIR");
+    if(!common_dylan) {
+      common_dylan = COMMON_DYLAN_FILE;
+    }
+    load(make_byte_string(common_dylan));
+  }
+#endif
 
   if(execute) {
     /* put in a ; in case the user forgets */
@@ -372,12 +353,18 @@ initialize_marlais (void)
   initialize_symbol = make_symbol ("initialize");
   equal_hash_symbol = make_symbol ("=hash");
   uninit_slot_object = make_uninit_slot ();
+
+#ifndef COMMON_DYLAN_SPEC
   standard_input_stream = make_stream (Input, stdin);
   standard_output_stream = make_stream (Output, stdout);
   standard_error_stream = make_stream (Output, stderr);
+#endif
+
+/* this looks like lisp -- should it go? */
   quasiquote_symbol = make_symbol ("quasiquote");
   unquote_symbol = make_symbol ("unquote");
   unquote_splicing_symbol = make_symbol ("unquote-splicing");
+
   element_symbol = make_symbol ("element");
   element_setter_symbol = make_symbol ("element-setter");
   signal_symbol = make_symbol ("signal");
@@ -506,7 +493,7 @@ initialize_marlais (void)
   test_symbol = make_symbol ("test");
   description_symbol = make_keyword ("description:");
   aref_symbol = make_symbol ("aref");
-  print_symbol = make_symbol ("object-print");
+  print_symbol = make_symbol ("print-object");
   princ_symbol = make_symbol ("object-princ");
 
   /* initialize builtin classes */

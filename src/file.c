@@ -99,7 +99,10 @@ i_load (Object filename)
 	expr_list = CDR (expr_list);
     }
 
+#ifdef NO_LOADING_LIBRARIES
     set_module (old_module);
+#endif
+
     load_file_context = old_load_file_context;
 
     return (res);
@@ -132,7 +135,15 @@ open_file (Object filename)
   str = BYTESTRVAL (filename);
   fp = fopen (str, "r");
   if (!fp) {
-    error ("load: cannot open file", filename, NULL);
+/* KLUDGE!!!! */
+    {
+      char file_name[256];
+      sprintf(file_name, "lib/%s", str);
+      fp = fopen(file_name, "r");
+      if(!fp) {
+        error ("load: cannot open file", filename, NULL);
+      }
+    }
   }
   open_file_list = cons (make_foreign_ptr (fp), open_file_list);
   return fp;

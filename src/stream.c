@@ -1,37 +1,7 @@
-/*
+/* stream.c, see COPYRIGHT for use */
 
-   stream.c
-
-   This software is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This software is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public
-   License along with this software; if not, write to the Free
-   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-   Original copyright notice follows:
-
-   Copyright, 1993, Brent Benson.  All Rights Reserved.
-   0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
-   0.6 Revisions Copyright 2001, Douglas M. Auclair.  All Rights Reserved.
-
-   Permission to use, copy, and modify this software and its
-   documentation is hereby granted only under the following terms and
-   conditions.  Both the above copyright notice and this permission
-   notice must appear in all copies of the software, derivative works
-   or modified version, and both notices must appear in supporting
-   documentation.  Users of this software agree to the terms and
-   conditions set forth in this notice.
-
- */
-
+#include <fcntl.h>
+#include <stdio.h>
 #include "stream.h"
 
 #include "error.h"
@@ -43,16 +13,20 @@ static Object eof_object_p (Object obj);
 static Object standard_input (void);
 static Object standard_output (void);
 static Object standard_error (void);
+static Object dylan_write (Object fd, Object str);
 
 static struct primitive stream_prims[] =
 {
+#ifndef COMMON_DYLAN_SPEC
     {"%open-input-file", prim_1, open_input_file},
     {"%open-output-file", prim_1, open_output_file},
+#endif
     {"%close-stream", prim_1, close_stream},
     {"%eof-object?", prim_1, eof_object_p},
     {"%standard-input", prim_0, standard_input},
     {"%standard-output", prim_0, standard_output},
     {"%standard-error", prim_0, standard_error},
+  {"%write", prim_2, dylan_write},
 };
 
 /* globals */
@@ -78,6 +52,8 @@ make_stream (enum streamtype type, FILE * fp)
   return (obj);
 }
 
+#ifndef COMMON_DYLAN_SPEC
+
 Object
 open_input_file (Object filename)
 {
@@ -101,11 +77,15 @@ open_output_file (Object filename)
   }
   return (make_stream (Output, fp));
 }
+#endif
 
 Object
-close_stream (Object stream)
+close_stream (Object stream_fd)
 {
-  fclose (STREAMFP (stream));
+  int fd = INTVAL(stream_fd);
+  if(fd > 2) { /* ignore closing input/output/error */
+    close (fd);
+  }
   return (unspecified_object);
 }
 
@@ -117,6 +97,14 @@ eof_object_p (Object obj)
   } else {
     return (false_object);
   }
+}
+
+static Object
+dylan_write(Object fd_obj, Object str)
+{
+  int fd = INTVAL(fd_obj);
+  write(fd, BYTESTRVAL(str), BYTESTRSIZE(str));
+  return unspecified_object;
 }
 
 static Object

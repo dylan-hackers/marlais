@@ -1,4 +1,4 @@
-module: streams
+module: dylan
 copyright: (c) 2001, LGPL, Douglas M. Auclair (see "copyright" file)
 
 // source file history:
@@ -6,7 +6,7 @@ copyright: (c) 2001, LGPL, Douglas M. Auclair (see "copyright" file)
 
 //------------------------POSITIONABLE-STREAM-------------------------------
 define abstract class <positionable-stream> (<stream>)
-  slot pos = 0;
+  slot pos, init-value: 0;
 end class <positionable-stream>;
 
 define method stream-position(ps :: <positionable-stream>)
@@ -32,7 +32,7 @@ define method adjust-stream-position(ps :: <positionable-stream>,
   end;
 end method adjust-stream-position;
 
-define method stream-size(ps :: <positionable-stream) => (s :: <integer>)
+define method stream-size(ps :: <positionable-stream>) => (s :: <integer>)
   ps.stream-contents.size;
 end method stream-size;
 
@@ -75,8 +75,12 @@ define method type-for-sequence-stream(seq :: <sequence>) => (ans :: <class>)
   <fixed-sequence-stream>;
 end method type-for-sequence-stream;
 
-define method type-for-sequence-stream(seq :: type-union(<stretchy-vector>, 
-							 <deque>))
+define method type-for-sequence-stream(seq :: <stretchy-vector>)
+ => (ans :: <class>)
+  <stretchy-sequence-stream>;
+end method type-for-sequence-stream;
+
+define method type-for-sequence-stream(seq :: <deque>)
  => (ans :: <class>)
   <stretchy-sequence-stream>;
 end method type-for-sequence-stream;
@@ -138,7 +142,7 @@ define method grow-stream(s :: <fixed-sequence-stream>,
 	 #key by = 1, elt = $unspecified)
   let orig = copy-sequence(s.contents);
   s.contents := make(type-for-copy(s.contents), size: s.stream-size + by);
-  map-into!(s.contents, identity, orig);
+  map-into(s.contents, identity, orig);
   if(elt ~== $unspecified) s.contents[s.stream-position] := elt; end if;
 end method grow-stream;
 

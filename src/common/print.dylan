@@ -1,5 +1,5 @@
 module: dylan
-copyright: (c) 2001, LGPL, Douglas M. Auclair (see "copyright" file)
+copyright: (c) 2001, LGPL, Marlais Hackers (see "COPYRIGHT" file)
 
 // print
 // source file history:
@@ -42,20 +42,22 @@ define method write-number(s :: <stream>, d :: <integer>, #key base = 10)
 end method write-number;
 
 define generic format-arg(s :: <stream>, fmt-char :: <character>, obj);
+
+// all these format args need to be fixed for uppercase format args!
 define method format-arg(s :: <stream>, fmt-char == 'd', obj)
-  write-number(s, obj, 10);
+  write-number(s, obj, base: 10);
 end method format-arg;
 
 define method format-arg(s :: <stream>, fmt-char == 'b', obj)
-  write-number(s, obj, 2);
+  write-number(s, obj, base: 2);
 end method format-arg;
 
 define method format-arg(s :: <stream>, fmt-char == 'o', obj)
-  write-number(s, obj, 8);
+  write-number(s, obj, base: 8);
 end method format-arg;
 
 define method format-arg(s :: <stream>, fmt-char == 'x', obj)
-  write-number(s, obj, 16);
+  write-number(s, obj, base: 16);
 end method format-arg;
 
 define method format-arg(s :: <stream>, fmt-char == 'c', obj)
@@ -66,28 +68,33 @@ define method format-arg(s :: <stream>, fmt-char == '=', obj)
   print-object(obj, s);
 end method format-arg;
 
-// this may be really inefficient or really efficient, depending if
-// the <sequence-stream> write is faster that writing elements to <stream>
-// of unknown properties.
-define method format (stream :: <stream>, s :: <string>, #rest args)
+define method format-arg(s :: <stream>, fmt-char == 's', obj)
+  write(s, obj);
+end method format-arg;
+
+// This is about the best for speed's sake that I can do.  One character
+// at a time is painfully slow, and writing to an interem stream isn't
+// much better.  Once Marlais gets a really turbo-charged intepreter
+// algorithm, this'll be faster than C (-; -- dma
+define method format (stream :: <stream>, s :: <string>, #rest args) => ()
   let index = 0;
-  let temp-stream = make(<sequence-stream>, 
-			 contents: make(<deque>), direction: #"output");
+  let old-index = 0;
+
   while(index < s.size)
     if(s[index] == '%')
+      write(stream, s, start: old-index, end: index);
       index := index + 1;
-      if(s[index] == '%')
-	write-element(temp-stream, '%');
+      if(s[index] == '%') // I hate this case, but c'est la vie -- dma
+	write-element(stream, '%');
       else
-        format-arg(temp-stream, s[index], args.head);
+        format-arg(stream, s[index], args.head);
         args := args.tail;
       end if;
-    else
-      write-element(temp-stream, s[index]);
+      old-index := index + 1;
     end if;
     index := index + 1;
   end while;
-  write(stream, temp-stream.stream-contents);
+  write(stream, s, start: old-index, end: index);
 end method format;
 
 define constant format-out = curry(format, *standard-output*);
