@@ -1,6 +1,10 @@
 (Modifications are listed in order from most recent to least recent.)
 
-New in release 0.6.5
+New in release 0.6.4-io-beta
+
+* Put in the beginnings of Common Dylan IO support.  This isn't a library,
+  as Marlais doesn't yet have support for DRM libraries, but it's pretty
+  close to what's defined by the spec.
 
 * Added sequence.c|h to handle common make cases for list, deque, vector.
 
