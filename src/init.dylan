@@ -135,22 +135,6 @@ define method eof-object? (obj)
   %eof-object?(obj);
 end method eof-object?;
 
-/*******  OLD standard-io methods ****
-
-define method standard-input ()
-  %standard-input();
-end method standard-input;
-
-define method standard-output ()
-  %standard-output();
-end method standard-output;
-
-define method standard-error ()
-  %standard-error();
-end method standard-error;
-
-*****/
-
 define variable *standard-output* :: <stream> = %standard-output();
 
 define method print (obj)
