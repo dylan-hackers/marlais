@@ -36,7 +36,7 @@
 
 #include "object.h"
 
-void init_misc_prims (void);
+/* void init_misc_prims (void); */
 Object make_eof_object (void);
 Object make_unspecified_object (void);
 Object make_uninit_slot (void);

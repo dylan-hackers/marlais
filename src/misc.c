@@ -36,6 +36,7 @@
 #include "alloc.h"
 #include "prim.h"
 
+#ifdef PRE_REFACTORED
 static Object quit (void);
 
 static struct primitive misc_prims[] =
@@ -47,12 +48,10 @@ static struct primitive misc_prims[] =
 void
 init_misc_prims (void)
 {
-    int num;
-
-    num = sizeof (misc_prims) / sizeof (struct primitive);
-
-    init_prims (num, misc_prims);
+  int num = sizeof (misc_prims) / sizeof (struct primitive);
+  init_prims (num, misc_prims);
 }
+#endif
 
 Object
 make_eof_object (void)
@@ -72,28 +71,13 @@ make_eof_object (void)
 Object
 make_unspecified_object (void)
 {
-    Object obj;
-
-
-    obj = allocate_object (sizeof (struct values));
+    Object obj = allocate_object (sizeof (struct values));
 
     VALUESTYPE (obj) = Values;
     VALUESNUM (obj) = 0;
     VALUESELS (obj) = NULL;
 
     return obj;
-
-#if 0
-#ifndef SMALL_OBJECTS
-    Object obj;
-    obj = allocate_object (sizeof (struct object));
-
-    TYPE (obj) = Unspecified;
-    return (obj);
-#else
-    return (UNSPECVAL);
-#endif
-#endif
 }
 
 Object
@@ -138,8 +122,11 @@ make_unwind (Object body)
     return (obj);
 }
 
+#ifdef PRE_REFACTORED
 static Object
 quit (void)
 {
     exit (0);
 }
+#endif
+
