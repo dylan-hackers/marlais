@@ -1,7 +1,7 @@
 module: dylan
 
 //
-// newinit.dyl
+// init.dylan
 //
 // This software is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -52,6 +52,9 @@ module: dylan
 //                  and truncate/
 //                Fixed bogus variable name use in modulo
 // 03/10/95  pcb  Added support for <big-integer> class (again).
+// ---------------------------------------------------------------------
+// 07/01/2001 dma Marlais now under sourceforge developement
+// 07/29/2001 dma Added format-out and standard streams
 //
 
 define method make (c :: <class>, #rest args, #key, #all-keys)
@@ -132,6 +135,8 @@ define method eof-object? (obj)
   %eof-object?(obj);
 end method eof-object?;
 
+/*******  OLD standard-io methods ****
+
 define method standard-input ()
   %standard-input();
 end method standard-input;
@@ -144,10 +149,13 @@ define method standard-error ()
   %standard-error();
 end method standard-error;
 
+*****/
+
+define variable *standard-output* :: <stream> = %standard-output();
+
 define method print (obj)
-  object-princ (standard-output(), obj);
-//  %print (standard-output(), obj);
-  %princ (standard-output(), "\n");
+  object-princ(*standard-output*, obj);
+  %princ(*standard-output*, "\n");
 end method print;
 
 define method object-print (stream, obj)
@@ -162,7 +170,7 @@ define method print* (obj, #rest args)
 end method print*;
 
 define method princ (obj)
-  %princ (standard-output(), obj);
+  %princ (*standard-output*, obj);
 end method princ;
 
 define method object-princ (stream, obj)
@@ -3284,7 +3292,6 @@ define method eval(obj)
 end method eval;
 
 //  Temporary home for COMMON-DYLAN definitions
-define variable *standard-output* = #t;
 define constant format-out = curry(format, *standard-output*);
 
 // eof
