@@ -1,3 +1,25 @@
+I flew solo for the 0.6.2 distribution 
+
+Douglas M. Auclair, dauclair@hotmail.com
+
+-------------------------------------------
+
+Acknowledgments for the 0.6.1 distribution:
+
+Thanks to:
+
+Dr. Joe Wilson for allowing me to pick up on this project and leaving Marlais
+in a very strong state.
+
+Andreas Bogk for adding top-level bindings for return values.
+
+Hans Boehm for making his garbage collector so easy to integrate -- right out
+of the box!
+
+Douglas M. Auclair, dauclair@hotmail.com
+
+--------------------------------------------
+
 Acknowledgments for the 0.5.12 distribution:
 
 Thanks to:

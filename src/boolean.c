@@ -89,14 +89,6 @@ make_false (void)
 }
 #endif
 
-#ifdef PRE_REFACTORED
-Object
-not_id_p (Object obj1, Object obj2, Object rest)
-{
-  return not(id_p(obj1, obj2, rest));
-}
-#endif
-
 Object
 id_p (Object obj1, Object obj2, Object rest)
 {

@@ -101,13 +101,30 @@ int thePromptDirty = false;
 #endif
 
 static int do_not_load_init_file = 0;
-static char *optstring = "cdnep";
+static char *optstring = "bdnep";
 char *prompt = "? ";
 char *prompt_continuation = "> ";
 char *current_prompt;
 static int debug = 0;
 int echo_prefix = 0;
 int sequence_num = 0;
+
+static void assign_top_level_constant(Object obj)
+{
+  Object symbol;
+  char symbol_name[12];
+
+  if (obj == unspecified_object) return;
+	    
+  snprintf (symbol_name, 12, "$%i", sequence_num);
+  symbol = make_symbol (symbol_name);
+  add_top_level_binding (symbol, obj, 1);
+  fprintf (stdout, " $%i = ", sequence_num);
+  sequence_num++;
+  apply (eval (print_symbol),
+	 listem (standard_output_stream, obj, NULL));
+  fprintf (stdout, "\n");
+}
 
 int
 main (int argc, char *argv[])
@@ -118,9 +135,6 @@ main (int argc, char *argv[])
   extern int optind;
   struct frame *cache_env;
 
-  /* banner */
-  printf ("Marlais %s\n", VERSION);
-
   /* initialization */
   initialize_marlais ();
   open_file_list = make_empty_list ();
@@ -128,8 +142,8 @@ main (int argc, char *argv[])
   /* process command line parameters except source files */
   while ((c = getopt (argc, argv, optstring)) != EOF) {
     switch (c) {
-    case 'c':
-      classic_syntax = 1;
+    case 'b': /* b is for banner */
+      printf ("Marlais %s\n", VERSION);
       break;
     case 'd':
       debug = 1;
@@ -144,7 +158,7 @@ main (int argc, char *argv[])
       prompt_continuation = "";
       break;
     default:
-      fatal ("fatal: unrecognized option");
+      fatal ("Marlais fatal error: unrecognized option");
     }
   }
 
@@ -160,11 +174,7 @@ main (int argc, char *argv[])
     if (!init_file) {
       init_file = INIT_FILE;
     }
-#ifdef INFIX_INIT_FILE
     i_load (make_byte_string (init_file));
-#else
-    p_load (make_byte_string (init_file));
-#endif
   }
   set_module (new_module (dylan_user_symbol));
   current_module ()->exported_bindings = all_symbol;
@@ -231,32 +241,23 @@ main (int argc, char *argv[])
     prompt = "? ";
     current_prompt = prompt;
   }
-  while ((obj = (classic_syntax ? read_object (stdin)
-		 : parse_object (stdin, debug)))
-	 && (obj != eof_object)) {
+
+  /* so now that DRM Dylan only accepts infix syntax, I'm eliminating all
+     traces of the classic_syntax -- dma */
+  while ((obj = parse_object (stdin, debug)) && (obj != eof_object)) {
     obj = eval (obj);
-    if (obj != unspecified_object) {
-      Object symbol;
-      char symbol_name[12];
-	    
-      snprintf (symbol_name, 12, "$%i", sequence_num);
-      symbol = make_symbol (symbol_name);
-      add_top_level_binding (symbol, obj, 1);
-      fprintf (stdout, " $%i = ", sequence_num);
-      sequence_num++;
-    }
-    if (TYPE (obj) == Values) {
-      print_obj (standard_output_stream, obj);
-      if (VALUESNUM (obj)) {
-	fprintf (stdout, "\n");
+    {
+      int x, vals = 1;
+      if(TYPE(obj) == Values) {
+	vals = VALUESNUM(obj);
       }
-    } else {
-      apply (eval (print_symbol),
-	     listem (standard_output_stream, obj, NULL));
-      fprintf (stdout, "\n");
-    }
-    if (classic_syntax < 0) {
-      classic_syntax = 0;
+      else {
+	obj = construct_values(1, obj);
+      }
+      for(x = 0; x < vals; x++) {
+	Object elt = VALUESELS(obj)[x];
+	assign_top_level_constant(elt);
+      }
     }
     fflush (stdout);
     cache_env = the_env;
@@ -270,8 +271,6 @@ main (int argc, char *argv[])
 void
 initialize_marlais (void)
 {
-  classic_syntax = 0;
-
   /* intialize garbage collector */
   initialize_gc ();
 
@@ -380,6 +379,7 @@ initialize_marlais (void)
   plus_symbol = make_symbol ("+");
   not_symbol = make_symbol ("~");
 
+  /** dma -- I think these are classic syntax constructs */
   local_bind_symbol = make_symbol ("\"local-bind");
   local_bind_rec_symbol = make_symbol ("\"local-bind-rec");
   unbinding_begin_symbol = make_symbol ("\"unbinding-begin");
@@ -389,6 +389,7 @@ initialize_marlais (void)
   define_generic_function_symbol = make_symbol ("define-generic-function");
   define_method_symbol = make_symbol ("define-method");
   define_function_symbol = make_symbol ("define-function");
+
   seal_symbol = make_symbol ("seal");
   set_bang_symbol = make_symbol ("set!");
   singleton_symbol = make_symbol ("singleton");

@@ -21,6 +21,7 @@ module: dylan
 //
 // Copyright, 1993, Brent Benson.  All Rights Reserved.
 // 0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
+// 0.6 Revisions Copyright 2001, Douglas M. Auclair.  All Rights Reserved.
 //
 // Permission to use, copy, and modify this software and its
 // documentation is hereby granted only under the following terms and
@@ -39,7 +40,8 @@ module: dylan
 // <Revision History>
 // 12/05/94  pcb  Fixed bug in next-state(state, s :: <string>).
 // 12/16/94  pcb  Converted setter argument ordering.
-// 12/21/94  pcb  Made forward/backward-iteration-protocol reflect setter ordering.
+// 12/21/94  pcb  Made forward/backward-iteration-protocol reflect 
+//		  setter ordering.
 // 12/21/94  pcb  Fixed as (new-class :: <class>, c :: <collection>) bug. 
 // 12/24/94  jnw  Fixed key-sequence and made it use iter protocol components.
 //                Mod'd state functions for <vector>, <string>, <array> to

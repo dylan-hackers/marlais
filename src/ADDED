@@ -1,5 +1,19 @@
 (Modifications are listed in order from most recent to least recent.)
 
+New in release 0.6.2
+
+* Eliminated support for the classic (a la Scheme) syntax as DRM-compliant
+  Dylan implementations must be infix syntax only.  This cut out 89K from
+  the Linux binary.
+
+* Eliminated some unused, non-DRM-compliant bindings.  Fixed some bindings
+  that were non-DRM-compliant (but almost there, e.g. I renamed class-for-copy
+  to type-for-copy).  Added some missing bindings, such as <stretchy-vector>
+  (which is only a binding at this time, do not use it!), type-union, and
+  \~==.
+
+* Fixed top-level-bindings for multiple-return values.
+
 New in release 0.6.1
 
 * Returned values are stored in constants bound at the top-level.

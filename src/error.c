@@ -109,10 +109,6 @@ char *sys_siglist[32] =
 extern Object signal_symbol;
 extern Object simple_error_class;
 
-#ifdef ALLOW_CLASSIC_SYNTAX
-extern int classic_syntax;
-#endif
-
 int signal_response[32] =
     {IGNORE,
      ERROR,				/* hangup */
@@ -344,12 +340,7 @@ error (char *msg,...)
       yy_restart (stdin);
       prompt = prompt_buf;
       current_prompt = prompt;
-      while ((obj = (
-#ifdef ALLOW_CLASSIC_SYNTAX
-		     classic_syntax ? read_object (stdin) :
-#endif
-		     parse_object (stdin, 0)))
-	     && (obj != eof_object)) {
+      while ((obj = parse_object (stdin, 0)) && (obj != eof_object)) {
 	obj = eval (obj);
 	if (obj != unspecified_object) {
 	  Object symbol;

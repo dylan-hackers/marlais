@@ -47,29 +47,14 @@
 
 extern Object open_file_list;
 
-#ifdef ALLOW_CLASSIC_SYNTAX
-/* primitives */
-static Object infix ();
-static Object prefix ();
-#endif
-
 static struct primitive file_prims[] =
 {
     {"load", prim_1, load},
-#ifdef ALLOW_CLASSIC_SYNTAX
-    {"i-load", prim_1, i_load},
-    {"p-load", prim_1, p_load},
-    {"infix", prim_0, infix},
-    {"prefix", prim_0, prefix},
-#endif
 };
 
 /* function definitions */
-static FILE *
-  open_file (Object filename);
-
-static void
-  close_file (FILE * fp);
+static FILE * open_file (Object filename);
+static void close_file (FILE * fp);
 
 void
 init_file_prims (void)
@@ -77,28 +62,6 @@ init_file_prims (void)
   int num = sizeof (file_prims) / sizeof (struct primitive);
   init_prims (num, file_prims);
 }
-
-#ifdef ALLOW_CLASSIC_SYNTAX
-Object
-p_load (Object filename)
-{
-    FILE *fp;
-    Object obj, res;
-    struct module_binding *old_module;
-
-    old_module = current_module ();
-
-    fp = open_file (filename);
-
-    while ((obj = read_object (fp)) != eof_object) {
-	res = eval (obj);
-    }
-
-    set_module (old_module);
-    close_file (fp);
-    return (res);
-}
-#endif
 
 Object
 i_load (Object filename)
@@ -146,12 +109,6 @@ Object
 load (Object filename)
 {
   Object res;
-
-#ifdef ALLOW_CLASSIC_SYNTAX
-  if (classic_syntax) {
-    res = p_load (filename);
-  } else {
-#endif
   FILE *old_yyin = yyin;
 
   res = i_load (filename);
@@ -160,48 +117,8 @@ load (Object filename)
     fflush (stdin);
     yyrestart (stdin);
   }
-#ifdef ALLOW_CLASSIC_SYNTAX
-  }
-#endif
   return res;
 }
-
-#ifdef ALLOW_CLASSIC_SYNTAX
-static Object
-infix ()
-{
-#ifdef MACOS
-    extern void update_listener_syntax (void);
-
-    classic_syntax = 0;
-    update_listener_syntax ();
-
-    if (yyin == stdin) {
-	clearerr (stdin);
-	fflush (stdin);
-	yyrestart (stdin);
-    }
-#else
-    classic_syntax = -1;
-    reset_parser (yyin);
-#endif
-    return unspecified_object;
-}
-
-static Object
-prefix ()
-{
-#ifdef MACOS
-    extern void update_listener_syntax (void);
-
-    classic_syntax = 1;
-    update_listener_syntax ();
-#else
-    classic_syntax = 1;
-#endif
-    return unspecified_object;
-}
-#endif
 
 static FILE *
 open_file (Object filename)

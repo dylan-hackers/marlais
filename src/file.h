@@ -39,10 +39,6 @@
 void init_file_prims (void);
 Object load (Object filename);
 Object i_load (Object filename);
-#ifdef ALLOW_CLASSIC_SYNTAX
-Object p_load (Object filename);
-extern int classic_syntax;
-#endif
 void close_open_files (void);
 
 #endif

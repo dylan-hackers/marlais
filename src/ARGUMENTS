@@ -1,4 +1,4 @@
-marlais [-d] [-c] [-n] [init-file ...]
+marlais [-b] [-d] [-n] [init-file ...]
 
 marlais is the Marlais Dylan(TM) interpreter.  It directly evaluates
 programs written in a variant of Apple Computer's Dylan programming
@@ -12,15 +12,9 @@ terminate its execution.
 
 Switches:
 
-	-c	Use prefix (classic) Dylan syntax.
+	-b	Show the banner (with the version number) at startup.
 
 	-d	Generate parser debug output.
-
-	-e	Echo equivalent prefix expression.
-
-		This flag causes the interpreter to echo the prefix
-		Dylan expression equivalent to any infix expression
-		it encounters in its read-eval-print loop.
 
 	-n	Suppress loading the system default Dylan init file.
 
