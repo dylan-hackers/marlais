@@ -2,25 +2,13 @@ Marlais should run on the following systems.  If you successfully run
 Marlais on one of the untested systems, please let me know so I can
 add it to the tested category. 
 
-tested under Rev. 0.5.9
+tested under Rev. 0.6.1
 ~~~~~~
-Sun 4 under SunOS 4.X and SunOS 5.X
 Intel 386 or 486 under Linux.
-SGI workstations under IRIX
-Intel 386 and 486 with Windows NT 3.5 and Visual C++ 2.0
+Intel 386 and 486 with Windows NT 4.0 and Windows ME (MSVC++ 6.0)
 
-untested
-~~~~~~~~
-Sun 3
-Intel 386 or 486 under OS/2 (no threads).
-Vax under 4.3BSD, Ultrix
-Sequent Symmetry  (no concurrency)
-Encore Multimax   (no concurrency)
-MIPS M/120 (and presumably M/2000) (RISC/os 4.0 with BSD libraries)
-IBM PC/RT  (Berkeley UNIX)
-HP9000/300
-HP9000/700
-Sony News
-Apple MacIntosh under A/UX
-IBM RS/6000
-DECstations under Ultrix
+tested under Rev. 0.5.12
+~~~~~~
+MacOS 8.6 and lower
+SGI workstations under IRIX
+

@@ -55,7 +55,7 @@ Contents of the file my-arith.lid:
 		export trunc/, ceil/;
 	end module my-arithmetic;
 
-Contents of the file my-arith.dyl
+Contents of the file my-arith.dylan
 
 	module: my-arithmetic
 	
@@ -75,7 +75,7 @@ Interpreter Session:
 
 	Marlais 0.5.7
 	? load ("my-arith.lid");
-	? load ("my-arith.dyl");
+	? load ("my-arith.dylan");
 	? define module use-arith
 	>   use dylan-user, export: all;
 	>   use my-arithmetic, export: all;
@@ -252,6 +252,7 @@ Dylan book.  Marlais has added the following I/O features:
 	print (<object>) => unspecified
 	princ (<object>) => unspecified
 	format ((union <stream> #t) <string> arg1 arg2 ...) => unspecified
+        format-out(<string>, #rest args) => ()
 	read ([<stream>]) => <object>
 	read-char ([<stream>]) => <character>
 

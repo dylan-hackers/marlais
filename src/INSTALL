@@ -5,7 +5,7 @@ information on porting to your architecture.
 Modify the CC and CFLAGS variables in the Makefile if necessary.
 Marlais requires an ANSI C compiler.
 
-Modify the INIT_FILE variable to point to the place where the
-initialization file, init.dyl, will be kept.
+Modify the MARLAIS_INIT variable to point to the place where the
+initialization file, init.dylan, will be kept.
 
 Type make.

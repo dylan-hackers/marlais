@@ -97,10 +97,10 @@ PRECEDENCE_FLAG = -DUSE_LL_PRECEDENCE
 
 ##########################################
 
-VERSION = 0.5.12
-RLOG_VERSION = marlais_0_5_12
-PREVIOUS_VERSION = 0.5
-PREVIOUS_RLOG_VERSION = marlais_0_5
+VERSION = 0.6.1
+RLOG_VERSION = marlais_0_6_1
+PREVIOUS_VERSION = 0.5.12
+PREVIOUS_RLOG_VERSION = marlais_0_5_12
 PREVIOUS_VERSION_DIR = $(PROGRAM)-$(PREVIOUS_VERSION)
 PATCHFILE = $(PROGRAM)-$(PREVIOUS_VERSION)-$(VERSION).diff
 INCDIRS = gc 
@@ -272,7 +272,7 @@ OTHER_NONC_FILES = \
 	ARGUMENTS \
 	ChangeLog \
 	Makefile \
-	init.dyl \
+	init.dylan \
 	dylan.l \
 	dylan.y \
 	foreign.dyl \

@@ -59,7 +59,6 @@ STRCASECMP_FLAG = -DNO_STRCASECMP
 # # below like #NOT-NT (which probably cause problems with csh)
 #
 SHELL = /bin/sh
-GETOPT=../win32/getopt
 
 ##########################################
 ### Interpreter Customization Features ###
@@ -93,8 +92,8 @@ PRECEDENCE_FLAG = -DUSE_LL_PRECEDENCE
 
 ##########################################
 
-VERSION = 0.5.13
-RLOG_VERSION = marlais_0_5_13
+VERSION = 0.6.1
+RLOG_VERSION = marlais_0_6_1
 PREVIOUS_VERSION = 0.5.12
 PREVIOUS_RLOG_VERSION = marlais_0_5_12
 PREVIOUS_VERSION_DIR = $(PROGRAM)-$(PREVIOUS_VERSION)
@@ -185,7 +184,7 @@ CSRCS = alloc.c \
 	function.c \
 	foreign_ptr.c \
 	keyword.c \
-	..\win32\lex-yy.c \
+	lex-yy.c \
 	list.c \
 	main.c \
 	misc.c \
@@ -203,7 +202,7 @@ CSRCS = alloc.c \
 	table.c \
 	values.c \
 	vector.c \
-	$(GETOPT).c
+	getopt.c
 
 SRCS = 	$(CSRCS) \
 	dylan.tab.h \

@@ -173,6 +173,10 @@ define method format (stream, s :: <string>, #rest args)
   %format(stream, s, args);
 end method format;
 
+define method format-out (#rest args)
+  format(#t, args);
+end method format-out;
+
 define method write-char (c :: <character>, #rest maybe-stream)
   %write-char(c, maybe-stream);
 end method write-char;

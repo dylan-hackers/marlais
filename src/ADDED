@@ -1,5 +1,16 @@
 (Modifications are listed in order from most recent to least recent.)
 
+New in release 0.6.1
+
+* Returned values are stored in constants bound at the top-level.
+
+* Windows integration tightened up.
+
+* Boehm garbage collector upgraded to 5.3.
+
+* Minor improvements to Marlais Dylan:  added format-out, fixed bug
+  in complement.
+
 New in release 0.5.11 (since release (0.5.10)
 
 * NT_MAKEFILE has not been tested, but is probably close to working.
