@@ -397,10 +397,6 @@ define method union (t1 :: <type>, t2 :: <type>)
   %union-type(list(t1, t2));
 end method union;
 
-// define method union* (#rest args)
-//   union(head(args), apply(union, tail(args)));
-// end method union*;
-
 //
 // collections
 //
@@ -1086,33 +1082,6 @@ define method remove-duplicates (s :: <sequence>, #key test = \==)
   as (s.type-for-copy, new-list);
 end method remove-duplicates;
 
-//(define-method remove-duplicates ((s <sequence>) #key (test id?))
-//  (bind ((new-list '()))
-//    (for ((state1 (initial-state s) (next-state s state1)))
-//	((not state1))
-//      (bind ((already-there #f))
-//	(for ((state2 (initial-state s) (next-state s state2)))
-//	    ((or already-there (not state)))
-//	  (if (test (current-element s state1) (current-element s state2))
-//	      (set! already-there #t)))
-//	(if (not already-there)
-//	    (set! new-list (pair (current-element s state1))))))
-//    (as (type-for-copy s) new-list)))
-
-
-//(define-method remove-duplicates! ((s <sequence>) #key (test id?))
-//  (bind ((new-list '()))
-//    (for ((state1 (initial-state s) (next-state s state1)))
-//	((not state1))
-//      (bind ((already-there #f))
-//	(for ((state2 (initial-state s) (next-state s state2)))
-//	    ((or already-there (not state)))
-//	  (if (test (current-element s state1) (current-element s state2))
-//	      (set! already-there #t)))
-//	(if (not already-there)
-//	    (set! new-list (pair (current-element s state1))))))
-//    (as (type-for-copy s) new-list)))
-
 define method copy-sequence (s :: <sequence>,
 				 #key start = 0, end: finish = s.size - 1)
   if (finish > s.size - 1)
@@ -1562,17 +1531,6 @@ define method remove-duplicates (l :: <list>, #key test = \==)
   help (l);
 end method remove-duplicates;
 
-
-//(define-method remove-duplicates! ((l <list>) #key (test id?)) 'unimplemented)
-
-//(define-method concatenate-as ((c <class>) (l <list>) #rest more-sequences) 'unimplemented)
-
-// define generic append2 (obj1, obj2);
-
-// define method append2 (l1 :: <list>, l2 :: <list>)
-//   %list-append(l1, l2);
-// end method append2;
-
 define method concatenate (s :: <list>, #rest more-sequences)
   local method help (s :: <sequence>, more :: <list>)
 	  if (empty? (more))
@@ -1583,8 +1541,6 @@ define method concatenate (s :: <list>, #rest more-sequences)
 	end method help;
   help (s, more-sequences);
 end method concatenate;
-
-//(define-method replace-subsequence! ((l <list>) (insert <list>) #key (start 0)) 'unimplemented)
 
 define method reverse (l :: <list>)
   %list-reverse(l);
@@ -1618,10 +1574,6 @@ define method last (l :: <list>, #key default = %default-object)
   %list-last (l, default);
 end method last;
 
-//(define-method subsequence-position ((l <list>) pattern #key (test id?)
-//(count 0))
-//	'unimplemented)
-
 //
 // faster versions of collection operations for <list>.
 //
@@ -1629,10 +1581,6 @@ end method last;
 define method size (l :: <list>)
   %list-length(l);
 end method size;
-
-// define method length (l :: <list>)
-//   %list-length(l);
-// end method length;
 
 define method empty? (l == #())
   #t;
@@ -2078,10 +2026,6 @@ define method size (s :: <string>)
   %string-size(s);
 end method size;
 
-// define method length (s :: <string>)
-//   %string-size(s);
-// end method length;
-
 define method concatenate (s :: <string>, #rest more-strings)
   if (empty? (more-strings))
     s
@@ -2090,10 +2034,6 @@ define method concatenate (s :: <string>, #rest more-strings)
 			      more-strings.tail));
   end if;
 end method concatenate;
-
-// define method append2 (s1 :: <string>, s2 :: <string>)
-//   %string-append2(s1, s2);
-// end method append2;
 
 define method as (ic == <small-integer>, s :: <string>)
   let zero = as(<small-integer>, '0');
@@ -2196,14 +2136,6 @@ define method dimensions (v :: <vector>)
   list (%vector-size (v));
 end method dimensions;
 
-// define method length (v :: <vector>)
-//   %vector-size (v);
-// end method length;
-
-// define method append2 (v1 :: <vector>, v2 :: <vector>)
-//   %vector-append2 (v1, v2);
-// end method append2;
-
 //
 // iteration protocol
 //
@@ -2251,17 +2183,6 @@ define method final-state (v :: <vector>)
 end method final-state;
 
 // end vector.dyl
-
-// stretchy-vector
-//
-// jnw@cis.ufl.edu
-//
-
-// define class <stretchy-vector> (<stretchy-collection>, <vector>)
-//  slot rep :: <vector>;
-//  slot size, init-keyword: size:;
-//  slot fill, init-keyword: fill:;
-// end class <stretchy-vector>;
 
 //
 // table.dyl
@@ -2744,15 +2665,6 @@ define method \* (i1 ::<small-integer>, i2 :: <small-integer>)
   %binary-int* (i1, i2);
 end method \*;
 
-// A default method for / on integers is not part of Dylan.
-// Uncomment this method at your own risk.  You won't be writing Dylan
-// programs if you use it.
-
-//
-// define method \/ (i1 :: <small-integer>, i2 :: <small-integer>)
-//   %binary-int/ (i1, i2);
-// end method \/;
-
 define method negative (i :: <small-integer>) => value :: <small-integer>;
   %int-negative (i);
 end method negative;
@@ -2857,14 +2769,6 @@ end method \*;
 define method \* (i :: <small-integer>, b :: <big-integer>)
   %binary-bigint* (as(<big-integer>, i), b);
 end method \*;
-
-// A default method for / on integers is not part of Dylan.
-// Uncomment this method at your own risk.  You won't be writing Dylan
-// programs if you use it.
-
-// define method \/ (b1 :: <big-integer>, b2 :: <big-integer>)
-//    %binary-bigint/ (b1, b2);
-// end method \/;
 
 define method \/ (b :: <big-integer>, i :: <small-integer>)
    %binary-bigint/ (b, as(<big-integer>, i));
