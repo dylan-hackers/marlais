@@ -1,5 +1,11 @@
 (Modifications are listed in order from most recent to least recent.)
 
+New in release 0.6.5
+
+* Added sequence.c|h to handle common make cases for list, deque, vector.
+
+* Jaime E. Vargas added code to port to Mac OS-X.
+
 New in release 0.6.4
 
 * Removed some more classic syntax code in print.c; eliminated factored out
