@@ -49,7 +49,6 @@
 #include "biginteger.h"
 #endif
 
-extern int classic_syntax;
 extern Object print_symbol;
 extern Object princ_symbol;
 extern Object standard_output_stream;
@@ -163,7 +162,7 @@ print_object (Object stream, Object obj, int escaped)
 	fprintf (fp, "#f");
 	break;
     case EmptyList:
-	fprintf (fp, classic_syntax ? "()" : "#()");
+	fprintf (fp, "#()");
 	break;
     case Integer:
 	fprintf (fp, "%d", INTVAL (obj));
@@ -348,11 +347,11 @@ print_pair (Object stream, Object pair, int escaped)
     Object cdr;
     FILE *fp = STREAMFP (stream);
 
-    fprintf (fp, classic_syntax ? "(" : "#(");
+    fprintf (fp, "#(");
     apply_print (stream, CAR (pair), escaped);
     cdr = CDR (pair);
     while (PAIRP (cdr)) {
-	fprintf (fp, classic_syntax ? " " : ", ");
+	fprintf (fp, ", ");
 	apply_print (stream, CAR (cdr), escaped);
 	cdr = CDR (cdr);
     }
@@ -371,35 +370,6 @@ print_character (Object stream, Object c, int escaped)
 
     ch = CHARVAL (c);
     if (escaped) {
-	if (classic_syntax) {
-	    fprintf (fp, "#\\");
-	    switch (ch) {
-	    case '\n':
-		fprintf (fp, "newline");
-		break;
-	    case ' ':
-		fprintf (fp, "space");
-		break;
-	    case 0x7f:
-		fprintf (fp, "rubout");
-		break;
-	    case '\f':
-		fprintf (fp, "page");
-		break;
-	    case '\t':
-		fprintf (fp, "tab");
-		break;
-	    case '\b':
-		fprintf (fp, "backspace");
-		break;
-	    case '\r':
-		fprintf (fp, "return");
-		break;
-	    default:
-		fprintf (fp, "%c", ch);
-		break;
-	    }
-	} else {
 	    switch (ch) {
 	    case '\b':
 		fprintf (fp, "'\\b'");
@@ -420,7 +390,6 @@ print_character (Object stream, Object c, int escaped)
 		fprintf (fp, "'%c'", ch);
 		break;
 	    }
-	}
     } else {
 	fprintf (fp, "%c", ch);
     }

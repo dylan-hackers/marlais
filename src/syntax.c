@@ -660,16 +660,7 @@ static void define_eval_helper(Object form, int bind_where)
 static Object
 define_eval (Object form)
 {
-#ifdef PRE_REFACTORED
-  if (EMPTYLISTP (CDR (form)) || EMPTYLISTP (CDR (CDR (form)))) {
-    error ("DEFINE form requires at least two args: (define {<var>} <init>)", 
-	   form, NULL);
-  } else {
-    bind_variables (CDR (form), 1, 0, the_env);
-  }
-#else
   define_eval_helper(form, 0);
-#endif
   return unspecified_object;
 }
 
@@ -677,17 +668,8 @@ define_eval (Object form)
 static Object
 define_constant_eval (Object form)
 {
-#ifdef PRE_REFACTORED
-  if (EMPTYLISTP (CDR (form)) || EMPTYLISTP (CDR (CDR (form)))) {
-    error ("DEFINE form requires at least two args: (define {<var>} <init>)", 
-	   form, NULL);
-  } else {
-    bind_variables (CDR (form), 1, 1, the_env);
-  }
-#else
   define_eval_helper(form, 1);
-#endif
-  return SECOND (form);
+  return unspecified_object;
 }
 
 static void
@@ -953,26 +935,7 @@ define_method_eval_helper (Object form, int do_generic_p)
 {
   Object name, params, body, method;
 
-#ifdef PRE_REFACTORED
-  if (EMPTYLISTP (CDR (form))) {
-    error ("define-method: missing name", form, NULL);
-  }
-  name = SECOND (form);
-  if (!SYMBOLP (name)) {
-    error ("define-method: first argument must be a symbol", name, NULL);
-  }
-  if (EMPTYLISTP (CDR (CDR (form)))) {
-    error ("define-method: missing parameter list", form, NULL);
-  }
-  params = THIRD (form);
-  if (!LISTP (params)) {
-    error ("define-method: second argument must be a parameter list", 
-	   params, NULL);
-  }
-#else
   check_function_syntax(form, &name, &params, "define-method");
-#endif
-
   body = CDR (CDR (CDR (form)));
   method = make_method (name, params, body, the_env, do_generic_p);
   return (name);
