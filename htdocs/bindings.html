@@ -100,12 +100,12 @@ The DRM has 169 exported functions.
    &lt; = {the generic function &lt; (o1, o2, #rest x)}<br>
    &lt;= = {an anonymous method (o1, o2)#(~, #(&lt;, o2, o1))}<br>
    = = {the generic function = (o1, o2, #rest x)}<br>
-   == = {primitive function ==}<br>
-   ~== = {primitive function ~==}<br>
+   == = {anonymous method ==}<br>
+   ~== = {anonymous method ~==}<br>
    > = {an anonymous method (o1, o2)#(&lt;, o2, o1)}<br>
    >= = {an anonymous method (o1, o2)#(~, #(&lt;, o1, o2))}<br>
    ^ = {the generic function ^ (n :: &lt;number>, i :: &lt;integer>)}<br>
-   ~ = {primitive function ~}<br>
+   ~ = {an anonymous method ~}<br>
    ~= = {an anonymous method (o1, o2)#(~, #(=, o1, o2))}<br>
 *   <font color="blue">above = {the generic function above (x, #rest x)}</font><br>
 *   <font color="blue">above-setter = {the generic function above-setter (x, x, #rest x)}</font><br>
@@ -296,8 +296,6 @@ The DRM has 169 exported functions.
    zero? = {the generic function zero? (n :: &lt;number>)}<br>
 
 <h3>Bindings that really shouldn't be visible to Marlais users</h3>
-   i-load = {primitive function i-load}<br>
-   not = {primitive function not}<br>
    object-princ = {the generic function object-princ (stream, obj, #rest x)}<br>
    object-print = {the generic function object-print (stream, obj, #rest x)}<br>
 *   <font color="blue">set-slot-value! = {primitive function set-slot-value!}</font><br>
@@ -305,8 +303,6 @@ The DRM has 169 exported functions.
 
 <h3>Bindings that should be eliminated from Marlais</h3>
 *   <font color="blue">bye = {primitive function bye}</font> -- see quit<br>
-   infix = {primitive function infix} -- as infix-dylan is now the
-   <strong>only</strong> allowed style.<br>
    insertion-sort! = {the generic function insertion-sort! (a, test, #rest x)}<br>
    map-forward-iteration-protocol = {the generic function map-forward-iteration-protocol (c, #rest x)}<br>
    map1 = {the generic function map1 (f, c, #rest x)}<br>
@@ -314,8 +310,6 @@ The DRM has 169 exported functions.
    map1* = {the generic function map1* (functions, c, #rest x)}<br>
    map2* = {the generic function map2* (functions, c1, c2, #rest x)}<br>
    map3* = {the generic function map3* (functions, c1, c2, c3, #rest x)}<br>
-   p-load = {primitive function p-load}<br>
-<em><strong>   prefix = {primitive function prefix}</strong></em><br>
 *   <font color="blue">quit = {primitive function quit}</font> -- replace with &lt;CNTL>-D<br>
 
 <h2>Exported Constants</h2>
