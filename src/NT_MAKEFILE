@@ -35,7 +35,7 @@
 # initialization file (change this to suite your installation)
 #
 # INIT_FILE=`pwd`/init.dyl#NOT-NT
-INIT_FILE=c:/marlais/init.dylan #NT
+INIT_FILE=init.dylan#NT -- remember to point to the right directory
 
 #INIT_FILE_FLAG = -DINIT_FILE=\"$(INIT_FILE)\"
 INIT_FILE_FLAG = -DINIT_FILE=\"$(INIT_FILE)\" -DINFIX_INIT_FILE
