@@ -10,29 +10,35 @@
 /* primitives */
 
 static Object eof_object_p (Object obj);
+
+#ifdef NO_COMMON_DYLAN_SPEC
 static Object standard_input (void);
 static Object standard_output (void);
 static Object standard_error (void);
+#endif
+
 static Object dylan_write (Object fd, Object str);
 
 static struct primitive stream_prims[] =
 {
-#ifndef COMMON_DYLAN_SPEC
+#ifdef NO_COMMON_DYLAN_SPEC
     {"%open-input-file", prim_1, open_input_file},
     {"%open-output-file", prim_1, open_output_file},
-#endif
-    {"%close-stream", prim_1, close_stream},
-    {"%eof-object?", prim_1, eof_object_p},
     {"%standard-input", prim_0, standard_input},
     {"%standard-output", prim_0, standard_output},
     {"%standard-error", prim_0, standard_error},
+#endif
+    {"%close-stream", prim_1, close_stream},
+    {"%eof-object?", prim_1, eof_object_p},
   {"%write", prim_2, dylan_write},
 };
 
+#ifdef NO_COMMON_DYLAN_SPEC
 /* globals */
 Object standard_input_stream;
 Object standard_output_stream;
 Object standard_error_stream;
+#endif
 
 void
 init_stream_prims (void)
@@ -41,6 +47,7 @@ init_stream_prims (void)
   init_prims (num, stream_prims);
 }
 
+#ifdef NO_COMMON_DYLAN_SPEC
 Object
 make_stream (enum streamtype type, FILE * fp)
 {
@@ -51,8 +58,6 @@ make_stream (enum streamtype type, FILE * fp)
   STREAMFP (obj) = fp;
   return (obj);
 }
-
-#ifndef COMMON_DYLAN_SPEC
 
 Object
 open_input_file (Object filename)
@@ -107,6 +112,7 @@ dylan_write(Object fd_obj, Object str)
   return unspecified_object;
 }
 
+#ifdef NO_COMMON_DYLAN_SPEC
 static Object
 standard_input (void)
 {
@@ -124,3 +130,4 @@ standard_error (void)
 {
   return (standard_error_stream);
 }
+#endif

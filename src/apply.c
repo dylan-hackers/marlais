@@ -1,35 +1,4 @@
-/*
-
-   apply.c
-
-   This software is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This software is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public
-   License along with this software; if not, write to the Free
-   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-   Original copyright notice follows:
-
-   Copyright, 1993, Brent Benson.  All Rights Reserved.
-   0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
-
-   Permission to use, copy, and modify this software and its
-   documentation is hereby granted only under the following terms and
-   conditions.  Both the above copyright notice and this permission
-   notice must appear in all copies of the software, derivative works
-   or modified version, and both notices must appear in supporting
-   documentation.  Users of this software agree to the terms and
-   conditions set forth in this notice.
-
- */
+/* apply.c -- see COPYRIGHT for use */
 
 #include "apply.h"
 
@@ -44,6 +13,7 @@
 #include "number.h"
 #include "print.h"
 #include "prim.h"
+#include "stream.h"
 #include "symbol.h"
 #include "syntax.h"
 #include "table.h"
@@ -55,7 +25,10 @@ int trace_functions = 0;
 int trace_only_user_funs = 0;
 int trace_level = 0;
 Object ResultValueStack;
+
+#ifdef NO_COMMON_DYLAN_SPEC
 extern Object standard_output_stream;
+#endif
 
 #ifdef MACOS
 void check_stack (void);
@@ -122,9 +95,16 @@ apply_internal (Object fun, Object args)
 	    for (i = 0; i < trace_level; ++i) {
 		putchar ('-');
 	    }
+#ifdef NO_COMMON_DYLAN_SPEC
 	    print_object (standard_output_stream, fun, 1);
 	    printf (" called with ");
 	    print_object (standard_output_stream, args, 1);
+#else
+	    print_object (make_integer(STDOUT), fun, 1);
+	    printf (" called with ");
+	    print_object (make_integer(STDOUT), args, 1);
+#endif
+
 	    printf ("\n");
 	    trace_level++;
 	}
@@ -165,7 +145,11 @@ apply_internal (Object fun, Object args)
 		printf ("-");
 	    }
 	    printf ("returned: ");
+#ifdef NO_COMMON_DYLAN_SPEC
 	    print_object (standard_output_stream, ret, 1);
+#else
+	    print_object(make_integer(STDOUT), ret, 1);
+#endif
 	    printf ("\n");
 	}
     }
@@ -198,9 +182,15 @@ apply_method (Object meth, Object args, Object rest_methods, Object generic_appl
 		putchar ('-');
 	    }
 	    printf ("apply-method applying ");
+#ifdef NO_COMMON_DYLAN_SPEC
 	    print_object (standard_output_stream, meth, 1);
 	    printf (" with args ");
 	    print_object (standard_output_stream, args, 1);
+#else
+	    print_object (make_integer(STDOUT), meth, 1);
+	    printf (" with args ");
+	    print_object (make_integer(STDOUT), args, 1);
+#endif
 	    printf ("\n");
 	}
     }

@@ -212,7 +212,7 @@ init_class_hierarchy (void)
   singleton_class = make_builtin_class ("<singleton>", type_class);
   class_class = make_builtin_class ("<class>", type_class);
 
-#ifndef COMMON_DYLAN_SPEC
+#ifdef NO_COMMON_DYLAN_SPEC
   stream_class = make_builtin_class ("<stream>", object_class);
 #endif
 
@@ -1071,7 +1071,7 @@ objectclass (Object obj)
   case EndOfFile:
     return (object_class);
 
-#ifndef COMMON_DYLAN_SPEC
+#ifdef NO_COMMON_DYLAN_SPEC
   case Stream:
     return (stream_class);
 #endif

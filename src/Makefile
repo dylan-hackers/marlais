@@ -68,8 +68,8 @@ PRECEDENCE_FLAG = -DUSE_LL_PRECEDENCE
 
 ##########################################
 
-VERSION = 0.6.4a
-RLOG_VERSION = marlais_0_6_4a
+VERSION = 0.6.4-io-beta
+RLOG_VERSION = marlais_0_6_4_io_beta
 PREVIOUS_VERSION = 0.6.4
 PREVIOUS_RLOG_VERSION = marlais_0_6_4
 PREVIOUS_VERSION_DIR = $(PROGRAM)-$(PREVIOUS_VERSION)

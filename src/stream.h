@@ -6,18 +6,19 @@
 #include "object.h"
 
 void init_stream_prims (void);
-Object make_stream (enum streamtype type, FILE * fp);
+enum { STDIN, STDOUT, STDERR };
 
-#ifndef COMMON_DYLAN_SPEC
+#ifdef NO_COMMON_DYLAN_SPEC
+Object make_stream (enum streamtype type, FILE * fp);
 Object open_input_file (Object filename);
 Object open_output_file (Object filename);
-#endif
-
-Object close_stream (Object stream);
-
 /* globals */
 extern Object standard_input_stream;
 extern Object standard_output_stream;
 extern Object standard_error_stream;
+#endif
+
+Object close_stream (Object stream);
+
 
 #endif

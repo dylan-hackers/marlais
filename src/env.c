@@ -1,35 +1,4 @@
-/*
-
-   env.c
-
-   This software is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This software is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public
-   License along with this software; if not, write to the Free
-   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-   Original copyright notice follows:
-
-   Copyright, 1993, Brent Benson.  All Rights Reserved.
-   0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
-
-   Permission to use, copy, and modify this software and its
-   documentation is hereby granted only under the following terms and
-   conditions.  Both the above copyright notice and this permission
-   notice must appear in all copies of the software, derivative works
-   or modified version, and both notices must appear in supporting
-   documentation.  Users of this software agree to the terms and
-   conditions set forth in this notice.
-
- */
+/* env.c -- see COPYRIGHT for use */
 
 #include <string.h>
 
@@ -46,12 +15,17 @@
 #include "number.h"
 #include "prim.h"
 #include "print.h"
+#include "stream.h"
 #include "table.h"
 
 extern Object dylan_symbol;
 extern Object dylan_user_symbol;
 extern Object empty_string;
+
+#ifdef NO_COMMON_DYLAN_SPEC
 extern Object standard_error_stream;
+#endif
+
 extern Object unwind_protect_symbol;
 extern jmp_buf *the_eval_context;
 
@@ -158,7 +132,11 @@ add_top_lvl_binding1(Object sym, Object val, int constant, int exported)
   the_env->top_level_env[h] = binding;
 
   if (trace_bindings) {
+#ifdef NO_COMMON_DYLAN_SPEC
     print_obj (standard_error_stream, sym);
+#else
+    print_obj (make_integer(STDERR), sym);
+#endif
   }
 }
 
@@ -362,10 +340,7 @@ static struct primitive env_prims[] =
 void
 init_env_prims (void)
 {
-    int num;
-
-    num = sizeof (env_prims) / sizeof (struct primitive);
-
+    int num = sizeof (env_prims) / sizeof (struct primitive);
     init_prims (num, env_prims);
 }
 
@@ -539,40 +514,6 @@ set_module (struct module_binding *new_module)
     the_current_module = new_module;
     return old_module;
 }
-
-#if 0
-/* This is definitely an idea whose time has not come. */
-Object
-reset_module (Object args)
-{
-    struct module_binding *binding;
-    Object module_name;
-    int i;
-
-
-    if (list_length (args) != 1 || !KEYWORDP (CAR (args))) {
-	error ("reset-module: Requires exactly one symbol argument", NULL);
-    }
-    module_name = keyword_to_symbol (CAR (args));
-    if (module_name == dylan_symbol || module_name == dylan_user_symbol) {
-	error ("reset-module: Reset not permitted on this module",
-	       module_name,
-	       NULL);
-    }
-    for (i = 0; i < modules.size; ++i) {
-	binding = modules.bindings[i];
-	if (binding->sym == module_name) {
-	    binding->namespace = initialize_namespace (module_name);
-	    return (unspecified_object);
-	} else {
-	    warning ("Saw module", binding->sym, NULL);
-	}
-    }
-    error ("reset-module: Attempt to reset nonexistent module",
-	   module_name,
-	   NULL);
-}
-#endif
 
 static void
 import_top_level_binding (struct binding *import_binding,
@@ -783,7 +724,11 @@ print_env (struct frame *env)
 
     for (i = 0, frame = env; frame != NULL; frame = frame->next, i++) {
 	fprintf (stderr, "#%d ", i);
+#ifdef NO_COMMON_DYLAN_SPEC
 	print_object (standard_error_stream, frame->owner, 1);
+#else
+	print_object(make_integer(STDERR), frame->owner, 1);
+#endif
 	fprintf (stderr, "\n");
     }
     return unspecified_object;
@@ -812,7 +757,11 @@ show_bindings (Object args)
     } else {
 	fprintf (stderr, "** Bindings for frame %d [",
 		 frame_number);
+#ifdef NO_COMMON_DYLAN_SPEC
 	print_object (standard_error_stream, frame->owner, 1);
+#else
+	print_object (make_integer(STDERR), frame->owner, 1);
+#endif
 	fprintf (stderr, "]\n");
 	/*
 	 * Print the bindings in all the frame slots.
@@ -827,13 +776,26 @@ show_bindings (Object args)
 		 binding != NULL;
 		 binding = binding->next) {
 		fprintf (stderr, "   ");
+
+#ifdef NO_COMMON_DYLAN_SPEC
 		print_object (standard_error_stream, binding->sym, 1);
+#else
+		print_object (make_integer(STDERR), binding->sym, 1);
+#endif
 		if (binding->type != object_class) {
 		    fprintf (stderr, " :: ");
+#ifdef NO_COMMON_DYLAN_SPEC
 		    print_object (standard_error_stream, binding->type, 1);
+#else
+		print_object (make_integer(STDERR), binding->type, 1);
+#endif
 		}
 		fprintf (stderr, " = ");
+#ifdef NO_COMMON_DYLAN_SPEC
 		print_object (standard_error_stream, *(binding->val), 1);
+#else
+		print_object (make_integer(STDERR), *(binding->val), 1);
+#endif
 		fprintf (stderr, "\n");
 	    }
 	}

@@ -51,7 +51,7 @@ int getopt (int argc, char *argv[], const char *options);
 #endif
 
 #ifndef VERSION
-#define VERSION "0.6.4a"
+#define VERSION "0.6.4-io-beta"
 #endif
 
 #ifdef MACOS
@@ -94,8 +94,14 @@ static void print_top_level_constant(Object obj, int bind_p)
     fprintf (stdout, " $%i = ", sequence_num);
     sequence_num++;
   }
+
+#ifdef WHY
   apply (eval (print_symbol),
-	 listem (obj, standard_output_stream, NULL));
+	 listem (obj, make_integer(STDOUT), NULL));
+#else
+  print_object(make_integer(STDOUT), obj, 0);
+#endif
+
   fprintf (stdout, "\n");
 }
 
@@ -224,13 +230,13 @@ main (int argc, char *argv[])
 #else
   {
 #define COMMON_DYLAN_LIB_DIR "common"
-    char* lib_dir = getenv("MARLAIS_LIB_DIR");
-    char common_dylan[256];
-    if(!lib_dir) {
-      lib_dir = COMMON_DYLAN_LIB_DIR;
+    char* common_dylan = getenv("MARLAIS_LIB_DIR");
+    char file[256];
+    if(!common_dylan) {
+      common_dylan = COMMON_DYLAN_LIB_DIR;
     }
-    sprintf(common_dylan, "%s/common-dylan.dylan", lib_dir);
-    load(make_byte_string(common_dylan));
+    sprintf(file, "%s/common-dylan.dylan", common_dylan);
+    load(make_byte_string(file));
   }
 #endif
 
@@ -356,7 +362,7 @@ initialize_marlais (void)
   equal_hash_symbol = make_symbol ("=hash");
   uninit_slot_object = make_uninit_slot ();
 
-#ifndef COMMON_DYLAN_SPEC
+#ifdef NO_COMMON_DYLAN_SPEC
   standard_input_stream = make_stream (Input, stdin);
   standard_output_stream = make_stream (Output, stdout);
   standard_error_stream = make_stream (Output, stderr);

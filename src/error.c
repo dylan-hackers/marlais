@@ -1,35 +1,4 @@
-/*
-
-error.c
-
-This software is free software; you can redistribute it and/or
-modify it under the terms of the GNU Library General Public
-License as published by the Free Software Foundation; either
-version 2 of the License, or (at your option) any later version.
-
-This software is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Library General Public License for more details.
-
-You should have received a copy of the GNU Library General Public
-License along with this software; if not, write to the Free
-Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-Original copyright notice follows:
-
-Copyright, 1993, Brent Benson.  All Rights Reserved.
-0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
-
-Permission to use, copy, and modify this software and its
-documentation is hereby granted only under the following terms and
-conditions.  Both the above copyright notice and this permission
-notice must appear in all copies of the software, derivative works
-or modified version, and both notices must appear in supporting
-documentation.  Users of this software agree to the terms and
-conditions set forth in this notice.
-
-*/
+/* error.c -- see COPYRIGHT for use */
 
 
 #include <stdio.h>
@@ -44,14 +13,18 @@ conditions set forth in this notice.
 #include "env.h"
 #include "eval.h"
 #include "list.h"
+#include "number.h"
 #include "parse.h"
 #include "prim.h"
 #include "print.h"
 #include "read.h"
+#include "stream.h"
 #include "yystype.h"
 
+#ifdef NO_COMMON_DYLAN_SPEC
 extern Object standard_error_stream;
 extern Object standard_output_stream;
+#endif
 extern Object print_symbol;
 extern char* prompt;
 extern char* current_prompt;
@@ -228,38 +201,79 @@ signal_handler_init ()
 }
 
 static Object
-dylan_error (Object msg_str, Object rest)
+print_dylan_error_helper(const char* kind, Object msg_str, Object rest)
 {
-  fprintf (stderr, "error: %s", BYTESTRVAL (msg_str));
+  fprintf (stderr, "%s: %s", kind, BYTESTRVAL (msg_str));
   if (!EMPTYLISTP (rest)) {
     fprintf (stderr, ": ");
   }
   while (!EMPTYLISTP (rest)) {
+
+#ifdef NO_COMMON_DYLAN_SPEC
     print_object (standard_error_stream, CAR (rest), 0);
+#else
+    print_object (make_integer(STDERR), CAR (rest), 0);
+#endif
     rest = CDR (rest);
     if (!EMPTYLISTP (rest)) {
       fprintf (stderr, ", ");
     }
   }
   fprintf (stderr, ".\n");
+}
+
+static Object
+dylan_error (Object msg_str, Object rest)
+{
+#ifdef PRE_REFACTORED
+  fprintf (stderr, "error: %s", BYTESTRVAL (msg_str));
+  if (!EMPTYLISTP (rest)) {
+    fprintf (stderr, ": ");
+  }
+  while (!EMPTYLISTP (rest)) {
+
+#ifdef NO_COMMON_DYLAN_SPEC
+    print_object (standard_error_stream, CAR (rest), 0);
+#else
+    print_object (make_integer(STDERR), CAR (rest), 0);
+#endif
+    rest = CDR (rest);
+    if (!EMPTYLISTP (rest)) {
+      fprintf (stderr, ", ");
+    }
+  }
+  fprintf (stderr, ".\n");
+#else
+  print_dylan_error_helper("error", msg_str, rest);
+#endif
   longjmp (error_return, 1);
 }
 
 static Object
 dylan_warning (Object msg_str, Object rest)
 {
+#ifdef PRE_REFACTORED
   fprintf (stderr, "warning: %s", BYTESTRVAL (msg_str));
   if (!EMPTYLISTP (rest)) {
     fprintf (stderr, ": ");
   }
   while (!EMPTYLISTP (rest)) {
+
+#ifdef NO_COMMON_DYLAN_SPEC
     print_object (standard_error_stream, CAR (rest), 0);
+#else
+    print_object (make_integer(STDERR), CAR (rest), 0);
+#endif
+
     rest = CDR (rest);
     if (!EMPTYLISTP (rest)) {
       fprintf (stderr, ", ");
     }
   }
   fprintf (stderr, ".\n");
+#else
+  print_dylan_error_helper("warning", msg_str, rest);
+#endif
   return unspecified_object;
 }
 
@@ -286,7 +300,12 @@ error (char *msg,...)
     fprintf (stderr, ": ");
   }
   while (obj) {
+#ifdef NO_COMMON_DYLAN_SPEC
     print_object (standard_error_stream, obj, 0);
+#else
+    print_object (make_integer(STDERR), obj, 0);
+#endif
+
     obj = va_arg (args, Object);
     
     if (obj) {
@@ -353,13 +372,24 @@ error (char *msg,...)
 	  sequence_num++;
 	}
 	if (TYPE (obj) == Values) {
+#ifdef NO_COMMON_DYLAN_SPEC
 	  print_obj (standard_output_stream, obj);
+#else
+	  print_obj (make_integer(STDOUT), obj);
+#endif
 	  if (VALUESNUM (obj)) {
 	    fprintf (stdout, "\n");
 	  }
 	} else {
+
+#ifdef NO_COMMON_DYLAN_SPEC
+/* is this correct in light of Common-Dylan? -- dma */
 	  apply (eval (print_symbol),
 		 listem (true_object, obj, NULL));
+#else
+	  apply(eval(print_symbol), listem(obj, make_integer(STDOUT), NULL));
+#endif
+
 	  fprintf (stdout, "\n");
 	}
 	current_prompt = prompt;
@@ -409,7 +439,11 @@ warning (char *msg,...)
     fprintf (stderr, ": ");
   }
   while (obj) {
+#ifdef NO_COMMON_DYLAN_SPEC
     print_object (standard_error_stream, obj, 0);
+#else
+    print_object (make_integer(STDERR), obj, 0);
+#endif
     obj = va_arg (args, Object);
     
     if (obj) {

@@ -35,7 +35,10 @@ enum objtype {
     Primitive, GenericFunction, Method, Function, NextMethod,
 
     /* misc */
-    EndOfFile, Values, Unspecified, Exit, Unwind, Stream,
+    EndOfFile, Values, Unspecified, Exit, Unwind, 
+#ifdef NO_COMMON_DYLAN_SPEC
+Stream,
+#endif
     TableEntry, UninitializedSlotValue, DequeEntry,
     ObjectHandle,
     ForeignPtr,			/* <pcb> */
@@ -452,6 +455,7 @@ struct unwind {
 #define UNWINDP(obj)      ((obj)->type == Unwind)
 #define UNWINDTYPE(obj)   ((obj)->type)
 
+#ifdef NO_COMMON_DYLAN_SPEC
 enum streamtype {
     Input, Output
 };
@@ -466,6 +470,7 @@ struct stream {
 #define STREAMTYPE(obj)    ((obj)->type)
 #define INPUTSTREAMP(obj)  (STREAMP(obj) && (STREAMSTYPE(obj) == Input))
 #define OUTPUTSTREAMP(obj) (STREAMP(obj) && (STREAMSTYPE(obj) == Output))
+#endif
 
 #define UNINITSLOTP(obj)   ((obj)->type == UninitializedSlotValue)
 
@@ -525,7 +530,9 @@ struct object {
 	struct values values;
 	struct exitproc exitproc;
 	struct unwind unwind;
+#ifdef NO_COMMON_DYLAN_SPEC
 	struct stream stream;
+#endif
 	struct table_entry table_entry;
 	struct deque_entry deque_entry;
 	struct foreign_ptr foreign_ptr;
@@ -1013,6 +1020,7 @@ struct unwind {
 #define UNWINDBODY(obj)   (((struct unwind *)obj)->body)
 #define UNWINDP(obj)      (POINTERP(obj) && (UNWINDTYPE(obj) == Unwind)
 
+#ifdef NO_COMMON_DYLAN_SPEC
 enum streamtype {
     Input, Output
 };
@@ -1028,6 +1036,7 @@ struct stream {
 #define STREAMP(obj)       (POINTERP(obj) && (STREAMTYPE(obj) == Stream))
 #define INPUTSTREAMP(obj)  (STREAMP(obj) && (STREAMSTYPE(obj) == Input))
 #define OUTPUTSTREAMP(obj) (STREAMP(obj) && (STREAMSTYPE(obj) == Output))
+#endif
 
 #define TYPE(obj)        (object_type (obj))
 #define POINTERTYPE(obj) (PAIRTYPE(obj))
@@ -1099,7 +1108,11 @@ extern Object symbol_class, keyword_class;
 extern Object character_class;
 extern Object function_class, primitive_class, generic_function_class,
   method_class;
-extern Object class_class, stream_class, table_entry_class, deque_entry_class;
+extern Object class_class, table_entry_class, deque_entry_class;
+
+#ifdef NO_COMMON_DYLAN_SPEC
+stream_class, 
+#endif
 
 /* from alloc.c */
 extern Object allocate_object (size_t size);
