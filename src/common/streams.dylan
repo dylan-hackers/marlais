@@ -120,7 +120,7 @@ end method initialize;
 
 //------------------------READ/WRITE-------------------------------
 define generic write-element(s :: <stream>, obj);
-define generic write(s :: <stream>, seq :: <sequence>, #key start, end);
+define generic write(s :: <stream>, seq :: <sequence>, #key start, end: stop);
 define generic read(s :: <stream>, n :: <integer>, #key on-end-of-stream);
 define generic read-element(s :: <stream>, #key on-end-of-stream);
 define constant $unspecified = #"not supplied";
@@ -200,3 +200,4 @@ define method read-element(s :: <sequence-stream>,
   reader(s, 1, "read-element", method(seq, start, stop) seq[start] end,
 	 on-end-of-stream);
 end method read-element;
+

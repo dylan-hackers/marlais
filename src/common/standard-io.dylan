@@ -14,9 +14,3 @@ define constant *standard-output* :: <fd-stream>
 define constant *standard-error* :: <fd-stream>
   = make(<fd-stream>, fd: 2, direction: #"output");
 
-//define variable *standard-output* :: <stream>
-//  = %standard-output();
-//define variable *standard-error* :: <stream> 
-//  = %standard-error();
-//define variable *standard-input* :: <stream>
-//  = %standard-input();
