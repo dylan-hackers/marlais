@@ -363,9 +363,9 @@ define method shallow-copy (o :: <object>) => new-object :: <object>;
   o;
 end method shallow-copy;
 
-define method class-for-copy (o :: <object>) => value :: <class>;
+define method type-for-copy (o :: <object>) => value :: <class>;
   o.object-class
-end method class-for-copy;
+end method type-for-copy;
 
 //
 // Seal is no longer in the DIRM, but Marlais still provides it.
@@ -476,7 +476,7 @@ define method size (c :: <collection>)
 end method size;
 
 define method shallow-copy (c :: <collection>)
-  let new-collection = make (class-for-copy (c), size: c.size);
+  let new-collection = make (type-for-copy (c), size: c.size);
   for (obj in c, i from 0 below c.size)
     new-collection[i] := obj;
   finally
@@ -484,13 +484,13 @@ define method shallow-copy (c :: <collection>)
   end for;
 end method shallow-copy;
 
-define method class-for-copy (c :: <mutable-collection>)
+define method type-for-copy (c :: <mutable-collection>)
   object-class(c);
-end method class-for-copy;
+end method type-for-copy;
 
-define method class-for-copy (p :: <byte-string>)
+define method type-for-copy (p :: <byte-string>)
   <byte-string>;
-end method class-for-copy;
+end method type-for-copy;
 
 define method empty? (c :: <collection>)
   if (initial-state(c))
@@ -505,7 +505,7 @@ end method empty?;
 //
 
 define method map1 (f :: <function>, c :: <collection>)
-  let new = make (class-for-copy (c), size: c.size);
+  let new = make (type-for-copy (c), size: c.size);
   for (v in c, i = 0 then i + 1)
     new[i] := f (v);
   finally
@@ -514,7 +514,7 @@ define method map1 (f :: <function>, c :: <collection>)
 end method map1;
 
 define method map1* (functions :: <collection>, c :: <collection>)
-  let new = make (class-for-copy (c), size: c.size);
+  let new = make (type-for-copy (c), size: c.size);
   for (v in c, f in functions, i = 0 then i + 1)
     new[i] := f (v);
   finally
@@ -523,7 +523,7 @@ define method map1* (functions :: <collection>, c :: <collection>)
 end method map1*;
 
 define method map2 (f :: <function>, c1 :: <collection>, c2 :: <collection>)
-  let new = make (class-for-copy (c1), size: c1.size);
+  let new = make (type-for-copy (c1), size: c1.size);
   for (v1 in c1, v2 in c2, i = 0 then i + 1)
     new[i] := f (v1, v2);
   finally
@@ -534,7 +534,7 @@ end method map2;
 define method map2* (functions :: <collection>,
 		    c1 :: <collection>,
 		    c2 :: <collection>)
-  let new = make (class-for-copy (c1), size: c1.size);
+  let new = make (type-for-copy (c1), size: c1.size);
   for (v1 in c1, v2 in c2, f in functions, i = 0 then i + 1)
     new[i] := f (v1, v2);
   finally
@@ -546,7 +546,7 @@ define method map3* (functions :: <collection>,
 		     c1 :: <collection>,
 		     c2 :: <collection>,
 		     c3 :: <collection>)
-  let new = make (class-for-copy (c1), size: c1.size);
+  let new = make (type-for-copy (c1), size: c1.size);
   for (v1 in c1, v2 in c2, v3 in c3, f in functions, i = 0 then i + 1)
     new[i] := f (v1, v2, v3);
   finally
@@ -638,7 +638,7 @@ define method map (f :: <function>, c :: <collection>, #rest more-collections)
        current-element-setters,
        copy-states)
     = apply (map-forward-iteration-protocol, collections);
-  let new = make (class-for-copy (c), size: c.size);
+  let new = make (type-for-copy (c), size: c.size);
   for (states = initial-states then map2* (next-states, collections, states),
        i = 0 then i + 1, 
        while: ~reduce (method (x, y) x & y end,
@@ -942,7 +942,7 @@ end method key-test;
 // most general methods for sequence GFs
 
 define method add (s :: <sequence>, new-el)
-  let new = make (class-for-copy (s), size: s.size + 1);
+  let new = make (type-for-copy (s), size: s.size + 1);
   let (initial-state1,
        limit1,
        next-state1,
@@ -972,7 +972,7 @@ define method add (s :: <sequence>, new-el)
 end method add;
 
 define method add! (s :: <sequence>, new-el)
-  let new = make (class-for-copy (s), size: s.size + 1);
+  let new = make (type-for-copy (s), size: s.size + 1);
   let (initial-state1,
        limit1,
        next-state1,
@@ -1019,7 +1019,7 @@ end method add-new!;
 
 define method remove (s :: <sequence>, value, #key test = \==, count)
   let lst = as (<list>, s);
-  as (class-for-copy (s), remove (lst, value, test: test, count: count));
+  as (type-for-copy (s), remove (lst, value, test: test, count: count));
 end method remove;
 	      
 //
@@ -1027,13 +1027,13 @@ end method remove;
 //
 define method remove! (s :: <sequence>, value, #key test = \==, count)
   let lst = as (<list>, s);
-  let class = class-for-copy (s);
+  let class = type-for-copy (s);
   as (class, remove (lst, value, test: test, count: count));
 end method remove!;
 
 define method choose (pred :: <function>, s :: <sequence>)
   let lst = as (<list>, s);
-  as (class-for-copy (s), choose (pred, s));
+  as (type-for-copy (s), choose (pred, s));
 end method choose;
 
 define method choose-by (pred :: <function>,
@@ -1041,7 +1041,7 @@ define method choose-by (pred :: <function>,
 			 vs :: <sequence>)
   let tlist = as (<list>, ts);
   let vlist = as (<list>, vs);
-  as (class-for-copy (vs), choose-by (pred, tlist, vlist));
+  as (type-for-copy (vs), choose-by (pred, tlist, vlist));
 end method choose-by;
 
 define method intersection (s1 :: <sequence>, s2 :: <sequence>,
@@ -1052,7 +1052,7 @@ define method intersection (s1 :: <sequence>, s2 :: <sequence>,
       new-list := pair (el, new-list);
     end if;
   finally
-    as (class-for-copy (s1), new-list);
+    as (type-for-copy (s1), new-list);
   end for;
 end method intersection;
 
@@ -1080,7 +1080,7 @@ define method remove-duplicates (s :: <sequence>, #key test = \==)
       new-list := pair (val1, new-list);
     end unless; 
   end for;
-  as (s.class-for-copy, new-list);
+  as (s.type-for-copy, new-list);
 end method remove-duplicates;
 
 //(define-method remove-duplicates ((s <sequence>) #key (test id?))
@@ -1094,7 +1094,7 @@ end method remove-duplicates;
 //	      (set! already-there #t)))
 //	(if (not already-there)
 //	    (set! new-list (pair (current-element s state1))))))
-//    (as (class-for-copy s) new-list)))
+//    (as (type-for-copy s) new-list)))
 
 
 //(define-method remove-duplicates! ((s <sequence>) #key (test id?))
@@ -1108,7 +1108,7 @@ end method remove-duplicates;
 //	      (set! already-there #t)))
 //	(if (not already-there)
 //	    (set! new-list (pair (current-element s state1))))))
-//    (as (class-for-copy s) new-list)))
+//    (as (type-for-copy s) new-list)))
 
 define method copy-sequence (s :: <sequence>,
 				 #key start = 0, end: finish = s.size - 1)
@@ -1116,7 +1116,7 @@ define method copy-sequence (s :: <sequence>,
        error ("Not enough elements in sequence to be copied,\ncopy-sequence",
 	      s, "start: ", start, "end:", finish);
   end if;
-  let new = make (class-for-copy (s), size: finish - start + 1);
+  let new = make (type-for-copy (s), size: finish - start + 1);
   let (new-initial-state,
        new-limit,
        new-next-state,
@@ -1168,7 +1168,7 @@ define method concatenate (s :: <sequence>, #rest more-seq)
       warning("in concatenate2", s1, s2);
       let size1 = s1.size;
       let new-size = size1 + s2.size;
-      let new = make (class-for-copy (s1), size: new-size);
+      let new = make (type-for-copy (s1), size: new-size);
       for (i from 0 to new-size - 1)
 	if (i < size1)
 	  new[i] := s1[i];
@@ -1193,7 +1193,7 @@ define method replace-subsequence! (ms :: <mutable-sequence>,
   let insert = is.size;
   let delta = insert - delete;
   unless (delta = 0)
-    let copy = class-for-copy(ms);
+    let copy = type-for-copy(ms);
     os := make(copy, size: ms.size + delta);
     for (i from 0 below start)
       os[i] := ms[i];
@@ -1210,7 +1210,7 @@ end method replace-subsequence!;
 
 define method reverse (s :: <sequence>)
   let seq-size = s.size;
-  let new = make (class-for-copy(s), size: seq-size);
+  let new = make (type-for-copy(s), size: seq-size);
   for (i = 0 then i + 1
 	 while: i < seq-size)
     new[i] := s [seq-size - i - 1];
@@ -1413,13 +1413,13 @@ define method list (#rest els)
   els
 end method list;
 
-define method class-for-copy (p :: <pair>)
+define method type-for-copy (p :: <pair>)
   <list>;
-end method class-for-copy;
+end method type-for-copy;
 
-define method class-for-copy (l == #())
+define method type-for-copy (l == #())
   <list>;
-end method class-for-copy;
+end method type-for-copy;
 
 define method head (lst :: <list>) => result :: <object>;
   %head(lst); 
@@ -2021,9 +2021,9 @@ define method reverse (r :: <range>)
   end if;
 end method reverse;
 
-define method class-for-copy (r :: <range>)
+define method type-for-copy (r :: <range>)
   <list>;
-end method class-for-copy;
+end method type-for-copy;
 
 //
 // range iteration protocol
