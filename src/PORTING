@@ -1,0 +1,18 @@
+
+The only machine dependent part of Marlais is the garbage
+collector[1,2,3].  See the file gc/README for information on porting
+the garbage collector to a new architecture or OS.
+
+[1] Boehm, H., and M. Weiser, "Garbage Collection in an Uncooperative
+Environment", Software Practice & Experience, September 1988,
+pp. 807-820.
+
+[2] Boehm, H., A. Demers, and S. Shenker, "Mostly Parallel Garbage
+Collection", Proceedings of the ACM SIGPLAN '91 Conference on
+Programming Language Design and Implementation, SIGPLAN Notices 26, 6
+(June 1991), pp. 157-164.
+
+[3] Boehm, H., "Space Efficient Conservative Garbage Collection",
+Proceedings of the ACM SIGPLAN '91 Conference on Programming Language
+Design and Implementation, SIGPLAN Notices 28, 6 (June 1993),
+pp. 197-206.

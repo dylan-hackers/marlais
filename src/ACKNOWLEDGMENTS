@@ -1,0 +1,187 @@
+Acknowledgments for the 0.5.12 distribution:
+
+Thanks to:
+
+Ron Franke-Polz pointed out problems with handling of white space.
+
+Marty Hall for the lcm and gcd code in init.dyl.
+
+I fixed make for generic functions to work in the face of method
+caching, fixed `for' to exit with non-false values rather than only on
+#t, modified apply_print to work when trace_functions is in effect,
+fixed bug in bind-exit that would cause incorrect behavior when
+exit-proc was passed as first argument to a method.
+
+Joe Wilson
+<A HREF="http://www.cis.ufl.edu/~jnw/">jnw@cis.ufl.edu</A>
+
+--------------------------------------------
+Acknowledgments for the 0.5.11 distribution:
+
+Thanks to:
+
+Luc Beaudoin <L.P.Beaudoin@cs.bham.ac.uk> for finding a big bug in
+array indexing.
+
+Patrick Beard <pcbeard@llnl.gov> for as (<small-integer>, <string>),
+for a fix to the array indexing bug, various compatibility fixes, a
+fix to prefix read of numberings (allowing leading `.'), for making
+sure as (<class>, <collection>) got fixed, and for string-size-setter.
+
+Johan Dahl for his helpful bug reports concerning coercions and
+formatting.
+
+Bruce Hoult <Bruce@hoult.actrix.gen.nz> for pointing out the lack of a
+working shallow-copy on arrays and for encouraging the object-print
+mod.
+
+I added support for `block' (fixing unwind-protect in the process),
+added object-print (to allow user-defined functions to affect the
+listener print method), repaired method caching, and updated arrays
+use to use element, element-setter, and shallow-copy in compliance
+with the DIRM.
+
+Joe Wilson
+<A HREF="http://www.cis.ufl.edu/~jnw/">jnw@cis.ufl.edu</A>
+
+--------------------------------------------
+Acknowledgments for the 0.5.10 distribution:
+
+The method caching code was written by Drew Nolan (wan@cis.ufl.edu).
+I wrote the L*Loops class precedence list calculation.
+
+Most of the other items are as in version 0.5.9.
+
+Joseph N. Wilson
+<A HREF="http://www.cis.ufl.edu/~jnw/">jnw@cis.ufl.edu</A>
+
+-------------------------------------------
+Acknowledgments for the 0.5.9 distribution:
+
+As of revision 0.5.9, the Marlais interpreter is copyrighted under the
+GNU Library General Public License.  Thus, it is now certifiably free
+software.  My thanks to all who have helped with its development.
+
+Ramin Zabih (rdz@cs.cornell.edu) is using MacMarlais as the
+programming language vehicle for CS 212 "Modes of Algorithmic
+Expression," which you can read about at the following URL:
+
+	http://www.cs.cornell.edu/Info/Courses/Current/CS212/CS212.html
+
+The use of the interpreter in that course has been the cause for many
+improvements to the implementation.
+
+I realize I've left contributions of some out, but here are the names
+of many who have helped with Marlais since 0.5:
+
+Bob Alexander (bob_alexander@ccmail.com provided many improvements to
+init.dyl.
+
+Tom Arns toma@hal.com for help with linux porting.
+
+Patrick Beard (beard@llnl.gov) made many more improvements to the mac
+interface (which are not seen in the unix distribution), provided much
+help in translating init.dyl to infix, in making setters DIRM
+compliant, , pointed out problem with array iteration protocol,
+provided devalue_args, pointed out a problem with +-sign prefixed
+literal numbers, gave me lots of diffs to match his <big-integer>
+extensions provided in MacMarlais, fixed map-into, and drastically
+improved the tracking of line numbers for error reporting.  Perhaps
+most importantly, he also made the tail call optimization mods.
+
+Brent Benson (bwb@icad.com) provided aint and anint for systems not
+having them and helped with porting.
+
+Roger Critchlow (rec@arris.com) was quite helpful in providing
+solutions to header parsing using start contexts with flex.  Patrick
+
+Johan Dahl (Johan.Dahl@ling.lu.se) pointed out a problem and fix for
+`any?' in init.dyl, pointed out problem with negative number literals,
+and reminded us that errors always appeared to be on line #1.  He also
+pointed out problems with the list literals.
+
+Dave Dyer (ddyer@pak.triple-i.com) gave some sgi porting help,
+pointed out a fix for a problem with infix_decode_token,
+contributed subsequence-position
+
+Hugh Emberson (hugh@cosc.canterbury.ac.nz) for a bit of linux help.
+
+Adi Fairbank (anf1@rsrch1.cit.cornell.edu) helped with porting to
+_HP_UX.
+
+Seth LaForge <sethml@ugcs.caltech.edu> for some help with hpux porting.
+
+Drew Nolan (wan@cis.ufl.edu) provided create_generic parameters, &
+sub_specializers, fixed a problem with multiple values return parsing,
+pointed out lots of problems with init.dyl, provided fix for
+function-specializers.
+
+Robert Orenstein (rlo@netcom.com) found that a bug allowing methods
+with non-congruent parameter lists to be added to generic functions.
+This bug was fixed by Drew Nolan.
+
+P. Tucker Withington (ptw@harlequin.com) provided the definition of
+replace-subsequence!.
+
+Michael Wolber (wolber@informatik.uni-wuerzburg.de) found an error in
+member?(<object>, <list>).
+
+The responsibility for all errors is, of course mine.
+
+
+Joe Wilson
+<A HREF="http://www.cis.ufl.edu/~jnw/">jnw@cis.ufl.edu</A>
+
+-----------------------------------------
+Acknowledgments for the 0.5 distribution:
+
+More thanks are necessary to Patrick Beard for helpful fixes and suggestions
+and for his work on the Mac version.
+Brent helped with configuration checking.
+Randy Fischer helped with Linux configuration checking.
+Thanks to Steve Strassmann for pointing out several blatantly obvious errors
+just before release.
+
+
+Most of all, though, thanks to you for reading the acknowledgments and
+sharing some of your time to make this product useful.
+
+Joe Wilson
+
+
+-----------------------------------------
+Acknowledgments for the 0.4 distribution.
+
+The Marlais interpreter was started as a quick implementation by Brent
+Benson (Brent.Benson@mail.csd.harris.com), who wanted an
+implementation of Dylan to experiment with.  The first version was
+churned out in a short period of time (weeks) by Brent.
+
+I first happened upon Marlais in Version 0.3 (Nov. 1993).  I wanted to
+use it as a language vehicle for a small portion of a course in
+Object-Oriented Programming I taught in the spring of 1994 at the
+University of Florida.  I realized there were some limitations to the
+system, but that Marlais was very accessible and modifiable.  I hacked
+in the features that I wanted to use, but then got interested in the
+language in a more serious way.
+
+I embarked on systematically adding Dylan Design Note changes in about
+May of 1994.  I contacted Brent and told him about my efforts.  I said
+I'd be glad to produce a Version 0.4 of the interpreter.  Brent said
+he was glad to have someone breathe new life into the project.  Later
+in the month, Patrick Beard (beard@cs.ucdavis.edu) started contributing
+numerous suggestions and corrections (esp. w.r.t. porting to Mac) that I
+incorporated into the current Marlais version.  Brent and
+Bri Carlstrom (bdc@ai.mit.edu) also provided helpful porting feedback.
+
+	"...My ark sings in the sun
+	At God speeded summer's end
+	And the flood flowers now."
+
+		Dylan M. Thomas
+		Author's Prologue
+		The Collected Poems of Dylan Thomas
+		New Directions Publishing Corporation
+
+Joseph N. Wilson
+(jnw@cis.ufl.edu)

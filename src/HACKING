@@ -1,0 +1,55 @@
+
+Guide to modifying Marlais
+
+* Adding a data type - There are actually two representations of
+Marlais objects.  When SMALL_OBJECTS is not defined, every object is
+represented by a struct object that contains a TYPE field and a union
+holding the information specific to that object (if there is any).
+This is great for debugging because you can easily look inside any
+object in a debugger.  The disadvantage is that because of C union
+semantics, every object is a big as the largest object.  Object is
+simply typedefed to struct object *.  When adding a new type of
+object, you need to add a new type name to the objtype enum, add a new
+struct containing the necessary information, and then add an entry in
+the struct object union.  You should also add the class to the class
+hierarchy (init_class_hierarchy) and have objectlcass() return the
+correct value in class.c
+
+When SMALL_OBJECTS is defined, Object is a word that contain either a
+pointer or some immediate data depending on the value of last two bits
+in that word.  To add a new immediate type (the data part must be
+smaller than 26 bits) add new type tag (ends in SUB), add a new
+predicate (ends in P), add a new value extractor if there is actually
+a value (ends in VAL), and a macro for synthesizing that immediate
+type (starts with MAKE).  To add a new, non-immediate, type add a
+struct containing the object type in the first word and the rest of
+the values after that.
+
+All object slot accesses should take place through macros in case the
+object representation changes (again).
+
+* Adding a new primitive function - To add a primitive to an existing
+file that already defines primtives you must perform the following
+steps.  
+
+	1) Put a prototype above the struct primitive declaration. 
+	2) Add an entry in the struct primitive declaration; see
+	object.h for information on the meaning of the prim_type
+	field.  The name of the resulting function should be begin
+	with '%'.
+	3) Add the function to the bottom of the file.  The convention
+	is to do no type checking in the C function and do the type
+	checking with the generic function call mechanism in the
+	wrapper function.
+	4) Add a wrapper function to init.dyl.
+
+To add a whole new file of primitives, you need to provide a struct
+primitive structure and a function called init_xxxx_prims().  You need
+to add a call to the init function in main.c: initialize_marlais().
+
+* Adding new syntax - All of the syntax form definitions are in
+syntax.c.  You need to add a prototype, add an entry in
+syntax_operators[], add an entry in syntax_functions[], and write the
+function that will evaluate the form.  The function should accept a
+single argument which is the whole form to be evaluated.
+

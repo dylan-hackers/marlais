@@ -1,0 +1,13 @@
+This is a Win32 binary of version 0.5.12 of the Marlais (almost)Dylan
+interpreter.  It has been tested under Windows NT 3.51 and Windows 95.
+
+init.dylan  - Initialization file (in c:\marlais or pointed to by MARLAIS_INIT.
+marlais.bat - A batch file that sets MARLAIS_INIT and runs marlais.exe
+marlais.exe - The executable.
+readme      - This file.
+
+The following files can be used to build marlais-0.5.12 from the
+source distribution with Visual C++ 2.2.
+
+getopt.c
+makefile

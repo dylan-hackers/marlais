@@ -1,0 +1,92 @@
+Marlais is a simple-minded interpreter for a programming language
+strongly resembling Dylan [1].  It is not intended as a final release,
+but rather to fill a perceived void where Dylan implementations are
+concerned.  This is a "hackers release" and is intended as a vehicle
+for education, experimentation and also to encourage people to port it
+to different architectures, add features, and fix bugs.  Marlais is
+alpha software and should not be used by people desiring
+reliability!!!
+
+Marlais information and distributions are available via the web from
+
+	http://www.cis.ufl.edu/~jnw/Marlais/
+
+or for anonymous ftp from
+
+	ftp://ftp.cis.ufl.edu:/pub/src/Marlais
+
+
+***NOTE***
+The interpreter will read, evaluate, and print a sequence of semicolon
+terminated Dylan expressions.
+
+The normal interpreter prompt is the symbol `?'.
+If an incomplete expression has been entered, the interpreter prints
+a continuation prompt `>'.
+
+If you type a non-semicolon terminated expression at the interpreter,
+you will see the continuation prompt.  This is your cue to finish up
+with a semicolon.  Here's an example:
+
+	? 1 + 3
+	> ;
+	4
+
+This release contains marlais.el, an emacs mode (based on comint.el)
+suitable for use as a listener for the marlais interpreter.  It
+requires dylan-mode.el, the most recent version of which may be
+obtained via World-Wide Web from URL
+	http://legend.gwydion.cs.cmu.edu:8001/gwydion/mindy/dylan-mode.el
+It also contains dylan-hilit19.el, which contains a dylan mode pattern
+for emacs hilit19.
+
+***
+
+See ARGUMENTS for the Marlais command-line arguments.
+
+See INSTALL for information on installing Marlais.
+
+See MACHINES for a list of supported machines.
+
+See PORTING for information on porting Marlais to another
+architecture. 
+
+See BUGS for information on how to report bugs.
+
+See DIFFERENCES for information on some of the differences between
+Marlais and Dylan.
+
+See HACKING for information on adding to and fixing Marlais.
+
+See ADDED for information on new features in this release.
+
+---
+Further Dylan information is available from the following places
+On the Internet:
+ ftp://ftp.cambridge.apple.com:/pub/dylan/
+ http://www.cambridge.apple.com
+
+On Applelink, click on:
+Developer Support:Developer Services:
+   Development Platforms:Dylan Related
+
+On eWorld, Go (cmd-G) to "dev service", then click on
+   Tool Chest:Development Platforms:Dylan Related
+
+On CompuServe, Type GO APPLE to get to the Apple support forum.
+There are 16 libraries, go into Programmers/Developers Library #15
+---
+Visit the Marlais home page
+
+	http://www.cis.ufl.edu/~jnw/Marlais/
+
+for new developments.
+
+You can email the authors of Marlais at
+
+	 marlais-authors@cis.ufl.edu
+
+---
+[1] Andrew Shalit.  "Dylan: an object oriented dynamic language".
+Apple Computer, Inc.  1992.
+

@@ -1,0 +1,6146 @@
+
+RCS file: RCS/ACKNOWLEDGMENTS,v
+Working file: ACKNOWLEDGMENTS
+head: 1.23
+branch:
+locks: strict
+	jnw: 1.23
+access list:
+symbolic names:
+	marlais_0_5_12: 1.23
+	marlais_0_5_11: 1.22
+	marlais_0_5_10: 1.18
+	marlais_0_5_7: 1.8
+	marlais_0_5_6: 1.7
+	marlais_0_5_5: 1.7
+	marlais_0_5: 1.5
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.1
+comment leader: "# "
+keyword substitution: kv
+total revisions: 23;	selected revisions: 19
+description:
+Need I say more?
+----------------------------
+revision 1.23	locked by: jnw;
+date: 1995/09/04 15:05:14;  author: jnw;  state: Exp;  lines: +20 -1
+Added ACKs for 0.5.12
+----------------------------
+revision 1.22
+date: 1995/06/14 17:54:25;  author: jnw;  state: Exp;  lines: +5 -4
+*** empty log message ***
+----------------------------
+revision 1.21
+date: 1995/06/13 04:00:11;  author: jnw;  state: Exp;  lines: +5 -5
+*** empty log message ***
+----------------------------
+revision 1.20
+date: 1995/06/06 13:14:56;  author: jnw;  state: Exp;  lines: +18 -1
+Modified print to put its own newline
+Added default object-print method
+Added object-princ method
+Made element(<array>, <integer>) use array-element and
+element (<array>, <list>) use array-ref
+Likewise for element-setter
+Added some gf definitions indicated by DIRM: rank, aref, dimension.
+Added shallow-copy for <array>
+----------------------------
+revision 1.19
+date: 1995/06/03 12:02:21;  author: jnw;  state: Exp;  lines: +10 -0
+Substituted arguments_opt for arguments in array refereces, thus
+allowing empty subscript lists inside [ ]
+----------------------------
+revision 1.18
+date: 1995/05/13 21:23:01;  author: jnw;  state: Exp;  lines: +59 -48
+Added 0.5.10 acknowledgments
+----------------------------
+revision 1.17
+date: 1995/05/13 20:44:56;  author: jnw;  state: Exp;  lines: +2 -0
+Added Seth LaForge.
+----------------------------
+revision 1.16
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +13 -9
+Added Library GPL Notice
+----------------------------
+revision 1.15
+date: 1995/03/09 03:13:00;  author: jnw;  state: Exp;  lines: +4 -2
+Added Alexander and Emberson
+----------------------------
+revision 1.14
+date: 1995/03/08 17:09:55;  author: jnw;  state: Exp;  lines: +7 -3
+updated
+----------------------------
+revision 1.13
+date: 1995/02/16 15:20:48;  author: jnw;  state: Exp;  lines: +2 -2
+Included nod to Dahl for list literal bug find.
+----------------------------
+revision 1.12
+date: 1995/02/14 02:36:12;  author: jnw;  state: Exp;  lines: +12 -11
+Added extra Dave Dyer ack.
+----------------------------
+revision 1.11
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +58 -23
+Made many additions to credit those who've helped.
+----------------------------
+revision 1.10
+date: 1995/02/08 23:24:31;  author: jnw;  state: Exp;  lines: +8 -0
+*** empty log message ***
+----------------------------
+revision 1.9
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +21 -5
+fixed dotted list literals to call `quote' rather than `list'
+Fixed values return clauses to parse right and to generate correct
+code.
+Modified keyword parameter initialization
+----------------------------
+revision 1.8
+date: 1995/01/05 04:57:56;  author: jnw;  state: Exp;  lines: +3 -3
+Revised description of module use.
+----------------------------
+revision 1.7
+date: 1994/09/18 20:07:29;  author: jnw;  state: Exp;  lines: +6 -3
+Added ack for mac support by Beard.
+----------------------------
+revision 1.6
+date: 1994/09/15 17:08:00;  author: jnw;  state: Exp;  lines: +8 -1
+Added Critchlow ack and fixed Strassmann's spelling.
+----------------------------
+revision 1.5
+date: 1994/08/19 04:40:16;  author: jnw;  state: Exp;  lines: +5 -0
+Added some
+=============================================================================
+
+RCS file: RCS/ADDED,v
+Working file: ADDED
+head: 1.30
+branch:
+locks: strict
+	jnw: 1.30
+access list:
+symbolic names:
+	marlais_0_5_12: 1.30
+	marlais_0_5_11: 1.30
+	marlais_0_5_10: 1.24
+	marlais_0_5_7: 1.16
+	marlais_0_5_6: 1.12
+	marlais_0_5_5: 1.10
+	marlais_0_5: 1.6
+	marlais_0_4: 1.5
+	marlais+0+4+beta: 1.5
+	marlais-0-4-alpha: 1.5
+comment leader: "# "
+keyword substitution: kv
+total revisions: 30;	selected revisions: 25
+description:
+ ADDED
+----------------------------
+revision 1.30	locked by: jnw;
+date: 1995/06/15 04:59:02;  author: jnw;  state: Exp;  lines: +5 -0
+*** empty log message ***
+----------------------------
+revision 1.29
+date: 1995/06/15 04:57:24;  author: jnw;  state: Exp;  lines: +8 -0
+*** empty log message ***
+----------------------------
+revision 1.28
+date: 1995/06/14 17:54:25;  author: jnw;  state: Exp;  lines: +4 -0
+*** empty log message ***
+----------------------------
+revision 1.27
+date: 1995/06/13 04:00:11;  author: jnw;  state: Exp;  lines: +5 -0
+*** empty log message ***
+----------------------------
+revision 1.26
+date: 1995/06/06 13:14:56;  author: jnw;  state: Exp;  lines: +4 -2
+*** empty log message ***
+----------------------------
+revision 1.25
+date: 1995/06/03 11:56:12;  author: jnw;  state: Exp;  lines: +8 -1
+*** empty log message ***
+----------------------------
+revision 1.24
+date: 1995/05/13 21:23:01;  author: jnw;  state: Exp;  lines: +79 -78
+Reversed order to be most recent to least recent
+----------------------------
+revision 1.23
+date: 1995/05/13 20:44:56;  author: jnw;  state: Exp;  lines: +23 -1
+*** empty log message ***
+----------------------------
+revision 1.22
+date: 1995/03/29 03:33:00;  author: jnw;  state: Exp;  lines: +2 -0
+*** empty log message ***
+----------------------------
+revision 1.21
+date: 1995/03/09 13:37:51;  author: jnw;  state: Exp;  lines: +7 -3
+reported new fixes
+----------------------------
+revision 1.20
+date: 1995/03/08 17:09:55;  author: jnw;  state: Exp;  lines: +7 -0
+Mentioned newly fixed stuff.
+----------------------------
+revision 1.19
+date: 1995/02/16 15:20:48;  author: jnw;  state: Exp;  lines: +7 -5
+revised some descriptions
+----------------------------
+revision 1.18
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +3 -1
+Changed release number
+----------------------------
+revision 1.17
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +21 -0
+Added x_symbol
+----------------------------
+revision 1.16
+date: 1995/01/05 04:57:56;  author: jnw;  state: Exp;  lines: +3 -0
+Mentioned fix of init slot problem.
+----------------------------
+revision 1.15
+date: 1995/01/05 03:01:48;  author: jnw;  state: Exp;  lines: +1 -0
+Added framework for list sorting to be done.
+Intend to use this soon internally.
+----------------------------
+revision 1.14
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +9 -2
+Removed default_module and added object_table_class.
+----------------------------
+revision 1.13
+date: 1994/12/23 03:27:14;  author: jnw;  state: Exp;  lines: +7 -0
+Added some comments
+----------------------------
+revision 1.12
+date: 1994/11/27 03:22:25;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed rev. number
+----------------------------
+revision 1.11
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +24 -0
+updated
+----------------------------
+revision 1.10
+date: 1994/11/03 03:38:36;  author: jnw;  state: Exp;  lines: +18 -0
+Updated with many new features
+----------------------------
+revision 1.9
+date: 1994/09/18 20:07:29;  author: jnw;  state: Exp;  lines: +3 -2
+Mention module support.
+----------------------------
+revision 1.8
+date: 1994/09/16 03:39:15;  author: jnw;  state: Exp;  lines: +12 -1
+Added changes for 0.5.2
+----------------------------
+revision 1.7
+date: 1994/09/15 17:08:00;  author: jnw;  state: Exp;  lines: +1 -24
+Got rid of version 5 stuff. Must start over again.
+----------------------------
+revision 1.6
+date: 1994/08/19 17:45:41;  author: jnw;  state: Exp;  lines: +12 -39
+Updated
+=============================================================================
+
+RCS file: RCS/ARGUMENTS,v
+Working file: ARGUMENTS
+head: 1.3
+branch:
+locks: strict
+	jnw: 1.3
+access list:
+symbolic names:
+	marlais_0_5_12: 1.3
+	marlais_0_5_11: 1.2
+	marlais_0_5_10: 1.2
+	marlais_0_5_7: 1.2
+	marlais_0_5_6: 1.2
+	marlais_0_5_5: 1.2
+	marlais_0_5: 1.2
+comment leader: "# "
+keyword substitution: kv
+total revisions: 3;	selected revisions: 2
+description:
+Describes command-line arguments for the interpreter.
+----------------------------
+revision 1.3	locked by: jnw;
+date: 1995/09/04 15:05:14;  author: jnw;  state: Exp;  lines: +1 -1
+updated `prefix' to `infix'
+----------------------------
+revision 1.2
+date: 1994/07/18 16:05:46;  author: jnw;  state: Exp;  lines: +8 -2
+Added description of -e argument.
+=============================================================================
+
+RCS file: RCS/BUGS,v
+Working file: BUGS
+head: 1.6
+branch:
+locks: strict
+	jnw: 1.6
+access list:
+symbolic names:
+	marlais_0_5_12: 1.6
+	marlais_0_5_11: 1.6
+	marlais_0_5_10: 1.6
+	marlais_0_5_7: 1.3
+	marlais_0_5_6: 1.3
+	marlais_0_5_5: 1.3
+	marlais_0_5: 1.3
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: "# "
+keyword substitution: kv
+total revisions: 6;	selected revisions: 4
+description:
+ BUGS
+----------------------------
+revision 1.6	locked by: jnw;
+date: 1995/03/08 17:09:55;  author: jnw;  state: Exp;  lines: +2 -1
+Updated Brent's address.
+----------------------------
+revision 1.5
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +3 -0
+*** empty log message ***
+----------------------------
+revision 1.4
+date: 1995/02/08 23:24:31;  author: jnw;  state: Exp;  lines: +11 -18
+Removed Brent's old address from BUGS file.
+----------------------------
+revision 1.3
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +15 -13
+Changed around to reflect new version status.
+=============================================================================
+
+RCS file: RCS/COPYING.LIB,v
+Working file: COPYING.LIB
+head: 1.1
+branch:
+locks: strict
+	jnw: 1.1
+access list:
+symbolic names:
+	marlais_0_5_12: 1.1
+	marlais_0_5_11: 1.1
+	marlais_0_5_10: 1.1
+comment leader: "# "
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+We are now copy lefted according to the Library GPL
+----------------------------
+revision 1.1	locked by: jnw;
+date: 1995/03/09 13:37:51;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/COPYRIGHT,v
+Working file: COPYRIGHT
+head: 1.5
+branch:
+locks: strict
+	jnw: 1.5
+access list:
+symbolic names:
+	marlais_0_5_12: 1.5
+	marlais_0_5_11: 1.5
+	marlais_0_5_10: 1.5
+	marlais_0_5_7: 1.4
+	marlais_0_5_6: 1.4
+	marlais_0_5_5: 1.4
+	marlais_0_5: 1.4
+	marlais_0_4: 1.3
+	marlais+0+4+beta: 1.3
+	marlais-0-4-alpha: 1.3
+comment leader: "# "
+keyword substitution: kv
+total revisions: 5;	selected revisions: 2
+description:
+ COPYRIGHT
+----------------------------
+revision 1.5	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.4
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/DIFFERENCES,v
+Working file: DIFFERENCES
+head: 1.19
+branch:
+locks: strict
+	jnw: 1.19
+access list:
+symbolic names:
+	marlais_0_5_12: 1.19
+	marlais_0_5_11: 1.18
+	marlais_0_5_10: 1.17
+	marlais_0_5_7: 1.13
+	marlais_0_5_6: 1.12
+	marlais_0_5_5: 1.12
+	marlais_0_5: 1.9
+	marlais_0_4: 1.4
+	marlais+0+4+beta: 1.4
+	marlais-0-4-alpha: 1.4
+comment leader: "# "
+keyword substitution: kv
+total revisions: 19;	selected revisions: 11
+description:
+  DIFFERENCES
+----------------------------
+revision 1.19	locked by: jnw;
+date: 1995/09/04 15:05:14;  author: jnw;  state: Exp;  lines: +26 -3
+Added listing of arith operations in the DIRM which are or are not supported.
+----------------------------
+revision 1.18
+date: 1995/06/14 17:54:25;  author: jnw;  state: Exp;  lines: +35 -7
+Added description of `block'
+----------------------------
+revision 1.17
+date: 1995/05/13 21:23:01;  author: jnw;  state: Exp;  lines: +10 -0
+Added discussion of class precedence list computation
+----------------------------
+revision 1.16
+date: 1995/03/09 13:37:51;  author: jnw;  state: Exp;  lines: +2 -1
+mentioned for changes.
+----------------------------
+revision 1.15
+date: 1995/02/16 18:03:30;  author: jnw;  state: Exp;  lines: +2 -5
+Updated comments about iteration protocol and numeric operations
+----------------------------
+revision 1.14
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +4 -8
+Added x_symbol
+----------------------------
+revision 1.13
+date: 1995/01/05 04:57:56;  author: jnw;  state: Exp;  lines: +53 -34
+Revised description of module use.
+----------------------------
+revision 1.12
+date: 1994/11/03 03:38:36;  author: jnw;  state: Exp;  lines: +9 -6
+updated list of system specific stuff.
+----------------------------
+revision 1.11
+date: 1994/09/18 20:07:29;  author: jnw;  state: Exp;  lines: +75 -3
+Added description of module support.
+----------------------------
+revision 1.10
+date: 1994/09/15 17:08:00;  author: jnw;  state: Exp;  lines: +3 -0
+Added message about printing multivalues with #< ... >
+----------------------------
+revision 1.9
+date: 1994/08/19 04:54:55;  author: jnw;  state: Exp;  lines: +3 -3
+Corrected some attribution errors.
+=============================================================================
+
+RCS file: RCS/HACKING,v
+Working file: HACKING
+head: 1.1
+branch:
+locks: strict
+	jnw: 1.1
+access list:
+symbolic names:
+	marlais_0_5_12: 1.1
+	marlais_0_5_11: 1.1
+	marlais_0_5_10: 1.1
+	marlais_0_5_7: 1.1
+	marlais_0_5_6: 1.1
+	marlais_0_5_5: 1.1
+	marlais_0_5: 1.1
+	marlais_0_4: 1.1
+	marlais+0+4+beta: 1.1
+	marlais-0-4-alpha: 1.1
+comment leader: "# "
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+ HACKING
+----------------------------
+revision 1.1	locked by: jnw;
+date: 1994/04/25 21:33:07;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/INSTALL,v
+Working file: INSTALL
+head: 1.1
+branch:
+locks: strict
+	jnw: 1.1
+access list:
+symbolic names:
+	marlais_0_5_12: 1.1
+	marlais_0_5_11: 1.1
+	marlais_0_5_10: 1.1
+	marlais_0_5_7: 1.1
+	marlais_0_5_6: 1.1
+	marlais_0_5_5: 1.1
+	marlais_0_5: 1.1
+	marlais_0_4: 1.1
+	marlais+0+4+beta: 1.1
+	marlais-0-4-alpha: 1.1
+comment leader: "# "
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+ INSTALL
+----------------------------
+revision 1.1	locked by: jnw;
+date: 1994/04/25 21:33:07;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/KNOWN-BUGS,v
+Working file: KNOWN-BUGS
+head: 1.8
+branch:
+locks: strict
+	jnw: 1.8
+access list:
+symbolic names:
+	marlais_0_5_12: 1.8
+	marlais_0_5_11: 1.7
+	marlais_0_5_10: 1.7
+	marlais_0_5_7: 1.5
+	marlais_0_5_6: 1.5
+	marlais_0_5_5: 1.4
+	marlais_0_5: 1.3
+	marlais_0_4: 1.1
+	marlais+0+4+beta: 1.1
+	marlais-0-4-alpha: 1.1
+comment leader: "# "
+keyword substitution: kv
+total revisions: 8;	selected revisions: 6
+description:
+List of known marlais bugs.
+----------------------------
+revision 1.8	locked by: jnw;
+date: 1995/09/04 15:05:14;  author: jnw;  state: Exp;  lines: +22 -1
+A couple of new known bugs added.
+----------------------------
+revision 1.7
+date: 1995/02/14 02:36:12;  author: jnw;  state: Exp;  lines: +1 -0
+Added Dave Dyer's fix to infix_decode_token
+----------------------------
+revision 1.6
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +2 -2
+n
+----------------------------
+revision 1.5
+date: 1994/11/27 03:24:23;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed message about file format
+----------------------------
+revision 1.4
+date: 1994/09/15 17:08:00;  author: jnw;  state: Exp;  lines: +2 -0
+Added message about builtin collection classes not being subclassed.
+----------------------------
+revision 1.3
+date: 1994/08/12 02:09:47;  author: jnw;  state: Exp;  lines: +0 -4
+Removed bug note about implicit generic functions being
+created incorrectly.
+=============================================================================
+
+RCS file: RCS/MACHINES,v
+Working file: MACHINES
+head: 1.4
+branch:
+locks: strict
+	jnw: 1.4
+access list:
+symbolic names:
+	marlais_0_5_12: 1.4
+	marlais_0_5_11: 1.4
+	marlais_0_5_10: 1.4
+	marlais_0_5_7: 1.3
+	marlais_0_5_6: 1.3
+	marlais_0_5_5: 1.3
+	marlais_0_5: 1.3
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.1
+comment leader: "# "
+keyword substitution: kv
+total revisions: 4;	selected revisions: 2
+description:
+ MACHINES
+----------------------------
+revision 1.4	locked by: jnw;
+date: 1995/03/29 03:33:00;  author: jnw;  state: Exp;  lines: +4 -4
+updated this a little
+----------------------------
+revision 1.3
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +3 -6
+Removed untested machines.
+=============================================================================
+
+RCS file: RCS/Makefile,v
+Working file: Makefile
+head: 1.56
+branch:
+locks: strict
+	jnw: 1.56
+access list:
+symbolic names:
+	marlais_0_5_12: 1.56
+	marlais-0-5-11: 1.55
+	marlais_0_5_11: 1.54
+	marlais_0_5_10: 1.51
+	marlais_0_5_7: 1.41
+	marlais_0_5_6: 1.36
+	marlais_0_5_5: 1.31
+	marlais_0_5: 1.22
+	marlais_0_4: 1.9
+	marlais+0+4+beta: 1.6
+	marlais-0-4-alpha: 1.3
+comment leader: "# "
+keyword substitution: kv
+total revisions: 56;	selected revisions: 35
+description:
+ Makefile
+----------------------------
+revision 1.56	locked by: jnw;
+date: 1995/09/04 15:05:14;  author: jnw;  state: Exp;  lines: +1 -1
+Added CEXTRAS to CFLAGS
+----------------------------
+revision 1.55
+date: 1995/06/15 05:14:07;  author: jnw;  state: Exp;  lines: +3 -3
+*** empty log message ***
+----------------------------
+revision 1.54
+date: 1995/06/14 17:54:25;  author: jnw;  state: Exp;  lines: +86 -43
+Various changes made.  Mostly cosmetic.
+----------------------------
+revision 1.53
+date: 1995/06/13 04:07:12;  author: jnw;  state: Exp;  lines: +1 -1
+Added NT_MAKEFILE to non-rcs'd files
+----------------------------
+revision 1.52
+date: 1995/06/13 04:00:11;  author: jnw;  state: Exp;  lines: +51 -30
+Added target and special comments to make NT_MAKEFILE from Makefile
+Snarfed System config flags in one place and dropped Solaris hack.
+Changed version
+Removed trailing \ from OTHER_C_FILES (caused some make's to york)
+----------------------------
+revision 1.51
+date: 1995/05/13 21:23:01;  author: jnw;  state: Exp;  lines: +6 -4
+changed version number
+added classprec.[ch] to SRCS lists
+----------------------------
+revision 1.50
+date: 1995/05/13 20:44:56;  author: jnw;  state: Exp;  lines: +153 -36
+Added METHOD_CACHING_FLAG, PRECEDENCE_FLAG and MARLAIS_FLAGS
+----------------------------
+revision 1.49
+date: 1995/03/29 03:33:00;  author: jnw;  state: Exp;  lines: +15 -15
+Added NT_MAKEFILE (courtesy of bwb)
+Fixed problem with SunOS hack.
+----------------------------
+revision 1.48
+date: 1995/03/09 13:37:51;  author: jnw;  state: Exp;  lines: +10 -6
+Changed Makefile to use `indent' on checkin
+----------------------------
+revision 1.47
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.46
+date: 1995/03/09 04:38:22;  author: jnw;  state: Exp;  lines: +2 -2
+version number change
+----------------------------
+revision 1.45
+date: 1995/03/08 17:09:55;  author: jnw;  state: Exp;  lines: +6 -1
+Added OPTIMIZE_TAIL_CALL_FLAG arg
+----------------------------
+revision 1.44
+date: 1995/02/16 15:20:48;  author: jnw;  state: Exp;  lines: +10 -3
+Added hack for distinguishing SunOS_5 from other SunOS versions
+----------------------------
+revision 1.43
+date: 1995/02/08 23:24:31;  author: jnw;  state: Exp;  lines: +33 -34
+updated dependencies
+----------------------------
+revision 1.42
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +50 -46
+Added dylan_lexer.h to SRCS and updated dependencies
+----------------------------
+revision 1.41
+date: 1995/01/05 04:05:11;  author: jnw;  state: Exp;  lines: +8 -7
+Changed gc version
+----------------------------
+revision 1.40
+date: 1995/01/05 03:01:48;  author: jnw;  state: Exp;  lines: +2 -2
+Changed version number
+----------------------------
+revision 1.39
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +6 -5
+Updated dependencies.
+----------------------------
+revision 1.38
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;  lines: +38 -30
+Made string->bytestring mods.
+Updated dependencies.
+----------------------------
+revision 1.37
+date: 1994/11/28 22:59:40;  author: jnw;  state: Exp;  lines: +7 -7
+Added foreign_ptr files to object and srcs lists
+----------------------------
+revision 1.36
+date: 1994/11/27 03:38:46;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed init file (again)
+----------------------------
+revision 1.35
+date: 1994/11/27 03:22:25;  author: jnw;  state: Exp;  lines: +1 -1
+Added -f parameter to rm of NO_RCS_FILES in checkin target
+----------------------------
+revision 1.34
+date: 1994/11/27 03:18:14;  author: jnw;  state: Exp;  lines: +3 -3
+Fixed revision and init_file
+----------------------------
+revision 1.33
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +5 -5
+Changed INIT_FILE_FLAG to default to includ -Changed to default to INFIX_INIT_FILE
+Modified gc distribution to do a cp -pr
+----------------------------
+revision 1.32
+date: 1994/11/03 04:01:02;  author: jnw;  state: Exp;  lines: +1 -1
+Modified dependent gc make to avoid setting CC variable.
+Use of gcc caused problems!
+----------------------------
+revision 1.31
+date: 1994/11/03 03:52:10;  author: jnw;  state: Exp;  lines: +2 -2
+Changed version to 0.5.5
+----------------------------
+revision 1.30
+date: 1994/11/03 03:38:36;  author: jnw;  state: Exp;  lines: +1 -0
+Added marlais.el to OTHERFILES list
+----------------------------
+revision 1.29
+date: 1994/09/20 17:03:29;  author: jnw;  state: Exp;  lines: +2 -2
+fixed PREVIOUS_VERSION to be 0.5.3
+----------------------------
+revision 1.28
+date: 1994/09/20 17:01:00;  author: jnw;  state: Exp;  lines: +4 -4
+changed versions again.
+----------------------------
+revision 1.27
+date: 1994/09/18 20:07:29;  author: jnw;  state: Exp;  lines: +6 -2
+Changed version numberd.
+Added mac: target.
+----------------------------
+revision 1.26
+date: 1994/09/16 03:32:49;  author: jnw;  state: Exp;  lines: +2 -2
+Modified version (0.5.2)
+----------------------------
+revision 1.25
+date: 1994/09/15 17:25:53;  author: jnw;  state: Exp;  lines: +1 -1
+Mod'd checkin rule to keep from failing if ci fails
+----------------------------
+revision 1.24
+date: 1994/09/15 17:08:00;  author: jnw;  state: Exp;  lines: +6 -6
+Changed version numbers, modified real_clean target.
+----------------------------
+revision 1.23
+date: 1994/08/25 16:22:19;  author: jnw;  state: Exp;  lines: +1 -1
+Made gc make use same CC parameter
+----------------------------
+revision 1.22
+date: 1994/08/19 04:14:59;  author: jnw;  state: Exp;  lines: +2 -2
+Updated version to 0.5
+=============================================================================
+
+RCS file: RCS/PORTING,v
+Working file: PORTING
+head: 1.1
+branch:
+locks: strict
+	jnw: 1.1
+access list:
+symbolic names:
+	marlais_0_5_12: 1.1
+	marlais_0_5_11: 1.1
+	marlais_0_5_10: 1.1
+	marlais_0_5_7: 1.1
+	marlais_0_5_6: 1.1
+	marlais_0_5_5: 1.1
+	marlais_0_5: 1.1
+	marlais_0_4: 1.1
+	marlais+0+4+beta: 1.1
+	marlais-0-4-alpha: 1.1
+comment leader: "# "
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+ PORTING
+----------------------------
+revision 1.1	locked by: jnw;
+date: 1994/04/25 21:33:07;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/README,v
+Working file: README
+head: 1.13
+branch:
+locks: strict
+	jnw: 1.13
+access list:
+symbolic names:
+	marlais_0_5_12: 1.13
+	marlais_0_5_11: 1.13
+	marlais_0_5_10: 1.11
+	marlais_0_5_7: 1.10
+	marlais_0_5_6: 1.9
+	marlais_0_5_5: 1.8
+	marlais_0_5: 1.5
+	marlais_0_4: 1.1
+	marlais+0+4+beta: 1.1
+	marlais-0-4-alpha: 1.1
+comment leader: "# "
+keyword substitution: kv
+total revisions: 13;	selected revisions: 9
+description:
+ README
+----------------------------
+revision 1.13	locked by: jnw;
+date: 1995/06/13 04:00:11;  author: jnw;  state: Exp;  lines: +3 -1
+Added mention of dylan-hilit19.el
+----------------------------
+revision 1.12
+date: 1995/06/03 11:56:12;  author: jnw;  state: Exp;  lines: +0 -5
+remove 0.5.6 note
+----------------------------
+revision 1.11
+date: 1995/05/13 20:44:56;  author: jnw;  state: Exp;  lines: +9 -0
+Added reference to web page
+----------------------------
+revision 1.10
+date: 1994/12/23 03:27:14;  author: jnw;  state: Exp;  lines: +7 -3
+Added some comments
+----------------------------
+revision 1.9
+date: 1994/11/27 03:22:25;  author: jnw;  state: Exp;  lines: +5 -0
+Added revision specific message
+----------------------------
+revision 1.8
+date: 1994/11/03 03:38:36;  author: jnw;  state: Exp;  lines: +13 -0
+Added references to marlais.el, dylan-mode.el, and the Marlais home page.
+----------------------------
+revision 1.7
+date: 1994/09/18 20:07:29;  author: jnw;  state: Exp;  lines: +13 -3
+Added discussion of new prompting strategy.
+----------------------------
+revision 1.6
+date: 1994/09/15 17:08:00;  author: jnw;  state: Exp;  lines: +23 -0
+Added note about semicolongs.
+(love that misspelling!)
+Added info about further dylan info.
+----------------------------
+revision 1.5
+date: 1994/08/19 04:22:48;  author: jnw;  state: Exp;  lines: +0 -18
+Removed prerelease warning.
+=============================================================================
+
+RCS file: RCS/TODO,v
+Working file: TODO
+head: 1.1
+branch:
+locks: strict
+	jnw: 1.1
+access list:
+symbolic names:
+	marlais_0_5_12: 1.1
+	marlais_0_5_11: 1.1
+	marlais_0_5_10: 1.1
+	marlais_0_5_7: 1.1
+	marlais_0_5_6: 1.1
+	marlais_0_5_5: 1.1
+	marlais_0_5: 1.1
+	marlais_0_4: 1.1
+	marlais+0+4+beta: 1.1
+	marlais-0-4-alpha: 1.1
+comment leader: "# "
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+List of things to do
+----------------------------
+revision 1.1	locked by: jnw;
+date: 1994/06/12 20:26:39;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/alloc.c,v
+Working file: alloc.c
+head: 1.11
+branch:
+locks: strict
+	jnw: 1.11
+access list:
+symbolic names:
+	marlais_0_5_12: 1.11
+	marlais_0_5_11: 1.11
+	marlais_0_5_10: 1.11
+	marlais_0_5_7: 1.7
+	marlais_0_5_6: 1.7
+	marlais_0_5_5: 1.7
+	marlais_0_5: 1.6
+	marlais_0_4: 1.5
+	marlais+0+4+beta: 1.4
+	marlais-0-4-alpha: 1.3
+comment leader: " * "
+keyword substitution: kv
+total revisions: 11;	selected revisions: 6
+description:
+alloc.c
+----------------------------
+revision 1.11	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -2
+Added Library GPL Notice
+----------------------------
+revision 1.10
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +54 -57
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.9
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +5 -5
+untabified
+----------------------------
+revision 1.8
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +5 -0
+Added include of <string.h> and extern decl for GC_init
+----------------------------
+revision 1.7
+date: 1994/09/15 17:08:00;  author: jnw;  state: Exp;  lines: +13 -0
+Added allocate_module_binding
+----------------------------
+revision 1.6
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/alloc.h,v
+Working file: alloc.h
+head: 1.8
+branch:
+locks: strict
+	jnw: 1.8
+access list:
+symbolic names:
+	marlais_0_5_12: 1.8
+	marlais_0_5_11: 1.8
+	marlais_0_5_10: 1.8
+	marlais_0_5_7: 1.5
+	marlais_0_5_6: 1.5
+	marlais_0_5_5: 1.5
+	marlais_0_5: 1.5
+	marlais_0_4: 1.4
+	marlais+0+4+beta: 1.4
+	marlais-0-4-alpha: 1.4
+comment leader: " * "
+keyword substitution: kv
+total revisions: 8;	selected revisions: 4
+description:
+ alloc.h
+----------------------------
+revision 1.8	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.7
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +3 -3
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.6
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +1 -0
+Added decl of module_binding
+----------------------------
+revision 1.5
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/apply.c,v
+Working file: apply.c
+head: 1.35
+branch:
+locks: strict
+	jnw: 1.35
+access list:
+symbolic names:
+	marlais_0_5_12: 1.35
+	marlais_0_5_11: 1.34
+	marlais_0_5_10: 1.32
+	marlais_0_5_7: 1.20
+	marlais_0_5_6: 1.18
+	marlais_0_5_5: 1.17
+	marlais_0_5: 1.15
+	marlais_0_4: 1.11
+	marlais+0+4+beta: 1.9
+	marlais-0-4-alpha: 1.9
+comment leader: " * "
+keyword substitution: kv
+total revisions: 35;	selected revisions: 21
+description:
+apply.c
+----------------------------
+revision 1.35	locked by: jnw;
+date: 1995/09/04 14:40:39;  author: jnw;  state: Exp;  lines: +33 -21
+Modified unwind_to_exit to use EXITSYM rather than check just the exit proc.
+----------------------------
+revision 1.34
+date: 1995/06/14 17:48:24;  author: jnw;  state: Exp;  lines: +7 -0
+Added ret value check in construct_return_values. Makes test run on sgi.
+----------------------------
+revision 1.33
+date: 1995/06/06 12:39:20;  author: jnw;  state: Exp;  lines: +25 -19
+Updated to use new print_object
+Added static sto. class where appropriate
+Fixed build_rest_methods to cdr down ambiguity groups
+----------------------------
+revision 1.32
+date: 1995/05/13 20:32:28;  author: jnw;  state: Exp;  lines: +71 -34
+Added method caching
+----------------------------
+revision 1.31
+date: 1995/04/03 03:07:08;  author: jnw;  state: Exp;  lines: +29 -3
+#ifdef'd the method caching
+----------------------------
+revision 1.30
+date: 1995/03/29 04:05:23;  author: jnw;  state: Exp;  lines: +1 -1
+Added method caching code
+----------------------------
+revision 1.29
+date: 1995/03/29 03:18:02;  author: jnw;  state: Exp;  lines: +101 -19
+Added method caching courtesy of Drew Nolan
+----------------------------
+revision 1.28
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.27
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +296 -302
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.26
+date: 1995/03/09 04:31:06;  author: jnw;  state: Exp;  lines: +0 -2
+removed some useless comments
+----------------------------
+revision 1.25
+date: 1995/03/08 16:42:24;  author: jnw;  state: Exp;  lines: +269 -168
+Added code to perform return value checking with tail recursion
+
+Added narrow_value_types
+Added ResultValueStack
+Added %eval
+Added construct_return_values
+----------------------------
+revision 1.24
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +213 -213
+untabified
+----------------------------
+revision 1.23
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +20 -3
+Added Patrick Beard's tail recursion mods.
+----------------------------
+revision 1.22
+date: 1995/02/08 23:20:23;  author: jnw;  state: Exp;  lines: +1 -1
+fixed devalue_args
+----------------------------
+revision 1.21
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +31 -7
+Reordered include list
+Added check_stack decl for MACOS
+Added devalue_args (from Beard)
+Modified devalue args to complain about null values
+----------------------------
+revision 1.20
+date: 1995/01/03 23:50:17;  author: jnw;  state: Exp;  lines: +13 -5
+Added arg to apply_method to tell if application is from a GF/next-method
+or direct method application.
+----------------------------
+revision 1.19
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;  lines: +1 -1
+change THINK_C ifdef to MACOS
+----------------------------
+revision 1.18
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +3 -3
+Changed push_scope calls and added on error return
+----------------------------
+revision 1.17
+date: 1994/09/20 14:46:09;  author: jnw;  state: Exp;  lines: +20 -1
+Added trace_functions message in apply_method
+Added check for METHALLKEYS before complaining about presence of
+  key arguments that are not parameters.
+----------------------------
+revision 1.16
+date: 1994/09/15 17:08:00;  author: jnw;  state: Exp;  lines: +5 -3
+Fixed apply_method to handle new keyword parameter strategy
+----------------------------
+revision 1.15
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/apply.h,v
+Working file: apply.h
+head: 1.13
+branch:
+locks: strict
+	jnw: 1.13
+access list:
+symbolic names:
+	marlais_0_5_12: 1.13
+	marlais_0_5_11: 1.13
+	marlais_0_5_10: 1.13
+	marlais_0_5_7: 1.7
+	marlais_0_5_6: 1.6
+	marlais_0_5_5: 1.6
+	marlais_0_5: 1.6
+	marlais_0_4: 1.4
+	marlais+0+4+beta: 1.4
+	marlais-0-4-alpha: 1.4
+comment leader: " * "
+keyword substitution: kv
+total revisions: 13;	selected revisions: 8
+description:
+ apply.h
+----------------------------
+revision 1.13	locked by: jnw;
+date: 1995/03/29 04:08:30;  author: jnw;  state: Exp;  lines: +1 -1
+Modified prototype of apply_method
+----------------------------
+revision 1.12
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.11
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +3 -3
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.10
+date: 1995/03/09 04:38:22;  author: jnw;  state: Exp;  lines: +0 -2
+whitespace frobbing
+----------------------------
+revision 1.9
+date: 1995/03/08 17:09:55;  author: jnw;  state: Exp;  lines: +5 -0
+Added decl of construct_return_values ( ... )
+Added extern decl of ResultBalueStack
+Added decl of default_result_value
+----------------------------
+revision 1.8
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +3 -0
+Added apply_internal decl.
+----------------------------
+revision 1.7
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +4 -1
+Added generic_apply argument to apply_method.
+----------------------------
+revision 1.6
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/array.c,v
+Working file: array.c
+head: 1.15
+branch:
+locks: strict
+	jnw: 1.15
+access list:
+symbolic names:
+	marlais_0_5_12: 1.15
+	marlais_0_5_11: 1.14
+	marlais_0_5_10: 1.11
+	marlais_0_5_7: 1.7
+	marlais_0_5_6: 1.7
+	marlais_0_5_5: 1.7
+	marlais_0_5: 1.7
+	marlais_0_4: 1.6
+	marlais+0+4+beta: 1.6
+	marlais-0-4-alpha: 1.5
+comment leader: " * "
+keyword substitution: kv
+total revisions: 15;	selected revisions: 9
+description:
+array.c
+----------------------------
+revision 1.15	locked by: jnw;
+date: 1995/09/04 14:42:57;  author: jnw;  state: Exp;  lines: +5 -7
+minor cosmetic changes and a return of error in element
+----------------------------
+revision 1.14
+date: 1995/06/06 12:42:06;  author: jnw;  state: Exp;  lines: +56 -12
+Added pcb's indexing repair.
+Rearranged element/element-setter/aref/aref-setter to match DIRM more
+closely.
+Added array-size caching
+----------------------------
+revision 1.13
+date: 1995/06/03 11:51:00;  author: jnw;  state: Exp;  lines: +8 -7
+Modified make array driver to support arrays with null dimensions
+Added include of list.h
+Added pcb mods to make index work
+----------------------------
+revision 1.12
+date: 1995/05/26 12:47:30;  author: jnw;  state: Exp;  lines: +1 -1
+fixed bug with array indexing.
+----------------------------
+revision 1.11
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.10
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +133 -155
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.9
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +31 -31
+untabified
+----------------------------
+revision 1.8
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +5 -3
+reordered includes.
+Fixed array_next_state to calculate size as product of dimensions.
+----------------------------
+revision 1.7
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/array.h,v
+Working file: array.h
+head: 1.6
+branch:
+locks: strict
+	jnw: 1.6
+access list:
+symbolic names:
+	marlais_0_5_12: 1.6
+	marlais_0_5_11: 1.6
+	marlais_0_5_10: 1.6
+	marlais_0_5_7: 1.4
+	marlais_0_5_6: 1.4
+	marlais_0_5_5: 1.4
+	marlais_0_5: 1.4
+	marlais_0_4: 1.3
+	marlais+0+4+beta: 1.3
+	marlais-0-4-alpha: 1.3
+comment leader: " * "
+keyword substitution: kv
+total revisions: 6;	selected revisions: 3
+description:
+array.h
+----------------------------
+revision 1.6	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.5
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +2 -3
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.4
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/boolean.c,v
+Working file: boolean.c
+head: 1.10
+branch:
+locks: strict
+	jnw: 1.10
+access list:
+symbolic names:
+	marlais_0_5_12: 1.10
+	marlais_0_5_11: 1.10
+	marlais_0_5_10: 1.9
+	marlais_0_5_7: 1.5
+	marlais_0_5_6: 1.5
+	marlais_0_5_5: 1.5
+	marlais_0_5: 1.5
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 10;	selected revisions: 6
+description:
+boolean.c
+----------------------------
+revision 1.10	locked by: jnw;
+date: 1995/06/06 12:49:12;  author: jnw;  state: Exp;  lines: +4 -4
+NULLP => EMPTYLISTP
+----------------------------
+revision 1.9
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.8
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +75 -102
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.7
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +49 -49
+untabified
+----------------------------
+revision 1.6
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +1 -0
+*** empty log message ***
+----------------------------
+revision 1.5
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/boolean.h,v
+Working file: boolean.h
+head: 1.5
+branch:
+locks: strict
+	jnw: 1.5
+access list:
+symbolic names:
+	marlais_0_5_12: 1.5
+	marlais_0_5_11: 1.5
+	marlais_0_5_10: 1.5
+	marlais_0_5_7: 1.3
+	marlais_0_5_6: 1.3
+	marlais_0_5_5: 1.3
+	marlais_0_5: 1.3
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 5;	selected revisions: 3
+description:
+ boolean.h
+----------------------------
+revision 1.5	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.4
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +2 -2
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.3
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/bytestring.c,v
+Working file: bytestring.c
+head: 1.6
+branch:
+locks: strict
+	jnw: 1.6
+access list:
+symbolic names:
+	marlais_0_5_12: 1.6
+	marlais_0_5_11: 1.6
+	marlais_0_5_10: 1.5
+	marlais_0_5_7: 1.1
+comment leader: " * "
+keyword substitution: kv
+total revisions: 6;	selected revisions: 6
+description:
+This is a rename of string.h
+----------------------------
+revision 1.6	locked by: jnw;
+date: 1995/06/06 12:49:34;  author: jnw;  state: Exp;  lines: +16 -1
+Added string_size_setter (pcb)
+----------------------------
+revision 1.5
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.4
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +98 -107
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.3
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +19 -19
+untabified
+----------------------------
+revision 1.2
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +8 -5
+reordered includes and added include of prim.h
+----------------------------
+revision 1.1
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/bytestring.h,v
+Working file: bytestring.h
+head: 1.3
+branch:
+locks: strict
+	jnw: 1.3
+access list:
+symbolic names:
+	marlais_0_5_12: 1.3
+	marlais_0_5_11: 1.3
+	marlais_0_5_10: 1.3
+	marlais_0_5_7: 1.1
+comment leader: " * "
+keyword substitution: kv
+total revisions: 3;	selected revisions: 3
+description:
+new version of string.h
+----------------------------
+revision 1.3	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.2
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +2 -2
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.1
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/character.c,v
+Working file: character.c
+head: 1.7
+branch:
+locks: strict
+	jnw: 1.7
+access list:
+symbolic names:
+	marlais_0_5_12: 1.7
+	marlais_0_5_11: 1.7
+	marlais_0_5_10: 1.7
+	marlais_0_5_7: 1.3
+	marlais_0_5_6: 1.3
+	marlais_0_5_5: 1.3
+	marlais_0_5: 1.3
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 7;	selected revisions: 5
+description:
+character.c
+----------------------------
+revision 1.7	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.6
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +20 -18
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.5
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +0 -1
+untabified
+----------------------------
+revision 1.4
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +2 -0
+Added prim.h include
+----------------------------
+revision 1.3
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/character.h,v
+Working file: character.h
+head: 1.5
+branch:
+locks: strict
+	jnw: 1.5
+access list:
+symbolic names:
+	marlais_0_5_12: 1.5
+	marlais_0_5_11: 1.5
+	marlais_0_5_10: 1.5
+	marlais_0_5_7: 1.3
+	marlais_0_5_6: 1.3
+	marlais_0_5_5: 1.3
+	marlais_0_5: 1.3
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 5;	selected revisions: 3
+description:
+ character.h
+----------------------------
+revision 1.5	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.4
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +2 -3
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.3
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/class.c,v
+Working file: class.c
+head: 1.39
+branch:
+locks: strict
+	jnw: 1.39
+access list:
+symbolic names:
+	marlais_0_5_12: 1.39
+	marlais_0_5_11: 1.38
+	marlais_0_5_10: 1.35
+	marlais_0_5_7: 1.23
+	marlais_0_5_6: 1.18
+	marlais_0_5_5: 1.17
+	marlais_0_5: 1.15
+	marlais_0_4: 1.11
+	marlais+0+4+beta: 1.10
+	marlais-0-4-alpha: 1.8
+comment leader: " * "
+keyword substitution: kv
+total revisions: 39;	selected revisions: 25
+description:
+class.c
+----------------------------
+revision 1.39	locked by: jnw;
+date: 1995/09/04 14:43:50;  author: jnw;  state: Exp;  lines: +28 -33
+Many declaration changes (removal of unused vars, etc.
+Modified slot_descriptor_list to record inherited slot occurrences
+----------------------------
+revision 1.38
+date: 1995/06/15 04:45:45;  author: jnw;  state: Exp;  lines: +7 -9
+Modified make (<class>) to associate a debug-name: with a <string>
+----------------------------
+revision 1.37
+date: 1995/06/14 17:49:10;  author: jnw;  state: Exp;  lines: +4 -0
+Added unwind_protect_function_class
+Added unwind_protect_function_class to objectclass
+----------------------------
+revision 1.36
+date: 1995/06/06 12:49:58;  author: jnw;  state: Exp;  lines: +18 -6
+Added class_debug_name (pcb)
+Added an <object-handle> class.
+Added <object_handle> case to objectclass.
+----------------------------
+revision 1.35
+date: 1995/05/13 20:33:29;  author: jnw;  state: Exp;  lines: +90 -16
+fixed initialization so that all keyword args are passed to initialize.
+Added support for l*loops class precedence mechanism including
+sorting the class precedence list and storing it with the class.
+----------------------------
+revision 1.34
+date: 1995/03/29 04:05:42;  author: jnw;  state: Exp;  lines: +3 -1
+Added class numbering code and updated call to apply_method
+----------------------------
+revision 1.33
+date: 1995/03/29 03:18:57;  author: jnw;  state: Exp;  lines: +3 -11
+Made small_integer_class and big_integer_class real
+----------------------------
+revision 1.32
+date: 1995/03/09 13:26:48;  author: jnw;  state: Exp;  lines: +4 -4
+whitespace frobbing
+----------------------------
+revision 1.31
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.30
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +824 -786
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.29
+date: 1995/03/09 04:31:06;  author: jnw;  state: Exp;  lines: +0 -1
+removed white space
+----------------------------
+revision 1.28
+date: 1995/03/09 03:13:00;  author: jnw;  state: Exp;  lines: +19 -37
+Added case for empty_list_class in make
+----------------------------
+revision 1.27
+date: 1995/03/08 16:42:24;  author: jnw;  state: Exp;  lines: +5 -5
+Changed object-class and singleton to %object-class and %singleton
+to support reflective operations upon them
+
+Fixed initialization of class slots.
+----------------------------
+revision 1.26
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +553 -553
+untabified
+----------------------------
+revision 1.25
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +21 -7
+Added fix for insertion of subclass if superclass is a single object.
+Added support for BIG_INTEGERS
+----------------------------
+revision 1.24
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +41 -28
+Reordered includes
+Changed construction of slotgetter and setter GFs to have correct
+arg lists.
+Added support for #f as setter name
+----------------------------
+revision 1.23
+date: 1995/01/05 03:01:48;  author: jnw;  state: Exp;  lines: +14 -2
+Modified replace_slotd_init to copy slotd to be modified.  Old code
+  was in error.
+----------------------------
+revision 1.22
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +34 -12
+Changed eval_slot_inits to initialize_slotds.
+Added object_table_class <object-table> and made it the implementation
+  class of <table>.
+CLASSPROPS of builtin classes (in make_builtin_class) are initialized
+  so the class is not SLOTSUNINIT.
+Added slot initialization for superclasses upon subclass slot initialization.
+Fixed apply_method call for deferred slot type initializers to
+  require strict match of keyword arguments.  This is meaninless, but
+  a value for the argument must be passed, and either one's as good as the
+  other.
+Restored do_eval test in slot_descriptor_list for init_function.
+----------------------------
+revision 1.21
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;  lines: +3 -3
+Changed order of setter args in method made by make_setter_method
+----------------------------
+revision 1.20
+date: 1994/12/23 03:27:14;  author: jnw;  state: Exp;  lines: +72 -18
+Modified code for class creation to be lazy about eval'ing slot types.
+Added eval_slot_inits and eval_slotds functions
+Changed make_class to record the class creation environment (for
+eval'ing the slot types later).
+Removed make_getters_setters calls from make_class (since the
+setter creation depends on having the slot types.
+make class initializes CLASSPROPS to include CLASSSLOTSUNINIT.
+
+Modified make_setters_method to include slot type in val argument.
+Removed do_eval checks from initialize_slot_descriptors
+Added deferred_type slot support (but didn't test it)
+----------------------------
+revision 1.19
+date: 1994/11/28 22:59:40;  author: jnw;  state: Exp;  lines: +4 -0
+Added foreign_pointer_class make
+----------------------------
+revision 1.18
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +9 -0
+Modified binding of <object> to have type <object>
+----------------------------
+revision 1.17
+date: 1994/11/03 03:38:36;  author: jnw;  state: Exp;  lines: +2 -2
+Modified <keyword> class to be <symbol> as it should be.
+Changed old <symbol> class to <variable-name>
+----------------------------
+revision 1.16
+date: 1994/08/25 16:22:19;  author: jnw;  state: Exp;  lines: +5 -1
+Added make_primary stub
+took out local def. of make_uninstantiable
+----------------------------
+revision 1.15
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +4 -4
+Fixed Copyright
+Modified top_level_binding calls for make_class to make classes
+be immutable.  Thus, one cannot change a class definition on the
+fly now.  I know this is absolutely Draconian, but the use of offsets
+for setters/getters and the caching of superclasses absolutely
+depends on classes not changing.
+I submit that we need to add code to invalidate all cached information
+for a class upon class redefinition.  That is, invalidate all subclass
+getters/setters/superclass lists, and then recreate them upon class
+redefinition.  Sounds tough, but seems to be the only way to go.
+=============================================================================
+
+RCS file: RCS/class.h,v
+Working file: class.h
+head: 1.12
+branch:
+locks: strict
+	jnw: 1.12
+access list:
+symbolic names:
+	marlais_0_5_12: 1.12
+	marlais_0_5_11: 1.12
+	marlais_0_5_10: 1.12
+	marlais_0_5_7: 1.8
+	marlais_0_5_6: 1.8
+	marlais_0_5_5: 1.8
+	marlais_0_5: 1.7
+	marlais_0_4: 1.5
+	marlais+0+4+beta: 1.5
+	marlais-0-4-alpha: 1.5
+comment leader: " * "
+keyword substitution: kv
+total revisions: 12;	selected revisions: 6
+description:
+class.h
+----------------------------
+revision 1.12	locked by: jnw;
+date: 1995/05/13 20:42:46;  author: jnw;  state: Exp;  lines: +1 -0
+Added make_union_type
+----------------------------
+revision 1.11
+date: 1995/03/29 04:09:23;  author: jnw;  state: Exp;  lines: +3 -0
+Added support for class index assignment
+----------------------------
+revision 1.10
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.9
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +8 -6
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.8
+date: 1994/08/25 16:22:19;  author: jnw;  state: Exp;  lines: +2 -0
+Added decl of make_uninstantiable and make_primary
+----------------------------
+revision 1.7
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/classprec-clos.c,v
+Working file: classprec-clos.c
+head: 1.11
+branch:
+locks: strict
+	jnw: 1.11
+access list:
+symbolic names:
+	marlais_0_5_12: 1.11
+	marlais_0_5_11: 1.11
+	marlais_0_5_10: 1.10
+	marlais_0_5_7: 1.4
+	marlais_0_5_6: 1.4
+	marlais_0_5_5: 1.4
+	marlais_0_5: 1.4
+	marlais_0_4: 1.4
+	marlais+0+4+beta: 1.3
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 11;	selected revisions: 8
+description:
+This defines compute_class_precedence_list.
+----------------------------
+revision 1.11	locked by: jnw;
+date: 1995/06/06 12:52:53;  author: jnw;  state: Exp;  lines: +5 -2
+Added print.h include and update print_object calls
+----------------------------
+revision 1.10
+date: 1995/05/13 20:36:11;  author: jnw;  state: Exp;  lines: +32 -2
+Fixed CPL computation to handle several classes with
+no predecessors correctly (see DIRM pg. 60)
+----------------------------
+revision 1.9
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.8
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +151 -148
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.7
+date: 1995/03/09 04:31:06;  author: jnw;  state: Exp;  lines: +0 -1
+removed useless comment
+----------------------------
+revision 1.6
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +101 -101
+untabified
+----------------------------
+revision 1.5
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +1 -0
+*** empty log message ***
+----------------------------
+revision 1.4
+date: 1994/07/12 06:38:39;  author: jnw;  state: Exp;  lines: +2 -4
+Fixed some inconsistent declarations (static decl, non-static defn)
+=============================================================================
+
+RCS file: RCS/classprec-clos.h,v
+Working file: classprec-clos.h
+head: 1.5
+branch:
+locks: strict
+	jnw: 1.5
+access list:
+symbolic names:
+	marlais_0_5_12: 1.5
+	marlais_0_5_11: 1.5
+	marlais_0_5_10: 1.5
+	marlais_0_5_7: 1.2
+	marlais_0_5_6: 1.2
+	marlais_0_5_5: 1.2
+	marlais_0_5: 1.2
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 5;	selected revisions: 4
+description:
+class precedence list header file.
+----------------------------
+revision 1.5	locked by: jnw;
+date: 1995/05/13 20:42:59;  author: jnw;  state: Exp;  lines: +5 -1
+changed header define constant
+----------------------------
+revision 1.4
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.3
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +1 -1
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.2
+date: 1994/06/28 15:17:31;  author: jnw;  state: Exp;  lines: +1 -2
+Fixed Copyright.
+=============================================================================
+
+RCS file: RCS/classprec-ll.c,v
+Working file: classprec-ll.c
+head: 1.4
+branch:
+locks: strict
+	jnw: 1.4
+access list:
+symbolic names:
+	marlais_0_5_12: 1.4
+	marlais_0_5_11: 1.3
+	marlais_0_5_10: 1.1
+comment leader: " * "
+keyword substitution: kv
+total revisions: 4;	selected revisions: 4
+description:
+L*Loops class precedence algorithm
+----------------------------
+revision 1.4	locked by: jnw;
+date: 1995/09/04 14:46:50;  author: jnw;  state: Exp;  lines: +10 -5
+Changed to match new print_obj protocol
+----------------------------
+revision 1.3
+date: 1995/06/06 12:53:37;  author: jnw;  state: Exp;  lines: +15 -10
+Changed GC_malloc calls to checking_malloc (will I never learn?)
+Made pcb's change to make used_classes non auto for non gcc comilers.
+----------------------------
+revision 1.2
+date: 1995/06/03 11:53:34;  author: jnw;  state: Exp;  lines: +2 -1
+Modified used_classes in loops concatenate *not* to be an auto array.
+Now I GC_malloc the storage for it.
+----------------------------
+revision 1.1
+date: 1995/05/13 20:38:20;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/classprec-ll.h,v
+Working file: classprec-ll.h
+head: 1.1
+branch:
+locks: strict
+	jnw: 1.1
+access list:
+symbolic names:
+	marlais_0_5_12: 1.1
+	marlais_0_5_11: 1.1
+	marlais_0_5_10: 1.1
+comment leader: " * "
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+l*loops class precedence header file
+----------------------------
+revision 1.1	locked by: jnw;
+date: 1995/05/13 20:43:22;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/classprec.c,v
+Working file: classprec.c
+head: 1.1
+branch:
+locks: strict
+	jnw: 1.1
+access list:
+symbolic names:
+	marlais_0_5_12: 1.1
+	marlais_0_5_11: 1.1
+	marlais_0_5_10: 1.1
+comment leader: " * "
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+Class Precedence list calculation
+----------------------------
+revision 1.1	locked by: jnw;
+date: 1995/05/13 21:22:00;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/classprec.h,v
+Working file: classprec.h
+head: 1.1
+branch:
+locks: strict
+	jnw: 1.1
+access list:
+symbolic names:
+	marlais_0_5_12: 1.1
+	marlais_0_5_11: 1.1
+	marlais_0_5_10: 1.1
+comment leader: " * "
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+ Class Precedence list calculation
+----------------------------
+revision 1.1	locked by: jnw;
+date: 1995/05/13 21:22:41;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/collection.h,v
+Working file: collection.h
+head: 1.3
+branch:
+locks: strict
+	jnw: 1.3
+access list:
+symbolic names:
+	marlais_0_5_12: 1.3
+	marlais_0_5_11: 1.3
+	marlais_0_5_10: 1.3
+	marlais_0_5_7: 1.1
+	marlais_0_5_6: 1.1
+	marlais_0_5_5: 1.1
+	marlais_0_5: 1.1
+comment leader: " * "
+keyword substitution: kv
+total revisions: 3;	selected revisions: 3
+description:
+Contains keywords and objects needed by all collection code.
+----------------------------
+revision 1.3	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.2
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +2 -2
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.1
+date: 1994/08/03 05:31:10;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/deque.c,v
+Working file: deque.c
+head: 1.12
+branch:
+locks: strict
+	jnw: 1.12
+access list:
+symbolic names:
+	marlais_0_5_12: 1.12
+	marlais_0_5_11: 1.11
+	marlais_0_5_10: 1.10
+	marlais_0_5_7: 1.6
+	marlais_0_5_6: 1.6
+	marlais_0_5_5: 1.6
+	marlais_0_5: 1.6
+	marlais_0_4: 1.4
+	marlais+0+4+beta: 1.4
+	marlais-0-4-alpha: 1.4
+comment leader: " * "
+keyword substitution: kv
+total revisions: 12;	selected revisions: 7
+description:
+----------------------------
+revision 1.12	locked by: jnw;
+date: 1995/09/04 14:47:26;  author: jnw;  state: Exp;  lines: +1 -1
+removed unused var. decls.
+----------------------------
+revision 1.11
+date: 1995/06/06 12:54:56;  author: jnw;  state: Exp;  lines: +1 -1
+NULLP => EMPTYLISTP
+----------------------------
+revision 1.10
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.9
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +182 -208
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.8
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +43 -44
+untabified
+----------------------------
+revision 1.7
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +2 -1
+reordered included
+----------------------------
+revision 1.6
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/deque.h,v
+Working file: deque.h
+head: 1.7
+branch:
+locks: strict
+	jnw: 1.7
+access list:
+symbolic names:
+	marlais_0_5_12: 1.7
+	marlais_0_5_11: 1.7
+	marlais_0_5_10: 1.7
+	marlais_0_5_7: 1.5
+	marlais_0_5_6: 1.5
+	marlais_0_5_5: 1.5
+	marlais_0_5: 1.5
+	marlais_0_4: 1.3
+	marlais+0+4+beta: 1.3
+	marlais-0-4-alpha: 1.3
+comment leader: " * "
+keyword substitution: kv
+total revisions: 7;	selected revisions: 3
+description:
+ deque.h
+----------------------------
+revision 1.7	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.6
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +2 -4
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.5
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/dylan-hilit19.el,v
+Working file: dylan-hilit19.el
+head: 1.3
+branch:
+locks: strict
+	jnw: 1.3
+access list:
+symbolic names:
+	marlais_0_5_12: 1.3
+	marlais_0_5_11: 1.2
+comment leader: "; "
+keyword substitution: kv
+total revisions: 3;	selected revisions: 3
+description:
+hilit mode for dylan
+----------------------------
+revision 1.3	locked by: jnw;
+date: 1995/09/04 15:05:14;  author: jnw;  state: Exp;  lines: +10 -5
+Modified to include URL for dylan-mode.el at CMU
+----------------------------
+revision 1.2
+date: 1995/06/15 04:47:41;  author: jnw;  state: Exp;  lines: +56 -25
+David Lim's version with `afterwards' keyword added.
+----------------------------
+revision 1.1
+date: 1995/06/13 04:00:11;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/dylan.l,v
+Working file: dylan.l
+head: 1.30
+branch:
+locks: strict
+	jnw: 1.30
+access list:
+symbolic names:
+	marlais_0_5_12: 1.30
+	marlais_0_5_11: 1.29
+	marlais_0_5_10: 1.28
+	marlais_0_5_7: 1.19
+	marlais_0_5_6: 1.15
+	marlais_0_5_5: 1.14
+	marlais_0_5: 1.6
+comment leader: " * "
+keyword substitution: kv
+total revisions: 30;	selected revisions: 25
+description:
+Flex lexical analyzer source for Dylan
+----------------------------
+revision 1.30	locked by: jnw;
+date: 1995/09/04 15:05:14;  author: jnw;  state: Exp;  lines: +27 -13
+Made \v be white-space
+Made mods to support flex 2.5.2
+----------------------------
+revision 1.29
+date: 1995/06/14 17:54:25;  author: jnw;  state: Exp;  lines: +2 -1
+Added AFTERWARDS intermediate word for BLOCK
+----------------------------
+revision 1.28
+date: 1995/03/29 03:33:00;  author: jnw;  state: Exp;  lines: +6 -0
+Added _WIN32 ifdef for headers
+Added _WIN32 mod for char_ready
+----------------------------
+revision 1.27
+date: 1995/03/09 05:29:25;  author: jnw;  state: Exp;  lines: +27 -12
+Added Library GPL notice
+----------------------------
+revision 1.26
+date: 1995/03/09 04:38:22;  author: jnw;  state: Exp;  lines: +2 -2
+whitespace frobbing
+----------------------------
+revision 1.25
+date: 1995/03/09 03:13:00;  author: jnw;  state: Exp;  lines: +1 -1
+Added { to __linux__ case in charready.
+----------------------------
+revision 1.24
+date: 1995/03/08 17:09:55;  author: jnw;  state: Exp;  lines: +6 -2
+Modified value of TEST symbol to be test
+Added __linux__ hold plug for char_ready.  I'm sure this is wrong.
+----------------------------
+revision 1.23
+date: 1995/02/14 02:36:12;  author: jnw;  state: Exp;  lines: +2 -0
+Added decl for countlines
+----------------------------
+revision 1.22
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +46 -10
+Added Patrick's support for BIG_INTEGERS and line numbers.
+----------------------------
+revision 1.21
+date: 1995/02/08 23:24:31;  author: jnw;  state: Exp;  lines: +7 -7
+Added optional sign to number REs
+----------------------------
+revision 1.20
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +27 -20
+fixed includes and prototypes
+modified GC_malloc calls fo be checking_malloc
+----------------------------
+revision 1.19
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +8 -7
+Added form-feed (\f) to white-space set for skipping.
+----------------------------
+revision 1.18
+date: 1994/12/24 22:20:58;  author: jnw;  state: Exp;  lines: +37 -5
+Added make_expanded_byte_string
+----------------------------
+revision 1.17
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;  lines: +45 -14
+Added escape character processing.
+Fixed return cast for NULL to (Object)
+Spruced up unrecognized character message.
+Fixed THINK_C -> MACOS
+----------------------------
+revision 1.16
+date: 1994/11/28 22:59:40;  author: jnw;  state: Exp;  lines: +4 -4
+Added load_file_context check to continuation prompt printing
+Moved declarations in charready so THINK_C won't see 'em.
+----------------------------
+revision 1.15
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +20 -9
+Added test capability (ugly for now--really need macros)
+Added multiple contexts for EOF
+Added some symbol support for debugging
+Added nasty kludge to get prompt to print after a load is processed.
+----------------------------
+revision 1.14
+date: 1994/11/03 03:38:36;  author: jnw;  state: Exp;  lines: +3 -1
+Modified timeout.tv_usec to try to work around bug with prompt_continuation
+printing from the emacs mode.  This is really nasty and probably beyond
+me, but tv_usec = 300000 appears to contain the right amount of flubber
+to fix the problem.
+----------------------------
+revision 1.13
+date: 1994/10/29 04:58:13;  author: jnw;  state: Exp;  lines: +42 -11
+Added charready
+Use charready to determine if an intermediate prompt should be issued.
+If no chars are ready I assume the user has yet to type anything and
+put up an intermediate prompt.  Otherwise, no prompt is issued.
+----------------------------
+revision 1.12
+date: 1994/09/20 17:01:00;  author: jnw;  state: Exp;  lines: +1 -1
+fixed sizeof (char) problem in module name malloc.
+----------------------------
+revision 1.11
+date: 1994/09/20 14:49:27;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed MONDO bug on GC_malloc for module name!
+----------------------------
+revision 1.10
+date: 1994/09/18 20:07:29;  author: jnw;  state: Exp;  lines: +47 -5
+Added yylineno
+Added ~= support
+Added check for load_file_context in \n rule.  This avoids printing
+continuation prompt from load files.
+Added get_nonws_symbol (to grab module name from beginning of file)
+Added header_key and header_val variables to find module: keyword
+and its value at beginning of file.
+Added call to set_module for module name associated with module: keyword.
+Made yy_restart set start context to INI.
+----------------------------
+revision 1.9
+date: 1994/09/16 03:26:44;  author: jnw;  state: Exp;  lines: +19 -1
+Added module_intermediate_word_table
+----------------------------
+revision 1.8
+date: 1994/09/15 17:08:00;  author: jnw;  state: Exp;  lines: +104 -30
+Added rules to handle file headers and added yy)_
+yy_eoln (in an attempt to get more sane parsing from the interpreter itself)
+----------------------------
+revision 1.7
+date: 1994/08/25 16:22:19;  author: jnw;  state: Exp;  lines: +0 -4
+removed extraneous code
+----------------------------
+revision 1.6
+date: 1994/08/17 20:50:22;  author: jnw;  state: Exp;  lines: +2 -0
+Added yywrap definition.
+=============================================================================
+
+RCS file: RCS/dylan.y,v
+Working file: dylan.y
+head: 1.29
+branch:
+locks: strict
+	jnw: 1.29
+access list:
+symbolic names:
+	marlais_0_5_12: 1.29
+	marlais_0_5_11: 1.28
+	marlais_0_5_10: 1.26
+	marlais_0_5_7: 1.20
+	marlais_0_5_6: 1.17
+	marlais_0_5_5: 1.16
+	marlais_0_5: 1.10
+comment leader: " * "
+keyword substitution: kv
+total revisions: 29;	selected revisions: 20
+description:
+Bison parser source for Dylan
+----------------------------
+revision 1.29	locked by: jnw;
+date: 1995/09/04 15:05:14;  author: jnw;  state: Exp;  lines: +4 -4
+Made bindings_increment return Object.
+----------------------------
+revision 1.28
+date: 1995/06/14 17:54:25;  author: jnw;  state: Exp;  lines: +74 -12
+Added nelistem to do splicing listems.  Perhaps I should call this
+splicem!
+
+Added block_statement that really works (excepting exceptions).
+Changed cleanups and exceptions to match new block.
+----------------------------
+revision 1.27
+date: 1995/06/03 12:02:21;  author: jnw;  state: Exp;  lines: +1 -1
+Substituted arguments_opt for arguments in array refereces, thus
+allowing empty subscript lists inside [ ]
+----------------------------
+revision 1.26
+date: 1995/05/13 20:44:56;  author: jnw;  state: Exp;  lines: +13 -5
+Fixed  array [x] notation to create aref call
+when list of args is longer than 1.
+----------------------------
+revision 1.25
+date: 1995/03/29 03:33:00;  author: jnw;  state: Exp;  lines: +14 -11
+Modified keyword parameter parsing to *require* variable_name and
+allow type_designator, and let keyword be optional
+----------------------------
+revision 1.24
+date: 1995/03/09 05:29:25;  author: jnw;  state: Exp;  lines: +19 -0
+Added Library GPL notice
+----------------------------
+revision 1.23
+date: 1995/03/08 17:09:55;  author: jnw;  state: Exp;  lines: +120 -44
+Made ignored local bindings return unspecified object
+Modified body rule to give unspecified on *empty* otherwise use nonempty_body
+nonempty_body rule acts like body did onb nonempty cases
+Modified if to use then_body which returns false on empty
+modified else_parts to require non_empty body or return false_object
+Modified case_tails to have no alternative (in costructed cond) if
+	there are no constituents in the tail.
+Did same thing for select.
+Modified for to handle while: and until:
+Made `define test' work like Harlequin uses it.
+Added initialization specifications to slot specs cases
+----------------------------
+revision 1.22
+date: 1995/02/16 15:20:48;  author: jnw;  state: Exp;  lines: +12 -5
+Plugged leak in literal constants.
+Implementation of list literals didn't recognize possible nesting of
+lists in list literals.
+----------------------------
+revision 1.21
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +28 -18
+fixed dotted list literals to call `quote' rather than `list'
+Fixed values return clauses to parse right and to generate correct
+code.
+Modified keyword parameter initialization
+----------------------------
+revision 1.20
+date: 1995/01/05 03:07:28;  author: jnw;  state: Exp;  lines: +6 -0
+Added (commented) Harlequin extension for keyword parameter default value.
+----------------------------
+revision 1.19
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +146 -31
+Added some #ifdef'd code to help handle sealed argument dispatch
+performance hacks.
+----------------------------
+revision 1.18
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;  lines: +8 -6
+Mod'd THINK_C -> MACOS
+Modified setter call sequences to be DIRM compliant.
+----------------------------
+revision 1.17
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +20 -12
+Added ugly support for testing
+Fixed string concatenation
+Redid variable_list
+----------------------------
+revision 1.16
+date: 1994/11/03 03:38:36;  author: jnw;  state: Exp;  lines: +4 -1
+Added optional comma after for_clauses
+Created comm_opt nonterminal with appropriate rule
+----------------------------
+revision 1.15
+date: 1994/09/20 14:49:27;  author: jnw;  state: Exp;  lines: +7 -6
+Made #all-keys work by reorganizing keyword_parameters production.
+Before, we needed LR(2) to parse these right.  (Whoops!)
+----------------------------
+revision 1.14
+date: 1994/09/18 20:07:29;  author: jnw;  state: Exp;  lines: +22 -9
+Changed evaluable_constituent rule to handle expressions and
+defining forms separately, so that `let' at top level does nothing.
+Fixed the rule for property key/value associations.
+Modified yyerror ala Beard.
+----------------------------
+revision 1.13
+date: 1994/09/16 03:26:44;  author: jnw;  state: Exp;  lines: +41 -4
+Added rules for module defiinitions
+	module_definition, module_clauses, module_clause, use_clause,
+	export_clause, create_clause
+Added back item_names rule.
+Added MODULE_opt
+----------------------------
+revision 1.12
+date: 1994/09/15 17:08:00;  author: jnw;  state: Exp;  lines: +18 -14
+Modified parsing to handle continued lines and multiple exprs on a single
+line somewhat better (maybe).
+Modified error handling a little.
+Modified parser to handle keyword parameters with defaults correctly.
+----------------------------
+revision 1.11
+date: 1994/08/25 16:22:19;  author: jnw;  state: Exp;  lines: +21 -8
+Modified error handling in small way.
+Added modifiers_opt to define-class to parse adjectives correctly.
+----------------------------
+revision 1.10
+date: 1994/08/19 04:14:59;  author: jnw;  state: Exp;  lines: +2 -44
+Removed keyless_expression nonterminal and replaced occurrences of
+keyless_epxression in `arguments' alternatives with `expression'.
+=============================================================================
+
+RCS file: RCS/dylan_lexer.h,v
+Working file: dylan_lexer.h
+head: 1.4
+branch:
+locks: strict
+	jnw: 1.4
+access list:
+symbolic names:
+	marlais_0_5_12: 1.4
+	marlais_0_5_11: 1.4
+	marlais_0_5_10: 1.4
+comment leader: " * "
+keyword substitution: kv
+total revisions: 4;	selected revisions: 4
+description:
+----------------------------
+revision 1.4	locked by: jnw;
+date: 1995/03/29 03:31:11;  author: jnw;  state: Exp;  lines: +1 -0
+Added yyrestart declaration
+----------------------------
+revision 1.3
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +3 -3
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.2
+date: 1995/02/08 23:24:31;  author: jnw;  state: Exp;  lines: +1 -0
+Added yyin as an extern
+----------------------------
+revision 1.1
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/env.c,v
+Working file: env.c
+head: 1.29
+branch:
+locks: strict
+	jnw: 1.29
+access list:
+symbolic names:
+	marlais_0_5_12: 1.29
+	marlais_0_5_11: 1.27
+	marlais_0_5_10: 1.25
+	marlais_0_5_7: 1.16
+	marlais_0_5_6: 1.12
+	marlais_0_5_5: 1.11
+	marlais_0_5: 1.7
+	marlais_0_4: 1.5
+	marlais+0+4+beta: 1.5
+	marlais-0-4-alpha: 1.5
+comment leader: " * "
+keyword substitution: kv
+total revisions: 29;	selected revisions: 23
+description:
+env.c
+----------------------------
+revision 1.29	locked by: jnw;
+date: 1995/09/04 17:42:54;  author: jnw;  state: Exp;  lines: +6 -1
+Made some (probably gratiutous) environment restoration changes.
+----------------------------
+revision 1.28
+date: 1995/09/04 14:48:28;  author: jnw;  state: Exp;  lines: +27 -23
+Modified unwind_to_exit to look for exit_sym in eval_stack
+rather than looking for binding of exit_proc
+Made many routines return error rather than fail.
+----------------------------
+revision 1.27
+date: 1995/06/14 17:50:12;  author: jnw;  state: Exp;  lines: +12 -8
+Fixed unwind_to_exit to use eval_stack rather than environment stack.
+----------------------------
+revision 1.26
+date: 1995/06/06 12:55:47;  author: jnw;  state: Exp;  lines: +10 -8
+Made print_obj changes
+----------------------------
+revision 1.25
+date: 1995/05/13 20:39:07;  author: jnw;  state: Exp;  lines: +13 -1
+Modified environment binding to do a little better
+with generic functions.
+----------------------------
+revision 1.24
+date: 1995/04/03 03:07:49;  author: jnw;  state: Exp;  lines: +6 -0
+Added init value checking to add_binding
+----------------------------
+revision 1.23
+date: 1995/03/29 03:20:31;  author: jnw;  state: Exp;  lines: +5 -4
+Added frame ptr argument to add_binding and add_bindings
+as given by pcb.
+----------------------------
+revision 1.22
+date: 1995/03/09 13:29:01;  author: jnw;  state: Exp;  lines: +2 -2
+whitespace frobbing
+----------------------------
+revision 1.21
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.20
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +476 -486
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.19
+date: 1995/03/09 04:31:06;  author: jnw;  state: Exp;  lines: +8 -1
+Added trace_bindings code
+----------------------------
+revision 1.18
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +241 -241
+untabified
+----------------------------
+revision 1.17
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +13 -7
+reordered includes,repl'd GC_malloc call with checking malloc.
+----------------------------
+revision 1.16
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +242 -81
+#included bytestring.h and table.h
+Changed type of the_current_module to be a module_binding*
+  rather than a name.
+Added functions concat_prefix and fill_imports_table_from_property_set
+Changed new_module to return type struct module_binding*
+Changed module_namespace to be module_binding and return a struct
+  module_binding*.
+Changed set_module to return a module_binding*
+Changed third parameter of import_top_level_binding to be all_imports
+  rather than exports.
+Removed context tests in import_top_level_binding.
+Change use_module substantially.
+  Added tables to keep track of imports, exclusions, renames, and
+    exports.
+  Moved code for prefix string handling inside.
+Added concat_prefix -- given prefix-string and a symbol, returns a
+  value which is prefix-string concatenated with the symbol string.
+Added fill_table_from_property_set (which turns a list into a
+  table.
+Added fill_imports_table_from_property_set (which stores the renames
+associated with an imports list in the renames_table.
+----------------------------
+revision 1.15
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;  lines: +3 -3
+Added casts to binding->val allocate_object calls
+----------------------------
+revision 1.14
+date: 1994/12/23 03:27:14;  author: jnw;  state: Exp;  lines: +12 -2
+Modified print_env to take an argument environment to print
+Added make_environment to create environment objects.
+----------------------------
+revision 1.13
+date: 1994/11/28 22:59:40;  author: jnw;  state: Exp;  lines: +1 -0
+Added pcb fix to frame printing.
+----------------------------
+revision 1.12
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +135 -9
+Added ower object to frame and added owner arg to
+initialize_namespace and push_scope
+
+Changed user_set_module to be prin_0_rest and check its own args.
+Put in lame reset_module function (#ifdef'd out)
+Added functions print_env and show_bindings
+----------------------------
+revision 1.11
+date: 1994/11/03 03:38:36;  author: jnw;  state: Exp;  lines: +25 -2
+made set-module callable by the user.
+Changed set-module and current-module to return <symbol>s
+Made set-module return the <symbol> corresponding to the previous
+module rather than the new module.
+----------------------------
+revision 1.10
+date: 1994/09/18 20:07:29;  author: jnw;  state: Exp;  lines: +111 -7
+Added current_module and primitive current-module, and init_env_prims
+Fixed return values of many of the new module functions.
+Added import_top_level_binding
+Made use_module into something real.  Now support export: all version
+of call.
+----------------------------
+revision 1.9
+date: 1994/09/16 03:26:44;  author: jnw;  state: Exp;  lines: +25 -2
+Added set_module and use_module (unfinished)
+----------------------------
+revision 1.8
+date: 1994/09/15 17:08:00;  author: jnw;  state: Exp;  lines: +104 -17
+Modified frame struct so each frame has a ref to its top_level_env
+Added modules variable to keep track of bindings of modules to frames
+Added code to initialize a frame namespace
+Modified variable bindings to have properties
+	IMPORTED_BINDING, CONSTANT_BINDING, EXPORTED_BINDING
+  to help with modules
+Added new_module and module_namespace to maintain bindings between
+module names and frames.
+----------------------------
+revision 1.7
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/env.h,v
+Working file: env.h
+head: 1.17
+branch:
+locks: strict
+	jnw: 1.17
+access list:
+symbolic names:
+	marlais_0_5_12: 1.17
+	marlais_0_5_11: 1.16
+	marlais_0_5_10: 1.16
+	marlais_0_5_7: 1.12
+	marlais_0_5_6: 1.10
+	marlais_0_5_5: 1.9
+	marlais_0_5: 1.6
+	marlais_0_4: 1.4
+	marlais+0+4+beta: 1.4
+	marlais-0-4-alpha: 1.4
+comment leader: " * "
+keyword substitution: kv
+total revisions: 17;	selected revisions: 12
+description:
+ env.h
+----------------------------
+revision 1.17	locked by: jnw;
+date: 1995/09/04 15:04:10;  author: jnw;  state: Exp;  lines: +1 -1
+mod. of protocol for unwind_to_exit (returns void)
+----------------------------
+revision 1.16
+date: 1995/03/29 03:31:26;  author: jnw;  state: Exp;  lines: +2 -2
+Modified add_binding and add_bindings decls to include frame* parameter
+----------------------------
+revision 1.15
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.14
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +13 -14
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.13
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +3 -1
+Added decl of init_env_prims, removed initialize_namespace,
+and added decl of user_set_module
+----------------------------
+revision 1.12
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +6 -4
+Changed ret. types of new_module and set_module
+Changed types of current_module and module_binding.
+Made fill_table_from_property_set accessible.
+----------------------------
+revision 1.11
+date: 1994/12/23 03:27:14;  author: jnw;  state: Exp;  lines: +3 -1
+Added print_env and make_environment changes
+----------------------------
+revision 1.10
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +4 -1
+Added decls for print_env and show_bindings
+----------------------------
+revision 1.9
+date: 1994/09/18 20:07:29;  author: jnw;  state: Exp;  lines: +9 -1
+Added default_module, all_symbol extern definitions.
+Added use_module prototype.
+----------------------------
+revision 1.8
+date: 1994/09/16 03:26:44;  author: jnw;  state: Exp;  lines: +4 -1
+Made module_namespace, new_module, and set_module available extern
+----------------------------
+revision 1.7
+date: 1994/09/15 17:08:00;  author: jnw;  state: Exp;  lines: +21 -5
+Added support for variable binding properties, module_bindings, and
+changed frame struct to include pointer to top_level_env.
+----------------------------
+revision 1.6
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/error.c,v
+Working file: error.c
+head: 1.27
+branch:
+locks: strict
+	jnw: 1.27
+access list:
+symbolic names:
+	marlais_0_5_12: 1.27
+	marlais_0_5_11: 1.26
+	marlais_0_5_10: 1.24
+	marlais_0_5_7: 1.13
+	marlais_0_5_6: 1.9
+	marlais_0_5_5: 1.8
+	marlais_0_5: 1.8
+	marlais_0_4: 1.6
+	marlais+0+4+beta: 1.5
+	marlais-0-4-alpha: 1.3
+comment leader: " * "
+keyword substitution: kv
+total revisions: 27;	selected revisions: 20
+description:
+error.c
+----------------------------
+revision 1.27	locked by: jnw;
+date: 1995/09/04 14:47:50;  author: jnw;  state: Exp;  lines: +11 -14
+removed useless variables.
+----------------------------
+revision 1.26
+date: 1995/06/14 17:49:42;  author: jnw;  state: Exp;  lines: +1 -0
+Fixed debugger read-eval-print loop
+----------------------------
+revision 1.25
+date: 1995/06/06 12:55:15;  author: jnw;  state: Exp;  lines: +24 -11
+print_object changes
+----------------------------
+revision 1.24
+date: 1995/05/13 20:38:39;  author: jnw;  state: Exp;  lines: +3 -2
+Made some __hpux changes
+----------------------------
+revision 1.23
+date: 1995/03/29 03:20:01;  author: jnw;  state: Exp;  lines: +14 -8
+Added _WIN32 diffs
+Fixed binding calls to include the_env
+----------------------------
+revision 1.22
+date: 1995/03/09 13:28:32;  author: jnw;  state: Exp;  lines: +2 -2
+whitespace frobbing
+----------------------------
+revision 1.21
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.20
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +223 -227
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.19
+date: 1995/03/09 03:13:00;  author: jnw;  state: Exp;  lines: +3 -1
+Modified an #else if to be #else #if   #endif
+----------------------------
+revision 1.18
+date: 1995/03/08 16:42:24;  author: jnw;  state: Exp;  lines: +61 -57
+Added NoDebug flag to allow debugger entry to be suppressed.
+This is currently only employed for testing, though it might be
+useful in general.
+----------------------------
+revision 1.17
+date: 1995/02/16 15:20:48;  author: jnw;  state: Exp;  lines: +1 -1
+Changed __solaris__ to __SunOS_5__
+----------------------------
+revision 1.16
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +66 -66
+untabified
+----------------------------
+revision 1.15
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +13 -14
+Added support for _HP_UX.
+Put in define for solaris _sys_siglist  (__solaris__ is not really defined
+in general for solaris machines, however)
+----------------------------
+revision 1.14
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +15 -10
+reordered includes, fixed up some prototypes, repl'd GC_malloc
+call with checking malloc.
+----------------------------
+revision 1.13
+date: 1994/12/24 22:17:13;  author: jnw;  state: Exp;  lines: +7 -6
+Added newline print after end of debug session.
+----------------------------
+revision 1.12
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;  lines: +1 -1
+Made bytestring update
+----------------------------
+revision 1.11
+date: 1994/12/23 03:27:14;  author: jnw;  state: Exp;  lines: +8 -2
+Added primitive my_print_env to bind to print_env so that envrionment
+objects can be printed when they're useful.
+----------------------------
+revision 1.10
+date: 1994/11/28 22:59:40;  author: jnw;  state: Exp;  lines: +27 -12
+Added pcb diffs to fix help message and longjmp and added message_printed
+check in debug startup.
+----------------------------
+revision 1.9
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +155 -2
+Added initial debugging mechanisms including
+	error_ok_return stack
+	error_ok_return_push(), error_ok_return_pop(), return_value(),
+	fail_function(), help_function()
+Modified error to have debugging read-eval-print loop
+----------------------------
+revision 1.8
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/error.h,v
+Working file: error.h
+head: 1.7
+branch:
+locks: strict
+	jnw: 1.7
+access list:
+symbolic names:
+	marlais_0_5_12: 1.7
+	marlais_0_5_11: 1.7
+	marlais_0_5_10: 1.7
+	marlais_0_5_7: 1.4
+	marlais_0_5_6: 1.4
+	marlais_0_5_5: 1.3
+	marlais_0_5: 1.3
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 7;	selected revisions: 5
+description:
+ error.h
+----------------------------
+revision 1.7	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.6
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +4 -4
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.5
+date: 1995/03/08 17:09:55;  author: jnw;  state: Exp;  lines: +2 -1
+Mod'd return type of warning to be Object.
+----------------------------
+revision 1.4
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +3 -1
+Added num_debug_contexts decl
+----------------------------
+revision 1.3
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/eval.c,v
+Working file: eval.c
+head: 1.14
+branch:
+locks: strict
+	jnw: 1.14
+access list:
+symbolic names:
+	marlais_0_5_12: 1.14
+	marlais_0_5_11: 1.13
+	marlais_0_5_10: 1.11
+	marlais_0_5_7: 1.5
+	marlais_0_5_6: 1.4
+	marlais_0_5_5: 1.3
+	marlais_0_5: 1.3
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 14;	selected revisions: 12
+description:
+eval.c
+----------------------------
+revision 1.14	locked by: jnw;
+date: 1995/09/04 14:50:00;  author: jnw;  state: Exp;  lines: +14 -4
+Modified many routines to return error rather than fail
+----------------------------
+revision 1.13
+date: 1995/06/14 17:51:00;  author: jnw;  state: Exp;  lines: +1 -0
+Added frame setting to the eval_stack.
+----------------------------
+revision 1.12
+date: 1995/06/06 12:56:08;  author: jnw;  state: Exp;  lines: +2 -1
+made print_object  changes
+----------------------------
+revision 1.11
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.10
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +69 -70
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.9
+date: 1995/03/08 16:42:24;  author: jnw;  state: Exp;  lines: +69 -51
+Modified tail_eval as per pcb to return a value when eval'ing something
+besides a pair.
+
+Modified eval_combination to support checking of return values.
+Each (new) call stacks result values onto the ResultValueStack
+these are popped and checked against the actual result objects before
+return.
+----------------------------
+revision 1.8
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +69 -69
+untabified
+----------------------------
+revision 1.7
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +79 -21
+Added Patrick Beard's support for BIG_INTEGERS and tail calls
+----------------------------
+revision 1.6
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +7 -4
+reordered includes,repl'd GC_malloc call with checking malloc.
+----------------------------
+revision 1.5
+date: 1994/12/23 03:27:14;  author: jnw;  state: Exp;  lines: +9 -0
+Added fix to eval (ala pcb) to allow eval of unspecified_object.
+----------------------------
+revision 1.4
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +49 -12
+Added error return on unbound variable
+Added eval_stack pushes in eval_combination
+Added fns push_eval_stack and pop_eval_stack and print_stack
+----------------------------
+revision 1.3
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/eval.h,v
+Working file: eval.h
+head: 1.9
+branch:
+locks: strict
+	jnw: 1.9
+access list:
+symbolic names:
+	marlais_0_5_12: 1.9
+	marlais_0_5_11: 1.9
+	marlais_0_5_10: 1.9
+	marlais_0_5_7: 1.4
+	marlais_0_5_6: 1.4
+	marlais_0_5_5: 1.3
+	marlais_0_5: 1.3
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 9;	selected revisions: 7
+description:
+ eval.h
+----------------------------
+revision 1.9	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.8
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +2 -2
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.7
+date: 1995/03/09 04:38:22;  author: jnw;  state: Exp;  lines: +1 -0
+whitespace frobbing
+----------------------------
+revision 1.6
+date: 1995/03/08 17:09:55;  author: jnw;  state: Exp;  lines: +1 -1
+Mod'd return type of tail_eval to Object.
+----------------------------
+revision 1.5
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +3 -0
+Added tail_eval decl.
+----------------------------
+revision 1.4
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +11 -0
+Added print_stack, pop_eval_stack, and push_eval_stack decls
+Added eval_stack struct def'n
+----------------------------
+revision 1.3
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/file.c,v
+Working file: file.c
+head: 1.21
+branch:
+locks: strict
+	jnw: 1.21
+access list:
+symbolic names:
+	marlais_0_5_12: 1.21
+	marlais_0_5_11: 1.21
+	marlais_0_5_10: 1.20
+	marlais_0_5_7: 1.13
+	marlais_0_5_6: 1.9
+	marlais_0_5_5: 1.8
+	marlais_0_5: 1.6
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 21;	selected revisions: 16
+description:
+file.c
+----------------------------
+revision 1.21	locked by: jnw;
+date: 1995/06/06 12:56:38;  author: jnw;  state: Exp;  lines: +10 -0
+Made some pcb updates to infix and prefix (added calls to
+update_listener_syntax)
+----------------------------
+revision 1.20
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.19
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +44 -42
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.18
+date: 1995/03/09 04:31:06;  author: jnw;  state: Exp;  lines: +12 -0
+Added MACOS ifdef'd fix for syntax switching problem.  Have to check this out.
+----------------------------
+revision 1.17
+date: 1995/02/16 15:20:48;  author: jnw;  state: Exp;  lines: +6 -0
+Added Patrick's fix for load
+----------------------------
+revision 1.16
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +12 -12
+untabified
+----------------------------
+revision 1.15
+date: 1995/02/08 23:20:23;  author: jnw;  state: Exp;  lines: +3 -1
+Added hack to fix switching back to infix mode from prefix.
+Please revisit this later.
+----------------------------
+revision 1.14
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +7 -4
+reordered includes
+----------------------------
+revision 1.13
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +2 -2
+Changed module binding saves to use struct module_binding*
+  rather than Object.
+----------------------------
+revision 1.12
+date: 1994/12/24 22:17:13;  author: jnw;  state: Exp;  lines: +5 -2
+Added parser reset in i_load.
+Removed extraneous eval in i_load (how did this ever work?).
+Moved close_file up in i_load to earliest reasonable time.
+----------------------------
+revision 1.11
+date: 1994/12/24 05:19:04;  author: jnw;  state: Exp;  lines: +92 -52
+Added open_file, close_file, close_open_files.
+Factored out file opening from i_load and p_load and placed in open_file.
+Added pcb's suggested mod of consing exprs in i_load then loading after
+the fact.
+----------------------------
+revision 1.10
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;  lines: +5 -3
+Added load_file_context fix for chained loads.
+----------------------------
+revision 1.9
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +1 -0
+Added in reset of load_file_context
+----------------------------
+revision 1.8
+date: 1994/09/18 20:07:29;  author: jnw;  state: Exp;  lines: +16 -2
+Made all the load functions restore the_current_module after call.
+----------------------------
+revision 1.7
+date: 1994/08/25 16:22:19;  author: jnw;  state: Exp;  lines: +0 -1
+Took out debugging warning.
+----------------------------
+revision 1.6
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/file.h,v
+Working file: file.h
+head: 1.9
+branch:
+locks: strict
+	jnw: 1.9
+access list:
+symbolic names:
+	marlais_0_5_12: 1.9
+	marlais_0_5_11: 1.9
+	marlais_0_5_10: 1.9
+	marlais_0_5_7: 1.6
+	marlais_0_5_6: 1.5
+	marlais_0_5_5: 1.5
+	marlais_0_5: 1.5
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 9;	selected revisions: 5
+description:
+ file.h
+----------------------------
+revision 1.9	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.8
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +3 -2
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.7
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +1 -0
+Added decl of init_file_prims
+----------------------------
+revision 1.6
+date: 1994/12/24 05:19:04;  author: jnw;  state: Exp;  lines: +2 -0
+Added close_open_file decl.
+----------------------------
+revision 1.5
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/foreign.c,v
+Working file: foreign.c
+head: 1.5
+branch:
+locks: strict
+	jnw: 1.5
+access list:
+symbolic names:
+	marlais_0_5_12: 1.5
+	marlais_0_5_11: 1.5
+	marlais_0_5_10: 1.5
+	marlais_0_5_7: 1.3
+	marlais_0_5_6: 1.2
+	marlais_0_5_5: 1.2
+	marlais_0_5: 1.2
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.1
+comment leader: " * "
+keyword substitution: kv
+total revisions: 5;	selected revisions: 4
+description:
+foreign.c
+----------------------------
+revision 1.5	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.4
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +26 -26
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.3
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;  lines: +26 -1
+Added powerpc mods
+----------------------------
+revision 1.2
+date: 1994/06/28 21:08:47;  author: jnw;  state: Exp;  lines: +2 -3
+Fixed copyright message.
+=============================================================================
+
+RCS file: RCS/foreign.dyl,v
+Working file: foreign.dyl
+head: 1.1
+branch:
+locks: strict
+	jnw: 1.1
+access list:
+symbolic names:
+	marlais_0_5_12: 1.1
+	marlais_0_5_11: 1.1
+	marlais_0_5_10: 1.1
+	marlais_0_5_7: 1.1
+	marlais_0_5_6: 1.1
+	marlais_0_5_5: 1.1
+	marlais_0_5: 1.1
+	marlais_0_4: 1.1
+	marlais+0+4+beta: 1.1
+comment leader: "# "
+keyword substitution: kv
+total revisions: 1;	selected revisions: 1
+description:
+foreign.dyl initial revision
+----------------------------
+revision 1.1	locked by: jnw;
+date: 1994/06/28 21:08:47;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/foreign.h,v
+Working file: foreign.h
+head: 1.4
+branch:
+locks: strict
+	jnw: 1.4
+access list:
+symbolic names:
+	marlais_0_5_12: 1.4
+	marlais_0_5_11: 1.4
+	marlais_0_5_10: 1.4
+	marlais_0_5_7: 1.2
+	marlais_0_5_6: 1.2
+	marlais_0_5_5: 1.2
+	marlais_0_5: 1.2
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.1
+comment leader: " * "
+keyword substitution: kv
+total revisions: 4;	selected revisions: 3
+description:
+ foreign.h
+----------------------------
+revision 1.4	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.3
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +4 -4
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.2
+date: 1994/06/28 21:08:47;  author: jnw;  state: Exp;  lines: +2 -3
+Fixed copyright message.
+=============================================================================
+
+RCS file: RCS/foreign_ptr.c,v
+Working file: foreign_ptr.c
+head: 1.5
+branch:
+locks: strict
+	jnw: 1.5
+access list:
+symbolic names:
+	marlais_0_5_12: 1.5
+	marlais_0_5_11: 1.5
+	marlais_0_5_10: 1.5
+	marlais_0_5_7: 1.1
+comment leader: " * "
+keyword substitution: kv
+total revisions: 5;	selected revisions: 5
+description:
+New file.
+----------------------------
+revision 1.5	locked by: jnw;
+date: 1995/03/09 13:29:21;  author: jnw;  state: Exp;  lines: +2 -2
+whitespace frobbing
+----------------------------
+revision 1.4
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.3
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +28 -24
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.2
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +11 -11
+untabified
+----------------------------
+revision 1.1
+date: 1994/11/28 22:59:40;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/foreign_ptr.h,v
+Working file: foreign_ptr.h
+head: 1.3
+branch:
+locks: strict
+	jnw: 1.3
+access list:
+symbolic names:
+	marlais_0_5_12: 1.3
+	marlais_0_5_11: 1.3
+	marlais_0_5_10: 1.3
+	marlais_0_5_7: 1.1
+comment leader: " * "
+keyword substitution: kv
+total revisions: 3;	selected revisions: 3
+description:
+foreign pointer header
+----------------------------
+revision 1.3	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.2
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +12 -12
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.1
+date: 1994/11/28 22:59:40;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/function.c,v
+Working file: function.c
+head: 1.29
+branch:
+locks: strict
+	jnw: 1.29
+access list:
+symbolic names:
+	marlais_0_5_12: 1.29
+	marlais_0_5_11: 1.28
+	marlais_0_5_10: 1.27
+	marlais_0_5_7: 1.17
+	marlais_0_5_6: 1.16
+	marlais_0_5_5: 1.15
+	marlais_0_5: 1.13
+	marlais_0_4: 1.9
+	marlais+0+4+beta: 1.9
+	marlais-0-4-alpha: 1.8
+comment leader: " * "
+keyword substitution: kv
+total revisions: 29;	selected revisions: 17
+description:
+function.c
+----------------------------
+revision 1.29	locked by: jnw;
+date: 1995/09/04 14:51:11;  author: jnw;  state: Exp;  lines: +34 -23
+Modified GFs to fix #values bug.
+Made make on GF make the method cache (It didn't used to)
+
+
+made other minor changes.
+----------------------------
+revision 1.28
+date: 1995/06/06 12:57:17;  author: jnw;  state: Exp;  lines: +23 -23
+static storage class additions and NULLP => EMPTYLISTP
+----------------------------
+revision 1.27
+date: 1995/05/13 20:39:40;  author: jnw;  state: Exp;  lines: +167 -27
+Added code to cache methods and next methods
+----------------------------
+revision 1.26
+date: 1995/04/03 03:08:05;  author: jnw;  state: Exp;  lines: +62 -15
+Added is_param_name and param_name_to_keyword
+Added code to handle keyword params without initial value and
+to handle keyword param types
+#ifdef'd method caching.
+----------------------------
+revision 1.25
+date: 1995/03/29 04:07:56;  author: jnw;  state: Exp;  lines: +71 -4
+Added method caching code
+----------------------------
+revision 1.24
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.23
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +721 -743
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.22
+date: 1995/03/08 16:42:24;  author: jnw;  state: Exp;  lines: +44 -11
+Added function_values and make_specializers_from_params
+Added %function-values primitive
+----------------------------
+revision 1.21
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +415 -415
+untabified
+----------------------------
+revision 1.20
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +1 -1
+made create_generic_parameters static
+----------------------------
+revision 1.19
+date: 1995/02/08 23:20:23;  author: jnw;  state: Exp;  lines: +11 -7
+Added rest of checks for function args as developed by Drew Nolan
+----------------------------
+revision 1.18
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +102 -14
+Added create_generic_parameters, sub_specializers, and modified
+function-specializers to work on GFs too.
+----------------------------
+revision 1.17
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +76 -50
+Added user_applicable_method_p.
+Added strict_check parameter to applicable_method_p.
+Fixed applicable_method_p to take either a GF or a method as argument
+  function.
+Changed applicable_method_p to avoid checking for extraneous keyword
+  parameters if strict_check is 0.
+----------------------------
+revision 1.16
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +1 -1
+Added error return on "no applicable methods"
+----------------------------
+revision 1.15
+date: 1994/11/03 03:38:36;  author: jnw;  state: Exp;  lines: +24 -2
+Added %generic-function-make to primitives list.
+----------------------------
+revision 1.14
+date: 1994/09/15 17:08:00;  author: jnw;  state: Exp;  lines: +38 -16
+Modified keyword parameter representations to support
+	[keyword] name [default]
+keyword parameters specs.  Now represent each keyword as a 3-elt list
+	(keyword name default)
+in the METHKEYPARAMS and GFKEYPARAMS of methods and generic functions resp.
+----------------------------
+revision 1.13
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/function.h,v
+Working file: function.h
+head: 1.12
+branch:
+locks: strict
+	jnw: 1.12
+access list:
+symbolic names:
+	marlais_0_5_12: 1.12
+	marlais_0_5_11: 1.12
+	marlais_0_5_10: 1.12
+	marlais_0_5_7: 1.6
+	marlais_0_5_6: 1.6
+	marlais_0_5_5: 1.6
+	marlais_0_5: 1.6
+	marlais_0_4: 1.5
+	marlais+0+4+beta: 1.5
+	marlais-0-4-alpha: 1.5
+comment leader: " * "
+keyword substitution: kv
+total revisions: 12;	selected revisions: 7
+description:
+ function.h
+----------------------------
+revision 1.12	locked by: jnw;
+date: 1995/05/13 20:43:34;  author: jnw;  state: Exp;  lines: +2 -0
+Added applicable_method_p and sorted_possible_)method_handles
+----------------------------
+revision 1.11
+date: 1995/04/03 03:10:56;  author: jnw;  state: Exp;  lines: +4 -0
+#ifdef'd method caching stuff
+----------------------------
+revision 1.10
+date: 1995/03/29 04:09:42;  author: jnw;  state: Exp;  lines: +3 -1
+Added function_specializers and recalc_next_methods calls
+----------------------------
+revision 1.9
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.8
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +3 -2
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.7
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +1 -0
+Added init_function_prims decl
+----------------------------
+revision 1.6
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/globaldefs.h,v
+Working file: globaldefs.h
+head: 1.31
+branch:
+locks: strict
+	jnw: 1.31
+access list:
+symbolic names:
+	marlais_0_5_12: 1.31
+	marlais_0_5_11: 1.31
+	marlais_0_5_10: 1.29
+	marlais_0_5_7: 1.21
+	marlais_0_5_6: 1.17
+	marlais_0_5_5: 1.16
+	marlais_0_5: 1.12
+	marlais_0_4: 1.7
+	marlais+0+4+beta: 1.7
+	marlais-0-4-alpha: 1.7
+comment leader: " * "
+keyword substitution: kv
+total revisions: 31;	selected revisions: 20
+description:
+Added this to allow many files to see the global variables, but declare them
+only once (in main.c)
+----------------------------
+revision 1.31	locked by: jnw;
+date: 1995/06/14 17:53:44;  author: jnw;  state: Exp;  lines: +7 -0
+Added  unwind_protect_function_class, afterwards_symbol, bind_exit_symbol,
+exit_symbol, unwind_protect_symbol, vals_symbol
+----------------------------
+revision 1.30
+date: 1995/06/06 13:10:48;  author: jnw;  state: Exp;  lines: +3 -0
+Added object_handle_class, print_symbol, and princ_symbol.
+----------------------------
+revision 1.29
+date: 1995/05/13 20:44:42;  author: jnw;  state: Exp;  lines: +4 -0
+Added aref_symbol
+----------------------------
+revision 1.28
+date: 1995/03/29 03:32:19;  author: jnw;  state: Exp;  lines: +3 -5
+Made small_integer_class and big_integer_class always be there/
+Added local_bind_rec_symbol
+----------------------------
+revision 1.27
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.26
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +234 -232
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.25
+date: 1995/03/08 17:09:55;  author: jnw;  state: Exp;  lines: +6 -0
+Added keyword_symbol, required_symbol, until_keyword, while_keyword,
+test_symbol.
+----------------------------
+revision 1.24
+date: 1995/02/16 15:20:48;  author: jnw;  state: Exp;  lines: +1 -0
+Added pair_symbol
+----------------------------
+revision 1.23
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +3 -0
+Added Patrick's BIG_INTEGERS support
+----------------------------
+revision 1.22
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +1 -0
+Added x_symbol
+----------------------------
+revision 1.21
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +1 -1
+Removed default_module and added object_table_class.
+----------------------------
+revision 1.20
+date: 1994/12/24 05:24:13;  author: jnw;  state: Exp;  lines: +218 -137
+Prettified the file.  Still needs reorganization.
+----------------------------
+revision 1.19
+date: 1994/12/23 03:27:14;  author: jnw;  state: Exp;  lines: +1 -0
+Added deferred_type_keyword.
+----------------------------
+revision 1.18
+date: 1994/11/28 22:59:40;  author: jnw;  state: Exp;  lines: +1 -0
+Added foreign_pointer_class.
+----------------------------
+revision 1.17
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +1 -0
+Added define_test_symbol
+----------------------------
+revision 1.16
+date: 1994/11/03 03:38:36;  author: jnw;  state: Exp;  lines: +1 -0
+Added empty_string Object.
+----------------------------
+revision 1.15
+date: 1994/09/18 20:07:29;  author: jnw;  state: Exp;  lines: +11 -1
+Added the keywords mentioned in main.c
+Added default_module and load_file_context.
+----------------------------
+revision 1.14
+date: 1994/09/16 03:26:44;  author: jnw;  state: Exp;  lines: +5 -0
+Added symbols for module definitions
+----------------------------
+revision 1.13
+date: 1994/08/25 16:22:19;  author: jnw;  state: Exp;  lines: +5 -0
+Added modifiers_keyword, abstract_symbol, concrete_symbol, primary_symbol,
+and free_symbol.
+----------------------------
+revision 1.12
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/globals.h,v
+Working file: globals.h
+head: 1.6
+branch:
+locks: strict
+	jnw: 1.6
+access list:
+symbolic names:
+	marlais_0_5_12: 1.6
+	marlais_0_5_11: 1.6
+	marlais_0_5_10: 1.6
+	marlais_0_5_7: 1.4
+	marlais_0_5_6: 1.4
+	marlais_0_5_5: 1.4
+	marlais_0_5: 1.4
+	marlais_0_4: 1.3
+	marlais+0+4+beta: 1.3
+	marlais-0-4-alpha: 1.3
+comment leader: " * "
+keyword substitution: kv
+total revisions: 6;	selected revisions: 3
+description:
+ globals.h
+----------------------------
+revision 1.6	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.5
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +2 -2
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.4
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/init.dyl,v
+Working file: init.dyl
+head: 1.37
+branch:
+locks: strict
+	jnw: 1.37
+access list:
+symbolic names:
+	marlais_0_5_12: 1.37
+	marlais_0_5_11: 1.36
+	marlais_0_5_10: 1.32
+	marlais_0_5_7: 1.22
+	marlais_0_5_6: 1.16
+	marlais_0_5_5: 1.15
+	marlais_0_5: 1.10
+	marlais_0_4: 1.5
+	marlais+0+4+beta: 1.4
+	marlais-0-4-alpha: 1.3
+comment leader: "# "
+keyword substitution: kv
+total revisions: 37;	selected revisions: 28
+description:
+so many changes, I don't know what to say.
+----------------------------
+revision 1.37	locked by: jnw;
+date: 1995/09/04 15:05:14;  author: jnw;  state: Exp;  lines: +118 -35
+Adcded debug-name
+Added identity
+Commented out \^ on <small-integer>, <small-integer>
+Added Marty Hall's \^
+Moved around non-DIRM arith. functions
+----------------------------
+revision 1.36
+date: 1995/06/14 17:54:25;  author: jnw;  state: Exp;  lines: +1 -2
+modified print and princ to have correct line termination behavior.
+----------------------------
+revision 1.35
+date: 1995/06/13 04:00:11;  author: jnw;  state: Exp;  lines: +4 -4
+Applied pcb's fix to as (<class>, <collection>)
+----------------------------
+revision 1.34
+date: 1995/06/06 13:14:56;  author: jnw;  state: Exp;  lines: +44 -16
+Modified print to put its own newline
+Added default object-print method
+Added object-princ method
+Made element(<array>, <integer>) use array-element and
+element (<array>, <list>) use array-ref
+Likewise for element-setter
+Added some gf definitions indicated by DIRM: rank, aref, dimension.
+Added shallow-copy for <array>
+----------------------------
+revision 1.33
+date: 1995/06/03 12:02:21;  author: jnw;  state: Exp;  lines: +20 -3
+Modified occurrences of ~a to be %= in format strings
+Fixed weird call to error in cerror
+Added pcb's method for as (<small-integer>, <string>)
+Added aref and aref-setter for vectors.
+----------------------------
+revision 1.32
+date: 1995/05/13 20:44:56;  author: jnw;  state: Exp;  lines: +111 -32
+Changed many collection functions to use finished-state
+function the right way.
+Change while and until in for loops to while: and until:
+Modified deque-state to use pairs everywhere.
+Added method for element on array with an integer index rather
+  than a list.
+Added matching element-setter for array with integer index
+Modified atan2 to take number arguments and convert to
+<double-float>.
+----------------------------
+revision 1.31
+date: 1995/03/29 03:33:00;  author: jnw;  state: Exp;  lines: +230 -40
+Added as for <string>, <variable-name>
+Fixed occurrences of <integer> than should be <small-integer>
+Added <big-integer> methods
+----------------------------
+revision 1.30
+date: 1995/03/09 05:29:25;  author: jnw;  state: Exp;  lines: +15 -0
+Added Library GPL notice
+----------------------------
+revision 1.29
+date: 1995/03/09 04:38:22;  author: jnw;  state: Exp;  lines: +29 -24
+fixed concatenate and find-key
+----------------------------
+revision 1.28
+date: 1995/03/09 03:13:00;  author: jnw;  state: Exp;  lines: +191 -105
+Added many changes from Bob Alexander
+Fixed as default method.
+Fixed object-class.
+Modified find-key to avoid cons'ing key-sequence
+Fixed copy-sequence bug on end:
+Replaced my sort with Alexander's.
+Added class-for-copy method for #() to return <list>
+Removed head and tail on <pair>
+Deleted special copy-sequence methods for lists
+Added sort for <list>
+Fixed copy-sequence for <range> and added shllow-copy for <range>
+Added sort for <range>
+Added current-key for <collection>
+Added as-uppercase and as-lowercase methods for strings
+Fixed deque state manipulation
+Added remainder methods
+----------------------------
+revision 1.27
+date: 1995/03/08 17:09:55;  author: jnw;  state: Exp;  lines: +118 -24
+Added singleton.
+Made function-specializers work for gf.
+Added object-class.
+Added shallow-copy
+Modified map-into as per pcb
+Added quicksort method for sort!
+Added truncate/ method for integer args.
+Added eval.
+----------------------------
+revision 1.26
+date: 1995/02/14 02:36:12;  author: jnw;  state: Exp;  lines: +23 -2
+Added Dave Dyer's subsequence-position
+----------------------------
+revision 1.25
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +2 -2
+Fixed member? on lists
+----------------------------
+revision 1.24
+date: 1995/02/08 23:24:31;  author: jnw;  state: Exp;  lines: +2 -2
+changed bad spelling of next-states
+----------------------------
+revision 1.23
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +156 -125
+modified class-for-copy to apply to <object>
+Added many unspecified value return parameter names.  These were really
+broken!
+Added third argument to map-into
+Added Withing's replace-subsequence!
+Changed key param initializations to use `key = val' rather than `key (val)'
+Fixed arg types of floor, ceiling, round, truncate, floor/, ceiling/, round/,
+truncate/, etc.
+----------------------------
+revision 1.22
+date: 1995/01/05 04:05:11;  author: jnw;  state: Exp;  lines: +9 -5
+modified uses of / on integers to be truncate/.
+initialize(<range>, ...) was broken due to this.
+----------------------------
+revision 1.21
+date: 1995/01/05 03:01:48;  author: jnw;  state: Exp;  lines: +7 -2
+Added framework (commented out) for list sort and sort!
+----------------------------
+revision 1.20
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +263 -203
+Cleaned up end words to have syntactic unit res-word following.
+Added floor/, ceiling/, round/, truncate/, floor, ceiling, round.
+Removed integer / integer.
+----------------------------
+revision 1.19
+date: 1994/12/24 22:20:58;  author: jnw;  state: Exp;  lines: +5 -3
+Made array state manipulators use <integer-state>
+----------------------------
+revision 1.18
+date: 1994/12/24 05:24:13;  author: jnw;  state: Exp;  lines: +67 -72
+Folded in pcb changes to support DIRM setters.
+Fixed key-sequence.
+----------------------------
+revision 1.17
+date: 1994/12/23 03:27:14;  author: jnw;  state: Exp;  lines: +20 -10
+Added <integer-state> type for better versions of iterator methods.
+Redefined next-state, current-element, and current-element-setter
+for <string> to use <integer-state>.
+(Also mod'd <string> copy-state, <vector> next-state, current-element,
+current-element-setter, copy-state, and previous-state similarly.)
+----------------------------
+revision 1.16
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +2556 -1569
+This file has been completely rewritten.
+----------------------------
+revision 1.15
+date: 1994/11/03 03:38:36;  author: jnw;  state: Exp;  lines: +63 -37
+Removed needless `as' methods for (obsolete) <keyword> class.
+Modified %generic-function-make call to have all-keys rather than (bogus)
+	#all-keys.
+Fixed debug-name-setter for <variable-name> change
+Changed arithmetic functions to match IRM specifications.
+----------------------------
+revision 1.14
+date: 1994/09/20 14:49:27;  author: jnw;  state: Exp;  lines: +2 -2
+Fixed some occurrences of all-keys to be #all-keys
+----------------------------
+revision 1.13
+date: 1994/09/18 20:07:29;  author: jnw;  state: Exp;  lines: +2 -0
+Added define-method for ~=.
+----------------------------
+revision 1.12
+date: 1994/09/15 17:08:00;  author: jnw;  state: Exp;  lines: +4 -1
+Added some explicit gf definitions.
+----------------------------
+revision 1.11
+date: 1994/08/25 16:22:19;  author: jnw;  state: Exp;  lines: +3 -0
+Added pcb's exp and ln
+----------------------------
+revision 1.10
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/keyword.c,v
+Working file: keyword.c
+head: 1.13
+branch:
+locks: strict
+	jnw: 1.13
+access list:
+symbolic names:
+	marlais_0_5_12: 1.13
+	marlais_0_5_11: 1.12
+	marlais_0_5_10: 1.11
+	marlais_0_5_7: 1.7
+	marlais_0_5_6: 1.6
+	marlais_0_5_5: 1.6
+	marlais_0_5: 1.6
+	marlais_0_4: 1.5
+	marlais+0+4+beta: 1.5
+	marlais-0-4-alpha: 1.4
+comment leader: " * "
+keyword substitution: kv
+total revisions: 13;	selected revisions: 8
+description:
+keyword.c
+----------------------------
+revision 1.13	locked by: jnw;
+date: 1995/09/04 14:55:36;  author: jnw;  state: Exp;  lines: +0 -1
+removed unused var. decls.
+----------------------------
+revision 1.12
+date: 1995/06/06 12:58:15;  author: jnw;  state: Exp;  lines: +3 -3
+NULLP => EMPTYLISTP
+----------------------------
+revision 1.11
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.10
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +52 -53
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.9
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +4 -4
+untabified
+----------------------------
+revision 1.8
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +5 -3
+reordered includes
+----------------------------
+revision 1.7
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;  lines: +1 -1
+Added bytestring.h fix
+----------------------------
+revision 1.6
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/keyword.h,v
+Working file: keyword.h
+head: 1.5
+branch:
+locks: strict
+	jnw: 1.5
+access list:
+symbolic names:
+	marlais_0_5_12: 1.5
+	marlais_0_5_11: 1.5
+	marlais_0_5_10: 1.5
+	marlais_0_5_7: 1.3
+	marlais_0_5_6: 1.3
+	marlais_0_5_5: 1.3
+	marlais_0_5: 1.3
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 5;	selected revisions: 3
+description:
+keyword.h
+----------------------------
+revision 1.5	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +32 -0
+Added Library GPL Notice
+----------------------------
+revision 1.4
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +2 -2
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.3
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/list.c,v
+Working file: list.c
+head: 1.21
+branch:
+locks: strict
+	jnw: 1.21
+access list:
+symbolic names:
+	marlais_0_5_12: 1.21
+	marlais_0_5_11: 1.20
+	marlais_0_5_10: 1.19
+	marlais_0_5_7: 1.13
+	marlais_0_5_6: 1.12
+	marlais_0_5_5: 1.11
+	marlais_0_5: 1.11
+	marlais_0_4: 1.9
+	marlais+0+4+beta: 1.8
+	marlais-0-4-alpha: 1.8
+comment leader: " * "
+keyword substitution: kv
+total revisions: 21;	selected revisions: 11
+description:
+list.c
+----------------------------
+revision 1.21	locked by: jnw;
+date: 1995/09/04 14:55:53;  author: jnw;  state: Exp;  lines: +15 -8
+cleaned up unused vars and error returns.
+----------------------------
+revision 1.20
+date: 1995/06/06 12:58:37;  author: jnw;  state: Exp;  lines: +13 -13
+NULLP => EMPTYLISTP
+----------------------------
+revision 1.19
+date: 1995/03/09 13:29:44;  author: jnw;  state: Exp;  lines: +2 -2
+whitespace frobbing
+----------------------------
+revision 1.18
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.17
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +306 -342
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.16
+date: 1995/03/09 03:13:00;  author: jnw;  state: Exp;  lines: +6 -4
+Made car and cdr static and changed them to yield #() on #() arg.
+----------------------------
+revision 1.15
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +96 -97
+untabified
+----------------------------
+revision 1.14
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +6 -4
+reordered includes
+Added return to add_new_at_end
+----------------------------
+revision 1.13
+date: 1995/01/05 03:01:48;  author: jnw;  state: Exp;  lines: +20 -0
+Added framework for list sorting to be done.
+Intend to use this soon internally.
+----------------------------
+revision 1.12
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +1 -1
+Added error return on attempt to find first of empty list
+----------------------------
+revision 1.11
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/list.h,v
+Working file: list.h
+head: 1.13
+branch:
+locks: strict
+	jnw: 1.13
+access list:
+symbolic names:
+	marlais_0_5_12: 1.13
+	marlais_0_5_11: 1.13
+	marlais_0_5_10: 1.13
+	marlais_0_5_7: 1.9
+	marlais_0_5_6: 1.9
+	marlais_0_5_5: 1.9
+	marlais_0_5: 1.9
+	marlais_0_4: 1.7
+	marlais+0+4+beta: 1.7
+	marlais-0-4-alpha: 1.7
+comment leader: " * "
+keyword substitution: kv
+total revisions: 13;	selected revisions: 5
+description:
+list.h
+----------------------------
+revision 1.13	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.12
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +7 -5
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.11
+date: 1995/03/09 03:13:00;  author: jnw;  state: Exp;  lines: +0 -2
+Removed decls of car and cdr.
+----------------------------
+revision 1.10
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +5 -0
+Added decls for
+add_new_at_end, list_sort, and list_sort_bang
+----------------------------
+revision 1.9
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/macintosh.c,v
+Working file: macintosh.c
+head: 1.6
+branch:
+locks: strict
+	jnw: 1.6
+access list:
+symbolic names:
+	marlais_0_5_12: 1.6
+	marlais_0_5_11: 1.6
+	marlais_0_5_10: 1.6
+	marlais_0_5_7: 1.2
+	marlais_0_5_6: 1.1
+	marlais_0_5_5: 1.1
+	marlais_0_5: 1.1
+	marlais_0_4: 1.1
+comment leader: " * "
+keyword substitution: kv
+total revisions: 6;	selected revisions: 6
+description:
+Mac specific code from Patrick Beard.
+----------------------------
+revision 1.6	locked by: jnw;
+date: 1995/03/09 13:37:44;  author: jnw;  state: Exp;  lines: +9 -9
+*** empty log message ***
+----------------------------
+revision 1.5
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.4
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +201 -188
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.3
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +117 -117
+untabified
+----------------------------
+revision 1.2
+date: 1994/11/28 22:59:40;  author: jnw;  state: Exp;  lines: +107 -19
+New version from pcb
+----------------------------
+revision 1.1
+date: 1994/07/12 20:27:08;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/macintosh.h,v
+Working file: macintosh.h
+head: 1.4
+branch:
+locks: strict
+	jnw: 1.4
+access list:
+symbolic names:
+	marlais_0_5_12: 1.4
+	marlais_0_5_11: 1.4
+	marlais_0_5_10: 1.4
+	marlais_0_5_7: 1.2
+	marlais_0_5_6: 1.1
+	marlais_0_5_5: 1.1
+	marlais_0_5: 1.1
+	marlais_0_4: 1.1
+comment leader: " * "
+keyword substitution: kv
+total revisions: 4;	selected revisions: 4
+description:
+Mac specific code from Patrick Beard.
+----------------------------
+revision 1.4	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.3
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +9 -9
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.2
+date: 1994/11/28 22:59:40;  author: jnw;  state: Exp;  lines: +6 -15
+new version from pcb
+----------------------------
+revision 1.1
+date: 1994/07/12 20:27:08;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/main.c,v
+Working file: main.c
+head: 1.44
+branch:
+locks: strict
+	jnw: 1.44
+access list:
+symbolic names:
+	marlais_0_5_12: 1.44
+	marlais_0_5_11: 1.43
+	marlais_0_5_10: 1.40
+	marlais_0_5_7: 1.29
+	marlais_0_5_6: 1.23
+	marlais_0_5_5: 1.22
+	marlais_0_5: 1.15
+	marlais_0_4: 1.8
+	marlais+0+4+beta: 1.7
+	marlais-0-4-alpha: 1.7
+comment leader: " * "
+keyword substitution: kv
+total revisions: 44;	selected revisions: 30
+description:
+main.c
+----------------------------
+revision 1.44	locked by: jnw;
+date: 1995/09/04 14:56:18;  author: jnw;  state: Exp;  lines: +2 -4
+removed unused var. decls.
+----------------------------
+revision 1.43
+date: 1995/06/15 04:46:46;  author: jnw;  state: Exp;  lines: +1 -1
+Modified vals to be an uncreatable symbol.
+----------------------------
+revision 1.42
+date: 1995/06/14 17:51:23;  author: jnw;  state: Exp;  lines: +5 -0
+Added apply_symbol, bind_exit_symbol, exit_symbol, unwind_protect_symbol,
+and vals_symbol (which needs to be changed).
+----------------------------
+revision 1.41
+date: 1995/06/06 12:58:56;  author: jnw;  state: Exp;  lines: +14 -0
+print_obj changes
+Added print_symbol and princ_symbol
+----------------------------
+revision 1.40
+date: 1995/05/13 20:40:12;  author: jnw;  state: Exp;  lines: +8 -1
+Added printing of the output marker.
+Added aref symbol (to fix array reference problems)
+----------------------------
+revision 1.39
+date: 1995/03/29 03:21:45;  author: jnw;  state: Exp;  lines: +2 -1
+Modified yyrestart to be yy_restart
+Added local_bind_rec_symbol (pcb's let changes)
+----------------------------
+revision 1.38
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.37
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +364 -366
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.36
+date: 1995/03/09 04:31:06;  author: jnw;  state: Exp;  lines: +6 -4
+Added some MACOS ifdefd fixes
+----------------------------
+revision 1.35
+date: 1995/03/08 16:53:38;  author: jnw;  state: Exp;  lines: +7 -1
+Added keyword_symbol, required_symbol, until_keyword, while_keyword,
+test_symbol, and description_symbol.
+Moved equal_symbol closer to beginning of initialization.
+----------------------------
+revision 1.34
+date: 1995/02/16 15:20:48;  author: jnw;  state: Exp;  lines: +1 -0
+Added pair_symbol init.
+----------------------------
+revision 1.33
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +39 -39
+untabified
+----------------------------
+revision 1.32
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +20 -18
+copied some lines to match Patrick's indentation.
+----------------------------
+revision 1.31
+date: 1995/02/08 23:20:23;  author: jnw;  state: Exp;  lines: +9 -5
+Added classic_syntax fix to go along with change to file.c
+to fix switching back to infix from prefix.
+Please revisit this some day.
+----------------------------
+revision 1.30
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +25 -22
+reordered includes
+added getopt prototype
+added initialization of x_symbol.
+----------------------------
+revision 1.29
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +7 -3
+Deleted bogus reference to default_module.
+Explicitly set exported_bindings of dylan and dylan-user modules to be `all'
+----------------------------
+revision 1.28
+date: 1994/12/24 22:17:13;  author: jnw;  state: Exp;  lines: +29 -22
+Changed prompting ala pcb for MACOS.  Made small mods for unix.
+----------------------------
+revision 1.27
+date: 1994/12/24 05:19:04;  author: jnw;  state: Exp;  lines: +7 -7
+Added initialization of initial_prompt (to 1)
+Added initialization of open_file_list.
+Added call of close_open_files into error longjmp return code
+----------------------------
+revision 1.26
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;  lines: +29 -21
+Mod'd THINK_C -> MACOS
+Mod'd MACOS specific error recovery.
+----------------------------
+revision 1.25
+date: 1994/12/23 03:27:14;  author: jnw;  state: Exp;  lines: +1 -0
+Added init of deferred_type_keyword
+----------------------------
+revision 1.24
+date: 1994/11/28 22:59:40;  author: jnw;  state: Exp;  lines: +2 -2
+Fixed thePathToLoad variable name.
+----------------------------
+revision 1.23
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +31 -23
+Added eval_stack, and num_debug_contexts resets.
+Moved creation of unspecified object to support printing top level frame.
+----------------------------
+revision 1.22
+date: 1994/11/03 03:38:36;  author: jnw;  state: Exp;  lines: +1 -2
+removed gratuitous change to call of use-module.
+----------------------------
+revision 1.21
+date: 1994/10/29 04:56:22;  author: jnw;  state: Exp;  lines: +37 -10
+Modified reading strategy
+----------------------------
+revision 1.20
+date: 1994/09/20 14:46:09;  author: jnw;  state: Exp;  lines: +15 -8
+Added cache_env to restore environment upon error return.
+  This was causing problems upon signal returns.
+  The environment stuff really needs some major overhauling now
+  that modules are in there.
+Moved the initialization of default_module to after inclusion of
+  init-file code.  This stuff really does belong in dylan, not
+  dylan-user.
+----------------------------
+revision 1.19
+date: 1994/09/18 20:07:29;  author: jnw;  state: Exp;  lines: +43 -14
+Modified continuation prompt as suggested by Beard.
+Made Beard's mod to init_file loading
+Added yyrestart for THINK_C.
+Made dylan-user the default-module, not dylan.
+Added module keywords import:, exclude:, prefix:, export:, rename:
+and symbols empty_string_symbol, dylan_user_symbol, dylan_symbol.
+Added keyword module:
+Added call to init_env_prims
+----------------------------
+revision 1.18
+date: 1994/09/16 03:26:44;  author: jnw;  state: Exp;  lines: +5 -0
+Added symbols for module definitions
+----------------------------
+revision 1.17
+date: 1994/09/15 17:08:00;  author: jnw;  state: Exp;  lines: +13 -8
+Modified keyword parameter representations to support
+	[keyword] name [default]
+keyword parameters specs.  Now represent each keyword as a 3-elt list
+	(keyword name default)
+in the METHKEYPARAMS and GFKEYPARAMS of methods and generic functions resp.
+----------------------------
+revision 1.16
+date: 1994/08/25 16:22:19;  author: jnw;  state: Exp;  lines: +6 -1
+Added some keywords and symbols.
+----------------------------
+revision 1.15
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/marlais.el,v
+Working file: marlais.el
+head: 1.2
+branch:
+locks: strict
+	jnw: 1.2
+access list:
+symbolic names:
+	marlais_0_5_12: 1.2
+	marlais_0_5_11: 1.1
+	marlais_0_5_10: 1.1
+	marlais_0_5_7: 1.1
+	marlais_0_5_6: 1.1
+	marlais_0_5_5: 1.1
+comment leader: "; "
+keyword substitution: kv
+total revisions: 2;	selected revisions: 2
+description:
+Marlais Dylan mode
+----------------------------
+revision 1.2	locked by: jnw;
+date: 1995/09/04 15:05:14;  author: jnw;  state: Exp;  lines: +11 -2
+Modified to use full-copy-sparse-keymap rather than copy-keymap
+Added semicolon to load (filename)
+----------------------------
+revision 1.1
+date: 1994/11/03 03:38:36;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/misc.c,v
+Working file: misc.c
+head: 1.7
+branch:
+locks: strict
+	jnw: 1.7
+access list:
+symbolic names:
+	marlais_0_5_12: 1.7
+	marlais_0_5_11: 1.7
+	marlais_0_5_10: 1.7
+	marlais_0_5_7: 1.4
+	marlais_0_5_6: 1.4
+	marlais_0_5_5: 1.3
+	marlais_0_5: 1.3
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 7;	selected revisions: 5
+description:
+misc.c
+----------------------------
+revision 1.7	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.6
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +52 -45
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.5
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +2 -0
+Added include of alloc.h
+----------------------------
+revision 1.4
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +12 -1
+changed unspecified_object to be result of values()
+----------------------------
+revision 1.3
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/misc.h,v
+Working file: misc.h
+head: 1.5
+branch:
+locks: strict
+	jnw: 1.5
+access list:
+symbolic names:
+	marlais_0_5_12: 1.5
+	marlais_0_5_11: 1.5
+	marlais_0_5_10: 1.5
+	marlais_0_5_7: 1.3
+	marlais_0_5_6: 1.3
+	marlais_0_5_5: 1.3
+	marlais_0_5: 1.3
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 5;	selected revisions: 3
+description:
+ misc.h
+----------------------------
+revision 1.5	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.4
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +2 -2
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.3
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/number.c,v
+Working file: number.c
+head: 1.22
+branch:
+locks: strict
+	jnw: 1.22
+access list:
+symbolic names:
+	marlais_0_5_12: 1.22
+	marlais_0_5_11: 1.21
+	marlais_0_5_10: 1.21
+	marlais_0_5_7: 1.9
+	marlais_0_5_6: 1.7
+	marlais_0_5_5: 1.7
+	marlais_0_5: 1.6
+	marlais_0_4: 1.3
+	marlais+0+4+beta: 1.3
+	marlais-0-4-alpha: 1.3
+comment leader: " * "
+keyword substitution: kv
+total revisions: 22;	selected revisions: 17
+description:
+number.c
+----------------------------
+revision 1.22	locked by: jnw;
+date: 1995/09/04 14:56:49;  author: jnw;  state: Exp;  lines: +3 -3
+Made modulo non static
+----------------------------
+revision 1.21
+date: 1995/05/13 20:40:34;  author: jnw;  state: Exp;  lines: +2 -1
+Added __hpux fix
+----------------------------
+revision 1.20
+date: 1995/03/29 03:22:56;  author: jnw;  state: Exp;  lines: +1 -1
+Added _WIN32 mods for NO_DOUBLE_INT_ARITH
+----------------------------
+revision 1.19
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.18
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +274 -301
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.17
+date: 1995/03/09 04:38:22;  author: jnw;  state: Exp;  lines: +27 -0
+Added pcb's new modulo (#ifdef'd out for now)
+----------------------------
+revision 1.16
+date: 1995/03/09 03:13:00;  author: jnw;  state: Exp;  lines: +24 -0
+Added remainder_double and remainder_int.
+----------------------------
+revision 1.15
+date: 1995/03/08 16:53:38;  author: jnw;  state: Exp;  lines: +14 -1
+Added int_truncate_divide.
+Modified NO_DOUBLE_INT_ARITH to be defined in __linux__
+Added %int-truncate
+----------------------------
+revision 1.14
+date: 1995/02/16 15:20:48;  author: jnw;  state: Exp;  lines: +1 -1
+changed __solaris__ to __SunOS_5__
+----------------------------
+revision 1.13
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +44 -44
+untabified
+----------------------------
+revision 1.12
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +59 -1
+Added solaris and HP_UX #defines for double int arith.
+Added Patrick's support for BIG_INTEGERS
+----------------------------
+revision 1.11
+date: 1995/02/08 23:20:23;  author: jnw;  state: Exp;  lines: +1 -1
+Added sgi to list of machines needing double int arith functions
+----------------------------
+revision 1.10
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +41 -0
+Added NO_DOUBLE_INT_ARITH cases and aint and anint
+definitions taking double args.
+----------------------------
+revision 1.9
+date: 1995/01/05 04:57:56;  author: jnw;  state: Exp;  lines: +4 -4
+Whoops!  Added calls to floor, ceil, anint, and aint in
+  floor/, ceiling/, round/, and truncate/.
+----------------------------
+revision 1.8
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +111 -4
+Added floor, ceiling, round, floor/, ceiling/, round/, and truncate/.
+Fixed modulo to return specified results.
+----------------------------
+revision 1.7
+date: 1994/08/25 16:22:19;  author: jnw;  state: Exp;  lines: +16 -0
+Added P.C. Beard's exp and log
+----------------------------
+revision 1.6
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/number.h,v
+Working file: number.h
+head: 1.6
+branch:
+locks: strict
+	jnw: 1.6
+access list:
+symbolic names:
+	marlais_0_5_12: 1.6
+	marlais_0_5_11: 1.6
+	marlais_0_5_10: 1.6
+	marlais_0_5_7: 1.4
+	marlais_0_5_6: 1.4
+	marlais_0_5_5: 1.4
+	marlais_0_5: 1.4
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 6;	selected revisions: 3
+description:
+ number.h
+----------------------------
+revision 1.6	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.5
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +2 -2
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.4
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/object.c,v
+Working file: object.c
+head: 1.9
+branch:
+locks: strict
+	jnw: 1.9
+access list:
+symbolic names:
+	marlais_0_5_12: 1.9
+	marlais_0_5_11: 1.8
+	marlais_0_5_10: 1.8
+	marlais_0_5_7: 1.3
+	marlais_0_5_6: 1.3
+	marlais_0_5_5: 1.3
+	marlais_0_5: 1.3
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 9;	selected revisions: 7
+description:
+object.c
+----------------------------
+revision 1.9	locked by: jnw;
+date: 1995/09/04 14:57:08;  author: jnw;  state: Exp;  lines: +3 -2
+cosmetic changes
+----------------------------
+revision 1.8
+date: 1995/05/13 20:40:50;  author: jnw;  state: Exp;  lines: +12 -0
+Added handle support
+----------------------------
+revision 1.7
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.6
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +26 -25
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.5
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +11 -11
+untabified
+----------------------------
+revision 1.4
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +3 -0
+Added includes of error.h and number.h
+----------------------------
+revision 1.3
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/object.h,v
+Working file: object.h
+head: 1.27
+branch:
+locks: strict
+	jnw: 1.27
+access list:
+symbolic names:
+	marlais_0_5_12: 1.27
+	marlais_0_5_11: 1.26
+	marlais_0_5_10: 1.25
+	marlais_0_5_7: 1.17
+	marlais_0_5_6: 1.13
+	marlais_0_5_5: 1.13
+	marlais_0_5: 1.13
+	marlais_0_4: 1.10
+	marlais+0+4+beta: 1.10
+	marlais-0-4-alpha: 1.8
+comment leader: " * "
+keyword substitution: kv
+total revisions: 27;	selected revisions: 15
+description:
+ object.h
+----------------------------
+revision 1.27	locked by: jnw;
+date: 1995/09/04 15:04:34;  author: jnw;  state: Exp;  lines: +4 -0
+Added EXITBINDING to exit_proc.
+----------------------------
+revision 1.26
+date: 1995/06/06 13:08:57;  author: jnw;  state: Exp;  lines: +8 -4
+Added size caching to array structure
+Changed next_method.next_method to next_method.next_method_ (pcb)
+----------------------------
+revision 1.25
+date: 1995/05/13 20:43:57;  author: jnw;  state: Exp;  lines: +32 -2
+Added Object Handle class.
+Added sorted precedence list and num_precs to CLASS
+----------------------------
+revision 1.24
+date: 1995/03/29 04:10:10;  author: jnw;  state: Exp;  lines: +24 -0
+Added support for method caching, class counting, and next-method caching
+----------------------------
+revision 1.23
+date: 1995/03/29 03:31:56;  author: jnw;  state: Exp;  lines: +0 -10
+Removed BIG_INTEGERS ifdefs
+----------------------------
+revision 1.22
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.21
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +360 -374
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.20
+date: 1995/03/09 04:38:22;  author: jnw;  state: Exp;  lines: +1 -0
+whitespace frobbing
+----------------------------
+revision 1.19
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +30 -1
+Added Patrick's BIG_INTEGERS support
+----------------------------
+revision 1.18
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +1 -1
+Removed comma after Environment
+----------------------------
+revision 1.17
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +11 -11
+Added ObjectTable enum to denote <object-table> class objects.
+Fixed SLOTDPROPS to work.  Had been using && instead of & to
+include logical flags.
+----------------------------
+revision 1.16
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;  lines: +9 -7
+Pulled primitive struct out to top level.
+----------------------------
+revision 1.15
+date: 1994/12/23 03:27:14;  author: jnw;  state: Exp;  lines: +35 -1
+Added Environment object
+Added support for deferred slot types
+Added class uninitialized property
+Added class creation environment slot
+----------------------------
+revision 1.14
+date: 1994/11/28 22:59:40;  author: jnw;  state: Exp;  lines: +26 -1
+Added pcb's foreign pointer mods
+----------------------------
+revision 1.13
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/parse.c,v
+Working file: parse.c
+head: 1.12
+branch:
+locks: strict
+	jnw: 1.12
+access list:
+symbolic names:
+	marlais_0_5_12: 1.12
+	marlais_0_5_11: 1.12
+	marlais_0_5_10: 1.11
+	marlais_0_5_7: 1.7
+	marlais_0_5_6: 1.6
+	marlais_0_5_5: 1.5
+	marlais_0_5: 1.3
+comment leader: " * "
+keyword substitution: kv
+total revisions: 12;	selected revisions: 10
+description:
+Code to interface with the parser.
+----------------------------
+revision 1.12	locked by: jnw;
+date: 1995/06/06 12:59:27;  author: jnw;  state: Exp;  lines: +2 -1
+print_object changes
+----------------------------
+revision 1.11
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.10
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +18 -17
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.9
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +11 -11
+untabified
+----------------------------
+revision 1.8
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +6 -2
+Added includes of error.h and print.h.
+Added extern decl of load_file_context.
+Removed yyparse prototype.
+----------------------------
+revision 1.7
+date: 1994/12/24 22:17:13;  author: jnw;  state: Exp;  lines: +14 -6
+Added include of parse.h
+Added reset_parser call and factored out of parse_object
+----------------------------
+revision 1.6
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +2 -2
+Added check of load_file_context for echo with -e switch
+----------------------------
+revision 1.5
+date: 1994/09/18 20:07:29;  author: jnw;  state: Exp;  lines: +5 -3
+Added yylineno ala Bread.
+(Whoops -- make that Beard.
+----------------------------
+revision 1.4
+date: 1994/09/15 17:08:00;  author: jnw;  state: Exp;  lines: +2 -0
+Added extern ref to yychar.
+----------------------------
+revision 1.3
+date: 1994/08/12 02:09:47;  author: jnw;  state: Exp;  lines: +3 -2
+fixed initialization of yyin.
+Removed Restart message.
+=============================================================================
+
+RCS file: RCS/parse.h,v
+Working file: parse.h
+head: 1.6
+branch:
+locks: strict
+	jnw: 1.6
+access list:
+symbolic names:
+	marlais_0_5_12: 1.6
+	marlais_0_5_11: 1.6
+	marlais_0_5_10: 1.6
+	marlais_0_5_7: 1.3
+	marlais_0_5_6: 1.2
+	marlais_0_5_5: 1.2
+	marlais_0_5: 1.1
+comment leader: " * "
+keyword substitution: kv
+total revisions: 6;	selected revisions: 6
+description:
+Parser interface include file.
+----------------------------
+revision 1.6	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.5
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +5 -4
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.4
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +8 -1
+Added PARSE_H gaurds
+----------------------------
+revision 1.3
+date: 1994/12/24 22:20:58;  author: jnw;  state: Exp;  lines: +1 -0
+Added defn of reset_parser
+----------------------------
+revision 1.2
+date: 1994/09/18 20:07:29;  author: jnw;  state: Exp;  lines: +1 -0
+Added load_file_context (for file.h)
+----------------------------
+revision 1.1
+date: 1994/07/18 15:02:04;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================
+
+RCS file: RCS/prim.c,v
+Working file: prim.c
+head: 1.14
+branch:
+locks: strict
+	jnw: 1.14
+access list:
+symbolic names:
+	marlais_0_5_12: 1.14
+	marlais_0_5_11: 1.13
+	marlais_0_5_10: 1.13
+	marlais_0_5_7: 1.6
+	marlais_0_5_6: 1.5
+	marlais_0_5_5: 1.5
+	marlais_0_5: 1.5
+	marlais_0_4: 1.3
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 14;	selected revisions: 10
+description:
+prim.c
+----------------------------
+revision 1.14	locked by: jnw;
+date: 1995/09/04 14:57:27;  author: jnw;  state: Exp;  lines: +4 -2
+return error cleanups
+----------------------------
+revision 1.13
+date: 1995/03/29 03:24:03;  author: jnw;  state: Exp;  lines: +1 -1
+Added THINK_C to apply_prim to decl of fun
+----------------------------
+revision 1.12
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.11
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +81 -84
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.10
+date: 1995/03/09 04:38:22;  author: jnw;  state: Exp;  lines: +5 -1
+Added (...) version of fun #ifdef'd for MACOS
+----------------------------
+revision 1.9
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +46 -46
+untabified
+----------------------------
+revision 1.8
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +1 -1
+Had to take out the ...'s.  Many C compilers won't eat them.
+----------------------------
+revision 1.7
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +6 -3
+reordered includes and added list.h include
+Added (...) spec to decl of fun in apply_prim
+----------------------------
+revision 1.6
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;  lines: +1 -1
+Made bytestring.h mod
+----------------------------
+revision 1.5
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/prim.h,v
+Working file: prim.h
+head: 1.5
+branch:
+locks: strict
+	jnw: 1.5
+access list:
+symbolic names:
+	marlais_0_5_12: 1.5
+	marlais_0_5_11: 1.5
+	marlais_0_5_10: 1.5
+	marlais_0_5_7: 1.3
+	marlais_0_5_6: 1.3
+	marlais_0_5_5: 1.3
+	marlais_0_5: 1.3
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 5;	selected revisions: 3
+description:
+ prim.h
+----------------------------
+revision 1.5	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.4
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +3 -3
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.3
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/print.c,v
+Working file: print.c
+head: 1.34
+branch:
+locks: strict
+	jnw: 1.34
+access list:
+symbolic names:
+	marlais_0_5_12: 1.34
+	marlais_0_5_11: 1.33
+	marlais_0_5_10: 1.31
+	marlais_0_5_7: 1.22
+	marlais_0_5_6: 1.18
+	marlais_0_5_5: 1.17
+	marlais_0_5: 1.14
+	marlais_0_4: 1.9
+	marlais+0+4+beta: 1.9
+	marlais-0-4-alpha: 1.8
+comment leader: " * "
+keyword substitution: kv
+total revisions: 34;	selected revisions: 21
+description:
+print.c
+----------------------------
+revision 1.34	locked by: jnw;
+date: 1995/09/04 14:57:39;  author: jnw;  state: Exp;  lines: +11 -12
+mostly cosmetic changes and unused var. cleanup
+----------------------------
+revision 1.33
+date: 1995/06/06 12:59:39;  author: jnw;  state: Exp;  lines: +225 -126
+Made many changes to accomodate use of user define object-print routines
+to override the default (built-in) method.  Mostly this involved using
+streams uniformly rather than file ptrs.
+Added apply_print (which applies object-print or object-princ appropriately)
+Added pr (obj) for use in debugging (avoids using gf mechanism)
+Added break after ObjectHandle case in print_object (didn't I do this
+before?)
+----------------------------
+revision 1.32
+date: 1995/06/03 11:55:12;  author: jnw;  state: Exp;  lines: +4 -0
+Added case to print array with null dimensions.
+----------------------------
+revision 1.31
+date: 1995/05/13 20:41:06;  author: jnw;  state: Exp;  lines: +13 -3
+Added printing for object handles.
+Added break into NextMethod print.
+Removed virtual slot value printing
+Added printing of class index.
+----------------------------
+revision 1.30
+date: 1995/03/29 03:25:41;  author: jnw;  state: Exp;  lines: +72 -9
+Added print of METHBODY back in to print_method
+Modified format strings to match printf style.
+----------------------------
+revision 1.29
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.28
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +584 -624
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.27
+date: 1995/03/09 04:38:22;  author: jnw;  state: Exp;  lines: +0 -4
+removed useless comment
+----------------------------
+revision 1.26
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +289 -289
+untabified
+----------------------------
+revision 1.25
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +9 -0
+Added BIG_INTEGERS support.
+----------------------------
+revision 1.24
+date: 1995/02/08 23:24:31;  author: jnw;  state: Exp;  lines: +3 -3
+Added changes to print things nicely in prefix mode.
+----------------------------
+revision 1.23
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +8 -2
+reordered includes and added incl or character.h and prim.h
+----------------------------
+revision 1.22
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +15 -3
+Updated to know about ObjectTable.
+Added type: and init: attribute printing in slot printing.
+----------------------------
+revision 1.21
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;  lines: +63 -42
+Added escape character printing for infix syntax.
+Mod'd method and function printing to be more infix compliant.
+----------------------------
+revision 1.20
+date: 1994/12/23 03:27:14;  author: jnw;  state: Exp;  lines: +5 -0
+Added print for Environment type objects
+----------------------------
+revision 1.19
+date: 1994/11/28 22:59:40;  author: jnw;  state: Exp;  lines: +3 -0
+Added foreign_ptr diffs
+----------------------------
+revision 1.18
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +8 -5
+Added NextMethod print method.
+Changed checks for unspecified_object to values checks
+----------------------------
+revision 1.17
+date: 1994/11/03 03:38:36;  author: jnw;  state: Exp;  lines: +6 -2
+Modified printing of parameter lists to handle anonymous GFs.
+----------------------------
+revision 1.16
+date: 1994/09/18 20:07:29;  author: jnw;  state: Exp;  lines: +3 -3
+Changed back multi-values print to one per line.
+----------------------------
+revision 1.15
+date: 1994/09/15 17:08:00;  author: jnw;  state: Exp;  lines: +4 -1
+Modified values to print inside delimiters #< and >
+----------------------------
+revision 1.14
+date: 1994/08/19 04:14:59;  author: jnw;  state: Exp;  lines: +4 -4
+Fixed empty list to print like #() and vectors to print like
+#[ ... ]
+
+Fixed slot printing to print names of slots rather than their gf
+definition.
+=============================================================================
+
+RCS file: RCS/print.h,v
+Working file: print.h
+head: 1.8
+branch:
+locks: strict
+	jnw: 1.8
+access list:
+symbolic names:
+	marlais_0_5_12: 1.8
+	marlais_0_5_11: 1.7
+	marlais_0_5_10: 1.6
+	marlais_0_5_7: 1.4
+	marlais_0_5_6: 1.4
+	marlais_0_5_5: 1.4
+	marlais_0_5: 1.4
+	marlais_0_4: 1.3
+	marlais+0+4+beta: 1.3
+	marlais-0-4-alpha: 1.3
+comment leader: " * "
+keyword substitution: kv
+total revisions: 8;	selected revisions: 5
+description:
+ print.h
+----------------------------
+revision 1.8	locked by: jnw;
+date: 1995/09/04 15:04:55;  author: jnw;  state: Exp;  lines: +1 -1
+Modified pr to return an object.
+----------------------------
+revision 1.7
+date: 1995/06/06 13:10:00;  author: jnw;  state: Exp;  lines: +3 -2
+Added stream parameter to print_obj and changed print_object to use
+stream rather than file ptr.
+----------------------------
+revision 1.6
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.5
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +4 -3
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.4
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/read.c,v
+Working file: read.c
+head: 1.24
+branch:
+locks: strict
+	jnw: 1.24
+access list:
+symbolic names:
+	marlais_0_5_12: 1.24
+	marlais_0_5_11: 1.23
+	marlais_0_5_10: 1.22
+	marlais_0_5_7: 1.14
+	marlais_0_5_6: 1.12
+	marlais_0_5_5: 1.12
+	marlais_0_5: 1.11
+	marlais_0_4: 1.8
+	marlais+0+4+beta: 1.7
+	marlais-0-4-alpha: 1.5
+comment leader: " * "
+keyword substitution: kv
+total revisions: 24;	selected revisions: 14
+description:
+read.c
+----------------------------
+revision 1.24	locked by: jnw;
+date: 1995/09/04 14:58:33;  author: jnw;  state: Exp;  lines: +1 -1
+unused var cleanups
+----------------------------
+revision 1.23
+date: 1995/06/06 13:05:01;  author: jnw;  state: Exp;  lines: +3 -2
+Added pcb's fixes to number reading (allowing leading `.')
+----------------------------
+revision 1.22
+date: 1995/03/29 03:26:40;  author: jnw;  state: Exp;  lines: +4 -0
+removed BIG_INTEGERS ifdefs
+----------------------------
+revision 1.21
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.20
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +460 -526
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.19
+date: 1995/03/09 04:38:22;  author: jnw;  state: Exp;  lines: +12 -3
+Added BIG_INTEGERS case
+----------------------------
+revision 1.18
+date: 1995/02/14 02:36:12;  author: jnw;  state: Exp;  lines: +1 -0
+Added Dave Dyer's fix to infix_decode_token
+----------------------------
+revision 1.17
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +317 -317
+untabified
+----------------------------
+revision 1.16
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +27 -31
+Made Patrick's read fixes.
+----------------------------
+revision 1.15
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +8 -6
+reordered includes and added include of prim.h
+----------------------------
+revision 1.14
+date: 1994/12/24 22:23:57;  author: jnw;  state: Exp;  lines: +184 -108
+Added infix_read_object
+----------------------------
+revision 1.13
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;  lines: +1 -1
+Made bytestring.h mod
+----------------------------
+revision 1.12
+date: 1994/09/15 17:08:00;  author: jnw;  state: Exp;  lines: +17 -22
+Modified to get results of getc into int rather than char.
+Some systems return negatives for EOF!
+----------------------------
+revision 1.11
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/read.h,v
+Working file: read.h
+head: 1.7
+branch:
+locks: strict
+	jnw: 1.7
+access list:
+symbolic names:
+	marlais_0_5_12: 1.7
+	marlais_0_5_11: 1.7
+	marlais_0_5_10: 1.7
+	marlais_0_5_7: 1.5
+	marlais_0_5_6: 1.5
+	marlais_0_5_5: 1.5
+	marlais_0_5: 1.5
+	marlais_0_4: 1.3
+	marlais+0+4+beta: 1.3
+	marlais-0-4-alpha: 1.3
+comment leader: " * "
+keyword substitution: kv
+total revisions: 7;	selected revisions: 3
+description:
+ read.h
+----------------------------
+revision 1.7	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.6
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +3 -3
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.5
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/slot.c,v
+Working file: slot.c
+head: 1.13
+branch:
+locks: strict
+	jnw: 1.13
+access list:
+symbolic names:
+	marlais_0_5_12: 1.13
+	marlais_0_5_11: 1.12
+	marlais_0_5_10: 1.12
+	marlais_0_5_7: 1.8
+	marlais_0_5_6: 1.8
+	marlais_0_5_5: 1.8
+	marlais_0_5: 1.8
+	marlais_0_4: 1.6
+	marlais+0+4+beta: 1.6
+	marlais-0-4-alpha: 1.6
+comment leader: " * "
+keyword substitution: kv
+total revisions: 13;	selected revisions: 6
+description:
+slot.c
+----------------------------
+revision 1.13	locked by: jnw;
+date: 1995/09/04 14:58:45;  author: jnw;  state: Exp;  lines: +0 -14
+removed unused var. decls.
+----------------------------
+revision 1.12
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.11
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +73 -96
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.10
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +11 -11
+untabified
+----------------------------
+revision 1.9
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +7 -5
+reordered and expanded includes
+----------------------------
+revision 1.8
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/slot.h,v
+Working file: slot.h
+head: 1.7
+branch:
+locks: strict
+	jnw: 1.7
+access list:
+symbolic names:
+	marlais_0_5_12: 1.7
+	marlais_0_5_11: 1.7
+	marlais_0_5_10: 1.7
+	marlais_0_5_7: 1.5
+	marlais_0_5_6: 1.5
+	marlais_0_5_5: 1.5
+	marlais_0_5: 1.5
+	marlais_0_4: 1.3
+	marlais+0+4+beta: 1.3
+	marlais-0-4-alpha: 1.3
+comment leader: " * "
+keyword substitution: kv
+total revisions: 7;	selected revisions: 3
+description:
+ slot.h
+----------------------------
+revision 1.7	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.6
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +2 -2
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.5
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/stream.c,v
+Working file: stream.c
+head: 1.6
+branch:
+locks: strict
+	jnw: 1.6
+access list:
+symbolic names:
+	marlais_0_5_12: 1.6
+	marlais_0_5_11: 1.6
+	marlais_0_5_10: 1.6
+	marlais_0_5_7: 1.3
+	marlais_0_5_6: 1.3
+	marlais_0_5_5: 1.3
+	marlais_0_5: 1.3
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 6;	selected revisions: 4
+description:
+ stream.c
+----------------------------
+revision 1.6	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.5
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +51 -54
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.4
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +2 -1
+reordered includes
+----------------------------
+revision 1.3
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/stream.h,v
+Working file: stream.h
+head: 1.5
+branch:
+locks: strict
+	jnw: 1.5
+access list:
+symbolic names:
+	marlais_0_5_12: 1.5
+	marlais_0_5_11: 1.5
+	marlais_0_5_10: 1.5
+	marlais_0_5_7: 1.3
+	marlais_0_5_6: 1.3
+	marlais_0_5_5: 1.3
+	marlais_0_5: 1.3
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 5;	selected revisions: 3
+description:
+ stream.h
+----------------------------
+revision 1.5	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.4
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +3 -4
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.3
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/string.c,v
+Working file: string.c
+head: 1.8
+branch:
+locks: strict
+	jnw: 1.8
+access list:
+symbolic names:
+	marlais_0_5_12: 1.8
+	marlais_0_5_11: 1.8
+	marlais_0_5_10: 1.8
+	marlais_0_5_7: 1.8
+	marlais_0_5_6: 1.8
+	marlais_0_5_5: 1.8
+	marlais_0_5: 1.7
+	marlais_0_4: 1.5
+	marlais+0+4+beta: 1.5
+	marlais-0-4-alpha: 1.4
+comment leader: " * "
+keyword substitution: kv
+total revisions: 8;	selected revisions: 2
+description:
+ string.c
+----------------------------
+revision 1.8	locked by: jnw;
+date: 1994/11/03 03:38:36;  author: jnw;  state: Exp;  lines: +17 -0
+Added %string< and %string= at suggestion of PC Beard
+Implemented them with string_lessthan and string_equal
+----------------------------
+revision 1.7
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/string.h,v
+Working file: string.h
+head: 1.5
+branch:
+locks: strict
+	jnw: 1.5
+access list:
+symbolic names:
+	marlais_0_5_12: 1.5
+	marlais_0_5_11: 1.5
+	marlais_0_5_10: 1.5
+	marlais_0_5_7: 1.5
+	marlais_0_5_6: 1.5
+	marlais_0_5_5: 1.5
+	marlais_0_5: 1.5
+	marlais_0_4: 1.3
+	marlais+0+4+beta: 1.3
+	marlais-0-4-alpha: 1.3
+comment leader: " * "
+keyword substitution: kv
+total revisions: 5;	selected revisions: 1
+description:
+ string.h
+----------------------------
+revision 1.5	locked by: jnw;
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/symbol.c,v
+Working file: symbol.c
+head: 1.20
+branch:
+locks: strict
+	jnw: 1.20
+access list:
+symbolic names:
+	marlais_0_5_12: 1.20
+	marlais_0_5_11: 1.19
+	marlais_0_5_10: 1.19
+	marlais_0_5_7: 1.16
+	marlais_0_5_6: 1.14
+	marlais_0_5_5: 1.14
+	marlais_0_5: 1.13
+	marlais_0_4: 1.10
+	marlais+0+4+beta: 1.7
+	marlais-0-4-alpha: 1.5
+comment leader: " * "
+keyword substitution: kv
+total revisions: 20;	selected revisions: 8
+description:
+ symbol.c
+----------------------------
+revision 1.20	locked by: jnw;
+date: 1995/09/04 14:59:04;  author: jnw;  state: Exp;  lines: +0 -13
+removed unused function (tolowerstr)
+----------------------------
+revision 1.19
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.18
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +54 -43
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.17
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +2 -4
+removed NO_STRCASECMP define for MACOS
+----------------------------
+revision 1.16
+date: 1994/12/24 22:20:58;  author: jnw;  state: Exp;  lines: +1 -1
+Tiny change for pcb compliance.
+----------------------------
+revision 1.15
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;  lines: +6 -2
+Made bytestring.h mod
+Made THINK_C -> MACOS mod
+----------------------------
+revision 1.14
+date: 1994/10/29 04:51:28;  author: jnw;  state: Exp;  lines: +1 -5
+Simplified chartable construction with use of tolower
+----------------------------
+revision 1.13
+date: 1994/08/19 04:14:59;  author: jnw;  state: Exp;  lines: +2 -2
+Absolutely NASTY error in strcasecmp (debugged by Patrick Beard) was
+fixed.
+=============================================================================
+
+RCS file: RCS/symbol.h,v
+Working file: symbol.h
+head: 1.6
+branch:
+locks: strict
+	jnw: 1.6
+access list:
+symbolic names:
+	marlais_0_5_12: 1.6
+	marlais_0_5_11: 1.6
+	marlais_0_5_10: 1.6
+	marlais_0_5_7: 1.4
+	marlais_0_5_6: 1.4
+	marlais_0_5_5: 1.4
+	marlais_0_5: 1.4
+	marlais_0_4: 1.3
+	marlais+0+4+beta: 1.3
+	marlais-0-4-alpha: 1.3
+comment leader: " * "
+keyword substitution: kv
+total revisions: 6;	selected revisions: 3
+description:
+symbol.h
+----------------------------
+revision 1.6	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.5
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +7 -7
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.4
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/syntax.c,v
+Working file: syntax.c
+head: 1.41
+branch:
+locks: strict
+	jnw: 1.41
+access list:
+symbolic names:
+	marlais_0_5_12: 1.41
+	marlais_0_5_11: 1.39
+	marlais_0_5_10: 1.37
+	marlais_0_5_7: 1.24
+	marlais_0_5_6: 1.20
+	marlais_0_5_5: 1.19
+	marlais_0_5: 1.15
+	marlais_0_4: 1.8
+	marlais+0+4+beta: 1.7
+	marlais-0-4-alpha: 1.6
+comment leader: " * "
+keyword substitution: kv
+total revisions: 41;	selected revisions: 27
+description:
+ syntax.c
+----------------------------
+revision 1.41	locked by: jnw;
+date: 1995/09/04 17:43:48;  author: jnw;  state: Exp;  lines: +1 -0
+Added set of EXITBINDING in define_test_eval.  Need this for new exit
+procedure protocol (to avoid infinite recursion)
+----------------------------
+revision 1.40
+date: 1995/09/04 15:00:06;  author: jnw;  state: Exp;  lines: +29 -27
+Modified bind_exit_eval to return false with empty body
+Modified `for' to terminate of test_form is `not false' rather
+than if test_form is `true' as was done (incorrectly) before.
+----------------------------
+revision 1.39
+date: 1995/06/14 17:51:54;  author: jnw;  state: Exp;  lines: +19 -10
+Modified add_variable_binding to handle #rest variable if only
+one value is present.  (Previously it didn't listify the value and
+bind it to the rest variable.  Bad!)
+----------------------------
+revision 1.38
+date: 1995/06/06 13:05:38;  author: jnw;  state: Exp;  lines: +86 -77
+Added a pcb update to eval_bind
+----------------------------
+revision 1.37
+date: 1995/05/13 20:42:14;  author: jnw;  state: Exp;  lines: +3 -3
+Modified format strings to match new format specifiers
+----------------------------
+revision 1.36
+date: 1995/04/03 03:09:59;  author: jnw;  state: Exp;  lines: +9 -3
+Modified initial-value check for variable defintions to be handled
+by add_binding implicitly but explicit for add_top_level_binding
+----------------------------
+revision 1.35
+date: 1995/03/29 03:27:16;  author: jnw;  state: Exp;  lines: +90 -33
+Modified bind_variables to take frame ptr arg
+Added local-bind-rec and local_bind_rec_eval
+Modified bind_variables and bind_variable to have behavior of let
+(I mean let*) rather than letrec.
+Added local_bind_rec_eval
+----------------------------
+revision 1.34
+date: 1995/03/09 13:30:26;  author: jnw;  state: Exp;  lines: +1 -1
+whitespace frobbing
+----------------------------
+revision 1.33
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.32
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +1291 -1340
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.31
+date: 1995/03/09 04:38:22;  author: jnw;  state: Exp;  lines: +5 -12
+modified cond_eval to use eval_body
+----------------------------
+revision 1.30
+date: 1995/03/09 03:13:00;  author: jnw;  state: Exp;  lines: +7 -0
+Added static car (for mapping purposes)
+----------------------------
+revision 1.29
+date: 1995/03/08 16:53:38;  author: jnw;  state: Exp;  lines: +273 -279
+Added extern decls of dylan_symbol and dylan_user_symbol
+Added extern decls of description_symbol and error_class
+Added pcb's eval_body modified to take null_body_result_value arg
+
+Mod'd begin_eval to use eval_body
+Mod'd bind_eval to use eval_body
+Mod'd local_bind_eval to return unspecified_object
+Mod'd unbinding_begin_eval to use tail_eval
+Mod'd bind_methods eval to use eval_body
+Mod'd define_constant_eval to return the variable name it bound.
+Mod'd define_class_eval to return the class variable it bound.
+Mod'd define_method_eval to return the method variable it bound.
+Mod'd for_eval to initialize clause_types and vars and inits
+	Not doing this caused many for's to fail.
+Mod'd for_eval to pop collection var scope at right time.
+Mod'd if_eval to use tail_eval
+Mod'd or_eval to use tail_eval
+Mod'd unless_eval to use eval_body
+Mod'd when_eval to use eval_body
+Mod'd test_eval to set NoDebug
+Made various mods to process_test_result, record_failure, record_success,
+	and record_disabled.
+----------------------------
+revision 1.28
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +766 -766
+untabified
+----------------------------
+revision 1.27
+date: 1995/02/14 00:29:25;  author: jnw;  state: Exp;  lines: +20 -0
+Added boundp_eval and support for bound? ala Beard.
+----------------------------
+revision 1.26
+date: 1995/02/08 23:24:31;  author: jnw;  state: Exp;  lines: +21 -15
+Added some prefix syntax error checking.
+----------------------------
+revision 1.25
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +20 -17
+reordered includes
+Modified set_eval to handle (set! (slot obj ...) new-value)
+Modified set_eval and set_module_eval to devalue their args
+  (so you can assign a values construct to an object)
+----------------------------
+revision 1.24
+date: 1995/01/05 04:57:56;  author: jnw;  state: Exp;  lines: +20 -17
+Moved clause temporary variables for use clauses in define_module_eval
+to inside of loop over clauses.
+----------------------------
+revision 1.23
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +38 -25
+Made set-module syntax again.  Not having it be syntax can really
+  bite you if you get into a module in which set-module is not
+  defined.
+Modified define_module_eval to use modules as now specified.
+Added calls to fill_table_from_property_set for exported and created
+  arguments.
+Added consistency check (imports and exclusions not both present) for
+  module definition.
+----------------------------
+revision 1.22
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;  lines: +1 -1
+Made bytestring.h mod
+----------------------------
+revision 1.21
+date: 1994/12/23 03:27:14;  author: jnw;  state: Exp;  lines: +5 -1
+initialize CLASSPROPS of defined classes to have CLASSSLOTSUNINIT set
+----------------------------
+revision 1.20
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +10 -10
+Added owner to push_scope calls
+----------------------------
+revision 1.19
+date: 1994/11/03 03:38:36;  author: jnw;  state: Exp;  lines: +5 -3
+removed set-module from the syntax list.
+----------------------------
+revision 1.18
+date: 1994/09/18 20:07:29;  author: jnw;  state: Exp;  lines: +90 -3
+Added guts for define_module_eval
+Modified set-module to call set_module!]
+----------------------------
+revision 1.17
+date: 1994/09/16 03:26:44;  author: jnw;  state: Exp;  lines: +34 -0
+Added define-module (unfinished) and set-module
+----------------------------
+revision 1.16
+date: 1994/08/25 16:22:19;  author: jnw;  state: Exp;  lines: +83 -12
+Added support for abstract,concrete,sealed,open,primary,free adjectives
+with new syntax form of define-class
+
+Need to do this for define-generic and define-method with open/sealed
+Made malformed define-class messages more informative
+----------------------------
+revision 1.15
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/syntax.h,v
+Working file: syntax.h
+head: 1.9
+branch:
+locks: strict
+	jnw: 1.9
+access list:
+symbolic names:
+	marlais_0_5_12: 1.9
+	marlais_0_5_11: 1.9
+	marlais_0_5_10: 1.9
+	marlais_0_5_7: 1.7
+	marlais_0_5_6: 1.6
+	marlais_0_5_5: 1.6
+	marlais_0_5: 1.5
+	marlais_0_4: 1.3
+	marlais+0+4+beta: 1.3
+	marlais-0-4-alpha: 1.3
+comment leader: " * "
+keyword substitution: kv
+total revisions: 9;	selected revisions: 5
+description:
+ syntax.h
+----------------------------
+revision 1.9	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.8
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +4 -4
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.7
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +1 -1
+replaced empty_string_symbol with empty_string.
+----------------------------
+revision 1.6
+date: 1994/09/18 20:07:29;  author: jnw;  state: Exp;  lines: +9 -0
+Added the keywords mentioned in main.c
+----------------------------
+revision 1.5
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/sys.c,v
+Working file: sys.c
+head: 1.13
+branch:
+locks: strict
+	jnw: 1.13
+access list:
+symbolic names:
+	marlais_0_5_12: 1.13
+	marlais_0_5_11: 1.12
+	marlais_0_5_10: 1.12
+	marlais_0_5_7: 1.6
+	marlais_0_5_6: 1.5
+	marlais_0_5_5: 1.5
+	marlais_0_5: 1.4
+	marlais_0_4: 1.4
+	marlais+0+4+beta: 1.4
+	marlais-0-4-alpha: 1.4
+comment leader: " * "
+keyword substitution: kv
+total revisions: 13;	selected revisions: 10
+description:
+File to support system-specific goodies
+----------------------------
+revision 1.13	locked by: jnw;
+date: 1995/09/04 15:02:42;  author: jnw;  state: Exp;  lines: +6 -2
+Added fix for integer problems we had with SGIs.  This is a bogus fix.
+Look at  POSITIVE_SMALL_INT_MASK
+----------------------------
+revision 1.12
+date: 1995/03/29 03:30:18;  author: jnw;  state: Exp;  lines: +3 -3
+Added _WIN32 ifdef to handle include file problems.
+----------------------------
+revision 1.11
+date: 1995/03/09 13:30:36;  author: jnw;  state: Exp;  lines: +3 -3
+whitespace frobbing
+----------------------------
+revision 1.10
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.9
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +26 -20
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.8
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +2 -2
+untabified
+----------------------------
+revision 1.7
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +11 -9
+Reordered includes and pulled decls into sys.h
+----------------------------
+revision 1.6
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;  lines: +1 -1
+Made bytestring.h mod
+----------------------------
+revision 1.5
+date: 1994/11/03 03:38:36;  author: jnw;  state: Exp;  lines: +15 -3
+Added call for `system'
+----------------------------
+revision 1.4
+date: 1994/06/28 15:17:31;  author: jnw;  state: Exp;  lines: +3 -4
+Fixed Copyright.
+Fixed behavior of and on values.
+Fixed behavior of cond on values.
+changed instance_p calls to instance calls
+Fixed while and until to return false on termination.
+Fixed define-test-case error reporting.
+=============================================================================
+
+RCS file: RCS/sys.h,v
+Working file: sys.h
+head: 1.9
+branch:
+locks: strict
+	jnw: 1.9
+access list:
+symbolic names:
+	marlais_0_5_12: 1.9
+	marlais_0_5_11: 1.9
+	marlais_0_5_10: 1.9
+	marlais_0_5_7: 1.6
+	marlais_0_5_6: 1.5
+	marlais_0_5_5: 1.5
+	marlais_0_5: 1.5
+	marlais_0_4: 1.5
+	marlais+0+4+beta: 1.3
+	marlais-0-4-alpha: 1.3
+comment leader: " * "
+keyword substitution: kv
+total revisions: 9;	selected revisions: 5
+description:
+header file for system goodies file.
+----------------------------
+revision 1.9	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.8
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +2 -2
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.7
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +11 -4
+Added SYS_H gaurds
+included object.h
+Added get_ctime, get_time, get_clock, and user_system decls
+----------------------------
+revision 1.6
+date: 1994/12/24 03:06:17;  author: jnw;  state: Exp;  lines: +1 -1
+THINK_C -> MACOS
+----------------------------
+revision 1.5
+date: 1994/07/12 17:47:29;  author: jnw;  state: Exp;  lines: +1 -1
+fixed #include of <time.h>
+=============================================================================
+
+RCS file: RCS/table.c,v
+Working file: table.c
+head: 1.17
+branch:
+locks: strict
+	jnw: 1.17
+access list:
+symbolic names:
+	marlais_0_5_12: 1.17
+	marlais_0_5_11: 1.16
+	marlais_0_5_10: 1.14
+	marlais_0_5_7: 1.8
+	marlais_0_5_6: 1.7
+	marlais_0_5_5: 1.6
+	marlais_0_5: 1.6
+	marlais_0_4: 1.4
+	marlais+0+4+beta: 1.4
+	marlais-0-4-alpha: 1.4
+comment leader: " * "
+keyword substitution: kv
+total revisions: 17;	selected revisions: 12
+description:
+ table.c
+----------------------------
+revision 1.17	locked by: jnw;
+date: 1995/09/04 15:03:35;  author: jnw;  state: Exp;  lines: +5 -4
+unused var and return error mods
+----------------------------
+revision 1.16
+date: 1995/06/14 17:52:47;  author: jnw;  state: Exp;  lines: +5 -4
+Modified hash values to be abs'd before turning them into entry numbers.
+This was failing on sgi.  I don't know how it ever worked!
+----------------------------
+revision 1.15
+date: 1995/06/06 13:08:12;  author: jnw;  state: Exp;  lines: +4 -4
+NULLP => EMPTYLISTP
+----------------------------
+revision 1.14
+date: 1995/03/29 04:08:15;  author: jnw;  state: Exp;  lines: +51 -0
+Added support for method caching
+----------------------------
+revision 1.13
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.12
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +173 -213
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.11
+date: 1995/03/08 17:09:55;  author: jnw;  state: Exp;  lines: +31 -10
+Added table_element_handle ( ... )
+Added table_default
+Mod'd table_el,ement to return the contents of the element handle
+	returned by table_element_handle
+table_element_handle returns a ptr to default_val if it couldn't find
+	the element
+Mod'd table_element_setter to check for the right handle and
+	if not in table, then insert, otherwise update.
+	This previously was not updating elements already in the table.
+----------------------------
+revision 1.10
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +52 -52
+untabified
+----------------------------
+revision 1.9
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +7 -3
+reordered includes
+----------------------------
+revision 1.8
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +14 -8
+Made table_element and table_element_setter public.
+Changed type of tables to <object-table>.
+----------------------------
+revision 1.7
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +3 -3
+Changed binary_equal_fun occurrences to equal_fun.
+Added initialization of equal_fun from equal_symbol
+----------------------------
+revision 1.6
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/table.h,v
+Working file: table.h
+head: 1.9
+branch:
+locks: strict
+	jnw: 1.9
+access list:
+symbolic names:
+	marlais_0_5_12: 1.9
+	marlais_0_5_11: 1.9
+	marlais_0_5_10: 1.8
+	marlais_0_5_7: 1.5
+	marlais_0_5_6: 1.4
+	marlais_0_5_5: 1.3
+	marlais_0_5: 1.3
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 9;	selected revisions: 7
+description:
+ table.h
+----------------------------
+revision 1.9	locked by: jnw;
+date: 1995/06/06 13:10:26;  author: jnw;  state: Exp;  lines: +1 -0
+Added table_element_setter_by_vector
+----------------------------
+revision 1.8
+date: 1995/03/29 04:10:40;  author: jnw;  state: Exp;  lines: +1 -0
+Added table_element_by_vector (for method caching)
+----------------------------
+revision 1.7
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.6
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +3 -2
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.5
+date: 1995/01/04 04:40:05;  author: jnw;  state: Exp;  lines: +2 -1
+Made table_element and table_element_setter public.
+----------------------------
+revision 1.4
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +2 -0
+Added equal_symbol
+----------------------------
+revision 1.3
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/values.c,v
+Working file: values.c
+head: 1.8
+branch:
+locks: strict
+	jnw: 1.8
+access list:
+symbolic names:
+	marlais_0_5_12: 1.8
+	marlais_0_5_11: 1.8
+	marlais_0_5_10: 1.8
+	marlais_0_5_7: 1.4
+	marlais_0_5_6: 1.4
+	marlais_0_5_5: 1.3
+	marlais_0_5: 1.3
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 8;	selected revisions: 6
+description:
+ values.c
+----------------------------
+revision 1.8	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.7
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +53 -49
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.6
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +12 -12
+untabified
+----------------------------
+revision 1.5
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +19 -1
+reordered includes
+Added definition of devalue (which turns a values construct into its 0th val)
+----------------------------
+revision 1.4
+date: 1994/11/27 02:40:16;  author: jnw;  state: Exp;  lines: +18 -18
+Modified make_values to work on empty arglist.
+Made values() return unspecified object (unique values() representation)
+----------------------------
+revision 1.3
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/values.h,v
+Working file: values.h
+head: 1.6
+branch:
+locks: strict
+	jnw: 1.6
+access list:
+symbolic names:
+	marlais_0_5_12: 1.6
+	marlais_0_5_11: 1.6
+	marlais_0_5_10: 1.6
+	marlais_0_5_7: 1.3
+	marlais_0_5_6: 1.3
+	marlais_0_5_5: 1.3
+	marlais_0_5: 1.3
+	marlais_0_4: 1.2
+	marlais+0+4+beta: 1.2
+	marlais-0-4-alpha: 1.2
+comment leader: " * "
+keyword substitution: kv
+total revisions: 6;	selected revisions: 4
+description:
+ values.h
+----------------------------
+revision 1.6	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.5
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +4 -3
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.4
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +2 -1
+Added init_values_prims and devalue decls
+----------------------------
+revision 1.3
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/vector.c,v
+Working file: vector.c
+head: 1.13
+branch:
+locks: strict
+	jnw: 1.13
+access list:
+symbolic names:
+	marlais_0_5_12: 1.13
+	marlais_0_5_11: 1.12
+	marlais_0_5_10: 1.11
+	marlais_0_5_7: 1.7
+	marlais_0_5_6: 1.7
+	marlais_0_5_5: 1.7
+	marlais_0_5: 1.7
+	marlais_0_4: 1.5
+	marlais+0+4+beta: 1.5
+	marlais-0-4-alpha: 1.5
+comment leader: " * "
+keyword substitution: kv
+total revisions: 13;	selected revisions: 7
+description:
+ vector.c
+----------------------------
+revision 1.13	locked by: jnw;
+date: 1995/09/04 15:03:50;  author: jnw;  state: Exp;  lines: +2 -2
+usued var mods.
+----------------------------
+revision 1.12
+date: 1995/06/06 13:08:30;  author: jnw;  state: Exp;  lines: +2 -2
+NULLP => EMPTYLISTP
+----------------------------
+revision 1.11
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.10
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +114 -129
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.9
+date: 1995/02/14 01:49:22;  author: jnw;  state: Exp;  lines: +29 -30
+untabified
+----------------------------
+revision 1.8
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +4 -2
+reordered includes
+----------------------------
+revision 1.7
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/vector.h,v
+Working file: vector.h
+head: 1.6
+branch:
+locks: strict
+	jnw: 1.6
+access list:
+symbolic names:
+	marlais_0_5_12: 1.6
+	marlais_0_5_11: 1.6
+	marlais_0_5_10: 1.6
+	marlais_0_5_7: 1.4
+	marlais_0_5_6: 1.4
+	marlais_0_5_5: 1.4
+	marlais_0_5: 1.4
+	marlais_0_4: 1.3
+	marlais+0+4+beta: 1.3
+	marlais-0-4-alpha: 1.3
+comment leader: " * "
+keyword substitution: kv
+total revisions: 6;	selected revisions: 3
+description:
+ vector.h
+----------------------------
+revision 1.6	locked by: jnw;
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +16 -0
+Added Library GPL Notice
+----------------------------
+revision 1.5
+date: 1995/03/09 04:48:31;  author: jnw;  state: Exp;  lines: +2 -2
+Indented with gnu indent-1.9.1
+----------------------------
+revision 1.4
+date: 1994/08/18 14:00:00;  author: jnw;  state: Exp;  lines: +1 -1
+Fixed Copyright
+=============================================================================
+
+RCS file: RCS/yystype.h,v
+Working file: yystype.h
+head: 1.4
+branch:
+locks: strict
+	jnw: 1.4
+access list:
+symbolic names:
+	marlais_0_5_12: 1.4
+	marlais_0_5_11: 1.4
+	marlais_0_5_10: 1.4
+	marlais_0_5_7: 1.1
+	marlais_0_5_6: 1.1
+	marlais_0_5_5: 1.1
+	marlais_0_5: 1.1
+comment leader: " * "
+keyword substitution: kv
+total revisions: 4;	selected revisions: 4
+description:
+Defines YYSTYPE
+----------------------------
+revision 1.4	locked by: jnw;
+date: 1995/03/09 13:31:06;  author: jnw;  state: Exp;  lines: +1 -1
+whitespace frobbing
+----------------------------
+revision 1.3
+date: 1995/03/09 05:24:47;  author: jnw;  state: Exp;  lines: +18 -0
+Added Library GPL Notice
+----------------------------
+revision 1.2
+date: 1995/01/28 17:10:22;  author: jnw;  state: Exp;  lines: +3 -0
+Added include of dylan_lexer and decl of yyparse
+----------------------------
+revision 1.1
+date: 1994/07/18 15:56:59;  author: jnw;  state: Exp;
+Initial revision
+=============================================================================

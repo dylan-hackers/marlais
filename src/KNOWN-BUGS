@@ -1,0 +1,25 @@
+* Won't read mixed case character constants like #\SpAcE.
+
+* literal object create shallow-copies of themselves rather when used
+	rather than returning a reference to a literal object.  This would
+	be easier to fix if we were to fix the next `bug'.
+
+* Builtin Collection classes cannot be subclassed!  Maybe this isn't
+	technically an error, but it is certainly disconcerting.
+
+* The following doesn't work because we don't handle the case of
+	inherited and keyword specifications in class definitions
+	correctly (yet).  Thus the following doesn't work:
+
+     define class <bar> (<object>)
+         slot bar-x, init-keyword: x:;
+         slot bar-y, init-keyword: y:;
+     end class <bar>;
+
+     define class <baz> (<bar>)
+         required keyword x:;
+         keyword y:, init-value: #t;
+     end class <baz>;
+
+* Doesn't correctly identify bogus keywords because it checks only the
+current method's keyword list rather than all applicable methods.

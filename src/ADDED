@@ -1,0 +1,165 @@
+(Modifications are listed in order from most recent to least recent.)
+
+New in release 0.5.11 (since release (0.5.10)
+
+* NT_MAKEFILE has not been tested, but is probably close to working.
+Feedback with diffs would help this become more stable.  Check the
+Makefile to see how NT_MAKEFILE gets made (using sed).  I'll gladly
+accept help in this area.
+
+* Now uses gc4.5 Thanks to the work of Boehm et.al. for indirectly
+making Marlais possible.
+
+* make on <class> now requires debug-name (if specified) to be a
+string, i.e., make (<class>, ... debug-name: "<class-name>", ... ).
+It used to require a symbol, but it didn't work.  I suspect few were
+using it in that condition.
+
+* `block' is now partially supported with a single cleanup clause and
+the afterward clause as proposed by Tim McNerney of Harlequin.
+There's no support for exceptions in blocks yet.
+
+* `as (<class>, <collection>)' repaired.
+
+* Defining a method for `object-print (<stream>, <class>)' causes the
+listener to print instances of <class> using that method.
+
+* Fixed array indexing bugs.
+
+* Fixed bug in method caching.
+
+* Removed use of C auto array in L*Loops class precedence algorithm.
+
+New in release 0.5.10 (since release (0.5)
+
+* Modified class precedence list mechanism to use the L*Loops algorithm
+	of Ducournau, et. al. (OOPSLA '94 pg. 164) as default mechanism.
+
+* Fixed CLOS precedence list computation algorithm.
+
+* Added method caching strategy to attempt to improve performance of
+	GF lookup.
+
+* Fixed many errors in init.dyl collection methods (such as add, add!, etc.).
+	Most of them assumed that the finished state was always #f.
+	Also modified init.dyl to use while: and until: in `for'.
+
+* Modified deque iteration mechanism to use non-boolean state.
+
+* Fixed foo[i1, i2, ..., in] to be equivalent to aref (foo, i1, i2, ... in)
+	and added element and element-setter methods for a single
+	int index on an array.
+
+* Fixed make so that after slot initialization *all* default-initializers
+	are passed to initialize.
+
+* Updated format two-char sequences to match C-style formats of DIRM pg. 152.
+
+* Fixed erroneous behavior of `case' and `select' on empty branches.
+
+* Added support for keywords until: and while: in `for'.
+
+* Made function-specializers work with gfs.
+
+* Fixed error in handling return values associated with Tail Recursion.
+
+* Fixed problem in lexer with vector literals like #[sun:, mon:] generating
+errors.
+
+* Fixed problems with list literals.
+
+* Added Tail recursion
+
+* Function specializers now works on GFs too.
+
+* Now support #f setter-name spec. in class definition (to force no setter)
+
+* Fixed array iteration protocol.
+
+* Prefix style setters work, i.e.
+
+	(set! (slot object args) new-value)
+
+* Fixed value return specifications.
+
+* GF method specializers are now required to match the GF specializers.
+
+* Setters now work in prefix mode.
+
+* Now support new #key parameter default value initialization (as
+specified in DIRM errata list).
+
+* Setters are now DIRM compliant.
+
+* Fixed problem with slot init-value getting reset when specified as
+	init-keyword argument.
+
+* Added floor, ceiling, round, floor/, ceiling/, round/, and truncate/.
+
+* Added <object-table> and made it the implementation class for <table>.
+
+* Fixed applicable-method? to handle GFs as well as methods.  Also
+fixed it not to check for extraneous keyword parameters if the
+argument is a GF rather than method.
+
+* Setter methods specialize the argument parameter to the appropriate
+type, providing type-safe slot values.
+
+* Slot type evaluation is now lazier.  Slot types and getter/setter
+methods are now created at the time of first instance initialization.
+This supports forward reference to other classes.
+
+* Some initial support for debugging.  Invocation of error causes the
+interpreter to execute a debuffer read-eval-print loop that supports
+inspection of environment and call stack.
+
+* Added
+	show-bindings(i :: <integer>) => ()
+which prints the
+
+* Added 
+	print-stack() => ()
+which prints the owner for each active frame
+
+* Modified frames to include an "owner" which is a subprogram or symbol
+
+* infix loads no longer echo when -e flag is specified.
+
+* Fixed error with string concatenation i.e.  "abc" "def" now evals
+to "abcdef" rathern than Bus Error.
+
+* Fixed values to work correctly with no arguments.
+
+* Fixed bindings rule to handle #rest variable correctly
+
+* Fixed make (gf == <generic-function> ...)
+
+* Fixed fill! for mutable sequences
+
+* Fixed apply (to handle single collection arg)
+
+* Fixed broken #all-keys key parameter specification.
+
+* Added function
+	system (<string>) => <integer>
+to allow execution of shell commands.
+
+* Modified init definitions of all mapping functions to use
+forward-iteration-protocol.
+
+* init.dyl is now infix.
+
+* Modified forward-iteration-protocol to return methods rather than generic
+functions.  This improves performance of `for', and all mapping functions.
+
+* Now supports keyword parameters with unmatched keyword and variable names.
+as described on DIRM pg. 52.
+
+* Parses dylan file headers and pays attention to module specification
+
+* Slightly better parsing and error handling.
+
+* marlais.el lisp mode
+
+* Half way reasonable support for modules.
+

@@ -1,0 +1,296 @@
+Marlais is an implementation of a Dylan-like language.
+
+In the spirit of the Larry Tesler's foreword to the Dylan Book[1],
+Marlais supports a language with multiple syntaxes atop the
+extremely neutral base of Lisp.
+
+The default infix syntax provided by Marlais is based on the description
+of Dylan given in the Dylan Interim Reference Manual (DIRM) [2].  Marlais
+does not implement that language in its entirety, and differs in some
+specific ways noted below.
+
+The alternative prefix syntax is a modification of the syntax defined in
+the Dylan Book.  The modifications have been made to support the semantics
+described in the DIRM with as little change as possible.
+
+The Marlais interpreter can be operated in either infix or prefix
+syntax mode.  The mode can be changed or asserted during execution by
+use of the built-in methods `infix' and `prefix'.  By default, Marlais
+starts in infix syntax mode.  To initiate an interpreter session using
+prefix syntax, one may use the '-c' command-line argument.
+
+Here are the major semantic differences between Marlais and the DIRM and
+Dylan Book specification of Dylan.
+
+* By default, Marlais computes class precedence lists using the L*Loops
+algorithm of Ducournau, Habib, Hucharc, and Mugnier presented in the
+paper "Proposal for a Monotonic Multiple Inheritance Linearization"
+presented at OOPSLA '94.  On classes with precedence lists for which
+the CLOS algorithms returns a reasonable result, this algorithm
+matches CLOS.  On many CPLs for which CLOS does not construct a
+reasonable result, this algorithm does.  If you feel you must have
+CLOS precendence, you may set the PRECEDENCE_FLAG in the Makefile
+appropriately.
+
+* Marlais supports modules and evaluates expressions with respect to a
+current-module's namespace.  One can get the current module with
+
+	current-module ()
+
+and one can set the current module with
+
+	set-module (new-module)
+
+* Modules have fledgling support as of version 0.5.3.  `define module'
+is implemented an works as shown in the following example.  A similar
+style of definition with separate `library interface' and `dylan
+code' is recommended.
+
+Contents of the file my-arith.lid:
+
+	module: dylan-user
+	
+	define module my-arithmetic
+		use dylan-user, export: all;
+		export trunc/, ceil/;
+	end module my-arithmetic;
+
+Contents of the file my-arith.dyl
+
+	module: my-arithmetic
+	
+	define constant trunc/ =
+	  method (n1 :: <number>, n2 :: <number>) => <number>;
+	    let firstval = truncate/ (n1, n2);
+	    firstval;
+	  end method;
+	
+	define constant ceil/ =
+	  method (n1 :: <number>, n2 :: <number>) => <number>;
+	    let firstval = ceiling/ (n1, n2);
+	    firstval;
+	  end method;
+
+Interpreter Session:
+
+	Marlais 0.5.7
+	? load ("my-arith.lid");
+	? load ("my-arith.dyl");
+	? define module use-arith
+	>   use dylan-user, export: all;
+	>   use my-arithmetic, export: all;
+	> end module use-arith;
+	? ceil/;
+	error: unbound variable: ceil/.
+	** Debugger **
+	 ...
+	Debug[1]> 
+	? set-module (my-arithmetic:);
+	#"dylan-user"
+	? ceil/;
+	{an anonymous method (n1 :: <number>, n2 :: <number>)}
+	? ceil/ (10, 7);
+	2
+	? trunc/ (10, 7);
+	1
+	? define variable x = 10;
+	? set-module (dylan-user:);
+	#"my-arithmetic"
+	? x;
+	error: unbound variable: x.
+	Debug[1]> 
+	? set-module (my-arithmetic:);
+	#"dylan-user"
+	? x;
+	10
+	? 
+	
+Prefix support for modules:
+
+	(define-module module-name clauses_opt)
+
+where
+	clauses_opt is one of
+		(use used-module-name module-options_opt)
+		(export variables)
+		(create variables)
+
+	module-options is one of
+		(import: imports)
+		(exclude: variable_names)
+		(prefix: string)
+		(rename: rename-specs)
+		(export: variable-names)
+
+	an import is of the form
+		variable-name or
+		rename-spec
+
+	a rename-spec is of form
+		(old-variable-name new-variable-name)
+
+* Conditions are not yet implemented in a reasonable way.  Condition
+classes exist, but beyond that, there's very little.
+
+* The prefix notation for `for' has been modified as follows:
+
+	(`for' (clause- ... clause-n)
+	     (test result-1 ... result-n)
+             expr-1 ... expr-n)
+
+where a clause takes one the following three forms:
+
+	(variable init step)
+	(`collection:' variable collection)
+	(`range:' variable start [{`to' | `above' | `below'} bound]
+                                 [`by' increment])
+
+The behavior of `for' using these forms conforms to the DIRM specification
+of form w.r.t. explicit step clauses, collection clauses, and numeric
+clauses, respectively.  As of version 0.5.9, for supports either use of
+symbols `while' and `until' or the keyword while: and until:.
+
+* The `block' control construct is now partially implemented in a way
+proposed by Tim McNerney of Harlequin.
+
+	The syntax is:
+
+	block ( [_exit-var_] )
+	    _body_
+	  [ afterwards _afterwards-clause_ ]
+	  [ cleanup _cleanup-clause_ ]
+	  [ exception _exception-clause_ ]*
+	end [ block ] ;
+
+The values returned by the last expression of the _body_ are the
+values returned by "block" in the normal case.
+
+An _afterwards-clause_ is executed after the _body_ and before any
+_cleanup-clause_.  An _afterwards-clause_, like a _cleanup-clause_,
+does not contribute to the block's return values, but unlike a
+_cleanup-clause_, it is NOT guaranteed to be executed during a
+non-local exit.
+
+McNerney's example below makes the value of the "afterwards" clause
+evident.  Here the user is relies on the "normal-exit?" flag being set
+to #t only if the function "perform-transaction" runs to completion.
+
+     let normal-exit? = #f;
+     block (return)
+       perform-transactions(return);
+     afterwards
+       normal-exit? := #t;
+     cleanup
+       if (normal-exit?)
+         commit();
+       else
+         revert();
+       end if;
+     end block;
+
+No _exception-clause_ is currently supported by Marlais.
+
+* The handler form of `let' is not yet implemented.
+
+* class initialization argument specifications are not supported.
+
+* Limited integer types *are* supported. (Design Note 6).
+
+* Union Types *are* supported. (Design Note 7).
+	
+* Builtin classes - Builtin classes are represented differently from
+classes defined with DEFINE-CLASS and (make <class> ...)
+
+* Incomplete class hierarchy.  The collection classes are spotty.
+There is no support for <stretchy-vector>.
+
+* Error handling - There is very little support for error handling and
+conditions.   Basically there is just an (error ...) function.
+
+* Numeric operations -
+The following DIRM functions are *not* supported
+
+	logxor #rest integers => integer
+	lognot  integer => integer
+	logbit? index  integer => integer
+	rationalize number => number
+	numerator number => number
+	denominator number => number
+	lcm integer1 integer2 => integer
+	gcd integer1 integer2 => integer
+
+The following arithmetic operators non-DIRM functions *are* supported:
+
+	sqrt integer => integer
+	sin number => number
+	cos number => number
+	atan2 number => number
+	exp number => number
+	ln number => number
+
+* Weak links - Not supported. (See note on pg. 93 of the Dylan book [2].)
+
+* Keyword argument initialization is specified differently from the
+description in the DIRM, but as will be included in final Dylan,
+namely:
+
+	[ keyword ] variable-name [ :: type ] [ = default-value ]
+
+* Misc - If there is a feature missing that you need, let us know.  It
+will have a better chance of making it into the next release.
+
+There are several additional features that have been added.
+
+* Simple stream I/O - There were only passing allusions to I/O in the
+Dylan book.  Marlais has added the following I/O features:
+
+	<stream> builtin class
+	open-input-file (<string>) => <stream>
+	open-output-file (<string>) => <stream>
+	close-stream (<stream>) => unspecified
+	eof-object? (<object>) => <boolean>
+	print (<object>) => unspecified
+	princ (<object>) => unspecified
+	format ((union <stream> #t) <string> arg1 arg2 ...) => unspecified
+	read ([<stream>]) => <object>
+	read-char ([<stream>]) => <character>
+
+* Syntax mode and loading Dylan files
+
+	infix () => unspecified
+		Switch the current syntax mode to infix.
+	prefix () => unspecified
+		Switch the current syntax mode to prefix.
+
+	load (<string>) => unspecified
+		Loads a Dylan file containing contents whose syntax 
+		matches the current syntax mode.
+	i-load (<string>) => unspecified
+		Loads an infix syntax Dylan file.
+	p-load (<string>) => unspecified
+		Loads a prefix syntax Dylan file.
+
+* Other handy features
+
+	ctime () => <string>
+		Returns day-date-time string.
+	time () => <integer>
+		Returns low order bits of number of seconds since
+		some system-defined referent.
+	clock () => <integer>
+		Returns number of milliseconds used by process.
+	system (<string>) => <integer>
+		Executes the argument string as a shell command.
+		Returns the status resulting from command execution.
+
+* Leaving Marlais - The functions QUIT and BYE are provided for
+leaving Marlais.
+
+---
+[1] Andrew Shalit.  "Dylan: an object oriented dynamic language".
+Apple Computer, Inc.  1992.
+
+[2] Andrew Shalit, Orca Starbuck, et. al. "Dylan (TM) Interim Reference Manual.
+Apple Computer, Inc.  1992-1994
+
+[3] Various Authors.  "Dylan Design Notes".  Apple Computer, Inc.  1993-1994.

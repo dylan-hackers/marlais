@@ -1,0 +1,218 @@
+/*
+
+   bytestring.c
+
+   This software is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This software is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public
+   License along with this software; if not, write to the Free
+   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+
+   Original copyright notice follows:
+
+   Copyright, 1993, Brent Benson.  All Rights Reserved.
+   0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
+
+   Permission to use, copy, and modify this software and its
+   documentation is hereby granted only under the following terms and
+   conditions.  Both the above copyright notice and this permission
+   notice must appear in all copies of the software, derivative works
+   or modified version, and both notices must appear in supporting
+   documentation.  Users of this software agree to the terms and
+   conditions set forth in this notice.
+
+ */
+
+#include <string.h>
+
+#include "bytestring.h"
+
+#include "alloc.h"
+#include "character.h"
+#include "collection.h"
+#include "error.h"
+#include "number.h"
+#include "prim.h"
+#include "symbol.h"
+
+/* primitives */
+
+static Object string_element (Object string, Object index, Object default_ob);
+static Object string_element_setter (Object string, Object index, Object val);
+static Object string_size (Object string);
+static Object string_size_setter (Object size, Object string);
+static Object string_append2 (Object str1, Object str2);
+static Object string_lessthan (Object str1, Object str2);
+static Object string_equal (Object str1, Object str2);
+
+static struct primitive string_prims[] =
+{
+    {"%string-element", prim_3, string_element},
+    {"%string-element-setter", prim_3, string_element_setter},
+    {"%string-size", prim_1, string_size},
+    {"%string-size-setter", prim_2, string_size_setter},
+    {"%string-append2", prim_2, string_append2},
+    {"%string<", prim_2, string_lessthan},
+    {"%string=", prim_2, string_equal},
+};
+
+/* function definitions */
+
+void
+init_string_prims (void)
+{
+    int num;
+
+    num = sizeof (string_prims) / sizeof (struct primitive);
+
+    init_prims (num, string_prims);
+
+}
+
+Object
+make_byte_string (char *str)
+{
+    Object obj;
+
+    obj = allocate_object (sizeof (struct byte_string));
+
+    BYTESTRTYPE (obj) = ByteString;
+    BYTESTRSIZE (obj) = strlen (str);
+    BYTESTRVAL (obj) = checking_strdup (str);
+    return (obj);
+}
+
+Object
+make_string_driver (Object args)
+{
+    int size, i;
+    char fill;
+    Object size_obj, fill_obj, res;
+
+    size = 0;
+    size_obj = NULL;
+    fill_obj = NULL;
+    while (!EMPTYLISTP (args)) {
+	if (FIRST (args) == size_keyword) {
+	    size_obj = SECOND (args);
+	} else if (FIRST (args) == fill_keyword) {
+	    fill_obj = SECOND (args);
+	} else {
+	    error ("make: unsupported keyword for <string> class", FIRST (args), NULL);
+	}
+	args = CDR (CDR (args));
+    }
+    if (size_obj) {
+	if (!INTEGERP (size_obj)) {
+	    error ("make: value of size: argument must be an integer", size_obj, NULL);
+	}
+	size = INTVAL (size_obj);
+    }
+    if (fill_obj) {
+	if (!CHARP (fill_obj)) {
+	    error ("make: value of fill: must be a character for <string> class", fill_obj, NULL);
+	}
+	fill = CHARVAL (fill_obj);
+    } else {
+	fill = 'a';
+    }
+
+    /* actually fabricate the string */
+    res = allocate_object (sizeof (struct byte_string));
+
+    BYTESTRTYPE (res) = ByteString;
+    BYTESTRSIZE (res) = size;
+    BYTESTRVAL (res) = (char *) checking_malloc ((size * sizeof (char)) + 1);
+
+    for (i = 0; i < size; ++i) {
+	BYTESTRVAL (res)[i] = fill;
+    }
+    BYTESTRVAL (res)[i] = '\0';
+    return (res);
+}
+
+/* primitives */
+
+static Object
+string_element (Object string, Object index, Object default_ob)
+{
+    int i;
+
+    i = INTVAL (index);
+    if ((i < 0) || (i >= BYTESTRSIZE (string))) {
+	if (default_ob == default_object) {
+	    error ("element: argument out of range", string, index, NULL);
+	} else {
+	    return default_ob;
+	}
+    }
+    return (make_character (BYTESTRVAL (string)[i]));
+}
+
+static Object
+string_element_setter (Object string, Object index, Object val)
+{
+    int i;
+
+    i = INTVAL (index);
+    if ((i < 0) || (i >= BYTESTRSIZE (string))) {
+	error ("element-setter: argument out of range", string, index, NULL);
+    }
+    BYTESTRVAL (string)[i] = CHARVAL (val);
+    return (unspecified_object);
+}
+
+static Object
+string_size (Object string)
+{
+    return (make_integer (BYTESTRSIZE (string)));
+}
+
+static Object
+string_size_setter (Object size, Object string)
+{
+    int new_size = INTVAL (size);
+
+    if ((new_size < 0) || (new_size >= BYTESTRSIZE (string))) {
+	error ("size-setter: new size out of range", new_size, string, NULL);
+    }
+    BYTESTRSIZE (string) = new_size;
+    BYTESTRVAL (string)[new_size] = '\0';
+    return size;
+}
+
+static Object
+string_append2 (Object str1, Object str2)
+{
+    char *new_str;
+    int new_size;
+
+    new_size = BYTESTRSIZE (str1) + BYTESTRSIZE (str2);
+    new_str = (char *) checking_malloc ((new_size * sizeof (char)) + 1);
+
+    strcpy (new_str, BYTESTRVAL (str1));
+    strcat (new_str, BYTESTRVAL (str2));
+    return (make_byte_string (new_str));
+}
+
+static Object
+string_lessthan (Object str1, Object str2)
+{
+    return (strcmp (BYTESTRVAL (str1), BYTESTRVAL (str2)) < 0) ?
+	true_object : false_object;
+}
+
+static Object
+string_equal (Object str1, Object str2)
+{
+    return (strcmp (BYTESTRVAL (str1), BYTESTRVAL (str2)) == 0) ?
+	true_object : false_object;
+}
