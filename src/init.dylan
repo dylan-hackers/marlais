@@ -3276,6 +3276,9 @@ define method eval(obj)
 end method eval;
 
 //  Temporary home for COMMON-DYLAN definitions
+define variable *standard-error* :: <stream> = %standard-error();
+define variable *standard-input* :: <stream> = %standard-input();
+
 define constant format-out = curry(format, *standard-output*);
 
 // eof
