@@ -1,35 +1,4 @@
-/*
-
-   syntax.c
-
-   This software is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This software is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public
-   License along with this software; if not, write to the Free
-   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-   Original copyright notice follows:
-
-   Copyright, 1993, Brent Benson.  All Rights Reserved.
-   0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
-
-   Permission to use, copy, and modify this software and its
-   documentation is hereby granted only under the following terms and
-   conditions.  Both the above copyright notice and this permission
-   notice must appear in all copies of the software, derivative works
-   or modified version, and both notices must appear in supporting
-   documentation.  Users of this software agree to the terms and
-   conditions set forth in this notice.
-
- */
+/* syntax.c -- see COPYRIGHT for use */
 
 #include <string.h>
 
@@ -111,7 +80,11 @@ static Object define_generic_function_eval (Object form);
 static Object define_method_eval (Object form);
 static Object define_function_eval (Object form);
 static Object define_module_eval (Object form);
+
+#ifdef DEFINE_TEST
 static Object define_test_eval (Object form);
+#endif
+
 static Object dotimes_eval (Object form);
 static Object for_eval (Object form);
 static Object get_variable (Object var_spec);
@@ -150,18 +123,23 @@ static Object set_module_eval (Object form);
 static Object unless_eval (Object form);
 static Object until_eval (Object form);
 static Object unwind_protect_eval (Object form);
+
+#ifdef LISPY_DYLAN
 static Object when_eval (Object form);
+#endif
+
 static Object while_eval (Object form);
 static Object local_bind_eval (Object form);
 static Object local_bind_rec_eval (Object form);
 static Object unbinding_begin_eval (Object form);
 
+#ifdef DEFINE_TEST
 static Object process_test_result (Object name, Object options,
 				   Object doc_string, Object result);
 static Object record_failure (Object name, Object doc_string, Object result);
 static Object record_success (Object name, Object doc_string, Object result);
 static Object record_disabled (Object name, Object doc_string);
-
+#endif
 
 static char *syntax_operators[] =
 {
@@ -182,7 +160,9 @@ static char *syntax_operators[] =
     "define-method",
     "define-function",
     "define-module",
+#ifdef DEFINE_TEST
     "define-test",
+#endif
     "dotimes",
     "for",
     "for-each",
@@ -198,7 +178,9 @@ static char *syntax_operators[] =
     "unless",
     "until",
     "unwind-protect",
+#ifdef LISPY_DYLAN
     "when",
+#endif
     "while",
     "\"local-bind",
     "\"local-bind-rec",
@@ -224,7 +206,9 @@ static syntax_fun syntax_functions[] =
     define_method_eval,
     define_function_eval,
     define_module_eval,
+#ifdef DEFINE_TEST
     define_test_eval,
+#endif
     dotimes_eval,
     for_eval,
     for_each_eval,
@@ -240,7 +224,9 @@ static syntax_fun syntax_functions[] =
     unless_eval,
     until_eval,
     unwind_protect_eval,
+#ifdef LISPY_DYLAN
     when_eval,
+#endif
     while_eval,
     local_bind_eval,
     local_bind_rec_eval,
@@ -1941,6 +1927,7 @@ unwind_protect_eval (Object form)
   return (ret);
 }
 
+#ifdef LISPY_DYLAN
 /*** DMA: when? is that CL or Dylan too? */
 static Object
 when_eval (Object form)
@@ -1957,6 +1944,7 @@ when_eval (Object form)
   }
   return (false_object);
 }
+#endif
 
 static Object
 while_eval (Object form)
@@ -1979,6 +1967,7 @@ while_eval (Object form)
   return (false_object);
 }
 
+#ifdef DEFINE_TEST
 static Object ___passed_test_list;
 static Object ___failed_test_list;
 static Object ___disabled_test_list;
@@ -2145,6 +2134,7 @@ record_disabled (Object name, Object doc_string)
   the_env = old_env;
   return ___disabled_symbol;
 }
+#endif
 
 static Object
 car (Object lst)
