@@ -7,11 +7,11 @@ copyright: (c) 2001, LGPL, Marlais Hackers (see "COPYRIGHT" file)
 
 define method print (obj)
   object-princ(*standard-output*, obj);
-  %princ(*standard-output*, "\n");
+  %princ(*standard-output*.file-descriptor, "\n");
 end method print;
 
 define method print-object (obj, stream)
-  %print (stream, obj);
+  %print (stream.file-descriptor, obj);
 end method print-object;
 
 define method print* (obj, #rest args)
@@ -22,13 +22,14 @@ define method print* (obj, #rest args)
 end method print*;
 
 define method princ (obj)
-  %princ (*standard-output*, obj);
+  %princ (*standard-output*.file-descriptor, obj);
 end method princ;
 
 define method object-princ (stream, obj)
-  %princ (stream, obj);
+  %princ (stream.file-descriptor, obj);
 end method object-princ;
 
+// I think this can be safely moved to the interpreter
 define method write-number(s :: <stream>, d :: <integer>, #key base = 10)
   let hexi = "0123456789ABCDEF";
   let str-num = make(<deque>);

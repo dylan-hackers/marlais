@@ -11,6 +11,7 @@
 #include "character.h"
 #include "error.h"
 #include "eval.h"
+#include "globaldefs.h"
 #include "list.h"
 #include "number.h"
 #include "prim.h"
@@ -22,11 +23,6 @@
 
 extern Object print_symbol;
 extern Object princ_symbol;
-
-#ifdef NO_COMMON_DYLAN_SPEC
-extern Object standard_output_stream;
-extern Object standard_error_stream;
-#endif
 
 /* local function prototypes */
 
@@ -42,23 +38,15 @@ static void print_method (Object stream, Object method, int escaped);
 static void print_slot_descriptor (Object stream, Object slotd, int escaped);
 static void print_class (Object stream, Object class, int escaped);
 static void print_array (Object stream, Object array, int escaped);
-#ifdef NO_COMMON_DYLAN_SPEC
 static void print_stream (Object out_stream, Object stream);
-#endif
 static void print_type_name (Object stream, Object class, int escaped);
 
 /* primitives */
 
 static struct primitive print_prims[] =
 {
-    {"%print", prim_2, print_obj},
-    {"%princ", prim_2, print_obj_escaped},
-#ifdef NO_COMMON_DYLAN_SPEC
-    {"%format", prim_3, format},
-#endif
-#ifdef PRE_REFACTORED
-  {"%write-char", prim_2, write_char},
-#endif
+  {"%print", prim_2, print_obj},
+  {"%princ", prim_2, print_obj_escaped},
 };
 
 /* function definitions */
@@ -66,6 +54,7 @@ static struct primitive print_prims[] =
 Object generic_function_methods (Object gen);
 
 static int DebugPrint = 0;
+static FILE* file_from_fd(Object);
 
 static void
 apply_print (Object fd, Object obj, int escaped)
@@ -73,16 +62,19 @@ apply_print (Object fd, Object obj, int escaped)
     if (DebugPrint || trace_functions) {
 	print_obj (fd, obj);
     } else {
+      Object stream;
+      file_from_fd(fd);
+      if(INTVAL(fd) == 1) {
+        stream = standard_output_stream;
+      } else {
+        stream = standard_error_stream;
+      }
 	if (0 == escaped) {
 	    apply (eval (princ_symbol),
-		   listem (fd, obj, NULL));
+		   listem (eval(stream), obj, NULL));
 	} else {
-#ifdef WHY
 	    apply (eval (print_symbol),
-		   listem (obj, fd, NULL));
-#else
-  		print_object(fd, obj, 0);
-#endif
+		   listem (obj, eval(stream), NULL));
 	}
     }
 }
@@ -141,21 +133,6 @@ void
 print_object (Object fd, Object obj, int escaped)
 {
     FILE* fp = file_from_fd(fd);
-
-#ifdef NO_COMMON_DYLAN_SPEC
-    if (stream == true_object) {
-	fp = stdout;
-	stream = standard_output_stream;
-    } else 
-#endif
-
-#ifdef STREAM_ERROR_CHECKING
-    if (OUTPUTSTREAMP (stream)) {
-	fp = STREAMFP (stream);
-    } else {
-	error ("print_object: cannot send output to non-stream", stream, NULL);
-    }
-#endif
 
     switch (TYPE (obj)) {
     case True:
@@ -280,11 +257,6 @@ print_object (Object fd, Object obj, int escaped)
     case Unwind:
 	fprintf (fp, "{unwind protect}");
 	break;
-#ifdef NO_COMMON_DYLAN_SPEC
-    case Stream:
-	print_stream (stream, obj);
-	break;
-#endif
     case TableEntry:
 	fprintf (fp, "{table entry}");
 	break;
@@ -506,29 +478,12 @@ print_class_slot_values (Object fd, Object class, int escaped, int first)
 static void
 print_instance (Object fd, Object inst, int escaped)
 {
-    Object class
-
-#ifdef WANT_SLOT_INFO
-, instslotds
-#endif
-		;
-
+    Object class;
     FILE *fp = file_from_fd(fd);
 
     fprintf (fp, "{instance of class %s",
 	     SYMBOLNAME (CLASSNAME (INSTCLASS (inst))));
     class = INSTCLASS (inst);
-
-#ifdef WANT_SLOT_INFO
-    instslotds = append (CLASSINSLOTDS (class), CLASSSLOTDS (class));
-    print_slot_values (fd, inst, instslotds, escaped);
-/*
- *    print_virtual_slot_values (fd, inst, CLASSVSLOTDS (class), escaped);
- */
-    print_class_slot_values (fd, class, escaped, 1);
-    print_constant_slot_values (fd, CLASSCONSTSLOTDS (class), escaped);
-#endif
-
     fprintf (fp, "}");
 }
 
@@ -587,41 +542,13 @@ print_list_helper(Object fd, Object members, int escaped,
 static void
 print_param_list (Object fd, Object params, int escaped)
 {
-#ifdef PRE_REFACTORED
-    FILE *fp = file_from_fd(fd);
-
-    if (PAIRP (params)) {
-	print_param (fd, CAR (params), escaped);
-	params = CDR (params);
-	while (PAIRP (params)) {
-	    fprintf (fp, ", ");
-	    print_param (fd, CAR (params), escaped);
-	    params = CDR (params);
-	}
-    }
-#else
   print_list_helper(fd, params, escaped, print_param, ", ");
-#endif
 }
 
 static void
 print_unparenthesized_list (Object fd, Object pair, int escaped)
 {
-#ifdef PRE_REFACTORED
-    FILE *fp = file_from_fd(fd);
-
-    if (PAIRP (pair)) {
-	print_object (stream, CAR (pair), escaped);
-	pair = CDR (pair);
-	while (PAIRP (pair)) {
-	    fprintf (fp, " ");
-	    print_object (stream, CAR (pair), escaped);
-	    pair = CDR (pair);
-	}
-    }
-#else
   print_list_helper(fd, pair, escaped, print_object, " ");
-#endif
 }
 
 static void
@@ -716,22 +643,7 @@ print_class (Object fd, Object class, int escaped)
 	fprintf (fp, "{the class %s", SYMBOLNAME (CLASSNAME (class)));
     }
 
-    fprintf (fp, " (%d)", CLASSINDEX (class));
-
-#ifdef WANT_SUPERCLASS_INFO
-       fprintf (fp, " (");
-       print_unparenthesized_list (stream, CLASSSUPERS (class), escaped);
-       fprintf (fp, ")");
-#endif
-#ifdef WANT_SLOT_INFO
-       print_slot_values (stream, CLASSCSLOTS(class),
-	                  append (CLASSCSLOTDS (class),
-       CLASSESSLOTDS (class)),
-       escaped);
-#endif
-
-    fprintf (fp, "}");
-
+    fprintf (fp, " (%d)}", CLASSINDEX (class));
 }
 
 static void
@@ -832,199 +744,6 @@ print_string (Object fd, Object str, int escaped)
 	fprintf (fp, "%s", BYTESTRVAL (str));
     }
 }
-
-#ifdef NO_COMMON_DYLAN_SPEC
-Object
-format (Object stream, Object str, Object rest)
-{
-    Object obj;
-    FILE *fp;
-    char *cstr;
-    int i;
-
-/** DMA -- tightening requirements on format
-    * if (stream == true_object) {
-	* fp = stdout;
-	* stream = standard_output_stream;
-    } else ***/
-    if (OUTPUTSTREAMP (stream)) {
-	fp = STREAMFP (stream);
-    } else {
-	error ("format: cannot send output to non-stream", stream, NULL);
-    }
-    cstr = BYTESTRVAL (str);
-
-    i = 0;
-    while (cstr[i]) {
-	if (cstr[i] == '%') {
-	    i++;
-	    switch (cstr[i]) {
-	    case '=':
-		if (EMPTYLISTP (rest)) {
-		    error ("format: not enough args for format string", str, NULL);
-		}
-		obj = CAR (rest);
-		rest = CDR (rest);
-		apply_print (stream, obj, 0);
-		break;
-
-	    case 'd':
-	    case 'D':
-		if (EMPTYLISTP (rest)) {
-		    error ("format: not enough args for format string", str, NULL);
-		}
-		obj = CAR (rest);
-		if (!INTEGERP (obj)) {
-		    error ("format: argument to %d must be an integer", obj, NULL);
-		}
-		rest = CDR (rest);
-#if 0
-		if (isdigit (cstr[i - 1])) {
-		    j = i - 1;
-		    while (isdigit (cstr[j])) {
-			j--;
-		    }
-		    j++;
-		    sscanf (cstr[j], "%d", &arg);
-		    fprintf (fp, "%");
-		} else
-#endif
-		{
-		    fprintf (fp, "%d", INTVAL (obj));
-		}
-		break;
-	    case 'b':
-	    case 'B':
-		if (EMPTYLISTP (rest)) {
-		    error ("format: not enough args for format string", str, NULL);
-		}
-		obj = CAR (rest);
-		if (!INTEGERP (obj)) {
-		    error ("format: argument to %b must be an integer", obj, NULL);
-		}
-		rest = CDR (rest);
-		{
-		    int val = INTVAL (obj);
-
-		    while (val > 0)
-			val <<= 1;
-		    do
-			fputc (val < 0 ? '1' : '0', fp);
-		    while ((val <<= 1) != 0);
-		}
-		break;
-
-	    case 'o':
-	    case 'O':
-		if (EMPTYLISTP (rest)) {
-		    error ("format: not enough args for format string", str, NULL);
-		}
-		obj = CAR (rest);
-		if (!INTEGERP (obj)) {
-		    error ("format: argument to %o must be an integer", obj, NULL);
-		}
-		rest = CDR (rest);
-		fprintf (fp, "%o", INTVAL (obj));
-		break;
-
-	    case 'x':
-	    case 'X':
-		if (EMPTYLISTP (rest)) {
-		    error ("format: not enough args for format string", str, NULL);
-		}
-		obj = CAR (rest);
-		if (!INTEGERP (obj)) {
-		    error ("format: argument to %x must be an integer", obj, NULL);
-		}
-		rest = CDR (rest);
-		fprintf (fp, "%x", INTVAL (obj));
-		break;
-
-	    case 'c':
-	    case 'C':
-		if (EMPTYLISTP (rest)) {
-		    error ("format: not enough args for format string", str, NULL);
-		}
-		obj = CAR (rest);
-		if (!CHARP (obj)) {
-		    error ("format: argument to %c must be an integer", obj, NULL);
-		}
-		rest = CDR (rest);
-		apply_print (stream, obj, 0);
-		break;
-
-	    case 's':
-	    case 'S':
-		if (EMPTYLISTP (rest)) {
-		    error ("format: not enough args for format string", str, NULL);
-		}
-		obj = CAR (rest);
-		rest = CDR (rest);
-		apply_print (stream, obj, 0);
-		break;
-
-	    case '%':
-		fprintf (fp, "%%");
-		break;
-
-	    default:
-		/* skip over digits.  individuals branches
-		   handle there own arguments. */
-		if (isdigit (cstr[i])) {
-		    while (isdigit (cstr[i])) {
-			i++;
-		    }
-		    break;
-		}
-		error ("format: bad escape character", make_character (cstr[i]), NULL);
-	    }
-	} else {
-	    fprintf (fp, "%c", cstr[i]);
-	}
-	i++;
-    }
-    if (!EMPTYLISTP (rest)) {
-	error ("format: too many arguments for format string", CAR (rest), NULL);
-    }
-    return (unspecified_object);
-}
-
-static void
-print_stream (Object out_stream, Object stream)
-{
-    FILE *fp = STREAMFP (out_stream);
-
-    switch (STREAMSTYPE (stream)) {
-    case Input:
-	fprintf (fp, "{input stream}");
-	break;
-    case Output:
-	fprintf (fp, "{output stream}");
-	break;
-    default:
-	error ("trying to print stream of unknown type", NULL);
-    }
-}
-#endif
-
-#ifdef PRE_REFACTORED
-static Object
-write_char (Object ch, Object stream_list)
-{
-    char the_char;
-    FILE *fp;
-
-    if (EMPTYLISTP (stream_list)) {
-	fp = stdout;
-    } else {
-	fp = STREAMFP (CAR (stream_list));
-    }
-    the_char = CHARVAL (ch);
-    fwrite (&the_char, 1, sizeof (char), fp);
-
-    return (unspecified_object);
-}
-#endif
 
 static void
 print_type_name (Object fd, Object obj, int escaped)

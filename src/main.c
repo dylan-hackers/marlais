@@ -95,12 +95,8 @@ static void print_top_level_constant(Object obj, int bind_p)
     sequence_num++;
   }
 
-#ifdef WHY
   apply (eval (print_symbol),
-	 listem (obj, make_integer(STDOUT), NULL));
-#else
-  print_object(make_integer(STDOUT), obj, 0);
-#endif
+	 listem (obj, eval(standard_output_stream), NULL));
 
   fprintf (stdout, "\n");
 }
@@ -361,12 +357,8 @@ initialize_marlais (void)
   initialize_symbol = make_symbol ("initialize");
   equal_hash_symbol = make_symbol ("=hash");
   uninit_slot_object = make_uninit_slot ();
-
-#ifdef NO_COMMON_DYLAN_SPEC
-  standard_input_stream = make_stream (Input, stdin);
-  standard_output_stream = make_stream (Output, stdout);
-  standard_error_stream = make_stream (Output, stderr);
-#endif
+  standard_output_stream = make_symbol ("*standard-output*");
+  standard_error_stream = make_symbol ("*standard-error*");
 
 /* this looks like lisp -- should it go? */
   quasiquote_symbol = make_symbol ("quasiquote");
