@@ -144,7 +144,7 @@ OBJS = 	alloc.obj \
 	foreign_ptr.obj \
 	function.obj \
 	keyword.obj \
-	lex.yy.obj \
+	lex-yy.obj \
 	list.obj \
 	main.obj \
 	misc.obj \
@@ -162,7 +162,7 @@ OBJS = 	alloc.obj \
 	table.obj \
 	values.obj \
 	vector.obj \
-	$(GETOPT).obj
+	getopt.obj
 
 GCOBJS = gc/gc.lib
 
@@ -185,7 +185,7 @@ CSRCS = alloc.c \
 	function.c \
 	foreign_ptr.c \
 	keyword.c \
-	lex.yy.c \
+	..\win32\lex-yy.c \
 	list.c \
 	main.c \
 	misc.c \
@@ -284,7 +284,7 @@ NO_RCS_FILES = \
 	ChangeLog \
 	dylan.tab.c \
 	dylan.tab.h \
-	lex.yy.c \
+	lex-yy.c \
 	NT_MAKEFILE
 
 # PROGRAM = marlais#NOT-NT
@@ -297,9 +297,6 @@ $(PROGRAM): $(OBJS) $(GCOBJS)
 # a target for building parser/scanner on the Mac under MachTen.
 mac: dylan.tab.c lex.yy.c
 	mactext dylan.tab.[ch] lex.yy.c
-
-lex.yy.c: dylan.l dylan.tab.h
-	flex $(FLEXFLAGS) dylan.l
 
 dylan.tab.h: dylan.tab.c
 
@@ -324,7 +321,7 @@ clean:
 	del *.obj
 
 real_clean: clean
-	rm dylan.tab.c lex.yy.c
+	rm dylan.tab.c
 	cd gc; $(MAKE) clean
 
 
