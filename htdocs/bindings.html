@@ -5,10 +5,9 @@
    <h1>Marlais Init.Dylan exported names</h1>
   </center>
 
-  This document tracks Marlais' compilance to the Dylan Language
-  Specification and provides me (Douglas M. Auclair) and anyone else
-  working on Marlais ideas for areas on which to bring Marlais into
-  closer compliance.
+  This document tracks Marlais' compliance to the Dylan Language
+  Specification and provides those working on Marlais ideas for areas
+  on which to bring Marlais into closer compliance.
 <p>
 Note that some of the exported names properly belong elsewhere,
   e.g. to the Common-Dylan specification libraries.  So, this document
@@ -24,7 +23,9 @@ DRM has 52 names exported.
    &lt;boolean> = {the class &lt;boolean> (2)}<br>
    &lt;byte-string> = {the class &lt;byte-string> (30)}<br>
    &lt;character> = {(46)}<br>
-   &lt;class> = {the class &lt;class> (55)}<br>
+   <a name="<class>">&lt;class></a> = {the class &lt;class> (55)}<br>
+   &nbsp;&nbsp;-- <strong>Warning:</strong> missing the 
+   <font color="green"><code>abstract?:</code></font> keyword initializer.<br>
 *   <font color="blue">&lt;class-slots-class> = {the class &lt;class-slots-class> (59)}</font><br>
    &lt;collection> = {(14)}<br>
    &lt;complex> = {the class &lt;complex> (4)}<br>
@@ -76,7 +77,7 @@ DRM has 52 names exported.
 *    <font color="blue">&lt;table-entry> = {the class &lt;table-entry> (57)}</font><br> 
    &lt;table> = (21)<br>
    &lt;type-error> = {> (42)}<br>
-   &lt;type> = {the class &lt;type> (53)}<br>
+   <a name="<type>">&lt;type></a> = {the class &lt;type> (53)}<br>
    &lt;unicode-string> = {the class &lt;unicode-string> (31)}<br>
 *   <font color="blue">&lt;unwind-protect-function> = {the class &lt;unwind-protect-function> (52)}</font><br>
 *    <font color="blue">&lt;variable-name> = {the class
@@ -143,9 +144,6 @@ The DRM has 169 exported functions.
    cerror = {the generic function cerror (#rest x)}<br>
    choose = {the generic function choose (predicate :: &lt;function>, sequence :: &lt;sequence>)}<br>
    choose-by = {the generic function choose-by (predicate :: &lt;function>, test-sequence :: &lt;sequence>, value-sequence :: &lt;sequence>)}<br>
-*   <font color="blue">class-for-copy = {the generic function
-   class-for-copy (o, #rest x)}</font> -- <strong>rename to
-   type-for-copy for DRM compliance</strong><br>
    complement = {the generic function complement (func, #rest x)}<br>
    compose = {the generic function compose (function, #rest x)}<br>
    concatenate = {the generic function concatenate (sequence1 :: &lt;sequence>, #rest sequences)}<br>
@@ -218,7 +216,8 @@ The DRM has 169 exported functions.
    logand = {the generic function logand (#rest x)}<br>
    logior = {the generic function logior (#rest x)}<br>
 <font color="red">(missing logbit?)</font><br>
-   make = {the generic function make (c, #rest x)}<br>
+   <a name="make">make</a> = {the generic function make (c, #rest
+   x)}<br>
    map = {the generic function map (procedure :: &lt;function>, collection :: &lt;collection>, #rest more-collections)}<br>
    map-as = {the generic function map-as (class :: &lt;class>, procedure :: &lt;function>, collection :: &lt;collection>, #rest more-collections)}<br>
    map-into = {the generic function map-into (mutable-collection :: &lt;mutable-collection>, procedure :: &lt;function>, collection :: &lt;collection>, #rest more-cols)}<br>
@@ -271,7 +270,10 @@ The DRM has 169 exported functions.
 *   <font color="blue">set-module = {primitive function set-module}</font><br>
    shallow-copy = {the generic function shallow-copy (o, #rest x)}<br>
    signal = {the generic function signal (#rest x)}<br>
-   singleton = {an anonymous method (o)#(%singleton, o)}<br>
+   <a name="singleton">singleton</a> = {an anonymous method
+   (o)#(%singleton, o)}
+   <br>&nbsp;&nbsp; -- <strong>Warning:</strong> in Marlais,
+   singletons are not subtypes of <a href="#<type>">&lt;type></a>s!<br>
    size = {the generic function size (collection :: &lt;collection>)}<br>
    size-setter = {the generic function size-setter (x, x, #rest x)}<br>
    slot-initialized? = {an anonymous method (obj, slot)#(~, #(id?, #(slot, obj), %uninitialized-slot-value))}<br>
@@ -293,8 +295,10 @@ The DRM has 169 exported functions.
    &lt;real>)}<br>
 <font color="red">(missing type-error-expected-type)</font><br>
 <font color="red">(missing type-error-value)</font><br>
-<font color="red">(missing type-for-copy)</font> -- see class-for-copy<br>
-<font color="red">(missing type-union)</font><br>
+   type-for-copy = {the generic function type-for-copy (o, #rest x)}
+<font color="red">(missing type-union)</font> -- we need to fix
+   <a href="#singleton">singleton</a> and <a href="#make">make</a> on 
+   <a href="#<class>">&lt;class></a><br>
    union = {the generic function union (o1, o2, #rest args)}<br>
    values = {primitive function values}<br>
    vector = {the generic function vector (#rest x)}<br>
