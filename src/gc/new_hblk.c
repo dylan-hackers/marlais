@@ -103,10 +103,10 @@ ptr_t ofl;
     p[3] = 0;
     p += 4;
     for (; p < lim; p += 4) {
+	PREFETCH_FOR_WRITE(p+64);
         p[0] = (word)(p-4);
         p[1] = 0;
-        p[2] = 0;
-        p[3] = 0;
+	CLEAR_DOUBLE(p+2);
     };
     return((ptr_t)(p-4));
 }
@@ -141,6 +141,7 @@ ptr_t ofl;
     p[4] = (word)p;
     p += 8;
     for (; p < lim; p += 8) {
+	PREFETCH_FOR_WRITE(p+64);
         p[0] = (word)(p-4);
         p[4] = (word)p;
     };
@@ -152,7 +153,9 @@ ptr_t ofl;
 /*
  * Allocate a new heapblock for small objects of size n.
  * Add all of the heapblock's objects to the free list for objects
- * of that size.  Will fail to do anything if we are out of memory.
+ * of that size.
+ * Set all mark bits if objects are uncollectable.
+ * Will fail to do anything if we are out of memory.
  */
 void GC_new_hblk(sz, kind)
 register word sz;
@@ -162,7 +165,7 @@ int kind;
 		  *prev;
     word *last_object;		/* points to last object in new hblk	*/
     register struct hblk *h;	/* the new heap block			*/
-    register bool clear = GC_obj_kinds[kind].ok_init;
+    register GC_bool clear = GC_obj_kinds[kind].ok_init;
 
 #   ifdef PRINTSTATS
 	if ((sizeof (struct hblk)) > HBLKSIZE) {
@@ -174,6 +177,13 @@ int kind;
     h = GC_allochblk(sz, kind, 0);
     if (h == 0) return;
 
+  /* Mark all objects if appropriate. */
+      if (IS_UNCOLLECTABLE(kind)) GC_set_hdr_marks(HDR(h));
+
+  PREFETCH_FOR_WRITE((char *)h);
+  PREFETCH_FOR_WRITE((char *)h + 128);
+  PREFETCH_FOR_WRITE((char *)h + 256);
+  PREFETCH_FOR_WRITE((char *)h + 378);
   /* Handle small objects sizes more efficiently.  For larger objects 	*/
   /* the difference is less significant.				*/
 #  ifndef SMALL_CONFIG

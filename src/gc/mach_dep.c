@@ -11,7 +11,7 @@
  * provided the above notices are retained, and a notice that the code was
  * modified is included with the above copyright notice.
  */
-/* Boehm, December 12, 1994 5:03 pm PST */
+/* Boehm, November 17, 1995 12:13 pm PST */
 # include "gc_priv.h"
 # include <stdio.h>
 # include <setjmp.h>
@@ -20,20 +20,29 @@
 #   define _longjmp(b,v) longjmp(b,v)
 # endif
 # ifdef AMIGA
-#   include <dos.h>
+#   ifndef __GNUC__
+#     include <dos/dos.h>
+#   else
+#     include <machine/reg.h>
+#   endif
 # endif
 
 #if defined(__MWERKS__) && !defined(POWERPC)
 
 asm static void PushMacRegisters()
 {
-	sub.w   #4,sp                   // reserve space for one parameter.
+    sub.w   #4,sp                   // reserve space for one parameter.
     move.l  a2,(sp)
     jsr		GC_push_one
     move.l  a3,(sp)
     jsr		GC_push_one
     move.l  a4,(sp)
     jsr		GC_push_one
+#   if !__option(a6frames)
+	// <pcb> perhaps a6 should be pushed if stack frames are not being used.    
+  	move.l	a6,(sp)
+  	jsr		GC_push_one
+#   endif
 	// skip a5 (globals), a6 (frame pointer), and a7 (stack pointer)
     move.l  d2,(sp)
     jsr		GC_push_one
@@ -47,11 +56,17 @@ asm static void PushMacRegisters()
     jsr		GC_push_one
     move.l  d7,(sp)
     jsr		GC_push_one
-	add.w   #4,sp                   // fix stack.
-	rts
+    add.w   #4,sp                   // fix stack.
+    rts
 }
 
 #endif /* __MWERKS__ */
+
+# if defined(SPARC) || defined(IA64)
+    /* Value returned from register flushing routine; either sp (SPARC) */
+    /* or ar.bsp (IA64)							*/
+    word GC_save_regs_ret_val;
+# endif
 
 /* Routine to mark from registers that are preserved by the C compiler. */
 /* This must be ported to every new architecture.  There is a generic   */
@@ -59,11 +74,30 @@ asm static void PushMacRegisters()
 /* on your architecture.  Run the test_setjmp program to see whether    */
 /* there is any chance it will work.                                    */
 
+#ifndef USE_GENERIC_PUSH_REGS
 void GC_push_regs()
 {
 #       ifdef RT
 	  register long TMP_SP; /* must be bound to r11 */
 #       endif
+
+#       if defined(MIPS) && defined(LINUX)
+	  /* I'm not sure whether this has actually been tested. */
+#         define call_push(x)     asm("move $4," x ";"); asm("jal GC_push_one")
+	  call_push("$2");
+	  call_push("$3");
+	  call_push("$16");
+	  call_push("$17");
+	  call_push("$18");
+	  call_push("$19");
+	  call_push("$20");
+	  call_push("$21");
+	  call_push("$22");
+	  call_push("$23");
+	  call_push("$30");
+#         undef call_push
+#       endif	/* MIPS && LINUX */
+
 #       ifdef VAX
 	  /* VAX - generic code below does not work under 4.2 */
 	  /* r1 through r5 are caller save, and therefore     */
@@ -120,9 +154,28 @@ void GC_push_regs()
 	  asm("addq.w &0x4,%sp");	/* put stack back where it was	*/
 #       endif /* M68K HP */
 
-#       ifdef AMIGA
-	/*  AMIGA - could be replaced by generic code 			*/
-	  /* a0, a1, d0 and d1 are caller save */
+#	if defined(M68K) && defined(AMIGA)
+ 	 /*  AMIGA - could be replaced by generic code 			*/
+ 	 /* a0, a1, d0 and d1 are caller save */
+
+#        ifdef __GNUC__
+	  asm("subq.w &0x4,%sp");	/* allocate word on top of stack */
+
+	  asm("mov.l %a2,(%sp)"); asm("jsr _GC_push_one");
+	  asm("mov.l %a3,(%sp)"); asm("jsr _GC_push_one");
+	  asm("mov.l %a4,(%sp)"); asm("jsr _GC_push_one");
+	  asm("mov.l %a5,(%sp)"); asm("jsr _GC_push_one");
+	  asm("mov.l %a6,(%sp)"); asm("jsr _GC_push_one");
+	  /* Skip frame pointer and stack pointer */
+	  asm("mov.l %d2,(%sp)"); asm("jsr _GC_push_one");
+	  asm("mov.l %d3,(%sp)"); asm("jsr _GC_push_one");
+	  asm("mov.l %d4,(%sp)"); asm("jsr _GC_push_one");
+	  asm("mov.l %d5,(%sp)"); asm("jsr _GC_push_one");
+	  asm("mov.l %d6,(%sp)"); asm("jsr _GC_push_one");
+	  asm("mov.l %d7,(%sp)"); asm("jsr _GC_push_one");
+
+	  asm("addq.w &0x4,%sp");	/* put stack back where it was	*/
+#        else /* !__GNUC__ */
 	  GC_push_one(getreg(REG_A2));
 	  GC_push_one(getreg(REG_A3));
 	  GC_push_one(getreg(REG_A4));
@@ -135,7 +188,8 @@ void GC_push_regs()
 	  GC_push_one(getreg(REG_D5));
 	  GC_push_one(getreg(REG_D6));
 	  GC_push_one(getreg(REG_D7));
-#       endif
+#	 endif /* !__GNUC__ */
+#       endif /* AMIGA */
 
 #	if defined(M68K) && defined(MACOS)
 #	if defined(THINK_C)
@@ -163,18 +217,44 @@ void GC_push_regs()
 #	endif	/* __MWERKS__ */
 #   endif	/* MACOS */
 
-#       if defined(I386) &&!defined(OS2) &&!defined(SVR4) &&!defined(MSWIN32) && !defined(SCO)
+#       if defined(I386) &&!defined(OS2) &&!defined(SVR4) \
+	&& (defined(__MINGW32__) || !defined(MSWIN32)) \
+	&& !defined(SCO) && !defined(SCO_ELF) \
+ 	&& !(defined(LINUX)       && defined(__ELF__)) \
+	&& !(defined(FREEBSD) && defined(__ELF__)) \
+	&& !defined(DOS4GW)
 	/* I386 code, generic code does not appear to work */
 	/* It does appear to work under OS2, and asms dont */
+	/* This is used for some 38g UNIX variants and for CYGWIN32 */
 	  asm("pushl %eax");  asm("call _GC_push_one"); asm("addl $4,%esp");
 	  asm("pushl %ecx");  asm("call _GC_push_one"); asm("addl $4,%esp");
 	  asm("pushl %edx");  asm("call _GC_push_one"); asm("addl $4,%esp");
+	  asm("pushl %ebp");  asm("call _GC_push_one"); asm("addl $4,%esp");
 	  asm("pushl %esi");  asm("call _GC_push_one"); asm("addl $4,%esp");
 	  asm("pushl %edi");  asm("call _GC_push_one"); asm("addl $4,%esp");
 	  asm("pushl %ebx");  asm("call _GC_push_one"); asm("addl $4,%esp");
 #       endif
 
-#       if defined(I386) && defined(MSWIN32)
+#	if ( defined(I386) && defined(LINUX) && defined(__ELF__) ) \
+	|| ( defined(I386) && defined(FREEBSD) && defined(__ELF__) )
+
+	/* This is modified for Linux with ELF (Note: _ELF_ only) */
+	/* This section handles FreeBSD with ELF. */
+	/* Eax is caller-save and dead here.  Other caller-save 	*/
+	/* registers could also be skipped.  We assume there are no	*/
+	/* pointers in MMX registers, etc.				*/
+	/* We combine instructions in a single asm to prevent gcc from 	*/
+	/* inserting code in the middle.				*/
+	  asm("pushl %ecx; call GC_push_one; addl $4,%esp");
+	  asm("pushl %edx; call GC_push_one; addl $4,%esp");
+	  asm("pushl %ebp; call GC_push_one; addl $4,%esp");
+	  asm("pushl %esi; call GC_push_one; addl $4,%esp");
+	  asm("pushl %edi; call GC_push_one; addl $4,%esp");
+	  asm("pushl %ebx; call GC_push_one; addl $4,%esp");
+#	endif
+
+#       if defined(I386) && defined(MSWIN32) && !defined(__MINGW32__) \
+	   && !defined(USE_GENERIC)
 	/* I386 code, Microsoft variant		*/
 	  __asm  push eax
 	  __asm  call GC_push_one
@@ -199,7 +279,7 @@ void GC_push_regs()
 	  __asm  add esp,4
 #       endif
 
-#       if defined(I386) && (defined(SVR4) || defined(SCO))
+#       if defined(I386) && (defined(SVR4) || defined(SCO) || defined(SCO_ELF))
 	/* I386 code, SVR4 variant, generic code does not appear to work */
 	  asm("pushl %eax");  asm("call GC_push_one"); asm("addl $4,%esp");
 	  asm("pushl %ebx");  asm("call GC_push_one"); asm("addl $4,%esp");
@@ -218,12 +298,11 @@ void GC_push_regs()
 	  asm ("movd r7, tos"); asm ("bsr ?_GC_push_one"); asm ("adjspb $-4");
 #       endif
 
-#       ifdef SPARC
+#       if defined(SPARC)
 	  {
 	      word GC_save_regs_in_stack();
 	      
-	      /* generic code will not work */
-	      (void)GC_save_regs_in_stack();
+	      GC_save_regs_ret_val = GC_save_regs_in_stack();
 	  }
 #       endif
 
@@ -283,8 +362,32 @@ void GC_push_regs()
 #        endif /* !__GNUC__ */
 #       endif /* M68K/SYSV */
 
+#     if defined(PJ)
+	{
+	    register int * sp asm ("optop");
+	    extern int *__libc_stack_end;
 
-#     if defined(HP_PA) || defined(M88K) || defined(POWERPC) || (defined(I386) && defined(OS2))
+	    GC_push_all_stack (sp, __libc_stack_end);
+        }
+#     endif
+
+      /* other machines... */
+#       if !(defined M68K) && !(defined VAX) && !(defined RT) 
+#	if !(defined SPARC) && !(defined I386) && !(defined NS32K)
+#	if !defined(POWERPC) && !defined(UTS4) 
+#       if !defined(PJ) && !(defined(MIPS) && defined(LINUX))
+	    --> bad news <--
+#	endif
+#       endif
+#       endif
+#       endif
+}
+#endif /* !USE_GENERIC_PUSH_REGS */
+
+#if defined(USE_GENERIC_PUSH_REGS)
+void GC_generic_push_regs(cold_gc_frame)
+ptr_t cold_gc_frame;
+{
 	/* Generic code                          */
 	/* The idea is due to Parag Patel at HP. */
 	/* We're not sure whether he would like  */
@@ -299,24 +402,28 @@ void GC_push_regs()
 		for (; (char *)i < lim; i++) {
 		    *i = 0;
 		}
-#	    ifdef POWERPC
+#	    if defined(POWERPC) || defined(MSWIN32) || defined(UTS4) || defined(LINUX)
 		(void) setjmp(regs);
 #	    else
 	        (void) _setjmp(regs);
 #	    endif
-	    GC_push_all_stack((ptr_t)regs, lim);
+#           if defined(SPARC) || defined(IA64)
+	      /* On a register window machine, we need to save register	*/
+	      /* contents on the stack for this to work.  The setjmp	*/
+	      /* is probably not needed on SPARC, since pointers are	*/
+	      /* only stored in windowed or scratch registers.  It is	*/
+	      /* needed on IA64, since some non-windowed registers are	*/
+	      /* preserved.						*/
+	      {
+	        word GC_save_regs_in_stack();
+	      
+	        GC_save_regs_ret_val = GC_save_regs_in_stack();
+	      }
+#           endif
+	    GC_push_current_stack(cold_gc_frame);
 	}
-#     endif
-
-      /* other machines... */
-#       if !(defined M68K) && !(defined VAX) && !(defined RT) 
-#	if !(defined SPARC) && !(defined I386) && !(defined NS32K)
-#	if !defined(HP_PA) && !defined(M88K) && !defined(POWERPC)
-	    --> bad news <--
-#       endif
-#       endif
-#       endif
 }
+#endif /* USE_GENERIC_PUSH_REGS */
 
 /* On register window machines, we need a way to force registers into 	*/
 /* the stack.	Return sp.						*/
@@ -343,6 +450,27 @@ void GC_push_regs()
 #   endif
 # endif
 
+/* On IA64, we also need to flush register windows.  But they end	*/
+/* up on the other side of the stack segment.				*/
+/* Returns the backing store pointer for the register stack.		*/
+# ifdef IA64
+	asm("        .text");
+	asm("        .psr abi64");
+	asm("        .psr lsb");
+	asm("        .lsb");
+	asm("");
+	asm("        .text");
+	asm("        .align 16");
+	asm("        .global GC_save_regs_in_stack");
+	asm("        .proc GC_save_regs_in_stack");
+	asm("GC_save_regs_in_stack:");
+	asm("        .body");
+	asm("        flushrs");
+	asm("        ;;");
+	asm("        mov r8=ar.bsp");
+	asm("        br.ret.sptk.few rp");
+	asm("        .endp GC_save_regs_in_stack");
+# endif
 
 /* GC_clear_stack_inner(arg, limit) clears stack area up to limit and	*/
 /* returns arg.  Stack clearing is crucial on SPARC, so we supply	*/

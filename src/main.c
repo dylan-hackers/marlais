@@ -80,7 +80,7 @@ int getopt (int argc, char *argv[], const char *options);
 #endif
 
 #ifndef INIT_FILE
-#define INIT_FILE "init.dyl"
+#define INIT_FILE "init.dylan"
 #endif
 
 #ifndef VERSION

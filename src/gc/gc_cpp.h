@@ -16,12 +16,11 @@ the code was modified is included with the above copyright notice.
 C++ Interface to the Boehm Collector
 
     John R. Ellis and Jesse Hull 
-    Last modified on Wed Jan  4 16:30:20 PST 1995 by ellis
 
 This interface provides access to the Boehm collector.  It provides
 basic facilities similar to those described in "Safe, Efficient
 Garbage Collection for C++", by John R. Elis and David L. Detlefs
-(ftp.parc.xerox.com:/pub/ellis/gc).
+(ftp://ftp.parc.xerox.com/pub/ellis/gc).
 
 All heap-allocated objects are either "collectable" or
 "uncollectable".  Programs must explicitly delete uncollectable
@@ -34,11 +33,11 @@ Objects allocated with the built-in "::operator new" are uncollectable.
 
 Objects derived from class "gc" are collectable.  For example:
 
-    class A: gc {...};
+    class A: public gc {...};
     A* a = new A;       // a is collectable. 
 
 Collectable instances of non-class types can be allocated using the GC
-placement:
+(or UseGC) placement:
 
     typedef int A[ 10 ];
     A* a = new (GC) A;
@@ -46,7 +45,7 @@ placement:
 Uncollectable instances of classes derived from "gc" can be allocated
 using the NoGC placement:
 
-    class A: gc {...};
+    class A: public gc {...};
     A* a = new (NoGC) A;   // a is uncollectable.
 
 Both uncollectable and collectable objects can be explicitly deleted
@@ -87,35 +86,48 @@ Cautions:
 add -DOPERATOR_NEW_ARRAY to the Makefile.
 
 If your compiler doesn't support "operator new[]", beware that an
-array of type T, where T is derived from "gc", will by default be
-allocated as an uncollectable object.  Use the explicit GC placement
-to make the array collectable.  For example:
+array of type T, where T is derived from "gc", may or may not be
+allocated as a collectable object (it depends on the compiler).  Use
+the explicit GC placement to make the array collectable.  For example:
 
-    class A: gc {...};
-    A* a1 = new A[ 10 ];        // uncollectable
+    class A: public gc {...};
+    A* a1 = new A[ 10 ];        // collectable or uncollectable?
     A* a2 = new (GC) A[ 10 ];   // collectable
 
-3. Arrays of objects derived from "gc_cleanup" do not have default
-clean-up functions.  For example:
+3. The destructors of collectable arrays of objects derived from
+"gc_cleanup" will not be invoked properly.  For example:
 
-    class A: gc_cleanup {...};
-    A* a = new (GC) A[ 10 ];
+    class A: public gc_cleanup {...};
+    A* a = new (GC) A[ 10 ];    // destructors not invoked correctly
 
-The elements of "a" will not have their destructors invoked when the
-collector frees "a".  You must supply an explicit clean-up function
-for that to occur.
+Typically, only the destructor for the first element of the array will
+be invoked when the array is garbage-collected.  To get all the
+destructors of any array executed, you must supply an explicit
+clean-up function:
+
+    A* a = new (GC, MyCleanUp) A[ 10 ];
+
+(Implementing clean-up of arrays correctly, portably, and in a way
+that preserves the correct exception semantics requires a language
+extension, e.g. the "gc" keyword.)
 
 4. Compiler bugs:
 
-    Solaris 2's CC (SC3.0) doesn't implement t->~T() correctly, so the
-    destructors of classes derived from gc_cleanup won't be invoked.
-    You'll have to explicitly register a clean-up function with
-    new-placement syntax.
+* Solaris 2's CC (SC3.0) doesn't implement t->~T() correctly, so the
+destructors of classes derived from gc_cleanup won't be invoked.
+You'll have to explicitly register a clean-up function with
+new-placement syntax.
 
-    Evidently cfront 3.0 does not allow destructors to be explicitly
-    invoked using the ANSI-conforming syntax t->~T().  If you're using
-    cfront 3.0, you'll have to comment out the class gc_cleanup, which
-    uses explicit invocation.
+* Evidently cfront 3.0 does not allow destructors to be explicitly
+invoked using the ANSI-conforming syntax t->~T().  If you're using
+cfront 3.0, you'll have to comment out the class gc_cleanup, which
+uses explicit invocation.
+
+5. GC name conflicts:
+
+Many other systems seem to use the identifier "GC" as an abbreviation
+for "Graphics Context".  Since version 5.0, GC placement has been replaced
+by UseGC.  GC is an alias for UseGC, unless GC_NAME_CONFLICT is defined.
 
 ****************************************************************************/
 
@@ -125,11 +137,17 @@ for that to occur.
 #define _cdecl
 #endif
 
-#if __BORLANDC__ >= 0x450 && !defined(OPERATOR_NEW_ARRAY)
+#if ! defined( OPERATOR_NEW_ARRAY ) \
+    && (__BORLANDC__ >= 0x450 || (__GNUC__ >= 2 && __GNUC_MINOR__ >= 6) \
+        || __WATCOMC__ >= 1050 || _MSC_VER >= 1100)
 #   define OPERATOR_NEW_ARRAY
 #endif
 
-enum GCPlacement {GC, NoGC};
+enum GCPlacement {UseGC,
+#ifndef GC_NAME_CONFLICT
+		  GC=UseGC,
+#endif
+                  NoGC, PointerFreeGC};
 
 class gc {public:
     inline void* operator new( size_t size );
@@ -182,6 +200,19 @@ inline void* operator new(
 
 #ifdef OPERATOR_NEW_ARRAY
 
+#ifdef NO_DOUG_NEW_ARRAY
+#ifdef _MSC_VER
+ /** This ensures that the system default operator new[] doesn't get
+  *  undefined, which is what seems to happen on VC++ 6 for some reason
+  *  if we define a multi-argument operator new[].
+  */
+ inline void *operator new[]( size_t size )
+ {
+    return ::operator new( size );
+ }
+#endif /* _MSC_VER */
+#endif
+
 inline void* operator new[](
     size_t size, 
     GCPlacement gcp,
@@ -202,8 +233,10 @@ inline void* gc::operator new( size_t size ) {
     return GC_MALLOC( size );}
     
 inline void* gc::operator new( size_t size, GCPlacement gcp ) {
-    if (gcp == GC) 
+    if (gcp == UseGC) 
         return GC_MALLOC( size );
+    else if (gcp == PointerFreeGC)
+	return GC_MALLOC_ATOMIC( size );
     else
         return GC_MALLOC_UNCOLLECTABLE( size );}
 
@@ -226,16 +259,21 @@ inline void gc::operator delete[]( void* obj ) {
 
 
 inline gc_cleanup::~gc_cleanup() {
-    GC_REGISTER_FINALIZER_IGNORE_SELF( this, 0, 0, 0, 0 );}
+    GC_REGISTER_FINALIZER_IGNORE_SELF( GC_base(this), 0, 0, 0, 0 );}
 
 inline void gc_cleanup::cleanup( void* obj, void* displ ) {
     ((gc_cleanup*) ((char*) obj + (ptrdiff_t) displ))->~gc_cleanup();}
 
 inline gc_cleanup::gc_cleanup() {
+    GC_finalization_proc oldProc;
+    void* oldData;
     void* base = GC_base( (void *) this );
-    if (0 != base) {
-        GC_REGISTER_FINALIZER_IGNORE_SELF( 
-            base, cleanup, (void*) ((char*) this - (char*) base), 0, 0 );}}
+    if (0 != base)  {
+      GC_REGISTER_FINALIZER_IGNORE_SELF( 
+        base, (GC_finalization_proc)cleanup, (void*) ((char*) this - (char*) base), 
+        &oldProc, &oldData );
+      if (0 != oldProc) {
+        GC_REGISTER_FINALIZER_IGNORE_SELF( base, oldProc, oldData, 0, 0 );}}}
 
 inline void* operator new( 
     size_t size, 
@@ -245,11 +283,13 @@ inline void* operator new(
 {
     void* obj;
 
-    if (gcp == GC) {
+    if (gcp == UseGC) {
         obj = GC_MALLOC( size );
         if (cleanup != 0) 
             GC_REGISTER_FINALIZER_IGNORE_SELF( 
                 obj, cleanup, clientData, 0, 0 );}
+    else if (gcp == PointerFreeGC) {
+        obj = GC_MALLOC_ATOMIC( size );}
     else {
         obj = GC_MALLOC_UNCOLLECTABLE( size );};
     return obj;}

@@ -21,10 +21,24 @@
 
 /* We put this here to minimize the risk of inlining. */
 /*VARARGS*/
-void GC_noop() {}
+#ifdef __WATCOMC__
+  void GC_noop(void *p, ...) {}
+#else
+  void GC_noop() {}
+#endif
 
-mark_proc GC_mark_procs[MAX_MARK_PROCS] = {0};
-word GC_n_mark_procs = 0;
+/* Single argument version, robust against whole program analysis. */
+void GC_noop1(x)
+word x;
+{
+    static VOLATILE word sink;
+
+    sink = x;
+}
+
+/* mark_proc GC_mark_procs[MAX_MARK_PROCS] = {0} -- declared in gc_priv.h */
+
+word GC_n_mark_procs = GC_RESERVED_MARK_PROCS;
 
 /* Initialize GC_obj_kinds properly and standard free lists properly.  	*/
 /* This must be done statically since they may be accessed before 	*/
@@ -34,8 +48,8 @@ struct obj_kind GC_obj_kinds[MAXOBJKINDS] = {
 /* PTRFREE */ { &GC_aobjfreelist[0], 0 /* filled in dynamically */,
 		0 | DS_LENGTH, FALSE, FALSE },
 /* NORMAL  */ { &GC_objfreelist[0], 0,
-#		ifdef ADD_BYTE_AT_END
-		(word)(WORDS_TO_BYTES(-1)) | DS_LENGTH,
+#		if defined(ADD_BYTE_AT_END) && ALIGNMENT > DS_TAGS
+		(word)(-ALIGNMENT) | DS_LENGTH,
 #		else
 		0 | DS_LENGTH,
 #		endif
@@ -43,22 +57,41 @@ struct obj_kind GC_obj_kinds[MAXOBJKINDS] = {
 /* UNCOLLECTABLE */
 	      { &GC_uobjfreelist[0], 0,
 		0 | DS_LENGTH, TRUE /* add length to descr */, TRUE },
+# ifdef ATOMIC_UNCOLLECTABLE
+   /* AUNCOLLECTABLE */
+	      { &GC_auobjfreelist[0], 0,
+		0 | DS_LENGTH, FALSE /* add length to descr */, FALSE },
+# endif
 # ifdef STUBBORN_ALLOC
 /*STUBBORN*/ { &GC_sobjfreelist[0], 0,
 		0 | DS_LENGTH, TRUE /* add length to descr */, TRUE },
 # endif
 };
 
-# ifdef STUBBORN_ALLOC
-  int GC_n_kinds = 4;
+# ifdef ATOMIC_UNCOLLECTABLE
+#   ifdef STUBBORN_ALLOC
+      int GC_n_kinds = 5;
+#   else
+      int GC_n_kinds = 4;
+#   endif
 # else
-  int GC_n_kinds = 3;
+#   ifdef STUBBORN_ALLOC
+      int GC_n_kinds = 4;
+#   else
+      int GC_n_kinds = 3;
+#   endif
 # endif
 
 
-# define INITIAL_MARK_STACK_SIZE (1*HBLKSIZE)
+# ifndef INITIAL_MARK_STACK_SIZE
+#   define INITIAL_MARK_STACK_SIZE (1*HBLKSIZE)
 		/* INITIAL_MARK_STACK_SIZE * sizeof(mse) should be a 	*/
 		/* multiple of HBLKSIZE.				*/
+		/* The incremental collector actually likes a larger	*/
+		/* size, since it want to push all marked dirty objs	*/
+		/* before marking anything new.  Currently we let it	*/
+		/* grow dynamically.					*/
+# endif
 
 /*
  * Limits of stack for GC_mark routine.
@@ -79,12 +112,15 @@ static struct hblk * scan_ptr;
 
 mark_state_t GC_mark_state = MS_NONE;
 
-bool GC_mark_stack_too_small = FALSE;
+GC_bool GC_mark_stack_too_small = FALSE;
 
-bool GC_objects_are_marked = FALSE;	/* Are there collectable marked	*/
+GC_bool GC_objects_are_marked = FALSE;	/* Are there collectable marked	*/
 					/* objects in the heap?		*/
 
-bool GC_collection_in_progress()
+/* Is a collection in progress?  Note that this can return true in the	*/
+/* nonincremental case, if a collection has been abandoned and the	*/
+/* mark state is now MS_INVALID.					*/
+GC_bool GC_collection_in_progress()
 {
     return(GC_mark_state != MS_NONE);
 }
@@ -94,6 +130,17 @@ void GC_clear_hdr_marks(hhdr)
 register hdr * hhdr;
 {
     BZERO(hhdr -> hb_marks, MARK_BITS_SZ*sizeof(word));
+}
+
+/* Set all mark bits in the header.  Used for uncollectable blocks. */
+void GC_set_hdr_marks(hhdr)
+register hdr * hhdr;
+{
+    register int i;
+
+    for (i = 0; i < MARK_BITS_SZ; ++i) {
+    	hhdr -> hb_marks[i] = ONES;
+    }
 }
 
 /*
@@ -106,7 +153,7 @@ word dummy;
 {
     register hdr * hhdr = HDR(h);
     
-    if (hhdr -> hb_obj_kind == UNCOLLECTABLE) return;
+    if (IS_UNCOLLECTABLE(hhdr -> hb_obj_kind)) return;
         /* Mark bit for these is cleared only once the object is 	*/
         /* explicitly deallocated.  This either frees the block, or	*/
         /* the bit is cleared once the object is on the free list.	*/
@@ -134,7 +181,7 @@ ptr_t p;
     clear_mark_bit_from_hdr(hhdr, word_no);
 }
 
-bool GC_is_marked(p)
+GC_bool GC_is_marked(p)
 ptr_t p;
 {
     register struct hblk *h = HBLKPTR(p);
@@ -148,7 +195,7 @@ ptr_t p;
 /*
  * Clear mark bits in all allocated heap blocks.  This invalidates
  * the marker invariant, and sets GC_mark_state to reflect this.
- * (This implicitly starts marking to reestablish the
+ * (This implicitly starts marking to reestablish the invariant.)
  */
 void GC_clear_marks()
 {
@@ -164,36 +211,10 @@ void GC_clear_marks()
 
 }
 
-/* Initiate full marking.	*/
-void GC_initiate_full()
-{
-#   ifdef PRINTSTATS
-	GC_printf2("***>Full mark for collection %lu after %ld allocd bytes\n",
-		  (unsigned long) GC_gc_no+1,
-	   	  (long)WORDS_TO_BYTES(GC_words_allocd));
-#   endif
-    GC_promote_black_lists();
-    GC_reclaim_or_delete_all();
-    GC_clear_marks();
-    GC_read_dirty();
-#   ifdef STUBBORN_ALLOC
-    	GC_read_changed();
-#   endif
-#   ifdef CHECKSUMS
-	{
-	    extern void GC_check_dirty();
-	    
-	    GC_check_dirty();
-	}
-#   endif
-#   ifdef GATHERSTATS
-	GC_n_rescuing_pages = 0;
-#   endif
-}
-
-/* Initiate partial marking.	*/
+/* Initiate a garbage collection.  Initiates a full collection if the	*/
+/* mark	state is invalid.						*/
 /*ARGSUSED*/
-void GC_initiate_partial()
+void GC_initiate_gc()
 {
     if (GC_dirty_maintained) GC_read_dirty();
 #   ifdef STUBBORN_ALLOC
@@ -224,15 +245,36 @@ static void alloc_mark_stack();
 /* Perform a small amount of marking.			*/
 /* We try to touch roughly a page of memory.		*/
 /* Return TRUE if we just finished a mark phase.	*/
-bool GC_mark_some()
+/* Cold_gc_frame is an address inside a GC frame that	*/
+/* remains valid until all marking is complete.		*/
+/* A zero value indicates that it's OK to miss some	*/
+/* register values.					*/
+GC_bool GC_mark_some(cold_gc_frame)
+ptr_t cold_gc_frame;
 {
+#ifdef MSWIN32
+  /* Windows 98 appears to asynchronously create and remove writable	*/
+  /* memory mappings, for reasons we haven't yet understood.  Since	*/
+  /* we look for writable regions to determine the root set, we may	*/
+  /* try to mark from an address range that disappeared since we 	*/
+  /* started the collection.  Thus we have to recover from faults here. */
+  /* This code does not appear to be necessary for Windows 95/NT/2000.	*/ 
+  /* Note that this code should never generate an incremental GC write	*/
+  /* fault.								*/
+  __try {
+#endif
     switch(GC_mark_state) {
     	case MS_NONE:
     	    return(FALSE);
     	    
     	case MS_PUSH_RESCUERS:
     	    if (GC_mark_stack_top
-    	        >= GC_mark_stack + INITIAL_MARK_STACK_SIZE/4) {
+    	        >= GC_mark_stack + GC_mark_stack_size
+		   - INITIAL_MARK_STACK_SIZE/2) {
+		/* Go ahead and mark, even though that might cause us to */
+		/* see more marked dirty objects later on.  Avoid this	 */
+		/* in the future.					 */
+		GC_mark_stack_too_small = TRUE;
     	        GC_mark_from_mark_stack();
     	        return(FALSE);
     	    } else {
@@ -242,7 +284,7 @@ bool GC_mark_some()
 			GC_printf1("Marked from %lu dirty pages\n",
 				   (unsigned long)GC_n_rescuing_pages);
 #		    endif
-    	    	    GC_push_roots(FALSE);
+    	    	    GC_push_roots(FALSE, cold_gc_frame);
     	    	    GC_objects_are_marked = TRUE;
     	    	    if (GC_mark_state != MS_INVALID) {
     	    	        GC_mark_state = MS_ROOTS_PUSHED;
@@ -259,7 +301,7 @@ bool GC_mark_some()
     	    } else {
     	        scan_ptr = GC_push_next_marked_uncollectable(scan_ptr);
     	        if (scan_ptr == 0) {
-    	    	    GC_push_roots(TRUE);
+    	    	    GC_push_roots(TRUE, cold_gc_frame);
     	    	    GC_objects_are_marked = TRUE;
     	    	    if (GC_mark_state != MS_INVALID) {
     	    	        GC_mark_state = MS_ROOTS_PUSHED;
@@ -290,14 +332,17 @@ bool GC_mark_some()
     	        GC_mark_from_mark_stack();
     	        return(FALSE);
     	    }
-    	    if (scan_ptr == 0
-    	        && (GC_mark_state == MS_INVALID || GC_mark_stack_too_small)) {
-    	        alloc_mark_stack(2*GC_mark_stack_size);
+    	    if (scan_ptr == 0 && GC_mark_state == MS_INVALID) {
+		/* About to start a heap scan for marked objects. */
+		/* Mark stack is empty.  OK to reallocate.	  */
+		if (GC_mark_stack_too_small) {
+    	            alloc_mark_stack(2*GC_mark_stack_size);
+		}
 		GC_mark_state = MS_PARTIALLY_INVALID;
     	    }
     	    scan_ptr = GC_push_next_marked(scan_ptr);
     	    if (scan_ptr == 0 && GC_mark_state == MS_PARTIALLY_INVALID) {
-    	    	GC_push_roots(TRUE);
+    	    	GC_push_roots(TRUE, cold_gc_frame);
     	    	GC_objects_are_marked = TRUE;
     	    	if (GC_mark_state != MS_INVALID) {
     	    	    GC_mark_state = MS_ROOTS_PUSHED;
@@ -308,10 +353,24 @@ bool GC_mark_some()
     	    ABORT("GC_mark_some: bad state");
     	    return(FALSE);
     }
+#ifdef MSWIN32
+  } __except (GetExceptionCode() == EXCEPTION_ACCESS_VIOLATION ?
+	    EXCEPTION_EXECUTE_HANDLER : EXCEPTION_CONTINUE_SEARCH) {
+#   ifdef PRINTSTATS
+	GC_printf0("Caught ACCESS_VIOLATION in marker. "
+		   "Memory mapping disappeared.\n");
+#   endif /* PRINTSTATS */
+    /* We have bad roots on the stack.  Discard mark stack.  	*/
+    /* Rescan from marked objects.  Redetermine roots.		*/
+    GC_invalidate_mark_state();	
+    scan_ptr = 0;
+    return FALSE;
+  }
+#endif /* MSWIN32 */
 }
 
 
-bool GC_mark_stack_empty()
+GC_bool GC_mark_stack_empty()
 {
     return(GC_mark_stack_top < GC_mark_stack);
 }	
@@ -330,15 +389,21 @@ bool GC_mark_stack_empty()
 /* Returns NIL without black listing if current points to a block	*/
 /* with IGNORE_OFF_PAGE set.						*/
 /*ARGSUSED*/
-word GC_find_start(current, hhdr)
-register word current;
+# ifdef PRINT_BLACK_LIST
+  ptr_t GC_find_start(current, hhdr, source)
+  word source;
+# else
+  ptr_t GC_find_start(current, hhdr)
+# define source 0
+# endif
+register ptr_t current;
 register hdr * hhdr;
 {
 #   ifdef ALL_INTERIOR_POINTERS
 	if (hhdr != 0) {
-	    register word orig = current;
+	    register ptr_t orig = current;
 	    
-	    current = (word)HBLKPTR(current) + HDR_BYTES;
+	    current = (ptr_t)HBLKPTR(current) + HDR_BYTES;
 	    do {
 	      current = current - HBLKSIZE*(word)hhdr;
 	      hhdr = HDR(current);
@@ -348,18 +413,19 @@ register hdr * hhdr;
 	    if ((word *)orig - (word *)current
 	         >= (ptrdiff_t)(hhdr->hb_sz)) {
 	        /* Pointer past the end of the block */
-	        GC_ADD_TO_BLACK_LIST_NORMAL(orig);
+	        GC_ADD_TO_BLACK_LIST_NORMAL(orig, source);
 	        return(0);
 	    }
 	    return(current);
 	} else {
-	    GC_ADD_TO_BLACK_LIST_NORMAL(current);
+	    GC_ADD_TO_BLACK_LIST_NORMAL(current, source);
 	    return(0);
         }
 #   else
-        GC_ADD_TO_BLACK_LIST_NORMAL(current);
+        GC_ADD_TO_BLACK_LIST_NORMAL(current, source);
         return(0);
 #   endif
+#   undef source
 }
 
 void GC_invalidate_mark_state()
@@ -372,6 +438,7 @@ mse * GC_signal_mark_stack_overflow(msp)
 mse * msp;
 {
     GC_mark_state = MS_INVALID;
+    GC_mark_stack_too_small = TRUE;
 #   ifdef PRINTSTATS
 	GC_printf1("Mark stack overflow; current size = %lu entries\n",
 	    	    GC_mark_stack_size);
@@ -387,6 +454,12 @@ mse * msp;
  * is never 0.  A mark stack entry never has size 0.
  * We try to traverse on the order of a hblk of memory before we return.
  * Caller is responsible for calling this until the mark stack is empty.
+ * Note that this is the most performance critical routine in the
+ * collector.  Hence it contains all sorts of ugly hacks to speed
+ * things up.  In particular, we avoid procedure calls on the common
+ * path, we take advantage of peculiarities of the mark descriptor
+ * encoding, we optionally maintain a cache for the block address to
+ * header mapping, we prefetch when an object is "grayed", etc. 
  */
 void GC_mark_from_mark_stack()
 {
@@ -401,9 +474,12 @@ void GC_mark_from_mark_stack()
   register word descr;
   register ptr_t greatest_ha = GC_greatest_plausible_heap_addr;
   register ptr_t least_ha = GC_least_plausible_heap_addr;
+  DECLARE_HDR_CACHE;
+
 # define SPLIT_RANGE_WORDS 128  /* Must be power of 2.		*/
 
   GC_objects_are_marked = TRUE;
+  INIT_HDR_CACHE;
 # ifdef OS2 /* Use untweaked version to circumvent compiler problem */
   while (GC_mark_stack_top_reg >= GC_mark_stack_reg && credit >= 0) {
 # else
@@ -412,7 +488,12 @@ void GC_mark_from_mark_stack()
 # endif
     current_p = GC_mark_stack_top_reg -> mse_start;
     descr = GC_mark_stack_top_reg -> mse_descr;
-  retry:  
+  retry:
+    /* current_p and descr describe the current object.		*/
+    /* *GC_mark_stack_top_reg is vacant.			*/
+    /* The following is 0 only for small objects described by a simple	*/
+    /* length descriptor.  For many applications this is the common	*/
+    /* case, so we try to detect it quickly.				*/
     if (descr & ((~(WORDS_TO_BYTES(SPLIT_RANGE_WORDS) - 1)) | DS_TAGS)) {
       word tag = descr & DS_TAGS;
       
@@ -423,8 +504,8 @@ void GC_mark_from_mark_stack()
           /* stack.							*/
           GC_mark_stack_top_reg -> mse_start =
          	limit = current_p + SPLIT_RANGE_WORDS-1;
-          GC_mark_stack_top_reg -> mse_descr -=
-          		WORDS_TO_BYTES(SPLIT_RANGE_WORDS-1);
+          GC_mark_stack_top_reg -> mse_descr =
+          		descr - WORDS_TO_BYTES(SPLIT_RANGE_WORDS-1);
           /* Make sure that pointers overlapping the two ranges are	*/
           /* considered. 						*/
           limit = (word *)((char *)limit + sizeof(word) - ALIGNMENT);
@@ -435,15 +516,15 @@ void GC_mark_from_mark_stack()
           credit -= WORDS_TO_BYTES(WORDSZ/2); /* guess */
           while (descr != 0) {
             if ((signed_word)descr < 0) {
-              current = *current_p++;
-              descr <<= 1;
-              if ((ptr_t)current < least_ha) continue;
-              if ((ptr_t)current >= greatest_ha) continue;
-              PUSH_CONTENTS(current, GC_mark_stack_top_reg, mark_stack_limit);
-            } else {
-              descr <<= 1;
-              current_p++;
+              current = *current_p;
+	      if ((ptr_t)current >= least_ha && (ptr_t)current < greatest_ha) {
+		PREFETCH(current);
+                HC_PUSH_CONTENTS((ptr_t)current, GC_mark_stack_top_reg,
+			      mark_stack_limit, current_p, exit1);
+	      }
             }
+	    descr <<= 1;
+	    ++ current_p;
           }
           continue;
         case DS_PROC:
@@ -455,22 +536,98 @@ void GC_mark_from_mark_stack()
               	    mark_stack_limit, ENV(descr));
           continue;
         case DS_PER_OBJECT:
-          descr = *(word *)((ptr_t)current_p + descr - tag);
+	  if ((signed_word)descr >= 0) {
+	    /* Descriptor is in the object.	*/
+            descr = *(word *)((ptr_t)current_p + descr - DS_PER_OBJECT);
+	  } else {
+	    /* Descriptor is in type descriptor pointed to by first	*/
+	    /* word in object.						*/
+	    ptr_t type_descr = *(ptr_t *)current_p;
+	    /* type_descr is either a valid pointer to the descriptor	*/
+	    /* structure, or this object was on a free list.  If it 	*/
+	    /* it was anything but the last object on the free list,	*/
+	    /* we will misinterpret the next object on the free list as */
+	    /* the type descriptor, and get a 0 GC descriptor, which	*/
+	    /* is ideal.  Unfortunately, we need to check for the last	*/
+	    /* object case explicitly.					*/
+	    if (0 == type_descr) {
+		/* Rarely executed.	*/
+		GC_mark_stack_top_reg--;
+		continue;
+	    }
+            descr = *(word *)(type_descr
+			      - (descr - (DS_PER_OBJECT - INDIR_PER_OBJ_BIAS)));
+	  }
+	  if (0 == descr) {
+	    GC_mark_stack_top_reg--;
+	    continue;
+	  }
           goto retry;
       }
-    } else {
+    } else /* Small object with length descriptor */ {
       GC_mark_stack_top_reg--;
       limit = (word *)(((ptr_t)current_p) + (word)descr);
     }
     /* The simple case in which we're scanning a range.	*/
     credit -= (ptr_t)limit - (ptr_t)current_p;
     limit -= 1;
-    while (current_p <= limit) {
-      current = *current_p;
-      current_p = (word *)((char *)current_p + ALIGNMENT);
-      if ((ptr_t)current < least_ha) continue;
-      if ((ptr_t)current >= greatest_ha) continue;
-      PUSH_CONTENTS(current, GC_mark_stack_top_reg, mark_stack_limit);
+    {
+#     define PREF_DIST 4
+
+#     ifndef SMALL_CONFIG
+        word deferred;
+
+	/* Try to prefetch the next pointer to be examined asap.	*/
+	/* Empirically, this also seems to help slightly without	*/
+	/* prefetches, at least on linux/X86.  Presumably this loop 	*/
+	/* ends up with less register pressure, and gcc thus ends up 	*/
+	/* generating slightly better code.  Overall gcc code quality	*/
+	/* for this loop is still not great.				*/
+	for(;;) {
+	  PREFETCH((ptr_t)limit - PREF_DIST*CACHE_LINE_SIZE);
+	  deferred = *limit;
+	  limit = (word *)((char *)limit - ALIGNMENT);
+	  if ((ptr_t)deferred >= least_ha && (ptr_t)deferred <  greatest_ha) {
+	    PREFETCH(deferred);
+	    break;
+	  }
+	  if (current_p > limit) goto next_object;
+	  /* Unroll once, so we don't do too many of the prefetches 	*/
+	  /* based on limit.						*/
+	  deferred = *limit;
+	  limit = (word *)((char *)limit - ALIGNMENT);
+	  if ((ptr_t)deferred >= least_ha && (ptr_t)deferred <  greatest_ha) {
+	    PREFETCH(deferred);
+	    break;
+	  }
+	  if (current_p > limit) goto next_object;
+	}
+#     endif
+
+      while (current_p <= limit) {
+	/* Empirically, unrolling this loop doesn't help a lot.	*/
+	/* Since HC_PUSH_CONTENTS expands to a lot of code,	*/
+	/* we don't.						*/
+        current = *current_p;
+        PREFETCH((ptr_t)current_p + PREF_DIST*CACHE_LINE_SIZE);
+        if ((ptr_t)current >= least_ha && (ptr_t)current <  greatest_ha) {
+  	  /* Prefetch the contents of the object we just pushed.  It's	*/
+  	  /* likely we will need them soon.				*/
+  	  PREFETCH(current);
+          HC_PUSH_CONTENTS((ptr_t)current, GC_mark_stack_top_reg,
+  		           mark_stack_limit, current_p, exit2);
+        }
+        current_p = (word *)((char *)current_p + ALIGNMENT);
+      }
+
+#     ifndef SMALL_CONFIG
+	/* We still need to mark the entry we previously prefetched.	*/
+	/* We alrady know that it passes the preliminary pointer	*/
+	/* validity test.						*/
+        HC_PUSH_CONTENTS((ptr_t)deferred, GC_mark_stack_top_reg,
+  		         mark_stack_limit, current_p, exit4);
+	next_object:;
+#     endif
     }
   }
   GC_mark_stack_top = GC_mark_stack_top_reg;
@@ -486,17 +643,16 @@ word n;
     GC_mark_stack_too_small = FALSE;
     if (GC_mark_stack_size != 0) {
         if (new_stack != 0) {
-          word displ = HBLKDISPL(GC_mark_stack);
-          word size = GC_mark_stack_size * sizeof(struct ms_entry);
+          word displ = (word)GC_mark_stack & (GC_page_size - 1);
+          signed_word size = GC_mark_stack_size * sizeof(struct ms_entry);
           
           /* Recycle old space */
-            if (displ == 0) {
-              GC_add_to_heap((struct hblk *)GC_mark_stack, size);
-	    } else {
-	      GC_add_to_heap((struct hblk *)
-	      			((word)GC_mark_stack - displ + HBLKSIZE),
-	      		     size - HBLKSIZE);
-	    }
+	      if (0 != displ) displ = GC_page_size - displ;
+	      size = (size - displ) & ~(GC_page_size - 1);
+	      if (size > 0) {
+	        GC_add_to_heap((struct hblk *)
+	      			((word)GC_mark_stack + displ), (word)size);
+	      }
           GC_mark_stack = new_stack;
           GC_mark_stack_size = n;
 #	  ifdef PRINTSTATS
@@ -612,6 +768,7 @@ void (*push_fn)(/* ptr_t bottom, ptr_t top */);
 void GC_push_conditional(bottom, top, all)
 ptr_t bottom;
 ptr_t top;
+int all;
 {
     if (all) {
       if (GC_dirty_maintained) {
@@ -637,7 +794,13 @@ ptr_t top;
 # endif
 word p;
 {
-    GC_PUSH_ONE_STACK(p);
+#   ifdef NURSERY
+      if (0 != GC_push_proc) {
+	GC_push_proc(p);
+	return;
+      }
+#   endif
+    GC_PUSH_ONE_STACK(p, MARKED_FROM_REGISTER);
 }
 
 # ifdef __STDC__
@@ -647,9 +810,15 @@ word p;
 # endif
 
 /* As above, but argument passed preliminary test. */
-void GC_push_one_checked(p, interior_ptrs)
+# if defined(PRINT_BLACK_LIST) || defined(KEEP_BACK_PTRS)
+    void GC_push_one_checked(p, interior_ptrs, source)
+    ptr_t source;
+# else
+    void GC_push_one_checked(p, interior_ptrs)
+#   define source 0
+# endif
 register word p;
-register bool interior_ptrs;
+register GC_bool interior_ptrs;
 {
     register word r;
     register hdr * hhdr; 
@@ -670,13 +839,18 @@ register bool interior_ptrs;
         displ = HBLKDISPL(p);
         map_entry = MAP_ENTRY((hhdr -> hb_map), displ);
         if (map_entry == OBJ_INVALID) {
-          if (interior_ptrs) {
-            r = BASE(p);
-	    displ = BYTES_TO_WORDS(HBLKDISPL(r));
-	    if (r == 0) hhdr = 0;
-          } else {
-            hhdr = 0;
-          }
+#	  ifndef ALL_INTERIOR_POINTERS
+            if (interior_ptrs) {
+              r = BASE(p);
+	      displ = BYTES_TO_WORDS(HBLKDISPL(r));
+	      if (r == 0) hhdr = 0;
+            } else {
+              hhdr = 0;
+            }
+#	  else
+	    /* map already reflects interior pointers */
+	    hhdr = 0;
+#	  endif
         } else {
           displ = BYTES_TO_WORDS(displ);
           displ -= map_entry;
@@ -687,13 +861,19 @@ register bool interior_ptrs;
     /* displ is the word index within the block.		 */
     if (hhdr == 0) {
     	if (interior_ptrs) {
-	    GC_add_to_black_list_stack(p);
+#	    ifdef PRINT_BLACK_LIST
+	      GC_add_to_black_list_stack(p, source);
+#	    else
+	      GC_add_to_black_list_stack(p);
+#	    endif
 	} else {
-	    GC_ADD_TO_BLACK_LIST_NORMAL(p);
+	    GC_ADD_TO_BLACK_LIST_NORMAL(p, source);
+#	    undef source  /* In case we had to define it. */
 	}
     } else {
 	if (!mark_bit_from_hdr(hhdr, displ)) {
 	    set_mark_bit_from_hdr(hhdr, displ);
+ 	    GC_STORE_BACK_PTR(source, (ptr_t)r);
 	    PUSH_OBJ((word *)r, hhdr, GC_mark_stack_top,
 	             &(GC_mark_stack[GC_mark_stack_size]));
 	}
@@ -725,7 +905,7 @@ void GC_add_trace_entry(char *kind, word arg1, word arg2)
     if (GC_trace_buf_ptr >= TRACE_ENTRIES) GC_trace_buf_ptr = 0;
 }
 
-void GC_print_trace(word gc_no, bool lock)
+void GC_print_trace(word gc_no, GC_bool lock)
 {
     int i;
     struct trace_entry *p;
@@ -747,17 +927,13 @@ void GC_print_trace(word gc_no, bool lock)
 
 /*
  * A version of GC_push_all that treats all interior pointers as valid
+ * and scans the entire region immediately, in case the contents
+ * change.
  */
-void GC_push_all_stack(bottom, top)
+void GC_push_all_eager(bottom, top)
 ptr_t bottom;
 ptr_t top;
 {
-# ifdef ALL_INTERIOR_POINTERS
-    GC_push_all(bottom, top);
-#   ifdef TRACE_BUF
-        GC_add_trace_entry("GC_push_all_stack", bottom, top);
-#   endif
-# else
     word * b = (word *)(((long) bottom + ALIGNMENT-1) & ~(ALIGNMENT-1));
     word * t = (word *)(((long) top) & ~(ALIGNMENT-1));
     register word *p;
@@ -774,10 +950,58 @@ ptr_t top;
       lim = t - 1 /* longword */;
       for (p = b; p <= lim; p = (word *)(((char *)p) + ALIGNMENT)) {
 	q = *p;
-	GC_PUSH_ONE_STACK(q);
+	GC_PUSH_ONE_STACK(q, p);
       }
 #   undef GC_greatest_plausible_heap_addr
 #   undef GC_least_plausible_heap_addr
+}
+
+#ifndef THREADS
+/*
+ * A version of GC_push_all that treats all interior pointers as valid
+ * and scans part of the area immediately, to make sure that saved
+ * register values are not lost.
+ * Cold_gc_frame delimits the stack section that must be scanned
+ * eagerly.  A zero value indicates that no eager scanning is needed.
+ */
+void GC_push_all_stack_partially_eager(bottom, top, cold_gc_frame)
+ptr_t bottom;
+ptr_t top;
+ptr_t cold_gc_frame;
+{
+# ifdef ALL_INTERIOR_POINTERS
+#   define EAGER_BYTES 1024
+    /* Push the hot end of the stack eagerly, so that register values   */
+    /* saved inside GC frames are marked before they disappear.		*/
+    /* The rest of the marking can be deferred until later.		*/
+    if (0 == cold_gc_frame) {
+	GC_push_all_stack(bottom, top);
+	return;
+    }
+#   ifdef STACK_GROWS_DOWN
+	GC_push_all_eager(bottom, cold_gc_frame);
+	GC_push_all(cold_gc_frame - sizeof(ptr_t), top);
+#   else /* STACK_GROWS_UP */
+	GC_push_all_eager(cold_gc_frame, top);
+	GC_push_all(bottom, cold_gc_frame + sizeof(ptr_t));
+#   endif /* STACK_GROWS_UP */
+# else
+    GC_push_all_eager(bottom, top);
+# endif
+# ifdef TRACE_BUF
+      GC_add_trace_entry("GC_push_all_stack", bottom, top);
+# endif
+}
+#endif /* !THREADS */
+
+void GC_push_all_stack(bottom, top)
+ptr_t bottom;
+ptr_t top;
+{
+# ifdef ALL_INTERIOR_POINTERS
+    GC_push_all(bottom, top);
+# else
+    GC_push_all_eager(bottom, top);
 # endif
 }
 
@@ -809,7 +1033,7 @@ register hdr * hhdr;
 	    while(mark_word != 0) {
 	      if (mark_word & 1) {
 	          q = p[i];
-	          GC_PUSH_ONE_HEAP(q);
+	          GC_PUSH_ONE_HEAP(q, p + i);
 	      }
 	      i++;
 	      mark_word >>= 1;
@@ -850,9 +1074,9 @@ register hdr * hhdr;
 	    while(mark_word != 0) {
 	      if (mark_word & 1) {
 	          q = p[i];
-	          GC_PUSH_ONE_HEAP(q);
+	          GC_PUSH_ONE_HEAP(q, p + i);
 	          q = p[i+1];
-	          GC_PUSH_ONE_HEAP(q);
+	          GC_PUSH_ONE_HEAP(q, p + i);
 	      }
 	      i += 2;
 	      mark_word >>= 2;
@@ -892,13 +1116,13 @@ register hdr * hhdr;
 	    while(mark_word != 0) {
 	      if (mark_word & 1) {
 	          q = p[i];
-	          GC_PUSH_ONE_HEAP(q);
+	          GC_PUSH_ONE_HEAP(q, p + i);
 	          q = p[i+1];
-	          GC_PUSH_ONE_HEAP(q);
+	          GC_PUSH_ONE_HEAP(q, p + i + 1);
 	          q = p[i+2];
-	          GC_PUSH_ONE_HEAP(q);
+	          GC_PUSH_ONE_HEAP(q, p + i + 2);
 	          q = p[i+3];
-	          GC_PUSH_ONE_HEAP(q);
+	          GC_PUSH_ONE_HEAP(q, p + i + 3);
 	      }
 	      i += 4;
 	      mark_word >>= 4;
@@ -919,6 +1143,7 @@ struct hblk *h;
 register hdr * hhdr;
 {
     register int sz = hhdr -> hb_sz;
+    register int descr = hhdr -> hb_descr;
     register word * p;
     register int word_no;
     register word * lim;
@@ -926,14 +1151,14 @@ register hdr * hhdr;
     register mse * mark_stack_limit = &(GC_mark_stack[GC_mark_stack_size]);
     
     /* Some quick shortcuts: */
-        if (hhdr -> hb_obj_kind == PTRFREE) return;
+	if ((0 | DS_LENGTH) == descr) return;
         if (GC_block_empty(hhdr)/* nothing marked */) return;
 #   ifdef GATHERSTATS
         GC_n_rescuing_pages++;
 #   endif
     GC_objects_are_marked = TRUE;
     if (sz > MAXOBJSZ) {
-        lim = (word *)(h + 1);
+        lim = (word *)h + HDR_WORDS;
     } else {
         lim = (word *)(h + 1) - sz;
     }
@@ -956,10 +1181,6 @@ register hdr * hhdr;
       GC_mark_stack_top_reg = GC_mark_stack_top;
       for (p = (word *)h + HDR_WORDS, word_no = HDR_WORDS; p <= lim;
          p += sz, word_no += sz) {
-         /* This ignores user specified mark procs.  This currently	*/
-         /* doesn't matter, since marking from the whole object		*/
-         /* is always sufficient, and we will eventually use the user	*/
-         /* mark proc to avoid any bogus pointers.			*/
          if (mark_bit_from_hdr(hhdr, word_no)) {
            /* Mark from fields inside the object */
              PUSH_OBJ((word *)p, hhdr, GC_mark_stack_top_reg, mark_stack_limit);
@@ -976,7 +1197,7 @@ register hdr * hhdr;
 
 #ifndef SMALL_CONFIG
 /* Test whether any page in the given block is dirty	*/
-bool GC_block_was_dirty(h, hhdr)
+GC_bool GC_block_was_dirty(h, hhdr)
 struct hblk *h;
 register hdr * hhdr;
 {
@@ -1003,7 +1224,7 @@ struct hblk *h;
 {
     register hdr * hhdr;
     
-    h = GC_next_block(h);
+    h = GC_next_used_block(h);
     if (h == 0) return(0);
     hhdr = HDR(h);
     GC_push_marked(h, hhdr);
@@ -1015,11 +1236,11 @@ struct hblk *h;
 struct hblk * GC_push_next_marked_dirty(h)
 struct hblk *h;
 {
-    register hdr * hhdr = HDR(h);
+    register hdr * hhdr;
     
     if (!GC_dirty_maintained) { ABORT("dirty bits not set up"); }
     for (;;) {
-        h = GC_next_block(h);
+        h = GC_next_used_block(h);
         if (h == 0) return(0);
         hhdr = HDR(h);
 #	ifdef STUBBORN_ALLOC
@@ -1048,7 +1269,7 @@ struct hblk *h;
     register hdr * hhdr = HDR(h);
     
     for (;;) {
-        h = GC_next_block(h);
+        h = GC_next_used_block(h);
         if (h == 0) return(0);
         hhdr = HDR(h);
 	if (hhdr -> hb_obj_kind == UNCOLLECTABLE) break;

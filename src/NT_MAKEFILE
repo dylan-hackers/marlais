@@ -35,7 +35,7 @@
 # initialization file (change this to suite your installation)
 #
 # INIT_FILE=`pwd`/init.dyl#NOT-NT
-INIT_FILE=c:/marlais/init.dyl#NT
+INIT_FILE=c:/marlais/init.dylan #NT
 
 #INIT_FILE_FLAG = -DINIT_FILE=\"$(INIT_FILE)\"
 INIT_FILE_FLAG = -DINIT_FILE=\"$(INIT_FILE)\" -DINFIX_INIT_FILE
@@ -52,13 +52,14 @@ SYS_FLAG =
 
 # Use following if your c library does not include strcasecmp
 #
-# STRCASECMP = -DNO_STRCASECMP
-STRCASECMP_FLAG =
+# STRCASECMP_FLAG =
+STRCASECMP_FLAG = -DNO_STRCASECMP
 
 # Just in case you don't have sh, change this, but beware the comments
 # # below like #NOT-NT (which probably cause problems with csh)
 #
 SHELL = /bin/sh
+GETOPT=../win32/getopt
 
 ##########################################
 ### Interpreter Customization Features ###
@@ -92,10 +93,10 @@ PRECEDENCE_FLAG = -DUSE_LL_PRECEDENCE
 
 ##########################################
 
-VERSION = 0.5.12
-RLOG_VERSION = marlais_0_5_12
-PREVIOUS_VERSION = 0.5
-PREVIOUS_RLOG_VERSION = marlais_0_5
+VERSION = 0.5.13
+RLOG_VERSION = marlais_0_5_13
+PREVIOUS_VERSION = 0.5.12
+PREVIOUS_RLOG_VERSION = marlais_0_5_12
 PREVIOUS_VERSION_DIR = $(PROGRAM)-$(PREVIOUS_VERSION)
 PATCHFILE = $(PROGRAM)-$(PREVIOUS_VERSION)-$(VERSION).diff
 INCDIRS = gc 
@@ -115,7 +116,7 @@ MARLAIS_FLAGS = $(SYS_FLAG) \
 CC=$(cc) #NT
 
 # CFLAGS= -g -I$(INCDIRS) $(MARLAIS_FLAGS) $(CEXTRAS) #NOT-NT
-CFLAGS= $(cdebug) $(cvars) $(cflags) -i$(INCDIRS) $(MARLAIS_FLAGS) #NT
+CFLAGS= $(cdebug) $(cvars) $(cflags) -Igc -I$(INCDIRS) $(MARLAIS_FLAGS) #NT
 
 # LIBS=-lm #NOT-NT
 LIBS=	#NT
@@ -126,43 +127,44 @@ BYACCFLAGS = -d -v -t
 DISTDIR = /tmp/marlais-$(VERSION)
 GCDIST = ../gc
 
-OBJS = 	alloc.o \
-	apply.o \
-	array.o \
-	boolean.o \
-	bytestring.o \
-	character.o \
-	class.o \
-	classprec.o\
-	deque.o \
-	dylan.tab.o \
-	error.o \
-	env.o \
-	eval.o \
-	file.o \
-	foreign_ptr.o \
-	function.o \
-	keyword.o \
-	lex.yy.o \
-	list.o \
-	main.o \
-	misc.o \
-	number.o \
-	object.o \
-	parse.o \
-	prim.o \
-	print.o \
-	read.o \
-	slot.o \
-	stream.o \
-	symbol.o \
-	syntax.o \
-	sys.o \
-	table.o \
-	values.o \
-	vector.o
+OBJS = 	alloc.obj \
+	apply.obj \
+	array.obj \
+	boolean.obj \
+	bytestring.obj \
+	character.obj \
+	class.obj \
+	classprec.obj \
+	deque.obj \
+	dylan.tab.obj \
+	error.obj \
+	env.obj \
+	eval.obj \
+	file.obj \
+	foreign_ptr.obj \
+	function.obj \
+	keyword.obj \
+	lex.yy.obj \
+	list.obj \
+	main.obj \
+	misc.obj \
+	number.obj \
+	object.obj \
+	parse.obj \
+	prim.obj \
+	print.obj \
+	read.obj \
+	slot.obj \
+	stream.obj \
+	symbol.obj \
+	syntax.obj \
+	sys.obj \
+	table.obj \
+	values.obj \
+	vector.obj \
+	$(GETOPT).obj
 
-GCOBJS = gc/gc.a
+GCOBJS = gc/gc.lib
 
 CSRCS = alloc.c \
 	apply.c \
@@ -200,7 +202,8 @@ CSRCS = alloc.c \
 	sys.c \
 	table.c \
 	values.c \
-	vector.c
+	vector.c \
+	$(GETOPT).c
 
 SRCS = 	$(CSRCS) \
 	dylan.tab.h \
@@ -285,11 +288,11 @@ NO_RCS_FILES = \
 	NT_MAKEFILE
 
 # PROGRAM = marlais#NOT-NT
-PROGRAM = marlais.exe#NT
+PROGRAM = marlais.exe
 
 $(PROGRAM): $(OBJS) $(GCOBJS)
 # 	$(CC) $(CFLAGS) -o $(PROGRAM) $ $(OBJS) $(GCOBJS) $(LIBS) #NOT-NT
-	$(link) $(ldebug) -subsystem:console -out $(PROGRAM) $(OBJS) $(GCOBJS) $(LIBS) #NT
+	$(link) $(ldebug) -subsystem:console -out:$(PROGRAM) $(OBJS) $(GCOBJS) $(LIBS)
 
 # a target for building parser/scanner on the Mac under MachTen.
 mac: dylan.tab.c lex.yy.c
@@ -300,25 +303,25 @@ lex.yy.c: dylan.l dylan.tab.h
 
 dylan.tab.h: dylan.tab.c
 
-dylan.tab.c: dylan.y
-	byacc $(BYACCFLAGS) dylan.y
-	mv y.tab.c dylan.tab.c
-	mv y.tab.h dylan.tab.h
+# dylan.tab.c: dylan.y
+#	byacc $(BYACCFLAGS) dylan.y
+#	mv y.tab.c dylan.tab.c
+#	mv y.tab.h dylan.tab.h
 
 # gc/gc.a:			#NOT-NT
 # 	cd gc; $(MAKE) CC=$(CC)	#NOT-NT
 
-gc/gc.lib:			#NT
-	cd gc			#NT
-	$(MAKE) -f NT_MAKEFILE	#NT
-	cd ..			#NT
+gc/gc.lib:
+	cd gc
+	$(MAKE) -f NT_MAKEFILE
+	cd ..
 
 NT_MAKEFILE: Makefile
 	mv NT_MAKEFILE NT_MAKEFILE.bak
 	sed -e '/#NOT-NT/s/^/# /' -e '/#NT/s/^# //' <Makefile >NT_MAKEFILE
 
 clean:
-	rm -rf $(OBJS)
+	del *.obj
 
 real_clean: clean
 	rm dylan.tab.c lex.yy.c
