@@ -1,5 +1,16 @@
 (Modifications are listed in order from most recent to least recent.)
 
+New in release 0.6.3
+
+* Added some new command-line switches and backend behavior, so that marlais
+  is much more an apt CGI base as well as allowing quickly calculations.
+
+* Fixed a bug for string and list concatenation (with spilt over onto format
+  and friends).
+
+* Eliminated more non-DRM-compliant bindings: quit and bye -- use EOF or BRK
+  to exit the interactor.
+
 New in release 0.6.2
 
 * Eliminated support for the classic (a la Scheme) syntax as DRM-compliant

@@ -22,9 +22,9 @@ Source code for it is available at
 
 ***NOTE***
 The interpreter will read, evaluate, and print a sequence of semicolon
-terminated Dylan expressions.  It will do so until it evaluates the
-expression "quit();", "bye();" or EOF character (CRTL-D for Unix and
-CRTL-Z for Windows).
+terminated Dylan expressions.  It will do so until it receives the
+BRK character (CTRL-C) or the EOF character (CTRL-D for Unix and
+CTRL-Z for Windows).
 
 The normal interpreter prompt is the symbol `?'.
 If an incomplete expression has been entered, the interpreter prints
@@ -43,7 +43,6 @@ with a semicolon.  Here's an example:
 See ARGUMENTS for the Marlais command-line arguments.
 See INSTALL for information on installing Marlais.
 See MACHINES for a list of supported machines.
-See PORTING for information on porting Marlais to another architecture. 
 See BUGS for information on how to report bugs.
 See HACKING for information on adding to and fixing Marlais.
 See ADDED for information on new features in this release.

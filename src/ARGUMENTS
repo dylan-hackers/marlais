@@ -1,9 +1,8 @@
-marlais [-b] [-d] [-n] [init-file ...]
+marlais [-dhnsv] [-e '<Dylan expression>'|init-file ...]
 
 marlais is the Marlais Dylan(TM) interpreter.  It directly evaluates
 programs written in a variant of Apple Computer's Dylan programming
-language.  Marlais supports both the infix syntax defined in the Dylan
-Reference Manual[1], and the prefix syntax of the Dylan book[2].
+language.
 
 Each of the specified init-files must contain infix Dylan code to be
 evaluated before the interpreter begins its read-eval-print loop.
@@ -12,16 +11,10 @@ terminate its execution.
 
 Switches:
 
-	-b	Show the banner (with the version number) at startup.
-
-	-d	Generate parser debug output.
-
-	-n	Suppress loading the system default Dylan init file.
-
-
-[1] Andrew Shalit, Orca Starbuck, et. al. "Dylan Reference Manual"
-Apple Computer, Inc.  1996
-
-[2] Andrew Shalit.  "Dylan: an object oriented dynamic language".
-Apple Computer, Inc.  1992.
+  -d	Generate parser debug output.
+  -e    Executes a Dylan expression, prints resulting value, then exits.
+  -h    Prints help menu.
+  -n	Suppress loading the system default Dylan init file.
+  -s    Stay in the interactor after executing an expression or file.
+  -v    Prints version number.
 
