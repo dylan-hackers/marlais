@@ -415,56 +415,12 @@ parse_generic_function_parameters (Object gf_obj, Object params)
 				xform_gf_key_param);
 #endif
 
-#ifdef PARSE_RETURN_PARAMS_THE_OLD_WAY
-  /* now get return value types */
-  if (PAIRP (params) && CAR (params) == hash_values_symbol) {
-    params = CDR (params);
-    GFRESTVALUES (gf_obj) = NULL;
-    tmp_ptr = &GFREQVALUES (gf_obj);
-    *tmp_ptr = make_empty_list ();
-
-    /* first get required return values */
-    while (PAIRP (params)) {	/* CONTAINS BREAK! */
-      entry = CAR (params);
-      if (entry == hash_rest_symbol) {
-	break;
-      }
-      if (PAIRP (entry)) {
-	result_type = eval (SECOND (entry));
-      } else {
-	result_type = object_class;
-      }
-
-      (*tmp_ptr) = cons (result_type, make_empty_list ());
-      tmp_ptr = &CDR (*tmp_ptr);
-      params = CDR (params);
-    }
-    
-    /* next look for rest parameter */
-    if (PAIRP (params) && CAR (params) == hash_rest_symbol) {
-      params = CDR (params);
-      if (PAIRP (params)) {
-	if (PAIRP (CAR (params))) {
-	  GFRESTVALUES (gf_obj) = eval (SECOND (CAR (params)));
-	} else {
-	  GFRESTVALUES (gf_obj) = object_class;
-	}
-	params = CDR (params);
-      } else {
-	error ("generic function #rest designator not followed by a parameter",
-	       NULL);
-      }
-    }
-  }
-#else
   if(next_parameter_is(params, hash_values_symbol)) {
     GFRESTVALUES (gf_obj) = NULL;
     tmp_ptr = &GFREQVALUES (gf_obj);
     parse_function_return_parameters(gf_obj, &params, tmp_ptr);
     parse_function_rest_parameter(gf_obj, &params, gf_rest_return_assign);
-  }
-#endif
-  else {			/* no values specified */
+  } else {			/* no values specified */
     GFREQVALUES (gf_obj) = make_empty_list ();
     GFRESTVALUES (gf_obj) = object_class;
   }
@@ -574,57 +530,13 @@ parse_method_parameters (Object meth_obj, Object params)
   parse_function_key_parameters(meth_obj, &params, method_keys, do_method_key,
 				xform_method_key_param);
 #endif
-#ifdef PARSE_RETURN_PARAMS_THE_OLD_WAY
-  /* now get return value types */
-  if (PAIRP (params) && CAR (params) == hash_values_symbol) {
-    params = CDR (params);
-    METHRESTVALUES (meth_obj) = NULL;
-    tmp_ptr = &METHREQVALUES (meth_obj);
-    *tmp_ptr = make_empty_list ();
-    
-    /* first get required return values */
-    while (PAIRP (params)) {	/* CONTAINS BREAK! */
-      entry = CAR (params);
-      if (entry == hash_rest_symbol) {
-	break;
-      }
-      if (PAIRP (entry)) {
-	result_type = eval (SECOND (entry));
-      } else {
-	result_type = object_class;
-      }
 
-      (*tmp_ptr) = cons (result_type, make_empty_list ());
-      tmp_ptr = &CDR (*tmp_ptr);
-      params = CDR (params);
-    }
-
-    /* next look for rest parameter */
-    if (PAIRP (params) && CAR (params) == hash_rest_symbol) {
-      params = CDR (params);
-      if (PAIRP (params)) {	/* need structure check */
-	if (PAIRP (CAR (params))) {
-	  METHRESTVALUES (meth_obj) = eval (SECOND (CAR (params)));
-	} else {
-	  METHRESTVALUES (meth_obj) = object_class;
-	}
-	params = CDR (params);
-      } else {
-	error ("function #rest designator not followed by a parameter", NULL);
-      }
-    }
-  }
-
-#else
   if(next_parameter_is(params, hash_values_symbol)) {
     METHRESTVALUES (meth_obj) = NULL;
     tmp_ptr = &METHREQVALUES (meth_obj);
     parse_function_return_parameters(meth_obj, &params, tmp_ptr);
     parse_function_rest_parameter(meth_obj, &params,method_rest_return_assign);
-  }
-#endif
-
-  else {
+  } else {
     METHREQVALUES (meth_obj) = make_empty_list ();
     METHRESTVALUES (meth_obj) = object_class;
   }
