@@ -252,8 +252,7 @@ main (int argc, char *argv[])
 
   if(execute) {
     /* put in a ; in case the user forgets */
-    int len = strlen(argv[optind] + 1);
-    char command[len];
+    char command[256]; // win32 MSVC++ requires a constant here
     sprintf(command, "%s;", argv[optind]);
     yy_restart(stdin);
     yy_scan_string(command);
@@ -573,7 +572,7 @@ initialize_marlais (void)
   init_stream_prims ();
   init_read_prims ();
   init_table_prims ();
-  init_misc_prims ();
+  /* init_misc_prims (); */
   init_char_prims ();
   init_deque_prims ();
   init_array_prims ();
