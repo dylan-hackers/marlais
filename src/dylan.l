@@ -256,19 +256,19 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 				  return yylex();
 				}
 
-<INI,KEY>^[\ \t\f\v]*\n	{ BEGIN(ETC);
+<INI,KEY>^[\ \t\f\v\r]*\n	{ BEGIN(ETC);
 			  ++yylineno;
 			  make_header_end ();
 			  return yylex ();
 			}
 
-<VAL>.*\n([\ \t\f\v]+.+\n)*	{ BEGIN(KEY);
+<VAL>.*\n([\ \t\f\v\r]+.+\n)*	{ BEGIN(KEY);
 				  yylineno += countlines (yytext);
 				  make_header_val ();
 				  return yylex ();
 				}
 
-<ETC>[\ \t\f\v]	{ }
+<ETC>[\ \t\f\v\r]	{ }
 
 <ETC>[\n]	{ /* Bogus hack! */
 		  ++yylineno;
@@ -773,11 +773,11 @@ get_nonws_symbol (char *text)
 
 	for (start_ptr = text;
 	     *start_ptr == ' ' || *start_ptr == '\t' || *start_ptr == '\f'
-		|| *start_ptr == '\v';
+		|| *start_ptr == '\v' || *start_ptr == '\r';
 	     start_ptr++);
 	for (end_ptr = start_ptr;
 	     *end_ptr != ' ' && *end_ptr != '\t' && *end_ptr != '\f'
-		&& *end_ptr != '\v' && *end_ptr != '\n';
+		&& *end_ptr != '\v' && *end_ptr != '\r' *end_ptr != '\n';
              end_ptr++);
 	buf_ptr = buffer =
 		(char *) checking_malloc((end_ptr - start_ptr + 1) * sizeof (char));
