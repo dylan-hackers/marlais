@@ -42,87 +42,83 @@
 
 static struct primitive values_prims[] =
 {
-    {"values", prim_0_rest, values},
+  {"values", prim_0_rest, values},
 };
 
-/* function defintions */
+/* function definitions */
 
 void
 init_values_prims (void)
 {
-    int num;
-
-    num = sizeof (values_prims) / sizeof (struct primitive);
-
-    init_prims (num, values_prims);
+  int num = sizeof (values_prims) / sizeof (struct primitive);
+  init_prims (num, values_prims);
 }
 
 Object
 make_values (Object vals)
 {
-    Object obj;
-    int i;
+  Object obj;
+  int i;
 
-    if (EMPTYLISTP (vals)) {
-	return unspecified_object;
-    } else {
-	obj = allocate_object (sizeof (struct values));
+  if (EMPTYLISTP (vals)) {
+    return unspecified_object;
+  } else {
+    obj = allocate_object (sizeof (struct values));
 
-	VALUESTYPE (obj) = Values;
-	VALUESNUM (obj) = list_length (vals);
-	VALUESELS (obj) = (Object *)
-	    checking_malloc (VALUESNUM (obj) * sizeof (Object));
+    VALUESTYPE (obj) = Values;
+    VALUESNUM (obj) = list_length (vals);
+    VALUESELS (obj) = (Object *)
+      checking_malloc (VALUESNUM (obj) * sizeof (Object));
 
-	for (i = 0; i < VALUESNUM (obj); ++i) {
-	    VALUESELS (obj)[i] = CAR (vals);
-	    vals = CDR (vals);
-	}
-	return (obj);
+    for (i = 0; i < VALUESNUM (obj); ++i) {
+      VALUESELS (obj)[i] = CAR (vals);
+      vals = CDR (vals);
     }
+    return (obj);
+  }
 }
 
 Object
 construct_values (int num,...)
 {
-    Object obj;
-    int i;
-    va_list args;
+  Object obj;
+  int i;
+  va_list args;
 
-    obj = allocate_object (sizeof (struct values));
+  obj = allocate_object (sizeof (struct values));
+  
+  VALUESTYPE (obj) = Values;
+  VALUESNUM (obj) = num;
+  VALUESELS (obj) = (Object *) checking_malloc (num * sizeof (Object));
 
-    VALUESTYPE (obj) = Values;
-    VALUESNUM (obj) = num;
-    VALUESELS (obj) = (Object *) checking_malloc (num * sizeof (Object));
-
-    va_start (args, num);
-    for (i = 0; i < num; ++i) {
-	VALUESELS (obj)[i] = va_arg (args, Object);
-    }
-    va_end (args);
-    return (obj);
+  va_start (args, num);
+  for (i = 0; i < num; ++i) {
+    VALUESELS (obj)[i] = va_arg (args, Object);
+  }
+  va_end (args);
+  return (obj);
 }
 
 Object
 values (Object rest)
 {
-    if (EMPTYLISTP (rest) || PAIRP (CDR (rest))) {
-	return make_values (rest);
-    } else {
-	return (CAR (rest));
-    }
+  if (EMPTYLISTP (rest) || PAIRP (CDR (rest))) {
+    return make_values (rest);
+  } else {
+    return (CAR (rest));
+  }
 }
 
 Object
 devalue (Object val)
 {
-    if (VALUESP (val)) {
-	if (VALUESNUM (val)) {
-	    return VALUESELS (val)[0];
-	} else {
-	    return error ("Null values construct used in an invalid context",
-			  NULL);
-	}
+  if (VALUESP (val)) {
+    if (VALUESNUM (val)) {
+      return VALUESELS (val)[0];
     } else {
-	return val;
+      return error ("Null values construct used in an invalid context", NULL);
     }
+  } else {
+    return val;
+  }
 }

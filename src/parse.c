@@ -55,33 +55,33 @@ extern Object eof_object;
 Object
 parse_object (FILE * fp, int debug)
 {
-    Object parse_value;
+  Object parse_value;
 
-    if (!yyin) {
-	yyin = fp;
-    } else if (yyin && fp != yyin) {
-	reset_parser (fp);
+  if (!yyin) {
+    yyin = fp;
+  } else if (yyin && fp != yyin) {
+    reset_parser (fp);
+  }
+  yydebug = debug;
+  parse_value_ptr = &parse_value;
+  if (yyparse () == 0) {
+    if (echo_prefix && !load_file_context) {
+      fprintf (stderr, "==> ");
+      print_object (standard_error_stream, parse_value, 1);
+      fprintf (stderr, "\n");
+      fflush (stderr);
     }
-    yydebug = debug;
-    parse_value_ptr = &parse_value;
-    if (yyparse () == 0) {
-	if (echo_prefix && !load_file_context) {
-	    fprintf (stderr, "==> ");
-	    print_object (standard_error_stream, parse_value, 1);
-	    fprintf (stderr, "\n");
-	    fflush (stderr);
-	}
-	return parse_value;
-    } else {
-	warning ("Parser failed in inexplicable way", parse_value, NULL);
-	return eof_object;
-    }
+    return parse_value;
+  } else {
+    warning ("Parser failed in inexplicable way", parse_value, NULL);
+    return eof_object;
+  }
 }
 
 void
 reset_parser (FILE * fp)
 {
-    fflush (stderr);
-    yy_restart (fp);
-    yylineno = 1;
+  fflush (stderr);
+  yy_restart (fp);
+  yylineno = 1;
 }

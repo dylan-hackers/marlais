@@ -47,17 +47,21 @@
 
 extern Object open_file_list;
 
+#ifdef ALLOW_CLASSIC_SYNTAX
 /* primitives */
 static Object infix ();
 static Object prefix ();
+#endif
 
 static struct primitive file_prims[] =
 {
     {"load", prim_1, load},
+#ifdef ALLOW_CLASSIC_SYNTAX
     {"i-load", prim_1, i_load},
     {"p-load", prim_1, p_load},
     {"infix", prim_0, infix},
     {"prefix", prim_0, prefix},
+#endif
 };
 
 /* function definitions */
@@ -70,13 +74,11 @@ static void
 void
 init_file_prims (void)
 {
-    int num;
-
-    num = sizeof (file_prims) / sizeof (struct primitive);
-
-    init_prims (num, file_prims);
+  int num = sizeof (file_prims) / sizeof (struct primitive);
+  init_prims (num, file_prims);
 }
 
+#ifdef ALLOW_CLASSIC_SYNTAX
 Object
 p_load (Object filename)
 {
@@ -96,6 +98,7 @@ p_load (Object filename)
     close_file (fp);
     return (res);
 }
+#endif
 
 Object
 i_load (Object filename)
@@ -142,23 +145,28 @@ i_load (Object filename)
 Object
 load (Object filename)
 {
-    Object res;
+  Object res;
 
-    if (classic_syntax) {
-	res = p_load (filename);
-    } else {
-	FILE *old_yyin = yyin;
+#ifdef ALLOW_CLASSIC_SYNTAX
+  if (classic_syntax) {
+    res = p_load (filename);
+  } else {
+#endif
+  FILE *old_yyin = yyin;
 
-	res = i_load (filename);
-	if (old_yyin == stdin) {
-	    clearerr (stdin);
-	    fflush (stdin);
-	    yyrestart (stdin);
-	}
-    }
-    return res;
+  res = i_load (filename);
+  if (old_yyin == stdin) {
+    clearerr (stdin);
+    fflush (stdin);
+    yyrestart (stdin);
+  }
+#ifdef ALLOW_CLASSIC_SYNTAX
+  }
+#endif
+  return res;
 }
 
+#ifdef ALLOW_CLASSIC_SYNTAX
 static Object
 infix ()
 {
@@ -193,40 +201,41 @@ prefix ()
 #endif
     return unspecified_object;
 }
+#endif
 
 static FILE *
 open_file (Object filename)
 {
-    char *str;
-    FILE *fp;
+  char *str;
+  FILE *fp;
 
-    if (!BYTESTRP (filename)) {
-	error ("load: argument must be a filename", filename, NULL);
-    }
-    str = BYTESTRVAL (filename);
-    fp = fopen (str, "r");
-    if (!fp) {
-	error ("load: cannot open file", filename, NULL);
-    }
-    open_file_list = cons (make_foreign_ptr (fp), open_file_list);
-    return fp;
+  if (!BYTESTRP (filename)) {
+    error ("load: argument must be a filename", filename, NULL);
+  }
+  str = BYTESTRVAL (filename);
+  fp = fopen (str, "r");
+  if (!fp) {
+    error ("load: cannot open file", filename, NULL);
+  }
+  open_file_list = cons (make_foreign_ptr (fp), open_file_list);
+  return fp;
 }
 
 static void
 close_file (FILE * fp)
 {
-    if ((FILE *) FOREIGNPTR (CAR (open_file_list)) != fp) {
-	error ("close-file called with bogus fp (BUG)", NULL);
-    }
-    fclose (fp);
-    open_file_list = CDR (open_file_list);
+  if ((FILE *) FOREIGNPTR (CAR (open_file_list)) != fp) {
+    error ("close-file called with bogus fp (BUG)", NULL);
+  }
+  fclose (fp);
+  open_file_list = CDR (open_file_list);
 }
 
 void
 close_open_files (void)
 {
-    while (PAIRP (open_file_list)) {
-	fclose ((FILE *) FOREIGNPTR (CAR (open_file_list)));
-	open_file_list = CDR (open_file_list);
-    }
+  while (PAIRP (open_file_list)) {
+    fclose ((FILE *) FOREIGNPTR (CAR (open_file_list)));
+    open_file_list = CDR (open_file_list);
+  }
 }

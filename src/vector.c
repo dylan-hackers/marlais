@@ -45,14 +45,12 @@
 
 static Object vector_element_setter (Object vec, Object index, Object val);
 static Object vector_size (Object vec);
-static Object vector_append2 (Object vec1, Object vec2);
 
 static struct primitive vector_prims[] =
 {
     {"%vector-element", prim_3, vector_element},
     {"%vector-element-setter", prim_3, vector_element_setter},
     {"%vector-size", prim_1, vector_size},
-    /*    {"%vector-append2", prim_2, vector_append2}, */
     {"%vector", prim_1, make_sov},
 };
 
@@ -128,13 +126,15 @@ make_vector_driver (Object args)
     } else if (FIRST (args) == fill_keyword) {
       fill_obj = SECOND (args);
     } else {
-      error ("make: unsupported keyword for <vector> class", FIRST (args), NULL);
+      error ("make: unsupported keyword for <vector> class", 
+	     FIRST (args), NULL);
     }
     args = CDR (CDR (args));
   }
   if (size_obj) {
     if (!INTEGERP (size_obj)) {
-      error ("make: value of size: argument must be an integer", size_obj, NULL);
+      error ("make: value of size: argument must be an integer", 
+	     size_obj, NULL);
     }
     size = INTVAL (size_obj);
   }
@@ -200,29 +200,3 @@ vector_size (Object vec)
 {
   return (make_integer (SOVSIZE (vec)));
 }
-
-/*****
-static Object
-vector_append2 (Object vec1, Object vec2)
-{
-  Object new_vec;
-  int new_size, i, size1;
-  
-  size1 = SOVSIZE (vec1);
-  new_size = size1 + SOVSIZE (vec2);
-  new_vec = allocate_object (sizeof (struct simple_object_vector));
-  
-  SOVTYPE (new_vec) = SimpleObjectVector;
-  SOVSIZE (new_vec) = new_size;
-  SOVELS (new_vec) = (Object *) checking_malloc (new_size * sizeof (Object));
-  
-  for (i = 0; i < new_size; ++i) {
-    if (i < size1) {
-      SOVELS (new_vec)[i] = SOVELS (vec1)[i];
-    } else {
-      SOVELS (new_vec)[i] = SOVELS (vec2)[i - size1];
-    }
-  }
-  return (new_vec);
-}
-*****/

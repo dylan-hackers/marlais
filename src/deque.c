@@ -147,8 +147,7 @@ make_deque_driver (Object args)
     DENEXT (last) = make_empty_list ();
     DEQUELAST (deq) = last;
   } else {
-    DEQUEFIRST (deq) = DEQUELAST (deq) =
-      DENEXT (deq) = make_empty_list ();
+    DEQUEFIRST (deq) = DEQUELAST (deq) = DENEXT (deq) = make_empty_list ();
   }
   return (deq);
 }

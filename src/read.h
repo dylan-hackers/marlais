@@ -41,6 +41,7 @@
 extern Object allkeys_symbol, hash_values_symbol;
 
 void init_read_prims (void);
+#ifdef ALLOW_CLASSIC_SYNTAX
 Object read_object (FILE * fp);
-
+#endif
 #endif

@@ -67,6 +67,7 @@ static Object infix_decode_token (int yychar, FILE * fp);
 static Object read_wrapper (Object stream);
 static Object read_char (Object stream);
 
+#ifdef ALLOW_CLASSIC_SYNTAX
 static Object read_list (FILE * fp);
 static Object read_string (FILE * fp);
 static Object read_quote (FILE * fp);
@@ -81,13 +82,14 @@ static Object read_unquote_splicing (FILE * fp);
 static void skip_whitespace_comments (FILE * fp);
 static char peek_char (FILE * fp);
 static int match_chars (FILE * fp, char *str);
+#endif
 
 /* primitives */
 
 static struct primitive read_prims[] =
 {
-    {"%read", prim_0_1, read_wrapper},
-    {"%read-char", prim_0_1, read_char},
+  {"%read", prim_0_1, read_wrapper},
+  {"%read-char", prim_0_1, read_char},
 };
 
 /* function definitions */
@@ -95,259 +97,262 @@ static struct primitive read_prims[] =
 void
 init_read_prims (void)
 {
-    int num;
-
-    num = sizeof (read_prims) / sizeof (struct primitive);
-
-    init_prims (num, read_prims);
+  int num = sizeof (read_prims) / sizeof (struct primitive);
+  init_prims (num, read_prims);
 }
 
 static Object
 infix_read_object (FILE * fp)
 {
-    int yychar;
-    int old_load_file_context = load_file_context;
+  int yychar;
+  int old_load_file_context = load_file_context;
 
-    load_file_context = 1;
+  load_file_context = 1;
 
-    if (yyin != fp) {
-	reset_parser (fp);
-    }
-    if ((yychar = yylex ()) < 0)
-	yychar = 0;
+  if (yyin != fp) {
+    reset_parser (fp);
+  }
+  if ((yychar = yylex ()) < 0)
+    yychar = 0;
 
-    load_file_context = old_load_file_context;
-    return infix_decode_token (yychar, fp);
+  load_file_context = old_load_file_context;
+  return infix_decode_token (yychar, fp);
 }
 
 static Object
 infix_decode_token (int yychar, FILE * fp)
 {
-    switch (yychar) {
-    case EOF_TOKEN:
-	return (eof_object);
-    case LITERAL:
-    case STRING:
-    case HASH_T:
-    case HASH_F:
-	return (yylval);
-    case HASH_BRACKET:
-	{
-	    Object new_list = make_empty_list ();
-	    Object *new_list_ptr = &new_list;
+  switch (yychar) {
+  case EOF_TOKEN:
+    return (eof_object);
+  case LITERAL:
+  case STRING:
+  case HASH_T:
+  case HASH_F:
+    return (yylval);
+  case HASH_BRACKET:
+    {
+      Object new_list = make_empty_list ();
+      Object *new_list_ptr = &new_list;
+      
+      do {
+	if ((yychar = yylex ()) < 0)
+	  yychar = 0;
+	if (yychar == ']')
+	  return new_list;
+	
+	*new_list_ptr = cons (infix_decode_token (yychar, fp),
+			      make_empty_list ());
+	new_list_ptr = &CDR (*new_list_ptr);
+	
+	if ((yychar = yylex ()) < 0)
+	  yychar = 0;
+      } while (yychar == ',');
+      
+      if (yychar != ']') {
+	return error ("Malformed vector.  Expected a ']'", NULL);
+      }
+      return make_sov (new_list);
+    }			/* case HASH_BRACKET */
+  case HASH_PAREN:
+    {
+      Object new_list = make_empty_list ();
+      Object *new_list_ptr = &new_list;
+      
+      do {
+	if ((yychar = yylex ()) < 0)
+	  yychar = 0;
+	if (yychar == ')')
+	  return new_list;
+	
+	*new_list_ptr = cons (infix_decode_token (yychar, fp),
+			      make_empty_list ());
+	new_list_ptr = &CDR (*new_list_ptr);
 
-	    do {
-		if ((yychar = yylex ()) < 0)
-		    yychar = 0;
-		if (yychar == ']')
-		    return new_list;
+	if ((yychar = yylex ()) < 0)
+	  yychar = 0;
+      } while (yychar == ',');
 
-		*new_list_ptr = cons (infix_decode_token (yychar, fp),
-				      make_empty_list ());
-		new_list_ptr = &CDR (*new_list_ptr);
-
-		if ((yychar = yylex ()) < 0)
-		    yychar = 0;
-	    } while (yychar == ',');
-
-	    if (yychar != ']') {
-		return error ("Malformed vector.  Expected a ']'", NULL);
-	    }
-	    return make_sov (new_list);
-	}			/* case HASH_BRACKET */
-    case HASH_PAREN:
-	{
-	    Object new_list = make_empty_list ();
-	    Object *new_list_ptr = &new_list;
-
-	    do {
-		if ((yychar = yylex ()) < 0)
-		    yychar = 0;
-		if (yychar == ')')
-		    return new_list;
-
-		*new_list_ptr = cons (infix_decode_token (yychar, fp),
-				      make_empty_list ());
-		new_list_ptr = &CDR (*new_list_ptr);
-
-		if ((yychar = yylex ()) < 0)
-		    yychar = 0;
-	    } while (yychar == ',');
-
-	    if (yychar == '.') {
-		*new_list_ptr = infix_read_object (fp);
-		if ((yychar = yylex ()) < 0)
-		    yychar = 0;
-	    }
-	    if (yychar != ')') {
-		return error ("Malformed list.  Expected a ')'", NULL);
-	    }
-	    return new_list;
-	}			/* case HASH_PAREN */
-    case KEYWORD:
-	return yylval;
-    default:
-	return error ("read couldn't find a literal", NULL);
-    }
+      if (yychar == '.') {
+	*new_list_ptr = infix_read_object (fp);
+	if ((yychar = yylex ()) < 0)
+	  yychar = 0;
+      }
+      if (yychar != ')') {
+	return error ("Malformed list.  Expected a ')'", NULL);
+      }
+      return new_list;
+    }			/* case HASH_PAREN */
+  case KEYWORD:
+    return yylval;
+  default:
+    return error ("read couldn't find a literal", NULL);
+  }
 }
 
+#ifdef ALLOW_CLASSIC_SYNTAX
 Object
 read_object (FILE * fp)
 {
-    signed char ch;
+  signed char ch;
 
-    if (!classic_syntax) {
-	return infix_read_object (fp);
+  if (!classic_syntax) {
+    return infix_read_object (fp);
+  }
+ start_over:
+  skip_whitespace_comments (fp);
+  ch = getc (fp);
+  switch (ch) {
+  case EOF:
+    return (eof_object);
+  case ')':
+    error ("read: unexpected ')'", NULL);
+  case '(':
+    return (read_list (fp));
+  case '"':
+    return (read_string (fp));
+  case '\'':
+    return (read_quote (fp));
+  case '`':
+    return (read_quasiquote (fp));
+  case ',':
+    if (peek_char (fp) == '@') {
+      ch = getc (fp);
+      return (read_unquote_splicing (fp));
+    } else {
+      return (read_unquote (fp));
     }
-  start_over:
-    skip_whitespace_comments (fp);
+  case ';':
+    while ((ch = getc (fp)) != '\n') {
+      if (ch == EOF) {
+	return (eof_object);
+      }
+    }
+    goto start_over;
+    break;
+  case '+':
+  case '-':
+    if (isdigit (peek_char (fp))) {
+      ungetc (ch, fp);
+      return (read_number (fp));
+    } else {
+      ungetc (ch, fp);
+      return (read_symbol (fp));
+    }
+  case '#':
     ch = getc (fp);
     switch (ch) {
-    case EOF:
-	return (eof_object);
-    case ')':
-	error ("read: unexpected ')'", NULL);
+    case 'a':
+      if (((ch = getc (fp) != 'l') || ((ch = getc (fp)) != 'l')
+	   || ((ch = getc (fp)) != '-') || ((ch = getc (fp)) != 'k')
+	   || ((ch = getc (fp)) != 'e') || ((ch = getc (fp)) != 'y')
+	   || ((ch = getc (fp)) != 's'))) {
+	error ("read: regular symbol cannot begin with '#'", NULL);
+      }
+      return (allkeys_symbol);
+      
+    case 'v':
+      if (((ch = getc (fp)) != 'a') || ((ch = getc (fp)) != 'l')
+	  || ((ch = getc (fp)) != 'u') || ((ch = getc (fp)) != 'e')
+	  || ((ch = getc (fp)) != 's')) {
+	error ("read: regular symbol cannot begin with '#'", NULL);
+      }
+      return (hash_values_symbol);
+    case 'k':
+      if (((ch = getc (fp)) != 'e') || ((ch = getc (fp)) != 'y')) {
+	error ("read: regular symbol cannot begin with `#'", NULL);
+      }
+      return (key_symbol);
+    case 'r':
+      if (((ch = getc (fp)) != 'e') || ((ch = getc (fp)) != 's')
+	  || ((ch = getc (fp)) != 't')) {
+	error ("read: regular symbol cannot begin with `#'", NULL);
+      }
+      return (hash_rest_symbol);
+    case 'n':
+      if (((ch = getc (fp)) != 'e') || ((ch = getc (fp)) != 'x')
+	  || ((ch = getc (fp)) != 't')) {
+	error ("read: regular symbol cannot begin with `#'", NULL);
+      }
+      return (next_symbol);
     case '(':
-	return (read_list (fp));
-    case '"':
-	return (read_string (fp));
-    case '\'':
-	return (read_quote (fp));
-    case '`':
-	return (read_quasiquote (fp));
-    case ',':
-	if (peek_char (fp) == '@') {
-	    ch = getc (fp);
-	    return (read_unquote_splicing (fp));
-	} else {
-	    return (read_unquote (fp));
-	}
-    case ';':
-	while ((ch = getc (fp)) != '\n') {
-	    if (ch == EOF) {
-		return (eof_object);
-	    }
-	}
-	goto start_over;
-	break;
-    case '+':
-    case '-':
-	if (isdigit (peek_char (fp))) {
-	    ungetc (ch, fp);
-	    return (read_number (fp));
-	} else {
-	    ungetc (ch, fp);
-	    return (read_symbol (fp));
-	}
-    case '#':
+      return (read_vector (fp));
+    case '\\':
+      return (read_character (fp));
+    case 't':
+      return (true_object);
+    case 'f':
+      return (false_object);
+    case 'x':
+    case 'b':
+    case 'o':
+      error ("read: hex, binary and octal number reading not supported", NULL);
+    case '|':
+      do {
 	ch = getc (fp);
-	switch (ch) {
-	case 'a':
-	    if (((ch = getc (fp) != 'l') || ((ch = getc (fp)) != 'l')
-		 || ((ch = getc (fp)) != '-') || ((ch = getc (fp)) != 'k')
-		 || ((ch = getc (fp)) != 'e') || ((ch = getc (fp)) != 'y')
-		 || ((ch = getc (fp)) != 's'))) {
-		error ("read: regular symbol cannot begin with '#'", NULL);
-	    }
-	    return (allkeys_symbol);
-
-	case 'v':
-	    if (((ch = getc (fp)) != 'a') || ((ch = getc (fp)) != 'l')
-		|| ((ch = getc (fp)) != 'u') || ((ch = getc (fp)) != 'e')
-		|| ((ch = getc (fp)) != 's')) {
-		error ("read: regular symbol cannot begin with '#'", NULL);
-	    }
-	    return (hash_values_symbol);
-	case 'k':
-	    if (((ch = getc (fp)) != 'e') || ((ch = getc (fp)) != 'y')) {
-		error ("read: regular symbol cannot begin with `#'", NULL);
-	    }
-	    return (key_symbol);
-	case 'r':
-	    if (((ch = getc (fp)) != 'e') || ((ch = getc (fp)) != 's')
-		|| ((ch = getc (fp)) != 't')) {
-		error ("read: regular symbol cannot begin with `#'", NULL);
-	    }
-	    return (hash_rest_symbol);
-	case 'n':
-	    if (((ch = getc (fp)) != 'e') || ((ch = getc (fp)) != 'x')
-		|| ((ch = getc (fp)) != 't')) {
-		error ("read: regular symbol cannot begin with `#'", NULL);
-	    }
-	    return (next_symbol);
-	case '(':
-	    return (read_vector (fp));
-	case '\\':
-	    return (read_character (fp));
-	case 't':
-	    return (true_object);
-	case 'f':
-	    return (false_object);
-	case 'x':
-	case 'b':
-	case 'o':
-	    error ("read: hex, binary and octal number reading not supported", NULL);
-	case '|':
-	    do {
-		ch = getc (fp);
-		if (ch == EOF) {
-		    error ("read: end of file in #| comment", NULL);
-		}
-		if ((ch == '|') && (peek_char (fp) == '#')) {
-		    ch = getc (fp);
-		    goto start_over;
-		}
-	    }
-	    while (1);
-	    break;
-	default:
-	    error ("read: unexpected `#'", NULL);
+	if (ch == EOF) {
+	  error ("read: end of file in #| comment", NULL);
 	}
+	if ((ch == '|') && (peek_char (fp) == '#')) {
+	  ch = getc (fp);
+	  goto start_over;
+	}
+      }
+      while (1);
+      break;
     default:
-	/* may need to look ahead one further if have a '.' here */
-	if (isdigit (ch) || ch == '.') {
-	    ungetc (ch, fp);
-	    return (read_number (fp));
-	} else {
-	    ungetc (ch, fp);
-	    return (read_symbol (fp));
-	}
+      error ("read: unexpected `#'", NULL);
     }
-
+  default:
+    /* may need to look ahead one further if have a '.' here */
+    if (isdigit (ch) || ch == '.') {
+      ungetc (ch, fp);
+      return (read_number (fp));
+    } else {
+      ungetc (ch, fp);
+      return (read_symbol (fp));
+    }
+  }
 }
+#endif
 
 static Object
 read_wrapper (Object stream)
 {
-    FILE *fp;
+  FILE *fp;
 
-    if (stream) {
-	fp = STREAMFP (stream);
-    } else {
-	fp = stdin;
-    }
-    return (read_object (fp));
+  if (stream) {
+    fp = STREAMFP (stream);
+  } else {
+    fp = stdin;
+  }
+#ifdef ALLOW_CLASSIC_SYNTAX
+  return (read_object (fp));
+#else
+  return infix_read_object(fp);
+#endif
 }
 
 static Object
 read_char (Object stream)
 {
-    FILE *fp;
-    int ch;
+  FILE *fp;
+  int ch;
 
-    if (stream) {
-	fp = STREAMFP (stream);
-    } else {
-	fp = stdin;
-    }
-    ch = getc (fp);
-    if (ch == EOF) {
-	return (eof_object);
-    } else {
-	return (make_character (ch));
-    }
+  if (stream) {
+    fp = STREAMFP (stream);
+  } else {
+    fp = stdin;
+  }
+  ch = getc (fp);
+  if (ch == EOF) {
+    return (eof_object);
+  } else {
+    return (make_character (ch));
+  }
 }
 
+#ifdef ALLOW_CLASSIC_SYNTAX
 /* "(" has already been read */
 static Object
 read_list (FILE * fp)
@@ -697,3 +702,4 @@ match_chars (FILE * fp, char *str)
     }
     return (1);
 }
+#endif

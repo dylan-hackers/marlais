@@ -41,9 +41,9 @@ static Object not (Object obj);
 
 static struct primitive boolean_prims[] =
 {
-    {"~==", prim_2_rest, not_id_p},
-    {"==", prim_2_rest, id_p},
-    {"~", prim_1, not},
+  /*    {"%~==", prim_2_rest, not_id_p}, */
+  {"%identical?", prim_2_rest, id_p},
+  {"%not", prim_1, not},
 };
 
 /* function definitions */
@@ -89,11 +89,13 @@ make_false (void)
 }
 #endif
 
+#ifdef PRE_REFACTORED
 Object
 not_id_p (Object obj1, Object obj2, Object rest)
 {
   return not(id_p(obj1, obj2, rest));
 }
+#endif
 
 Object
 id_p (Object obj1, Object obj2, Object rest)
