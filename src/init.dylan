@@ -58,12 +58,16 @@ module: dylan
 // 08/21/2001 dma Worked the type system:  added type-union, changed
 //                class-for-copy to type-for-copy, added abstract? keyword
 //                for make(<class>).  Removed some unused and non-DRM-
-//                compliant bindings.
+//                compliant bindings.  Made sure functions are not primitive.
 //
 
 define method make (c :: <class>, #rest args, #key, #all-keys)
   %make(c, args);
 end method make;
+
+define constant \== = method(a, b) %identical?(a, b) end;
+define constant \~ = method(a) %not(a) end;
+define constant \~== = method(a, b) %not(%identical?(a, b)) end;
 
 define constant instance? =
   method (obj, typ :: <type>)
