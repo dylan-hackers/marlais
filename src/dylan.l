@@ -62,6 +62,7 @@
 #endif
 
 extern char* prompt_continuation;
+extern char* current_prompt;
 extern int yyerrflag;
 extern int yydebug;
 extern int load_file_context;
@@ -273,14 +274,8 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 		  ++yylineno;
 		  if (yyerrflag == 3) {
 		      return ';';
-		  } else if (! load_file_context) {
-		      /* <pcb> not if loading from a file! */
-		      if (! charready(yyin)) {
-			  printf(prompt_continuation);
-			  fflush (stdout); 
-		      }
 		  }
-		}
+                }
 
 <ETC>#b[01][01]*	{ /* binary integer */ 
 		  yylval = make_integer (strtol (yytext+2, NULL, 2));
@@ -429,7 +424,51 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 		}
 
 %%
-int yywrap() { return 1; }
+int yywrap() { 
+#define BUFSIZE 1024
+  char buffer[BUFSIZE];
+  char* input;
+
+  if(load_file_context) return 1;
+
+#if defined(HAVE_READLINE)
+  input = readline(current_prompt);
+  if(input) {
+    yy_delete_buffer( YY_CURRENT_BUFFER );
+    if(*input) {
+      add_history(input);
+      snprintf(buffer, BUFSIZE, "%s\n", input);
+      yy_scan_string(buffer);
+      current_prompt = prompt_continuation;
+    } else {
+      yy_scan_string("\n");
+    }
+    free(input);
+    return 0; 
+  } else {
+    return 1;
+  }
+
+#else
+  printf("%s", current_prompt);
+  fflush(stdout);
+  input = fgets(buffer, BUFSIZE, stdin);
+  if(input) {
+    yy_delete_buffer( YY_CURRENT_BUFFER );
+    if(*input) {
+      yy_scan_string(input);
+      current_prompt = prompt_continuation;
+    } else {
+      yy_scan_string("\n");
+    }
+    return 0; 
+  } else {
+    return 1;
+  }
+#endif
+
+
+}
 
 int
 search_for_poundword (char *string, YYSTYPE *obj_ptr)
@@ -756,66 +795,11 @@ make_header_val()
 	}
 }
 
-int
-charready (FILE *stream)
-{
-#ifdef MACOS
-    return ((stdin)->cnt > 0);
-#elif defined (_WIN32)
-	return ((stdin)->_cnt > 0);
-#else
-    fd_set  readfds;
-    int  nfound;
-    struct timeval  timeout;
-
-    if (yylval == eof_object) {
-	/* This horrible kludge makes a prompt print after a file load */
-        return 0;
-    }
-#ifdef __linux__
-    if  (stream->_IO_read_end >= stream->_IO_read_ptr) {
-#else
-    if  (((stream)->_cnt) <= 0)  {
-#endif
-	FD_ZERO( &readfds );
-	FD_SET( fileno( stream ), &readfds );
-	timeout.tv_sec = 0;
-	timeout.tv_usec = 300000;
-	nfound = select( fileno( stream )+1, &readfds, 0, 0, &timeout );
-	if  (nfound <= 0)  {
-	    return 0;
-	}
-    }
-    return 1;
-#endif
-}
-
-void
-yy_skip_ws()
-{
-    int c = '\0';
-
-    /*
-     * The check for yy_hold_char had to be added in upgrade to
-     * flex 2.5.2 which `fixes' problems with beginning-of-line
-     * conditions.  Without this check, marlais would print the
-     * continuation prompt after each prompt due to not having
-     * a charready but having input!
-     */
-    while ((yy_hold_char || charready (yyin)) &&	
-	   ((c = input()) == ' ' || c == '\t' || c == '\f' 
-		|| c == '\v' || c == '\n')){
-    }
-    if (c && c != '\n') {
-	unput(c);
-    }
-}
-
 void
 yy_restart(FILE *new_file)
 {
 	yylineno = 1;
-	yyrestart(new_file);
+	/* yyrestart(new_file); */
 	BEGIN(INI);
 }
 

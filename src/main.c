@@ -71,9 +71,6 @@ void initialize_marlais (void);
 extern Object binding_stack;
 extern FILE *yyin;
 
-void yy_skip_ws (void);
-int charready (FILE *);
-
 #ifdef MACOS
 int getopt (int argc, char *argv[], const char *options);
 
@@ -105,8 +102,9 @@ int thePromptDirty = false;
 
 static int do_not_load_init_file = 0;
 static char *optstring = "cdnep";
-static char *prompt = "? ";
+char *prompt = "? ";
 char *prompt_continuation = "> ";
+char *current_prompt;
 static int debug = 0;
 int echo_prefix = 0;
 
@@ -184,10 +182,12 @@ main (int argc, char *argv[])
     }
 
     load_file_context = 0;	/* <pcb> needs to be cleared after loading file */
+    yy_restart(stdin);
+    yy_scan_string("");
+
     cache_env = the_env;
 
-    printf (prompt);
-    fflush (stdout);
+    current_prompt = prompt;
 
     /* errors reset to here */
     err = setjmp (error_return);
@@ -214,9 +214,7 @@ main (int argc, char *argv[])
 	    thePromptDirty = 0;
 	}
 #else
-	printf (prompt);
 	fflush (stdout);
-	yy_skip_ws ();
 	clearerr (stdin);
 #endif
 	if (trace_functions) {
@@ -228,6 +226,8 @@ main (int argc, char *argv[])
 	eval_stack = 0;
 	push_eval_stack (current_module ()->sym);
 	num_debug_contexts = 0;
+	prompt = "? ";
+	current_prompt = prompt;
     }
     while ((obj = (classic_syntax ? read_object (stdin)
 		   : parse_object (stdin, debug)))
@@ -251,19 +251,14 @@ main (int argc, char *argv[])
 		   listem (standard_output_stream, obj, NULL));
 	    fprintf (stdout, "\n");
 	}
-	if (!classic_syntax) {
-	    yy_skip_ws ();
-	}
-	if (!classic_syntax && charready (stdin)) {
-	    continue;
-	}
 	if (classic_syntax < 0) {
 	    classic_syntax = 0;
 	}
-	printf (prompt);
 	fflush (stdout);
 	cache_env = the_env;
+	current_prompt = prompt;
     }
+    printf("\n");
     return (0);
 }
 

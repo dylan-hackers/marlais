@@ -1,35 +1,35 @@
 /*
 
-   error.c
+error.c
 
-   This software is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+This software is free software; you can redistribute it and/or
+modify it under the terms of the GNU Library General Public
+License as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later version.
 
-   This software is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+This software is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+Library General Public License for more details.
 
-   You should have received a copy of the GNU Library General Public
-   License along with this software; if not, write to the Free
-   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+You should have received a copy of the GNU Library General Public
+License along with this software; if not, write to the Free
+Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
-   Original copyright notice follows:
+Original copyright notice follows:
 
-   Copyright, 1993, Brent Benson.  All Rights Reserved.
-   0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
+Copyright, 1993, Brent Benson.  All Rights Reserved.
+0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
 
-   Permission to use, copy, and modify this software and its
-   documentation is hereby granted only under the following terms and
-   conditions.  Both the above copyright notice and this permission
-   notice must appear in all copies of the software, derivative works
-   or modified version, and both notices must appear in supporting
-   documentation.  Users of this software agree to the terms and
-   conditions set forth in this notice.
+Permission to use, copy, and modify this software and its
+documentation is hereby granted only under the following terms and
+conditions.  Both the above copyright notice and this permission
+notice must appear in all copies of the software, derivative works
+or modified version, and both notices must appear in supporting
+documentation.  Users of this software agree to the terms and
+conditions set forth in this notice.
 
- */
+*/
 
 
 #include <stdio.h>
@@ -53,6 +53,10 @@
 extern Object standard_error_stream;
 extern Object standard_output_stream;
 extern Object print_symbol;
+extern char* prompt;
+extern char* current_prompt;
+
+static char prompt_buf[20];
 
 #define NUMSIGNALS 32
 #define IGNORE  0
@@ -65,39 +69,39 @@ extern char *sys_siglist[];
 #else
 #if (defined _HP_UX) || (defined __hpux) || defined (_WIN32)
 char *sys_siglist[32] =
-{"",
- "hangup",
- "interrupt",
- "quit",
- "illegal instruction (not reset when caught)",
- "trace trap (not reset when caught)",
- "IOT instruction",
- "EMT instruction",
- "floating point exception",
- "kill (cannot be caught or ignored)",
- "bus error",
- "segmentation violation",
- "bad argument to system call",
- "write on a pipe with no one to read it",
- "alarm clock",
- "software termination signal from kill",
- "urgent condition on IO channel",
- "sendable stop signal not from tty",
- "stop signal from tty",
- "continue a stopped process",
- "to parent on child stop or exit",
- "to readers pgrp upon background tty read",
- "like TTIN for output if (tp->t_local&LTOSTOP)",
- "input/output possible signal",
- "exceeded CPU time limit",
- "exceeded file size limit",
- "virtual time alarm",
- "profiling time alarm",
- "window changed",
- "resource lost (eg, record-lock lost)",
- "user defined signal 1",
- "user defined signal 2",
-};
+    {"",
+     "hangup",
+     "interrupt",
+     "quit",
+     "illegal instruction (not reset when caught)",
+     "trace trap (not reset when caught)",
+     "IOT instruction",
+     "EMT instruction",
+     "floating point exception",
+     "kill (cannot be caught or ignored)",
+     "bus error",
+     "segmentation violation",
+     "bad argument to system call",
+     "write on a pipe with no one to read it",
+     "alarm clock",
+     "software termination signal from kill",
+     "urgent condition on IO channel",
+     "sendable stop signal not from tty",
+     "stop signal from tty",
+     "continue a stopped process",
+     "to parent on child stop or exit",
+     "to readers pgrp upon background tty read",
+     "like TTIN for output if (tp->t_local&LTOSTOP)",
+     "input/output possible signal",
+     "exceeded CPU time limit",
+     "exceeded file size limit",
+     "virtual time alarm",
+     "profiling time alarm",
+     "window changed",
+     "resource lost (eg, record-lock lost)",
+     "user defined signal 1",
+     "user defined signal 2",
+    };
 
 #endif
 #endif
@@ -108,39 +112,39 @@ extern int classic_syntax;
 
 
 int signal_response[32] =
-{IGNORE,
- ERROR,				/* hangup */
- DEFAULT,			/* interrupt */
- DEFAULT,			/* quit */
- DEFAULT,			/* illegal instruction (not reset when caught) */
- DEFAULT,			/* trace trap (not reset when caught) */
- DEFAULT,			/* IOT instruction */
- DEFAULT,			/* EMT instruction */
- ERROR,				/* floating point exception */
- IGNORE,			/* kill (cannot be caught or ignored) */
- DEFAULT,			/* bus error */
- DEFAULT,			/* segmentation violation */
- DEFAULT,			/* bad argument to system call */
- ERROR,				/* write on a pipe with no one to read it */
- IGNORE,			/* alarm clock */
- ERROR,				/* software termination signal from kill */
- DEFAULT,			/* urgent condition on IO channel */
- DEFAULT,			/* sendable stop signal not from tty */
- DEFAULT,			/* stop signal from tty */
- DEFAULT,			/* continue a stopped process */
- DEFAULT,			/* to parent on child stop or exit */
- DEFAULT,			/* to readers pgrp upon background tty read */
- DEFAULT,			/* like TTIN for output if (tp->t_local&LTOSTOP) */
- ERROR,				/* input/output possible signal */
- ERROR,				/* exceeded CPU time limit */
- ERROR,				/* exceeded file size limit */
- ERROR,				/* virtual time alarm */
- ERROR,				/* profiling time alar */
- ERROR,				/* window changed */
- DEFAULT,			/* resource lost (eg, record-lock lost) */
- ERROR,				/* user defined signal 1 */
- ERROR				/* user defined signal 2 */
-};
+    {IGNORE,
+     ERROR,				/* hangup */
+     DEFAULT,			/* interrupt */
+     DEFAULT,			/* quit */
+     DEFAULT,			/* illegal instruction (not reset when caught) */
+     DEFAULT,			/* trace trap (not reset when caught) */
+     DEFAULT,			/* IOT instruction */
+     DEFAULT,			/* EMT instruction */
+     ERROR,				/* floating point exception */
+     IGNORE,			/* kill (cannot be caught or ignored) */
+     DEFAULT,			/* bus error */
+     DEFAULT,			/* segmentation violation */
+     DEFAULT,			/* bad argument to system call */
+     ERROR,				/* write on a pipe with no one to read it */
+     IGNORE,			/* alarm clock */
+     ERROR,				/* software termination signal from kill */
+     DEFAULT,			/* urgent condition on IO channel */
+     DEFAULT,			/* sendable stop signal not from tty */
+     DEFAULT,			/* stop signal from tty */
+     DEFAULT,			/* continue a stopped process */
+     DEFAULT,			/* to parent on child stop or exit */
+     DEFAULT,			/* to readers pgrp upon background tty read */
+     DEFAULT,			/* like TTIN for output if (tp->t_local&LTOSTOP) */
+     ERROR,				/* input/output possible signal */
+     ERROR,				/* exceeded CPU time limit */
+     ERROR,				/* exceeded file size limit */
+     ERROR,				/* virtual time alarm */
+     ERROR,				/* profiling time alar */
+     ERROR,				/* window changed */
+     DEFAULT,			/* resource lost (eg, record-lock lost) */
+     ERROR,				/* user defined signal 1 */
+     ERROR				/* user defined signal 2 */
+    };
 
 struct jmp_buf_stack {
     jmp_buf buf;
@@ -179,12 +183,12 @@ static Object signal_error_jump ();
 static Object enter_debugger (void);
 
 static struct primitive error_prims[] =
-{
-    {"%error", prim_1_rest, dylan_error},
-    {"%warning", prim_1_rest, dylan_warning},
-    {"%signal-error-jump", prim_0, signal_error_jump},
-    {"%debugger", prim_0, enter_debugger},
-};
+    {
+	{"%error", prim_1_rest, dylan_error},
+	{"%warning", prim_1_rest, dylan_warning},
+	{"%signal-error-jump", prim_0, signal_error_jump},
+	{"%debugger", prim_0, enter_debugger},
+    };
 
 /* function definitions */
 
@@ -325,7 +329,7 @@ error (char *msg,...)
 			 the_env);
 
 	    add_binding (return_symbol,
-		       make_primitive ("return", prim_0_rest, return_value),
+			 make_primitive ("return", prim_0_rest, return_value),
 			 1,
 			 the_env);
 	    add_binding (fail_symbol,
@@ -337,13 +341,18 @@ error (char *msg,...)
 		help_function ();
 		message_printed = 1;
 	    }
-	    printf ("Debug[%d]> ", num_debug_contexts);
-	    fflush (stdout);
 	    yy_restart (stdin);
+	    prompt = prompt_buf;
+	    current_prompt = prompt;
 	    while ((obj = (classic_syntax ? read_object (stdin)
 			   : parse_object (stdin, 0)))
 		   && (obj != eof_object)) {
 		obj = eval (obj);
+#ifdef OUTPUT_MARKER
+		if (obj != unspecified_object) {
+		    fprintf (stdout, OUTPUT_MARKER);
+		}
+#endif
 		if (TYPE (obj) == Values) {
 		    print_obj (standard_output_stream, obj);
 		    if (VALUESNUM (obj)) {
@@ -354,16 +363,11 @@ error (char *msg,...)
 			   listem (true_object, obj, NULL));
 		    fprintf (stdout, "\n");
 		}
-		if (!classic_syntax) {
-		    yy_skip_ws ();
-		}
-		if (!classic_syntax && charready (stdin)) {
-		    continue;
-		}
-		printf ("Debug[%d]> ", num_debug_contexts);
+		current_prompt = prompt;
 		fflush (stdout);
 	    }
 	    fprintf (stderr, "\n");
+	    prompt = "? ";
 	    pop_scope ();
 	    error_ok_return_pop ();
 	} else {
@@ -466,6 +470,13 @@ error_ok_return_pop (void)
 
     num_debug_contexts--;
     error_ok_return = error_ok_return->next;
+    
+    if(num_debug_contexts) { 
+	snprintf(prompt_buf, 20, "Debug[%d]> ", num_debug_contexts);
+	prompt = prompt_buf;
+    } else {
+	prompt = "? ";
+    }
     return ret;
 }
 
@@ -474,9 +485,11 @@ static jmp_buf
 error_ok_return_push ()
 {
     struct jmp_buf_stack *tmp =
-    (struct jmp_buf_stack *) checking_malloc (sizeof (struct jmp_buf_stack));
+	(struct jmp_buf_stack *) checking_malloc (sizeof (struct jmp_buf_stack));
 
     num_debug_contexts++;
+    snprintf(prompt_buf, 20, "Debug[%d]> ", num_debug_contexts);
+    prompt = prompt_buf;
     tmp->next = error_ok_return;
     error_ok_return = tmp;
     return &(error_ok_return->buf);

@@ -34,7 +34,7 @@
 #####
 # initialization file (change this to suite your installation)
 #
-INIT_FILE=`pwd`/init.dyl#NOT-NT
+INIT_FILE=/usr/local/share/marlais/init.dylan#NOT-NT
 # INIT_FILE=c:/marlais/init.dyl#NT
 
 #INIT_FILE_FLAG = -DINIT_FILE=\"$(INIT_FILE)\"
@@ -59,6 +59,11 @@ STRCASECMP_FLAG =
 # below like #NOT-NT (which probably cause problems with csh)
 #
 SHELL = /bin/sh
+
+# If your system has no readline support, remove this
+#
+READLINE_FLAGS = -DHAVE_READLINE#NOT-NT
+#READLINE_FLAGS = #NT
 
 ##########################################
 ### Interpreter Customization Features ###
@@ -103,6 +108,7 @@ INCDIRS = gc
 MARLAIS_FLAGS = $(SYS_FLAG) \
 	$(STRCASECMP_FLAG) \
 	$(INIT_FILE_FLAG) \
+	$(READLINE_FLAGS) \
 	$(SMALL_OBJECTS_FLAG) \
 	$(OPTIMIZE_TAIL_CALL_FLAG) \
 	$(OUTPUT_MARKER_FLAG) \
@@ -117,7 +123,7 @@ CC=gcc #NOT-NT
 CFLAGS= -g -I$(INCDIRS) $(MARLAIS_FLAGS) $(CEXTRAS) #NOT-NT
 # CFLAGS= $(cdebug) $(cvars) $(cflags) -i$(INCDIRS) $(MARLAIS_FLAGS) #NT
 
-LIBS=-lm #NOT-NT
+LIBS=-lm -lreadline #NOT-NT
 # LIBS=	#NT
 
 FLEXFLAGS = -I
