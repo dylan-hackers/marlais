@@ -20,6 +20,7 @@
 
    Copyright, 1993, Brent Benson.  All Rights Reserved.
    0.4 & 0.5 Revision Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
+   0.6 Revision Copyright 2001, Douglas M. Auclair. All Rights Reserved.
 
    Permission to use, copy, and modify this software and its
    documentation is hereby granted only under the following terms and
@@ -320,34 +321,10 @@ main (int argc, char *argv[])
     current_prompt = prompt;
   }
 
-#ifdef PRE_REFACTORED
-  /* so now that DRM Dylan only accepts infix syntax, I'm eliminating all
-     traces of the classic_syntax -- dma */
-  while ((obj = parse_object (stdin, debug)) && (obj != eof_object)) {
-    obj = eval (obj);
-    {
-      int x, vals = 1;
-      if(TYPE(obj) == Values) {
-	vals = VALUESNUM(obj);
-      }
-      else {
-	obj = construct_values(1, obj);
-      }
-      for(x = 0; x < vals; x++) {
-	Object elt = VALUESELS(obj)[x];
-	assign_top_level_constant(elt);
-      }
-    }
-    fflush (stdout);
-    cache_env = the_env;
-    current_prompt = prompt;
-  }
-#else
   while(read_eval_print(stdin, debug, 1)) {
     cache_env = the_env;
     current_prompt = prompt;
   }
-#endif
 
   printf("\n");
   return (0);

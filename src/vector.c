@@ -117,35 +117,7 @@ make_vector_driver (Object args)
   int size;
   Object size_obj, fill_obj;
 
-#ifdef PRE_REFACTORED
-  size = 0;
-  size_obj = NULL;
-  fill_obj = NULL;
-
-  while (!EMPTYLISTP (args)) {
-    if (FIRST (args) == size_keyword) {
-      size_obj = SECOND (args);
-    } else if (FIRST (args) == fill_keyword) {
-      fill_obj = SECOND (args);
-    } else {
-      error ("make: unsupported keyword for <vector> class", 
-	     FIRST (args), NULL);
-    }
-    args = CDR (CDR (args));
-  }
-  if (size_obj) {
-    if (!INTEGERP (size_obj)) {
-      error ("make: value of size: argument must be an integer", 
-	     size_obj, NULL);
-    }
-    size = INTVAL (size_obj);
-  }
-  if (!fill_obj) {
-    fill_obj = false_object;
-  }
-#else
   make_sequence_driver(args, &size, &size_obj, &fill_obj, "<vector>");
-#endif
   return make_vector (size, fill_obj);
 }
 

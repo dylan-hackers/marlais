@@ -114,32 +114,7 @@ make_deque_driver (Object args)
   int size;
   Object size_obj, fill_obj, first, last, deq;
 
-#ifdef PRE_REFACTORED
-  size = 0;
-  size_obj = NULL;
-  fill_obj = false_object;
-
-  while (!EMPTYLISTP (args)) {
-    if (FIRST (args) == size_keyword) {
-      size_obj = SECOND (args);
-    } else if (FIRST (args) == fill_keyword) {
-      fill_obj = SECOND (args);
-    } else {
-      error ("make: unsupported keyword for <deque> class", 
-	     FIRST (args), NULL);
-    }
-    args = CDR (CDR (args));
-  }
-  if (size_obj) {
-    if (!INTEGERP (size_obj)) {
-      error ("make: value of size: argument must be an integer",
-	     size_obj, NULL);
-    }
-    size = INTVAL (size_obj);
-  }
-#else
   make_sequence_driver(args, &size, &size_obj, &fill_obj, "<deque>");
-#endif
 
   deq = make_deque ();
   /* actually fabricate the list representing the deque */

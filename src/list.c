@@ -154,34 +154,7 @@ make_list_driver (Object args)
     int size;
     Object size_obj, fill_obj, res;
 
-#ifdef PRE_REFACTORED
-    size = 0;
-    size_obj = NULL;
-    fill_obj = NULL;
-    while (!EMPTYLISTP (args)) {
-	if (FIRST (args) == size_keyword) {
-	    size_obj = SECOND (args);
-	} else if (FIRST (args) == fill_keyword) {
-	    fill_obj = SECOND (args);
-	} else {
-	    error ("make: unsupported keyword for <list> class", 
-		   FIRST (args), NULL);
-	}
-	args = CDR (CDR (args));
-    }
-    if (size_obj) {
-	if (!INTEGERP (size_obj)) {
-	    error ("make: value of size: argument must be an integer", 
-		   size_obj, NULL);
-	}
-	size = INTVAL (size_obj);
-    }
-    if (!fill_obj) {
-	fill_obj = false_object;
-    }
-#else
     make_sequence_driver(args, &size, &size_obj, &fill_obj, "<list>");
-#endif
 
     /* actually fabricate the list */
     if (size == 0) {
@@ -219,7 +192,6 @@ cdr (Object lst)
     return (EMPTYLISTP (lst) ? lst : CDR (lst));
 }
 
-#ifndef PRE_REFACTORED
 static Object nth(Object lst, Object default_ob, const char* where,
 		  int test, Object (*fn)(Object))
 {
@@ -233,22 +205,11 @@ static Object nth(Object lst, Object default_ob, const char* where,
 	return default_ob;
     }
 }
-#endif
 
 static Object
 first (Object lst, Object default_ob)
 {
-#ifdef PRE_REFACTORED
-    if (PAIRP (lst)) {
-	return (CAR (lst));
-    } else if (default_ob == default_object) {
-	return error ("attempt to find first of empty list", NULL);
-    } else {
-	return default_ob;
-    }
-#else
   return nth(lst, default_ob, "first", PAIRP(lst), car);
-#endif
 }
 
 Object
@@ -260,17 +221,7 @@ second (Object lst)
 static Object
 second_d (Object lst, Object default_ob)
 {
-#ifdef PRE_REFACTORED
-    if (PAIRP (lst) && PAIRP (CDR (lst))) {
-	return (SECOND (lst));
-    } else if (default_ob == default_object) {
-	return error ("list has no second element", lst, NULL);
-    } else {
-	return default_ob;
-    }
-#else
   return nth(lst, default_ob, "second", PAIRP(lst) && PAIRP(CDR(lst)), second);
-#endif
 }
 
 Object
@@ -282,19 +233,9 @@ third (Object lst)
 static Object
 third_d (Object lst, Object default_ob)
 {
-#ifdef PRE_REFACTORED
-    if (PAIRP (lst) && PAIRP (CDR (lst)) && PAIRP (CDR (CDR (lst)))) {
-	return (THIRD (lst));
-    } else if (default_ob == default_object) {
-	return error ("list has no third element", lst, NULL);
-    } else {
-	return default_ob;
-    }
-#else
   return nth(lst, default_ob, "third", 
 	     PAIRP (lst) && PAIRP (CDR (lst)) && PAIRP (CDR (CDR (lst))),
 	     third);
-#endif
 }
 
 Object
@@ -429,19 +370,7 @@ list_reduce (Object fun, Object init, Object lst)
 Object
 list_reduce1 (Object fun, Object lst)
 {
-#ifdef PRE_REFACTORED
-    Object val;
-
-    val = CAR (lst);
-    lst = CDR (lst);
-    while (!EMPTYLISTP (lst)) {
-	val = apply (fun, listem (val, CAR (lst), NULL));
-	lst = CDR (lst);
-    }
-    return (val);
-#else
     return list_reduce(fun, CAR(lst), CDR(lst));
-#endif
 }
 
 int
