@@ -1,0 +1,590 @@
+<html>
+ <title>Names exported from Init.dylan</title>
+ <body bgcolor="white">
+  <center>
+   <h1>Marlais Init.Dylan exported names</h1>
+  </center>
+
+  This document tracks Marlais' compilance to the Dylan Language
+  Specification and provides me (Douglas M. Auclair) and anyone else
+  working on Marlais ideas for areas on which to bring Marlais into
+  closer compliance.
+<p>
+Note that some of the exported names properly belong elsewhere,
+  e.g. to the Common-Dylan specification libraries.  So, this document
+  also points out good places to attack the common-dylan spec.
+<p>
+  <h2>Exported Classes</h2>
+
+DRM has 52 names exported.
+<p>
+   &lt;abort> = {the class &lt;abort> (39)}<br>
+   &lt;array> = {the class &lt;array> (24)}<br>
+*   <font color="blue">&lt;big-integer> = {> (9)}</font><br>
+   &lt;boolean> = {the class &lt;boolean> (2)}<br>
+   &lt;byte-string> = {the class &lt;byte-string> (30)}<br>
+   &lt;character> = {(46)}<br>
+   &lt;class> = {the class &lt;class> (55)}<br>
+*   <font color="blue">&lt;class-slots-class> = {the class &lt;class-slots-class> (59)}</font><br>
+   &lt;collection> = {(14)}<br>
+   &lt;complex> = {the class &lt;complex> (4)}<br>
+   &lt;condition> = {(33)}<br>
+   &lt;deque> = {the class &lt;deque> (23)}<br>
+*    <font color="blue">&lt;deque-entry> = {the class &lt;deque-entry> (58)}</font><br>
+   &lt;double-float> = {the class &lt;double-float> (13)}<br>
+   &lt;empty-list> = {(26)}<br>
+   &lt;error> = {the class &lt;error> (40)}<br>
+*    <font color="blue">&lt;exit-function> = {the class &lt;exit-function> (51)}</font><br>
+   &lt;explicit-key-collection> = {the class &lt;explicit-key-collection> (15)}<br>
+<font color="red">(missing &lt;extended-float>)</font><br>
+   &lt;float> = {the class &lt;float> (11)}<br>
+*    <font color="blue">&lt;foreign-pointer> = {the class &lt;foreign-pointer> (61)}</font><br>
+   &lt;function> = {(47)}<br>
+   &lt;generic-function> = {the class &lt;generic-function> (49)}<br>
+   &lt;integer> = {the class &lt;integer> (7)}<br>
+*    <font color="blue">&lt;integer-state> = {false-or( &lt;small-integer>) (8)}</font><br>
+   &lt;list> = {the class &lt;list> (25)}<br>
+   &lt;method> = {the class &lt;method> (50)}<br>
+   &lt;mutable-collection> = {the class &lt;mutable-collection> (17)}<br>
+   &lt;mutable-explicit-key-collection> = {(19)}<br>
+   &lt;mutable-sequence> = {the class &lt;mutable-sequence> (20)}<br>
+   &lt;number> = {the class &lt;number> (3)}<br>
+*   <font color="blue"> &lt;object-handle> = {the class &lt;object-handle> (60)}</font><br>
+   &lt;object-table> = {the class &lt;object-table> (22)}<br>
+   &lt;object> = {the class &lt;object> (1)}<br>
+   &lt;pair> = {the class &lt;pair> (27)}<br>
+*    <font color="blue">&lt;primitive> = {(48)}</font><br>
+   &lt;range> = {the class &lt;range> (62)}<br>
+*    <font color="blue">&lt;ratio> = {the class &lt;ratio> (10)}</font><br>
+   &lt;rational> = {> (6)}<br>
+   &lt;real> = {the class &lt;real> (5)}<br>
+   &lt;restart> = {the class &lt;restart> (37)}<br>
+   &lt;sealed-object-error> = {> (43)}<br>
+   &lt;sequence> = {> (18)}<br>
+   &lt;serious-condition> = {the class &lt;serious-condition> (34)}<br>
+   &lt;simple-error> = {the class &lt;simple-error> (41)}<br>
+   &lt;simple-object-vector> = {> (32)}<br>
+   &lt;simple-restart> = {the class &lt;simple-restart> (38)}<br>
+   &lt;simple-warning> = {the class &lt;simple-warning> (36)}<br>
+   &lt;single-float> = {the class &lt;single-float> (12)}<br>
+   &lt;singleton> = {> (54)}<br>
+*    <font color="blue">&lt;small-integer> = {the class &lt;small-integer> (8)}</font><br>
+   &lt;stretchy-collection> = {> (16)}<br>
+<font color="red">(missing &lt;stretchy-vector>)</font><br>
+   &lt;string> = {the class &lt;string> (28)}<br>
+   &lt;symbol> = {the class &lt;symbol> (45)}<br>
+*    <font color="blue">&lt;table-entry> = {the class &lt;table-entry> (57)}</font><br> 
+   &lt;table> = (21)<br>
+   &lt;type-error> = {> (42)}<br>
+   &lt;type> = {the class &lt;type> (53)}<br>
+   &lt;unicode-string> = {the class &lt;unicode-string> (31)}<br>
+*   <font color="blue">&lt;unwind-protect-function> = {the class &lt;unwind-protect-function> (52)}</font><br>
+*    <font color="blue">&lt;variable-name> = {the class
+   &lt;variable-name> (44)}</font> -- this class should probably be
+   hidden from the Marlais user.<br>
+   &lt;vector> = {the class &lt;vector> (29)}<br>
+   &lt;warning> = {the class &lt;warning> (35)}
+<p>
+
+* = name exported from Marlais, but not from DRM's Dylan module
+
+<h2>Exported Functions</h2>
+
+The DRM has 169 exported functions.
+<p>
+
+   * = {the generic function * (n1 :: &lt;number>, n2 :: &lt;number>)}<br>
+   + = {the generic function + (n1 :: &lt;number>, n2 :: &lt;number>)}<br>
+   - = {the generic function - (n1 :: &lt;number>, n2 :: &lt;number>)}<br>
+   / = {the generic function / (n1 :: &lt;number>, n2 :: &lt;number>)}<br>
+   &lt; = {the generic function &lt; (o1, o2, #rest x)}<br>
+   &lt;= = {an anonymous method (o1, o2)#(~, #(&lt;, o2, o1))}<br>
+   = = {the generic function = (o1, o2, #rest x)}<br>
+   == = {primitive function ==}<br>
+   > = {an anonymous method (o1, o2)#(&lt;, o2, o1)}<br>
+   >= = {an anonymous method (o1, o2)#(~, #(&lt;, o1, o2))}<br>
+   ^ = {the generic function ^ (n :: &lt;number>, i :: &lt;integer>)}<br>
+   ~ = {primitive function ~}<br>
+   ~= = {an anonymous method (o1, o2)#(~, #(=, o1, o2))}<br>
+<font color="red">(missing ~==)</font><br>
+* <font color="blue">=hash = {the generic function =hash (obj, #rest
+   x)}</font><br>
+*   <font color="blue">above = {the generic function above (x, #rest x)}</font><br>
+*   <font color="blue">above-setter = {the generic function above-setter (x, x, #rest x)}</font><br>
+<font color="red">(missing abort)</font><br>
+   abs = {the generic function abs (n :: &lt;number>)}<br>
+   add = {the generic function add (s :: &lt;sequence>, new-element)}<br>
+   add! = {the generic function add! (sequence1 :: &lt;sequence>, new-element)}<br>
+   add-method = {the generic function add-method (gf, meth, #rest x)}<br>
+   add-new = {the generic function add-new (sequence :: &lt;sequence>, new-element, #key #(#"test", test, #f))}<br>
+   add-new! = {the generic function add-new! (sequence1 :: &lt;sequence>, new-element, #key #(#"test", test, #f))}<br>
+   all-superclasses = {an anonymous method (c :: &lt;class>)#(%all-superclasses, c)}<br> 
+   always = {the generic function always (obj, #rest x)}<br>
+   any? = {the generic function any? (procedure :: &lt;function>, collection :: &lt;collection>, #rest more-collections)}<br>
+*   <font color="blue">append2 = {the generic function append2 (obj1, obj2)}</font><br>
+   applicable-method? = {the generic function applicable-method? (m, #rest x)}<br>
+   apply = {the generic function apply (f, #rest x)}<br>
+   aref = {the generic function aref (a :: &lt;array>, #rest indices)}<br>
+   aref-setter = {the generic function aref-setter (new-val, a :: &lt;array>, #rest indices)}<br>
+   as = {the generic function as (c, obj, #rest x)}<br>
+   as-lowercase = {the generic function as-lowercase (s, #rest x)}<br>
+   as-lowercase! = {the generic function as-lowercase! (s, #rest x)}<br>
+   as-uppercase = {the generic function as-uppercase (s, #rest x)}<br>
+   as-uppercase! = {the generic function as-uppercase! (s, #rest x)}<br>
+   ash = {the generic function ash (i, count, #rest x)}<br>
+   backward-iteration-protocol = {the generic function backward-iteration-protocol (c, #rest x)}<br>
+<font color="red">(missing break)</font><br>
+*   <font color="blue">below = {the generic function below (x, #rest x)}</font><br>
+*   <font color="blue">below-setter = {the generic function below-setter (x, x, #rest x)}</font><br>
+*   <font color="blue">by = {the generic function by (x, #rest x)}</font><br>
+*   <font color="blue">by-setter = {the generic function by-setter (x, x, #rest x)}</font><br>
+   ceiling = {the generic function ceiling (r :: &lt;real>)}<br>
+   ceiling/ = {the generic function ceiling/ (r1 :: &lt;real>, r2 :: &lt;real>)}<br>
+   cerror = {the generic function cerror (#rest x)}<br>
+   choose = {the generic function choose (predicate :: &lt;function>, sequence :: &lt;sequence>)}<br>
+   choose-by = {the generic function choose-by (predicate :: &lt;function>, test-sequence :: &lt;sequence>, value-sequence :: &lt;sequence>)}<br>
+*   <font color="blue">class-for-copy = {the generic function
+   class-for-copy (o, #rest x)}</font> -- <strong>rename to
+   type-for-copy for DRM compliance</strong><br>
+   complement = {the generic function complement (func, #rest x)}<br>
+   compose = {the generic function compose (function, #rest x)}<br>
+   concatenate = {the generic function concatenate (sequence1 :: &lt;sequence>, #rest sequences)}<br>
+   concatenate-as = {the generic function concatenate-as (class :: &lt;class>, sequence1 :: &lt;sequence>, #rest more-sequences)}<br>
+<font color="red">(missing condition-format-arguments)</font><br>
+<font color="red">(missing condition-format-string)</font><br>
+   conjoin = {the generic function conjoin (predicate, #rest x)}<br>
+   copy-sequence = {the generic function copy-sequence (source :: &lt;sequence>, #key #(#"start", start, #f))}<br>
+*   <font color="blue">copy-state = {the generic function copy-state (c, state, #rest x)}</font><br>
+*   <font color="blue">current-element = {the generic function current-element (c, state, #rest x)}</font><br>
+*   <font color="blue">current-element-setter = {the generic function current-element-setter (obj, c, state, #rest x)}</font><br>
+*   <font color="blue">current-key = {the generic function current-key (c, state, #rest x)}</font><br>
+*   <font color="blue">current-module = {primitive function current-module}</font><br>
+   curry = {the generic function curry (f, #rest x)}<br>
+*   <font color="blue">debug-name = {the generic function debug-name (c, #rest x)}</font><br>
+*   <font color="blue">debug-name-setter = {the generic function debug-name-setter (s, m, #rest x)}</font><br>
+<font color="red">(missing default-handler)</font><br>
+   dimension = {the generic function dimension (a :: &lt;array>, axis :: &lt;integer>)}<br>
+   dimensions = {the generic function dimensions (v, #rest x)}<br>
+   direct-subclasses = {an anonymous method (c :: &lt;class>)#(%direct-subclasses, c)}<br>
+   direct-superclasses = {an anonymous method (c :: &lt;class>)#(%direct-superclasses, c)}<br>
+   disjoin = {the generic function disjoin (predicate, #rest x)}<br>
+   do = {the generic function do (procedure :: &lt;function>, collection :: &lt;collection>, #rest more-collections)}<br>
+<font color="red">(missing do-handlers)</font><br>
+   element = {the generic function element (c :: &lt;collection>, key, #rest rest)}<br>
+   element-setter = {the generic function element-setter (val, l, i, #rest x)}<br>
+   empty? = {the generic function empty? (collection :: &lt;collection>)}<br>
+*   <font color="blue">eof-object? = {the generic function eof-object? (obj, #rest x)}</font><br>
+   error = {the generic function error (msg, #rest x)}<br>
+*   <font color="blue">eval = {the generic function eval (obj, #rest x)}</font><br>
+   even? = {the generic function even? (i, #rest x)}<br>
+   every? = {the generic function every? (procedure :: &lt;function>, collection :: &lt;collection>, #rest more-collections)}<br>
+   fill! = {the generic function fill! (mutable-collection :: &lt;mutable-collection>, value, #key #(#"start", start, #f))}<br>
+*  <font color="blue">final-state = {the generic function final-state (v, #rest x)}</font><br>
+   find-key = {the generic function find-key (collection :: &lt;collection>, procedure :: &lt;function>, #key #(#"skip", skip, #f) #(#"failure", failure, #f))}<br>
+   find-method = {the generic function find-method (gf, #rest x)}<br>
+*   <font color="blue">finished-state? = {the generic function finished-state? (c, state, limit, #rest x)}</font><br>
+   first = {the generic function first (sequence :: &lt;sequence>)}<br>
+   first-setter = {the generic function first-setter (new-value, sequence :: &lt;sequence>)}<br>
+   floor = {the generic function floor (r :: &lt;real>)}<br>
+   floor/ = {the generic function floor/ (r1 :: &lt;real>, r2 :: &lt;real>)}<br>
+   forward-iteration-protocol = {the generic function forward-iteration-protocol (c, #rest x)}<br>
+*   <font color="blue">from = {the generic function from (x, #rest x)}</font><br>
+*   <font color="blue">from-setter = {the generic function from-setter (x, x, #rest x)}</font><br>
+   function-arguments = {the generic function function-arguments (f, #rest x)}<br>
+   function-specializers = {the generic function function-specializers (func, #rest x)}<br>
+*   <font color="blue">function-values = {the generic function
+   function-values (func, #rest x)}</font> -- rename to
+   <strong>function-return-values</strong> for DRM compliance.<br>
+   gcd = {the generic function gcd (int1, int2, #rest x)}<br>
+   generic-function-mandatory-keywords = {the generic function generic-function-mandatory-keywords (gf, #rest x)}<br>
+   generic-function-methods = {the generic function generic-function-methods (gf, #rest x)}<br>
+   head = {the generic function head (lst, #rest x)}<br>
+   head-setter = {the generic function head-setter (obj, p, #rest x)}<br>
+*   <font color="blue">id? = {primitive function id?}</font><br>
+   identity = {an anonymous method (x)x}<br>
+*   <font color="blue">initial-state = {the generic function initial-state (l, #rest x)}</font><br>
+   initialize = {the generic function initialize (instance, #rest x)}<br>
+   instance? = {an anonymous method (obj, typ :: &lt;type>)#(%instance?, obj, typ)}<br>
+   integral? = {the generic function integral? (n, #rest x)}<br>
+   intersection = {the generic function intersection (sequence1 :: &lt;sequence>, sequence2 :: &lt;sequence>, #key #(#"test", test, #f))}<br>
+   key-sequence = {the generic function key-sequence (s, #rest x)}<br>
+   key-test = {the generic function key-test (c :: &lt;collection>)}<br>
+   last = {the generic function last (sequence :: &lt;sequence>)}<br>
+   last-setter = {the generic function last-setter (new-value, s, #rest x)}<br>
+   lcm = {the generic function lcm (int1, int2, #rest x)}<br>
+   limited = {the generic function limited (int, #rest x, #key #(#"min", min, #f) #(#"max", max, #f))}<br>
+   list = {the generic function list (#rest x)}<br>
+*   <font color="blue">load = {primitive function load}</font><br>
+   logand = {the generic function logand (#rest x)}<br>
+   logior = {the generic function logior (#rest x)}<br>
+<font color="red">(missing logbit?)</font><br>
+   make = {the generic function make (c, #rest x)}<br>
+   map = {the generic function map (procedure :: &lt;function>, collection :: &lt;collection>, #rest more-collections)}<br>
+   map-as = {the generic function map-as (class :: &lt;class>, procedure :: &lt;function>, collection :: &lt;collection>, #rest more-collections)}<br>
+   map-into = {the generic function map-into (mutable-collection :: &lt;mutable-collection>, procedure :: &lt;function>, collection :: &lt;collection>, #rest more-cols)}<br>
+   max = {the generic function max (n1, #rest x)}<br>
+   member? = {the generic function member? (value, collection :: &lt;collection>, #key #(#"test", test, #f))}<br>
+   min = {the generic function min (n1, #rest x)}<br>
+   modulo = {the generic function modulo (r1 :: &lt;real>, r2 :: &lt;real>)}<br>
+   negative = {the generic function negative (n :: &lt;number>)}<br>
+   negative? = {the generic function negative? (r :: &lt;real>)}<br>
+*   <font color="blue">next-state = {the generic function next-state (c, state, #rest x)}</font><br>
+   object-class = {an anonymous method (o)#(%object-class, o)}<br>
+<font color="red">(missing object-hash)</font><br>
+   odd? = {the generic function odd? (i, #rest x)}<br>
+   pair = {the generic function pair (car, cdr, #rest x)}<br>
+   pop = {the generic function pop (d, #rest x)}<br>
+   pop-last = {the generic function pop-last (d, #rest x)}<br>
+   positive? = {the generic function positive? (r :: &lt;real>)}<br>
+*   <font color="blue">previous-state = {the generic function previous-state (v, state, #rest x)}</font><br>
+   push = {the generic function push (d, new, #rest x)}<br>
+   push-last = {the generic function push-last (d, new, #rest x)}<br>
+   range = {the generic function range (#rest x)}<br>
+   rank = {the generic function rank (a :: &lt;array>)}<br>
+   rcurry = {the generic function rcurry (f, #rest x)}<br>
+   reduce = {the generic function reduce (procedure :: &lt;function>, initial-value, collection :: &lt;collection>)}<br>
+   reduce1 = {the generic function reduce1 (procedure :: &lt;function>, collection :: &lt;collection>)}<br>
+   remainder = {the generic function remainder (r1 :: &lt;real>, r2 :: &lt;real>)}<br>
+   remove = {the generic function remove (sequence :: &lt;sequence>, value, #key #(#"test", test, #f) #(#"count", count, #f))}<br>
+   remove! = {the generic function remove! (sequence1 :: &lt;sequence>, value, #key #(#"test", test, #f) #(#"count", count, #f))}<br>
+   remove-duplicates = {the generic function remove-duplicates (sequence :: &lt;sequence>, #key #(#"test", test, #f))}<br>
+   remove-duplicates! = {the generic function remove-duplicates!
+   (sequence1 :: &lt;sequence>, #key #(#"test", test, #f))}<br>
+<font color="red">(missing remove-key!)</font><br>
+   remove-method = {the generic function remove-method (gf, meth, #rest x)}<br>
+   replace-elements! = {the generic function replace-elements! (mutable-collection :: &lt;mutable-collection>, predicate :: &lt;function>, new-value-fn :: &lt;function>, #key #(#"count", count, #f))}<br>
+   replace-subsequence! = {the generic function replace-subsequence!
+   (mutable-sequence :: &lt;sequence>, insert-sequence ::
+   &lt;sequence>, #key #(#"start", start, #f))}<br>
+<font color="red">(missing restart-query)</font><br>
+<font color="red">(missing return-allowed?)</font><br>
+<font color="red">(missing return-description)</font><br>
+<font color="red">(missing return-query)</font><br>
+   reverse = {the generic function reverse (sequence :: &lt;sequence>)}<br>
+   reverse! = {the generic function reverse! (sequence1 :: &lt;sequence>)}<br>
+   round = {the generic function round (r :: &lt;real>)}<br>
+   round/ = {the generic function round/ (r1 :: &lt;real>, r2 :: &lt;real>)}<br>
+   row-major-index = {the generic function row-major-index (a :: &lt;array>, #rest subscripts)}<br>
+*   <font color="blue">seal = {the generic function seal (c, #rest x)}</font><br>
+   second = {the generic function second (sequence :: &lt;sequence>)}<br>
+   second-setter = {the generic function second-setter (new-value, sequence :: &lt;sequence>)}<br>
+*   <font color="blue">set-module = {primitive function set-module}</font><br>
+   shallow-copy = {the generic function shallow-copy (o, #rest x)}<br>
+   signal = {the generic function signal (#rest x)}<br>
+   singleton = {an anonymous method (o)#(%singleton, o)}<br>
+   size = {the generic function size (collection :: &lt;collection>)}<br>
+   size-setter = {the generic function size-setter (x, x, #rest x)}<br>
+   slot-initialized? = {an anonymous method (obj, slot)#(~, #(id?, #(slot, obj), %uninitialized-slot-value))}<br>
+   sort = {the generic function sort (sequence :: &lt;sequence>, #key #(#"test", test, #f) #(#"stable", stable, #f))}<br>
+   sort! = {the generic function sort! (sequence1 :: &lt;sequence>, #key #(#"test", test, #f) #(#"stable", stable, #f))}<br>
+   sorted-applicable-methods = {the generic function sorted-applicable-methods (gf, #rest x)}<br>
+   subsequence-position = {the generic function subsequence-position (big :: &lt;sequence>, pattern :: &lt;sequence>, #key #(#"test", test, #f) #(#"count", count, #f))}<br>
+   subtype? = {an anonymous method (t1 :: &lt;type>, t2 :: &lt;type>)#(%subtype?, t1, t2)}<br>
+*   <font color="blue">system = {primitive function system}</font><br>
+<font color="red">(missing table-protocol)</font><br>
+   tail = {the generic function tail (lst, #rest x)}<br>
+   tail-setter = {the generic function tail-setter (obj, p, #rest x)}<br>
+   third = {the generic function third (sequence :: &lt;sequence>)}<br>
+   third-setter = {the generic function third-setter (new-value, sequence :: &lt;sequence>)}<br>
+*   <font color="blue">to = {the generic function to (x, #rest x)}</font><br>
+*   <font color="blue">to-setter = {the generic function to-setter (x, x, #rest x)}</font><br>
+   truncate = {the generic function truncate (r :: &lt;real>)}<br>
+   truncate/ = {the generic function truncate/ (r1 :: &lt;real>, r2 ::
+   &lt;real>)}<br>
+<font color="red">(missing type-error-expected-type)</font><br>
+<font color="red">(missing type-error-value)</font><br>
+<font color="red">(missing type-for-copy)</font> -- see class-for-copy<br>
+<font color="red">(missing type-union)</font><br>
+   union = {the generic function union (o1, o2, #rest args)}<br>
+   values = {primitive function values}<br>
+   vector = {the generic function vector (#rest x)}<br>
+*   <font color="blue">warning = {the generic function warning (msg, #rest x)}</font><br>
+   zero? = {the generic function zero? (n :: &lt;number>)}<br>
+
+<h3>Bindings that really shouldn't be visible to Marlais users</h3>
+   i-load = {primitive function i-load}<br>
+   not = {primitive function not}<br>
+   object-princ = {the generic function object-princ (stream, obj, #rest x)}<br>
+   object-print = {the generic function object-print (stream, obj, #rest x)}<br>
+*   <font color="blue">set-slot-value! = {primitive function set-slot-value!}</font><br>
+   slot-value = {primitive function slot-value}<br>
+
+   %double-abs = {primitive function %double-abs}<br>
+   %table-element-setter = {primitive function %table-element-setter}<br>
+   %deque-element-setter = {primitive function %deque-element-setter}<br>
+   %deque-last = {primitive function %deque-last}<br>
+   %write-char = {primitive function %write-char}<br>
+   %array-element-setter = {primitive function %array-element-setter}<br>
+   %array-size = {primitive function %array-size}<br>
+   %deque-previous-state = {primitive function %deque-previous-state}<br>
+   %union-type = {primitive function %union-type}<br>
+   %eof-object? = {primitive function %eof-object?}<br>
+   %binary-int* = {primitive function %binary-int*}<br>
+   %binary-int+ = {primitive function %binary-int+}<br>
+   %binary-int- = {primitive function %binary-int-}<br>
+   %binary-int/ = {primitive function %binary-int/}<br>
+   %array-row-major-index = {primitive function %array-row-major-index}<br>
+   %generic-function-make = {primitive function %generic-function-make}<br>
+   %table-current-element = {primitive function %table-current-element}<br>
+   %find-method = {primitive function %find-method}<br>
+   %head-setter = {primitive function %head-setter}<br>
+   %deque-current-element = {primitive function %deque-current-element}<br>
+   %list-reduce = {primitive function %list-reduce}<br>
+   %list-append = {primitive function %list-append}<br>
+   %array-current-element = {primitive function %array-current-element}<br>
+   %deque-first = {primitive function %deque-first}<br>
+   %list-length = {primitive function %list-length}<br>
+   %vector-element-setter = {primitive function %vector-element-setter}<br>
+   %tail-setter = {primitive function %tail-setter}<br>
+   %string-element-setter = {primitive function %string-element-setter}<br>
+   %double-sqrt = {primitive function %double-sqrt}<br>
+   %int-inverse = {primitive function %int-inverse}<br>
+   %class-slots = {primitive function %class-slots}<br>
+   %vector-size = {primitive function %vector-size}<br>
+   %string-size = {primitive function %string-size}<br>
+   %unspecified =
+   %list-reduce1 = {primitive function %list-reduce1}<br>
+   %list-member? = {primitive function %list-member?}<br>
+   %function-specializers = {primitive function %function-specializers}<br>
+   %double-zero? = {primitive function %double-zero?}<br>
+   %object-class = {primitive function %object-class}<br>
+   %int-negative = {primitive function %int-negative}<br>
+   %close-stream = {primitive function %close-stream}<br>
+   %list-element = {primitive function %list-element}<br>
+   %ln = {primitive function %ln}<br>
+   %list-reverse = {primitive function %list-reverse}<br>
+   %double-to-int = {primitive function %double-to-int}<br>
+   %int-to-double = {primitive function %int-to-double}<br>
+   %list-reverse! = {primitive function %list-reverse!}<br>
+   %int-negative? = {primitive function %int-negative?}<br>
+   %int-truncate/ = {primitive function %int-truncate/}<br>
+   %binary-logand = {primitive function %binary-logand}<br>
+   %int-positive? = {primitive function %int-positive?}<br>
+   %deque-element = {primitive function %deque-element}<br>
+   %remainder-int = {primitive function %remainder-int}<br>
+   %array-element = {primitive function %array-element}<br>
+   %modulo-double = {primitive function %modulo-double}<br>
+   %ash = {primitive function %ash}<br>
+   %remove-method = {primitive function %remove-method}<br>
+   %binary-logior = {primitive function %binary-logior}<br>
+   %cos = {primitive function %cos}<br>
+   %sin = {primitive function %sin}<br>
+   %exp = {primitive function %exp}<br>
+   %pop = {primitive function %pop}<br>
+   %binary-double* = {primitive function %binary-double*}<br>
+   %binary-double+ = {primitive function %binary-double+}<br>
+   %binary-double- = {primitive function %binary-double-}<br>
+   %binary-double/ = {primitive function %binary-double/}<br>
+   %vector-append2 = {primitive function %vector-append2}<br>
+   %string-append2 = {primitive function %string-append2}<br>
+   %odd? = {primitive function %odd?}<br>
+   %default-object = #(#f . #f)
+   %generic-function-methods = {primitive function %generic-function-methods}<br>
+   %head = {primitive function %head}<br>
+   %string->symbol = {primitive function %string->symbol}<br>
+   %symbol->string = {primitive function %symbol->string}<br>
+   %forward-collection-limit = {the generic function %forward-collection-limit (c, #rest x)}<br>
+   %read = {primitive function %read}<br>
+   %make = {primitive function %make}<br>
+   %double-inverse = {primitive function %double-inverse}<br>
+   %seal = {primitive function %seal}<br>
+   %standard-error = {primitive function %standard-error}<br>
+   %eval = {primitive function %eval}<br>
+   %vector-element = {primitive function %vector-element}<br>
+   %tail = {primitive function %tail}<br>
+   %pair = {primitive function %pair}<br>
+   %standard-input = {primitive function %standard-input}<br>
+   %string-element = {primitive function %string-element}<br>
+   %uninitialized-slot-value = {uninitialized slot value}<br>
+   %instance-slots = {primitive function %instance-slots}<br>
+   %table-element = {primitive function %table-element}<br>
+   %push = {primitive function %push}<br>
+   %atan2 = {primitive function %atan2}<br>
+   %open-input-file = {primitive function %open-input-file}<br>
+   %=hash = {primitive function %=hash}<br>
+   %backward-collection-limit = {the generic function %backward-collection-limit (c, #rest x)}<br>
+   %sorted-applicable-methods = {primitive function %sorted-applicable-methods}<br>
+   %even? = {primitive function %even?}<br>
+   %double-negative = {primitive function %double-negative}<br>
+   %limited-integer = {primitive function %limited-integer}<br>
+   %symbol->keyword = {primitive function %symbol->keyword}<br>
+   %keyword->symbol = {primitive function %keyword->symbol}<br>
+   %trace = {primitive function %trace}<br>
+   %generic-function-mandatory-keywords = {primitive function %generic-function-mandatory-keywords}<br>
+   %class-debug-name = {primitive function %class-debug-name}<br>
+   %third = {primitive function %third}<br>
+   %princ = {primitive function %princ}<br>
+   %floor = {primitive function %floor}<br>
+   %function-values = {primitive function %function-values}<br>
+   %apply = {primitive function %apply}<br>
+   %round = {primitive function %round}<br>
+   %first = {primitive function %first}<br>
+   %error = {primitive function %error}<br>
+   %print = {primitive function %print}<br>
+   %standard-output = {primitive function %standard-output}<br>
+   %double-negative? = {primitive function %double-negative?}<br>
+   %binary-less-than = {primitive function %binary-less-than}<br>
+   %table-next-state = {primitive function %table-next-state}<br>
+   %array-ref-setter = {primitive function %array-ref-setter}<br>
+   %deque-next-state = {primitive function %deque-next-state}<br>
+   %floor/ = {primitive function %floor/}<br>
+   %round/ = {primitive function %round/}<br>
+   %array-next-state = {primitive function %array-next-state}<br>
+   %double-positive? = {primitive function %double-positive?}<br>
+   %open-output-file = {primitive function %open-output-file}<br>
+   %remainder-double = {primitive function %remainder-double}<br>
+   %second = {primitive function %second}<br>
+   %all-superclasses = {primitive function %all-superclasses}<br>
+   %array-dimensions = {primitive function %array-dimensions}<br>
+   %format = {primitive function %format}<br>
+   %modulo = {primitive function %modulo}<br>
+   %vector = {primitive function %vector}<br>
+   %deque-final-state = {primitive function %deque-final-state}<br>
+   %debug-name-setter = {primitive function %debug-name-setter}<br>
+   %table-current-key = {primitive function %table-current-key}<br>
+   %int-abs = {primitive function %int-abs}<br>
+   %signal-error-jump = {primitive function %signal-error-jump}<br>
+   %string&lt; = {primitive function %string&lt;}<br>
+   %string= = {primitive function %string=}<br>
+   %ceiling = {primitive function %ceiling}<br>
+   %direct-subclasses = {primitive function %direct-subclasses}<br>
+   %warning = {primitive function %warning}<br>
+   %applicable-method? = {primitive function %applicable-method?}<br>
+   %character->integer = {primitive function %character->integer}<br>
+   %integer->character = {primitive function %integer->character}<br>
+   %ceiling/ = {primitive function %ceiling/}<br>
+   %table-current-element-setter = {primitive function %table-current-element-setter}<br>
+   %deque-current-element-setter = {primitive function %deque-current-element-setter}<br>
+   %pop-last = {primitive function %pop-last}<br>
+   %int-sqrt = {primitive function %int-sqrt}<br>
+   %string-size-setter = {primitive function %string-size-setter}<br>
+   %debugger = {primitive function %debugger}<br>
+   %subtype? = {primitive function %subtype?}<br>
+   %list-map1 = {primitive function %list-map1}<br>
+   %truncate = {primitive function %truncate}<br>
+   %read-char = {primitive function %read-char}<br>
+   %function-arguments = {primitive function %function-arguments}<br>
+   %table-initial-state = {primitive function %table-initial-state}<br>
+   %int-zero? = {primitive function %int-zero?}<br>
+   %deque-initial-state = {primitive function %deque-initial-state}<br>
+   %quotient = {primitive function %quotient}<br>
+   %array-initial-state = {primitive function %array-initial-state}<br>
+   %array-ref = {primitive function %array-ref}<br>
+   %instance? = {primitive function %instance?}<br>
+   %truncate/ = {primitive function %truncate/}<br>
+   %integral? = {primitive function %integral?}<br>
+   %list-element-setter = {primitive function %list-element-setter}<br>
+   %list-last = {primitive function %list-last}<br>
+   %push-last = {primitive function %push-last}<br>
+   %list-sort = {primitive function %list-sort}<br>
+   %direct-superclasses = {primitive function %direct-superclasses}<br>
+   %list-sort! = {primitive function %list-sort!}<br>
+   %singleton = {primitive function %singleton}<br>
+   %add-method = {primitive function %add-method}<br>
+
+<h3>Bindings that should be eliminated from Marlais</h3>
+*   <font color="blue">bye = {primitive function bye}</font> -- see quit<br>
+   infix = {primitive function infix} -- as infix-dylan is now the
+   <strong>only</strong> allowed style.<br>
+   insertion-sort! = {the generic function insertion-sort! (a, test, #rest x)}<br>
+   length = {the generic function length (l, #rest x)}<br>
+   map-forward-iteration-protocol = {the generic function map-forward-iteration-protocol (c, #rest x)}<br>
+   map1 = {the generic function map1 (f, c, #rest x)}<br>
+   map2 = {the generic function map2 (f, c1, c2, #rest x)}<br>
+   map1* = {the generic function map1* (functions, c, #rest x)}<br>
+   map2* = {the generic function map2* (functions, c1, c2, #rest x)}<br>
+   map3* = {the generic function map3* (functions, c1, c2, c3, #rest x)}<br>
+   p-load = {primitive function p-load}<br>
+<em><strong>   prefix = {primitive function prefix}</strong></em><br>
+   quicksort! = {the generic function quicksort! (a, test, #rest x)}<br>
+*   <font color="blue">quit = {primitive function quit}</font> -- replace with &lt;CNTL>-D<br>
+   union* = {the generic function union* (#rest x)}<br>
+
+<h2>Exported Constants</h2>
+The DRM has one name exported.
+<p>
+<font color="red">(missing $permanent-hash-state)</font>
+
+<h2>Exported Defining Macros</h2>
+DRM has 8 defining macros, <strong>Marlais has NONE!</strong>  It hard-wires
+these defining macros into the parser/interpreter:
+<p>
+class-definer<br>
+constant-definer<br>
+<font color="red">(missing domain-definer)</font> -- true?<br>
+generic-definer<br>
+library-definer -- true?<br>
+method-definer<br>
+module-definer<br>
+variable-definer<br>
+<font color="red">(missing function-definer)</font> -- added to the Dylan
+language specification after the DRM was published.
+
+<h2>Exported Statement Macros</h2>
+DRM has 10 names, again <strong>Marlais has these hard-wired!</strong>
+<p>
+begin<br>
+block<br>
+case<br>
+for -- but not fully implemented?<br>
+if<br>
+method<br>
+select<br>
+unless<br>
+until<br>
+while<br>
+* <font color="blue">when</font> -- true?
+
+<h2>Exported Function Macros</h2>
+DRM has 3, <strong>Marlais has these hard-wired!</strong>
+<p>
+:=<br>
+|<br>
+&amp;<br>
+
+<h2>Bindings that are targets for the Common-Dylan spec</h2>
+<h3>IO Library</h3>
+<h4>Classes</h4>
+*    <font color="blue">&lt;stream> = {the class &lt;stream>
+   (56)}</font><br> 
+
+<h4>Functions</h4>
+*   <font color="blue">close-stream = {the generic function
+   close-stream (s, #rest x)}</font> -- should be renamed to 
+   <strong>close</strong><br>
+   format = {the generic function format (stream, s, #rest x)}<br>
+   format-out = {an anonymous method (#rest regular-args)#(apply, f, #(concatenate, curried-args, regular-args))}<br>
+<p>
+The next two functions must be restructured to conform to the
+   common-dylan spec.
+<blockquote>
+   open-input-file = {the generic function open-input-file (s, #rest x)}<br>
+   open-output-file = {the generic function open-output-file (s, #rest x)}<br>
+</blockquote>
+   princ = {the generic function princ (obj, #rest x)}<br>
+   print = {the generic function print (obj, #rest x)}<br>
+   print* = {the generic function print* (obj, #rest x)}<br>
+   read = {the generic function read (#rest x)}<br>
+   read-char = {the generic function read-char (#rest x)}<br>
+   write-char = {the generic function write-char (c, #rest x)}<br>
+
+<h4>Variables</h4>
+* <font color="blue">*standard-output* :: {the class &lt;stream> (56)} = {output stream}</font>
+
+<h3>Transcendentals Library</h3>
+<h4>Functions</h4>
+*   <font color="blue">atan2 = {the generic function atan2 (d1, d2, #rest x)}</font><br>
+*   <font color="blue">cos = {the generic function cos (n, #rest x)}</font><br>
+   exp = {the generic function exp (n, #rest x)}<br>
+   ln = {the generic function ln (n, #rest x)}<br>
+   sin = {the generic function sin (n, #rest x)}<br>
+   sqrt = {the generic function sqrt (i, #rest x)}<br>
+
+<h3>Date Library</h3>
+<h4>Functions</h4>
+*   <font color="blue">clock = {primitive function clock}</font><br>
+*   <font color="blue">ctime = {primitive function ctime}</font><br>
+   time = {primitive function time}<br>
+
+</body>
+</html>

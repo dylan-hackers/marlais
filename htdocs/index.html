@@ -21,19 +21,23 @@ this project, and maintains a page on Dylan at
 Marlais is in great shape ... it can load in and interpret Dylan files, and
 it can start and interactive session from scratch.  It is, however, based on
 a Dylan spec of 6 years ago, so this project will bring Marlais up to speed
-in the following way:
+in the following ways:
 <OL>
  <LI> First, we'll fix any inconsistancies of the functions defined in the
       <A HREF="http://www.gwydiondylan.org/drm/drm_96.htm#HEADING96-0">Dylan 
-      Reference Manual (DRM), chapter 12</A>.</LI>
+      Reference Manual (DRM), chapter 12</A>.
+      <p>
+      Actually, this task isn't so herculean, as most of the function and
+      class bindings are correct, see <A HREF="bindings.html">the bindings
+      list</A> for what needs to be done.</LI>
  <UL>
   <LI> At the same time, we'll allow for constant names such as $0, $1, etc,
        and then we'll bind values returned to constants a la 
        <A HREF="http://www.gwydiondylan.org/old-docs/maker-out/debug.htm#E8E23">
        mindy</A>.  <FONT COLOR="red">This is mostly done, see</FONT> 
        <A HREF="#const">Andreas' work</A>.</LI>
-  <LI> While we're at it, we'll make Marlais an excellent command-line interface:
-       executing Dylan expressions and (already mostly implemented:)
+  <LI> While we're at it, we'll make Marlais an excellent command-line 
+       interface: executing Dylan expressions and (already mostly implemented:)
        Dylan source files -- allowing Marlais to be used for (e.g.) CGI, scratch
        calculation and what-have-you.</LI>
  </UL>
