@@ -1,0 +1,103 @@
+<HTML>
+<HEAD>
+ <TITLE>Marlais Sourceforge Project</TITLE>
+</HEAD>
+<BODY>
+<CENTER><H2>Marlais Sourceforge Project</H2></CENTER>
+Marlais is an interactor for the Dylan Programming Language (more information
+is available on Dylan at <A HREF="http://www.fun-o.com">Functional Objects,
+Inc.</A> and at the <A HREF="http://www.gwydiondylan.org">Gwydion Dylan
+Maintainers' Website</A>).
+<P>
+Marlais was first developed by Brent Benson of Harris, Inc.  Then,
+<A HREF="mailto://jnw@cis.ufl.edu">Dr. Wilson</A> took up development with
+others and hosts Marlais up to version 0.5.12
+<A HREF="http://www.cis.ufl.edu/~jnw/Marlais">at this web site</A>.  
+<A HREF="mailto://dauclair@hotmail.com">Douglas M. Auclair</A> now heads 
+this project, and maintains a page on Dylan at 
+<A HREF="http://www.geocities.com/dylan_programmer">geocities</A>.
+<P>
+<H3>The Plan</H3>
+Marlais is in great shape ... it can load in and interpret Dylan files, and
+it can start and interactive session from scratch.  It is, however, based on
+a Dylan spec of 6 years ago, so this project will bring Marlais up to speed
+in the following way:
+<OL>
+ <LI> First, we'll fix any inconsistancies of the functions defined in the
+      <A HREF="http://www.gwydiondylan.org/drm/drm_96.htm#HEADING96-0">Dylan 
+      Reference Manual (DRM), chapter 12</A>.</LI>
+ <UL>
+  <LI> At the same time, we'll allow for constant names such as $0, $1, etc,
+       and then we'll bind values returned to constants a la 
+       <A HREF="http://www.gwydiondylan.org/old-docs/maker-out/debug.htm#E8E23">
+       mindy</A>.</LI>
+  <LI> We'll also replace the old 
+       <A HREF="http://www.hpl.hp.com/personal/Hans_Boehm/gc">Boehm</A> 
+       garbage collector with the most recent one -- <FONT COLOR="red">
+       mostly complete, see <A HREF="#gc">news</A></FONT>.</LI>
+ </UL>
+ <LI> Next, we'll implement as much as the common-dylan spec described in the
+      <A HREF="http://www.fun-o.com/products/doc/core/index.htm">Common Dylan
+      and Functional Extensions Reference</A></LI>
+ <LI> Finally, we'll implement the 
+      <A HREF="http://www.gwydiondylan.org/drm/drm_76.htm#HEADING76-0">hygenic 
+      macro system</A>, and then, reimplement the basic "syntax" using macros
+      and in accordance with 
+      <A HREF="http://www.gwydiondylan.org/drm/drm_110.htm#HEADING110-0">chapter
+      14 of the DRM</A>.</LI>
+</OL>
+The above listed items are what I see as priorities.  After that, we'll take on
+other Marlais issues as they occur to the group.
+<P>
+The <A HREF="http://sourceforge.net"> 
+      <IMG SRC="http://sourceforge.net/sflogo.php?group_id=30111" 
+           width="88" height="31" border="0" alt="SourceForge Logo"></A> 
+     project page is at <A HREF="https://sourceforge.net/projects/marlais/">
+      https://sourceforge.net/projects/marlais/</A> -- this is where the 
+     source code and binaries for Windows and up to MacOS 8.x 
+     <A HREF="#note0">[0]</A> are available (Unix
+     users must build their own binaries, please).
+<P>
+The source code in CVS is browsable on the Web 
+<A HREF="http://cvs.sourceforge.net/cgi-bin/viewcvs.cgi/marlais/marlais">
+  here</A>.
+<P>
+If you wish to join the coding effort, please 
+<A HREF="mailto://dauclair@hotmail.com">email me</A> with your 
+<A HREF="http://www.sourceforge.net">sourceforge</A> username, and I'll add 
+you to the list of people who can access and edit the Marlais source code.
+<HR>
+<H3><A NAME="news">News</A></H3>
+<TABLE BORDER="0">
+<TR><TD VALIGN="top"><A NAME="gc">June 28, 2001</A></TD><TD>Downloaded the 
+latest Boehm GC and installed
+on my local copy of marlais.  I'll do a new release once I tag the old sources
+and upload the new gc sources.</TD></TR>
+</TABLE>
+<HR>
+<H3><A NAME="notes">Notes</A></H3>
+<TABLE BORDER="0">
+<TR><TD VALIGN="top"><A NAME="note0">0</A></TD><TD>MacMarlais under MacOS 9
+  bombs and 
+  demands you restart your computer -- avoid MacMarlais for MacOS 9 or 
+  build it from the sources with CodeWarrior, post it to 
+  <A HREF="ftp://upload.sourceforge.net/incoming">
+    ftp://upload.sourceforge.net/incoming</A> as "anonymous", and send
+  <A HREF="mailto://dauclair@hotmail.com">me an email</A> so I can add it
+  to the releases.</TD></TR>
+</TABLE>
+<HR>
+<H3>Mail Lists</H3>
+<TABLE BORDER="0">
+<TR><TD><!-- A HREF="http://sourceforge.net/forum/forum.php?forum_id=94617"-->
+          marlais-hackers</TD><TD>The maillist for developers working on
+	  Marlais sources (must be a developer to participate).</TD></TR>
+<TR><TD><A HREF="http://sourceforge.net/forum/forum.php?forum_id=94616">
+          marlais-help</A></TD><TD>Send various and sundry queries about
+	  Marlais here.</TD></TR>
+<TR><TD><A HREF="http://sourceforge.net/forum/forum.php?forum_id=94615">
+          marlais-announce</A></TD><TD>Where Marlais releases, etc, are 
+	  broadcast to the world.</TD></TR>
+</TABLE>
+</BODY>
+</HTML>
