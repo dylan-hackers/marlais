@@ -21,11 +21,6 @@
 extern Object dylan_symbol;
 extern Object dylan_user_symbol;
 extern Object empty_string;
-
-#ifdef NO_COMMON_DYLAN_SPEC
-extern Object standard_error_stream;
-#endif
-
 extern Object unwind_protect_symbol;
 extern jmp_buf *the_eval_context;
 
@@ -132,11 +127,7 @@ add_top_lvl_binding1(Object sym, Object val, int constant, int exported)
   the_env->top_level_env[h] = binding;
 
   if (trace_bindings) {
-#ifdef NO_COMMON_DYLAN_SPEC
-    print_obj (standard_error_stream, sym);
-#else
     print_obj (make_integer(STDERR), sym);
-#endif
   }
 }
 
@@ -724,11 +715,7 @@ print_env (struct frame *env)
 
     for (i = 0, frame = env; frame != NULL; frame = frame->next, i++) {
 	fprintf (stderr, "#%d ", i);
-#ifdef NO_COMMON_DYLAN_SPEC
-	print_object (standard_error_stream, frame->owner, 1);
-#else
 	print_object(make_integer(STDERR), frame->owner, 1);
-#endif
 	fprintf (stderr, "\n");
     }
     return unspecified_object;
@@ -757,11 +744,7 @@ show_bindings (Object args)
     } else {
 	fprintf (stderr, "** Bindings for frame %d [",
 		 frame_number);
-#ifdef NO_COMMON_DYLAN_SPEC
-	print_object (standard_error_stream, frame->owner, 1);
-#else
 	print_object (make_integer(STDERR), frame->owner, 1);
-#endif
 	fprintf (stderr, "]\n");
 	/*
 	 * Print the bindings in all the frame slots.
@@ -776,26 +759,13 @@ show_bindings (Object args)
 		 binding != NULL;
 		 binding = binding->next) {
 		fprintf (stderr, "   ");
-
-#ifdef NO_COMMON_DYLAN_SPEC
-		print_object (standard_error_stream, binding->sym, 1);
-#else
 		print_object (make_integer(STDERR), binding->sym, 1);
-#endif
 		if (binding->type != object_class) {
 		    fprintf (stderr, " :: ");
-#ifdef NO_COMMON_DYLAN_SPEC
-		    print_object (standard_error_stream, binding->type, 1);
-#else
 		print_object (make_integer(STDERR), binding->type, 1);
-#endif
 		}
 		fprintf (stderr, " = ");
-#ifdef NO_COMMON_DYLAN_SPEC
-		print_object (standard_error_stream, *(binding->val), 1);
-#else
 		print_object (make_integer(STDERR), *(binding->val), 1);
-#endif
 		fprintf (stderr, "\n");
 	    }
 	}

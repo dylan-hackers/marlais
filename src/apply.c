@@ -26,10 +26,6 @@ int trace_only_user_funs = 0;
 int trace_level = 0;
 Object ResultValueStack;
 
-#ifdef NO_COMMON_DYLAN_SPEC
-extern Object standard_output_stream;
-#endif
-
 #ifdef MACOS
 void check_stack (void);
 
@@ -95,16 +91,9 @@ apply_internal (Object fun, Object args)
 	    for (i = 0; i < trace_level; ++i) {
 		putchar ('-');
 	    }
-#ifdef NO_COMMON_DYLAN_SPEC
-	    print_object (standard_output_stream, fun, 1);
-	    printf (" called with ");
-	    print_object (standard_output_stream, args, 1);
-#else
 	    print_object (make_integer(STDOUT), fun, 1);
 	    printf (" called with ");
 	    print_object (make_integer(STDOUT), args, 1);
-#endif
-
 	    printf ("\n");
 	    trace_level++;
 	}
@@ -145,11 +134,7 @@ apply_internal (Object fun, Object args)
 		printf ("-");
 	    }
 	    printf ("returned: ");
-#ifdef NO_COMMON_DYLAN_SPEC
-	    print_object (standard_output_stream, ret, 1);
-#else
 	    print_object(make_integer(STDOUT), ret, 1);
-#endif
 	    printf ("\n");
 	}
     }
@@ -182,15 +167,9 @@ apply_method (Object meth, Object args, Object rest_methods, Object generic_appl
 		putchar ('-');
 	    }
 	    printf ("apply-method applying ");
-#ifdef NO_COMMON_DYLAN_SPEC
-	    print_object (standard_output_stream, meth, 1);
-	    printf (" with args ");
-	    print_object (standard_output_stream, args, 1);
-#else
 	    print_object (make_integer(STDOUT), meth, 1);
 	    printf (" with args ");
 	    print_object (make_integer(STDOUT), args, 1);
-#endif
 	    printf ("\n");
 	}
     }

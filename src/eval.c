@@ -79,11 +79,6 @@ static Object the_eval_obj = NULL;
 
 extern struct frame *the_env;
 
-#ifdef NO_COMMON_DYLAN_SPEC
-extern Object standard_error_stream;
-extern Object unwind_protect_symbol;
-#endif
-
 Object
 tail_eval (Object obj)
 {
@@ -212,12 +207,7 @@ print_stack (void)
 	 entry != NULL;
 	 entry = entry->next, i++) {
 	fprintf (stderr, "#%d ", i);
-#ifdef NO_COMMON_DYLAN_SPEC
-	print_object (standard_error_stream, entry->context, 1);
-#else
 	print_object (make_integer(STDERR), entry->context, 1);
-#endif
-
 	fprintf (stderr, "\n");
     }
     return unspecified_object;

@@ -21,10 +21,6 @@
 #include "stream.h"
 #include "yystype.h"
 
-#ifdef NO_COMMON_DYLAN_SPEC
-extern Object standard_error_stream;
-extern Object standard_output_stream;
-#endif
 extern Object print_symbol;
 extern char* prompt;
 extern char* current_prompt;
@@ -208,12 +204,7 @@ print_dylan_error_helper(const char* kind, Object msg_str, Object rest)
     fprintf (stderr, ": ");
   }
   while (!EMPTYLISTP (rest)) {
-
-#ifdef NO_COMMON_DYLAN_SPEC
-    print_object (standard_error_stream, CAR (rest), 0);
-#else
     print_object (make_integer(STDERR), CAR (rest), 0);
-#endif
     rest = CDR (rest);
     if (!EMPTYLISTP (rest)) {
       fprintf (stderr, ", ");
@@ -225,55 +216,14 @@ print_dylan_error_helper(const char* kind, Object msg_str, Object rest)
 static Object
 dylan_error (Object msg_str, Object rest)
 {
-#ifdef PRE_REFACTORED
-  fprintf (stderr, "error: %s", BYTESTRVAL (msg_str));
-  if (!EMPTYLISTP (rest)) {
-    fprintf (stderr, ": ");
-  }
-  while (!EMPTYLISTP (rest)) {
-
-#ifdef NO_COMMON_DYLAN_SPEC
-    print_object (standard_error_stream, CAR (rest), 0);
-#else
-    print_object (make_integer(STDERR), CAR (rest), 0);
-#endif
-    rest = CDR (rest);
-    if (!EMPTYLISTP (rest)) {
-      fprintf (stderr, ", ");
-    }
-  }
-  fprintf (stderr, ".\n");
-#else
   print_dylan_error_helper("error", msg_str, rest);
-#endif
   longjmp (error_return, 1);
 }
 
 static Object
 dylan_warning (Object msg_str, Object rest)
 {
-#ifdef PRE_REFACTORED
-  fprintf (stderr, "warning: %s", BYTESTRVAL (msg_str));
-  if (!EMPTYLISTP (rest)) {
-    fprintf (stderr, ": ");
-  }
-  while (!EMPTYLISTP (rest)) {
-
-#ifdef NO_COMMON_DYLAN_SPEC
-    print_object (standard_error_stream, CAR (rest), 0);
-#else
-    print_object (make_integer(STDERR), CAR (rest), 0);
-#endif
-
-    rest = CDR (rest);
-    if (!EMPTYLISTP (rest)) {
-      fprintf (stderr, ", ");
-    }
-  }
-  fprintf (stderr, ".\n");
-#else
   print_dylan_error_helper("warning", msg_str, rest);
-#endif
   return unspecified_object;
 }
 
@@ -300,12 +250,7 @@ error (char *msg,...)
     fprintf (stderr, ": ");
   }
   while (obj) {
-#ifdef NO_COMMON_DYLAN_SPEC
-    print_object (standard_error_stream, obj, 0);
-#else
     print_object (make_integer(STDERR), obj, 0);
-#endif
-
     obj = va_arg (args, Object);
     
     if (obj) {
@@ -372,24 +317,12 @@ error (char *msg,...)
 	  sequence_num++;
 	}
 	if (TYPE (obj) == Values) {
-#ifdef NO_COMMON_DYLAN_SPEC
-	  print_obj (standard_output_stream, obj);
-#else
 	  print_obj (make_integer(STDOUT), obj);
-#endif
 	  if (VALUESNUM (obj)) {
 	    fprintf (stdout, "\n");
 	  }
 	} else {
-
-#ifdef NO_COMMON_DYLAN_SPEC
-/* is this correct in light of Common-Dylan? -- dma */
-	  apply (eval (print_symbol),
-		 listem (true_object, obj, NULL));
-#else
 	  apply(eval(print_symbol), listem(obj, make_integer(STDOUT), NULL));
-#endif
-
 	  fprintf (stdout, "\n");
 	}
 	current_prompt = prompt;
@@ -439,11 +372,7 @@ warning (char *msg,...)
     fprintf (stderr, ": ");
   }
   while (obj) {
-#ifdef NO_COMMON_DYLAN_SPEC
-    print_object (standard_error_stream, obj, 0);
-#else
     print_object (make_integer(STDERR), obj, 0);
-#endif
     obj = va_arg (args, Object);
     
     if (obj) {

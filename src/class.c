@@ -212,10 +212,6 @@ init_class_hierarchy (void)
   singleton_class = make_builtin_class ("<singleton>", type_class);
   class_class = make_builtin_class ("<class>", type_class);
 
-#ifdef NO_COMMON_DYLAN_SPEC
-  stream_class = make_builtin_class ("<stream>", object_class);
-#endif
-
   table_entry_class = make_builtin_class ("<table-entry>", object_class);
   deque_entry_class = make_builtin_class ("<deque-entry>", object_class);
 
@@ -1070,12 +1066,6 @@ objectclass (Object obj)
     return (object_class);
   case EndOfFile:
     return (object_class);
-
-#ifdef NO_COMMON_DYLAN_SPEC
-  case Stream:
-    return (stream_class);
-#endif
-
   case TableEntry:
     return (table_entry_class);
   case DequeEntry:

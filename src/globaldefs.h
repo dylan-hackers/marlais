@@ -1,3 +1,6 @@
+#ifndef GLOBALDEFS_H
+#define GLOBALDEFS_H
+
 /* globaldefs.h -- see COPYRIGHT for use */
 
 /* This file should only be included once in main.c. */
@@ -6,9 +9,6 @@
 extern jmp_buf error_return;
 extern int definition_level;
 extern int classic_syntax;
-
-
-
 extern int load_file_context;
 
 /* important objects */
@@ -148,11 +148,6 @@ extern Object method_class;
 extern Object exit_function_class;
 extern Object unwind_protect_function_class;
 extern Object class_class;
-
-#ifdef NO_COMMON_DYLAN_SPEC
-extern Object stream_class;
-#endif
-
 extern Object table_entry_class;
 extern Object deque_entry_class;
 extern Object limited_int_class;
@@ -268,3 +263,8 @@ extern Object description_symbol;
 extern Object aref_symbol;
 extern Object print_symbol;
 extern Object princ_symbol;
+extern Object standard_error_stream;
+extern Object standard_output_stream;
+
+#endif
+
