@@ -29,15 +29,12 @@
 # documentation.  Users of this software agree to the terms and
 # conditions set forth in this notice.
 
-!include <ntwin32.mak>	#NT
+!include <ntwin32.mak>
 
 #####
 # initialization file (change this to suite your installation)
 #
-# INIT_FILE=`pwd`/init.dyl#NOT-NT
-INIT_FILE=init.dylan#NT -- remember to point to the right directory
-
-#INIT_FILE_FLAG = -DINIT_FILE=\"$(INIT_FILE)\"
+INIT_FILE=init.dylan #-- remember to point to the right directory
 INIT_FILE_FLAG = -DINIT_FILE=\"$(INIT_FILE)\" -DINFIX_INIT_FILE
 
 ######################################
@@ -92,8 +89,8 @@ PRECEDENCE_FLAG = -DUSE_LL_PRECEDENCE
 
 ##########################################
 
-VERSION = 0.6.2a
-RLOG_VERSION = marlais_0_6_2a
+VERSION = 0.6.2
+RLOG_VERSION = marlais_0_6_2
 PREVIOUS_VERSION = 0.6.1
 PREVIOUS_RLOG_VERSION = marlais_0_6_1
 PREVIOUS_VERSION_DIR = $(PROGRAM)-$(PREVIOUS_VERSION)
@@ -111,14 +108,9 @@ MARLAIS_FLAGS = $(SYS_FLAG) \
 	$(PRECEDENCE_FLAG) \
 	 -DVERSION=\"$(VERSION)\"
 
-# CC=gcc #NOT-NT
-CC=$(cc) #NT
-
-# CFLAGS= -g -I$(INCDIRS) $(MARLAIS_FLAGS) $(CEXTRAS) #NOT-NT
-CFLAGS= $(cdebug) $(cvars) $(cflags) -Igc -I$(INCDIRS) $(MARLAIS_FLAGS) #NT
-
-# LIBS=-lm #NOT-NT
-LIBS=	#NT
+CC=$(cc)
+CFLAGS= $(cdebug) $(cvars) $(cflags) -Igc -I$(INCDIRS) $(MARLAIS_FLAGS)
+LIBS=
 
 FLEXFLAGS = -I
 BYACCFLAGS = -d -v -t
@@ -274,8 +266,7 @@ OTHER_NONC_FILES = \
 	foreign.dyl \
 	marlais.el \
 	dylan-hilit19.el \
-	.indent.pro\
-	NT_MAKEFILE
+	.indent.pro
 
 OTHER_FILES = $(OTHER_C_FILES) $(OTHER_NONC_FILES)
 
@@ -283,14 +274,11 @@ NO_RCS_FILES = \
 	ChangeLog \
 	dylan.tab.c \
 	dylan.tab.h \
-	lex-yy.c \
-	NT_MAKEFILE
+	lex.yy.c
 
-# PROGRAM = marlais#NOT-NT
 PROGRAM = marlais.exe
 
 $(PROGRAM): $(OBJS) $(GCOBJS)
-# 	$(CC) $(CFLAGS) -o $(PROGRAM) $ $(OBJS) $(GCOBJS) $(LIBS) #NOT-NT
 	$(link) $(ldebug) -subsystem:console -out:$(PROGRAM) $(OBJS) $(GCOBJS) $(LIBS)
 
 # a target for building parser/scanner on the Mac under MachTen.
@@ -304,17 +292,10 @@ dylan.tab.h: dylan.tab.c
 #	mv y.tab.c dylan.tab.c
 #	mv y.tab.h dylan.tab.h
 
-# gc/gc.a:			#NOT-NT
-# 	cd gc; $(MAKE) CC=$(CC)	#NOT-NT
-
 gc/gc.lib:
 	cd gc
 	$(MAKE) -f NT_MAKEFILE
 	cd ..
-
-NT_MAKEFILE: Makefile
-	mv NT_MAKEFILE NT_MAKEFILE.bak
-	sed -e '/#NOT-NT/s/^/# /' -e '/#NT/s/^# //' <Makefile >NT_MAKEFILE
 
 clean:
 	del *.obj
