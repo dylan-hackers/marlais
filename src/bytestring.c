@@ -95,7 +95,7 @@ make_string_driver (Object args)
 
   make_sequence_driver(args, &size, &size_obj, &fill_obj, "<string>");
 
-  if (fill_obj) {
+  if (fill_obj != false_object) {
     if (!CHARP (fill_obj)) {
       error ("make: value of fill: must be a character for <string> class", 
 	     fill_obj, NULL);
