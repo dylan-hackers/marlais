@@ -30,11 +30,12 @@ in the following way:
   <LI> At the same time, we'll allow for constant names such as $0, $1, etc,
        and then we'll bind values returned to constants a la 
        <A HREF="http://www.gwydiondylan.org/old-docs/maker-out/debug.htm#E8E23">
-       mindy</A>.</LI>
-  <LI> We'll also replace the old 
-       <A HREF="http://www.hpl.hp.com/personal/Hans_Boehm/gc">Boehm</A> 
-       garbage collector with the most recent one -- <FONT COLOR="red">
-       mostly complete, see <A HREF="#gc">news</A></FONT>.</LI>
+       mindy</A>.  <FONT COLOR="red">This is mostly done, see</FONT> 
+       <A HREF="#const">Andreas' work</A>.</LI>
+  <LI> While we're at it, we'll make Marlais an excellent command-line interface:
+       executing Dylan expressions and (already mostly implemented:)
+       Dylan source files -- allowing Marlais to be used for (e.g.) CGI, scratch
+       calculation and what-have-you.</LI>
  </UL>
  <LI> Next, we'll implement as much as the common-dylan spec described in the
       <A HREF="http://www.fun-o.com/products/doc/core/index.htm">Common Dylan
@@ -69,6 +70,8 @@ you to the list of people who can access and edit the Marlais source code.
 <HR>
 <H3><A NAME="news">News</A></H3>
 <TABLE BORDER="0">
+<TR><TD VALIGN="top"><A NAME="release">July 6, 2001</A></TD><TD>Release Marlais 0.6.1 -- added parsing for Windows '\r' characters, integrated Boehm 5.3 GC, and Andreas's constants work.</TD></TR>
+<TR><TD VALIGN="top"><A NAME="const">July 3, 2001</A></TD><TD>Andreas Bogk added a first go of top-level enumerated constants of returned values.  "Normal" returned values are bound properly.  What needs work is how <EM>user</EM> constant definitions are bound and that multiply-returned values are bound to multiple constants.</TD></TR>
 <TR><TD VALIGN="top"><A NAME="gc">June 28, 2001</A></TD><TD>Downloaded the 
 latest Boehm GC and installed
 on my local copy of marlais.  I'll do a new release once I tag the old sources
@@ -89,15 +92,20 @@ and upload the new gc sources.</TD></TR>
 <HR>
 <H3>Mail Lists</H3>
 <TABLE BORDER="0">
-<TR><TD><!-- A HREF="http://sourceforge.net/forum/forum.php?forum_id=94617"-->
+<!-- <TR><TD><A HREF="http://sourceforge.net/forum/forum.php?forum_id=94617">
           marlais-hackers</TD><TD>The maillist for developers working on
-	  Marlais sources (must be a developer to participate).</TD></TR>
+          Marlais sources (must be a developer to participate).</TD></TR>
 <TR><TD><A HREF="http://sourceforge.net/forum/forum.php?forum_id=94616">
           marlais-help</A></TD><TD>Send various and sundry queries about
-	  Marlais here.</TD></TR>
+          Marlais here.</TD></TR>
 <TR><TD><A HREF="http://sourceforge.net/forum/forum.php?forum_id=94615">
           marlais-announce</A></TD><TD>Where Marlais releases, etc, are 
-	  broadcast to the world.</TD></TR>
+          broadcast to the world.</TD></TR -->
+<TR><TD>marlais-hackers</TD>
+    <TD>Discussion list for developers working on the Marlais source code</TD></TR>
+<TR><TD>marlais-chatter</TD>
+    <TD>Output from CVS to show who's done what to which source file</TD></TR>
 </TABLE>
 </BODY>
 </HTML>
+
