@@ -30,13 +30,7 @@
 
  */
 
-#if defined(MACOS) || defined (_WIN32)
 #include <time.h>
-
-
-#else
-#include <sys/time.h>
-#endif
 
 #include "sys.h"
 
