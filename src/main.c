@@ -32,6 +32,7 @@
  */
 
 #include <stdlib.h>
+#include <stdio.h>
 
 #include "alloc.h"
 #include "apply.h"
@@ -81,7 +82,7 @@ int getopt (int argc, char *argv[], const char *options);
 #endif
 
 #ifndef VERSION
-#define VERSION "0.5.9"
+#define VERSION "0.6.2"
 #endif
 
 #ifdef MACOS
@@ -101,55 +102,96 @@ int thePromptDirty = false;
 #endif
 
 static int do_not_load_init_file = 0;
-static char *optstring = "bdnep";
+static char *optstring = "dehnpsv";
 char *prompt = "? ";
 char *prompt_continuation = "> ";
 char *current_prompt;
 static int debug = 0;
-int echo_prefix = 0;
+int execute = 0;
+int stay = 0;
 int sequence_num = 0;
 
-static void assign_top_level_constant(Object obj)
+static void print_top_level_constant(Object obj, int bind_p)
 {
   Object symbol;
   char symbol_name[12];
 
   if (obj == unspecified_object) return;
-	    
-  snprintf (symbol_name, 12, "$%i", sequence_num);
-  symbol = make_symbol (symbol_name);
-  add_top_level_binding (symbol, obj, 1);
-  fprintf (stdout, " $%i = ", sequence_num);
-  sequence_num++;
+
+  if(bind_p) {
+    snprintf (symbol_name, 12, "$%i", sequence_num);
+    symbol = make_symbol (symbol_name);
+    add_top_level_binding (symbol, obj, 1);
+    fprintf (stdout, " $%i = ", sequence_num);
+    sequence_num++;
+  }
   apply (eval (print_symbol),
 	 listem (standard_output_stream, obj, NULL));
   fprintf (stdout, "\n");
 }
 
-int
-main (int argc, char *argv[])
+static int read_eval_print(FILE* f, int dbg_lvl, int bind_constant_p)
 {
+  int x, vals;
   Object obj;
-  char *init_file;
-  int err, c;
-  extern int optind;
-  struct frame *cache_env;
 
-  /* initialization */
-  initialize_marlais ();
-  open_file_list = make_empty_list ();
+  if ((obj = parse_object (f, dbg_lvl)) && (obj != eof_object)) {
+    obj = eval (obj);
+    if(TYPE(obj) == Values) {
+      vals = VALUESNUM(obj);
+    }
+    else {
+      obj = construct_values(1, obj);
+      vals = 1;
+    }
+    for(x = 0; x < vals; x++) {
+      Object elt = VALUESELS(obj)[x];
+      print_top_level_constant(elt, bind_constant_p);
+    }
+    fflush (stdout);
+    return 1;
+    /*    cache_env = the_env;
+	  current_prompt = prompt; */
+  }
+  return 0;
+}
+
+static void show_help()
+{
+  printf("Marlais %s -- a Dylan Language Interactor\n\n", VERSION);
+  printf("marlais [-dhnpsv] [-e '<Dylan expression>'|<file.dylan> ...]\n\n"
+  	 "Options:\n  -d -- Provide debugging information\n"
+  	 "  -e -- Execute Dylan expression, print return values and "
+	 "optionally exit\n"
+  	 "  -h -- Show help information on Marlais\n"
+  	 "  -n -- Do not load bootstrap init.dylan file\n"
+	 "  -p -- Do not show continuation prompt for incomplete "
+	 "expressions\n"
+	 "  -s -- Stay in interactor after executing file or expression\n"
+	 "  -v -- print version number\n\n"
+	 "If Marlais receives files to execute, it will do so, in order, and\n"
+	 "then (optionally) exit.\n\n"
+	 "To quit the interactor, send it the EOF or BRK character at the\n"
+	 "prompt (EOF is <CTRL>-D for Unix and <CTRL>-Z for Windows, BRK is\n"
+         "<CTRL-C>).\n");
+  exit(0);
+}
+
+static void parse_args(int argc, char* argv[])
+{
+  char c;
 
   /* process command line parameters except source files */
   while ((c = getopt (argc, argv, optstring)) != EOF) {
     switch (c) {
-    case 'b': /* b is for banner */
-      printf ("Marlais %s\n", VERSION);
-      break;
     case 'd':
       debug = 1;
       break;
     case 'e':
-      echo_prefix = 1;
+      execute = 1;
+      break;
+    case 'h':
+      show_help();
       break;
     case 'n':
       do_not_load_init_file = 1;
@@ -157,10 +199,31 @@ main (int argc, char *argv[])
     case 'p':
       prompt_continuation = "";
       break;
+    case 's':
+      stay = 1;
+      break;
+    case 'v':
+      printf("Marlais, version %s\n", VERSION);
+      exit(0);
     default:
       fatal ("Marlais fatal error: unrecognized option");
     }
   }
+}
+
+int
+main (int argc, char *argv[])
+{
+  char *init_file;
+  int err;
+  extern int optind;
+  struct frame *cache_env;
+  int maybe_quit = 0;
+
+  /* initialization */
+  initialize_marlais ();
+  open_file_list = make_empty_list ();
+  parse_args(argc, argv);
 
   /* error catch for initialization code */
   err = setjmp (error_return);
@@ -168,6 +231,7 @@ main (int argc, char *argv[])
     printf ("; error in initialization code -- exiting.\n");
     exit (1);
   }
+
   /* load initialization code */
   if (!do_not_load_init_file) {
     init_file = getenv ("MARLAIS_INIT");
@@ -186,11 +250,27 @@ main (int argc, char *argv[])
 	      make_empty_list (),
 	      all_symbol);
 
+  if(execute) {
+    /* put in a ; in case the user forgets */
+    int len = strlen(argv[optind] + 1);
+    char command[len];
+    sprintf(command, "%s;", argv[optind]);
+    yy_restart(stdin);
+    yy_scan_string(command);
+    read_eval_print(stdin, debug, 0);
+    if(!stay) exit(0);
+    optind++;
+  }
+
   /* load any source files specified on command line */
   while (optind < argc) {
     load (make_byte_string (argv[optind]));
+    maybe_quit = 1;
     optind++;
   }
+
+  if(maybe_quit && !stay) exit(0);
+  printf("Marlais %s\n", VERSION);
 
   load_file_context = 0;
 	/* <pcb> needs to be cleared after loading file */
@@ -198,7 +278,6 @@ main (int argc, char *argv[])
   yy_scan_string("");
 
   cache_env = the_env;
-
   current_prompt = prompt;
 
   /* errors reset to here */
@@ -242,6 +321,7 @@ main (int argc, char *argv[])
     current_prompt = prompt;
   }
 
+#ifdef PRE_REFACTORED
   /* so now that DRM Dylan only accepts infix syntax, I'm eliminating all
      traces of the classic_syntax -- dma */
   while ((obj = parse_object (stdin, debug)) && (obj != eof_object)) {
@@ -263,10 +343,16 @@ main (int argc, char *argv[])
     cache_env = the_env;
     current_prompt = prompt;
   }
+#else
+  while(read_eval_print(stdin, debug, 1)) {
+    cache_env = the_env;
+    current_prompt = prompt;
+  }
+#endif
+
   printf("\n");
   return (0);
 }
-
 
 void
 initialize_marlais (void)
