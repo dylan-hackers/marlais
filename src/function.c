@@ -51,7 +51,7 @@
 
 extern Object x_symbol;
 
-#define PARSING_KEYS_THE_OLD_WAY 1
+/* #define PARSING_KEYS_THE_OLD_WAY 1 */
 
 /* local function prototypes */
 
@@ -281,14 +281,14 @@ parse_function_key_parameters(Object functor, Object* params,
       }
       /* get a keyword-parameter pair */
       if (SYMBOLP (entry)) {
-	keyword_list_insert (*get_params_fn (functor),
+	keyword_list_insert (get_params_fn (functor),
 			     listem (param_name_to_keyword (entry),
 				     entry,
 				     false_object,
 				     NULL));
       } else if (PAIRP (entry) && is_param_name (CAR (entry)) &&
 		 list_length (entry) == 2) {
-	keyword_list_insert (*get_params_fn (functor),
+	keyword_list_insert (get_params_fn (functor),
 			     listem (param_name_to_keyword (CAR (entry)),
 				     CAR (entry),
 				     SECOND (entry),
