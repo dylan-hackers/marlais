@@ -156,7 +156,7 @@ static int allocation_word (Object word);
  */	
 
 /*   %token	DEFINING_WORD */
-%token CLASS CONSTANT LIBRARY MODULE VARIABLE TEST
+%token CLASS CONSTANT LIBRARY MODULE VARIABLE TEST FUNCTION
 
 /* CLASS intermediate words */
 %token SLOT
@@ -188,6 +188,7 @@ defining_word
 	| MODULE
 	| VARIABLE
 	| TEST
+	| FUNCTION
 
 /* Program Structure */
 
@@ -799,6 +800,10 @@ defining_form
 		/* worry about modifiers later. */
 		{ $$ = cons (define_method_symbol, $4); }
 
+/* HACK: we should never allow modifiers for DEFINE FUNCTION */
+	| DEFINE modifiers_opt FUNCTION function_definition
+		{ $$ = cons (define_function_symbol, $4); }
+
 	| DEFINE modifiers_opt GENERIC generic_function_definition
 		/* worry about modifiers later. */
 		{ $$ = cons (define_generic_function_symbol, $4); }
@@ -940,6 +945,10 @@ method_definition
 	: variable_name method_body END METHOD_opt variable_name_opt
 		{ $$ = cons ($1, $2); }
 
+function_definition
+	: variable_name method_body END FUNCTION_opt variable_name_opt
+		{ $$ = cons ($1, $2); }
+
 generic_function_definition
 	: variable_name generic_function_body
 		{ $$ = cons ($1, $2); }
@@ -1004,7 +1013,7 @@ item_names
 
 
 /* Methods and Generic Functions */
-
+/* n.b. define function form uses this, too -- DMA */
 method_body
 	: '(' parameter_list_opt ')' 
 		{   
@@ -1262,6 +1271,10 @@ EQUAL_ARROW_opt
 METHOD_opt
 	:
 	| METHOD
+
+FUNCTION_opt
+	:
+	| FUNCTION
 
 CLASS_opt
 	:

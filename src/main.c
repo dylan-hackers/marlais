@@ -394,6 +394,7 @@ initialize_marlais (void)
     define_class_symbol = make_symbol ("define-class");
     define_generic_function_symbol = make_symbol ("define-generic-function");
     define_method_symbol = make_symbol ("define-method");
+    define_function_symbol = make_symbol ("define-function");
     seal_symbol = make_symbol ("seal");
     set_bang_symbol = make_symbol ("set!");
     singleton_symbol = make_symbol ("singleton");

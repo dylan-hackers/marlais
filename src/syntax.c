@@ -108,6 +108,7 @@ static Object define_constant_eval (Object form);
 static Object define_class_eval (Object form);
 static Object define_generic_function_eval (Object form);
 static Object define_method_eval (Object form);
+static Object define_function_eval (Object form);
 static Object define_module_eval (Object form);
 static Object define_test_eval (Object form);
 static Object dotimes_eval (Object form);
@@ -178,6 +179,7 @@ static char *syntax_operators[] =
     "define-constant",
     "define-generic-function",
     "define-method",
+    "define-function",
     "define-module",
     "define-test",
     "dotimes",
@@ -219,6 +221,7 @@ static syntax_fun syntax_functions[] =
     define_constant_eval,
     define_generic_function_eval,
     define_method_eval,
+    define_function_eval,
     define_module_eval,
     define_test_eval,
     dotimes_eval,
@@ -889,47 +892,80 @@ define_class_eval (Object form)
     return (name);
 }
 
+static void 
+check_function_syntax (Object form, Object* name, Object* params, char* def)
+{
+  char err_msg[80];
+  strcpy(err_msg, def);
+  strcat(err_msg, ": ");
+
+  if (EMPTYLISTP (CDR (form))) {
+    strcat(err_msg, "missing name");
+    error (err_msg, form, NULL);
+  }
+  *name = SECOND (form);
+  if (EMPTYLISTP (CDR (CDR (form)))) {
+    strcat(err_msg, "missing parameters");
+    error (err_msg, form, NULL);
+  }
+  *params = THIRD (form);
+  if (!LISTP (*params)) {
+    strcat(err_msg, "second argument must be a parameter list");
+    error (err_msg, params, NULL);
+  }
+}
+
 static Object
 define_generic_function_eval (Object form)
 {
-    Object name, params, gf;
+  Object name, params, gf;
 
-    if (EMPTYLISTP (CDR (form))) {
-	error ("define-generic-function: missing name", form, NULL);
-    }
-    name = SECOND (form);
-    if (EMPTYLISTP (CDR (CDR (form)))) {
-	error ("define-generic-function: missing parameters", form, NULL);
-    }
-    params = THIRD (form);
+  check_function_syntax(form, &name, &params, "define-generic-function");  
+  gf = make_generic_function (name, params, make_empty_list ());
+  add_top_level_binding (name, gf, 0);
+  return (unspecified_object);
+}
 
-    gf = make_generic_function (name, params, make_empty_list ());
-    add_top_level_binding (name, gf, 0);
-    return (unspecified_object);
+static Object
+define_method_eval_helper (Object form, int do_generic_p)
+{
+  Object name, params, body, method;
+
+#ifdef PRE_REFACTORED
+  if (EMPTYLISTP (CDR (form))) {
+    error ("define-method: missing name", form, NULL);
+  }
+  name = SECOND (form);
+  if (!SYMBOLP (name)) {
+    error ("define-method: first argument must be a symbol", name, NULL);
+  }
+  if (EMPTYLISTP (CDR (CDR (form)))) {
+    error ("define-method: missing parameter list", form, NULL);
+  }
+  params = THIRD (form);
+  if (!LISTP (params)) {
+    error ("define-method: second argument must be a parameter list", 
+	   params, NULL);
+  }
+#else
+  check_function_syntax(form, &name, &params, "define-method");
+#endif
+
+  body = CDR (CDR (CDR (form)));
+  method = make_method (name, params, body, the_env, do_generic_p);
+  return (name);
 }
 
 static Object
 define_method_eval (Object form)
 {
-    Object name, params, body, method;
+  return define_method_eval_helper(form, 1);
+}
 
-    if (EMPTYLISTP (CDR (form))) {
-	error ("define-method: missing name", form, NULL);
-    }
-    name = SECOND (form);
-    if (!SYMBOLP (name)) {
-	error ("define-method: first argument must be a symbol", name, NULL);
-    }
-    if (EMPTYLISTP (CDR (CDR (form)))) {
-	error ("define-method: missing parameter list", form, NULL);
-    }
-    params = THIRD (form);
-    if (!LISTP (params)) {
-	error ("define-method: second argument must be a parameter list", params, NULL);
-    }
-    body = CDR (CDR (CDR (form)));
-    method = make_method (name, params, body, the_env, 1);
-    return (name);
+static Object
+define_function_eval (Object form)
+{
+  return define_method_eval_helper(form, 0);
 }
 
 static Object

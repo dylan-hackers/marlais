@@ -51,6 +51,10 @@
 
 extern Object x_symbol;
 
+#define PARSING_KEYS_THE_OLD_WAY 1
+/* #define PARSING_REST_PARAMETERS_THE_OLD_WAY 1 */
+/* #define PARSING_REQUIRED_PARAMETERS_THE_OLD_WAY 1 */
+
 /* local function prototypes */
 
 static Object generic_function_make (Object arglist);
@@ -133,87 +137,276 @@ keyword_list_insert (Object *list, Object key_binding)
 }
 
 static void
+parse_function_required_parameters (Object *params, Object *tmp_ptr)
+{
+  Object entry;
+
+  *tmp_ptr = make_empty_list ();
+
+  while (PAIRP (*params)) {	/* CONTAINS BREAK! */
+    entry = CAR (*params);
+    if (entry == hash_rest_symbol || entry == key_symbol ||
+	entry == hash_values_symbol || entry == next_symbol) {
+      break;
+    }
+    if (PAIRP (entry)) {
+      (*tmp_ptr) = cons (listem (CAR (entry),
+				 eval (SECOND (entry)),
+				 NULL),
+			 make_empty_list ());
+    } else {
+      *tmp_ptr = cons (listem (entry, object_class, NULL),
+		       make_empty_list ());
+    }
+    tmp_ptr = &CDR (*tmp_ptr);
+    *params = CDR (*params);
+  }
+}
+
+static void
+parse_method_next_parameter (Object meth_obj, Object *params)
+{
+  if (PAIRP (*params) && CAR (*params) == next_symbol) {
+    *params = CDR (*params);
+    if (PAIRP (*params)) {
+      METHNEXTMETH (meth_obj) = CAR (*params);
+      *params = CDR (*params);
+    } else {
+      error ("method #next designator not followed by a parameter", NULL);
+    }
+  } else {
+    METHNEXTMETH (meth_obj) = next_method_symbol;
+  }
+}
+
+static void
+parse_function_rest_parameter (Object fn_obj, Object *params,
+			       void (*assign_fn)(Object, Object))
+{
+  if (PAIRP (*params) && CAR (*params) == hash_rest_symbol) {
+    *params = CDR (*params);
+    if (PAIRP (*params)) {
+      assign_fn (fn_obj, CAR (*params));
+      *params = CDR (*params);
+    } else {
+      error ("generic function #rest designator not followed by a parameter", 
+	     NULL);
+    }
+  } else {
+    assign_fn (fn_obj, NULL);
+  }
+}
+
+static void
+parse_function_key_parameters(Object functor, Object* params, 
+			      Object* (*get_params_fn)(Object), 
+			      void (*bit_mask_fn)(Object, int),
+			      void (*xform_key_fn)(Object, Object))
+{
+  Object entry;
+
+  *get_params_fn (functor) = make_empty_list ();
+  if (PAIRP (*params) && CAR (*params) == key_symbol) {
+    bit_mask_fn(functor, 0);
+    *params = CDR (*params);
+    while (PAIRP (*params) && (CAR (*params) != hash_values_symbol)) {
+      /* CONTAINS BREAK! */
+      entry = CAR (*params);
+      if (entry == allkeys_symbol) {
+	break;
+      }
+      /* get a keyword-parameter pair */
+      if (SYMBOLP (entry)) {
+	keyword_list_insert (*get_params_fn (functor),
+			     listem (param_name_to_keyword (entry),
+				     entry,
+				     false_object,
+				     NULL));
+      } else if (PAIRP (entry) && is_param_name (CAR (entry)) &&
+		 list_length (entry) == 2) {
+	keyword_list_insert (*get_params_fn (functor),
+			     listem (param_name_to_keyword (CAR (entry)),
+				     CAR (entry),
+				     SECOND (entry),
+				     NULL));
+      } else if (PAIRP (entry) && KEYWORDP (CAR (entry))) {
+	xform_key_fn(functor, entry);
+      }
+      *params = CDR(*params);
+    }
+    if (PAIRP (*params) && CAR (*params) == allkeys_symbol) {
+      bit_mask_fn(functor, 1);
+      *params = CDR (*params);
+      if (PAIRP (*params) && CAR (*params) != hash_values_symbol) {
+	error ("parameters follow #all-keys", *params);
+      }
+    }
+  }
+}
+
+static Object*
+method_keys(Object meth_obj)
+{
+  return &METHKEYPARAMS(meth_obj);
+}
+
+static Object*
+gf_keys(Object gf_obj)
+{
+  return &GFKEYPARAMS(gf_obj);
+}
+
+static void
+do_method_key(Object meth_obj, int all_p)
+{
+  if(all_p) {
+    METHPROPS (meth_obj) |= METHALLKEYSMASK;
+  }
+}
+
+static void
+do_gf_key(Object gf_obj, int all_p)
+{
+  GFPROPS (gf_obj) |= (all_p ? GFALLKEYSMASK : GFKEYSMASK);
+}
+
+static void
+xform_method_key_param(Object meth_obj, Object entry)
+{
+  int entry_length = list_length (entry);
+	
+  if (entry_length == 3) {
+    /* key: key-name value */
+    keyword_list_insert (&METHKEYPARAMS (meth_obj), entry);
+  } else if (entry_length == 2) {
+    /* key: key-name */
+    keyword_list_insert (&METHKEYPARAMS (meth_obj),
+			 listem (CAR (entry),
+				 SECOND (entry),
+				 false_object,
+				 NULL));
+  }
+}
+
+static void
+xform_gf_key_param(Object gf_obj, Object entry)
+{
+  if(list_length (entry) == 3) {
+    keyword_list_insert (&GFKEYPARAMS (gf_obj), entry);
+  }
+}
+
+static void
+gf_rest_assign(Object gf_obj, Object val)
+{
+  GFRESTPARAM (gf_obj) = val;
+}
+
+static void
+method_rest_assign(Object meth_obj, Object val)
+{
+  METHRESTPARAM (meth_obj) = val;
+}
+
+static void
 parse_generic_function_parameters (Object gf_obj, Object params)
 {
-    Object entry, *tmp_ptr, result_type;
+  Object entry, *tmp_ptr, result_type;
 
-    tmp_ptr = &GFREQPARAMS (gf_obj);
-    *tmp_ptr = make_empty_list ();
+  tmp_ptr = &GFREQPARAMS (gf_obj);
 
-    /* first get required params */
-    while (PAIRP (params)) {	/* CONTAINS BREAK! */
-	entry = CAR (params);
-	if (entry == hash_rest_symbol || entry == key_symbol ||
-	    entry == hash_values_symbol) {
-	    break;
-	}
-	if (PAIRP (entry)) {
-	    (*tmp_ptr) = cons (listem (CAR (entry),
-				       eval (SECOND (entry)),
-				       NULL),
-			       make_empty_list ());
-	} else {
-	    *tmp_ptr = cons (listem (entry, object_class, NULL),
-			     make_empty_list ());
-	}
-	tmp_ptr = &CDR (*tmp_ptr);
-	params = CDR (params);
+#ifdef PARSING_REQUIRED_PARAMETERS_THE_OLD_WAY
+  *tmp_ptr = make_empty_list ();
+
+  /* first get required params */
+  while (PAIRP (params)) {	/* CONTAINS BREAK! */
+    entry = CAR (params);
+    if (entry == hash_rest_symbol || entry == key_symbol ||
+	entry == hash_values_symbol) {
+      break;
     }
-
-    /* next look for rest parameter */
-    if (PAIRP (params) && CAR (params) == hash_rest_symbol) {
-	params = CDR (params);
-	if (PAIRP (params)) {
-	    GFRESTPARAM (gf_obj) = CAR (params);
-	    params = CDR (params);
-	} else {
-	    error ("generic function #rest designator not followed by a parameter", NULL);
-	}
+    if (PAIRP (entry)) {
+      (*tmp_ptr) = cons (listem (CAR (entry),
+				 eval (SECOND (entry)),
+				 NULL),
+			 make_empty_list ());
     } else {
-	GFRESTPARAM (gf_obj) = NULL;
+      *tmp_ptr = cons (listem (entry, object_class, NULL),
+		       make_empty_list ());
     }
-    /* next look for key parameters */
-    GFKEYPARAMS (gf_obj) = make_empty_list ();
-    if (PAIRP (params) && CAR (params) == key_symbol) {
-	GFPROPS (gf_obj) |= GFKEYSMASK;
-	params = CDR (params);
-	while (PAIRP (params) && (CAR (params) != hash_values_symbol)) {
-	    /* CONTAINS BREAK! */
-	    entry = CAR (params);
-	    if (entry == allkeys_symbol) {
-		break;
-	    }
-	    /* get a keyword-parameter */
-	    if (SYMBOLP (entry)) {
-		keyword_list_insert (&GFKEYPARAMS (gf_obj),
-				     listem (symbol_to_keyword (entry),
-					     entry,
-					     false_object,
-					     NULL));
-	    } else if (PAIRP (entry) && is_param_name (CAR (entry)) &&
-		       list_length (entry) == 2) {
-		keyword_list_insert (&GFKEYPARAMS (gf_obj),
-				listem (param_name_to_keyword (CAR (entry)),
-					CAR (entry),
-					SECOND (entry),
-					NULL));
-	    } else if (PAIRP (entry) && KEYWORDP (CAR (entry)) &&
-		       list_length (entry) == 3) {
-		keyword_list_insert (&GFKEYPARAMS (gf_obj), entry);
-	    }
-	    params = CDR (params);
-	}
-	if (PAIRP (params) && CAR (params) == allkeys_symbol) {
-	    GFPROPS (gf_obj) |= GFALLKEYSMASK;
-	    params = CDR (params);
-	    if (PAIRP (params) && CAR (params) != hash_values_symbol) {
-		error ("parameters follow #all-keys", params);
-	    }
-	}
+    tmp_ptr = &CDR (*tmp_ptr);
+    params = CDR (params);
+  }
+#else
+  parse_function_required_parameters(&params, tmp_ptr);
+#endif
+
+#ifdef PARSING_REST_PARAMETERS_THE_OLD_WAY
+  /* next look for rest parameter */
+  if (PAIRP (params) && CAR (params) == hash_rest_symbol) {
+    params = CDR (params);
+    if (PAIRP (params)) {
+      GFRESTPARAM (gf_obj) = CAR (params);
+      params = CDR (params);
+    } else {
+      error ("generic function #rest designator not followed by a parameter", 
+	     NULL);
     }
-    /* now get return value types */
-    if (PAIRP (params) && CAR (params) == hash_values_symbol) {
-	params = CDR (params);
+  } else {
+    GFRESTPARAM (gf_obj) = NULL;
+  }
+#else
+  parse_function_rest_parameter(gf_obj, &params, gf_rest_assign);
+#endif
+
+#ifdef PARSING_KEYS_THE_OLD_WAY
+  /* next look for key parameters */
+  GFKEYPARAMS (gf_obj) = make_empty_list ();
+  if (PAIRP (params) && CAR (params) == key_symbol) {
+    GFPROPS (gf_obj) |= GFKEYSMASK;
+    params = CDR (params);
+    while (PAIRP (params) && (CAR (params) != hash_values_symbol)) {
+      /* CONTAINS BREAK! */
+      entry = CAR (params);
+      if (entry == allkeys_symbol) {
+	break;
+      }
+      /* get a keyword-parameter */
+      if (SYMBOLP (entry)) {
+	keyword_list_insert (&GFKEYPARAMS (gf_obj),
+			     listem (symbol_to_keyword (entry),
+				     entry,
+				     false_object,
+				     NULL));
+      } else if (PAIRP (entry) && is_param_name (CAR (entry)) &&
+		 list_length (entry) == 2) {
+	keyword_list_insert (&GFKEYPARAMS (gf_obj),
+			     listem (param_name_to_keyword (CAR (entry)),
+				     CAR (entry),
+				     SECOND (entry),
+				     NULL));
+      } else if (PAIRP (entry) && KEYWORDP (CAR (entry)) &&
+		 list_length (entry) == 3) {
+	keyword_list_insert (&GFKEYPARAMS (gf_obj), entry);
+      }
+      params = CDR (params);
+    }
+    if (PAIRP (params) && CAR (params) == allkeys_symbol) {
+      GFPROPS (gf_obj) |= GFALLKEYSMASK;
+      params = CDR (params);
+      if (PAIRP (params) && CAR (params) != hash_values_symbol) {
+	error ("parameters follow #all-keys", params);
+      }
+    }
+  }
+#else
+  parse_function_key_parameters(gf_obj, &params, gf_keys, do_gf_key, 
+				xform_gf_key_param);
+#endif
+
+  /* now get return value types */
+  if (PAIRP (params) && CAR (params) == hash_values_symbol) {
+    params = CDR (params);
 	GFRESTVALUES (gf_obj) = NULL;
 	tmp_ptr = &GFREQVALUES (gf_obj);
 	*tmp_ptr = make_empty_list ();
@@ -297,163 +490,181 @@ make_generic_function (Object name, Object params, Object methods)
 static void
 parse_method_parameters (Object meth_obj, Object params)
 {
-    Object entry, *tmp_ptr, result_type;
+  Object entry, *tmp_ptr, result_type;
 
-    tmp_ptr = &METHREQPARAMS (meth_obj);
-    *tmp_ptr = make_empty_list ();
+  tmp_ptr = &METHREQPARAMS (meth_obj);
 
-    /* first get required params */
-    while (PAIRP (params)) {	/* CONTAINS BREAK! */
-	entry = CAR (params);
-	if (entry == hash_rest_symbol || entry == key_symbol ||
-	    entry == hash_values_symbol || entry == next_symbol) {
-	    break;
-	}
-	if (PAIRP (entry)) {
-	    (*tmp_ptr) = cons (listem (CAR (entry),
-				       eval (SECOND (entry)),
-				       NULL),
-			       make_empty_list ());
-	} else {
-	    *tmp_ptr = cons (listem (entry, object_class, NULL),
-			     make_empty_list ());
-	}
-	tmp_ptr = &CDR (*tmp_ptr);
-	params = CDR (params);
+#ifdef PARSING_REQUIRED_PARAMETERS_THE_OLD_WAY
+  *tmp_ptr = make_empty_list ();
+
+  /* first get required params */
+  while (PAIRP (params)) {	/* CONTAINS BREAK! */
+    entry = CAR (params);
+    if (entry == hash_rest_symbol || entry == key_symbol ||
+	entry == hash_values_symbol || entry == next_symbol) {
+      break;
     }
-
-    /* look for next-method parameter */
-    if (PAIRP (params) && CAR (params) == next_symbol) {
-	params = CDR (params);
-	if (PAIRP (params)) {
-	    METHNEXTMETH (meth_obj) = CAR (params);
-	    params = CDR (params);
-	} else {
-	    error ("generic function #next designator not followed by a parameter", NULL);
-	}
+    if (PAIRP (entry)) {
+      (*tmp_ptr) = cons (listem (CAR (entry),
+				 eval (SECOND (entry)),
+				 NULL),
+			 make_empty_list ());
     } else {
-	METHNEXTMETH (meth_obj) = next_method_symbol;
+      *tmp_ptr = cons (listem (entry, object_class, NULL),
+		       make_empty_list ());
+    }
+    tmp_ptr = &CDR (*tmp_ptr);
+    params = CDR (params);
+  }
+
+  /* look for next-method parameter */
+  if (PAIRP (params) && CAR (params) == next_symbol) {
+    params = CDR (params);
+    if (PAIRP (params)) {
+      METHNEXTMETH (meth_obj) = CAR (params);
+      params = CDR (params);
+    } else {
+      error ("generic function #next designator not followed by a parameter", NULL);
+    }
+  } else {
+    METHNEXTMETH (meth_obj) = next_method_symbol;
+  }
+#else
+  parse_function_required_parameters(&params, tmp_ptr);
+  parse_method_next_parameter(meth_obj, &params);
+#endif
+
+#ifdef PARSING_REST_PARAMETERS_THE_OLD_WAY
+  /* next look for rest parameter */
+  if (PAIRP (params) && CAR (params) == hash_rest_symbol) {
+    params = CDR (params);
+    if (PAIRP (params)) {
+      METHRESTPARAM (meth_obj) = CAR (params);
+      params = CDR (params);
+    } else {
+      error ("generic function #rest designator not followed by a parameter", 
+	     NULL);
+    }
+  } else {
+    METHRESTPARAM (meth_obj) = NULL;
+  }
+#else
+  parse_function_rest_parameter(meth_obj, &params, method_rest_assign);
+#endif
+
+#ifdef PARSING_KEYS_THE_OLD_WAY
+  /* next look for key parameters */
+  METHKEYPARAMS (meth_obj) = make_empty_list ();
+  if (PAIRP (params) && CAR (params) == key_symbol) {
+    params = CDR (params);
+    while (PAIRP (params) && (CAR (params) != hash_values_symbol)) {
+      /* CONTAINS BREAK! */
+      entry = CAR (params);
+      if (entry == allkeys_symbol) {
+	break;
+      }
+      /* get a keyword-parameter pair */
+      if (SYMBOLP (entry)) {
+	keyword_list_insert (&METHKEYPARAMS (meth_obj),
+			     listem (param_name_to_keyword (entry),
+				     entry,
+				     false_object,
+				     NULL));
+      } else if (PAIRP (entry) && is_param_name (CAR (entry)) &&
+		 list_length (entry) == 2) {
+	keyword_list_insert (&METHKEYPARAMS (meth_obj),
+			     listem (param_name_to_keyword (CAR (entry)),
+				     CAR (entry),
+				     SECOND (entry),
+				     NULL));
+      } else if (PAIRP (entry) && KEYWORDP (CAR (entry))) {
+	int entry_length = list_length (entry);
+	
+	if (entry_length == 3) {
+	  /* key: key-name value */
+	  keyword_list_insert (&METHKEYPARAMS (meth_obj), entry);
+	} else if (entry_length == 2) {
+	  /* key: key-name */
+	  keyword_list_insert (&METHKEYPARAMS (meth_obj),
+			       listem (CAR (entry),
+				       SECOND (entry),
+				       false_object,
+				       NULL));
+	}
+      }
+      params = CDR (params);
+    }
+  }
+  if (PAIRP (params) && CAR (params) == allkeys_symbol) {
+    METHPROPS (meth_obj) |= METHALLKEYSMASK;
+    params = CDR (params);
+    if (PAIRP (params) && CAR (params) != hash_values_symbol) {
+      error ("parameters follow #all-keys", params);
+    }
+  }
+
+#else
+  parse_function_key_parameters(meth_obj, &params, method_keys, do_method_key,
+				xform_method_key_param);
+#endif
+
+  /* now get return value types */
+  if (PAIRP (params) && CAR (params) == hash_values_symbol) {
+    params = CDR (params);
+    METHRESTVALUES (meth_obj) = NULL;
+    tmp_ptr = &METHREQVALUES (meth_obj);
+    *tmp_ptr = make_empty_list ();
+    
+    /* first get required return values */
+    while (PAIRP (params)) {	/* CONTAINS BREAK! */
+      entry = CAR (params);
+      if (entry == hash_rest_symbol) {
+	break;
+      }
+      if (PAIRP (entry)) {
+	result_type = eval (SECOND (entry));
+      } else {
+	result_type = object_class;
+      }
+
+      (*tmp_ptr) = cons (result_type, make_empty_list ());
+      tmp_ptr = &CDR (*tmp_ptr);
+      params = CDR (params);
     }
 
     /* next look for rest parameter */
     if (PAIRP (params) && CAR (params) == hash_rest_symbol) {
-	params = CDR (params);
-	if (PAIRP (params)) {
-	    METHRESTPARAM (meth_obj) = CAR (params);
-	    params = CDR (params);
+      params = CDR (params);
+      if (PAIRP (params)) {	/* need structure check */
+	if (PAIRP (CAR (params))) {
+	  METHRESTVALUES (meth_obj) = eval (SECOND (CAR (params)));
 	} else {
-	    error ("generic function #rest designator not followed by a parameter", NULL);
+	  METHRESTVALUES (meth_obj) = object_class;
 	}
-    } else {
-	METHRESTPARAM (meth_obj) = NULL;
-    }
-
-    /* next look for key parameters */
-    METHKEYPARAMS (meth_obj) = make_empty_list ();
-    if (PAIRP (params) && CAR (params) == key_symbol) {
 	params = CDR (params);
-	while (PAIRP (params) && (CAR (params) != hash_values_symbol)) {
-	    /* CONTAINS BREAK! */
-	    entry = CAR (params);
-	    if (entry == allkeys_symbol) {
-		break;
-	    }
-	    /* get a keyword-parameter pair */
-	    if (SYMBOLP (entry)) {
-		keyword_list_insert (&METHKEYPARAMS (meth_obj),
-				     listem (param_name_to_keyword (entry),
-					     entry,
-					     false_object,
-					     NULL));
-	    } else if (PAIRP (entry) && is_param_name (CAR (entry)) &&
-		       list_length (entry) == 2) {
-		keyword_list_insert (&METHKEYPARAMS (meth_obj),
-				listem (param_name_to_keyword (CAR (entry)),
-					CAR (entry),
-					SECOND (entry),
-					NULL));
-	    } else if (PAIRP (entry) && KEYWORDP (CAR (entry))) {
-		int entry_length = list_length (entry);
-
-		if (entry_length == 3) {
-		    /* key: key-name value */
-		    keyword_list_insert (&METHKEYPARAMS (meth_obj), entry);
-		} else if (entry_length == 2) {
-		    /* key: key-name */
-		    keyword_list_insert (&METHKEYPARAMS (meth_obj),
-					 listem (CAR (entry),
-						 SECOND (entry),
-						 false_object,
-						 NULL));
-		}
-	    }
-	    params = CDR (params);
-	}
+      } else {
+	error ("function #rest designator not followed by a parameter", NULL);
+      }
     }
-    if (PAIRP (params) && CAR (params) == allkeys_symbol) {
-	METHPROPS (meth_obj) |= METHALLKEYSMASK;
-	params = CDR (params);
-	if (PAIRP (params) && CAR (params) != hash_values_symbol) {
-	    error ("parameters follow #all-keys", params);
-	}
-    }
-    /* now get return value types */
-    if (PAIRP (params) && CAR (params) == hash_values_symbol) {
-	params = CDR (params);
-	METHRESTVALUES (meth_obj) = NULL;
-	tmp_ptr = &METHREQVALUES (meth_obj);
-	*tmp_ptr = make_empty_list ();
+  } else {
+    METHREQVALUES (meth_obj) = make_empty_list ();
+    METHRESTVALUES (meth_obj) = object_class;
+  }
 
-	/* first get required return values */
-	while (PAIRP (params)) {	/* CONTAINS BREAK! */
-	    entry = CAR (params);
-	    if (entry == hash_rest_symbol) {
-		break;
-	    }
-	    if (PAIRP (entry)) {
-		result_type = eval (SECOND (entry));
-	    } else {
-		result_type = object_class;
-	    }
-
-	    (*tmp_ptr) = cons (result_type, make_empty_list ());
-	    tmp_ptr = &CDR (*tmp_ptr);
-	    params = CDR (params);
-	}
-
-	/* next look for rest parameter */
-	if (PAIRP (params) && CAR (params) == hash_rest_symbol) {
-	    params = CDR (params);
-	    if (PAIRP (params)) {	/* need structure check */
-		if (PAIRP (CAR (params))) {
-		    METHRESTVALUES (meth_obj) = eval (SECOND (CAR (params)));
-		} else {
-		    METHRESTVALUES (meth_obj) = object_class;
-		}
-		params = CDR (params);
-	    } else {
-		error ("function #rest designator not followed by a parameter", NULL);
-	    }
-	}
-    } else {
-	METHREQVALUES (meth_obj) = make_empty_list ();
-	METHRESTVALUES (meth_obj) = object_class;
+  if (PAIRP (params)) {
+    error ("objects encountered after parameter list", params, NULL);
+  }
+  if (trace_functions) {
+    warning ("Got Method", METHNAME (meth_obj), NULL);
+    warning (" Required parameters", METHREQPARAMS (meth_obj), NULL);
+    warning (" Rest parameter", METHRESTPARAM (meth_obj), NULL);
+    warning (" Key parameters", METHKEYPARAMS (meth_obj), NULL);
+    if (METHALLKEYS (meth_obj)) {
+      warning ("All Keys specified", NULL);
     }
-
-    if (PAIRP (params)) {
-	error ("objects encountered after parameter list", params, NULL);
-    }
-    if (trace_functions) {
-	warning ("Got Method", METHNAME (meth_obj), NULL);
-	warning (" Required parameters", METHREQPARAMS (meth_obj), NULL);
-	warning (" Rest parameter", METHRESTPARAM (meth_obj), NULL);
-	warning (" Key parameters", METHKEYPARAMS (meth_obj), NULL);
-	if (METHALLKEYS (meth_obj)) {
-	    warning ("All Keys specified", NULL);
-	}
-	warning (" Required return values", METHREQVALUES (meth_obj), NULL);
-	warning (" Rest return value type", METHRESTVALUES (meth_obj), NULL);
-    }
+    warning (" Required return values", METHREQVALUES (meth_obj), NULL);
+    warning (" Rest return value type", METHRESTVALUES (meth_obj), NULL);
+  }
 }
 
 static Object

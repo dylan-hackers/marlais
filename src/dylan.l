@@ -113,7 +113,7 @@ struct resword begin_word_table [NUM_BEGIN_WORDS] =
 	{"while", WHILE, &while_symbol},
 };
 
-#define NUM_DEFINING_WORDS	6
+#define NUM_DEFINING_WORDS	7
 
 struct resword defining_word_table [NUM_DEFINING_WORDS] =
 {
@@ -123,6 +123,7 @@ struct resword defining_word_table [NUM_DEFINING_WORDS] =
 	{"module", MODULE, &module_symbol},	
 	{"test", TEST, &test_symbol},
 	{"variable", VARIABLE, &variable_symbol},
+	{"function", FUNCTION, &function_symbol},  /* DMA */
 };
 
 
