@@ -30,12 +30,7 @@ in the following ways:
       class bindings are correct, see <A HREF="bindings.html">the bindings
       list</A> for what needs to be done.</LI>
  <UL>
-  <LI> At the same time, we'll allow for constant names such as $0, $1, etc,
-       and then we'll bind values returned to constants a la 
-       <A HREF="http://www.gwydiondylan.org/old-docs/maker-out/debug.htm#E8E23">
-       mindy</A>.  <FONT COLOR="red">This is mostly done, see</FONT> 
-       <A HREF="#const">Andreas' work</A>.</LI>
-  <LI> While we're at it, we'll make Marlais an excellent command-line 
+  <LI> We'll make Marlais an excellent command-line 
        interface: executing Dylan expressions and (already mostly implemented:)
        Dylan source files -- allowing Marlais to be used for (e.g.) CGI, scratch
        calculation and what-have-you.</LI>
@@ -73,6 +68,12 @@ you to the list of people who can access and edit the Marlais source code.
 <HR>
 <H3><A NAME="news">News</A></H3>
 <TABLE BORDER="0">
+<TR><TD VALIGN="top"><A NAME="no classic">August 21, 2001</A></TD>
+<TD>Marlais used to support the "classic syntax" (a la Scheme).  I eliminated
+    the code that supported it, as DRM-compliant Dylan no longer allows that.
+    Also fixed the <A HREF="#const">multiple-return-value issue</A>, but still
+    must fix the constant bindings of constants.  This should not be too 
+    difficult, given DEFINE-CONSTANT is not supposed to return values.</TD></TR>
 <TR><TD VALIGN="top"><A NAME="binding">August 20, 2001</A></TD><TD>Did a 
 comparison study of Marlais' Dylan module binding to that required by the DRM.
 Happily, Marlais is pretty close to the standard.</TD></TR>
