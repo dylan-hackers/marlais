@@ -1,25 +1,7 @@
 %{ /* Emacs: -*- Fundamental -*- */
 
-/*
-   This software is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
-
-   This software is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
-
-   You should have received a copy of the GNU Library General Public
-   License along with this software; if not, write to the Free
-   Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-
-   Original authorship and copyright notices follows
-
- */
-
-/* interim-dylan.y -- dylan phrase grammar from 5/12/94 interim report */
+/* interim-dylan.y -- dylan phrase grammar from 5/12/94 interim report 
+   see COPYRIGHT for use */
 
 /*
  * this grammar is, i believe, an accurate translation of the
@@ -156,7 +138,7 @@ static int allocation_word (Object word);
  */	
 
 /*   %token	DEFINING_WORD */
-%token CLASS CONSTANT LIBRARY MODULE VARIABLE TEST
+%token CLASS CONSTANT LIBRARY MODULE VARIABLE
 
 /* CLASS intermediate words */
 %token SLOT
@@ -187,7 +169,6 @@ defining_word
 	| LIBRARY
 	| MODULE
 	| VARIABLE
-	| TEST
 
 /* Program Structure */
 
@@ -839,11 +820,6 @@ defining_form
 	  module_definition
 		{ $$ = cons (define_module_symbol, $4); }
 
-	| DEFINE TEST SYMBOL '(' arguments_opt ')'
-	  body END TEST_opt variable_name_opt
-		{ $$ = listem (define_test_symbol, $3, $5,
-			       empty_string, $7, NULL); }
-
 class_definition
 	: variable_name expression_list slot_specs END CLASS_opt
 		 variable_name_opt
@@ -1280,10 +1256,6 @@ FUNCTION_opt
 CLASS_opt
 	:
 	| CLASS
-
-TEST_opt
-	:
-	| TEST
 
 MODULE_opt
 	:
