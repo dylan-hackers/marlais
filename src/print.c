@@ -47,9 +47,6 @@ static struct primitive print_prims[] =
     {"%print", prim_2, print_obj},
     {"%princ", prim_2, print_obj_escaped},
     {"%format", prim_3, format},
-#ifdef PRE_REFACTORED
-  {"%write-char", prim_2, write_char},
-#endif
 };
 
 /* function definitions */
@@ -977,25 +974,6 @@ print_stream (Object out_stream, Object stream)
 	error ("trying to print stream of unknown type", NULL);
     }
 }
-
-#ifdef PRE_REFACTORED
-static Object
-write_char (Object ch, Object stream_list)
-{
-    char the_char;
-    FILE *fp;
-
-    if (EMPTYLISTP (stream_list)) {
-	fp = stdout;
-    } else {
-	fp = STREAMFP (CAR (stream_list));
-    }
-    the_char = CHARVAL (ch);
-    fwrite (&the_char, 1, sizeof (char), fp);
-
-    return (unspecified_object);
-}
-#endif
 
 static void
 print_type_name (Object stream, Object obj, int escaped)
