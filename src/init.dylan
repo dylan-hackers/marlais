@@ -173,10 +173,6 @@ define method format (stream, s :: <string>, #rest args)
   %format(stream, s, args);
 end method format;
 
-define method format-out (#rest args)
-  format(#t, args);
-end method format-out;
-
 define method write-char (c :: <character>, #rest maybe-stream)
   %write-char(c, maybe-stream);
 end method write-char;
@@ -3286,5 +3282,10 @@ end method always;
 define method eval(obj)
   %eval (obj);
 end method eval;
+
+//  Temporary home for COMMON-DYLAN definitions
+define variable *standard-output* = #t;
+define constant format-out = curry(format, *standard-output*);
+
 // eof
 // princ("at eof.");
