@@ -41,6 +41,7 @@ extern int yydebug;
 extern int load_file_context;
 
 int yylineno = 1;
+#define YYSTYPE Object
 
 int charready (FILE *stream);
 int strcasecmp (const char *s1, const char *s2);
@@ -165,7 +166,6 @@ struct resword module_intermediate_word_table [NUM_MODULE_INTERMEDIATE_WORDS] =
 
 /*  */
 
-extern Object yylval;
 int search_for_poundword (char *string, YYSTYPE *obj_ptr);
 int symbol_or_resword (char *string, YYSTYPE *obj_ptr);
 static struct resword *search_for_resword (char *string,
