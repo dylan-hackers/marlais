@@ -252,7 +252,7 @@ struct clas {
     Object virtual_slot_descriptors;
     Object precedence_list;
     Object sorted_prec_list;
-    int num_precs
+    int num_precs;
     int properties;
     int ordinal_index;
     struct frame *creation_env;
