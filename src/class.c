@@ -293,7 +293,7 @@ make_builtin_class (char *name, Object supers)
 {
   Object obj;
 
-  obj = allocate_object (sizeof (struct class));
+  obj = allocate_object (sizeof (struct clas));
 
   CLASSTYPE (obj) = Class;
   CLASSNAME (obj) = make_symbol (name);
@@ -518,7 +518,7 @@ make_class_driver (Object args)
   if (EMPTYLISTP (supers_obj)) {
     supers_obj = object_class;
   }
-  obj = allocate_object (sizeof (struct class));
+  obj = allocate_object (sizeof (struct clas));
 
   CLASSTYPE (obj) = Class;
   CLASSNAME (obj) = make_symbol (BYTESTRVAL (debug_obj));

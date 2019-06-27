@@ -238,7 +238,7 @@ struct slot_descriptor {
 #define SLOTDP(obj)             ((obj)->type == SlotDescriptor)
 #define SLOTDTYPE(obj)          ((obj)->type)
 
-struct class {
+struct clas {
     Object name;
     Object supers;
     Object subs;
@@ -258,31 +258,31 @@ struct class {
     struct frame *creation_env;
 };
 
-#define CLASSNAME(obj)     ((obj)->u.class.name)
-#define CLASSSUPERS(obj)   ((obj)->u.class.supers)
-#define CLASSSUBS(obj)     ((obj)->u.class.subs)
-#define CLASSSLOTDS(obj)   ((obj)->u.class.inst_slot_descriptors)
-#define CLASSINSLOTDS(obj) ((obj)->u.class.inherited_slot_descriptors)
-#define CLASSCSLOTDS(obj)  ((obj)->u.class.class_slot_descriptors)
-#define CLASSCSLOTS(obj)   ((obj)->u.class.class_slots)
-#define CLASSESSLOTDS(obj) ((obj)->u.class.eachsubclass_slot_descriptors)
-#define CLASSESSLOTS(obj)  ((obj)->u.class.eachsubclass_slots)
-#define CLASSCONSTSLOTDS(obj) ((obj)->u.class.constant_slot_descriptors)
-#define CLASSVSLOTDS(obj)  ((obj)->u.class.virtual_slot_descriptors)
-#define CLASSPRECLIST(obj) ((obj)->u.class.precedence_list)
-#define CLASSSORTEDPRECS(obj) ((obj)->u.class.sorted_prec_list)
-#define CLASSNUMPRECS(obj) ((obj)->u.class.num_precs)
+#define CLASSNAME(obj)     ((obj)->u.clas.name)
+#define CLASSSUPERS(obj)   ((obj)->u.clas.supers)
+#define CLASSSUBS(obj)     ((obj)->u.clas.subs)
+#define CLASSSLOTDS(obj)   ((obj)->u.clas.inst_slot_descriptors)
+#define CLASSINSLOTDS(obj) ((obj)->u.clas.inherited_slot_descriptors)
+#define CLASSCSLOTDS(obj)  ((obj)->u.clas.class_slot_descriptors)
+#define CLASSCSLOTS(obj)   ((obj)->u.clas.class_slots)
+#define CLASSESSLOTDS(obj) ((obj)->u.clas.eachsubclass_slot_descriptors)
+#define CLASSESSLOTS(obj)  ((obj)->u.clas.eachsubclass_slots)
+#define CLASSCONSTSLOTDS(obj) ((obj)->u.clas.constant_slot_descriptors)
+#define CLASSVSLOTDS(obj)  ((obj)->u.clas.virtual_slot_descriptors)
+#define CLASSPRECLIST(obj) ((obj)->u.clas.precedence_list)
+#define CLASSSORTEDPRECS(obj) ((obj)->u.clas.sorted_prec_list)
+#define CLASSNUMPRECS(obj) ((obj)->u.clas.num_precs)
 #define CLASSP(obj)        ((obj)->type == Class)
 #define CLASSTYPE(obj)     ((obj)->type)
-#define CLASSPROPS(obj)    ((obj)->u.class.properties)
+#define CLASSPROPS(obj)    ((obj)->u.clas.properties)
 #define CLASSSEAL          0x01
 #define SEALEDP(obj)       (CLASSP (obj) && (CLASSPROPS (obj) & CLASSSEAL))
 #define CLASSINSTANTIABLE  0x02
 #define INSTANTIABLE(obj)  (CLASSP (obj) && (CLASSPROPS (obj) & CLASSINSTANTIABLE))
 #define CLASSSLOTSUNINIT   0x04
 #define CLASSUNINITIALIZED(obj)  (CLASSP (obj) && (CLASSPROPS (obj) & CLASSSLOTSUNINIT))
-#define CLASSENV(obj)      ((obj)->u.class.creation_env);
-#define CLASSINDEX(obj)    ((obj)->u.class.ordinal_index)
+#define CLASSENV(obj)      ((obj)->u.clas.creation_env)
+#define CLASSINDEX(obj)    ((obj)->u.clas.ordinal_index)
 
 struct instance {
     Object class;
@@ -517,7 +517,7 @@ struct object {
 	struct condition condition;
 	struct symbol symbol;
 	struct character character;
-	struct class class;
+	struct clas clas;
 	struct instance instance;
 	struct singleton singleton;
 	struct limited_int_type limited_int_type;
@@ -788,7 +788,7 @@ struct slot_descriptor {
 #define SLOTDP(obj)            (POINTERP(obj) && (CLASSTYPE(obj) == SlotDescriptor))
 #define SLOTDTYPE(obj)         (((struct slot_descriptor *)obj)->type)
 
-struct class {
+struct clas {
     enum objtype type;
     Object name;
     Object supers;
@@ -809,31 +809,31 @@ struct class {
     struct frame *creation_env;
 };
 
-#define CLASSTYPE(obj)    (((struct class *)obj)->type)
-#define CLASSNAME(obj)    (((struct class *)obj)->name)
-#define CLASSSUPERS(obj)  (((struct class *)obj)->supers)
-#define CLASSSUBS(obj)    (((struct class *)obj)->subs)
-#define CLASSINSLOTDS(obj) (((struct class *)obj)->inherited_slot_descriptors)
-#define CLASSSLOTDS(obj)  (((struct class *)obj)->inst_slot_descriptors)
-#define CLASSCSLOTS(obj)  (((struct class *)obj)->class_slots)
-#define CLASSCSLOTDS(obj) (((struct class *)obj)->class_slot_descriptors)
-#define CLASSESSLOTDS(obj) (((struct class *)obj)->eachsubclass_slot_descriptors)
-#define CLASSESSLOTS(obj) (((struct class *)obj)->eachsubclass_slots)
-#define CLASSCONSTSLOTDS(obj) (((struct class *)obj)->constant_slot_descriptors)
-#define CLASSVSLOTDS(obj) (((struct class *)obj)->virtual_slot_descriptors)
-#define CLASSPRECLIST(obj)(((struct class *)obj)->precedence_list)
-#define CLASSSORTEDPRECS(obj) (((struct class *)obj)->sorted_prec_list)
-#define CLASSNUMPRECS(obj) (((struct class *)obj)->num_precs)
+#define CLASSTYPE(obj)    (((struct clas *)obj)->type)
+#define CLASSNAME(obj)    (((struct clas *)obj)->name)
+#define CLASSSUPERS(obj)  (((struct clas *)obj)->supers)
+#define CLASSSUBS(obj)    (((struct clas *)obj)->subs)
+#define CLASSINSLOTDS(obj) (((struct clas *)obj)->inherited_slot_descriptors)
+#define CLASSSLOTDS(obj)  (((struct clas *)obj)->inst_slot_descriptors)
+#define CLASSCSLOTS(obj)  (((struct clas *)obj)->class_slots)
+#define CLASSCSLOTDS(obj) (((struct clas *)obj)->class_slot_descriptors)
+#define CLASSESSLOTDS(obj) (((struct clas *)obj)->eachsubclass_slot_descriptors)
+#define CLASSESSLOTS(obj) (((struct clas *)obj)->eachsubclass_slots)
+#define CLASSCONSTSLOTDS(obj) (((struct clas *)obj)->constant_slot_descriptors)
+#define CLASSVSLOTDS(obj) (((struct clas *)obj)->virtual_slot_descriptors)
+#define CLASSPRECLIST(obj)(((struct clas *)obj)->precedence_list)
+#define CLASSSORTEDPRECS(obj) (((struct clas *)obj)->sorted_prec_list)
+#define CLASSNUMPRECS(obj) (((struct clas *)obj)->num_precs)
 #define CLASSP(obj)       (POINTERP(obj) && (CLASSTYPE(obj) == Class))
-#define CLASSPROPS(obj)   (((struct class *)obj)->properties)
+#define CLASSPROPS(obj)   (((struct clas *)obj)->properties)
 #define CLASSSEAL         0x01
 #define SEALEDP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & CLASSSEAL))
 #define CLASSINSTANTIABLE 0x02
 #define INSTANTIABLE(obj) (CLASSP (obj) && (CLASSPROPS (obj) & CLASSINSTANTIABLE))
 #define CLASSSLOTSUNINIT   0x04
 #define CLASSUNINITIALIZED(obj)  (CLASSP (obj) && (CLASSPROPS (obj) & CLASSSLOTSUNINIT))
-#define CLASSENV(obj)     (((struct class *)obj)->creation_env)
-#define CLASSINDEX(obj)     (((struct class *)obj)->ordinal_index)
+#define CLASSENV(obj)     (((struct clas *)obj)->creation_env)
+#define CLASSINDEX(obj)     (((struct clas *)obj)->ordinal_index)
 
 struct instance {
     enum objtype type;

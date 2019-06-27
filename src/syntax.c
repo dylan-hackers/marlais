@@ -819,7 +819,7 @@ define_class_eval (Object form)
    * Must introduce binding for the class before eval'ing 
    * the slot definitions.
    */
-  obj = allocate_object (sizeof (struct class));
+  obj = allocate_object (sizeof (struct clas));
 
   CLASSTYPE (obj) = Class;
   CLASSNAME (obj) = name;
