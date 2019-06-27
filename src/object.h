@@ -480,7 +480,7 @@ struct foreign_ptr {
     void *ptr;
 };
 
-#define FOREIGNPTR(obj)      ((obj)->u.ptr)
+#define FOREIGNPTR(obj)      ((obj)->u.foreign_ptr.ptr)
 #define FOREIGNP(obj)        (POINTERP(obj) && (POINTERTYPE(obj) == ForeignPtr))
 #define FOREIGNTYPE(obj)     ((obj)->type)
 
@@ -488,7 +488,7 @@ struct environment {
     struct frame *env;
 };
 
-#define ENVIRONMENT(obj)      ((obj)->u.env)
+#define ENVIRONMENT(obj)      ((obj)->u.environment.env)
 #define ENVIRONMENTP(obj)        (POINTERP(obj) && (POINTERTYPE(obj) == Environment))
 #define ENVIRONMENTTYPE(obj)     ((obj)->type)
 
@@ -496,7 +496,7 @@ struct object_handle {
     Object the_object;
 };
 
-#define HDLOBJ(obj)      ((obj)->u.the_object)
+#define HDLOBJ(obj)      ((obj)->u.object_handle.the_object)
 #define HDLP(obj)        (POINTERP(obj) && (POINTERTYPE(obj) == ObjectHandle))
 #define HDLTYPE(obj)     ((obj)->type)
 
@@ -530,6 +530,7 @@ struct object {
 	struct values values;
 	struct exitproc exitproc;
 	struct unwind unwind;
+	struct environment environment;
 #ifdef NO_COMMON_DYLAN_SPEC
 	struct stream stream;
 #endif
@@ -1050,9 +1051,9 @@ struct foreign_ptr {
     void *ptr;
 };
 
-#define FOREIGNPTR(obj)      (((struct foreign_ptr *)obj)->ptr)
+#define FOREIGNPTR(obj)      (((struct foreign_ptr *)obj)->foreign_ptr.ptr)
 #define FOREIGNP(obj)        (POINTERP(obj) && (POINTERTYPE(obj) == ForeignPtr))
-#define FOREIGNTYPE(obj)     (((struct foreign_ptr *)obj)->type)
+#define FOREIGNTYPE(obj)     (((struct foreign_ptr *)obj)->foreign_ptr.type)
 
 struct environment {
     enum objtype type;
