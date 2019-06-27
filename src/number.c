@@ -31,108 +31,108 @@ static double aint (double x);
 
 /* primitives */
 
-static Object odd_p (Object n);
-static Object even_p (Object n);
-static Object int_zero_p (Object n);
-static Object double_zero_p (Object n);
-static Object int_positive_p (Object n);
-static Object double_positive_p (Object n);
-static Object int_negative_p (Object n);
-static Object double_negative_p (Object n);
-static Object integral_p (Object n);
-static Object int_to_double (Object n);
-static Object double_to_int (Object n);
-static Object int_negative (Object n);
-static Object double_negative (Object n);
-static Object int_inverse (Object n);
-static Object double_inverse (Object n);
-static Object binary_int_plus (Object n1, Object n2);
-static Object binary_int_minus (Object n1, Object n2);
-static Object binary_int_times (Object n1, Object n2);
-static Object binary_int_divide (Object n1, Object n2);
-static Object binary_double_plus (Object n1, Object n2);
-static Object binary_double_minus (Object n1, Object n2);
-static Object binary_double_times (Object n1, Object n2);
-static Object binary_double_divide (Object n1, Object n2);
-static Object binary_less_than (Object n1, Object n2);
-static Object int_sqrt (Object n);
-static Object double_sqrt (Object n);
-static Object int_abs (Object n);
-static Object double_abs (Object n);
-static Object int_quotient (Object n1, Object n2);
-static Object ash (Object n, Object count);
-static Object binary_logand (Object n1, Object n2);
-static Object binary_logior (Object n1, Object n2);
-static Object double_sin (Object n1);
-static Object double_cos (Object n1);
-static Object double_atan2 (Object n1, Object n2);
-static Object floor_func (Object d);
-static Object ceiling (Object d);
-static Object round (Object d);
-static Object truncate (Object d);
-static Object modulo (Object d1, Object d2);
-static Object modulo_double (Object d1, Object d2);
-static Object remainder_double (Object d1, Object d2);
-static Object remainder_int (Object i1, Object i2);
-static Object double_exp (Object d);
-static Object double_log (Object d);
-static Object floor_divide (Object d1, Object d2);
-static Object ceiling_divide (Object d1, Object d2);
-static Object round_divide (Object d1, Object d2);
-static Object truncate_divide (Object d1, Object d2);
-static Object int_truncate_divide (Object i1, Object i2);
+static Object prim_odd_p (Object n);
+static Object prim_even_p (Object n);
+static Object prim_int_zero_p (Object n);
+static Object prim_double_zero_p (Object n);
+static Object prim_int_positive_p (Object n);
+static Object prim_double_positive_p (Object n);
+static Object prim_int_negative_p (Object n);
+static Object prim_double_negative_p (Object n);
+static Object prim_integral_p (Object n);
+static Object prim_int_to_double (Object n);
+static Object prim_double_to_int (Object n);
+static Object prim_int_negative (Object n);
+static Object prim_double_negative (Object n);
+static Object prim_int_inverse (Object n);
+static Object prim_double_inverse (Object n);
+static Object prim_binary_int_plus (Object n1, Object n2);
+static Object prim_binary_int_minus (Object n1, Object n2);
+static Object prim_binary_int_times (Object n1, Object n2);
+static Object prim_binary_int_divide (Object n1, Object n2);
+static Object prim_binary_double_plus (Object n1, Object n2);
+static Object prim_binary_double_minus (Object n1, Object n2);
+static Object prim_binary_double_times (Object n1, Object n2);
+static Object prim_binary_double_divide (Object n1, Object n2);
+static Object prim_binary_less_than (Object n1, Object n2);
+static Object prim_int_sqrt (Object n);
+static Object prim_double_sqrt (Object n);
+static Object prim_int_abs (Object n);
+static Object prim_double_abs (Object n);
+static Object prim_int_quotient (Object n1, Object n2);
+static Object prim_ash (Object n, Object count);
+static Object prim_binary_logand (Object n1, Object n2);
+static Object prim_binary_logior (Object n1, Object n2);
+static Object prim_double_sin (Object n1);
+static Object prim_double_cos (Object n1);
+static Object prim_double_atan2 (Object n1, Object n2);
+static Object prim_floor_func (Object d);
+static Object prim_ceiling (Object d);
+static Object prim_round (Object d);
+static Object prim_truncate (Object d);
+static Object prim_modulo (Object d1, Object d2);
+static Object prim_modulo_double (Object d1, Object d2);
+static Object prim_remainder_double (Object d1, Object d2);
+static Object prim_remainder_int (Object i1, Object i2);
+static Object prim_double_exp (Object d);
+static Object prim_double_log (Object d);
+static Object prim_floor_divide (Object d1, Object d2);
+static Object prim_ceiling_divide (Object d1, Object d2);
+static Object prim_round_divide (Object d1, Object d2);
+static Object prim_truncate_divide (Object d1, Object d2);
+static Object prim_int_truncate_divide (Object i1, Object i2);
 static struct primitive number_prims[] =
 {
-    {"%odd?", prim_1, odd_p},
-    {"%even?", prim_1, even_p},
-    {"%int-zero?", prim_1, int_zero_p},
-    {"%double-zero?", prim_1, double_zero_p},
-    {"%int-positive?", prim_1, int_positive_p},
-    {"%double-positive?", prim_1, double_positive_p},
-    {"%int-negative?", prim_1, int_negative_p},
-    {"%double-negative?", prim_1, double_negative_p},
-    {"%integral?", prim_1, integral_p},
-    {"%int-to-double", prim_1, int_to_double},
-    {"%double-to-int", prim_1, double_to_int},
-    {"%int-negative", prim_1, int_negative},
-    {"%double-negative", prim_1, double_negative},
-    {"%int-inverse", prim_1, int_inverse},
-    {"%double-inverse", prim_1, double_inverse},
-    {"%binary-int+", prim_2, binary_int_plus},
-    {"%binary-int-", prim_2, binary_int_minus},
-    {"%binary-int*", prim_2, binary_int_times},
-    {"%binary-int/", prim_2, binary_int_divide},
-    {"%binary-double+", prim_2, binary_double_plus},
-    {"%binary-double-", prim_2, binary_double_minus},
-    {"%binary-double*", prim_2, binary_double_times},
-    {"%binary-double/", prim_2, binary_double_divide},
-    {"%binary-less-than", prim_2, binary_less_than},
-    {"%int-sqrt", prim_1, int_sqrt},
-    {"%double-sqrt", prim_1, double_sqrt},
-    {"%int-abs", prim_1, int_abs},
-    {"%double-abs", prim_1, double_abs},
-    {"%quotient", prim_2, int_quotient},
-    {"%ash", prim_2, ash},
-    {"%sin", prim_1, double_sin},
-    {"%cos", prim_1, double_cos},
-    {"%atan2", prim_2, double_atan2},
-    {"%binary-logand", prim_2, binary_logand},
-    {"%binary-logior", prim_2, binary_logior},
-    {"%floor", prim_1, floor_func},
-    {"%ceiling", prim_1, ceiling},
-    {"%round", prim_1, round},
-    {"%truncate", prim_1, truncate},
-    {"%modulo", prim_2, modulo},
-    {"%modulo-double", prim_2, modulo_double},
-    {"%remainder-double", prim_2, remainder_double},
-    {"%remainder-int", prim_2, remainder_int},
-    {"%exp", prim_1, double_exp},
-    {"%ln", prim_1, double_log},
-    {"%floor/", prim_2, floor_divide},
-    {"%ceiling/", prim_2, ceiling_divide},
-    {"%round/", prim_2, round_divide},
-    {"%truncate/", prim_2, truncate_divide},
-    {"%int-truncate/", prim_2, int_truncate_divide},
+    {"%odd?", prim_1, prim_odd_p},
+    {"%even?", prim_1, prim_even_p},
+    {"%int-zero?", prim_1, prim_int_zero_p},
+    {"%double-zero?", prim_1, prim_double_zero_p},
+    {"%int-positive?", prim_1, prim_int_positive_p},
+    {"%double-positive?", prim_1, prim_double_positive_p},
+    {"%int-negative?", prim_1, prim_int_negative_p},
+    {"%double-negative?", prim_1, prim_double_negative_p},
+    {"%integral?", prim_1, prim_integral_p},
+    {"%int-to-double", prim_1, prim_int_to_double},
+    {"%double-to-int", prim_1, prim_double_to_int},
+    {"%int-negative", prim_1, prim_int_negative},
+    {"%double-negative", prim_1, prim_double_negative},
+    {"%int-inverse", prim_1, prim_int_inverse},
+    {"%double-inverse", prim_1, prim_double_inverse},
+    {"%binary-int+", prim_2, prim_binary_int_plus},
+    {"%binary-int-", prim_2, prim_binary_int_minus},
+    {"%binary-int*", prim_2, prim_binary_int_times},
+    {"%binary-int/", prim_2, prim_binary_int_divide},
+    {"%binary-double+", prim_2, prim_binary_double_plus},
+    {"%binary-double-", prim_2, prim_binary_double_minus},
+    {"%binary-double*", prim_2, prim_binary_double_times},
+    {"%binary-double/", prim_2, prim_binary_double_divide},
+    {"%binary-less-than", prim_2, prim_binary_less_than},
+    {"%int-sqrt", prim_1, prim_int_sqrt},
+    {"%double-sqrt", prim_1, prim_double_sqrt},
+    {"%int-abs", prim_1, prim_int_abs},
+    {"%double-abs", prim_1, prim_double_abs},
+    {"%quotient", prim_2, prim_int_quotient},
+    {"%ash", prim_2, prim_ash},
+    {"%sin", prim_1, prim_double_sin},
+    {"%cos", prim_1, prim_double_cos},
+    {"%atan2", prim_2, prim_double_atan2},
+    {"%binary-logand", prim_2, prim_binary_logand},
+    {"%binary-logior", prim_2, prim_binary_logior},
+    {"%floor", prim_1, prim_floor_func},
+    {"%ceiling", prim_1, prim_ceiling},
+    {"%round", prim_1, prim_round},
+    {"%truncate", prim_1, prim_truncate},
+    {"%modulo", prim_2, prim_modulo},
+    {"%modulo-double", prim_2, prim_modulo_double},
+    {"%remainder-double", prim_2, prim_remainder_double},
+    {"%remainder-int", prim_2, prim_remainder_int},
+    {"%exp", prim_1, prim_double_exp},
+    {"%ln", prim_1, prim_double_log},
+    {"%floor/", prim_2, prim_floor_divide},
+    {"%ceiling/", prim_2, prim_ceiling_divide},
+    {"%round/", prim_2, prim_round_divide},
+    {"%truncate/", prim_2, prim_truncate_divide},
+    {"%int-truncate/", prim_2, prim_int_truncate_divide},
 };
 
 /* function definitions */
@@ -222,7 +222,7 @@ make_dfloat (double d)
 /* primitives */
 
 static Object
-odd_p (Object n)
+prim_odd_p (Object n)
 {
     if ((INTVAL (n) % 2) == 1) {
 	return (true_object);
@@ -232,7 +232,7 @@ odd_p (Object n)
 }
 
 static Object
-even_p (Object n)
+prim_even_p (Object n)
 {
     if ((INTVAL (n) % 2) == 0) {
 	return (true_object);
@@ -242,7 +242,7 @@ even_p (Object n)
 }
 
 static Object
-int_zero_p (Object n)
+prim_int_zero_p (Object n)
 {
     if (INTVAL (n) == 0) {
 	return (true_object);
@@ -252,7 +252,7 @@ int_zero_p (Object n)
 }
 
 static Object
-double_zero_p (Object n)
+prim_double_zero_p (Object n)
 {
     if (DFLOATVAL (n) == 0.0) {
 	return (true_object);
@@ -262,7 +262,7 @@ double_zero_p (Object n)
 }
 
 static Object
-int_positive_p (Object n)
+prim_int_positive_p (Object n)
 {
     if (INTVAL (n) > 0) {
 	return (true_object);
@@ -272,7 +272,7 @@ int_positive_p (Object n)
 }
 
 static Object
-double_positive_p (Object n)
+prim_double_positive_p (Object n)
 {
     if (DFLOATVAL (n) > 0.0) {
 	return (true_object);
@@ -282,7 +282,7 @@ double_positive_p (Object n)
 }
 
 static Object
-int_negative_p (Object n)
+prim_int_negative_p (Object n)
 {
     if (INTVAL (n) < 0) {
 	return (true_object);
@@ -292,7 +292,7 @@ int_negative_p (Object n)
 }
 
 static Object
-double_negative_p (Object n)
+prim_double_negative_p (Object n)
 {
     if (DFLOATVAL (n) < 0.0) {
 	return (true_object);
@@ -302,7 +302,7 @@ double_negative_p (Object n)
 }
 
 static Object
-integral_p (Object n)
+prim_integral_p (Object n)
 {
     if (INTEGERP (n)) {
 	return (true_object);
@@ -312,49 +312,49 @@ integral_p (Object n)
 }
 
 static Object
-int_to_double (Object n)
+prim_int_to_double (Object n)
 {
     return (make_dfloat (INTVAL (n)));
 }
 
 static Object
-double_to_int (Object n)
+prim_double_to_int (Object n)
 {
     return (make_integer (DFLOATVAL (n)));
 }
 
 static Object
-int_negative (Object n)
+prim_int_negative (Object n)
 {
     return (make_integer (-INTVAL (n)));
 }
 
 static Object
-double_negative (Object n)
+prim_double_negative (Object n)
 {
     return (make_dfloat (-DFLOATVAL (n)));
 }
 
 static Object
-int_inverse (Object n)
+prim_int_inverse (Object n)
 {
     return (make_dfloat (1.0 / INTVAL (n)));
 }
 
 static Object
-double_inverse (Object n)
+prim_double_inverse (Object n)
 {
     return (make_dfloat (1 / DFLOATVAL (n)));
 }
 
 static Object
-binary_int_plus (Object n1, Object n2)
+prim_binary_int_plus (Object n1, Object n2)
 {
     return (make_integer (INTVAL (n1) + INTVAL (n2)));
 }
 
 static Object
-binary_int_minus (Object n1, Object n2)
+prim_binary_int_minus (Object n1, Object n2)
 {
     return (make_integer (INTVAL (n1) - INTVAL (n2)));
 }
@@ -362,7 +362,7 @@ binary_int_minus (Object n1, Object n2)
 #ifdef BIG_INTEGERS
 
 static Object
-binary_int_times (Object n1, Object n2)
+prim_binary_int_times (Object n1, Object n2)
 {
     int i1 = INTVAL (n1), i2 = INTVAL (n2);
 
@@ -376,7 +376,7 @@ binary_int_times (Object n1, Object n2)
 #else
 
 static Object
-binary_int_times (Object n1, Object n2)
+prim_binary_int_times (Object n1, Object n2)
 {
     return (make_integer (INTVAL (n1) * INTVAL (n2)));
 }
@@ -384,7 +384,7 @@ binary_int_times (Object n1, Object n2)
 #endif
 
 static Object
-binary_int_divide (Object n1, Object n2)
+prim_binary_int_divide (Object n1, Object n2)
 {
     if ((INTVAL (n1) % INTVAL (n2)) == 0) {
 	return (make_integer (INTVAL (n1) / INTVAL (n2)));
@@ -394,31 +394,31 @@ binary_int_divide (Object n1, Object n2)
 }
 
 static Object
-binary_double_plus (Object n1, Object n2)
+prim_binary_double_plus (Object n1, Object n2)
 {
     return (make_dfloat (DFLOATVAL (n1) + DFLOATVAL (n2)));
 }
 
 static Object
-binary_double_minus (Object n1, Object n2)
+prim_binary_double_minus (Object n1, Object n2)
 {
     return (make_dfloat (DFLOATVAL (n1) - DFLOATVAL (n2)));
 }
 
 static Object
-binary_double_times (Object n1, Object n2)
+prim_binary_double_times (Object n1, Object n2)
 {
     return (make_dfloat (DFLOATVAL (n1) * DFLOATVAL (n2)));
 }
 
 static Object
-binary_double_divide (Object n1, Object n2)
+prim_binary_double_divide (Object n1, Object n2)
 {
     return (make_dfloat (DFLOATVAL (n1) / DFLOATVAL (n2)));
 }
 
 static Object
-binary_less_than (Object n1, Object n2)
+prim_binary_less_than (Object n1, Object n2)
 {
     if (INTEGERP (n1)) {
 	if (INTEGERP (n2)) {
@@ -452,7 +452,7 @@ binary_less_than (Object n1, Object n2)
 }
 
 static Object
-int_sqrt (Object n)
+prim_int_sqrt (Object n)
 {
     double ans;
 
@@ -465,13 +465,13 @@ int_sqrt (Object n)
 }
 
 static Object
-double_sqrt (Object n)
+prim_double_sqrt (Object n)
 {
     return (make_dfloat (sqrt (DFLOATVAL (n))));
 }
 
 static Object
-int_abs (Object n)
+prim_int_abs (Object n)
 {
     int val;
 
@@ -484,19 +484,19 @@ int_abs (Object n)
 }
 
 static Object
-double_abs (Object n)
+prim_double_abs (Object n)
 {
     return (make_dfloat (fabs (DFLOATVAL (n))));
 }
 
 static Object
-int_quotient (Object n1, Object n2)
+prim_int_quotient (Object n1, Object n2)
 {
     return (make_integer (INTVAL (n1) / INTVAL (n2)));
 }
 
 static Object
-ash (Object n, Object count)
+prim_ash (Object n, Object count)
 {
     int num;
 
@@ -506,37 +506,37 @@ ash (Object n, Object count)
 }
 
 static Object
-double_sin (Object n1)
+prim_double_sin (Object n1)
 {
     return (make_dfloat (sin (DFLOATVAL (n1))));
 }
 
 static Object
-double_cos (Object n1)
+prim_double_cos (Object n1)
 {
     return (make_dfloat (cos (DFLOATVAL (n1))));
 }
 
 static Object
-double_atan2 (Object n1, Object n2)
+prim_double_atan2 (Object n1, Object n2)
 {
     return (make_dfloat (atan2 (DFLOATVAL (n1), DFLOATVAL (n2))));
 }
 
 static Object
-binary_logand (Object n1, Object n2)
+prim_binary_logand (Object n1, Object n2)
 {
     return (make_integer (INTVAL (n1) & INTVAL (n2)));
 }
 
 static Object
-binary_logior (Object n1, Object n2)
+prim_binary_logior (Object n1, Object n2)
 {
     return (make_integer (INTVAL (n1) | INTVAL (n2)));
 }
 
 static Object
-floor_func (Object d)
+prim_floor_func (Object d)
 {
     double dval, tmp = floor (dval = DFLOATVAL (d));
 
@@ -546,7 +546,7 @@ floor_func (Object d)
 }
 
 static Object
-ceiling (Object d)
+prim_ceiling (Object d)
 {
     double dval, tmp = ceil (dval = DFLOATVAL (d));
 
@@ -556,7 +556,7 @@ ceiling (Object d)
 }
 
 static Object
-round (Object d)
+prim_round (Object d)
 {
     double dval, tmp = anint (dval = DFLOATVAL (d));
 
@@ -566,7 +566,7 @@ round (Object d)
 }
 
 static Object
-truncate (Object d)
+prim_truncate (Object d)
 {
     double dval, tmp = aint (dval = DFLOATVAL (d));
 
@@ -577,13 +577,13 @@ truncate (Object d)
 
 #if 0
 static int
-sign (int x)
+prim_sign (int x)
 {
     return (x < 0 ? -1 : (x > 0 ? 1 : 0));
 }
 
 static Object
-modulo (Object i1, Object i2)
+prim_modulo (Object i1, Object i2)
 {
     int i1val = INTVAL (i1);
     int i2val = INTVAL (i2);
@@ -601,7 +601,7 @@ modulo (Object i1, Object i2)
 #else
 
 static Object
-modulo (Object i1, Object i2)
+prim_modulo (Object i1, Object i2)
 {
     double d1val;
     double d2val;
@@ -613,7 +613,7 @@ modulo (Object i1, Object i2)
 #endif
 
 static Object
-modulo_double (Object d1, Object d2)
+prim_modulo_double (Object d1, Object d2)
 {
     double d1val;
     double d2val;
@@ -623,19 +623,19 @@ modulo_double (Object d1, Object d2)
 }
 
 static Object
-double_exp (Object n1)
+prim_double_exp (Object n1)
 {
     return (make_dfloat (exp (DFLOATVAL (n1))));
 }
 
 static Object
-double_log (Object n1)
+prim_double_log (Object n1)
 {
     return (make_dfloat (log (DFLOATVAL (n1))));
 }
 
 static Object
-floor_divide (Object d1, Object d2)
+prim_floor_divide (Object d1, Object d2)
 {
     double d1val;
     double d2val;
@@ -647,7 +647,7 @@ floor_divide (Object d1, Object d2)
 }
 
 static Object
-ceiling_divide (Object d1, Object d2)
+prim_ceiling_divide (Object d1, Object d2)
 {
     double d1val;
     double d2val;
@@ -659,7 +659,7 @@ ceiling_divide (Object d1, Object d2)
 }
 
 static Object
-round_divide (Object d1, Object d2)
+prim_round_divide (Object d1, Object d2)
 {
     double d1val;
     double d2val;
@@ -671,7 +671,7 @@ round_divide (Object d1, Object d2)
 }
 
 static Object
-truncate_divide (Object d1, Object d2)
+prim_truncate_divide (Object d1, Object d2)
 {
     double d1val;
     double d2val;
@@ -682,7 +682,7 @@ truncate_divide (Object d1, Object d2)
 			     make_dfloat (d1val - d2val * intpart));
 }
 static Object
-int_truncate_divide (Object i1, Object i2)
+prim_int_truncate_divide (Object i1, Object i2)
 {
     int i1val;
     int i2val;
@@ -694,7 +694,7 @@ int_truncate_divide (Object i1, Object i2)
 }
 
 static Object
-remainder_double (Object d1, Object d2)
+prim_remainder_double (Object d1, Object d2)
 {
     double d1val;
     double d2val;
@@ -704,7 +704,7 @@ remainder_double (Object d1, Object d2)
 }
 
 static Object
-remainder_int (Object i1, Object i2)
+prim_remainder_int (Object i1, Object i2)
 {
     int i1val;
     int i2val;
