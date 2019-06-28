@@ -94,8 +94,10 @@ CFLAGS= -g -I$(INCDIRS) $(MARLAIS_FLAGS) $(CEXTRAS)
 
 LIBS=-lncurses -lreadline -lm -lgc
 
-FLEXFLAGS = -I
-BYACCFLAGS = -d -v -t
+FLEX ?= flex
+FLEXFLAGS ?= -I
+BISON ?= bison
+BISONFLAGS ?= -d -v -t
 
 OBJS = 	alloc.o \
 	apply.o \
@@ -179,14 +181,10 @@ $(PROGRAM): $(OBJS)
 	$(CC) $(CFLAGS) -o $(PROGRAM) $ $(OBJS) $(GCOBJS) $(LIBS)
 
 lex.yy.c: dylan.l dylan.tab.h
-	flex $(FLEXFLAGS) dylan.l
+	$(FLEX) $(FLEXFLAGS) dylan.l
 
-dylan.tab.h: dylan.tab.c
-
-dylan.tab.c: dylan.y
-	yacc $(BYACCFLAGS) dylan.y
-	mv y.tab.c dylan.tab.c
-	mv y.tab.h dylan.tab.h
+dylan.tab.h dylan.tab.c: dylan.y
+	$(BISON) $(BISONFLAGS) dylan.y
 
 clean:
 	rm -rf $(OBJS)
