@@ -76,11 +76,11 @@ void *
 marlais_allocate_atomic (size_t size)
 {
     void *obj;
-	obj = GC_malloc_atomic (size);
-	if (!obj) {
+    obj = GC_malloc_atomic (size);
+    if (!obj) {
         fatal ("internal error: memory allocation failure.");
-	}
-	return obj;
+    }
+    return obj;
 }
 
 
