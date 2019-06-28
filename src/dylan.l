@@ -107,7 +107,6 @@ struct intermediate_word_struct {
     int num_words;
     struct resword *reswords;
     struct intermediate_word_struct *next;
-    
 }
 *intermediate_words;
 
