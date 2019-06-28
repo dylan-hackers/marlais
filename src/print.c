@@ -120,13 +120,12 @@ FILE* file_from_fd(Object fd)
         break;
       case 1:
         return stdout;
-        break;
       case 2:
         return stderr;
-        break;
       default:
         error("Don't handle printing objects to >2 fds yet!", fd, NULL);
     }
+	return NULL;
 }
 
 void

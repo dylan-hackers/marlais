@@ -584,10 +584,12 @@ Object
 list_sort (Object lst, Object test)
 {
     /* Fill this in! */
+    return NULL;
 }
 
 Object
 list_sort_bang (Object lst, Object test)
 {
     /* Fill this in! */
+    return NULL;
 }
