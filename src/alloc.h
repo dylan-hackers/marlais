@@ -40,11 +40,12 @@
 /* initialize the garbage collector */
 extern void  marlais_initialize_gc (void);
 
-/* allocate memory */
+/* allocate normal memory */
 extern void *marlais_allocate_memory (size_t size);
-/* reallocate memory */
+/* reallocate normal memory */
 extern void *marlais_reallocate_memory (void *old_obj, size_t new_size);
-/* allocate atomic memory (no pointers) */
+
+/* allocate atomic memory */
 extern void *marlais_allocate_atomic (size_t size);
 
 /* allocate an object */
