@@ -94,7 +94,7 @@ make_array (Object dims, Object fill)
     dl = CDR (dl);
   }
   ARRELS (obj) = (Object *) checking_malloc (sizeof (Object) * size);
-  
+
   ARRSIZE (obj) = size;
   for (i = 0; i < size; ++i) {
     ARRELS (obj)[i] = fill;
@@ -116,7 +116,7 @@ make_array_driver (Object args)
     } else if (FIRST (args) == fill_keyword) {
       fill_obj = SECOND (args);
     } else {
-      error ("make: unsupported keyword for <array> class", 
+      error ("make: unsupported keyword for <array> class",
 	     FIRST (args), NULL);
     }
     args = CDR (CDR (args));

@@ -191,7 +191,7 @@ parse_function_rest_parameter (Object fn_obj, Object *params,
       assign_fn (fn_obj, CAR (*params));
       *params = CDR (*params);
     } else {
-      error ("generic function #rest designator not followed by a parameter", 
+      error ("generic function #rest designator not followed by a parameter",
 	     NULL);
     }
   } else {
@@ -234,7 +234,7 @@ method_rest_return_assign(Object meth_obj, Object params)
 }
 
 static void
-parse_function_return_parameters(Object functor, Object* params, 
+parse_function_return_parameters(Object functor, Object* params,
 				 Object* tmp_ptr)
 {
   Object entry, result_type;
@@ -260,8 +260,8 @@ parse_function_return_parameters(Object functor, Object* params,
 }
 
 static void
-parse_function_key_parameters(Object functor, Object* params, 
-			      Object* (*get_params_fn)(Object), 
+parse_function_key_parameters(Object functor, Object* params,
+			      Object* (*get_params_fn)(Object),
 			      void (*bit_mask_fn)(Object, int),
 			      void (*xform_key_fn)(Object, Object))
 {
@@ -336,7 +336,7 @@ static void
 xform_method_key_param(Object meth_obj, Object entry)
 {
   int entry_length = list_length (entry);
-	
+
   if (entry_length == 3) {
     /* key: key-name value */
     keyword_list_insert (&METHKEYPARAMS (meth_obj), entry);
@@ -367,7 +367,7 @@ parse_generic_function_parameters (Object gf_obj, Object params)
 
   parse_function_required_parameters(&params, tmp_ptr);
   parse_function_rest_parameter(gf_obj, &params, gf_rest_assign);
-  parse_function_key_parameters(gf_obj, &params, gf_keys, do_gf_key, 
+  parse_function_key_parameters(gf_obj, &params, gf_keys, do_gf_key,
 				xform_gf_key_param);
 
   if(next_parameter_is(params, hash_values_symbol)) {
@@ -774,7 +774,7 @@ make_specializers_from_params (Object params)
 
 }
 
-/* 
+/*
    returns three values:
    1) number of required parameters
    2) #t if takes rest, #f otherwise

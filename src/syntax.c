@@ -480,7 +480,7 @@ bind_methods_eval (Object form)
   }
   specs = SECOND (form);
   body = CDR (CDR (form));
-  
+
   push_scope (CAR (form));
   /* first bind method names to dummy values */
   if (!PAIRP (specs)) {
@@ -536,12 +536,12 @@ case_eval (Object form)
 {
   Object target_form, branches, branch;
   Object match_list, consequents, ret;
-  
+
   if (EMPTYLISTP (CDR (form))) {
     error ("malformed case", form, NULL);
   }
   target_form = eval (CAR (CDR (form)));
-  
+
   if (EMPTYLISTP (CDR (CDR (form)))) {
     error ("malformed case", form, NULL);
   }
@@ -586,7 +586,7 @@ static Object
 cond_eval (Object form)
 {
   Object clauses, clause, test, ret;
-  
+
   clauses = CDR (form);
   while (!EMPTYLISTP (clauses)) {
     clause = CAR (clauses);
@@ -607,7 +607,7 @@ cond_eval (Object form)
 static void define_eval_helper(Object form, int bind_where)
 {
   if (EMPTYLISTP (CDR (form)) || EMPTYLISTP (CDR (CDR (form)))) {
-    error ("DEFINE form requires at least two args: (define {<var>} <init>)", 
+    error ("DEFINE form requires at least two args: (define {<var>} <init>)",
 	   form, NULL);
   } else {
     bind_variables (CDR (form), 1, bind_where, the_env);
@@ -727,7 +727,7 @@ add_variable_binding (Object var,
 		      struct frame *to_frame)
 {
   Object type;
-  
+
   if (PAIRP (var)) {
     if (!PAIRP (CDR (var))) {
       error ("badly formed variable", var, NULL);
@@ -764,12 +764,12 @@ define_class_eval (Object form)
    * Assume a class to be concrete, sealed, and free unless otherwise
    * specified
    */
-  
+
   Object tmp_form = form;
   int abstract_class = 0, abstract_concrete_seen = 0;
   int open_class = 0, open_sealed_seen = 0;
   int primary_class = 0, primary_free_seen = 0;
-  
+
   if (EMPTYLISTP (CDR (tmp_form))) {
     error ("malfored define-class (no arguments)", form, NULL);
   }
@@ -816,7 +816,7 @@ define_class_eval (Object form)
     error ("malformed define-class (no superclass)", form, NULL);
   }
   /*
-   * Must introduce binding for the class before eval'ing 
+   * Must introduce binding for the class before eval'ing
    * the slot definitions.
    */
   obj = allocate_object (sizeof (struct clas));
@@ -828,9 +828,9 @@ define_class_eval (Object form)
   if(EMPTYLISTP(supers)) supers = cons(object_class, make_empty_list());
   slots = slot_descriptor_list (CDR (tmp_form), 1);
   make_getter_setter_gfs (slots);
-  class = make_class (obj, supers, slots, 
+  class = make_class (obj, supers, slots,
 		      (abstract_class ? true_object : false_object), NULL);
-  
+
   /* kludge to put these here.  Better to add a param to make_class. */
   CLASSPROPS (class) |= CLASSSLOTSUNINIT;
 
@@ -853,7 +853,7 @@ define_class_eval (Object form)
   return (name);
 }
 
-static void 
+static void
 check_function_syntax (Object form, Object* name, Object* params, char* def)
 {
   char err_msg[80];
@@ -881,7 +881,7 @@ define_generic_function_eval (Object form)
 {
   Object name, params, gf;
 
-  check_function_syntax(form, &name, &params, "define-generic-function");  
+  check_function_syntax(form, &name, &params, "define-generic-function");
   gf = make_generic_function (name, params, make_empty_list ());
   add_top_level_binding (name, gf, 0);
   return (unspecified_object);
@@ -932,14 +932,14 @@ define_module_eval (Object form)
 	  Object prefix = empty_string;
 	  Object renames = make_empty_list ();
 	  Object exports = make_empty_list ();
-	  
+
 	  int imports_specified = 0;
 	  int exclusions_specified = 0;
 	  int prefix_specified = 0;
 	  int renames_specified = 0;
 	  int exports_specified = 0;
 	  struct module_binding *old_module;
-	  
+
 	  if (list_length (clause) >= 2) {
 	    module_name = SECOND (clause);
 	    clause = CDR (CDR (clause));
@@ -969,7 +969,7 @@ define_module_eval (Object form)
 		} else {
 		  error ("use clause: unknown option", option, NULL);
 		}
-		
+
 	      } else {
 		error ("use clause: poorly formed option", CAR (clause), NULL);
 	      }
@@ -1043,7 +1043,7 @@ dotimes_eval (Object form)
   } else {
     resform = NULL;
   }
-  
+
   push_scope (CAR (form));
   add_binding (var, false_object, 0, the_env);
   for (i = 0; i < INTVAL (intval); ++i) {
@@ -1116,7 +1116,7 @@ for_eval (Object form)
 
   Object var_forms, test_form, return_forms;
   Object clause_types, vars, inits, body, ret;
-  
+
   if ((!PAIRP (CDR (form))) ||
       (!PAIRP (CDR (CDR (form)))) ||
       (!PAIRP (THIRD (form)))) {
@@ -1124,7 +1124,7 @@ for_eval (Object form)
   }
   test_form = FIRST (THIRD (form));
   return_forms = CDR (THIRD (form));
-  
+
   var_forms = SECOND (form);
 
   /* IRM Pg. 33 Step 1 */
@@ -1136,16 +1136,16 @@ for_eval (Object form)
   /* IRM Step 2 */
   push_scope (CAR (form));
   initialize_step_and_numeric_vars (clause_types, vars, inits);
-  
+
   /* IRM Step 3 */
   initialize_collection_inits (clause_types, vars, inits);
   if (!exhausted_numeric_or_collection_clauses (clause_types,
 						vars,
 						inits,
 						1)) {
-    
+
     /* IRM Step 4 */
-    
+
     push_scope (CAR (form));
     initialize_collection_variables (clause_types, vars, inits);
 
@@ -1160,7 +1160,7 @@ for_eval (Object form)
 	eval (CAR (body));
 	body = CDR (body);
       }
-      
+
       /* IRM Steps 7 and 8 */
       update_explicit_and_numeric_clauses (clause_types, vars, inits);
 
@@ -1212,12 +1212,12 @@ get_vars_and_inits (Object var_forms,
   Object var_form, var_spec;
   Object clause_type, var, init;
   Object rest, by, start, termination, bound, negative;
-  
+
   while (PAIRP (var_forms)) {
     var_form = CAR (var_forms);
     var_spec = CAR (var_form);
     if (PAIRP (var_spec) || SYMBOLP (var_spec)) {
-      
+
       /* Explicit Step Clause: init is of form
        *    (init-value . next-value)
        */
@@ -1243,7 +1243,7 @@ get_vars_and_inits (Object var_forms,
       }
       var = get_variable (SECOND (var_form));
       rest = CDR (CDR (var_form));
-      
+
       by = make_integer (1);
       termination = false_object;
       start = eval (CAR (rest));
@@ -1279,7 +1279,7 @@ get_vars_and_inits (Object var_forms,
       }
 
       init = listem (start, by, negative, termination, bound, NULL);
-      
+
     } else if (var_spec == collection_keyword) {
 
       /* Collection Clause: init value is
@@ -1299,7 +1299,7 @@ get_vars_and_inits (Object var_forms,
     *clause_types_ptr = cons (clause_type, make_empty_list ());
     *vars_ptr = cons (var, make_empty_list ());
     *inits_ptr = cons (init, make_empty_list ());
-    
+
     clause_types_ptr = &CDR (*clause_types_ptr);
     vars_ptr = &CDR (*vars_ptr);
     inits_ptr = &CDR (*inits_ptr);
@@ -1405,7 +1405,7 @@ exhausted_numeric_or_collection_clauses (Object clause_types,
       termination = CAR (init);	/* FOURTH */
       init = CDR (init);
       bound = CAR (init);	/* FIFTH */
-      
+
       if (termination == false_object) {
 	/* do nothing */
       } else if (termination == to_symbol) {
@@ -1456,7 +1456,7 @@ initialize_collection_variables (Object clause_types,
   while (PAIRP (clause_types)) {
     if (CAR (clause_types) == collection_keyword) {
       protocol = FIRST (CAR (inits));
-      
+
       /* (set! var (current-element collection state)) */
       add_binding (CAR (vars),
 		   apply (VALUESELS (protocol)[5],
@@ -1482,7 +1482,7 @@ update_explicit_and_numeric_clauses (Object clause_types,
 
   vars_copy = vars;
   new_values_ptr = &new_values;
-  
+
   while (PAIRP (clause_types)) {
     new_value = make_empty_list ();
     clause_type = CAR (clause_types);
@@ -1505,7 +1505,7 @@ update_explicit_and_numeric_clauses (Object clause_types,
     clause_types = CDR (clause_types);
     vars = CDR (vars);
     inits = CDR (inits);
-    
+
   }
 
   /* Do the bindings */
@@ -1544,8 +1544,8 @@ update_collection_variables (Object clause_types,
 }
 
 /*
-   The iteration is terminated if any collection is exhausted 
-   (in which case #f is returned) or if the end-test evaluates 
+   The iteration is terminated if any collection is exhausted
+   (in which case #f is returned) or if the end-test evaluates
    to #t (in which case the result forms are evaluated and the
    value of the last is returned).
  */
@@ -1576,7 +1576,7 @@ for_each_eval (Object form)
   }
   test_form = FIRST (THIRD (form));
   return_forms = CDR (THIRD (form));
-  
+
   var_forms = SECOND (form);
   vars = map (car, var_forms);
   collections = map (second, var_forms);
@@ -1602,7 +1602,7 @@ for_each_eval (Object form)
       return (false_object);
     }
     vals = list_map2 (cur_el_fun, collections, states);
-    
+
     /* modify bindings */
     temp_vars = vars;
     while (!EMPTYLISTP (temp_vars)) {
@@ -1625,7 +1625,7 @@ static Object
 if_eval (Object form)
 {
   Object testval, thenform, elseform;
-  
+
   if (EMPTYLISTP (CDR (form))) {
     error ("malformed if expression", form, NULL);
   }
@@ -1642,7 +1642,7 @@ if_eval (Object form)
     error ("if: too many arguments", NULL);
   }
   testval = eval (testval);
-  
+
   if (testval == false_object) {
     return tail_eval (elseform);
   } else {
@@ -1654,7 +1654,7 @@ static Object
 method_eval (Object form)
 {
   Object params, body, method;
-  
+
   if (EMPTYLISTP (CDR (form))) {
     error ("method: missing parameters", form, NULL);
   }
@@ -1719,7 +1719,7 @@ qq_help (Object skel)
       }
     } else if (PAIRP (CAR (head))
 	       && CAR (CAR (head)) == unquote_splicing_symbol) {
-      
+
       if (!EMPTYLISTP (CDR (CAR (head)))) {
 	tmp = eval (CAR (CDR (CAR (head))));
 	CAR (head) = CAR (tmp);
@@ -1750,17 +1750,17 @@ select_eval (Object form)
 {
   Object target_form, test, branches, branch;
   Object match_list, consequents, ret;
-  
+
   if (EMPTYLISTP (CDR (form))) {
     error ("malformed select", form, NULL);
   }
   target_form = eval (CAR (CDR (form)));
-  
+
   if (EMPTYLISTP (CDR (CDR (form)))) {
     error ("malformed select", form, NULL);
   }
   test = eval (CAR (CDR (CDR (form))));
-  
+
   if (EMPTYLISTP (CDR (CDR (CDR (form))))) {
     error ("malformed select", form, NULL);
   }
@@ -1818,7 +1818,7 @@ set_eval (Object form)
      */
     return eval (cons (make_setter_symbol (CAR (sym)),
 		       devalue (cons (THIRD (form), CDR (sym)))));
-    
+
   }
   if (EMPTYLISTP (CDR (CDR (form)))) {
     error ("set!: missing forms", form, NULL);
@@ -1843,7 +1843,7 @@ static Object
 unless_eval (Object form)
 {
   Object test, body;
-  
+
   if (EMPTYLISTP (CDR (form))) {
     error ("unless: missing forms", form, NULL);
   }

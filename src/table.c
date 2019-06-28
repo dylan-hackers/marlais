@@ -183,7 +183,7 @@ table_element_setter_by_vector (Object table, Object key, Object val)
   } else {
     hval = equal_hash (key);
     h = abs (INTVAL (hval)) % TABLESIZE (table);
-    
+
     entry = make_table_entry (h, key, val, TABLETABLE (table)[h]);
     TABLETABLE (table)[h] = entry;
   }
@@ -206,7 +206,7 @@ table_element_handle (Object table, Object key, Object *default_val)
   hval = equal_hash (key);
   h = abs (INTVAL (hval)) % TABLESIZE (table);
   entry = TABLETABLE (table)[h];
-  
+
   old_env = the_env;
   the_env = module_binding (dylan_symbol)->namespace;
   equal_fun = symbol_value (equal_symbol);
@@ -301,7 +301,7 @@ static Object
 equal_hash (Object key)
 {
   Object hashfun;
-  
+
   if (INSTANCEP (key)) {
     hashfun = symbol_value (equal_hash_symbol);
     /*

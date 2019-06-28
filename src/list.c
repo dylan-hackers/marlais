@@ -233,7 +233,7 @@ third (Object lst)
 static Object
 third_d (Object lst, Object default_ob)
 {
-  return nth(lst, default_ob, "third", 
+  return nth(lst, default_ob, "third",
 	     PAIRP (lst) && PAIRP (CDR (lst)) && PAIRP (CDR (CDR (lst))),
 	     third);
 }

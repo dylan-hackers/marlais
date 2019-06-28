@@ -146,7 +146,7 @@ init_class_hierarchy (void)
 
   object_table_class =
     make_builtin_class ("<object-table>", table_class);
-  
+
   deque_class =
     make_builtin_class ("<deque>",
 			listem (mutable_sequence_class,
@@ -163,7 +163,7 @@ init_class_hierarchy (void)
 					     listem(vector_class,
 						    stretchy_collection_class,
 						    NULL));
-						    
+
 
   byte_string_class =
     make_builtin_class ("<byte-string>",
@@ -237,7 +237,7 @@ init_class_hierarchy (void)
   seal (byte_string_class);
   seal (unicode_string_class);
   seal (simple_object_vector_class);
-  
+
   /* here, need to make things like sequence_class uninstantiable */
 
   make_uninstantiable (object_class); /* DMA, August 20, 2001 */
@@ -249,7 +249,7 @@ init_class_hierarchy (void)
   make_uninstantiable (sequence_class);
   make_uninstantiable (mutable_explicit_key_collection_class);
   make_uninstantiable (mutable_sequence_class);
-  
+
   make_uninstantiable (number_class);
   make_uninstantiable (complex_class);
 
@@ -323,7 +323,7 @@ make_class (Object obj,
   CLASSENV (obj) = the_env;
   if(abstract_p == false_object) CLASSPROPS (obj) |= CLASSINSTANTIABLE;
 
-  /* allow a single value for supers, make it into a list 
+  /* allow a single value for supers, make it into a list
    */
   if (!LISTP (supers)) {
     CLASSSUPERS (obj) = cons (supers, make_empty_list ());
@@ -334,7 +334,7 @@ make_class (Object obj,
     merge_sorted_precedence_lists (obj, CLASSSUPERS (obj));
   CLASSNUMPRECS (obj) = list_length (CLASSSORTEDPRECS (obj));
   CLASSPRECLIST (obj) = compute_class_precedence_list (obj);
-  
+
   /* first find slot descriptors for this class */
 
   CLASSINSLOTDS (obj) = make_empty_list ();
@@ -388,7 +388,7 @@ make_class (Object obj,
     allsuperclasses = CDR (allsuperclasses);
   }
   CLASSSUBS (obj) = make_empty_list ();
-  
+
   for (tmp = slot_descriptors; PAIRP (tmp); tmp = CDR (tmp)) {
     slot = CAR (tmp);
     if (SLOTDALLOCATION (slot) == instance_symbol) {
@@ -423,7 +423,7 @@ make_class (Object obj,
     (Object *) (VALUESELS (initialize_slots (append (CLASSCSLOTDS (obj),
 						     CLASSESSLOTDS (obj)),
 					     make_empty_list ()))[0]);
-  
+
   return (obj);
 }
 
@@ -633,7 +633,7 @@ replace_slotd_init (Object init_slotds, Object keyword, Object init)
 {
   Object slotd;
   Object new_slotd;
-  
+
   while (PAIRP (init_slotds)) {
     slotd = CAR (init_slotds);
 
@@ -648,7 +648,7 @@ replace_slotd_init (Object init_slotds, Object keyword, Object init)
       SLOTDINITKEYWORD (new_slotd) = SLOTDINITKEYWORD (slotd);
       SLOTDALLOCATION (new_slotd) = SLOTDALLOCATION (slotd);
       SLOTDDYNAMISM (new_slotd) = SLOTDDYNAMISM (slotd);
-      
+
       SLOTDINIT (new_slotd) = init;
       return NULL;
     }
@@ -666,7 +666,7 @@ static Object
 pair_list_reverse (Object lst)
 {
   Object result;
-  
+
   result = make_empty_list ();
   while (PAIRP (lst) && PAIRP (CDR (lst))) {
     result = cons (CAR (lst), cons (SECOND (lst), result));
@@ -723,7 +723,7 @@ make_union_type (Object typelist)
   
   UNIONTYPE (obj) = UnionType;
   union_types = make_empty_list ();
-  
+
   for (ptr = typelist; PAIRP (ptr); ptr = CDR (ptr)) {
     if (UNIONP (CAR (ptr))) {
       for (qtr = UNIONLIST (CAR (ptr)); PAIRP (qtr); qtr = CDR (qtr)) {
@@ -796,7 +796,7 @@ initialize_slotds (Object class)
 				       CLASSESSLOTDS (class)));
 
   make_getters_setters (class, CLASSCONSTSLOTDS (class));
-  
+
   eval_slotds (CLASSVSLOTDS (class));
   make_getters_setters (class, CLASSVSLOTDS (class));
   CLASSPROPS (class) &= ~CLASSSLOTSUNINIT;
@@ -904,7 +904,7 @@ instance (Object obj, Object type)
     return subtype (type_class, type);
   } else if (UNIONP (type)) {
     Object ptr;
-    
+
     for (ptr = UNIONLIST (type); PAIRP (ptr); ptr = CDR (ptr)) {
       if (instance (obj, (CAR (ptr)))) {
 	return 1;
@@ -1112,7 +1112,7 @@ void
 make_getter_setter_gfs (Object slotds)
 {
   Object getter, setter;
-  
+
   while (PAIRP (slotds)) {
 
     /* Fix up the getter first */
@@ -1140,9 +1140,9 @@ make_getter_setter_gfs (Object slotds)
       /* getter is not a symbol */
       error ("Getter name is not a symbol", getter, NULL);
     }
-    
+
     /* Now fix up the setter */
-    
+
     if (!id (SLOTDALLOCATION (CAR (slotds)), constant_symbol)) {
       setter = SLOTDSETTER (CAR (slotds));
       if (NULL == setter) {
@@ -1178,7 +1178,7 @@ make_getter_setter_gfs (Object slotds)
 	/* setter is not a symbol */
 	error ("Setter name is not a symbol", setter, NULL);
       }
-      
+
     }
     slotds = CDR (slotds);
   }
@@ -1189,7 +1189,7 @@ make_getters_setters (Object class, Object slotds)
 {
   Object slotd;
   int slot_num = 0;
-    
+
   while (!EMPTYLISTP (slotds)) {
     slotd = CAR (slotds);
     make_getter_method (slotd, class, slot_num);
@@ -1212,7 +1212,7 @@ make_getter_method (Object slot, Object class, int slot_num)
 {
   Object params, body, slot_location, allocation;
   Object class_location;
-  
+
   if (!GFUNP (SLOTDGETTER (slot))) {
     error ("Slot getter is not a generic function", SLOTDGETTER (slot), NULL);
   }
@@ -1321,7 +1321,7 @@ slot_descriptor_list (Object slots, int do_eval)
   Object *desc_ptr;
   Object slotelt;
   Object dynamism;
-  
+
   descriptors = make_empty_list ();
   desc_ptr = &descriptors;
   while (PAIRP (slots)) {
@@ -1341,7 +1341,7 @@ slot_descriptor_list (Object slots, int do_eval)
     getter_seen = 0;
     properties = 0;
     inherited_slot = 0;
-    
+
     if (SYMBOLP (slot)) {
       /* simple slot descriptor */
       getter = slot;
@@ -1444,7 +1444,7 @@ slot_descriptor_list (Object slots, int do_eval)
 	slot = CDR (CDR (slot));
       }
     }
-    
+
 #if 0
     if (!(getter || inherited_slot))
 #else
@@ -1471,7 +1471,7 @@ slot_descriptor_list (Object slots, int do_eval)
 				  dynamism),
 	    make_empty_list ());
     desc_ptr = &CDR (*desc_ptr);
-    
+
     slots = CDR (slots);
   }
   return descriptors;
@@ -1512,7 +1512,7 @@ merge_sorted_precedence_lists (Object class, Object supers)
     new_list = make_empty_list ();
     supers = make_empty_list ();
   }
-  
+
   while (!EMPTYLISTP (supers)) {
     new_list = merge_class_lists (new_list,
 				  CLASSSORTEDPRECS (CAR (supers)));
@@ -1545,7 +1545,7 @@ merge_class_lists (Object left, Object right)
       new_list_ptr = &CDR (*new_list_ptr);
     }
   }
-  
+
   if (!EMPTYLISTP (left)) {
     *new_list_ptr = left;
   }

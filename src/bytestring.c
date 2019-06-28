@@ -97,7 +97,7 @@ make_string_driver (Object args)
 
   if (fill_obj != false_object) {
     if (!CHARP (fill_obj)) {
-      error ("make: value of fill: must be a character for <string> class", 
+      error ("make: value of fill: must be a character for <string> class",
 	     fill_obj, NULL);
     }
     fill = CHARVAL (fill_obj);

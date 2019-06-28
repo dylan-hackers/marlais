@@ -455,7 +455,7 @@ initialize_marlais (void)
   by_symbol = make_symbol ("by");
   range_keyword = make_keyword ("range:");
   collection_keyword = make_keyword ("collection:");
-  forward_iteration_protocol_symbol = 
+  forward_iteration_protocol_symbol =
     make_symbol ("forward-iteration-protocol");
   plus_symbol = make_symbol ("+");
   bind_symbol = make_symbol ("bind");

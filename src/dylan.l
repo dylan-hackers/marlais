@@ -805,7 +805,7 @@ char* make_expanded_byte_string(char* str)
 	if (backslash) {
 		char* exp_str;
 		Object obj;
-		
+
 		exp_str = checking_strdup (str);
 		exp_str[0] = '\0';
 		while (backslash) {

@@ -146,7 +146,7 @@ Object
 vector_element (Object vec, Object index, Object default_ob)
 {
   int i, size;
-    
+
   i = INTVAL (index);
   size = SOVSIZE (vec);
   if ((i < 0) || (i >= size)) {
