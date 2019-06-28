@@ -246,9 +246,11 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 
 <ETC>[\n]	{ /* Bogus hack! */
 		  ++yylineno;
+#if 0
 		  if (yyerrflag == 3) {
 		      return ';';
 		  }
+#endif
                 }
 
 <ETC>#b[01][01]*	{ /* binary integer */
