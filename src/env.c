@@ -173,7 +173,7 @@ add_bindings (Object syms, Object vals, int constant, struct frame *to_frame)
   frame->bindings = (struct binding **)
     checking_realloc (frame->bindings,
 		      (frame->size + num_bindings) * sizeof(struct binding *));
-  
+
   for (i = 0; i < num_bindings; ++i) {
     if ((!syms) || (!vals)) {
       error ("mismatched number of symbols and values", NULL);
@@ -193,7 +193,7 @@ add_bindings (Object syms, Object vals, int constant, struct frame *to_frame)
       binding->props |= CONSTANT_BINDING;
     }
     frame->bindings[i + frame->size] = binding;
-    
+
     syms = CDR (syms);
     vals = CDR (vals);
   }
