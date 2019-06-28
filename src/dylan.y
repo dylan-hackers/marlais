@@ -1,6 +1,6 @@
 %{ /* Emacs: -*- Fundamental -*- */
 
-/* interim-dylan.y -- dylan phrase grammar from 5/12/94 interim report 
+/* interim-dylan.y -- dylan phrase grammar from 5/12/94 interim report
    see COPYRIGHT for use */
 
 /*
@@ -38,10 +38,10 @@
    conditions set forth in this notice.
 */
 
-/* 
+/*
  * Modified this to have built-in rules for control constructs.
  * I'll save macro implementation for a little later.
- * 
+ *
  * jnw@cis.ufl.edu
  * 15 July 1994
  */
@@ -133,7 +133,7 @@ static int allocation_word (Object word);
  * Wait for macros to include this general approach
  * %token BLOCK_BEGIN_WORD EXPR_BEGIN_WORD SIMPLE_BEGIN_WORD
  * %token INTERMEDIATE_WORD EXPR_INTERMEDIATE_WORD SIMPLE_INTERMEDIATE_WORD
- */	
+ */
 
 /*   %token	DEFINING_WORD */
 %token CLASS CONSTANT LIBRARY MODULE VARIABLE
@@ -244,7 +244,7 @@ constituents
 
 constituent
 	: defining_form		{ $$ = $1; }
-	| local_declaration	{ $$ = $1; } 
+	| local_declaration	{ $$ = $1; }
 	| expression		{ $$ = $1; }
 /*
 	| error	';'		{ yyerrok; $$ = unspecified_object; }
@@ -312,7 +312,7 @@ unary_operator
 
 operand	: operand '(' arguments_opt ')'
 
-	  {   
+	  {
 #ifdef OPTIMIZE_SPECIALIZERS
 	      $$ = cons ($1, $3);
 #else
@@ -332,7 +332,7 @@ operand	: operand '(' arguments_opt ')'
 
 unparenthesized_operand
 	: unparenthesized_operand '(' arguments_opt ')'
-		{   
+		{
 #ifdef OPTIMIZE_SPECIALIZERS
 		    $$ = cons ($1, $3);
 #else
@@ -373,7 +373,7 @@ literal	: LITERAL				{ $$ = $1; }
 		{ $$ = make_sov ($2); }
 
 strings	: STRING	    { $$ = $1; }
-	| STRING component_strings    
+	| STRING component_strings
 		{ $$ = cons (concatenate_symbol, cons ($1, $2)); }
 
 component_strings
@@ -418,8 +418,8 @@ statement
 
 
 begin_statement
-	: BEGIN_TOKEN 
-		{ 
+	: BEGIN_TOKEN
+		{
 #ifdef OPTIMIZE_SPECIALIZERS
 		    symtab_push_begin ();
 #endif
@@ -473,8 +473,8 @@ case_statement
 		{ $$ = cons (cond_symbol, $2); }
 
 case_body
-	: { $$ = make_empty_list(); } 
-	| case_label 
+	: { $$ = make_empty_list(); }
+	| case_label
 	  { push_bindings (); }
 	  case_tail SEMICOLON_opt
 	  { $$ =  cons (cons ($1, !EMPTYLISTP (CAR ($3))
@@ -513,7 +513,7 @@ case_tail
 		}
 	| constituent ';' case_label { push_bindings(); }
 	   case_tail
-	{ $$ = cons (cons ($1, make_empty_list()), 
+	{ $$ = cons (cons ($1, make_empty_list()),
 		     cons ( cons($3, !EMPTYLISTP (CAR ($5))
 				     ? cons (cons (unbinding_begin_symbol,
 						   cons (bindings_top(),
@@ -535,7 +535,7 @@ case_label
 
 select_statement
 	: SELECT	{ push_intermediate_words ($1); }
-		'(' expression test_opt 
+		'(' expression test_opt
 			{ pop_intermediate_words (); }
 		')' select_body
 		END SELECT_opt
@@ -547,7 +547,7 @@ test_opt
 	| BY expression		{ $$ = $2; }
 select_body
 	:  { $$ = make_empty_list(); }
-	| select_label 
+	| select_label
 	  { push_bindings (); }
 	  select_tail SEMICOLON_opt
 	  { $$ =  cons (cons ($1, !EMPTYLISTP (CAR ($3))
@@ -585,7 +585,7 @@ select_tail
 		}
 	| constituent ';' select_label { push_bindings(); }
 	   select_tail
-	{ $$ = cons (cons ($1, make_empty_list()), 
+	{ $$ = cons (cons ($1, make_empty_list()),
 		     cons ( cons($3, !EMPTYLISTP (CAR ($5))
 				     ? cons (cons (unbinding_begin_symbol,
 						   cons (bindings_top(),
@@ -622,7 +622,7 @@ for_statement
 			{ pop_intermediate_words (); }
 		')' body
 		 finally_opt END { pop_intermediate_words (); } FOR_opt
-		{ $$ = listem (for_symbol,	
+		{ $$ = listem (for_symbol,
 			       $4,
 			       append_bang($5, $9),
 			       $8,
@@ -635,7 +635,7 @@ for_clauses
 for_clauses_opt
 	: 			{ $$ = make_empty_list(); }
 	| for_clauses		{ $$ = $1; }
-	
+
 for_clause
 	: variable '=' expression THEN expression
 		{ $$ = cons ($1, cons ($3, cons ($5, make_empty_list()))); }
@@ -695,7 +695,7 @@ block_statement
 		afterwards_opt
 		cleanup_opt
 		exceptions
-			{ pop_intermediate_words (); 
+			{ pop_intermediate_words ();
 			  if (! EMPTYLISTP ($9)) {
 				warning ("Exceptions not yet implemented!",
 					 NULL);
@@ -733,7 +733,7 @@ cleanup_opt
 
 exceptions
 	:	{ $$ = make_empty_list(); }
-	| exceptions 
+	| exceptions
 	  EXCEPTION '(' exception_args ')' body
 		/* Note that exceptions are consed up from back to front! */
 		{ $$ = cons (listem ($2, $4, $6, NULL), $1); }
@@ -801,7 +801,7 @@ defining_form
 	  class_definition
 		{ pop_intermediate_words ();
 		  if (EMPTYLISTP ($2)) {
-			$$ = cons (define_class_symbol, $5); 
+			$$ = cons (define_class_symbol, $5);
 		  } else {
 			$$ = cons (define_class_symbol,
 				   cons (cons (modifiers_keyword,
@@ -990,14 +990,14 @@ item_names
 /* Methods and Generic Functions */
 /* n.b. define function form uses this, too -- DMA */
 method_body
-	: '(' parameter_list_opt ')' 
-		{   
+	: '(' parameter_list_opt ')'
+		{
 #ifdef OPTIMIZE_SPECIALIZERS
 		    symtab_push_parameters ($2);
 #endif
 		}
 	  SEMICOLON_opt body
-		{   
+		{
 #ifdef OPTIMIZE_SPECIALIZERS
 		    symtab_pop ();
 #endif
@@ -1139,7 +1139,7 @@ local_declaration
 						  cons (cons (values_symbol,
 							      methdefs),
 							make_empty_list())),
-					  make_empty_list()); 
+					  make_empty_list());
 #ifdef OPTIMIZE_SPECIALIZERS
 	      symtab_insert_bindings (methbindings);
 #endif
@@ -1162,9 +1162,9 @@ local_methods
 		 methnames = cons (FIRST ($2), methnames);
 		 methdefs = cons (cons (method_symbol, CDR ($2)), methdefs);
 		}
-	| METHOD_opt method_definition ',' 
+	| METHOD_opt method_definition ','
 		{
-		 methnames = cons (FIRST ($2), methnames); 
+		 methnames = cons (FIRST ($2), methnames);
 		 methdefs = cons (cons (method_symbol, CDR ($2)), methdefs);
 		}
 	  local_methods
@@ -1181,7 +1181,7 @@ variable_list
 	: variable		{ $$ = cons ($1, make_empty_list()); }
 	| variable ',' variable_list
 				{ $$ = cons ($1, $3); }
-	| HASH_REST variable_name 
+	| HASH_REST variable_name
 		{ $$ = cons ($1, cons ($2, make_empty_list())); }
 
 
@@ -1347,7 +1347,7 @@ void yyerror(char *s)
 /*
  * append_bang appends l2 to l1 if l1 is nonempty.
  * if l1 is empty, it just returns l2.
- */	
+ */
 static Object
 append_bang(Object l1, Object l2)
 {
@@ -1393,7 +1393,7 @@ nelistem (Object car,...)
 	va_end (args);
 	return (fst);
 }
-	    
+
 static void
 push_bindings()
 {
