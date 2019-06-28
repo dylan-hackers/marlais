@@ -293,7 +293,7 @@ make_builtin_class (char *name, Object supers)
 {
   Object obj;
 
-  obj = allocate_object (sizeof (struct clas));
+  obj = marlais_allocate_object (sizeof (struct clas));
 
   CLASSTYPE (obj) = Class;
   CLASSNAME (obj) = make_symbol (name);
@@ -410,8 +410,8 @@ make_class (Object obj,
     //warning ("Making class name", CLASSNAME(obj), NULL);
   }
   /* initialize class and each-subclass slot objects */
-  CLASSCSLOTS (obj) = allocate_object (sizeof (struct instance));
-  
+  CLASSCSLOTS (obj) = marlais_allocate_object (sizeof (struct instance));
+
   INSTTYPE (CLASSCSLOTS (obj)) = Instance;
   INSTCLASS (CLASSCSLOTS (obj)) = class_slots_class;
 
@@ -519,7 +519,7 @@ make_class_driver (Object args)
   if (EMPTYLISTP (supers_obj)) {
     supers_obj = object_class;
   }
-  obj = allocate_object (sizeof (struct clas));
+  obj = marlais_allocate_object (sizeof (struct clas));
 
   CLASSTYPE (obj) = Class;
   CLASSNAME (obj) = make_symbol (BYTESTRVAL (debug_obj));
@@ -638,7 +638,7 @@ replace_slotd_init (Object init_slotds, Object keyword, Object init)
     slotd = CAR (init_slotds);
 
     if (SLOTDINITKEYWORD (slotd) == keyword) {
-      new_slotd = allocate_object (sizeof (struct slot_descriptor));
+      new_slotd = marlais_allocate_object (sizeof (struct slot_descriptor));
 
       CAR (init_slotds) = new_slotd;
       SLOTDPROPS (new_slotd) = SLOTDPROPS (slotd) & ~SLOTDINITFUNCTIONMASK;
@@ -683,8 +683,8 @@ make_limited_int_type (Object args)
 {
   Object obj;
 
-  obj = allocate_object (sizeof (struct limited_int_type));
-  
+  obj = marlais_allocate_object (sizeof (struct limited_int_type));
+
   LIMINTTYPE (obj) = LimitedIntType;
   while (!EMPTYLISTP (args)) {
     if (FIRST (args) == min_keyword) {
@@ -719,8 +719,8 @@ make_union_type (Object typelist)
 {
   Object obj, ptr, qtr, union_types;
 
-  obj = allocate_object (sizeof (struct union_type));
-  
+  obj = marlais_allocate_object (sizeof (struct union_type));
+
   UNIONTYPE (obj) = UnionType;
   union_types = make_empty_list ();
 
@@ -749,7 +749,7 @@ make_instance (Object class, Object *initializers)
 {
   Object obj, ret;
 
-  obj = allocate_object (sizeof (struct instance));
+  obj = marlais_allocate_object (sizeof (struct instance));
 
   INSTTYPE (obj) = Instance;
   INSTCLASS (obj) = class;
@@ -826,7 +826,7 @@ make_singleton (Object val)
 {
   Object obj;
 
-  obj = allocate_object (sizeof (struct singleton));
+  obj = marlais_allocate_object (sizeof (struct singleton));
 
   SINGLETYPE (obj) = Singleton;
   SINGLEVAL (obj) = val;

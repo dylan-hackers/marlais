@@ -41,7 +41,7 @@ Object
 make_eof_object (void)
 {
 #ifndef SMALL_OBJECTS
-    Object obj = allocate_object (sizeof (struct object));
+    Object obj = marlais_allocate_object (sizeof (struct object));
     TYPE (obj) = EndOfFile;
     return (obj);
 #else
@@ -52,7 +52,7 @@ make_eof_object (void)
 Object
 make_unspecified_object (void)
 {
-    Object obj = allocate_object (sizeof (struct values));
+    Object obj = marlais_allocate_object (sizeof (struct values));
 
     VALUESTYPE (obj) = Values;
     VALUESNUM (obj) = 0;
@@ -65,7 +65,7 @@ Object
 make_uninit_slot (void)
 {
 #ifndef SMALL_OBJECTS
-    Object obj = allocate_object (sizeof (struct object));
+    Object obj = marlais_allocate_object (sizeof (struct object));
     TYPE (obj) = UninitializedSlotValue;
     return (obj);
 #else
@@ -78,7 +78,7 @@ make_uninit_slot (void)
 Object
 make_exit (Object sym)
 {
-    Object obj = allocate_object (sizeof (struct exitproc));
+    Object obj = marlais_allocate_object (sizeof (struct exitproc));
     EXITTYPE (obj) = Exit;
     EXITSYM (obj) = sym;
     EXITRET (obj) = (jmp_buf *) checking_malloc (sizeof (jmp_buf));
@@ -88,9 +88,8 @@ make_exit (Object sym)
 Object
 make_unwind (Object body)
 {
-    Object obj = allocate_object (sizeof (struct unwind));
+    Object obj = marlais_allocate_object (sizeof (struct unwind));
     UNWINDTYPE (obj) = Unwind;
     UNWINDBODY (obj) = body;
     return (obj);
 }
-

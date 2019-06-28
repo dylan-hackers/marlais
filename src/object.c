@@ -45,7 +45,7 @@ make_handle (Object an_object)
 {
     Object new_handle;
 
-    new_handle = allocate_object (sizeof (struct object_handle));
+    new_handle = marlais_allocate_object (sizeof (struct object_handle));
 
     HDLTYPE (new_handle) = ObjectHandle;
     HDLOBJ (new_handle) = an_object;

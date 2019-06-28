@@ -38,7 +38,7 @@ make_foreign_ptr (void *ptr)
 {
     Object obj;
 
-    obj = allocate_object (sizeof (struct object));
+    obj = marlais_allocate_object (sizeof (struct object));
 
     TYPE (obj) = ForeignPtr;
     FOREIGNPTR (obj) = ptr;
@@ -50,7 +50,7 @@ make_foreign_ptr (void *ptr)
 {
     Object obj;
 
-    obj = allocate_object (sizeof (struct foreign_ptr));
+    obj = marlais_allocate_object (sizeof (struct foreign_ptr));
 
     FOREIGNTYPE (obj) = ForeignPtr;
     FOREIGNPTR (obj) = ptr;

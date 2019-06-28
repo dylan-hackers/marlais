@@ -88,7 +88,7 @@ init_deque_prims (void)
 Object
 make_deque (void)
 {
-  Object obj = allocate_object (sizeof (struct deque));
+  Object obj = marlais_allocate_object (sizeof (struct deque));
 
   DEQUETYPE (obj) = Deque;
   DEQUEFIRST (obj) = make_empty_list ();
@@ -99,7 +99,7 @@ make_deque (void)
 Object
 make_deque_entry (Object prev, Object value, Object next)
 {
-  Object obj = allocate_object (sizeof (struct deque_entry));
+  Object obj = marlais_allocate_object (sizeof (struct deque_entry));
 
   DETYPE (obj) = DequeEntry;
   DEPREV (obj) = prev;

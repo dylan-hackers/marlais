@@ -516,7 +516,7 @@ construct_return_values (Object ret,
 		       NULL);
 	    }
 	}
-	newret = allocate_object (sizeof (struct values));
+	newret = marlais_allocate_object (sizeof (struct values));
 
 	VALUESTYPE (newret) = Values;
 	VALUESNUM (newret) = i + j;

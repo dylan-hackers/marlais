@@ -85,18 +85,14 @@ marlais_allocate_atomic (size_t size)
 
 
 Object
-allocate_object (size_t size)
+marlais_allocate_object (size_t size)
 {
     Object obj;
-
 #ifndef SMALL_OBJECTS
-    obj = (Object) GC_malloc (sizeof (struct object));
+    obj = (Object) marlais_allocate_memory (sizeof (struct object));
 #else
-    obj = (Object) GC_malloc (size);
+    obj = (Object) marlais_allocate_memory (size);
 #endif
-    if (!obj) {
-        fatal ("internal error: memory allocation failure.");
-    }
     return (obj);
 }
 

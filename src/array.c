@@ -79,7 +79,7 @@ make_array (Object dims, Object fill)
   Object obj, dl, val;
   unsigned int size, i;
 
-  obj = allocate_object (sizeof (struct array));
+  obj = marlais_allocate_object (sizeof (struct array));
 
   ARRTYPE (obj) = Array;
   ARRDIMS (obj) = dims;

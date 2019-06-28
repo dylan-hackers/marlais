@@ -817,7 +817,7 @@ char* make_expanded_byte_string(char* str)
 		}
 		strcat(exp_str, str);
 
-		obj = allocate_object (sizeof (struct byte_string));	
+		obj = marlais_allocate_object (sizeof (struct byte_string));
 		BYTESTRTYPE (obj) = ByteString;
 		BYTESTRSIZE(obj) = strlen (exp_str);
 		BYTESTRVAL(obj) = exp_str;

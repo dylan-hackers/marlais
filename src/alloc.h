@@ -37,7 +37,6 @@
 #include "object.h"
 #include "env.h"
 
-Object allocate_object (size_t size);
 /* initialize the garbage collector */
 extern void  marlais_initialize_gc (void);
 
@@ -47,6 +46,9 @@ extern void *marlais_allocate_memory (size_t size);
 extern void *marlais_reallocate_memory (void *old_obj, size_t new_size);
 /* allocate atomic memory (no pointers) */
 extern void *marlais_allocate_atomic (size_t size);
+
+/* allocate an object */
+extern Object marlais_allocate_object (size_t size);
 
 struct frame *allocate_frame (void);
 struct binding *allocate_binding (void);

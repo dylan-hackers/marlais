@@ -779,7 +779,7 @@ make_environment (struct frame *env)
 {
     Object obj;
 
-    obj = allocate_object (sizeof (struct environment));
+    obj = marlais_allocate_object (sizeof (struct environment));
 
     ENVIRONMENTTYPE (obj) = Environment;
     ENVIRONMENT (obj) = env;

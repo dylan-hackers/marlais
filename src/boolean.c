@@ -59,7 +59,7 @@ init_boolean_prims (void)
 Object
 make_true (void)
 {
-  Object obj = allocate_object (sizeof (struct object));
+  Object obj = marlais_allocate_object (sizeof (struct object));
 
   TYPE (obj) = True;
   return (obj);
@@ -76,7 +76,7 @@ make_true (void)
 Object
 make_false (void)
 {
-  Object obj = allocate_object (sizeof (struct object));
+  Object obj = marlais_allocate_object (sizeof (struct object));
 
   TYPE (obj) = False;
   return (obj);

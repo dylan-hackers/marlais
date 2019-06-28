@@ -70,7 +70,7 @@ make_sov (Object el_list)
   Object obj, els;
   int size, i;
 
-  obj = allocate_object (sizeof (struct simple_object_vector));
+  obj = marlais_allocate_object (sizeof (struct simple_object_vector));
 
   SOVTYPE (obj) = SimpleObjectVector;
   size = 0;
@@ -98,7 +98,7 @@ make_vector (int size, Object fill_obj)
   int i;
 
   /* actually fabricate the vector */
-  res = allocate_object (sizeof (struct simple_object_vector));
+  res = marlais_allocate_object (sizeof (struct simple_object_vector));
 
   SOVTYPE (res) = SimpleObjectVector;
   SOVSIZE (res) = size;
