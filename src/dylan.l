@@ -62,7 +62,7 @@ struct resword
 #define NUM_COREWORDS 8
 
 struct resword coreword_table [NUM_COREWORDS] =
-{	
+{
 	{"define", DEFINE, &define_symbol},
 	{"end", END, &end_symbol},
 	{"generic", GENERIC, &generic_symbol},
@@ -96,7 +96,7 @@ struct resword defining_word_table [NUM_DEFINING_WORDS] =
 	{"class", CLASS, &class_symbol},
 	{"constant", CONSTANT, &constant_symbol},
 	{"library", LIBRARY, &library_symbol},
-	{"module", MODULE, &module_symbol},	
+	{"module", MODULE, &module_symbol},
 	{"variable", VARIABLE, &variable_symbol},
 };
 
@@ -251,7 +251,7 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 		  }
                 }
 
-<ETC>#b[01][01]*	{ /* binary integer */ 
+<ETC>#b[01][01]*	{ /* binary integer */
 		  yylval = make_integer (strtol (yytext+2, NULL, 2));
 		  return (LITERAL);
 		}
@@ -278,7 +278,7 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 			    return (LITERAL);
 			  }
 
-<ETC>[+-]?[0-9][0-9]*\/[0-9][0-9]*	{ /* ratio */ 
+<ETC>[+-]?[0-9][0-9]*\/[0-9][0-9]*	{ /* ratio */
 				  char *ptr;
 				  long numerator, denominator;
 				  numerator = strtol (yytext, &ptr, 10);
@@ -305,7 +305,7 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 			 }
 
 
-<ETC>{OPSYMS}		{ /* OPERATOR  SYMBOL */ 
+<ETC>{OPSYMS}		{ /* OPERATOR  SYMBOL */
 			  return which_operator(yytext, yyleng);
 			}
 
@@ -398,7 +398,7 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 		}
 
 %%
-int yywrap() { 
+int yywrap() {
 #define BUFSIZE 1024
   char buffer[BUFSIZE];
   char* input;
@@ -418,7 +418,7 @@ int yywrap() {
       yy_scan_string("\n");
     }
     free(input);
-    return 0; 
+    return 0;
   } else {
     return 1;
   }
@@ -435,7 +435,7 @@ int yywrap() {
     } else {
       yy_scan_string("\n");
     }
-    return 0; 
+    return 0;
   } else {
     return 1;
   }
@@ -476,7 +476,6 @@ search_for_poundword (char *string, YYSTYPE *obj_ptr)
 	    return HASH_REST;
 	}
 	break;
-	
     case 'k':
     case 'K':
 	if (strcasecmp (string, "#key") == 0) {
@@ -595,15 +594,15 @@ init_reserved_word_symbols (void)
     for (i = 0; i < NUM_SELECT_INTERMEDIATE_WORDS; i++) {
 	*(select_intermediate_word_table[i].symbol) =
 	    make_symbol (select_intermediate_word_table[i].word);
-    } 
+    }
     for (i = 0; i < NUM_CLASS_INTERMEDIATE_WORDS; i++) {
 	*(class_intermediate_word_table[i].symbol) =
 	    make_symbol (class_intermediate_word_table[i].word);
-    } 
+    }
     for (i = 0; i < NUM_FOR_INTERMEDIATE_WORDS; i++) {
 	*(for_intermediate_word_table[i].symbol) =
 	    make_symbol (for_intermediate_word_table[i].word);
-    } 
+    }
     for (i = 0; i < NUM_FOR_CLAUSE_WORDS; i++) {
 	*(for_clause_word_table[i].symbol) =
 	    make_symbol (for_clause_word_table[i].word);
@@ -616,7 +615,7 @@ init_reserved_word_symbols (void)
 	*(module_intermediate_word_table[i].symbol) =
 	    make_symbol (module_intermediate_word_table[i].word);
     }
-    equal_arrow_symbol = make_symbol("=>");    
+    equal_arrow_symbol = make_symbol("=>");
     colon_colon_symbol = make_symbol("::");
 }
 
@@ -682,7 +681,7 @@ which_operator( char *string, int length)
       yylval = not_equal_equal_symbol;
       return NOT_EQUAL_EQUAL;
     }
-	
+
     /*
      * If control gets here, we're really in trouble.
      */
