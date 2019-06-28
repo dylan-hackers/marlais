@@ -8,18 +8,20 @@
  */
 
 typedef void *Object;
+typedef intptr_t  DyInteger;
+typedef uintptr_t DyUnsigned;
 
 #define POINTERTAG           0
 #define IMMEDTAG             1
 #define INTEGERTAG           2
 
-#define POINTERP(obj)        (((unsigned)obj & 3) == POINTERTAG)
-#define IMMEDP(obj)          (((unsigned)obj & 3) == IMMEDTAG)
-#define INTEGERP(obj)        (((unsigned)obj & 3) == INTEGERTAG)
+#define POINTERP(obj)        (((DyUnsigned)obj & 3) == POINTERTAG)
+#define IMMEDP(obj)          (((DyUnsigned)obj & 3) == IMMEDTAG)
+#define INTEGERP(obj)        (((DyUnsigned)obj & 3) == INTEGERTAG)
 
 /* macros for identifying immediates other than integers
  */
-#define SUBPART(obj)         (((unsigned)obj & 0x3c) >> 2)
+#define SUBPART(obj)         (((DyUnsigned)obj & 0x3c) >> 2)
 
 #define TRUESUB    0x00
 #define FALSESUB   0x01
@@ -51,14 +53,14 @@ typedef void *Object;
 /* macros for extracting relevant parts of object
  */
 #define POINTER_PART(obj)    (obj)
-#define IMMED_PART(obj)      ((unsigned)obj >> 6)
-#define INTEGER_PART(obj)    ((int)obj >> 2)
-#define INTVAL(obj)          ((int)obj >> 2)
-#define CHARVAL(obj)         ((unsigned)obj >> 6)
+#define IMMED_PART(obj)      ((DyUnsigned)obj >> 6)
+#define INTEGER_PART(obj)    ((DyInteger)obj >> 2)
+#define INTVAL(obj)          ((DyInteger)obj >> 2)
+#define CHARVAL(obj)         ((DyUnsigned)obj >> 6)
 
 /* macros for synthesizing immediates
  */
-#define MAKE_CHAR(ch)        ((Object)(((unsigned)ch << 6) | (CHARSUB << 2) | IMMEDTAG))
+#define MAKE_CHAR(ch)        ((Object)(((DyUnsigned)ch << 6) | (CHARSUB << 2) | IMMEDTAG))
 #define MAKE_INT(i)          ((Object)((i << 2) | INTEGERTAG))
 
 /* BigInteger support. <pcb> */
