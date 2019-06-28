@@ -198,7 +198,7 @@ real_clean: clean
 
 depend:
 	awk '/^# dependencies/ {exit 0;} {print $0;} END{print "# dependencies";}' <Makefile >Makefile.new
-	gcc $(CFLAGS) -I$(INCDIRS) -MM *.c >> Makefile.new
+	gcc $(CFLAGS) -I$(INCDIRS) -E -MM $(CSRCS) >> Makefile.new
 	mv Makefile Makefile.bak
 	mv Makefile.new Makefile
 
