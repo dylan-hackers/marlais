@@ -97,8 +97,6 @@ LIBS=-lncurses -lreadline -lm -lgc
 FLEXFLAGS = -I
 BYACCFLAGS = -d -v -t
 
-DISTDIR = /tmp/marlais-$(VERSION)
-
 OBJS = 	alloc.o \
 	apply.o \
 	array.o \
