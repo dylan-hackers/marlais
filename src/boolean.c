@@ -92,7 +92,7 @@ Object
 id_p (Object obj1, Object obj2, Object rest)
 {
     /* succeed quickly in the simple case */
-  if ((obj1 == obj2)) {
+  if (obj1 == obj2) {
     if (EMPTYLISTP (rest)) {
       return (true_object);
     } else {
