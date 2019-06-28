@@ -44,11 +44,45 @@
 /* function definitions */
 
 void
-initialize_gc (void)
+marlais_initialize_gc (void)
 {
     GC_init ();
     return;
 }
+
+void *
+marlais_allocate_memory (size_t size)
+{
+    void *obj;
+	obj = GC_malloc (size);
+	if (!obj) {
+        fatal ("internal error: memory allocation failure.");
+	}
+	return obj;
+}
+
+void *
+marlais_reallocate_memory(void *old_obj, size_t new_size)
+{
+    void *obj;
+	obj = GC_realloc (old_obj, new_size);
+	if (!obj) {
+        fatal ("internal error: memory allocation failure.");
+	}
+	return obj;
+}
+
+void *
+marlais_allocate_atomic (size_t size)
+{
+    void *obj;
+	obj = GC_malloc_atomic (size);
+	if (!obj) {
+        fatal ("internal error: memory allocation failure.");
+	}
+	return obj;
+}
+
 
 Object
 allocate_object (size_t size)

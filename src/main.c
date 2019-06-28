@@ -319,7 +319,7 @@ void
 initialize_marlais (void)
 {
   /* intialize garbage collector */
-  initialize_gc ();
+  marlais_initialize_gc ();
 
   dylan_symbol = make_symbol ("dylan");
   dylan_user_symbol = make_symbol ("dylan-user");
