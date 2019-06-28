@@ -193,7 +193,6 @@ real_clean: clean
 	rm dylan.tab.c lex.yy.c
 	cd $(INCDIRS); $(MAKE) clean
 
-
 depend:
 	awk '/^# dependencies/ {exit 0;} {print $0;} END{print "# dependencies";}' <Makefile >Makefile.new
 	gcc $(CFLAGS) -I$(INCDIRS) -E -MM $(CSRCS) >> Makefile.new
