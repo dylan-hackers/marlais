@@ -2,9 +2,13 @@
 
 #include <fcntl.h>
 #include <stdio.h>
+#include <unistd.h>
+
 #include "stream.h"
 
+/* for throwing errors */
 #include "error.h"
+/* for declaring primitives */
 #include "prim.h"
 
 /* primitives */
