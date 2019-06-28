@@ -199,69 +199,87 @@ depend:
 	mv Makefile.new Makefile
 
 # dependencies
-alloc.o : alloc.c alloc.h object.h env.h symbol.h $(INCDIRS)/gc.h error.h 
-apply.o : apply.c apply.h object.h alloc.h env.h class.h symbol.h eval.h error.h \
-  function.h keyword.h list.h print.h prim.h syntax.h table.h values.h vector.h 
-array.o : array.c array.h object.h alloc.h env.h error.h list.h number.h prim.h \
-  symbol.h 
-boolean.o : boolean.c boolean.h object.h prim.h 
-bytestring.o : bytestring.c bytestring.h object.h alloc.h env.h character.h \
-  error.h number.h prim.h symbol.h 
-character.o : character.c character.h object.h number.h prim.h 
-class.o : class.c class.h symbol.h object.h alloc.h env.h apply.h array.h boolean.h \
-  bytestring.h classprec.h classprec-ll.h deque.h error.h eval.h function.h globaldefs.h \
-  keyword.h list.h number.h prim.h slot.h table.h values.h vector.h 
-classprec-clos.o : classprec-clos.c classprec.h classprec-ll.h object.h class.h \
-  symbol.h error.h list.h print.h 
-classprec-ll.o : classprec-ll.c classprec.h classprec-ll.h object.h class.h \
-  symbol.h error.h list.h 
-classprec.o : classprec.c classprec-ll.c classprec.h classprec-ll.h object.h \
-  class.h symbol.h error.h list.h 
-deque.o : deque.c deque.h object.h error.h list.h prim.h symbol.h 
-dylan.tab.o : dylan.tab.c boolean.h object.h bytestring.h error.h $(INCDIRS)/gc.h globaldefs.h \
-  list.h number.h symbol.h table.h vector.h yystype.h dylan_lexer.h 
-env.o : env.c env.h object.h alloc.h bytestring.h class.h symbol.h error.h eval.h \
-  function.h keyword.h list.h prim.h print.h table.h 
-error.o : error.c error.h object.h alloc.h env.h apply.h bytestring.h class.h \
-  symbol.h eval.h list.h parse.h prim.h print.h read.h yystype.h dylan_lexer.h 
-eval.o : eval.c eval.h object.h env.h alloc.h apply.h error.h list.h print.h \
-  syntax.h 
-file.o : file.c file.h object.h dylan_lexer.h env.h eval.h error.h foreign_ptr.h \
-  list.h parse.h prim.h read.h 
-foreign.o : foreign.c foreign.h object.h prim.h 
-foreign_ptr.o : foreign_ptr.c foreign_ptr.h object.h 
-function.o : function.c function.h object.h apply.h class.h symbol.h env.h error.h \
-  eval.h keyword.h list.h number.h prim.h table.h values.h vector.h 
-keyword.o : keyword.c keyword.h object.h bytestring.h list.h prim.h symbol.h 
-lex.yy.o : lex.yy.c alloc.h object.h env.h bytestring.h character.h dylan.tab.h \
-  globaldefs.h list.h number.h symbol.h yystype.h dylan_lexer.h 
-list.o : list.c list.h object.h apply.h boolean.h error.h number.h \
-  prim.h symbol.h 
-macintosh.o : macintosh.c macintosh.h object.h /local/lib/gcc-lib/sparc-sun-sunos4.1.3/2.4.5/include/string.h \
-  number.h values.h error.h foreign_ptr.h 
-main.o : main.c alloc.h object.h env.h apply.h array.h boolean.h bytestring.h \
-  character.h class.h symbol.h deque.h dylan_lexer.h error.h eval.h file.h function.h \
-  globals.h globaldefs.h keyword.h list.h misc.h number.h parse.h print.h read.h \
-  slot.h syntax.h stream.h sys.h table.h values.h vector.h 
-misc.o : misc.c misc.h object.h alloc.h env.h prim.h 
-number.o : number.c number.h object.h prim.h values.h 
-object.o : object.c object.h error.h number.h 
-parse.o : parse.c parse.h object.h error.h print.h yystype.h dylan_lexer.h 
-prim.o : prim.c prim.h object.h alloc.h env.h bytestring.h error.h list.h symbol.h 
-print.o : print.c print.h object.h apply.h character.h error.h eval.h env.h \
-  list.h prim.h slot.h 
-read.o : read.c read.h object.h bytestring.h character.h dylan_lexer.h dylan.tab.h \
-  error.h file.h list.h number.h parse.h prim.h symbol.h vector.h 
-slot.o : slot.c slot.h object.h apply.h class.h symbol.h error.h eval.h env.h \
-  globaldefs.h keyword.h list.h prim.h vector.h 
-stream.o : stream.c stream.h object.h error.h prim.h 
-symbol.o : symbol.c symbol.h object.h alloc.h env.h bytestring.h 
-syntax.o : syntax.c syntax.h object.h alloc.h env.h apply.h boolean.h bytestring.h \
-  class.h symbol.h error.h eval.h keyword.h list.h function.h misc.h number.h \
-  print.h table.h values.h 
-sys.o : sys.c sys.h object.h bytestring.h error.h number.h prim.h values.h 
-table.o : table.c table.h object.h alloc.h env.h apply.h error.h \
-  list.h number.h prim.h symbol.h 
-values.o : values.c values.h object.h alloc.h env.h error.h list.h prim.h 
-vector.o : vector.c vector.h object.h alloc.h env.h error.h list.h \
-  number.h prim.h symbol.h 
+alloc.o: alloc.c alloc.h object.h object-small.h env.h symbol.h error.h
+apply.o: apply.c apply.h object.h object-small.h alloc.h env.h class.h \
+ symbol.h eval.h error.h function.h keyword.h list.h number.h print.h \
+ prim.h stream.h syntax.h table.h values.h vector.h
+array.o: array.c array.h object.h object-small.h alloc.h env.h error.h \
+ list.h number.h prim.h symbol.h
+boolean.o: boolean.c boolean.h object.h object-small.h prim.h
+bytestring.o: bytestring.c bytestring.h object.h object-small.h alloc.h \
+ env.h globaldefs.h character.h error.h number.h prim.h symbol.h \
+ sequence.h
+character.o: character.c character.h object.h object-small.h number.h \
+ prim.h
+class.o: class.c class.h symbol.h object.h object-small.h alloc.h env.h \
+ apply.h array.h boolean.h bytestring.h classprec.h classprec-ll.h \
+ deque.h error.h eval.h function.h globaldefs.h keyword.h list.h number.h \
+ prim.h slot.h table.h values.h vector.h
+classprec.o: classprec.c classprec-ll.c alloc.h object.h object-small.h \
+ env.h classprec.h classprec-ll.h class.h symbol.h error.h list.h \
+ number.h print.h stream.h
+classprec-clos.o: classprec-clos.c classprec.h classprec-ll.h object.h \
+ object-small.h class.h symbol.h error.h list.h print.h
+classprec-ll.o: classprec-ll.c alloc.h object.h object-small.h env.h \
+ classprec.h classprec-ll.h class.h symbol.h error.h list.h number.h \
+ print.h stream.h
+deque.o: deque.c deque.h object.h object-small.h globaldefs.h error.h \
+ list.h prim.h symbol.h sequence.h
+dylan.tab.o: dylan.tab.c boolean.h object.h object-small.h bytestring.h \
+ error.h globaldefs.h list.h number.h symbol.h table.h vector.h yystype.h \
+ dylan_lexer.h
+error.o: error.c error.h object.h object-small.h alloc.h env.h apply.h \
+ bytestring.h class.h symbol.h eval.h list.h number.h parse.h prim.h \
+ print.h read.h stream.h yystype.h dylan_lexer.h
+env.o: env.c env.h object.h object-small.h alloc.h bytestring.h class.h \
+ symbol.h error.h eval.h function.h keyword.h list.h number.h prim.h \
+ print.h stream.h table.h
+eval.o: eval.c eval.h object.h object-small.h env.h alloc.h apply.h \
+ error.h list.h number.h print.h stream.h syntax.h
+file.o: file.c file.h object.h object-small.h dylan_lexer.h env.h eval.h \
+ error.h foreign_ptr.h list.h parse.h prim.h read.h
+function.o: function.c function.h object.h object-small.h apply.h class.h \
+ symbol.h env.h error.h eval.h keyword.h list.h number.h prim.h table.h \
+ values.h vector.h
+foreign_ptr.o: foreign_ptr.c foreign_ptr.h object.h object-small.h
+keyword.o: keyword.c keyword.h object.h object-small.h bytestring.h \
+ list.h prim.h symbol.h
+lex.yy.o: lex.yy.c alloc.h object.h object-small.h env.h bytestring.h \
+ character.h dylan.tab.h globaldefs.h list.h number.h symbol.h yystype.h \
+ dylan_lexer.h
+list.o: list.c list.h object.h object-small.h apply.h boolean.h \
+ globaldefs.h error.h number.h prim.h symbol.h sequence.h
+main.o: main.c alloc.h object.h object-small.h env.h apply.h array.h \
+ boolean.h bytestring.h character.h class.h symbol.h deque.h \
+ dylan_lexer.h error.h eval.h file.h function.h globals.h globaldefs.h \
+ keyword.h list.h misc.h number.h parse.h print.h read.h slot.h syntax.h \
+ stream.h sys.h table.h values.h vector.h
+misc.o: misc.c misc.h object.h object-small.h alloc.h env.h prim.h
+number.o: number.c number.h object.h object-small.h prim.h values.h
+object.o: object.c object.h object-small.h error.h number.h
+parse.o: parse.c parse.h object.h object-small.h error.h print.h \
+ yystype.h dylan_lexer.h
+prim.o: prim.c prim.h object.h object-small.h alloc.h env.h bytestring.h \
+ error.h list.h symbol.h
+print.o: print.c print.h object.h object-small.h stream.h apply.h \
+ character.h error.h eval.h env.h globaldefs.h list.h number.h prim.h \
+ slot.h
+read.o: read.c
+sequence.o: sequence.c sequence.h object.h object-small.h globaldefs.h \
+ error.h
+slot.o: slot.c slot.h object.h object-small.h apply.h class.h symbol.h \
+ error.h eval.h env.h globaldefs.h keyword.h list.h prim.h vector.h
+stream.o: stream.c stream.h object.h object-small.h error.h prim.h
+symbol.o: symbol.c symbol.h object.h object-small.h alloc.h env.h \
+ bytestring.h
+syntax.o: syntax.c syntax.h object.h object-small.h alloc.h env.h apply.h \
+ boolean.h bytestring.h class.h symbol.h error.h eval.h keyword.h list.h \
+ function.h misc.h number.h print.h stream.h table.h values.h
+sys.o: sys.c sys.h object.h object-small.h bytestring.h error.h number.h \
+ prim.h values.h
+table.o: table.c table.h object.h object-small.h alloc.h env.h apply.h \
+ globaldefs.h error.h list.h number.h prim.h symbol.h
+values.o: values.c values.h object.h object-small.h alloc.h env.h error.h \
+ list.h prim.h
+vector.o: vector.c vector.h object.h object-small.h globaldefs.h alloc.h \
+ env.h error.h list.h number.h prim.h symbol.h sequence.h
