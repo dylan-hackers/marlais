@@ -265,10 +265,6 @@ PROGRAM = marlais
 $(PROGRAM): $(OBJS) $(GCOBJS)
 	$(CC) $(CFLAGS) -o $(PROGRAM) $ $(OBJS) $(GCOBJS) $(LIBS)
 
-# a target for building parser/scanner on the Mac under MachTen.
-mac: dylan.tab.c lex.yy.c
-	mactext dylan.tab.[ch] lex.yy.c
-
 lex.yy.c: dylan.l dylan.tab.h
 	flex $(FLEXFLAGS) dylan.l
 
@@ -281,10 +277,6 @@ dylan.tab.c: dylan.y
 
 $(INCDIRS)/gc.a:
 	cd $(INCDIRS); $(MAKE) CC=$(CC)
-
-NT_MAKEFILE: Makefile
-	mv NT_MAKEFILE NT_MAKEFILE.bak
-	sed -e '/#NOT-NT/s/^/# /' -e '/#NT/s/^# //' <Makefile >NT_MAKEFILE
 
 clean:
 	rm -rf $(OBJS)
@@ -299,31 +291,6 @@ depend:
 	gcc $(CFLAGS) -I$(INCDIRS) -MM *.c >> Makefile.new
 	mv Makefile Makefile.bak
 	mv Makefile.new Makefile
-
-dist:	depend $(SRCS) $(OTHER_FILES) $(DISTSUBDIRS)
-	mkdir -p $(DISTDIR)
-	cp -pr $(OTHER_FILES) $(SRCS) $(DISTDIR)
-	cp -pr $(GCDIST) $(DISTDIR)/gc
-
-ftp:	$(DISTDIR)
-	(cd $(DISTDIR)/.. ; \
-	tar cvf $(FTPDIR)/$(PROGRAM)-$(VERSION).tar $(PROGRAM)-$(VERSION) ; \
-	gzip <$(FTPDIR)/$(PROGRAM)-$(VERSION).tar >$(FTPDIR)/$(PROGRAM)-$(VERSION).tar.gz ; \
-	compress <$(FTPDIR)/$(PROGRAM)-$(VERSION).tar >$(FTPDIR)/$(PROGRAM)-$(VERSION).tar.Z ; \
-	shar  $(DISTDIR) > $(FTPDIR)/$(PROGRAM)-$(VERSION).shar ; \
-	)
-
-patch:
-	(cd $(DISTDIR)/.. ; diff -rc $(PREVIOUS_VERSION_DIR) $(DISTDIR) >$(PATCHFILE))
-
-checkin:
-	for x in $(SRCS) $(OTHER_C_FILES);\
-	 do (indent $$x; ci -l $$x); done ;\
-	ci -l $(OTHER_NONC_FILES); \
-	for x in $(NO_RCS_FILES); do (rm -f RCS/$$x,v); done
-
-ChangeLog: RCS/*
-	rlog -r$(PREVIOUS_RLOG_VERSION): RCS/* > ChangeLog
 
 # dependencies
 alloc.o : alloc.c alloc.h object.h env.h symbol.h $(INCDIRS)/gc.h error.h 
