@@ -2,6 +2,7 @@
 
 #include "object.h"
 
+#include "alloc.h"
 #include "error.h"
 #include "number.h"
 

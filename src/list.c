@@ -34,6 +34,7 @@
 
 #include "list.h"
 
+#include "alloc.h"
 #include "apply.h"
 #include "boolean.h"
 #include "globaldefs.h"

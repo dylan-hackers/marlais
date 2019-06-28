@@ -4,6 +4,7 @@
 
 #include "number.h"
 
+#include "alloc.h"
 #include "prim.h"
 #include "values.h"
 

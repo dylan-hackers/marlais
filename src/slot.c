@@ -2,6 +2,7 @@
 
 #include "slot.h"
 
+#include "alloc.h"
 #include "apply.h"
 #include "class.h"
 #include "error.h"

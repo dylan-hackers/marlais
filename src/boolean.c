@@ -33,6 +33,7 @@
 
 #include "boolean.h"
 
+#include "alloc.h"
 #include "prim.h"
 
 /* primitives */

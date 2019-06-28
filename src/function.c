@@ -35,6 +35,7 @@
 
 #include "function.h"
 
+#include "alloc.h"
 #include "apply.h"
 #include "class.h"
 #include "env.h"

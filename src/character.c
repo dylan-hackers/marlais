@@ -33,6 +33,7 @@
 
 #include "character.h"
 
+#include "alloc.h"
 #include "number.h"
 #include "prim.h"
 

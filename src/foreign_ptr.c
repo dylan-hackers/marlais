@@ -32,6 +32,8 @@
 
 #include "foreign_ptr.h"
 
+#include "alloc.h"
+
 #ifndef SMALL_OBJECTS
 Object
 make_foreign_ptr (void *ptr)
