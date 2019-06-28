@@ -56,12 +56,11 @@ allocate_object (size_t size)
 
 #ifndef SMALL_OBJECTS
     obj = (Object) GC_malloc (sizeof (struct object));
-
 #else
     obj = (Object) GC_malloc (size);
 #endif
     if (!obj) {
-	fatal ("internal error: memory allocation failure.");
+        fatal ("internal error: memory allocation failure.");
     }
     return (obj);
 }
@@ -74,7 +73,7 @@ allocate_frame (void)
     frame = (struct frame *) GC_malloc (sizeof (struct frame));
 
     if (!frame) {
-	fatal ("internal error: memory allocation failure.");
+        fatal ("internal error: memory allocation failure.");
     }
     return (frame);
 }
@@ -87,7 +86,7 @@ allocate_binding (void)
     binding = (struct binding *) GC_malloc (sizeof (struct binding));
 
     if (!binding) {
-	fatal ("internal error: memory allocation failure.");
+        fatal ("internal error: memory allocation failure.");
     }
     return (binding);
 }
@@ -98,10 +97,10 @@ allocate_module_binding (void)
     struct module_binding *module_binding;
 
     module_binding =
-	(struct module_binding *) GC_malloc (sizeof (struct module_binding));
+    (struct module_binding *) GC_malloc (sizeof (struct module_binding));
 
     if (!module_binding) {
-	fatal ("internal error: memory allocation failure.");
+        fatal ("internal error: memory allocation failure.");
     }
     return (module_binding);
 }
@@ -114,7 +113,7 @@ allocate_symtab (void)
     entry = (struct symtab *) GC_malloc (sizeof (struct symtab));
 
     if (!entry) {
-	fatal ("internal error: memory allocation failure.");
+        fatal ("internal error: memory allocation failure.");
     }
     return (entry);
 }
@@ -126,7 +125,7 @@ checking_malloc (size_t size)
 
     ptr = (void *) GC_malloc (size);
     if (!ptr) {
-	fatal ("internal error: memory allocation failure");
+        fatal ("internal error: memory allocation failure");
     }
     return (ptr);
 }
@@ -136,7 +135,7 @@ checking_realloc (void *ptr, size_t total_size)
 {
     ptr = (void *) GC_realloc (ptr, total_size);
     if (!ptr) {
-	fatal ("internal error: memory allocation failure");
+        fatal ("internal error: memory allocation failure");
     }
     return (ptr);
 }
@@ -150,7 +149,7 @@ checking_strdup (char *str)
     size = strlen (str) + 1;
     copied_str = (char *) GC_malloc_atomic (size);
     if (!copied_str) {
-	fatal ("internal error: memory allocation failure");
+        fatal ("internal error: memory allocation failure");
     }
     strcpy (copied_str, str);
     return (copied_str);
@@ -163,7 +162,7 @@ allocate_string (size_t size)
 
     str = (char *) GC_malloc_atomic (size);
     if (!str) {
-	fatal ("internal error: memory allocation failure.");
+        fatal ("internal error: memory allocation failure.");
     }
     return (str);
 }
