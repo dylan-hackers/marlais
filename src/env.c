@@ -107,8 +107,8 @@ add_top_lvl_binding1(Object sym, Object val, int constant, int exported)
     warning ("Symbol already defined. Previous value", sym,
 	     *(old_binding->val), NULL);
   }
-  binding->val = (Object *) allocate_object (sizeof (Object *));
-  
+  binding->val = (Object *) marlais_allocate_memory (sizeof (Object *));
+
   *(binding->val) = val;
 
   i = h = 0;
@@ -182,8 +182,8 @@ add_bindings (Object syms, Object vals, int constant, struct frame *to_frame)
     binding->sym = CAR (syms);
     /* ??? */
     binding->type = object_class;
-    binding->val = (Object *) allocate_object (sizeof (Object *));
-    
+    binding->val = (Object *) marlais_allocate_memory (sizeof (Object *));
+
     *(binding->val) = CAR (vals);
 
     binding->props &= !IMPORTED_BINDING;
@@ -214,7 +214,7 @@ add_binding (Object sym, Object val, int constant, struct frame *to_frame)
 	binding->sym = sym;
 	binding->type = object_class;
     }
-    binding->val = (Object *) allocate_object (sizeof (Object *));
+    binding->val = (Object *) marlais_allocate_memory (sizeof (Object *));
 
     if (!instance (val, binding->type)) {
 	error ("add_binding: value does not satisfy type constraint",
