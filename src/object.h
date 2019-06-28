@@ -36,7 +36,7 @@ enum objtype {
     Primitive, GenericFunction, Method, Function, NextMethod,
 
     /* misc */
-    EndOfFile, Values, Unspecified, Exit, Unwind, 
+    EndOfFile, Values, Unspecified, Exit, Unwind,
 #ifdef NO_COMMON_DYLAN_SPEC
 Stream,
 #endif
@@ -89,7 +89,7 @@ extern Object function_class, primitive_class, generic_function_class,
 extern Object class_class, table_entry_class, deque_entry_class;
 
 #ifdef NO_COMMON_DYLAN_SPEC
-stream_class, 
+stream_class,
 #endif
 
 /* from alloc.c */
