@@ -252,13 +252,13 @@ error (char *msg,...)
   while (obj) {
     print_object (make_integer(STDERR), obj, 0);
     obj = va_arg (args, Object);
-    
+
     if (obj) {
       fprintf (stderr, ", ");
     }
   }
   fprintf (stderr, ".\n");
-  
+
   jmp_buf_ptr = error_ok_return_push ();
   ret = (Object) setjmp (*jmp_buf_ptr);
   if (!NoDebug) {
@@ -296,7 +296,7 @@ error (char *msg,...)
 		   make_primitive ("fail", prim_0, fail_function),
 		   1,
 		   the_env);
-      
+
       if (!message_printed) {
 	help_function ();
 	message_printed = 1;
@@ -309,7 +309,7 @@ error (char *msg,...)
 	if (obj != unspecified_object) {
 	  Object symbol;
 	  char symbol_name[12];
-	  
+
 	  snprintf (symbol_name, 12, "$%i", sequence_num);
 	  symbol = make_symbol (symbol_name);
 	  add_top_level_binding (symbol, obj, 1);
@@ -374,7 +374,7 @@ warning (char *msg,...)
   while (obj) {
     print_object (make_integer(STDERR), obj, 0);
     obj = va_arg (args, Object);
-    
+
     if (obj) {
       fprintf (stderr, ", ");
     }
@@ -438,8 +438,8 @@ error_ok_return_pop (void)
 
   num_debug_contexts--;
   error_ok_return = error_ok_return->next;
-    
-  if(num_debug_contexts) { 
+
+  if(num_debug_contexts) {
     snprintf(prompt_buf, 20, "Debug[%d]> ", num_debug_contexts);
     prompt = prompt_buf;
   } else {
