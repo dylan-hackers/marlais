@@ -30,13 +30,12 @@ object_type (Object obj)
         case UNINITSUB:
             return (UninitializedSlotValue);
         default:
-            error ("object with unknown immediate tag",
-                make_integer (SUBPART (obj)),
-                0);
+            fatal ("internal error: object with unknown immediate tag");
         }
     } else {
         return (Integer);
     }
+	return (Uninitialized);
 }
 
 #else

@@ -10,6 +10,8 @@
 #include <setjmp.h>
 
 typedef enum {
+    Uninitialized = 0,
+
     /* booleans */
     True, False,
 
