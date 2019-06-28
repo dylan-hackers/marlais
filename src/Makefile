@@ -74,7 +74,7 @@ PREVIOUS_VERSION = 0.6.4
 PREVIOUS_RLOG_VERSION = marlais_0_6_4
 PREVIOUS_VERSION_DIR = $(PROGRAM)-$(PREVIOUS_VERSION)
 PATCHFILE = $(PROGRAM)-$(PREVIOUS_VERSION)-$(VERSION).diff
-INCDIRS = gc
+INCDIRS =
 
 MARLAIS_FLAGS = $(SYS_FLAG) \
 	$(STRCASECMP_FLAG) \
@@ -92,13 +92,12 @@ CC=gcc
 
 CFLAGS= -g -I$(INCDIRS) $(MARLAIS_FLAGS) $(CEXTRAS)
 
-LIBS=-lncurses -lreadline -lm
+LIBS=-lncurses -lreadline -lm -lgc
 
 FLEXFLAGS = -I
 BYACCFLAGS = -d -v -t
 
 DISTDIR = /tmp/marlais-$(VERSION)
-GCDIST = ../gc
 
 OBJS = 	alloc.o \
 	apply.o \
@@ -136,8 +135,6 @@ OBJS = 	alloc.o \
 	table.o \
 	values.o \
 	vector.o
-
-GCOBJS = $(INCDIRS)/gc.a
 
 CSRCS = alloc.c \
 	apply.c \
@@ -180,7 +177,7 @@ CSRCS = alloc.c \
 
 PROGRAM = marlais
 
-$(PROGRAM): $(OBJS) $(GCOBJS)
+$(PROGRAM): $(OBJS)
 	$(CC) $(CFLAGS) -o $(PROGRAM) $ $(OBJS) $(GCOBJS) $(LIBS)
 
 lex.yy.c: dylan.l dylan.tab.h
@@ -192,9 +189,6 @@ dylan.tab.c: dylan.y
 	yacc $(BYACCFLAGS) dylan.y
 	mv y.tab.c dylan.tab.c
 	mv y.tab.h dylan.tab.h
-
-$(INCDIRS)/gc.a:
-	cd $(INCDIRS); $(MAKE) CC=$(CC)
 
 clean:
 	rm -rf $(OBJS)
