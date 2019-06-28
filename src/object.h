@@ -1051,9 +1051,9 @@ struct foreign_ptr {
     void *ptr;
 };
 
-#define FOREIGNPTR(obj)      (((struct foreign_ptr *)obj)->foreign_ptr.ptr)
+#define FOREIGNPTR(obj)      (((struct foreign_ptr *)obj)->ptr)
 #define FOREIGNP(obj)        (POINTERP(obj) && (POINTERTYPE(obj) == ForeignPtr))
-#define FOREIGNTYPE(obj)     (((struct foreign_ptr *)obj)->foreign_ptr.type)
+#define FOREIGNTYPE(obj)     (((struct foreign_ptr *)obj)->type)
 
 struct environment {
     enum objtype type;
