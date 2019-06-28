@@ -405,8 +405,9 @@ make_class (Object obj,
   }
 
   if (!CLASSNAME (obj)) {
-    warning ("Making class name", debug_name, objectclass (debug_name));
-    CLASSNAME (obj) = make_symbol (BYTESTRVAL (debug_name));
+    CLASSNAME (obj) = make_symbol (debug_name);
+    // XXX what is this!?
+    //warning ("Making class name", CLASSNAME(obj), NULL);
   }
   /* initialize class and each-subclass slot objects */
   CLASSCSLOTS (obj) = allocate_object (sizeof (struct instance));
