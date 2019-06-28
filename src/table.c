@@ -90,9 +90,8 @@ init_table_prims (void)
 Object
 make_table (int size)
 {
-  Object obj = marlais_allocate_object (sizeof (struct table));
+  Object obj = marlais_allocate_object (ObjectTable, sizeof (struct table));
 
-  TABLETYPE (obj) = ObjectTable;
   TABLESIZE (obj) = size;
   TABLETABLE (obj) = (Object *) checking_malloc (sizeof (Object) * size);
   memset (TABLETABLE (obj), 0, sizeof (Object) * size);
@@ -103,9 +102,8 @@ make_table (int size)
 Object
 make_table_entry (int row, Object key, Object value, Object next)
 {
-  Object obj = marlais_allocate_object (sizeof (struct table_entry));
+  Object obj = marlais_allocate_object (TableEntry, sizeof (struct table_entry));
 
-  TETYPE (obj) = TableEntry;
   TEROW (obj) = row;
   TEKEY (obj) = key;
   TEVALUE (obj) = value;

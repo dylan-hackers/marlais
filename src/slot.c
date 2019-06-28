@@ -45,9 +45,8 @@ make_slot_descriptor (unsigned char properties, Object getter, Object setter,
 {
     Object obj;
 
-    obj = marlais_allocate_object (sizeof (struct slot_descriptor));
+    obj = marlais_allocate_object (SlotDescriptor, sizeof (struct slot_descriptor));
 
-    SLOTDTYPE (obj) = SlotDescriptor;
     SLOTDPROPS (obj) = properties;
     SLOTDGETTER (obj) = getter;
     SLOTDSETTER (obj) = setter;

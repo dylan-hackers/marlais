@@ -161,9 +161,8 @@ make_integer (int i)
     if (INT_ABS (i) <= MAX_SMALL_INT) {
 	Object obj;
 
-	obj = marlais_allocate_object (sizeof (struct object));
+	obj = marlais_allocate_object (Integer, sizeof (struct object));
 
-	TYPE (obj) = Integer;
 	INTVAL (obj) = i;
 	return (obj);
     } else
@@ -184,9 +183,8 @@ make_integer (int i)
 #ifndef SMALL_OBJECTS
     Object obj;
 
-    obj = marlais_allocate_object (sizeof (struct object));
+    obj = marlais_allocate_object (Integer, sizeof (struct object));
 
-    TYPE (obj) = Integer;
     INTVAL (obj) = i;
     return (obj);
 #else
@@ -200,9 +198,8 @@ make_ratio (int numerator, int denominator)
 {
     Object obj;
 
-    obj = marlais_allocate_object (sizeof (struct ratio));
+    obj = marlais_allocate_object (Ratio, sizeof (struct ratio));
 
-    RATIOTYPE (obj) = Ratio;
     RATIONUM (obj) = numerator;
     RATIODEN (obj) = denominator;
     return (obj);
@@ -213,9 +210,8 @@ make_dfloat (double d)
 {
     Object obj;
 
-    obj = marlais_allocate_object (sizeof (struct double_float));
+    obj = marlais_allocate_object (DoubleFloat, sizeof (struct double_float));
 
-    DFLOATTYPE (obj) = DoubleFloat;
     DFLOATVAL (obj) = d;
     return (obj);
 }

@@ -70,9 +70,8 @@ make_sov (Object el_list)
   Object obj, els;
   int size, i;
 
-  obj = marlais_allocate_object (sizeof (struct simple_object_vector));
+  obj = marlais_allocate_object (SimpleObjectVector, sizeof (struct simple_object_vector));
 
-  SOVTYPE (obj) = SimpleObjectVector;
   size = 0;
   els = el_list;
   while (PAIRP (els)) {
@@ -98,9 +97,8 @@ make_vector (int size, Object fill_obj)
   int i;
 
   /* actually fabricate the vector */
-  res = marlais_allocate_object (sizeof (struct simple_object_vector));
+  res = marlais_allocate_object (SimpleObjectVector, sizeof (struct simple_object_vector));
 
-  SOVTYPE (res) = SimpleObjectVector;
   SOVSIZE (res) = size;
   SOVELS (res) = (Object *) checking_malloc (size * sizeof (Object));
 

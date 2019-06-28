@@ -48,7 +48,7 @@ extern void *marlais_reallocate_memory (void *old_obj, size_t new_size);
 extern void *marlais_allocate_atomic (size_t size);
 
 /* allocate an object */
-extern Object marlais_allocate_object (size_t size);
+extern Object marlais_allocate_object (ObjectType type, size_t size);
 
 struct frame *allocate_frame (void);
 struct binding *allocate_binding (void);

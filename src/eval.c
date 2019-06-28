@@ -33,7 +33,7 @@ eval (Object obj)
 #ifdef SMALL_OBJECTS
     switch (POINTERTYPE (obj))
 #else
-    switch (TYPE (obj))
+    switch (object_type (obj))
 #endif
     {
     case True:

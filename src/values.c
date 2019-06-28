@@ -63,9 +63,8 @@ make_values (Object vals)
   if (EMPTYLISTP (vals)) {
     return unspecified_object;
   } else {
-    obj = marlais_allocate_object (sizeof (struct values));
+    obj = marlais_allocate_object (Values, sizeof (struct values));
 
-    VALUESTYPE (obj) = Values;
     VALUESNUM (obj) = list_length (vals);
     VALUESELS (obj) = (Object *)
       checking_malloc (VALUESNUM (obj) * sizeof (Object));
@@ -85,9 +84,8 @@ construct_values (int num,...)
   int i;
   va_list args;
 
-  obj = marlais_allocate_object (sizeof (struct values));
+  obj = marlais_allocate_object (Values, sizeof (struct values));
 
-  VALUESTYPE (obj) = Values;
   VALUESNUM (obj) = num;
   VALUESELS (obj) = (Object *) checking_malloc (num * sizeof (Object));
 

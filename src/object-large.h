@@ -1,6 +1,12 @@
 
 typedef struct object *Object;
 
+/* all objects are pointers */
+#define POINTERP(obj)    (1)
+/* and therefore have a type slot */
+#define POINTERTYPE(obj) ((obj)->type)
+
+
 #define TRUEP(obj)        ((obj)->type == True)
 #define FALSEP(obj)       ((obj)->type == False)
 
@@ -43,8 +49,9 @@ struct double_float {
 #define DFLOATP(obj)      ((obj)->type == DoubleFloat)
 #define DFLOATTYPE(obj)   ((obj)->type)
 
-#define EMPTYLISTP(obj)   ((obj)->type == EmptyList)
 #define NULLP(obj)        ((obj)->type == EmptyList)
+#define EMPTYLISTP(obj)   ((obj)->type == EmptyList)
+#define LISTP(obj)        (EMPTYLISTP(obj) || PAIRP(obj))
 
 struct pair {
     Object car, cdr;
@@ -453,7 +460,7 @@ struct object_handle {
 #define HDLTYPE(obj)     ((obj)->type)
 
 struct object {
-    enum objtype type;
+    ObjectType type;
     union {
 	struct integer integer;
 	struct big_integer big_integer;		/* <pcb> */
@@ -492,8 +499,3 @@ struct object {
 	struct object_handle object_handle;
     } u;
 };
-
-#define TYPE(obj)        ((obj)->type)
-#define POINTERTYPE(obj) ((obj)->type)
-#define LISTP(obj)       (NULLP(obj) || PAIRP(obj))
-#define POINTERP(obj)    (1)

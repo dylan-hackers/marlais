@@ -41,6 +41,9 @@ typedef uintptr_t DyUnsigned;
 #define UNSPECP(obj)        (IMMEDP(obj) && (SUBPART(obj) == UNSPECSUB))
 #define UNINITSLOTP(obj)    (IMMEDP(obj) && (SUBPART(obj) == UNINITSUB))
 
+#define NULLP(obj)       (EMPTYLISTP(obj))
+#define LISTP(obj)       (NULLP(obj) || PAIRP(obj))
+
 /* actual values of constant immediates
  */
 #define TRUEVAL         ((Object)((TRUESUB << 2)   | IMMEDTAG))
@@ -63,10 +66,17 @@ typedef uintptr_t DyUnsigned;
 #define MAKE_CHAR(ch)        ((Object)(((DyUnsigned)ch << 6) | (CHARSUB << 2) | IMMEDTAG))
 #define MAKE_INT(i)          ((Object)((i << 2) | INTEGERTAG))
 
+/* common structure of all heap objects */
+struct object {
+  ObjectType type;
+};
+
+#define POINTERTYPE(obj)     (((struct object *)obj)->type)
+
 /* BigInteger support. <pcb> */
 
 struct big_integer {
-    enum objtype type;
+    ObjectType type;
     void *val;
 };
 
@@ -75,7 +85,7 @@ struct big_integer {
 #define BIGINTTYPE(obj)   (((struct big_integer *)obj)->type)
 
 struct ratio {
-    enum objtype type;
+    ObjectType type;
     int numerator, denominator;
 };
 
@@ -85,7 +95,7 @@ struct ratio {
 #define RATIOP(obj)       (POINTERP(obj) && (RATIOTYPE(obj) == Ratio))
 
 struct double_float {
-    enum objtype type;
+    ObjectType type;
     double val;
 };
 
@@ -94,7 +104,7 @@ struct double_float {
 #define DFLOATP(obj)      (POINTERP(obj) && (DFLOATTYPE(obj) == DoubleFloat))
 
 struct pair {
-    enum objtype type;
+    ObjectType type;
     Object car, cdr;
 };
 
@@ -104,7 +114,7 @@ struct pair {
 #define PAIRP(obj)        (POINTERP(obj) && (PAIRTYPE(obj) == Pair))
 
 struct byte_string {
-    enum objtype type;
+    ObjectType type;
     int size;
     char *val;
 };
@@ -115,7 +125,7 @@ struct byte_string {
 #define BYTESTRP(obj)     (POINTERP(obj) && (BYTESTRTYPE(obj) == ByteString))
 
 struct simple_object_vector {
-    enum objtype type;
+    ObjectType type;
     int size;
     Object *els;
 };
@@ -126,7 +136,7 @@ struct simple_object_vector {
 #define SOVP(obj)         (POINTERP(obj) && (SOVTYPE(obj) == SimpleObjectVector))
 
 struct table_entry {
-    enum objtype type;
+    ObjectType type;
     int row;
     Object key;
     Object value;
@@ -141,7 +151,7 @@ struct table_entry {
 #define TEP(obj)          (POINTERP(obj) && (TETYPE(obj) == TableEntry))
 
 struct table {
-    enum objtype type;
+    ObjectType type;
     int size;
     Object *the_table;
 };
@@ -152,7 +162,7 @@ struct table {
 #define TABLEP(obj)       (POINTERP(obj) && (TABLETYPE(obj) == ObjectTable))
 
 struct deque_entry {
-    enum objtype type;
+    ObjectType type;
     Object value;
     Object prev, next;
 };
@@ -164,7 +174,7 @@ struct deque_entry {
 #define DEP(obj)          (POINTERP(obj) && (DETYPE(obj) == Deque))
 
 struct deque {
-    enum objtype type;
+    ObjectType type;
     Object first, last;
 };
 
@@ -174,7 +184,7 @@ struct deque {
 #define DEQUEP(obj)       (POINTERP(obj) && (DEQUETYPE(obj) == Deque))
 
 struct array {
-    enum objtype type;
+    ObjectType type;
     int size;
     Object dimensions;
     Object *elements;
@@ -191,7 +201,7 @@ enum condtype {
     SimpleRestart, Abort
 };
 struct condition {
-    enum objtype type;
+    ObjectType type;
     enum condtype condtype;
 };
 
@@ -200,7 +210,7 @@ struct condition {
 #define CONDP(obj)        (POINTERP(obj) && (CONDTYPE(obj) == Condition))
 
 struct symbol {
-    enum objtype type;
+    ObjectType type;
     char *name;
 };
 
@@ -211,7 +221,7 @@ struct symbol {
 #define KEYWORDP(obj)     (POINTERP(obj) && (SYMBOLTYPE(obj) == Keyword))
 
 struct slot_descriptor {
-    enum objtype type;
+    ObjectType type;
     unsigned char properties;
     Object getter_name;
     Object setter_name;
@@ -242,7 +252,7 @@ struct slot_descriptor {
 #define SLOTDTYPE(obj)         (((struct slot_descriptor *)obj)->type)
 
 struct clas {
-    enum objtype type;
+    ObjectType type;
     Object name;
     Object supers;
     Object subs;
@@ -289,7 +299,7 @@ struct clas {
 #define CLASSINDEX(obj)     (((struct clas *)obj)->ordinal_index)
 
 struct instance {
-    enum objtype type;
+    ObjectType type;
     Object class;
     Object *slots;
 };
@@ -300,7 +310,7 @@ struct instance {
 #define INSTANCEP(obj)    (POINTERP(obj) && (INSTTYPE(obj) == Instance))
 
 struct singleton {
-    enum objtype type;
+    ObjectType type;
     Object val;
 };
 
@@ -310,7 +320,7 @@ struct singleton {
 
 
 struct limited_int_type {
-    enum objtype type;
+    ObjectType type;
     unsigned char properties;
     int min, max;
 };
@@ -326,7 +336,7 @@ struct limited_int_type {
 #define LIMINTTYPE(obj)   (((struct limited_int_type *)obj)->type)
 
 struct union_type {
-    enum objtype type;
+    ObjectType type;
     Object list;
 };
 
@@ -350,7 +360,7 @@ struct primitive {
 };
 
 struct prim {
-    enum objtype type;
+    ObjectType type;
     struct primitive p;
 };
 
@@ -361,7 +371,7 @@ struct prim {
 #define PRIMP(obj)        (POINTERP(obj) && (PRIMTYPE(obj) == Primitive))
 
 struct generic_function {
-    enum objtype type;
+    ObjectType type;
     Object name;
     unsigned char properties;
     Object required_params;
@@ -393,7 +403,7 @@ struct generic_function {
 #define GFUNP(obj)        (POINTERP(obj) && (GFTYPE(obj) == GenericFunction))
 
 struct method {
-    enum objtype type;
+    ObjectType type;
     Object name;
     unsigned char properties;
     Object required_params;
@@ -424,7 +434,7 @@ struct method {
 #define METHODP(obj)        (POINTERP(obj) && (METHTYPE(obj) == Method))
 
 struct next_method {
-    enum objtype type;
+    ObjectType type;
     Object generic_function;
     Object next_method_;
     Object rest_methods;
@@ -439,7 +449,7 @@ struct next_method {
 #define NMETHP(obj)       (POINTERP(obj) && (NMTYPE(obj) == NextMethod))
 
 struct values {
-    enum objtype type;
+    ObjectType type;
     int num;
     Object *els;
 };
@@ -452,7 +462,7 @@ struct values {
 #define UNSPECIFIEDP(obj) ((obj)->type == Unspecified)
 
 struct exitproc {
-    enum objtype type;
+    ObjectType type;
     Object sym;
     jmp_buf *ret;
     struct binding *exit_binding;
@@ -465,7 +475,7 @@ struct exitproc {
 #define EXITP(obj)        (POINTERP(obj) && (EXITTYPE(obj) == Exit))
 
 struct unwind {
-    enum objtype type;
+    ObjectType type;
     Object body;
 };
 
@@ -478,7 +488,7 @@ enum streamtype {
     Input, Output
 };
 struct stream {
-    enum objtype type;
+    ObjectType type;
     enum streamtype stream_type;
     FILE *fp;
 };
@@ -491,15 +501,10 @@ struct stream {
 #define OUTPUTSTREAMP(obj) (STREAMP(obj) && (STREAMSTYPE(obj) == Output))
 #endif
 
-#define TYPE(obj)        (object_type (obj))
-#define POINTERTYPE(obj) (PAIRTYPE(obj))
-#define NULLP(obj)       (EMPTYLISTP(obj))
-#define LISTP(obj)       (NULLP(obj) || PAIRP(obj))
-
 /* <pcb> a wrapper around a system poiter. */
 
 struct foreign_ptr {
-    enum objtype type;
+    ObjectType type;
     void *ptr;
 };
 
@@ -508,7 +513,7 @@ struct foreign_ptr {
 #define FOREIGNTYPE(obj)     (((struct foreign_ptr *)obj)->type)
 
 struct environment {
-    enum objtype type;
+    ObjectType type;
     struct frame *env;
 };
 
@@ -517,7 +522,7 @@ struct environment {
 #define ENVIRONMENTTYPE(obj)     (((struct environment *)obj)->type)
 
 struct object_handle {
-    enum objtype type;
+    ObjectType type;
     Object the_object;
 };
 

@@ -78,9 +78,8 @@ init_string_prims (void)
 Object
 make_byte_string (char *str)
 {
-    Object obj = marlais_allocate_object (sizeof (struct byte_string));
+    Object obj = marlais_allocate_object (ByteString, sizeof (struct byte_string));
 
-    BYTESTRTYPE (obj) = ByteString;
     BYTESTRSIZE (obj) = strlen (str);
     BYTESTRVAL (obj) = checking_strdup (str);
     return (obj);
@@ -106,9 +105,8 @@ make_string_driver (Object args)
   }
 
   /* actually fabricate the string */
-  res = marlais_allocate_object (sizeof (struct byte_string));
+  res = marlais_allocate_object (ByteString, sizeof (struct byte_string));
 
-  BYTESTRTYPE (res) = ByteString;
   BYTESTRSIZE (res) = size;
   BYTESTRVAL (res) = (char *) checking_malloc ((size * sizeof (char)) + 1);
 

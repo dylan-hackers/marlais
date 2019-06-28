@@ -9,7 +9,7 @@
 #include <stdint.h>
 #include <setjmp.h>
 
-enum objtype {
+typedef enum {
     /* booleans */
     True, False,
 
@@ -44,7 +44,7 @@ Stream,
     ObjectHandle,
     ForeignPtr,			/* <pcb> */
     Environment
-};
+} ObjectType;
 
 #ifdef SMALL_OBJECTS
 #include "object-small.h"
@@ -113,6 +113,6 @@ extern Object allocate_object (size_t size);
 #define MAX_SYMBOL_SIZE 1024
 #define MAX_NUMBER_SIZE 255
 
-enum objtype object_type (Object obj);
+ObjectType object_type (Object obj);
 
 #endif

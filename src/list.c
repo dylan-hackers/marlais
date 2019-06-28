@@ -118,9 +118,8 @@ initialize_empty_list ()
     Object obj;
 
     if (___empty_list == NULL) {
-	___empty_list = marlais_allocate_object (sizeof (struct object));
+     ___empty_list = marlais_allocate_object (EmptyList, sizeof (struct object));
 
-	TYPE (___empty_list) = EmptyList;
     } else {
 	error ("initialize_empty_list: second attempt at initialization",
 	       NULL);
@@ -173,9 +172,8 @@ make_list_driver (Object args)
 Object
 cons (Object car, Object cdr)
 {
-    Object obj = marlais_allocate_object (sizeof (struct pair));
+    Object obj = marlais_allocate_object (Pair, sizeof (struct pair));
 
-    PAIRTYPE (obj) = Pair;
     CAR (obj) = car;
     CDR (obj) = cdr;
     return (obj);

@@ -819,9 +819,8 @@ define_class_eval (Object form)
    * Must introduce binding for the class before eval'ing
    * the slot definitions.
    */
-  obj = marlais_allocate_object (sizeof (struct clas));
+  obj = marlais_allocate_object (Class, sizeof (struct clas));
 
-  CLASSTYPE (obj) = Class;
   CLASSNAME (obj) = name;
   add_top_level_binding (name, obj, 0);
   supers = map (eval, CAR (tmp_form));
@@ -1267,7 +1266,7 @@ get_vars_and_inits (Object var_forms,
 	  error ("for: badly formed numeric clause", var_form, NULL);
 	}
       }
-      switch (TYPE (by)) {
+      switch (object_type (by)) {
       case Integer:
 	negative = (INTVAL (by) >= 0) ? false_object : true_object;
 	break;

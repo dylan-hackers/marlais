@@ -316,7 +316,7 @@ error (char *msg,...)
 	  fprintf (stdout, " $%i = ", sequence_num);
 	  sequence_num++;
 	}
-	if (TYPE (obj) == Values) {
+	if (object_type (obj) == Values) {
 	  print_obj (make_integer(STDOUT), obj);
 	  if (VALUESNUM (obj)) {
 	    fprintf (stdout, "\n");

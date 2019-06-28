@@ -134,7 +134,7 @@ print_object (Object fd, Object obj, int escaped)
 {
     FILE* fp = file_from_fd(fd);
 
-    switch (TYPE (obj)) {
+    switch (object_type (obj)) {
     case True:
 	fprintf (fp, "#t");
 	break;
@@ -292,7 +292,7 @@ print_obj (Object fd, Object obj)
 {
     print_object (fd, obj, 1);
 #if 0
-    if (TYPE (obj) != Values || VALUESNUM (obj)) {
+    if (object_type (obj) != Values || VALUESNUM (obj)) {
 	printf ("\n");
     }
 #endif
@@ -304,7 +304,7 @@ print_obj_escaped (Object fd, Object obj)
 {
     print_object (fd, obj, 0);
 #if 0
-    if (TYPE (obj) != Values || VALUESNUM (obj)) {
+    if (object_type (obj) != Values || VALUESNUM (obj)) {
 	printf ("\n");
     }
 #endif
@@ -472,7 +472,7 @@ print_class_slot_values (Object fd, Object class, int escaped, int first)
     }
 }
 
-/* changing this to be like other Dylan implementations -- if you 
+/* changing this to be like other Dylan implementations -- if you
  * want slot values, write a print-object method on the class you're
  * interested in -- dma */
 static void
@@ -522,7 +522,7 @@ print_param (Object fd, Object param, int escaped)
 }
 
 /* param_list and unparen_list are the same function */
-static void 
+static void
 print_list_helper(Object fd, Object members, int escaped,
 	          void (*print_fn)(Object, Object, int), const char* separator)
 {
@@ -689,7 +689,7 @@ print_slot_descriptor (Object fd, Object slotd, int escaped)
 }
 
 static int cur_el;
-static void 
+static void
 print_array_help (Object fd, Object dims, Object *els, int escaped);
 
 static void
@@ -750,7 +750,7 @@ print_type_name (Object fd, Object obj, int escaped)
 {
     FILE *fp = file_from_fd(fd);
 
-    switch (TYPE (obj)) {
+    switch (object_type (obj)) {
     case Class:
 	fprintf (fp, "%s", SYMBOLNAME (CLASSNAME (obj)));
 	break;

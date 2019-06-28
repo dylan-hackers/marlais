@@ -85,14 +85,18 @@ marlais_allocate_atomic (size_t size)
 
 
 Object
-marlais_allocate_object (size_t size)
+marlais_allocate_object (ObjectType type, size_t size)
 {
     Object obj;
+    /* allocate memory for the object */
 #ifndef SMALL_OBJECTS
     obj = (Object) marlais_allocate_memory (sizeof (struct object));
 #else
     obj = (Object) marlais_allocate_memory (size);
 #endif
+    /* initialize the type field */
+    POINTERTYPE(obj) = type;
+    /* return result */
     return (obj);
 }
 

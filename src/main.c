@@ -108,7 +108,7 @@ static int read_eval_print(FILE* f, int dbg_lvl, int bind_constant_p)
 
   if ((obj = parse_object (f, dbg_lvl)) && (obj != eof_object)) {
     obj = eval (obj);
-    if(TYPE(obj) == Values) {
+    if(POINTERP(obj) && POINTERTYPE(obj) == Values) {
       vals = VALUESNUM(obj);
     }
     else {

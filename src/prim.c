@@ -30,12 +30,11 @@ make_primitive (char *name, enum primtype type, Object (*fun) ())
   Object obj;
 
 #ifndef SMALL_OBJECTS
-  obj = marlais_allocate_object (sizeof (struct primitive));
+  obj = marlais_allocate_object (Primitive, sizeof (struct primitive));
 #else
-  obj = marlais_allocate_object (sizeof (struct prim));
+  obj = marlais_allocate_object (Primitive, sizeof (struct prim));
 #endif
 
-  PRIMTYPE (obj) = Primitive;
   PRIMNAME (obj) = checking_strdup (name);
   PRIMPTYPE (obj) = type;
   PRIMFUN (obj) = fun;
