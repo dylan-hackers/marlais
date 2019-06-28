@@ -38,8 +38,6 @@
 #include "gc.h"
 #include "error.h"
 
-extern void GC_init (void);
-
 /* function definitions */
 
 void
