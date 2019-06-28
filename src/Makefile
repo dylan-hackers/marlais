@@ -186,13 +186,13 @@ dylan.tab.h dylan.tab.c: dylan.y
 	$(BISON) $(BISONFLAGS) dylan.y
 
 clean:
-	rm -rf $(OBJS)
+	rm -rf $(OBJS) dylan.tab.c dylan.tab.h lex.yy.c
 
 real_clean: clean
 	rm dylan.tab.c lex.yy.c
 	cd $(INCDIRS); $(MAKE) clean
 
-depend:
+depend: dylan.tab.c lex.yy.c
 	awk '/^# dependencies/ {exit 0;} {print $0;} END{print "# dependencies";}' <Makefile >Makefile.new
 	$(CC) $(CFLAGS) -I$(INCDIRS) -E -MM $(CSRCS) >> Makefile.new
 	mv Makefile Makefile.bak
