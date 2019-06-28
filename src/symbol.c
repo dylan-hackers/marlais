@@ -149,9 +149,12 @@ intern_symbol (char *name)
   sym = marlais_allocate_object (Symbol, sizeof (struct symbol));
 
   SYMBOLNAME (sym) = checking_strdup (name);
-  entry = (struct symtab *) allocate_symtab ();
+
+  entry = MARLAIS_ALLOCATE_STRUCT (struct symtab);
   entry->sym = sym;
   entry->next = symbol_table[h];
+
   symbol_table[h] = entry;
+
   return (sym);
 }

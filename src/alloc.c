@@ -83,7 +83,6 @@ marlais_allocate_atomic (size_t size)
     return obj;
 }
 
-
 Object
 marlais_allocate_object (ObjectType type, size_t size)
 {
@@ -100,58 +99,6 @@ marlais_allocate_object (ObjectType type, size_t size)
     return (obj);
 }
 
-struct frame *
-allocate_frame (void)
-{
-    struct frame *frame;
-
-    frame = (struct frame *) GC_malloc (sizeof (struct frame));
-
-    if (!frame) {
-        fatal ("internal error: memory allocation failure.");
-    }
-    return (frame);
-}
-
-struct binding *
-allocate_binding (void)
-{
-    struct binding *binding;
-
-    binding = (struct binding *) GC_malloc (sizeof (struct binding));
-
-    if (!binding) {
-        fatal ("internal error: memory allocation failure.");
-    }
-    return (binding);
-}
-
-struct module_binding *
-allocate_module_binding (void)
-{
-    struct module_binding *module_binding;
-
-    module_binding =
-    (struct module_binding *) GC_malloc (sizeof (struct module_binding));
-
-    if (!module_binding) {
-        fatal ("internal error: memory allocation failure.");
-    }
-    return (module_binding);
-}
-
-struct symtab *
-allocate_symtab (void)
-{
-    struct symtab *entry;
-
-    entry = (struct symtab *) GC_malloc (sizeof (struct symtab));
-
-    if (!entry) {
-        fatal ("internal error: memory allocation failure.");
-    }
-    return (entry);
-}
 
 void *
 checking_malloc (size_t size)

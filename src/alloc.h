@@ -50,10 +50,10 @@ extern void *marlais_allocate_atomic (size_t size);
 /* allocate an object */
 extern Object marlais_allocate_object (ObjectType type, size_t size);
 
-struct frame *allocate_frame (void);
-struct binding *allocate_binding (void);
-struct module_binding *allocate_module_binding (void);
-struct symtab *allocate_symtab (void);
+/* allocate a data structure */
+#define MARLAIS_ALLOCATE_STRUCT(type) \
+  ((type *)marlais_allocate_memory(sizeof(type)))
+
 void *checking_malloc (size_t size);
 void *checking_realloc (void *ptr, size_t size);
 char *checking_strdup (char *str);

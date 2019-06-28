@@ -60,14 +60,14 @@ initialize_namespace (Object owner)
 {
   struct frame *frame;
 
-  frame = (struct frame *) allocate_frame ();
+  frame = MARLAIS_ALLOCATE_STRUCT (struct frame);
   frame->size = TOP_LEVEL_SIZE;
   frame->owner = owner;
   frame->bindings =
     (struct binding **) checking_malloc (TOP_LEVEL_SIZE * sizeof (struct binding));
-
   frame->next = NULL;
   frame->top_level_env = frame->bindings;
+
   return frame;
 }
 
@@ -84,7 +84,8 @@ add_top_lvl_binding1(Object sym, Object val, int constant, int exported)
   unsigned h;
   char *str;
 
-  binding = (struct binding *) allocate_binding ();
+  binding = MARLAIS_ALLOCATE_STRUCT (struct binding);
+
   if (PAIRP (sym)) {
     binding->sym = CAR (sym);
     binding->type = eval (SECOND (sym));
@@ -137,12 +138,13 @@ push_scope (Object owner)
   struct frame *frame;
 
   /* push a new frame */
-  frame = (struct frame *) allocate_frame ();
+  frame = MARLAIS_ALLOCATE_STRUCT (struct frame);
   frame->owner = owner;
   frame->size = 0;
   frame->bindings = NULL;
   frame->next = the_env;
   frame->top_level_env = the_env->top_level_env;
+
   the_env = frame;
   eval_stack->frame = frame;
 }
@@ -178,7 +180,7 @@ add_bindings (Object syms, Object vals, int constant, struct frame *to_frame)
     if ((!syms) || (!vals)) {
       error ("mismatched number of symbols and values", NULL);
     }
-    binding = (struct binding *) allocate_binding ();
+    binding = MARLAIS_ALLOCATE_STRUCT (struct binding);
     binding->sym = CAR (syms);
     /* ??? */
     binding->type = object_class;
@@ -206,7 +208,7 @@ add_binding (Object sym, Object val, int constant, struct frame *to_frame)
     struct frame *frame;
     struct binding *binding;
 
-    binding = (struct binding *) allocate_binding ();
+    binding = MARLAIS_ALLOCATE_STRUCT (struct binding);
     if (PAIRP (sym)) {
 	binding->sym = CAR (sym);
 	binding->type = eval (SECOND (sym));
@@ -434,7 +436,7 @@ new_module (Object module_name)
 {
     struct module_binding *this_module;
 
-    this_module = (struct module_binding *) allocate_module_binding ();
+    this_module = MARLAIS_ALLOCATE_STRUCT (struct module_binding);
     this_module->sym = module_name;
     this_module->namespace = initialize_namespace (module_name);
     this_module->exported_bindings = make_table (DEFAULT_TABLE_SIZE);
@@ -513,8 +515,7 @@ import_top_level_binding (struct binding *import_binding,
 {
     struct binding *binding;
 
-    binding = (struct binding *) allocate_binding ();
-
+    binding = MARLAIS_ALLOCATE_STRUCT (struct binding);
     binding->type = import_binding->type;
 /*    binding->props |= import_binding->props & CONSTANT_BINDING; */
     binding->props |= import_binding->props;
