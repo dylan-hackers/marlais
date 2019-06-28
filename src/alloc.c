@@ -31,12 +31,16 @@
 
 #include <string.h>
 
+#include <gc.h>
+
 #include "alloc.h"
 
+/* for throwing errors */
+#include "error.h"
+
+/* for struct sizes */
 #include "env.h"
 #include "symbol.h"
-#include "gc.h"
-#include "error.h"
 
 /* function definitions */
 
