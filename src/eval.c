@@ -189,7 +189,7 @@ void
 push_eval_stack (Object obj)
 {
     struct eval_stack *tmp =
-    (struct eval_stack *) checking_malloc (sizeof (struct eval_stack));
+    (struct eval_stack *) marlais_allocate_memory (sizeof (struct eval_stack));
 
     tmp->next = eval_stack;
     tmp->context = obj;

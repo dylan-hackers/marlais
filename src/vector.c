@@ -79,7 +79,7 @@ make_sov (Object el_list)
     els = CDR (els);
   }
   SOVSIZE (obj) = size;
-  SOVELS (obj) = (Object *) checking_malloc (size * sizeof (Object));
+  SOVELS (obj) = (Object *) marlais_allocate_memory (size * sizeof (Object));
 
   els = el_list;
   i = 0;
@@ -100,7 +100,7 @@ make_vector (int size, Object fill_obj)
   res = marlais_allocate_object (SimpleObjectVector, sizeof (struct simple_object_vector));
 
   SOVSIZE (res) = size;
-  SOVELS (res) = (Object *) checking_malloc (size * sizeof (Object));
+  SOVELS (res) = (Object *) marlais_allocate_memory (size * sizeof (Object));
 
   for (i = 0; i < size; ++i) {
     SOVELS (res)[i] = fill_obj;

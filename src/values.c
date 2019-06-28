@@ -67,7 +67,7 @@ make_values (Object vals)
 
     VALUESNUM (obj) = list_length (vals);
     VALUESELS (obj) = (Object *)
-      checking_malloc (VALUESNUM (obj) * sizeof (Object));
+      marlais_allocate_memory (VALUESNUM (obj) * sizeof (Object));
 
     for (i = 0; i < VALUESNUM (obj); ++i) {
       VALUESELS (obj)[i] = CAR (vals);
@@ -87,7 +87,7 @@ construct_values (int num,...)
   obj = marlais_allocate_object (Values, sizeof (struct values));
 
   VALUESNUM (obj) = num;
-  VALUESELS (obj) = (Object *) checking_malloc (num * sizeof (Object));
+  VALUESELS (obj) = (Object *) marlais_allocate_memory (num * sizeof (Object));
 
   va_start (args, num);
   for (i = 0; i < num; ++i) {

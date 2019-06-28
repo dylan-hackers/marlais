@@ -100,28 +100,6 @@ marlais_allocate_object (ObjectType type, size_t size)
 }
 
 
-void *
-checking_malloc (size_t size)
-{
-    void *ptr;
-
-    ptr = (void *) GC_malloc (size);
-    if (!ptr) {
-        fatal ("internal error: memory allocation failure");
-    }
-    return (ptr);
-}
-
-void *
-checking_realloc (void *ptr, size_t total_size)
-{
-    ptr = (void *) GC_realloc (ptr, total_size);
-    if (!ptr) {
-        fatal ("internal error: memory allocation failure");
-    }
-    return (ptr);
-}
-
 char *
 checking_strdup (char *str)
 {

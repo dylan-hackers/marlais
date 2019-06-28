@@ -613,7 +613,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
    * Create a vector of slot values (slots)
    * from the list of modified slot descriptors (init_slotds)
    */
-  slots = (Object *) checking_malloc (list_length (init_slotds) *
+  slots = (Object *) marlais_allocate_memory (list_length (init_slotds) *
 				      sizeof (Object));
 
   tmp_slotds = init_slotds;

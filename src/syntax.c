@@ -244,7 +244,7 @@ install_syntax_entry (char *name, syntax_fun fun)
     sym = make_symbol (name);
     h = ((int) sym) % SYNTAX_TABLE_SIZE;
     entry = (struct syntax_entry *)
-	checking_malloc (sizeof (struct syntax_entry));
+	marlais_allocate_memory (sizeof (struct syntax_entry));
 
     entry->sym = sym;
     entry->fun = fun;

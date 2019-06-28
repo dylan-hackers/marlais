@@ -77,7 +77,7 @@ make_exit (Object sym)
 {
     Object obj = marlais_allocate_object (Exit, sizeof (struct exitproc));
     EXITSYM (obj) = sym;
-    EXITRET (obj) = (jmp_buf *) checking_malloc (sizeof (jmp_buf));
+    EXITRET (obj) = (jmp_buf *) marlais_allocate_memory (sizeof (jmp_buf));
     return (obj);
 }
 

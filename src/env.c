@@ -64,7 +64,7 @@ initialize_namespace (Object owner)
   frame->size = TOP_LEVEL_SIZE;
   frame->owner = owner;
   frame->bindings =
-    (struct binding **) checking_malloc (TOP_LEVEL_SIZE * sizeof (struct binding));
+    (struct binding **) marlais_allocate_memory (TOP_LEVEL_SIZE * sizeof (struct binding));
   frame->next = NULL;
   frame->top_level_env = frame->bindings;
 
@@ -173,7 +173,7 @@ add_bindings (Object syms, Object vals, int constant, struct frame *to_frame)
   frame = to_frame;
 
   frame->bindings = (struct binding **)
-    checking_realloc (frame->bindings,
+    marlais_reallocate_memory (frame->bindings,
 		      (frame->size + num_bindings) * sizeof(struct binding *));
 
   for (i = 0; i < num_bindings; ++i) {
@@ -235,7 +235,7 @@ add_binding (Object sym, Object val, int constant, struct frame *to_frame)
 
     if ((frame->size % BIND_ALLOC_CHUNK) == 0) {
 	frame->bindings = (struct binding **)
-	    checking_realloc (frame->bindings,
+	    marlais_reallocate_memory (frame->bindings,
 	      (frame->size + BIND_ALLOC_CHUNK) * sizeof (struct binding *));
     }
     frame->bindings[frame->size] = binding;
@@ -443,7 +443,7 @@ new_module (Object module_name)
 
 
     modules.bindings = (struct module_binding **)
-	checking_realloc (modules.bindings,
+	marlais_reallocate_memory (modules.bindings,
 			  (modules.size + BIND_ALLOC_CHUNK) *
 			  sizeof (struct module_binding *));
 

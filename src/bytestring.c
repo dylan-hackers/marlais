@@ -108,7 +108,7 @@ make_string_driver (Object args)
   res = marlais_allocate_object (ByteString, sizeof (struct byte_string));
 
   BYTESTRSIZE (res) = size;
-  BYTESTRVAL (res) = (char *) checking_malloc ((size * sizeof (char)) + 1);
+  BYTESTRVAL (res) = (char *) marlais_allocate_memory ((size * sizeof (char)) + 1);
 
   for (i = 0; i < size; ++i) {
     BYTESTRVAL (res)[i] = fill;
@@ -174,7 +174,7 @@ string_append2 (Object str1, Object str2)
     int new_size;
 
     new_size = BYTESTRSIZE (str1) + BYTESTRSIZE (str2);
-    new_str = (char *) checking_malloc ((new_size * sizeof (char)) + 1);
+    new_str = (char *) marlais_allocate_memory ((new_size * sizeof (char)) + 1);
 
     strcpy (new_str, BYTESTRVAL (str1));
     strcat (new_str, BYTESTRVAL (str2));

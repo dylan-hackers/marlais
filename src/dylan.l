@@ -691,7 +691,7 @@ push_intermediate_words(Object begin_word)
     struct intermediate_word_struct *new_table;
 
     new_table = (struct intermediate_word_struct *)
-	checking_malloc (sizeof (struct intermediate_word_struct));
+	marlais_allocate_memory (sizeof (struct intermediate_word_struct));
 
     if (begin_word == if_symbol) {
 	new_table->num_words = NUM_IF_INTERMEDIATE_WORDS;
@@ -708,7 +708,7 @@ push_intermediate_words(Object begin_word)
 	new_table->next = intermediate_words;
 	intermediate_words = new_table;
 	new_table = (struct intermediate_word_struct *)
-	    checking_malloc (sizeof (struct intermediate_word_struct));
+	    marlais_allocate_memory (sizeof (struct intermediate_word_struct));
 	new_table->num_words = NUM_FOR_CLAUSE_WORDS;
 	new_table->reswords = for_clause_word_table;
     } else if (begin_word == block_symbol) {
@@ -754,7 +754,7 @@ get_nonws_symbol (char *text)
 		&& *end_ptr != '\v' && *end_ptr != '\r' && *end_ptr != '\n';
              end_ptr++);
 	buf_ptr = buffer =
-		(char *) checking_malloc((end_ptr - start_ptr + 1) * sizeof (char));
+		(char *) marlais_allocate_memory((end_ptr - start_ptr + 1) * sizeof (char));
 	for(; start_ptr < end_ptr; *buf_ptr++ = *start_ptr++);
 	*buf_ptr = '\0';
 	return buffer;

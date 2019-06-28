@@ -453,7 +453,7 @@ static jmp_buf
 error_ok_return_push ()
 {
   struct jmp_buf_stack *tmp =
-    (struct jmp_buf_stack *) checking_malloc (sizeof (struct jmp_buf_stack));
+    (struct jmp_buf_stack *) marlais_allocate_memory (sizeof (struct jmp_buf_stack));
 
   num_debug_contexts++;
   snprintf(prompt_buf, 20, "Debug[%d]> ", num_debug_contexts);
