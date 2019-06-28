@@ -61,4 +61,3 @@ dylan_write(Object fd_obj, Object str)
   write(fd, BYTESTRVAL(str), BYTESTRSIZE(str));
   return unspecified_object;
 }
-
