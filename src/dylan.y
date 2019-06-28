@@ -65,8 +65,6 @@
 #include "vector.h"
 #include "yystype.h"
 
-#define alloca GC_malloc
-
 void yyerror (char *);
 static Object append_bang (Object l1, Object l2);
 static Object nelistem (Object car,...);
