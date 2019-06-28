@@ -36,12 +36,8 @@
 
 extern char* prompt_continuation;
 extern char* current_prompt;
-extern int yyerrflag;
 extern int yydebug;
 extern int load_file_context;
-
-int yylineno = 1;
-#define YYSTYPE Object
 
 int charready (FILE *stream);
 int strcasecmp (const char *s1, const char *s2);
