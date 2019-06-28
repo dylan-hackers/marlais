@@ -87,11 +87,11 @@ MARLAIS_FLAGS = $(SYS_FLAG) \
 	$(PRECEDENCE_FLAG) \
 	 -DVERSION=\"$(VERSION)\"
 
-CC=gcc
+CC ?= gcc
 
 CFLAGS ?= -g $(MARLAIS_FLAGS)
 
-LIBS=-lncurses -lreadline -lm -lgc
+LIBS ?= -lncurses -lreadline -lm -lgc
 
 FLEX ?= flex
 FLEXFLAGS ?= -I
