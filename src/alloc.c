@@ -51,10 +51,13 @@ void *
 marlais_allocate_memory (size_t size)
 {
     void *obj;
+	/* allocate */
 	obj = GC_malloc (size);
+	/* check */
 	if (!obj) {
         fatal ("internal error: memory allocation failure.");
 	}
+	/* return */
 	return obj;
 }
 
@@ -62,10 +65,13 @@ void *
 marlais_reallocate_memory(void *old_obj, size_t new_size)
 {
     void *obj;
+	/* allocate */
 	obj = GC_realloc (old_obj, new_size);
+	/* check */
 	if (!obj) {
         fatal ("internal error: memory allocation failure.");
 	}
+	/* return */
 	return obj;
 }
 
@@ -73,10 +79,13 @@ void *
 marlais_allocate_atomic (size_t size)
 {
     void *obj;
+	/* allocate */
     obj = GC_malloc_atomic (size);
+	/* check */
     if (!obj) {
         fatal ("internal error: memory allocation failure.");
     }
+	/* return */
     return obj;
 }
 
@@ -93,7 +102,7 @@ marlais_allocate_object (ObjectType type, size_t size)
     /* initialize the type field */
     POINTERTYPE(obj) = type;
     /* return result */
-    return (obj);
+    return obj;
 }
 
 
