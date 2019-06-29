@@ -55,8 +55,6 @@ extern Object marlais_allocate_object (ObjectType type, size_t size);
 #define MARLAIS_ALLOCATE_STRUCT(type) \
   ((type *)marlais_allocate_memory(sizeof(type)))
 
-void *checking_malloc (size_t size);
-void *checking_realloc (void *ptr, size_t size);
 char *checking_strdup (char *str);
 char *allocate_string (size_t size);
 
