@@ -2,22 +2,8 @@
 /*   Lexical analyzer for Dylan interm report tokens
      see COPYRIGHT for use */
 
-#ifdef sun
-#include <floatingpoint.h>
-#endif
-
-#if defined(MACOS)
-#include <unix.h>
-#else
-#include <sys/types.h>
-#ifdef _WIN32
-#include <time.h>
-#else
-#include <sys/time.h>
-#endif
-#endif
-
 #include <string.h>
+#include <sys/time.h>
 
 #include "alloc.h"
 #include "bytestring.h"

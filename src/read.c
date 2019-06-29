@@ -6,9 +6,6 @@
 
 #include <stdio.h>
 #include <ctype.h>
-#ifdef sun
-#include <floatingpoint.h>
-#endif
 
 #include "read.h"
 
