@@ -36,11 +36,9 @@
 
 #include "object.h"
 
-/* globals */
-extern Object dim_keyword, fill_keyword, default_object;
-
-void init_array_prims (void);
-Object make_array (Object dims, Object fill);
-Object make_array_driver (Object args);
+/* Initialize array primitives */
+extern void marlais_initialize_array (void);
+/* Entrypoint for make(<array>) */
+extern Object marlais_make_array (Object args);
 
 #endif

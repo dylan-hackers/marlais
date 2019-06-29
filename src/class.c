@@ -854,7 +854,7 @@ make (Object class, Object rest)
   } else if (class == deque_class) {
     ret = make_deque_driver (rest);
   } else if (class == array_class) {
-    ret = make_array_driver (rest);
+    ret = marlais_make_array (rest);
   } else if (class == class_class) {
     ret = make_class_driver (rest);
   } else {

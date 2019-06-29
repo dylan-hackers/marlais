@@ -34,6 +34,8 @@
 
 #include "array.h"
 
+#include "globaldefs.h"
+
 #include "alloc.h"
 #include "error.h"
 #include "list.h"
@@ -41,68 +43,44 @@
 #include "prim.h"
 #include "symbol.h"
 
+static Object array_make (Object dims, Object fill);
+static int    array_index (Object arr, Object indices, Object default_ob);
 static Object array_size (Object arr);
-static Object row_major_index (Object arr, Object indices);
+static Object array_ref (Object arr, Object indices, Object default_ob);
+static Object array_ref_setter (Object arr, Object indices, Object new_val);
 static Object array_element (Object arr, Object index, Object default_ob);
-static Object a_ref (Object arr, Object indices, Object default_ob);
 static Object array_element_setter (Object arr, Object index, Object new_val);
-static Object a_ref_setter (Object arr, Object indices, Object new_val);
 static Object array_dimensions (Object arr);
 static Object array_initial_state (Object arr);
 static Object array_next_state (Object arr, Object state);
 static Object array_current_element (Object arr, Object state);
+static Object array_row_major_index (Object arr, Object indices);
 
 static struct primitive array_prims[] =
 {
   {"%array-size", prim_1, array_size},
-  {"%array-ref", prim_3, a_ref},
-  {"%array-ref-setter", prim_3, a_ref_setter},
+  {"%array-ref", prim_3, array_ref},
+  {"%array-ref-setter", prim_3, array_ref_setter},
   {"%array-element", prim_3, array_element},
   {"%array-element-setter", prim_3, array_element_setter},
   {"%array-dimensions", prim_1, array_dimensions},
   {"%array-initial-state", prim_1, array_initial_state},
   {"%array-next-state", prim_2, array_next_state},
   {"%array-current-element", prim_2, array_current_element},
-  {"%array-row-major-index", prim_2, row_major_index},
+  {"%array-row-major-index", prim_2, array_row_major_index},
 };
 
+/* Exported functions */
+
 void
-init_array_prims (void)
+marlais_initialize_array (void)
 {
   int num = sizeof (array_prims) / sizeof (struct primitive);
   init_prims (num, array_prims);
 }
 
 Object
-make_array (Object dims, Object fill)
-{
-  Object obj, dl, val;
-  unsigned int size, i;
-
-  obj = marlais_allocate_object (Array, sizeof (struct array));
-
-  ARRDIMS (obj) = dims;
-  dl = dims;
-  size = 1;
-  while (!EMPTYLISTP (dl)) {
-    val = CAR (dl);
-    if (!INTEGERP (val)) {
-      error ("make: array dimensions must be integers", dims, NULL);
-    }
-    size *= INTVAL (val);
-    dl = CDR (dl);
-  }
-  ARRELS (obj) = (Object *) marlais_allocate_memory (sizeof (Object) * size);
-
-  ARRSIZE (obj) = size;
-  for (i = 0; i < size; ++i) {
-    ARRELS (obj)[i] = fill;
-  }
-  return (obj);
-}
-
-Object
-make_array_driver (Object args)
+marlais_make_array (Object args)
 {
   Object dim_obj, fill_obj, res;
 
@@ -132,20 +110,42 @@ make_array_driver (Object args)
     fill_obj = false_object;
   }
   /* actually fabricate the array */
-  res = make_array (dim_obj, fill_obj);
+  res = array_make (dim_obj, fill_obj);
   return (res);
 }
 
-/* static functions */
+/* Static functions */
 
 static Object
-array_size (Object arr)
+array_make (Object dims, Object fill)
 {
-  return make_integer (ARRSIZE (arr));
+  Object obj, dl, val;
+  unsigned int size, i;
+
+  obj = marlais_allocate_object (Array, sizeof (struct array));
+
+  ARRDIMS (obj) = dims;
+  dl = dims;
+  size = 1;
+  while (!EMPTYLISTP (dl)) {
+    val = CAR (dl);
+    if (!INTEGERP (val)) {
+      error ("make: array dimensions must be integers", dims, NULL);
+    }
+    size *= INTVAL (val);
+    dl = CDR (dl);
+  }
+  ARRELS (obj) = (Object *) marlais_allocate_memory (sizeof (Object) * size);
+
+  ARRSIZE (obj) = size;
+  for (i = 0; i < size; ++i) {
+    ARRELS (obj)[i] = fill;
+  }
+  return (obj);
 }
 
 static int
-index (Object arr, Object indices, Object default_ob)
+array_index (Object arr, Object indices, Object default_ob)
 {
   Object dims, inds, ind, dim;
   unsigned int offset, dim_val;
@@ -193,15 +193,27 @@ index (Object arr, Object indices, Object default_ob)
 }
 
 static Object
-row_major_index (Object arr, Object indices)
+array_size (Object arr)
 {
-  return make_integer (index (arr, indices, default_object));
+  return make_integer (ARRSIZE (arr));
 }
-
 
 /*
  * Note that the key of an array collection is the list of indices.
  */
+
+static Object
+array_ref (Object arr, Object indices, Object default_ob)
+{
+  return (ARRELS (arr)[array_index (arr, indices, default_ob)]);
+}
+
+static Object
+array_ref_setter (Object arr, Object indices, Object new_val)
+{
+  ARRELS (arr)[array_index (arr, indices, default_object)] = new_val;
+  return (unspecified_object);
+}
 
 static Object
 array_element (Object arr, Object index, Object default_ob)
@@ -221,12 +233,6 @@ array_element (Object arr, Object index, Object default_ob)
 }
 
 static Object
-a_ref (Object arr, Object indices, Object default_ob)
-{
-  return (ARRELS (arr)[index (arr, indices, default_ob)]);
-}
-
-static Object
 array_element_setter (Object arr, Object index, Object new_val)
 {
   int ind_val = INTVAL (index);
@@ -236,13 +242,6 @@ array_element_setter (Object arr, Object index, Object new_val)
 	   ARRDIMS (arr), NULL);
   }
   ARRELS (arr)[ind_val] = new_val;
-  return (unspecified_object);
-}
-
-static Object
-a_ref_setter (Object arr, Object indices, Object new_val)
-{
-  ARRELS (arr)[index (arr, indices, default_object)] = new_val;
   return (unspecified_object);
 }
 
@@ -284,4 +283,10 @@ static Object
 array_current_element (Object arr, Object state)
 {
   return (ARRELS (arr)[INTVAL (state)]);
+}
+
+static Object
+array_row_major_index (Object arr, Object indices)
+{
+  return make_integer (array_index (arr, indices, default_object));
 }
