@@ -538,7 +538,7 @@ initialize_marlais (void)
   init_table_prims ();
   init_char_prims ();
   init_deque_prims ();
-  marlais_initialize_array ();
+  marlais_register_array ();
   init_sys_prims ();
 #ifdef MACOS
   init_mac_prims ();

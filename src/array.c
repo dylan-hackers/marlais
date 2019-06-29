@@ -70,7 +70,7 @@ static struct primitive array_prims[] =
 /* Exported functions */
 
 void
-marlais_initialize_array (void)
+marlais_register_array (void)
 {
   int num = sizeof (array_prims) / sizeof (struct primitive);
   init_prims (num, array_prims);
