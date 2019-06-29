@@ -40,8 +40,13 @@
 #include "prim.h"
 #include "symbol.h"
 
+/* Static declarations */
+
 static Object array_make (Object dims, Object fill);
 static int    array_index (Object arr, Object indices, Object default_ob);
+
+/* Primitives */
+
 static Object array_size (Object arr);
 static Object array_ref (Object arr, Object indices, Object default_ob);
 static Object array_ref_setter (Object arr, Object indices, Object new_val);
