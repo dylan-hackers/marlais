@@ -108,12 +108,12 @@ make_string_driver (Object args)
   res = marlais_allocate_object (ByteString, sizeof (struct byte_string));
 
   BYTESTRSIZE (res) = size;
-  BYTESTRVAL (res) = (char *) marlais_allocate_memory ((size * sizeof (char)) + 1);
-
+  BYTESTRVAL (res) = MARLAIS_ALLOCATE_STRING (size + 1);
   for (i = 0; i < size; ++i) {
     BYTESTRVAL (res)[i] = fill;
   }
   BYTESTRVAL (res)[i] = '\0';
+
   return (res);
 }
 
