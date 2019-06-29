@@ -56,7 +56,7 @@
 #include "bytestring.h"
 #include "error.h"
 #include "gc.h"
-#include "globaldefs.h"
+#include "globals.h"
 #include "list.h"
 #include "number.h"
 #include "object.h"

@@ -9,7 +9,7 @@
 #include "bytestring.h"
 #include "character.h"
 #include "dylan.tab.h"
-#include "globaldefs.h"
+#include "globals.h"
 #include "list.h"
 #include "number.h"
 #include "object.h"

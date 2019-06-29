@@ -37,7 +37,7 @@
 #include "alloc.h"
 #include "apply.h"
 #include "boolean.h"
-#include "globaldefs.h"
+#include "globals.h"
 #include "error.h"
 #include "number.h"
 #include "prim.h"

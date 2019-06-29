@@ -114,6 +114,7 @@ OBJS = 	alloc.o \
 	file.o \
 	foreign_ptr.o \
 	function.o \
+	globals.o \
 	keyword.o \
 	lex.yy.o \
 	list.o \
@@ -153,6 +154,7 @@ CSRCS = alloc.c \
 	file.c \
 	function.c \
 	foreign_ptr.c \
+	globals.c \
 	keyword.c \
 	lex.yy.c \
 	list.c \

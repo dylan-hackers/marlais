@@ -38,7 +38,7 @@
 
 #include "alloc.h"
 #include "apply.h"
-#include "globaldefs.h"
+#include "globals.h"
 #include "error.h"
 #include "list.h"
 #include "number.h"

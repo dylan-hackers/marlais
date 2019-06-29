@@ -34,7 +34,7 @@
 
 #include "array.h"
 
-#include "globaldefs.h"
+#include "globals.h"
 
 #include "alloc.h"
 #include "error.h"

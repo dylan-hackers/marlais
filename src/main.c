@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include "globals.h"
+
 #include "alloc.h"
 #include "apply.h"
 #include "array.h"
@@ -17,7 +19,6 @@
 #include "eval.h"
 #include "file.h"
 #include "function.h"
-#include "globals.h"
 #include "keyword.h"
 #include "list.h"
 #include "misc.h"
