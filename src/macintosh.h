@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "object.h"
+#include "common.h"
 
 void init_mac_prims (void);
 Object get_file (void);

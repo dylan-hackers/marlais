@@ -32,9 +32,6 @@
  */
 
 #include "boolean.h"
-
-#include "globals.h"
-
 #include "alloc.h"
 #include "prim.h"
 

@@ -34,7 +34,7 @@
 #ifndef VECTOR_H
 #define VECTOR_H
 
-#include "object.h"
+#include "common.h"
 
 void init_vector_prims (void);
 Object make_sov (Object el_list);

@@ -35,7 +35,8 @@
 #define VALUES_H
 
 #include <stdarg.h>
-#include "object.h"
+
+#include "common.h"
 
 void init_values_prims (void);
 Object make_values (Object vals);

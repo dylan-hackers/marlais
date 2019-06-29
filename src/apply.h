@@ -3,7 +3,7 @@
 #ifndef APPLY_H
 #define APPLY_H
 
-#include "object.h"
+#include "common.h"
 
 /* global data */
 extern int trace_functions;

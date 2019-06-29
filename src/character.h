@@ -34,7 +34,7 @@
 #ifndef CHARACTER_H
 #define CHARACTER_H
 
-#include "object.h"
+#include "common.h"
 
 void init_char_prims (void);
 Object make_character (char ch);

@@ -52,14 +52,14 @@
 
 /* #define OPTIMIZE_SPECIALIZERS */
 
+#include "common.h"
+
 #include "boolean.h"
 #include "bytestring.h"
 #include "error.h"
 #include "gc.h"
-#include "globals.h"
 #include "list.h"
 #include "number.h"
-#include "object.h"
 #include "symbol.h"
 #include "table.h"
 #include "vector.h"

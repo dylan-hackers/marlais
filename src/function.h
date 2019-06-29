@@ -34,7 +34,8 @@
 #ifndef FUNCTION_H
 #define FUNCTION_H
 
-#include "object.h"
+#include "common.h"
+
 /* global objects */
 extern Object allkeys_symbol, all_symbol;
 

@@ -34,7 +34,7 @@
 #ifndef TABLE_H
 #define TABLE_H
 
-#include "object.h"
+#include "common.h"
 
 #define DEFAULT_TABLE_SIZE 101
 

@@ -34,7 +34,7 @@
 #ifndef NUMBER_H
 #define NUMBER_H
 
-#include "object.h"
+#include "common.h"
 
 void init_number_prims (void);
 Object make_integer (int i);

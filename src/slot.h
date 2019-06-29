@@ -34,7 +34,7 @@
 #ifndef SLOT_H
 #define SLOT_H
 
-#include "object.h"
+#include "common.h"
 
 void init_slot_prims (void);
 Object slot_name (Object slot);

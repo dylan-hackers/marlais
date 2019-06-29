@@ -34,7 +34,7 @@
 #ifndef ARRAY_H
 #define ARRAY_H
 
-#include "object.h"
+#include "common.h"
 
 /* Initialize array primitives */
 extern void marlais_initialize_array (void);

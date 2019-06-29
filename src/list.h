@@ -35,7 +35,8 @@
 #define LIST_H
 
 #include <stdarg.h>
-#include "object.h"
+
+#include "common.h"
 
 #ifndef SMALL_OBJECTS
 Object make_empty_list (void);

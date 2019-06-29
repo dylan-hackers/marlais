@@ -35,7 +35,7 @@
 #ifndef MISC_H
 #define MISC_H
 
-#include "object.h"
+#include "common.h"
 
 Object make_eof_object (void);
 Object make_unspecified_object (void);

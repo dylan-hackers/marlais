@@ -15,7 +15,6 @@
 #include "error.h"
 #include "eval.h"
 #include "function.h"
-#include "globals.h"
 #include "keyword.h"
 #include "list.h"
 #include "number.h"

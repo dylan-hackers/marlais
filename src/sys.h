@@ -33,7 +33,7 @@
 #ifndef SYS_H
 #define SYS_H
 
-#include "object.h"
+#include "common.h"
 
 void init_sys_prims (void);
 Object get_ctime (void);

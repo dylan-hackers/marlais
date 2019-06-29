@@ -35,7 +35,8 @@
 #define PRINT_H
 
 #include <stdio.h>
-#include "object.h"
+
+#include "common.h"
 
 /* global objects */
 extern Object instance_symbol;

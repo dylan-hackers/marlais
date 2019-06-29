@@ -34,7 +34,7 @@
 #ifndef BOOLEAN_H
 #define BOOLEAN_H
 
-#include "object.h"
+#include "common.h"
 
 void init_boolean_prims (void);
 Object make_true (void);

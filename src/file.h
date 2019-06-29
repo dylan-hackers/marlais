@@ -34,7 +34,7 @@
 #ifndef FILE_H
 #define FILE_H
 
-#include "object.h"
+#include "common.h"
 
 void init_file_prims (void);
 Object load (Object filename);

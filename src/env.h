@@ -34,7 +34,7 @@
 #ifndef ENV_H
 #define ENV_H
 
-#include "object.h"
+#include "common.h"
 
 struct binding {
     Object sym, *val, type;

@@ -38,7 +38,6 @@
 
 #include "alloc.h"
 #include "apply.h"
-#include "globals.h"
 #include "error.h"
 #include "list.h"
 #include "number.h"

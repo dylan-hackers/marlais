@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "globals.h"
+#include "common.h"
 
 #include "alloc.h"
 #include "apply.h"
@@ -23,7 +23,6 @@
 #include "list.h"
 #include "misc.h"
 #include "number.h"
-#include "object.h"
 #include "parse.h"
 #include "print.h"
 #include "read.h"

@@ -36,7 +36,8 @@
 #define READ_H
 
 #include <stdio.h>
-#include "object.h"
+
+#include "common.h"
 
 /* global objects */
 extern Object allkeys_symbol, hash_values_symbol;

@@ -37,7 +37,6 @@
 #include "bytestring.h"
 
 #include "alloc.h"
-#include "globals.h"
 #include "character.h"
 #include "error.h"
 #include "number.h"

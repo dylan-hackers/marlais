@@ -35,7 +35,6 @@
 #include "deque.h"
 
 #include "alloc.h"
-#include "globals.h"
 #include "error.h"
 #include "list.h"
 #include "prim.h"

@@ -34,7 +34,7 @@
 #ifndef ALLOC_H
 #define ALLOC_H
 
-#include "object.h"
+#include "common.h"
 #include "env.h"
 
 /* initialize the garbage collector */

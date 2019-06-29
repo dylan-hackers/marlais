@@ -34,7 +34,7 @@
 #ifndef EVAL_H
 #define EVAL_H
 
-#include "object.h"
+#include "common.h"
 #include "env.h"
 
 Object eval (Object obj);

@@ -3,7 +3,7 @@
 #ifndef STREAM_H
 #define STREAM_H
 
-#include "object.h"
+#include "common.h"
 
 void init_stream_prims (void);
 enum { STDIN, STDOUT, STDERR };

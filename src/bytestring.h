@@ -33,7 +33,7 @@
 #ifndef BYTESTRING_H
 #define BYTESTRING_H
 
-#include "object.h"
+#include "common.h"
 
 /* global objects */
 void init_string_prims (void);

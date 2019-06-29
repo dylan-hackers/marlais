@@ -3,7 +3,7 @@
 #ifndef SYNTAX_H
 #define SYNTAX_H
 
-#include "object.h"
+#include "common.h"
 
 /* global objects */
 extern Object type_class, initial_state_sym, next_state_sym;

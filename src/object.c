@@ -1,6 +1,6 @@
 /* object.c -- see COPYRIGHT for use */
 
-#include "object.h"
+#include "common.h"
 
 #include "alloc.h"
 #include "error.h"

@@ -19,8 +19,10 @@
 #ifndef YYSTYPE_h_
 #define YYSTYPE_h_
 
+#include "common.h"
+
 #include "dylan_lexer.h"
-#include "object.h"
+
 #define YYSTYPE Object
 
 int yyparse (void);

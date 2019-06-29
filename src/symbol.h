@@ -34,7 +34,7 @@
 #ifndef SYMBOL_H
 #define SYMBOL_H
 
-#include "object.h"
+#include "common.h"
 
 struct symtab {
     Object sym;

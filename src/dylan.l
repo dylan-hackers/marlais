@@ -5,14 +5,15 @@
 #include <string.h>
 #include <sys/time.h>
 
+#include "common.h"
+
 #include "alloc.h"
 #include "bytestring.h"
 #include "character.h"
 #include "dylan.tab.h"
-#include "globals.h"
 #include "list.h"
 #include "number.h"
-#include "object.h"
+
 #include "symbol.h"
 #include "yystype.h"
 

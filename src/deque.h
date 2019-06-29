@@ -34,7 +34,7 @@
 #ifndef DEQUE_H
 #define DEQUE_H
 
-#include "object.h"
+#include "common.h"
 
 /* global objects */
 void init_deque_prims (void);

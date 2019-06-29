@@ -34,7 +34,7 @@
 #ifndef CLASSPREC2_LL_H_
 #define CLASSPREC2_LL_H_
 
-#include "object.h"
+#include "common.h"
 #include "class.h"
 
 typedef

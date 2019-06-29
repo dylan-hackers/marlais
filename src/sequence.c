@@ -34,7 +34,7 @@
 /* general operations that all sequences (vectors, deques, etc) use */ 
 
 #include "sequence.h"
-#include "globals.h"
+
 #include "error.h"
 
 void make_sequence_driver(Object args, 

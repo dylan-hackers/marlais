@@ -36,7 +36,7 @@
 #ifndef SEQUENCE_H
 #define SEQUENCE_H
 
-#include "object.h"
+#include "common.h"
 
 void make_sequence_driver(Object args, 
 			  int* sz, Object* sz_obj, Object* fill, 

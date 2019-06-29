@@ -29,6 +29,6 @@
 
  */
 
-#include "object.h"
+#include "common.h"
 
 Object make_foreign_ptr (void *ptr);

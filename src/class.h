@@ -3,8 +3,8 @@
 #ifndef CLASS_H
 #define CLASS_H
 
+#include "common.h"
 #include "symbol.h"
-#include "object.h"
 
 /* globals */
 

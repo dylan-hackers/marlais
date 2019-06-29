@@ -33,7 +33,7 @@
 #ifndef FOREIGN_H
 #define FOREIGN_H
 
-#include "object.h"
+#include "common.h"
 
 void init_foreign_prims (void);
 

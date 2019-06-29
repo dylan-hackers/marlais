@@ -35,7 +35,8 @@
 #define ERROR_H
 
 #include <stdarg.h>
-#include "object.h"
+
+#include "common.h"
 
 void init_error_prims (void);
 void fatal (char *msg);

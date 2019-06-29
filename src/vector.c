@@ -34,7 +34,6 @@
 
 #include "vector.h"
 
-#include "globals.h"
 #include "alloc.h"
 #include "error.h"
 #include "list.h"

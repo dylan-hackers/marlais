@@ -11,7 +11,6 @@
 #include "character.h"
 #include "error.h"
 #include "eval.h"
-#include "globals.h"
 #include "list.h"
 #include "number.h"
 #include "prim.h"

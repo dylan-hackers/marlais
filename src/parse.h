@@ -33,7 +33,7 @@
 #ifndef PARSE_H
 #define PARSE_H
 
-#include "object.h"
+#include "common.h"
 
 extern int load_file_context;
 
