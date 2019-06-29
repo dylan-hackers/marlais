@@ -37,9 +37,6 @@
 
 /* for throwing errors */
 #include "error.h"
-/* for struct sizes */
-#include "env.h"
-#include "symbol.h"
 
 /* function definitions */
 
