@@ -1,4 +1,4 @@
-/* globaldefs.h -- see COPYRIGHT for use */
+/* common.h -- see COPYRIGHT for use */
 
 #ifndef COMMON_H
 #define COMMON_H
