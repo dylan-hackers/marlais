@@ -81,7 +81,7 @@ make_byte_string (char *str)
     Object obj = marlais_allocate_object (ByteString, sizeof (struct byte_string));
 
     BYTESTRSIZE (obj) = strlen (str);
-    BYTESTRVAL (obj) = checking_strdup (str);
+    BYTESTRVAL (obj) = marlais_allocate_strdup (str);
     return (obj);
 }
 

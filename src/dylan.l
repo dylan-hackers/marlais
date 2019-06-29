@@ -792,7 +792,7 @@ char* make_expanded_byte_string(char* str)
 		char* exp_str;
 		Object obj;
 
-		exp_str = checking_strdup (str);
+		exp_str = marlais_allocate_strdup (str);
 		exp_str[0] = '\0';
 		while (backslash) {
 			backslash[0] = expand_escaped_character(backslash[1]);
