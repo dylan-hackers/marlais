@@ -107,7 +107,7 @@ marlais_allocate_object (ObjectType type, size_t size)
 
 
 char *
-marlais_allocate_strdup (char *str)
+marlais_allocate_strdup (const char *str)
 {
     size_t size = strlen (str) + 1;
     char *copy;
