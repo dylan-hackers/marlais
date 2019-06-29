@@ -791,10 +791,12 @@ concat_prefix (char *prefix_string, Object sym)
 {
     char *new_str, *old_str = SYMBOLNAME (sym);
     int prefix_len = strlen (prefix_string);
+    size_t new_len = prefix_len + strlen(old_str) + 1;
 
-    new_str = (char *) allocate_string (prefix_len + strlen (old_str) + 1);
+    new_str = MARLAIS_ALLOCATE_STRING(new_len);
     strcpy (new_str, prefix_string);
     strcpy (new_str + prefix_len, old_str);
+
     return make_symbol (new_str);
 }
 

@@ -91,13 +91,14 @@ make_keyword (char *name)
 Object
 make_setter_symbol (Object sym)
 {
+  size_t namelen;
   char *name;
 
-  name = allocate_string (sizeof (char) * (1 + strlen (SYMBOLNAME (sym)) +
-					   strlen ("-setter")));
-
+  namelen = 1 + strlen(SYMBOLNAME(sym)) + strlen("-setter");
+  name = MARLAIS_ALLOCATE_STRING(namelen);
   strcpy (name, SYMBOLNAME (sym));
   strcat (name, "-setter");
+
   return (make_symbol (name));
 }
 

@@ -98,28 +98,14 @@ marlais_allocate_object (ObjectType type, size_t size)
 
 
 char *
-checking_strdup (char *str)
+marlais_allocate_strdup (char *str)
 {
-    int size;
-    char *copied_str;
-
-    size = strlen (str) + 1;
-    copied_str = (char *) GC_malloc_atomic (size);
-    if (!copied_str) {
-        fatal ("internal error: memory allocation failure");
-    }
-    strcpy (copied_str, str);
-    return (copied_str);
-}
-
-char *
-allocate_string (size_t size)
-{
-    char *str;
-
-    str = (char *) GC_malloc_atomic (size);
-    if (!str) {
-        fatal ("internal error: memory allocation failure.");
-    }
-    return (str);
+    size_t size = strlen (str) + 1;
+    char *copy;
+	/* allocate copy */
+	copy = marlais_allocate_atomic(size);
+	/* perform copy */
+    strcpy (copy, str);
+	/* return result */
+    return copy;
 }

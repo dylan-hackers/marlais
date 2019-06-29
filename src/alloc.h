@@ -51,11 +51,15 @@ extern void *marlais_allocate_atomic (size_t size);
 /* allocate an object */
 extern Object marlais_allocate_object (ObjectType type, size_t size);
 
+/* allocate copy of a zero-terminated string */
+extern char *marlais_allocate_strdup (char *str);
+
 /* allocate a data structure */
 #define MARLAIS_ALLOCATE_STRUCT(type) \
   ((type *)marlais_allocate_memory(sizeof(type)))
 
-char *checking_strdup (char *str);
-char *allocate_string (size_t size);
+/* allocate a string */
+#define MARLAIS_ALLOCATE_STRING(size) \
+  ((char *)marlais_allocate_atomic(size))
 
 #endif
