@@ -1,4 +1,4 @@
-/* 
+/*
 
    character.h
 
@@ -36,7 +36,9 @@
 
 #include "common.h"
 
-void init_char_prims (void);
-Object make_character (char ch);
+/* Register character primitives */
+extern void marlais_register_character (void);
+/* Make a <character> */
+extern Object marlais_make_character (char ch);
 
 #endif

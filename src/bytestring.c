@@ -131,7 +131,7 @@ string_element (Object string, Object index, Object default_ob)
 	    return default_ob;
 	}
     }
-    return (make_character (BYTESTRVAL (string)[i]));
+    return (marlais_make_character (BYTESTRVAL (string)[i]));
 }
 
 static Object

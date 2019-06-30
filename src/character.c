@@ -37,6 +37,8 @@
 #include "number.h"
 #include "prim.h"
 
+/* Primitives */
+
 static Object integer_to_character (Object i);
 static Object character_to_integer (Object ch);
 
@@ -46,19 +48,24 @@ static struct primitive char_prims[] =
     {"%character->integer", prim_1, character_to_integer},
 };
 
+/* Exported functions */
+
 void
-init_char_prims (void)
+marlais_register_character (void)
 {
-    int num;
-
-    num = sizeof (char_prims) / sizeof (struct primitive);
-
+    int num = sizeof (char_prims) / sizeof (struct primitive);
     init_prims (num, char_prims);
 }
 
-#ifndef SMALL_OBJECTS
+#ifdef SMALL_OBJECTS
 Object
-make_character (char ch)
+marlais_make_character (char ch)
+{
+    return (MAKE_CHAR (ch));
+}
+#else
+Object
+marlais_make_character (char ch)
 {
     Object obj;
 
@@ -67,18 +74,14 @@ make_character (char ch)
     CHARVAL (obj) = ch;
     return (obj);
 }
-#else
-Object
-make_character (char ch)
-{
-    return (MAKE_CHAR (ch));
-}
 #endif
+
+/* Static functions */
 
 static Object
 integer_to_character (Object i)
 {
-    return (make_character (INTVAL (i)));
+    return (marlais_make_character (INTVAL (i)));
 }
 
 static Object

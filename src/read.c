@@ -175,7 +175,7 @@ read_char (Object stream)
   if (ch == EOF) {
     return (eof_object);
   } else {
-    return (make_character (ch));
+    return (marlais_make_character (ch));
   }
 }
 

@@ -283,7 +283,7 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 
 <ETC>\'([^\\\']|(\\.))\' { char ch = yytext [yyleng-2];
 			   yylval =
-			    make_character(yytext[1] == '\\' ?
+			    marlais_make_character(yytext[1] == '\\' ?
 					   expand_escaped_character(ch) : ch );
 			   return (LITERAL);
 			 }
