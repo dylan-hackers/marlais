@@ -41,12 +41,16 @@
 #include "symbol.h"
 #include "sequence.h"
 
-/* primitives */
+/* Static declarations */
 
-static Object push (Object d, Object new);
-static Object pop (Object d);
-static Object push_last (Object d, Object new);
-static Object pop_last (Object d);
+static Object deque_make_entry (Object prev, Object value, Object next);
+
+/* Primitives */
+
+static Object deque_push (Object d, Object new);
+static Object deque_pop (Object d);
+static Object deque_push_last (Object d, Object new);
+static Object deque_pop_last (Object d);
 static Object deque_first (Object d, Object default_ob);
 static Object deque_last (Object d, Object default_ob);
 static Object deque_element (Object d, Object i, Object default_ob);
@@ -62,10 +66,10 @@ static Object deque_current_element_setter (Object d,
 
 static struct primitive deque_prims[] =
 {
-  {"%push", prim_2, push},
-  {"%pop", prim_1, pop},
-  {"%push-last", prim_2, push_last},
-  {"%pop-last", prim_1, pop_last},
+  {"%push", prim_2, deque_push},
+  {"%pop", prim_1, deque_pop},
+  {"%push-last", prim_2, deque_push_last},
+  {"%pop-last", prim_1, deque_pop_last},
   {"%deque-first", prim_2, deque_first},
   {"%deque-last", prim_2, deque_last},
   {"%deque-element", prim_3, deque_element},
@@ -78,15 +82,17 @@ static struct primitive deque_prims[] =
   {"%deque-current-element-setter", prim_3, deque_current_element_setter},
 };
 
+/* Exported functions */
+
 void
-init_deque_prims (void)
+marlais_register_deque (void)
 {
   int num = sizeof (deque_prims) / sizeof (struct primitive);
   init_prims (num, deque_prims);
 }
 
 Object
-make_deque (void)
+marlais_make_deque (void)
 {
   Object obj = marlais_allocate_object (Deque, sizeof (struct deque));
 
@@ -96,32 +102,21 @@ make_deque (void)
 }
 
 Object
-make_deque_entry (Object prev, Object value, Object next)
-{
-  Object obj = marlais_allocate_object (DequeEntry, sizeof (struct deque_entry));
-
-  DEPREV (obj) = prev;
-  DEVALUE (obj) = value;
-  DENEXT (obj) = next;
-  return (obj);
-}
-
-Object
-make_deque_driver (Object args)
+marlais_make_deque_entry (Object args)
 {
   int size;
   Object size_obj, fill_obj, first, last, deq;
 
   make_sequence_driver(args, &size, &size_obj, &fill_obj, "<deque>");
 
-  deq = make_deque ();
+  deq = marlais_make_deque ();
   /* actually fabricate the list representing the deque */
   if (size--) {
-    first = last = make_deque_entry (make_empty_list (), fill_obj,
+    first = last = deque_make_entry (make_empty_list (), fill_obj,
 				     make_empty_list ());
     DEQUEFIRST (deq) = first;
     while (size--) {
-      DENEXT (last) = make_deque_entry (last, fill_obj, NULL);
+      DENEXT (last) = deque_make_entry (last, fill_obj, NULL);
       last = DENEXT (last);
     }
     DENEXT (last) = make_empty_list ();
@@ -132,12 +127,23 @@ make_deque_driver (Object args)
   return (deq);
 }
 
-/* primitives */
+/* Static functions */
 
 static Object
-push (Object d, Object new)
+deque_make_entry (Object prev, Object value, Object next)
 {
-  Object new_entry = make_deque_entry(make_empty_list (), new, DEQUEFIRST (d));
+  Object obj = marlais_allocate_object (DequeEntry, sizeof (struct deque_entry));
+
+  DEPREV (obj) = prev;
+  DEVALUE (obj) = value;
+  DENEXT (obj) = next;
+  return (obj);
+}
+
+static Object
+deque_push (Object d, Object new)
+{
+  Object new_entry = deque_make_entry(make_empty_list (), new, DEQUEFIRST (d));
   if (EMPTYLISTP (DEQUEFIRST (d))) {
     DEQUEFIRST (d) = DEQUELAST (d) = new_entry;
   } else {
@@ -148,7 +154,7 @@ push (Object d, Object new)
 }
 
 static Object
-pop (Object d)
+deque_pop (Object d)
 {
   Object ret;
 
@@ -164,9 +170,9 @@ pop (Object d)
 }
 
 static Object
-push_last (Object d, Object new)
+deque_push_last (Object d, Object new)
 {
-  Object new_entry = make_deque_entry (DEQUELAST (d), new, make_empty_list ());
+  Object new_entry = deque_make_entry (DEQUELAST (d), new, make_empty_list ());
   if (EMPTYLISTP (DEQUEFIRST (d))) {
     DEQUEFIRST (d) = DEQUELAST (d) = new_entry;
   } else {
@@ -178,7 +184,7 @@ push_last (Object d, Object new)
 }
 
 static Object
-pop_last (Object d)
+deque_pop_last (Object d)
 {
   Object res;
 

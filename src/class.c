@@ -851,7 +851,7 @@ make (Object class, Object rest)
   } else if ((class == table_class) || (class == object_table_class)) {
     ret = make_table_driver (rest);
   } else if (class == deque_class) {
-    ret = make_deque_driver (rest);
+    ret = marlais_make_deque_entry (rest);
   } else if (class == array_class) {
     ret = marlais_make_array_entry (rest);
   } else if (class == class_class) {
