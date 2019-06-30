@@ -190,7 +190,7 @@ apply_method (Object meth, Object args, Object rest_methods, Object generic_appl
     if (generic_apply) {
 
 	/* re-calculate next methods if invalidated. */
-	if (PAIRP (rest_methods) && CAR (rest_methods) == false_object) {
+	if (PAIRP (rest_methods) && CAR (rest_methods) == MARLAIS_FALSE) {
 	    rest_methods = recalc_next_methods (generic_apply, meth, args);
 	}
 #endif
@@ -510,7 +510,7 @@ construct_return_values (Object ret,
     } else if (PAIRP (required_values)) {
 	/* Add default values */
 	for (j = 0; PAIRP (required_values); j++, required_values = CDR (required_values)) {
-	    if (!instance (false_object, CAR (required_values))) {
+	    if (!instance (MARLAIS_FALSE, CAR (required_values))) {
 		error ("in value return: default value doesn't match return type",
 		       CAR (required_values),
 		       NULL);
@@ -526,7 +526,7 @@ construct_return_values (Object ret,
 	    VALUESELS (newret)[i] = VALUESELS (ret)[i];
 	}
 	for (; i < VALUESNUM (newret); i++) {
-	    VALUESELS (newret)[i] = false_object;
+	    VALUESELS (newret)[i] = MARLAIS_FALSE;
 	}
 	ret = newret;
     }
@@ -604,7 +604,7 @@ build_rest_methods (Object cache_tail, Object args)
 	method_group = CDR (method_group);
     }
     if (!method_found) {
-	return cons (false_object, make_empty_list ());
+	return cons (MARLAIS_FALSE, make_empty_list ());
     } else {
 	return cons (method_found, build_rest_methods (CDR (cache_tail), args));
     }
@@ -638,7 +638,7 @@ apply_generic (Object gen, Object args)
 	currentGroup = CAR (cacheEntry);
 	while (!EMPTYLISTP (currentGroup)) {
 	    if (applicable_method_p (HDLOBJ (CAR (currentGroup)), args, 0)
-		== true_object) {
+		== MARLAIS_TRUE) {
 		if (method) {
 		    error ("Ambiguous methods in apply generic function", gen, args, NULL);
 		} else {
@@ -711,7 +711,7 @@ apply_next_method (Object next_method, Object args)
 static Object
 set_trace (Object flag)
 {
-    if (flag == false_object) {
+    if (flag == MARLAIS_FALSE) {
 	trace_functions = 0;
 	trace_only_user_funs = 0;
     } else {

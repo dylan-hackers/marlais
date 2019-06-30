@@ -48,9 +48,9 @@ static Object
 eof_object_p (Object obj)
 {
   if (obj == eof_object) {
-    return (true_object);
+    return (MARLAIS_TRUE);
   } else {
-    return (false_object);
+    return (MARLAIS_FALSE);
   }
 }
 

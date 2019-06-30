@@ -109,7 +109,7 @@ marlais_make_array (Object args)
     error ("make: dimensions: must be specified for <array>", args, NULL);
   }
   if (!fill_obj) {
-    fill_obj = false_object;
+    fill_obj = MARLAIS_FALSE;
   }
   /* actually fabricate the array */
   res = array_make (dim_obj, fill_obj);
@@ -275,7 +275,7 @@ array_next_state (Object arr, Object state)
   state_val = INTVAL (state);
   state_val++;
   if (state_val >= total_size) {
-    return (false_object);
+    return (MARLAIS_FALSE);
   } else {
     return (make_integer (state_val));
   }

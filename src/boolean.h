@@ -36,11 +36,11 @@
 
 #include "common.h"
 
-void init_boolean_prims (void);
-Object make_true (void);
-Object make_false (void);
-Object id_p (Object obj1, Object obj2, Object rest);
-Object not_id_p (Object obj1, Object obj2, Object rest);
-int id (Object obj1, Object obj2);
+/* Initialize boolean globals */
+extern void marlais_initialize_boolean (void);
+/* Register boolean primitives */
+extern void marlais_register_boolean (void);
+/* Compare objects by identity */
+extern int marlais_identical_p (Object obj1, Object obj2);
 
 #endif

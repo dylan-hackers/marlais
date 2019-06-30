@@ -297,7 +297,7 @@ make_builtin_class (char *name, Object supers)
   CLASSNAME (obj) = make_symbol (name);
   CLASSPROPS (obj) &= ~CLASSSLOTSUNINIT;
   add_top_level_binding (CLASSNAME (obj), obj, 1);
-  return make_class (obj, supers, make_empty_list (), false_object, NULL);
+  return make_class (obj, supers, make_empty_list (), MARLAIS_FALSE, NULL);
 }
 
 Object
@@ -319,7 +319,7 @@ make_class (Object obj,
 
   CLASSINDEX (obj) = NEWCLASSINDEX;
   CLASSENV (obj) = the_env;
-  if(abstract_p == false_object) CLASSPROPS (obj) |= CLASSINSTANTIABLE;
+  if(abstract_p == MARLAIS_FALSE) CLASSPROPS (obj) |= CLASSINSTANTIABLE;
 
   /* allow a single value for supers, make it into a list
    */
@@ -431,7 +431,7 @@ add_slot_descriptor_names (Object sd_list, Object *sg_names_ptr)
 
   while (!EMPTYLISTP (sd_list)) {
     sd = CAR (sd_list);
-    if (SLOTDSETTER (sd) != false_object) {
+    if (SLOTDSETTER (sd) != MARLAIS_FALSE) {
       if (member_2 (SLOTDGETTER (sd), SLOTDSETTER (sd), *sg_names_ptr)) {
 	error ("slot getter or setter appears in superclass", sd, NULL);
       }
@@ -491,7 +491,7 @@ make_class_driver (Object args)
   supers_obj = object_class;
   slots_obj = make_empty_list ();
   debug_obj = NULL;
-  abstract_obj = false_object;
+  abstract_obj = MARLAIS_FALSE;
 
   while (!EMPTYLISTP (args)) {
     if (FIRST (args) == super_classes_keyword) {
@@ -832,7 +832,7 @@ make (Object class, Object rest)
 
   if (!INSTANTIABLE (class)) {
     error ("make: class uninstantiable", class, NULL);
-    return false_object;
+    return MARLAIS_FALSE;
   }
   /* special case the builtin classes */
   if (class == pair_class) {
@@ -871,7 +871,7 @@ make (Object class, Object rest)
 Object
 instance_p (Object obj, Object type)
 {
-  return (instance (obj, type) ? true_object : false_object);
+  return (instance (obj, type) ? MARLAIS_TRUE : MARLAIS_FALSE);
 }
 
 int
@@ -880,7 +880,7 @@ instance (Object obj, Object type)
   Object objtype;
 
   if (SINGLETONP (type)) {
-    return id (obj, SINGLEVAL (type));
+    return marlais_identical_p (obj, SINGLEVAL (type));
   } else if (LIMINTP (type)) {
     if (INTEGERP (obj) &&
 	((!LIMINTHASMIN (type)) ||
@@ -915,7 +915,7 @@ instance (Object obj, Object type)
 Object
 subtype_p (Object type1, Object type2)
 {
-  return (subtype (type1, type2) ? true_object : false_object);
+  return (subtype (type1, type2) ? MARLAIS_TRUE : MARLAIS_FALSE);
 }
 
 int
@@ -1086,17 +1086,16 @@ Object
 same_class_p (Object class1, Object class2)
 {
   if (class1 == class2) {
-    return (true_object);
+    return (MARLAIS_TRUE);
   } else if ((POINTERTYPE (class1) == Singleton) &&
 	     (POINTERTYPE (class2) == Singleton)) {
-    if (id_p (SINGLEVAL (class1), SINGLEVAL (class2), make_empty_list ())
-	== false_object) {
-      return (false_object);
+    if (marlais_identical_p (SINGLEVAL(class1), SINGLEVAL(class2))) {
+      return MARLAIS_TRUE;
     } else {
-      return (true_object);
+      return MARLAIS_FALSE;
     }
   } else {
-    return (false_object);
+    return MARLAIS_FALSE;
   }
 }
 
@@ -1135,7 +1134,7 @@ make_getter_setter_gfs (Object slotds)
 
     /* Now fix up the setter */
 
-    if (!id (SLOTDALLOCATION (CAR (slotds)), constant_symbol)) {
+    if (SLOTDALLOCATION (CAR (slotds)) != constant_symbol) {
       setter = SLOTDSETTER (CAR (slotds));
       if (NULL == setter) {
 	/* Manufacture the setter name */
@@ -1164,7 +1163,7 @@ make_getter_setter_gfs (Object slotds)
 	} else {
 	  SLOTDSETTER (CAR (slotds)) = symbol_value (setter);
 	}
-      } else if (setter == false_object) {
+      } else if (setter == MARLAIS_FALSE) {
 	SLOTDSETTER (CAR (slotds)) = setter;
       } else {
 	/* setter is not a symbol */
@@ -1252,7 +1251,7 @@ make_setter_method (Object slot, Object class, int slot_num)
   Object params, body, slot_location, allocation;
   Object class_location;
 
-  if (NULL == SLOTDSETTER (slot) || false_object == SLOTDSETTER (slot)) {
+  if (NULL == SLOTDSETTER (slot) || MARLAIS_FALSE == SLOTDSETTER (slot)) {
     return NULL;
   }
   if (!GFUNP (SLOTDSETTER (slot))) {
@@ -1369,7 +1368,7 @@ slot_descriptor_list (Object slots, int do_eval)
 	  }
 	  allocation_seen = 1;
 	  allocation = SECOND (slot);
-	  if (id (allocation, inherited_symbol)) {
+	  if (marlais_identical_p (allocation, inherited_symbol)) {
 	    inherited_slot = 1;
 	  }
 	} else if (slotelt == type_keyword) {

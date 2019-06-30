@@ -291,8 +291,8 @@ and_eval (Object form)
 		return ret;
 	    }
 	}
-	if (ret == false_object) {
-	    return (false_object);
+	if (ret == MARLAIS_FALSE) {
+	    return (MARLAIS_FALSE);
 	}
 	clauses = CDR (clauses);
     }
@@ -453,13 +453,13 @@ bind_exit_eval (Object form)
 
     if (!ret) {
 #if 1
-	ret = false_object;
+	ret = MARLAIS_FALSE;
 	while (!EMPTYLISTP (body)) {
 	    ret = eval (CAR (body));
 	    body = CDR (body);
 	}
 #else
-	eval_body (body, false_object);
+	eval_body (body, MARLAIS_FALSE);
 #endif
 	pop_scope ();
 	return (ret);
@@ -491,7 +491,7 @@ bind_methods_eval (Object form)
   while (!EMPTYLISTP (specs)) {
     spec = CAR (specs);
     name = FIRST (spec);
-    add_binding (name, false_object, 0, the_env);
+    add_binding (name, MARLAIS_FALSE, 0, the_env);
     specs = CDR (specs);
   }
 
@@ -528,7 +528,7 @@ boundp_eval (Object form)
   if (!SYMBOLP (sym)) {
     error ("bound?: argument must be a symbol", sym, NULL);
   }
-  return (symbol_value (sym) == NULL ? false_object : true_object);
+  return (symbol_value (sym) == NULL ? MARLAIS_FALSE : MARLAIS_TRUE);
 }
 
 static Object
@@ -552,9 +552,9 @@ case_eval (Object form)
       error ("case: malformed branch", branch, NULL);
     }
     match_list = CAR (branch);
-    if ((match_list == true_object) || (match_list == else_keyword)) {
+    if ((match_list == MARLAIS_TRUE) || (match_list == else_keyword)) {
       consequents = CDR (branch);
-      ret = false_object;
+      ret = MARLAIS_FALSE;
       while (!EMPTYLISTP (consequents)) {
 	ret = eval (CAR (consequents));
 	consequents = CDR (consequents);
@@ -565,10 +565,9 @@ case_eval (Object form)
       error ("select: malformed test expression", match_list, NULL);
     }
     while (!EMPTYLISTP (match_list)) {
-      if (id_p (CAR (match_list), target_form, make_empty_list ())
-	  != false_object) {
+      if (marlais_identical_p (CAR (match_list), target_form)) {
 	consequents = CDR (branch);
-	ret = false_object;
+	ret = MARLAIS_FALSE;
 	while (!EMPTYLISTP (consequents)) {
 	  ret = eval (CAR (consequents));
 	  consequents = CDR (consequents);
@@ -595,13 +594,13 @@ cond_eval (Object form)
     if (VALUESP (ret)) {
       ret = FIRSTVAL (ret);
     }
-    if (ret != false_object) {
+    if (ret != MARLAIS_FALSE) {
       clause = CDR (clause);
       return eval_body (clause, ret);
     }
     clauses = CDR (clauses);
   }
-  return (false_object);
+  return (MARLAIS_FALSE);
 }
 
 static void define_eval_helper(Object form, int bind_where)
@@ -681,7 +680,7 @@ bind_variables (Object init_list,
 	if (value_count < VALUESNUM (val)) {
 	  new = VALUESELS (val)[value_count];
 	} else {
-	  new = false_object;
+	  new = MARLAIS_FALSE;
 	}
 	add_variable_binding (variable,
 			      new,
@@ -710,7 +709,7 @@ bind_variables (Object init_list,
 	   variables != init;
 	   variables = CDR (variables)) {
 	add_variable_binding (CAR (variables),
-			      false_object,
+			      MARLAIS_FALSE,
 			      top_level,
 			      constant,
 			      to_frame);
@@ -828,7 +827,7 @@ define_class_eval (Object form)
   slots = slot_descriptor_list (CDR (tmp_form), 1);
   make_getter_setter_gfs (slots);
   class = make_class (obj, supers, slots,
-		      (abstract_class ? true_object : false_object), NULL);
+		      (abstract_class ? MARLAIS_TRUE : MARLAIS_FALSE), NULL);
 
   /* kludge to put these here.  Better to add a param to make_class. */
   CLASSPROPS (class) |= CLASSSLOTSUNINIT;
@@ -1044,7 +1043,7 @@ dotimes_eval (Object form)
   }
 
   push_scope (CAR (form));
-  add_binding (var, false_object, 0, the_env);
+  add_binding (var, MARLAIS_FALSE, 0, the_env);
   for (i = 0; i < INTVAL (intval); ++i) {
     change_binding (var, make_integer (i));
     body = CDR (CDR (form));
@@ -1056,7 +1055,7 @@ dotimes_eval (Object form)
   if (resform) {
     res = eval (resform);
   } else {
-    res = false_object;
+    res = MARLAIS_FALSE;
   }
   pop_scope ();
   return (res);
@@ -1150,7 +1149,7 @@ for_eval (Object form)
 
     do {
       /* IRM Step 5 */
-      if (eval (test_form) != false_object) {
+      if (eval (test_form) != MARLAIS_FALSE) {
 	break;
       }
       /* IRM Step 6 */
@@ -1175,7 +1174,7 @@ for_eval (Object form)
     pop_scope ();		/* To get rid of collection variables */
   }
   if (!PAIRP (return_forms)) {
-    ret = false_object;
+    ret = MARLAIS_FALSE;
   } else {
     while (PAIRP (return_forms)) {
       ret = eval (CAR (return_forms));
@@ -1244,10 +1243,10 @@ get_vars_and_inits (Object var_forms,
       rest = CDR (CDR (var_form));
 
       by = make_integer (1);
-      termination = false_object;
+      termination = MARLAIS_FALSE;
       start = eval (CAR (rest));
       rest = CDR (rest);
-      bound = false_object;
+      bound = MARLAIS_FALSE;
       if (PAIRP (rest)) {
 	termination = CAR (rest);
 	if (PAIRP (CDR (rest)) &&
@@ -1268,10 +1267,10 @@ get_vars_and_inits (Object var_forms,
       }
       switch (object_type (by)) {
       case Integer:
-	negative = (INTVAL (by) >= 0) ? false_object : true_object;
+	negative = (INTVAL (by) >= 0) ? MARLAIS_FALSE : MARLAIS_TRUE;
 	break;
       case DoubleFloat:
-	negative = (DFLOATVAL (by) >= 0) ? false_object : true_object;
+	negative = (DFLOATVAL (by) >= 0) ? MARLAIS_FALSE : MARLAIS_TRUE;
 	break;
       default:
 	error ("for: numeric clause has unsupported increment type", by, NULL);
@@ -1385,7 +1384,7 @@ exhausted_numeric_or_collection_clauses (Object clause_types,
 					   cons (THIRD (CAR (inits)),
 						 make_empty_list ())));
       }
-      if (true_object == apply (VALUESELS (protocol)[3],
+      if (MARLAIS_TRUE == apply (VALUESELS (protocol)[3],
 				cons (SECOND (CAR (inits)),
 				      cons (THIRD (CAR (inits)),
 					    cons (VALUESELS (protocol)[1],
@@ -1405,31 +1404,31 @@ exhausted_numeric_or_collection_clauses (Object clause_types,
       init = CDR (init);
       bound = CAR (init);	/* FIFTH */
 
-      if (termination == false_object) {
+      if (termination == MARLAIS_FALSE) {
 	/* do nothing */
       } else if (termination == to_symbol) {
-	if (negative == true_object) {
-	  if (true_object == eval (listem (lesser_symbol,
+	if (negative == MARLAIS_TRUE) {
+	  if (MARLAIS_TRUE == eval (listem (lesser_symbol,
 					   current,
 					   bound,
 					   NULL))) {
 	    return 1;
 	  }
-	} else if (true_object == eval (listem (greater_symbol,
+	} else if (MARLAIS_TRUE == eval (listem (greater_symbol,
 						current,
 						bound,
 						NULL))) {
 	  return 1;
 	}
       } else if (termination == above_symbol) {
-	if (true_object == eval (listem (lesser_equal_symbol,
+	if (MARLAIS_TRUE == eval (listem (lesser_equal_symbol,
 					 current,
 					 bound,
 					 NULL))) {
 	  return 1;
 	}
       } else if (termination == below_symbol) {
-	if (true_object == eval (listem (greater_equal_symbol,
+	if (MARLAIS_TRUE == eval (listem (greater_equal_symbol,
 					 current,
 					 bound,
 					 NULL))) {
@@ -1582,23 +1581,23 @@ for_each_eval (Object form)
   collections = map (eval, collections);
   states = list_map1 (init_state_fun, collections);
 
-  if (member (false_object, states)) {
-    return (false_object);
+  if (member (MARLAIS_FALSE, states)) {
+    return (MARLAIS_FALSE);
   }
   vals = list_map2 (cur_el_fun, collections, states);
   push_scope (CAR (form));
   add_bindings (vars, vals, 0, the_env);
 
-  while (eval (test_form) == false_object) {
+  while (eval (test_form) == MARLAIS_FALSE) {
     body = CDR (CDR (CDR (form)));
     while (!EMPTYLISTP (body)) {
       eval (CAR (body));
       body = CDR (body);
     }
     states = list_map2 (next_state_fun, collections, states);
-    if (member (false_object, states)) {
+    if (member (MARLAIS_FALSE, states)) {
       pop_scope ();
-      return (false_object);
+      return (MARLAIS_FALSE);
     }
     vals = list_map2 (cur_el_fun, collections, states);
 
@@ -1612,9 +1611,9 @@ for_each_eval (Object form)
   }
 
   if (EMPTYLISTP (return_forms)) {
-    return (false_object);
+    return (MARLAIS_FALSE);
   } else {
-    ret = eval_body (return_forms, false_object);
+    ret = eval_body (return_forms, MARLAIS_FALSE);
   }
   pop_scope ();
   return (ret);
@@ -1642,7 +1641,7 @@ if_eval (Object form)
   }
   testval = eval (testval);
 
-  if (testval == false_object) {
+  if (testval == MARLAIS_FALSE) {
     return tail_eval (elseform);
   } else {
     return tail_eval (thenform);
@@ -1681,12 +1680,12 @@ or_eval (Object form)
 	return (ret);
       }
     }
-    if (ret != false_object) {
+    if (ret != MARLAIS_FALSE) {
       return (ret);
     }
     clauses = CDR (clauses);
   }
-  return (false_object);
+  return (MARLAIS_FALSE);
 }
 
 static Object qq_help (Object skel);
@@ -1770,7 +1769,7 @@ select_eval (Object form)
       error ("select: malformed branch", branch, NULL);
     }
     match_list = CAR (branch);
-    if ((match_list == true_object) || (match_list == else_keyword)) {
+    if ((match_list == MARLAIS_TRUE) || (match_list == else_keyword)) {
       consequents = CDR (branch);
       while (!EMPTYLISTP (consequents)) {
 	ret = eval (CAR (consequents));
@@ -1782,9 +1781,9 @@ select_eval (Object form)
       error ("select: malformed test expression", match_list, NULL);
     }
     while (!EMPTYLISTP (match_list)) {
-      ret = false_object;
+      ret = MARLAIS_FALSE;
       if (apply (test, listem (target_form, eval (CAR (match_list)),
-			       NULL)) != false_object) {
+			       NULL)) != MARLAIS_FALSE) {
 	consequents = CDR (branch);
 	while (!EMPTYLISTP (consequents)) {
 	  ret = eval (CAR (consequents));
@@ -1796,7 +1795,7 @@ select_eval (Object form)
     }
     branches = CDR (branches);
   }
-  return (false_object);
+  return (MARLAIS_FALSE);
 }
 
 static Object
@@ -1848,10 +1847,10 @@ unless_eval (Object form)
   }
   test = SECOND (form);
   body = CDR (CDR (form));
-  if (eval (test) == false_object) {
-    return (eval_body (body, false_object));
+  if (eval (test) == MARLAIS_FALSE) {
+    return (eval_body (body, MARLAIS_FALSE));
   }
-  return (false_object);
+  return (MARLAIS_FALSE);
 }
 
 static Object
@@ -1865,14 +1864,14 @@ until_eval (Object form)
   test = CAR (CDR (form));
   body = CDR (CDR (form));
 
-  while (eval (test) == false_object) {
+  while (eval (test) == MARLAIS_FALSE) {
     forms = body;
     while (!EMPTYLISTP (forms)) {
       eval (CAR (forms));
       forms = CDR (forms);
     }
   }
-  return (false_object);
+  return (MARLAIS_FALSE);
 }
 
 static Object
@@ -1908,14 +1907,14 @@ while_eval (Object form)
   test = CAR (CDR (form));
   body = CDR (CDR (form));
 
-  while (eval (test) != false_object) {
+  while (eval (test) != MARLAIS_FALSE) {
     forms = body;
     while (!EMPTYLISTP (forms)) {
       eval (CAR (forms));
       forms = CDR (forms);
     }
   }
-  return (false_object);
+  return (MARLAIS_FALSE);
 }
 
 static Object

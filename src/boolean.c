@@ -35,105 +35,37 @@
 #include "alloc.h"
 #include "prim.h"
 
-/* primitives */
+/* Primitives */
 
-static Object not (Object obj);
+static Object boolean_not (Object obj);
+static Object boolean_identical_p (Object obj1, Object obj2, Object rest);
 
 static struct primitive boolean_prims[] =
 {
-  /*    {"%~==", prim_2_rest, not_id_p}, */
-  {"%identical?", prim_2_rest, id_p},
-  {"%not", prim_1, not},
+  {"%not", prim_1, boolean_not},
+  {"%identical?", prim_2_rest, boolean_identical_p},
 };
 
-/* function definitions */
+/* Exported functions */
 
 void
-init_boolean_prims (void)
+marlais_initialize_boolean (void)
+{
+#ifndef SMALL_OBJECTS
+  marlais_true = marlais_allocate_object (True, sizeof (struct object));
+  marlais_false = marlais_allocate_object (False, sizeof (struct object));
+#endif
+}
+
+void
+marlais_register_boolean (void)
 {
   int num = sizeof (boolean_prims) / sizeof (struct primitive);
   init_prims (num, boolean_prims);
 }
 
-#ifndef SMALL_OBJECTS
-Object
-make_true (void)
-{
-  Object obj = marlais_allocate_object (True, sizeof (struct object));
-
-  return (obj);
-}
-#else
-Object
-make_true (void)
-{
-  return (TRUEVAL);
-}
-#endif
-
-#ifndef SMALL_OBJECTS
-Object
-make_false (void)
-{
-  Object obj = marlais_allocate_object (False, sizeof (struct object));
-
-  return (obj);
-}
-#else
-Object
-make_false (void)
-{
-  return (FALSEVAL);
-}
-#endif
-
-Object
-id_p (Object obj1, Object obj2, Object rest)
-{
-    /* succeed quickly in the simple case */
-  if (obj1 == obj2) {
-    if (EMPTYLISTP (rest)) {
-      return (true_object);
-    } else {
-      return id_p (obj2, CAR (rest), CDR (rest));
-    }
-  } else if (INTEGERP (obj1) && INTEGERP (obj2)) {
-    if (INTVAL (obj1) == INTVAL (obj2)) {
-      if (EMPTYLISTP (rest)) {
-	return (true_object);
-      } else {
-	return (id_p (obj2, CAR (rest), CDR (rest)));
-      }
-    } else {
-      return (false_object);
-    }
-  } else if (CHARP (obj1) && CHARP (obj2)) {
-    if (CHARVAL (obj1) == CHARVAL (obj2)) {
-      if (EMPTYLISTP (rest)) {
-	return (true_object);
-      } else {
-	return (id_p (obj2, CAR (rest), CDR (rest)));
-      }
-    } else {
-      return (false_object);
-    }
-  } else if (DFLOATP (obj1) && DFLOATP (obj2)) {
-    if (DFLOATVAL (obj1) == DFLOATVAL (obj2)) {
-      if (EMPTYLISTP (rest)) {
-	return (true_object);
-      } else {
-	return (id_p (obj2, CAR (rest), CDR (rest)));
-      }
-    } else {
-      return (false_object);
-    }
-  } else {
-    return (false_object);
-  }
-}
-
 int
-id (Object obj1, Object obj2)
+marlais_identical_p (Object obj1, Object obj2)
 {
   if (obj1 == obj2) {
     return 1;
@@ -148,12 +80,59 @@ id (Object obj1, Object obj2)
   }
 }
 
+/* Static functions */
+
 static Object
-not (Object obj)
+boolean_not (Object obj)
 {
-  if (obj == false_object) {
-    return (true_object);
+  if (obj == MARLAIS_FALSE) {
+    return (MARLAIS_TRUE);
   } else {
-    return (false_object);
+    return (MARLAIS_FALSE);
+  }
+}
+
+static Object
+boolean_identical_p (Object obj1, Object obj2, Object rest)
+{
+  /* succeed quickly in the simple case */
+  if (obj1 == obj2) {
+    if (EMPTYLISTP (rest)) {
+      return (MARLAIS_TRUE);
+    } else {
+      return boolean_identical_p (obj2, CAR (rest), CDR (rest));
+    }
+  } else if (INTEGERP (obj1) && INTEGERP (obj2)) {
+    if (INTVAL (obj1) == INTVAL (obj2)) {
+      if (EMPTYLISTP (rest)) {
+		return (MARLAIS_TRUE);
+      } else {
+		return (boolean_identical_p (obj2, CAR (rest), CDR (rest)));
+      }
+    } else {
+      return (MARLAIS_FALSE);
+    }
+  } else if (CHARP (obj1) && CHARP (obj2)) {
+    if (CHARVAL (obj1) == CHARVAL (obj2)) {
+      if (EMPTYLISTP (rest)) {
+		return (MARLAIS_TRUE);
+      } else {
+		return (boolean_identical_p (obj2, CAR (rest), CDR (rest)));
+      }
+    } else {
+      return (MARLAIS_FALSE);
+    }
+  } else if (DFLOATP (obj1) && DFLOATP (obj2)) {
+    if (DFLOATVAL (obj1) == DFLOATVAL (obj2)) {
+      if (EMPTYLISTP (rest)) {
+		return (MARLAIS_TRUE);
+      } else {
+		return (boolean_identical_p (obj2, CAR (rest), CDR (rest)));
+      }
+    } else {
+      return (MARLAIS_FALSE);
+    }
+  } else {
+    return (MARLAIS_FALSE);
   }
 }

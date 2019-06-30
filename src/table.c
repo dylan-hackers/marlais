@@ -83,7 +83,7 @@ init_table_prims (void)
 {
   int num = sizeof (table_prims) / sizeof (struct primitive);
   init_prims (num, table_prims);
-  table_default = cons (false_object, false_object);
+  table_default = cons (MARLAIS_FALSE, MARLAIS_FALSE);
 }
 
 Object
@@ -212,7 +212,7 @@ table_element_handle (Object table, Object key, Object *default_val)
   while (entry) {
     if (apply (equal_fun,
 	       cons (TEKEY (entry), cons (key, make_empty_list ())))
-	!= false_object) {
+	!= MARLAIS_FALSE) {
       return &(TEVALUE (entry));
     }
     entry = TENEXT (entry);
@@ -256,7 +256,7 @@ table_initial_state (Object table)
       return (TABLETABLE (table)[i]);
     }
   }
-  return (false_object);
+  return (MARLAIS_FALSE);
 }
 
 static Object
@@ -272,7 +272,7 @@ table_next_state (Object table, Object state)
       return (TABLETABLE (table)[i]);
     }
   }
-  return (false_object);
+  return (MARLAIS_FALSE);
 }
 
 static Object

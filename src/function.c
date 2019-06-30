@@ -283,7 +283,7 @@ parse_function_key_parameters(Object functor, Object* params,
 	keyword_list_insert (get_params_fn (functor),
 			     listem (param_name_to_keyword (entry),
 				     entry,
-				     false_object,
+				     MARLAIS_FALSE,
 				     NULL));
       } else if (PAIRP (entry) && is_param_name (CAR (entry)) &&
 		 list_length (entry) == 2) {
@@ -346,7 +346,7 @@ xform_method_key_param(Object meth_obj, Object entry)
     keyword_list_insert (&METHKEYPARAMS (meth_obj),
 			 listem (CAR (entry),
 				 SECOND (entry),
-				 false_object,
+				 MARLAIS_FALSE,
 				 NULL));
   }
 }
@@ -587,13 +587,13 @@ generic_function_make (Object arglist)
     GFNAME (obj) = unspecified_object;
     GFREQPARAMS (obj) = required;
 
-    if (rest != false_object) {
+    if (rest != MARLAIS_FALSE) {
 	GFRESTPARAM (obj) = rest;
     } else {
 	GFRESTPARAM (obj) = NULL;
     }
     GFKEYPARAMS (obj) = key;
-    if (allkeys == false_object) {
+    if (allkeys == MARLAIS_FALSE) {
 	GFPROPS (obj) &= !GFALLKEYSMASK;
     } else {
 	GFPROPS (obj) |= GFALLKEYSMASK;
@@ -655,7 +655,7 @@ add_method (Object generic, Object method)
     /* invalidate next methods when new method added. */
     next_meth_list = GFACTIVENM (generic);
     while (PAIRP (next_meth_list)) {
-	NMREST (CAR (next_meth_list)) = cons (false_object,
+	NMREST (CAR (next_meth_list)) = cons (MARLAIS_FALSE,
 					      make_empty_list ());
 	next_meth_list = CDR (next_meth_list);
     }
@@ -699,7 +699,7 @@ add_method (Object generic, Object method)
     GFCACHE (generic) = make_table (50);
 #endif
 
-    return (construct_values (2, method, false_object));
+    return (construct_values (2, method, MARLAIS_FALSE));
 }
 
 Object
@@ -752,7 +752,7 @@ function_values (Object func)
     }
     return construct_values (2,
 			     vals,
-			     rest == NULL ? false_object : rest);
+			     rest == NULL ? MARLAIS_FALSE : rest);
 
 }
 
@@ -793,9 +793,9 @@ function_arguments (Object fun)
 	    keywords = GFKEYPARAMS (fun);
 	}
 	if (GFRESTPARAM (fun)) {
-	    has_rest = true_object;
+	    has_rest = MARLAIS_TRUE;
 	} else {
-	    has_rest = false_object;
+	    has_rest = MARLAIS_FALSE;
 	}
 	break;
     case Method:
@@ -806,9 +806,9 @@ function_arguments (Object fun)
 	    keywords = METHKEYPARAMS (fun);
 	}
 	if (METHRESTPARAM (fun)) {
-	    has_rest = true_object;
+	    has_rest = MARLAIS_TRUE;
 	} else {
-	    has_rest = false_object;
+	    has_rest = MARLAIS_FALSE;
 	}
 	break;
     case Primitive:
@@ -865,7 +865,7 @@ applicable_method_p (Object argfun, Object sample_args, int strict_check)
 
   fail:
     if (EMPTYLISTP (funs)) {
-	return false_object;
+	return MARLAIS_FALSE;
     }
     while (PAIRP (funs)) {
 	fun = CAR (funs);
@@ -876,7 +876,7 @@ applicable_method_p (Object argfun, Object sample_args, int strict_check)
 	/* Are there more sample args than required args? */
 	num_required = INTVAL (FIRSTVAL (args));
 	if (list_length (sample_args) < num_required) {
-	    return (false_object);
+	    return (MARLAIS_FALSE);
 	}
 	/* Do the types of the required args match the
 	   types of the sample args? */
@@ -884,7 +884,7 @@ applicable_method_p (Object argfun, Object sample_args, int strict_check)
 	for (i = 0; i < num_required; ++i) {
 	    if (!instance (CAR (samples), CAR (specs))) {
 		goto fail;
-/*              return (false_object); */
+/*              return (MARLAIS_FALSE); */
 	    }
 	    samples = CDR (samples);
 	    specs = CDR (specs);
@@ -906,26 +906,26 @@ applicable_method_p (Object argfun, Object sample_args, int strict_check)
 			EMPTYLISTP (CDR (samples))) {
 			/* Has non keyword where our method needs one */
 			goto fail;
-/*                      return (false_object); */
+/*                      return (MARLAIS_FALSE); */
 		    } else if (check_keywords) {
 			if (strict_check &&
 			  !find_keyword_in_list (CAR (samples), keywords)) {
 			    /* Has a keyword not in the method */
 			    goto fail;
-/*                          return (false_object); */
+/*                          return (MARLAIS_FALSE); */
 			}
 		    }
 		    samples = CDR (CDR (samples));
 		}
-	    } else if (SECONDVAL (args) == false_object) {
+	    } else if (SECONDVAL (args) == MARLAIS_FALSE) {
 		/* We have no rest parameter.  If there are more arguments, this
 		 * ain't a match.
 		 */
-		return (false_object);
+		return (MARLAIS_FALSE);
 	    }
 	}
 	/* We passed all of the tests. */
-	return (true_object);
+	return (MARLAIS_TRUE);
     }
 }
 
@@ -944,7 +944,7 @@ recalc_next_methods (Object fun, Object meth, Object sample_args)
     /* add all applicable methods */
     while (!EMPTYLISTP (methods)) {
 	method = CAR (methods);
-	if (applicable_method_p (method, sample_args, 0) != false_object) {
+	if (applicable_method_p (method, sample_args, 0) != MARLAIS_FALSE) {
 	    if (meth == method) {
 		current_method_added = 1;
 		/* detect add of current method */
@@ -1109,7 +1109,7 @@ sorted_applicable_methods (Object fun, Object sample_args)
     app_methods = make_empty_list ();
     while (!EMPTYLISTP (methods)) {
 	method = CAR (methods);
-	if (applicable_method_p (method, sample_args, 0) != false_object) {
+	if (applicable_method_p (method, sample_args, 0) != MARLAIS_FALSE) {
 	    app_methods = cons (method, app_methods);
 	}
 	methods = CDR (methods);
@@ -1186,7 +1186,7 @@ static int
 same_specializers (Object s1, Object s2)
 {
     while (!EMPTYLISTP (s1) && !EMPTYLISTP (s2)) {
-	if (same_class_p (CAR (s1), CAR (s2)) == false_object) {
+	if (same_class_p (CAR (s1), CAR (s2)) == MARLAIS_FALSE) {
 	    return (0);
 	}
 	s1 = CDR (s1);
@@ -1280,7 +1280,7 @@ find_method (Object generic, Object spec_list)
 	    return CAR (methods);
 	}
     }
-    return false_object;
+    return MARLAIS_FALSE;
 }
 
 static Object

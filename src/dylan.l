@@ -435,14 +435,14 @@ search_for_poundword (char *string, YYSTYPE *obj_ptr)
     case 't':
     case 'T':
 	if (yyleng == 2) {
-	    *obj_ptr = true_object;
+	    *obj_ptr = MARLAIS_TRUE;
 	    return HASH_T;
 	}
 	break;
     case 'f':
     case 'F':
 	if (yyleng == 2) {
-	    *obj_ptr = false_object;
+	    *obj_ptr = MARLAIS_FALSE;
 	    return HASH_F;
 	}
 	break;

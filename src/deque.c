@@ -271,7 +271,7 @@ static Object
 deque_initial_state (Object d)
 {
   if (EMPTYLISTP (DEQUEFIRST (d))) {
-    return (false_object);
+    return (MARLAIS_FALSE);
   } else {
     return (DEQUEFIRST (d));
   }
@@ -281,7 +281,7 @@ static Object
 deque_next_state (Object d, Object s)
 {
   if (EMPTYLISTP (DENEXT (s))) {
-    return (false_object);
+    return (MARLAIS_FALSE);
   } else {
     return (DENEXT (s));
   }
@@ -291,7 +291,7 @@ static Object
 deque_final_state (Object d)
 {
   if (EMPTYLISTP (DEQUELAST (d))) {
-    return (false_object);
+    return (MARLAIS_FALSE);
   } else {
     return (DEQUELAST (d));
   }
@@ -301,7 +301,7 @@ static Object
 deque_previous_state (Object d, Object s)
 {
   if (EMPTYLISTP (DEPREV (s))) {
-    return (false_object);
+    return (MARLAIS_FALSE);
   } else {
     return (DEPREV (s));
   }

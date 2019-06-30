@@ -93,7 +93,7 @@ make_string_driver (Object args)
 
   make_sequence_driver(args, &size, &size_obj, &fill_obj, "<string>");
 
-  if (fill_obj != false_object) {
+  if (fill_obj != MARLAIS_FALSE) {
     if (!CHARP (fill_obj)) {
       error ("make: value of fill: must be a character for <string> class",
 	     fill_obj, NULL);
@@ -184,12 +184,12 @@ static Object
 string_lessthan (Object str1, Object str2)
 {
     return (strcmp (BYTESTRVAL (str1), BYTESTRVAL (str2)) < 0) ?
-	true_object : false_object;
+	MARLAIS_TRUE : MARLAIS_FALSE;
 }
 
 static Object
 string_equal (Object str1, Object str2)
 {
     return (strcmp (BYTESTRVAL (str1), BYTESTRVAL (str2)) == 0) ?
-	true_object : false_object;
+	MARLAIS_TRUE : MARLAIS_FALSE;
 }

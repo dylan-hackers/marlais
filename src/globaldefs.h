@@ -23,8 +23,6 @@ GLOBAL Object apply_symbol;
 GLOBAL Object size_keyword;
 GLOBAL Object fill_keyword;
 GLOBAL Object default_object;
-GLOBAL Object true_object;
-GLOBAL Object false_object;
 GLOBAL Object eof_object;
 GLOBAL Object unspecified_object;
 GLOBAL Object uninit_slot_object;

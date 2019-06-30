@@ -593,10 +593,10 @@ use_module (Object module_name,
 		    (import_module->exported_bindings == all_symbol ||
 		     table_element (import_module->exported_bindings,
 				    binding->sym,
-				    false_object) != false_object) &&
+				    MARLAIS_FALSE) != MARLAIS_FALSE) &&
 		    (all_imports ||
-		     (table_element (imports_table, binding, false_object)
-		      != false_object))) {
+		     (table_element (imports_table, binding, MARLAIS_FALSE)
+		      != MARLAIS_FALSE))) {
 
 		    /*
 		     * This binding is importable.  Go for it.
@@ -609,8 +609,8 @@ use_module (Object module_name,
 		     */
 		    if ((new_sym = table_element (renames_table,
 						  binding->sym,
-						  false_object))
-			== false_object) {
+						  MARLAIS_FALSE))
+			== MARLAIS_FALSE) {
 			new_sym = prefix_string ? concat_prefix (prefix_string,
 							       binding->sym)
 			    : binding->sym;
@@ -653,8 +653,8 @@ use_module (Object module_name,
 		    if (exports != all_symbol &&
 			(table_element (exports_table,
 					new_sym,
-					false_object)
-			 == false_object)) {
+					MARLAIS_FALSE)
+			 == MARLAIS_FALSE)) {
 			/* This binding can't be exported */
 			bindings->props &= !EXPORTED_BINDING;
 			bindings->props |= IMPORTED_BINDING;

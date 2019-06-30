@@ -333,13 +333,12 @@ initialize_marlais (void)
   init_symbol_prims ();
 
   /* intialize global objects */
+  marlais_initialize_boolean ();
+
   initialize_empty_list ();
 
   empty_string = make_byte_string ("");
   equal_symbol = make_symbol ("=");
-
-  true_object = make_true ();
-  false_object = make_false ();
 
   apply_symbol = make_symbol ("apply");
   key_symbol = make_symbol ("#key");
@@ -512,7 +511,7 @@ initialize_marlais (void)
 			 1);
 
   /* make default object */
-  default_object = cons (false_object, false_object);
+  default_object = cons (MARLAIS_FALSE, MARLAIS_FALSE);
   add_top_level_binding (make_symbol ("%default-object"), default_object, 1);
 
   binding_stack = cons (make_integer (0), make_empty_list ());
@@ -528,7 +527,7 @@ initialize_marlais (void)
   init_print_prims ();
   init_number_prims ();
   init_apply_prims ();
-  init_boolean_prims ();
+  marlais_register_boolean ();
   init_keyword_prims ();
   init_string_prims ();
   init_vector_prims ();

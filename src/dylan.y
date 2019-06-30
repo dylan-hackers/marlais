@@ -446,12 +446,12 @@ if_statement
 							$7))); }
 
 then_body
-	:		{ $$ = false_object; }
+	:		{ $$ = MARLAIS_FALSE; }
 	| nonempty_body	{ $$ = $1; }
 
 else_parts
-	:		{ $$ = cons(false_object, make_empty_list()); }
-	| ELSE		{ $$ = cons (false_object, make_empty_list()); }
+	:		{ $$ = cons(MARLAIS_FALSE, make_empty_list()); }
+	| ELSE		{ $$ = cons (MARLAIS_FALSE, make_empty_list()); }
 	| ELSE nonempty_body	{ $$ = cons ($2, make_empty_list()); }
 	| ELSEIF '(' expression ')' body else_parts
 			{ $$ = cons (cons (if_symbol,
@@ -663,7 +663,7 @@ increment_clause_opt
 		{ $$ = cons ($1, cons ($2, make_empty_list())); }
 
 for_terminator_opt
-	:			{ $$ = cons (false_object,
+	:			{ $$ = cons (MARLAIS_FALSE,
 					     make_empty_list()); }
 	| UNTIL expression	{ $$ = cons ($2, make_empty_list()); }
 	| WHILE expression	{ $$ = cons (cons (not_symbol,
@@ -857,12 +857,12 @@ slot_spec
 		  mods = $1;
 		  while ( PAIRP (mods)) {
 		      mod = CAR (mods);
-		      if (id (mod, open_symbol)) {
+		      if (mod == open_symbol) {
 			  if (dynamism_specified) {
 			      error ("Slot dyanamism specified twice", NULL);
 			  }
 			  dynamism_specified = 1;
-		      } else if (id (mod, sealed_symbol)) {
+		      } else if (mod == sealed_symbol) {
 			  if (dynamism_specified) {
 			      error ("Slot dyanamism specified twice", NULL);
 			  }
@@ -1456,9 +1456,9 @@ gensym(int i)
 static int
 allocation_word (Object word)
 {
-    return (id (word, instance_symbol) || id (word, class_symbol)
-	    || id (word, each_subclass_symbol) || id (word, constant_symbol)
-	    || id (word, virtual_symbol) || id (word, inherited_symbol));
+    return (word == instance_symbol || word == class_symbol
+	    || word == each_subclass_symbol || word == constant_symbol
+	    || word == virtual_symbol || word == inherited_symbol);
 }
 
 #ifdef OPTIMIZE_SPECIALIZERS

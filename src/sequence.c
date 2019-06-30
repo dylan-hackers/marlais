@@ -43,7 +43,7 @@ void make_sequence_driver(Object args,
 {
   *size = 0;
   *size_obj = NULL;
-  *fill_obj = false_object;
+  *fill_obj = MARLAIS_FALSE;
 
   while (!EMPTYLISTP (args)) {
     if (FIRST (args) == size_keyword) {

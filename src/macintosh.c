@@ -91,7 +91,7 @@ get_file ()
 
 	return make_byte_string (FSSpecToPath (&reply.sfFile, path));
     }
-    return false_object;
+    return MARLAIS_FALSE;
 }
 
 Object
@@ -120,7 +120,7 @@ put_file (Object defaultNameObj, Object promptObj)
 
 	return make_byte_string (FSSpecToPath (&reply.sfFile, defaultName));
     }
-    return false_object;
+    return MARLAIS_FALSE;
 }
 
 static char *

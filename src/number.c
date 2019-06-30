@@ -222,9 +222,9 @@ static Object
 prim_odd_p (Object n)
 {
     if ((INTVAL (n) % 2) == 1) {
-	return (true_object);
+	return (MARLAIS_TRUE);
     } else {
-	return (false_object);
+	return (MARLAIS_FALSE);
     }
 }
 
@@ -232,9 +232,9 @@ static Object
 prim_even_p (Object n)
 {
     if ((INTVAL (n) % 2) == 0) {
-	return (true_object);
+	return (MARLAIS_TRUE);
     } else {
-	return (false_object);
+	return (MARLAIS_FALSE);
     }
 }
 
@@ -242,9 +242,9 @@ static Object
 prim_int_zero_p (Object n)
 {
     if (INTVAL (n) == 0) {
-	return (true_object);
+	return (MARLAIS_TRUE);
     } else {
-	return (false_object);
+	return (MARLAIS_FALSE);
     }
 }
 
@@ -252,9 +252,9 @@ static Object
 prim_double_zero_p (Object n)
 {
     if (DFLOATVAL (n) == 0.0) {
-	return (true_object);
+	return (MARLAIS_TRUE);
     } else {
-	return (false_object);
+	return (MARLAIS_FALSE);
     }
 }
 
@@ -262,9 +262,9 @@ static Object
 prim_int_positive_p (Object n)
 {
     if (INTVAL (n) > 0) {
-	return (true_object);
+	return (MARLAIS_TRUE);
     } else {
-	return (false_object);
+	return (MARLAIS_FALSE);
     }
 }
 
@@ -272,9 +272,9 @@ static Object
 prim_double_positive_p (Object n)
 {
     if (DFLOATVAL (n) > 0.0) {
-	return (true_object);
+	return (MARLAIS_TRUE);
     } else {
-	return (false_object);
+	return (MARLAIS_FALSE);
     }
 }
 
@@ -282,9 +282,9 @@ static Object
 prim_int_negative_p (Object n)
 {
     if (INTVAL (n) < 0) {
-	return (true_object);
+	return (MARLAIS_TRUE);
     } else {
-	return (false_object);
+	return (MARLAIS_FALSE);
     }
 }
 
@@ -292,9 +292,9 @@ static Object
 prim_double_negative_p (Object n)
 {
     if (DFLOATVAL (n) < 0.0) {
-	return (true_object);
+	return (MARLAIS_TRUE);
     } else {
-	return (false_object);
+	return (MARLAIS_FALSE);
     }
 }
 
@@ -302,9 +302,9 @@ static Object
 prim_integral_p (Object n)
 {
     if (INTEGERP (n)) {
-	return (true_object);
+	return (MARLAIS_TRUE);
     } else {
-	return (false_object);
+	return (MARLAIS_FALSE);
     }
 }
 
@@ -420,29 +420,29 @@ prim_binary_less_than (Object n1, Object n2)
     if (INTEGERP (n1)) {
 	if (INTEGERP (n2)) {
 	    if (INTVAL (n1) < INTVAL (n2)) {
-		return (true_object);
+		return (MARLAIS_TRUE);
 	    } else {
-		return (false_object);
+		return (MARLAIS_FALSE);
 	    }
 	} else {
 	    if (INTVAL (n1) < DFLOATVAL (n2)) {
-		return (true_object);
+		return (MARLAIS_TRUE);
 	    } else {
-		return (false_object);
+		return (MARLAIS_FALSE);
 	    }
 	}
     } else {
 	if (INTEGERP (n2)) {
 	    if (DFLOATVAL (n1) < INTVAL (n2)) {
-		return (true_object);
+		return (MARLAIS_TRUE);
 	    } else {
-		return (false_object);
+		return (MARLAIS_FALSE);
 	    }
 	} else {
 	    if (DFLOATVAL (n1) < DFLOATVAL (n2)) {
-		return (true_object);
+		return (MARLAIS_TRUE);
 	    } else {
-		return (false_object);
+		return (MARLAIS_FALSE);
 	    }
 	}
     }

@@ -54,6 +54,14 @@ Stream,
 #include "object-large.h"
 #endif
 
+#ifdef SMALL_OBJECTS
+#define MARLAIS_TRUE  (TRUEVAL)
+#define MARLAIS_FALSE (FALSEVAL)
+#else
+#define MARLAIS_TRUE  (true_object)
+#define MARLAIS_FALSE (false_object)
+#endif
+
 /* globals */
 extern jmp_buf error_return;
 

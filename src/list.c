@@ -143,7 +143,7 @@ make_empty_list (void)
 Object
 make_pair_driver (Object args)
 {
-    return cons (false_object, false_object);	/* who knows ?? */
+    return cons (MARLAIS_FALSE, MARLAIS_FALSE);	/* who knows ?? */
 }
 
 /* This gets called with (make <list> args) */
@@ -285,7 +285,7 @@ list_length_int (Object lst)
     int len = list_length (lst);
 
     if (len < 0) {
-	return false_object;
+	return MARLAIS_FALSE;
     } else {
 	return make_integer (len);
     }
@@ -318,18 +318,18 @@ member_p (Object obj, Object lst, Object test)
 {
     Object l = lst;
     while (!EMPTYLISTP (l)) {
-	if (test != false_object) {
-	    if (apply (test, listem (obj, CAR (l), NULL)) != false_object) {
-		return (true_object);
+	if (test != MARLAIS_FALSE) {
+	    if (apply (test, listem (obj, CAR (l), NULL)) != MARLAIS_FALSE) {
+		return (MARLAIS_TRUE);
 	    }
 	} else {
-	    if (id_p (obj, CAR (l), make_empty_list ()) != false_object) {
-		return (true_object);
+	    if (marlais_identical_p (obj, CAR (l))) {
+		return (MARLAIS_TRUE);
 	    }
 	}
 	l = CDR (l);
     }
-    return (false_object);
+    return (MARLAIS_FALSE);
 }
 
 Object
@@ -531,7 +531,7 @@ list_last (Object lst, Object default_ob)
 int
 list_equal (Object l1, Object l2)
 {
-    if (id_p (l1, l2, make_empty_list ()) != false_object) {
+    if (marlais_identical_p (l1, l2)) {
 	return (1);
     }
     if (PAIRP (l1) && PAIRP (l2)) {
