@@ -35,7 +35,6 @@
 #define ALLOC_H
 
 #include "common.h"
-#include "env.h"
 
 /* initialize the garbage collector */
 extern void  marlais_initialize_gc (void);
