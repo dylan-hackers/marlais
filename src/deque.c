@@ -107,7 +107,7 @@ marlais_make_deque_entry (Object args)
   int size;
   Object size_obj, fill_obj, first, last, deq;
 
-  make_sequence_driver(args, &size, &size_obj, &fill_obj, "<deque>");
+  marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<deque>");
 
   deq = marlais_make_deque ();
   /* actually fabricate the list representing the deque */

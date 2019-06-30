@@ -31,15 +31,18 @@
 
  */
 
-/* general operations that all sequences (vectors, deques, etc) use */ 
+/* general operations that all sequences (vectors, deques, etc) use */
 
 #include "sequence.h"
 
 #include "error.h"
 
-void make_sequence_driver(Object args, 
-	int* size, Object* size_obj, Object* fill_obj,
-	const char* type)
+void marlais_make_sequence_entry
+    (Object args,
+	 int* size,
+	 Object* size_obj,
+	 Object* fill_obj,
+	 const char* type)
 {
   *size = 0;
   *size_obj = NULL;

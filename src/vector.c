@@ -114,7 +114,7 @@ make_vector_driver (Object args)
   int size;
   Object size_obj, fill_obj;
 
-  make_sequence_driver(args, &size, &size_obj, &fill_obj, "<vector>");
+  marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<vector>");
   return make_vector (size, fill_obj);
 }
 

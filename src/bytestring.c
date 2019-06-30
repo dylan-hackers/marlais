@@ -91,7 +91,7 @@ marlais_make_bytestring_entry (Object args)
   char fill;
   Object size_obj, fill_obj, res;
 
-  make_sequence_driver(args, &size, &size_obj, &fill_obj, "<string>");
+  marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<string>");
 
   if (fill_obj != MARLAIS_FALSE) {
     if (!CHARP (fill_obj)) {

@@ -153,7 +153,7 @@ make_list_driver (Object args)
     int size;
     Object size_obj, fill_obj, res;
 
-    make_sequence_driver(args, &size, &size_obj, &fill_obj, "<list>");
+    marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<list>");
 
     /* actually fabricate the list */
     if (size == 0) {
