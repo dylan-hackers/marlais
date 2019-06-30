@@ -44,7 +44,7 @@
 #include "symbol.h"
 #include "sequence.h"
 
-/* primitives */
+/* Primitives */
 
 static Object string_element (Object string, Object index, Object default_ob);
 static Object string_element_setter (Object string, Object index, Object val);
@@ -65,17 +65,17 @@ static struct primitive string_prims[] =
     {"%string=", prim_2, string_equal},
 };
 
-/* function definitions */
+/* Exported functions */
 
 void
-init_string_prims (void)
+marlais_register_bytestring (void)
 {
     int num = sizeof (string_prims) / sizeof (struct primitive);
     init_prims (num, string_prims);
 }
 
 Object
-make_byte_string (char *str)
+marlais_make_bytestring (char *str)
 {
     Object obj = marlais_allocate_object (ByteString, sizeof (struct byte_string));
 
@@ -85,7 +85,7 @@ make_byte_string (char *str)
 }
 
 Object
-make_string_driver (Object args)
+marlais_make_bytestring_entry (Object args)
 {
   int size, i;
   char fill;
@@ -116,7 +116,7 @@ make_string_driver (Object args)
   return (res);
 }
 
-/* primitives */
+/* Static functions */
 
 static Object
 string_element (Object string, Object index, Object default_ob)
@@ -177,7 +177,7 @@ string_append2 (Object str1, Object str2)
 
     strcpy (new_str, BYTESTRVAL (str1));
     strcat (new_str, BYTESTRVAL (str2));
-    return (make_byte_string (new_str));
+    return (marlais_make_bytestring (new_str));
 }
 
 static Object

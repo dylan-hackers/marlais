@@ -94,7 +94,7 @@ all_keywords (Object lst)
 static Object
 symbol_to_string (Object sym)
 {
-    return (make_byte_string (SYMBOLNAME (sym)));
+    return (marlais_make_bytestring (SYMBOLNAME (sym)));
 }
 
 static Object

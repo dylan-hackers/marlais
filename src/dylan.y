@@ -1339,8 +1339,8 @@ void yyerror(char *s)
     char line_str[20];
     sprintf (line_str, " [line #%d]", yylineno);
     warning (s,
-	     make_byte_string (yytext),
-	     make_byte_string (line_str),
+	     marlais_make_bytestring (yytext),
+	     marlais_make_bytestring (line_str),
 	     NULL);
 }
 

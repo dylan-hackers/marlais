@@ -66,7 +66,7 @@ get_ctime ()
     time_t time_loc;
 
     (void) time (&time_loc);
-    return make_byte_string (ctime (&time_loc));
+    return marlais_make_bytestring (ctime (&time_loc));
 }
 
 Object

@@ -89,7 +89,7 @@ get_file ()
     if (reply.sfGood) {
 	char path[256];
 
-	return make_byte_string (FSSpecToPath (&reply.sfFile, path));
+	return marlais_make_bytestring (FSSpecToPath (&reply.sfFile, path));
     }
     return MARLAIS_FALSE;
 }
@@ -118,7 +118,7 @@ put_file (Object defaultNameObj, Object promptObj)
     if (reply.sfGood) {
 	FSSpec *file = &reply.sfFile;
 
-	return make_byte_string (FSSpecToPath (&reply.sfFile, defaultName));
+	return marlais_make_bytestring (FSSpecToPath (&reply.sfFile, defaultName));
     }
     return MARLAIS_FALSE;
 }

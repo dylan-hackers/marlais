@@ -35,9 +35,11 @@
 
 #include "common.h"
 
-/* global objects */
-void init_string_prims (void);
-Object make_byte_string (char *str);
-Object make_string_driver (Object args);
+/* Register bytestring primitives */
+extern void marlais_register_bytestring (void);
+/* Make a <bytestring> */
+extern Object marlais_make_bytestring (char *str);
+/* Entrypoint for make(<bytestring>) */
+extern Object marlais_make_bytestring_entry (Object args);
 
 #endif

@@ -809,7 +809,7 @@ char* make_expanded_byte_string(char* str)
 		BYTESTRVAL(obj) = exp_str;
 		return (obj);
 	}
-	return make_byte_string(str);
+	return marlais_make_bytestring(str);
 }
 
 static int countlines(char *str)

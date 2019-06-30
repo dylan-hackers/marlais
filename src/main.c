@@ -209,7 +209,7 @@ main (int argc, char *argv[])
     if(!init_file) {
       init_file = INIT_FILE;
     }
-    load(make_byte_string (init_file));
+    load(marlais_make_bytestring (init_file));
   }
 
   set_module (new_module (dylan_user_symbol));
@@ -232,7 +232,7 @@ main (int argc, char *argv[])
       common_dylan = COMMON_DYLAN_LIB_DIR;
     }
     sprintf(file, "%s/common-dylan.dylan", common_dylan);
-    load(make_byte_string(file));
+    load(marlais_make_bytestring(file));
   }
 #endif
 
@@ -249,7 +249,7 @@ main (int argc, char *argv[])
 
   /* load any source files specified on command line */
   while (optind < argc) {
-    load (make_byte_string (argv[optind]));
+    load (marlais_make_bytestring (argv[optind]));
     maybe_quit = 1;
     optind++;
   }
@@ -281,7 +281,7 @@ main (int argc, char *argv[])
     /* is this a request to load a file? */
     if (theLoadFileFlag) {
       theLoadFileFlag = false;
-      load (make_byte_string (thePathToLoad));
+      load (marlais_make_bytestring (thePathToLoad));
     }
     /* some event caused the prompt to be dirty. */
     if (thePromptDirty) {
@@ -337,7 +337,7 @@ initialize_marlais (void)
 
   initialize_empty_list ();
 
-  empty_string = make_byte_string ("");
+  empty_string = marlais_make_bytestring ("");
   equal_symbol = make_symbol ("=");
 
   apply_symbol = make_symbol ("apply");
@@ -529,7 +529,7 @@ initialize_marlais (void)
   init_apply_prims ();
   marlais_register_boolean ();
   init_keyword_prims ();
-  init_string_prims ();
+  marlais_register_bytestring ();
   init_vector_prims ();
   init_error_prims ();
   init_stream_prims ();

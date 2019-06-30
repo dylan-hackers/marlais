@@ -845,7 +845,7 @@ make (Object class, Object rest)
 	     (class == simple_object_vector_class)) {
     ret = make_vector_driver (rest);
   } else if ((class == string_class) || (class == byte_string_class)) {
-    ret = make_string_driver (rest);
+    ret = marlais_make_bytestring_entry (rest);
   } else if (class == generic_function_class) {
     ret = make_generic_function_driver (rest);
   } else if ((class == table_class) || (class == object_table_class)) {
@@ -853,7 +853,7 @@ make (Object class, Object rest)
   } else if (class == deque_class) {
     ret = make_deque_driver (rest);
   } else if (class == array_class) {
-    ret = marlais_make_array (rest);
+    ret = marlais_make_array_entry (rest);
   } else if (class == class_class) {
     ret = make_class_driver (rest);
   } else {
