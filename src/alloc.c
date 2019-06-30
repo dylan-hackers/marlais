@@ -105,7 +105,6 @@ marlais_allocate_object (ObjectType type, size_t size)
     return obj;
 }
 
-
 char *
 marlais_allocate_strdup (const char *str)
 {

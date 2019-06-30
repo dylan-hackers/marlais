@@ -38,18 +38,14 @@
 
 /* initialize the garbage collector */
 extern void  marlais_initialize_gc (void);
-
 /* allocate normal memory */
 extern void *marlais_allocate_memory (size_t size);
 /* reallocate normal memory */
 extern void *marlais_reallocate_memory (void *old_obj, size_t new_size);
-
 /* allocate atomic memory */
 extern void *marlais_allocate_atomic (size_t size);
-
 /* allocate an object */
 extern Object marlais_allocate_object (ObjectType type, size_t size);
-
 /* allocate copy of a zero-terminated string */
 extern char *marlais_allocate_strdup (const char *str);
 
