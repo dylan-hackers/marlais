@@ -35,12 +35,9 @@
 #ifndef READ_H
 #define READ_H
 
-#include <stdio.h>
-
 #include "common.h"
 
-/* global objects */
-extern Object allkeys_symbol, hash_values_symbol;
-void init_read_prims (void);
+/* Register read primitives */
+void marlais_register_read (void);
 
 #endif

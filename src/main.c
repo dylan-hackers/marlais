@@ -531,7 +531,7 @@ initialize_marlais (void)
   init_vector_prims ();
   marlais_register_error ();
   marlais_register_stream ();
-  init_read_prims ();
+  marlais_register_read ();
   init_table_prims ();
   marlais_register_character ();
   marlais_register_deque ();

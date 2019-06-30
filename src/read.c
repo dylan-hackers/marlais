@@ -49,7 +49,7 @@ static struct primitive read_prims[] =
 
 #endif
 void
-init_read_prims (void)
+marlais_register_read (void)
 {
 #ifdef NO_COMMON_DYLAN_SPEC
   int num = sizeof (read_prims) / sizeof (struct primitive);
@@ -91,21 +91,21 @@ infix_decode_token (int yychar, FILE * fp)
     {
       Object new_list = make_empty_list ();
       Object *new_list_ptr = &new_list;
-      
+
       do {
 	if ((yychar = yylex ()) < 0)
 	  yychar = 0;
 	if (yychar == ']')
 	  return new_list;
-	
+
 	*new_list_ptr = cons (infix_decode_token (yychar, fp),
 			      make_empty_list ());
 	new_list_ptr = &CDR (*new_list_ptr);
-	
+
 	if ((yychar = yylex ()) < 0)
 	  yychar = 0;
       } while (yychar == ',');
-      
+
       if (yychar != ']') {
 	return marlais_error ("Malformed vector.  Expected a ']'", NULL);
       }
@@ -115,13 +115,13 @@ infix_decode_token (int yychar, FILE * fp)
     {
       Object new_list = make_empty_list ();
       Object *new_list_ptr = &new_list;
-      
+
       do {
 	if ((yychar = yylex ()) < 0)
 	  yychar = 0;
 	if (yychar == ')')
 	  return new_list;
-	
+
 	*new_list_ptr = cons (infix_decode_token (yychar, fp),
 			      make_empty_list ());
 	new_list_ptr = &CDR (*new_list_ptr);
