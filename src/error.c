@@ -204,7 +204,7 @@ print_dylan_error_helper(const char* kind, Object msg_str, Object rest)
     fprintf (stderr, ": ");
   }
   while (!EMPTYLISTP (rest)) {
-    print_object (marlais_standard_error, CAR (rest), 0);
+    marlais_print_object (marlais_standard_error, CAR (rest), 0);
     rest = CDR (rest);
     if (!EMPTYLISTP (rest)) {
       fprintf (stderr, ", ");
@@ -250,7 +250,7 @@ marlais_error (char *msg,...)
     fprintf (stderr, ": ");
   }
   while (obj) {
-    print_object (marlais_standard_error, obj, 0);
+    marlais_print_object (marlais_standard_error, obj, 0);
     obj = va_arg (args, Object);
 
     if (obj) {
@@ -317,7 +317,7 @@ marlais_error (char *msg,...)
 	  sequence_num++;
 	}
 	if (object_type (obj) == Values) {
-	  print_obj (marlais_standard_output, obj);
+	  marlais_print_obj (marlais_standard_output, obj);
 	  if (VALUESNUM (obj)) {
 	    fprintf (stdout, "\n");
 	  }
@@ -372,7 +372,7 @@ marlais_warning (char *msg,...)
     fprintf (stderr, ": ");
   }
   while (obj) {
-    print_object (marlais_standard_error, obj, 0);
+    marlais_print_object (marlais_standard_error, obj, 0);
     obj = va_arg (args, Object);
 
     if (obj) {

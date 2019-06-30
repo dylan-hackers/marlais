@@ -55,7 +55,6 @@ extern Object x_symbol;
 /* local function prototypes */
 
 static Object generic_function_make (Object arglist);
-Object generic_function_methods (Object gen);
 static Object generic_function_mandatory_keywords (Object generic);
 static Object function_values (Object func);
 static Object make_specializers_from_params (Object);

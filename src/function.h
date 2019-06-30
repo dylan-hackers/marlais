@@ -48,6 +48,7 @@ Object make_generic_function_driver (Object args);
 Object sorted_applicable_methods (Object fun, Object sample_args);
 Object function_specializers (Object meth);
 Object applicable_method_p (Object fun, Object sample_args, int strict_check);
+Object generic_function_methods (Object gen);
 
 #ifdef USE_METHOD_CACHING
 Object recalc_next_methods (Object fun, Object meth, Object sample_args);

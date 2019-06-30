@@ -207,7 +207,7 @@ print_stack (void)
 	 entry != NULL;
 	 entry = entry->next, i++) {
 	fprintf (stderr, "#%d ", i);
-	print_object (marlais_standard_error, entry->context, 1);
+	marlais_print_object (marlais_standard_error, entry->context, 1);
 	fprintf (stderr, "\n");
     }
     return unspecified_object;

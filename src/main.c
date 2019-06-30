@@ -522,7 +522,7 @@ initialize_marlais (void)
   init_file_prims ();
   init_function_prims ();
   init_values_prims ();
-  init_print_prims ();
+  marlais_register_print ();
   marlais_register_number ();
   init_apply_prims ();
   marlais_register_boolean ();

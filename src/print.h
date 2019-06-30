@@ -38,15 +38,21 @@
 
 #include "common.h"
 
-/* global objects */
-extern Object instance_symbol;
-
-void pr (Object obj);
-void init_print_prims (void);
-void print_object (Object stream, Object obj, int escaped);
-Object print_obj (Object stream, Object obj);
-void print_err (Object obj);
-Object find_getter_name (Object slot);
-Object format (Object stream, Object str, Object rest);
+/* Register print primitives */
+extern void marlais_register_print (void);
+/* Print an object */
+extern void   marlais_print_object (Object stream, Object obj, int escaped);
+/* Print on object without escaping */
+extern Object marlais_print_obj (Object stream, Object obj);
+/* Print on object with escaping */
+extern Object marlais_print_obj_escaped (Object stream, Object obj);
+/* Print to *standard-output* without escaping */
+extern Object marlais_print_out (Object obj);
+/* Print to *standard-output* with escaping */
+extern Object marlais_print_out_escaped (Object obj);
+/* Print to *standard-error* without escaping */
+extern Object marlais_print_err (Object obj);
+/* Print to *standard-error* with escaping */
+extern Object marlais_print_err_escaped (Object obj);
 
 #endif
