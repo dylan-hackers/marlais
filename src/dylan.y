@@ -46,10 +46,6 @@
  * 15 July 1994
  */
 
-#ifdef MACOS
-#define YYDEBUG 0
-#endif
-
 /* #define OPTIMIZE_SPECIALIZERS */
 
 #include "common.h"

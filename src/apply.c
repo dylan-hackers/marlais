@@ -26,11 +26,6 @@ int trace_only_user_funs = 0;
 int trace_level = 0;
 Object ResultValueStack;
 
-#ifdef MACOS
-void check_stack (void);
-
-#endif
-
 /* local function prototypes and data */
 
 Object apply_generic (Object gen, Object args);
@@ -78,10 +73,6 @@ Object
 apply_internal (Object fun, Object args)
 {
     Object ret;
-
-#ifdef MACOS
-    check_stack ();
-#endif
 
     if (trace_functions) {
 	int i;

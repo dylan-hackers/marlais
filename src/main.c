@@ -41,11 +41,6 @@ extern Object binding_stack;
 extern FILE *yyin;
 extern int yylineno;
 
-#ifdef MACOS
-int getopt (int argc, char *argv[], const char *options);
-
-#endif
-
 #ifndef INIT_FILE
 #define INIT_FILE "init.dylan"
 #endif

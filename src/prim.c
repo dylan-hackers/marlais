@@ -45,11 +45,7 @@ make_primitive (char *name, enum primtype type, Object (*fun) ())
 Object
 apply_prim (Object prim, Object args)
 {
-#if defined(MACOS) && defined(THINK_C)
-  Object (*fun) (...);
-#else
   Object (*fun) ();
-#endif
 
   fun = PRIMFUN (prim);
   switch (PRIMPTYPE (prim)) {
