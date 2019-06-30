@@ -103,6 +103,10 @@ GLOBAL Object times_symbol;
 GLOBAL Object minus_symbol;
 GLOBAL Object plus_symbol;
 
+GLOBAL Object standard_input_symbol;
+GLOBAL Object standard_output_symbol;
+GLOBAL Object standard_error_symbol;
+
 /* builtin classes */
 GLOBAL Object object_class;
 GLOBAL Object boolean_class;

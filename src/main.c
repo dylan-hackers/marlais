@@ -91,7 +91,7 @@ static void print_top_level_constant(Object obj, int bind_p)
   }
 
   apply (eval (print_symbol),
-	 listem (obj, eval(standard_output_stream), NULL));
+	 listem (obj, eval(standard_output_symbol), NULL));
 
   fprintf (stdout, "\n");
 }
@@ -353,8 +353,9 @@ initialize_marlais (void)
   initialize_symbol = make_symbol ("initialize");
   equal_hash_symbol = make_symbol ("=hash");
   uninit_slot_object = make_uninit_slot ();
-  standard_output_stream = make_symbol ("*standard-output*");
-  standard_error_stream = make_symbol ("*standard-error*");
+  standard_input_symbol = make_symbol ("*standard-input*");
+  standard_output_symbol = make_symbol ("*standard-output*");
+  standard_error_symbol = make_symbol ("*standard-error*");
 
 /* this looks like lisp -- should it go? */
   quasiquote_symbol = make_symbol ("quasiquote");

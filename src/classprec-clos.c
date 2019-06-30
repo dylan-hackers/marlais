@@ -36,8 +36,6 @@
 #include "list.h"
 #include "print.h"
 
-extern Object standard_output_stream;
-
 /* local functions */
 static void print_pnode (Object pnode);
 static void print_slist (Object slist);
@@ -103,7 +101,7 @@ compute_class_precedence_list (Object class)
 	for (a_set = minimal_element_set;
 	     PAIRP (a_set);
 	     a_set = CDR (a_set)) {
-	    print_object (standard_output_stream,
+	    print_object (standard_output_symbol,
 			  CLASSNAME (PNODE_CLASS (CAR (a_set))),
 			  0);
 	    fprintf (stdout, " ");
@@ -364,7 +362,7 @@ print_slist (Object slist)
     Object p;
 
     for (p = slist; PAIRP (p); p = CDR (p)) {
-	print_object (standard_output_stream, CLASSNAME (PNODE_CLASS (CAR (p))), 0);
+	print_object (standard_output_symbol, CLASSNAME (PNODE_CLASS (CAR (p))), 0);
 	fprintf (stdout, " ");
     }
 }

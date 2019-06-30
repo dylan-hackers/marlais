@@ -64,9 +64,9 @@ apply_print (Object fd, Object obj, int escaped)
       Object stream;
       file_from_fd(fd);
       if(INTVAL(fd) == 1) {
-        stream = standard_output_stream;
+        stream = standard_output_symbol;
       } else {
-        stream = standard_error_stream;
+        stream = standard_error_symbol;
       }
 	if (0 == escaped) {
 	    apply (eval (princ_symbol),
