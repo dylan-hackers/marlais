@@ -1,6 +1,6 @@
 /* error.c -- see COPYRIGHT for use */
 
-
+#include <stdarg.h>
 #include <stdio.h>
 #include <signal.h>
 
@@ -157,10 +157,10 @@ static struct primitive error_prims[] =
   {"%debugger", prim_0, enter_debugger},
 };
 
-/* function definitions */
+/* Exported functions */
 
 void
-init_error_prims (void)
+marlais_register_error (void)
 {
   int num;
 
@@ -228,14 +228,14 @@ dylan_warning (Object msg_str, Object rest)
 }
 
 void
-fatal (char *msg)
+marlais_fatal (char *msg)
 {
   fprintf (stderr, "%s.\n", msg);
   exit (-1);
 }
 
 Object
-error (char *msg,...)
+marlais_error (char *msg,...)
 {
   va_list args;
   Object obj, signal_value, ret;
@@ -359,7 +359,7 @@ enter_debugger (void)
 }
 
 Object
-warning (char *msg,...)
+marlais_warning (char *msg,...)
 {
   va_list args;
   Object obj;
@@ -448,8 +448,7 @@ error_ok_return_pop (void)
   return ret;
 }
 
-static jmp_buf
-*
+static jmp_buf *
 error_ok_return_push ()
 {
   struct jmp_buf_stack *tmp =

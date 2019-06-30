@@ -95,18 +95,18 @@ marlais_make_array_entry (Object args)
     } else if (FIRST (args) == fill_keyword) {
       fill_obj = SECOND (args);
     } else {
-      error ("make: unsupported keyword for <array> class",
+      marlais_error ("make: unsupported keyword for <array> class",
 	     FIRST (args), NULL);
     }
     args = CDR (CDR (args));
   }
   if (dim_obj) {
     if (!LISTP (dim_obj)) {
-      error ("make: value of dimensions: argument must be a list of integers",
+      marlais_error ("make: value of dimensions: argument must be a list of integers",
 	     dim_obj, NULL);
     }
   } else {
-    error ("make: dimensions: must be specified for <array>", args, NULL);
+    marlais_error ("make: dimensions: must be specified for <array>", args, NULL);
   }
   if (!fill_obj) {
     fill_obj = MARLAIS_FALSE;
@@ -132,7 +132,7 @@ array_make (Object dims, Object fill)
   while (!EMPTYLISTP (dl)) {
     val = CAR (dl);
     if (!INTEGERP (val)) {
-      error ("make: array dimensions must be integers", dims, NULL);
+      marlais_error ("make: array dimensions must be integers", dims, NULL);
     }
     size *= INTVAL (val);
     dl = CDR (dl);
@@ -160,21 +160,21 @@ array_index (Object arr, Object indices, Object default_ob)
 
   while (!EMPTYLISTP (dims) && !EMPTYLISTP (inds)) {
     if (EMPTYLISTP (dims)) {
-      error ("element: too many indices for array", arr, indices, NULL);
+      marlais_error ("element: too many indices for array", arr, indices, NULL);
     }
     if (EMPTYLISTP (inds)) {
-      error ("element: not enough indices given", arr, indices, NULL);
+      marlais_error ("element: not enough indices given", arr, indices, NULL);
     }
     dim = CAR (dims);
     ind = CAR (inds);
     if (!INTEGERP (ind)) {
-      error ("element: array indices must be integers", ind, NULL);
+      marlais_error ("element: array indices must be integers", ind, NULL);
     }
     dim_val = INTVAL (dim);
     ind_val = INTVAL (ind);
     if ((ind_val < 0) || (ind_val >= dim_val)) {
       if (default_ob == default_object) {
-	error ("element: array indices out of range", indices,
+	marlais_error ("element: array indices out of range", indices,
 	       ARRDIMS (arr), NULL);
       } else {
 	return -1;
@@ -186,10 +186,10 @@ array_index (Object arr, Object indices, Object default_ob)
     inds = CDR (inds);
   }
   if (!EMPTYLISTP (dims)) {
-    error ("element: not enough indices for array", arr, indices, NULL);
+    marlais_error ("element: not enough indices for array", arr, indices, NULL);
   }
   if (!EMPTYLISTP (inds)) {
-    error ("element: too many indices given", arr, indices, NULL);
+    marlais_error ("element: too many indices given", arr, indices, NULL);
   }
   return offset;
 }
@@ -224,7 +224,7 @@ array_element (Object arr, Object index, Object default_ob)
 
   if ((ind_val < 0) || (ind_val >= ARRSIZE (arr))) {
     if (default_ob == default_object) {
-      return error ("element: array index out of range", index,
+      return marlais_error ("element: array index out of range", index,
 		    ARRDIMS (arr), NULL);
     } else {
       return default_ob;
@@ -240,7 +240,7 @@ array_element_setter (Object arr, Object index, Object new_val)
   int ind_val = INTVAL (index);
 
   if ((ind_val < 0) || (ind_val >= ARRSIZE (arr))) {
-    error ("element_setter: array index out of range", index,
+    marlais_error ("element_setter: array index out of range", index,
 	   ARRDIMS (arr), NULL);
   }
   ARRELS (arr)[ind_val] = new_val;

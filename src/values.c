@@ -114,7 +114,7 @@ devalue (Object val)
     if (VALUESNUM (val)) {
       return VALUESELS (val)[0];
     } else {
-      return error ("Null values construct used in an invalid context", NULL);
+      return marlais_error ("Null values construct used in an invalid context", NULL);
     }
   } else {
     return val;

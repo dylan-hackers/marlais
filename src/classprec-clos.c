@@ -170,13 +170,13 @@ compute_class_precedence_list (Object class)
 		}
 	    }
 	    if (EMPTYLISTP (class_list)) {
-		error ("Whoa!  the class list was empty making precedence list",
+		marlais_error ("Whoa!  the class list was empty making precedence list",
 		       NULL);
 	    }
 	}
     }
     if (PAIRP (slist)) {
-	error ("Unable to construct class precedence list", class, NULL);
+	marlais_error ("Unable to construct class precedence list", class, NULL);
     }
     /* Cache the result */
     CLASSPRECLIST (class) = list_reverse_bang (precedence_list_rev);

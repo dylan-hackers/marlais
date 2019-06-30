@@ -148,7 +148,7 @@ vector_element (Object vec, Object index, Object default_ob)
   size = SOVSIZE (vec);
   if ((i < 0) || (i >= size)) {
     if (default_ob == default_object) {
-      error ("element: index out of range", vec, index, NULL);
+      marlais_error ("element: index out of range", vec, index, NULL);
     } else {
       return default_ob;
     }
@@ -164,7 +164,7 @@ vector_element_setter (Object vec, Object index, Object val)
   i = INTVAL (index);
   size = SOVSIZE (vec);
   if ((i < 0) || (i >= size)) {
-    error ("element-setter: index out of range", vec, index, NULL);
+    marlais_error ("element-setter: index out of range", vec, index, NULL);
   }
   return (SOVELS (vec)[i] = val);
 }

@@ -159,7 +159,7 @@ deque_pop (Object d)
   Object ret;
 
   if (EMPTYLISTP (DEQUEFIRST (d))) {
-    error ("pop: cannot pop empty <deque>", d, NULL);
+    marlais_error ("pop: cannot pop empty <deque>", d, NULL);
   }
   ret = DEVALUE (DEQUEFIRST (d));
   DEQUEFIRST (d) = DENEXT (DEQUEFIRST (d));
@@ -189,7 +189,7 @@ deque_pop_last (Object d)
   Object res;
 
   if (EMPTYLISTP (DEQUEFIRST (d))) {
-    error ("pop-list: cannot pop empty <deque>", d, NULL);
+    marlais_error ("pop-list: cannot pop empty <deque>", d, NULL);
   }
   res = DEVALUE (DEQUELAST (d));
   if (DEQUEFIRST (d) == DEQUELAST (d)) {
@@ -208,7 +208,7 @@ deque_first (Object d, Object default_ob)
 {
   if (EMPTYLISTP (DEQUEFIRST (d))) {
     if (default_ob == default_object) {
-      error ("first: empty <deque>", d, NULL);
+      marlais_error ("first: empty <deque>", d, NULL);
     } else {
       return default_ob;
     }
@@ -221,7 +221,7 @@ deque_last (Object d, Object default_ob)
 {
   if (EMPTYLISTP (DEQUELAST (d))) {
     if (default_ob == default_object) {
-      error ("last: empty <deque>", d, NULL);
+      marlais_error ("last: empty <deque>", d, NULL);
     } else {
       return default_ob;
     }
@@ -242,7 +242,7 @@ deque_element (Object d, Object index, Object default_ob)
     el = DENEXT (el);
     if (EMPTYLISTP (el)) {
       if (default_ob == default_object) {
-	error ("element: out of range", index, d, NULL);
+	marlais_error ("element: out of range", index, d, NULL);
       } else {
 	return default_ob;
       }
@@ -260,13 +260,13 @@ deque_element_setter (Object d, Object index, Object new)
   i = INTVAL (index);
   el = DEQUEFIRST (d);
   if (EMPTYLISTP (el)) {
-    error ("attempt to set element of empty deque", NULL);
+    marlais_error ("attempt to set element of empty deque", NULL);
   }
   while (i) {
     i--;
     el = DENEXT (el);
     if (EMPTYLISTP (el)) {
-      error ("element: out of range", index, d, NULL);
+      marlais_error ("element: out of range", index, d, NULL);
     }
   }
   DEVALUE (el) = new;

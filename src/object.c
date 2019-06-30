@@ -30,7 +30,7 @@ object_type (Object obj)
         case UNINITSUB:
             return (UninitializedSlotValue);
         default:
-            fatal ("internal error: object with unknown immediate tag");
+            marlais_fatal ("internal error: object with unknown immediate tag");
         }
     } else {
         return (Integer);

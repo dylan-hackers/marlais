@@ -67,7 +67,7 @@ parse_object (FILE * fp, int debug)
   if (yyparse () == 0) {
     return parse_value;
   } else {
-    warning ("Parser failed in inexplicable way", parse_value, NULL);
+    marlais_warning ("Parser failed in inexplicable way", parse_value, NULL);
     return eof_object;
   }
 }

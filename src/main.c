@@ -172,7 +172,7 @@ static void parse_args(int argc, char* argv[])
       printf("Marlais, version %s\n", VERSION);
       exit(0);
     default:
-      fatal ("Marlais fatal error: unrecognized option");
+      marlais_fatal ("fatal error: unrecognized option");
     }
   }
 }
@@ -526,7 +526,7 @@ initialize_marlais (void)
   init_keyword_prims ();
   marlais_register_bytestring ();
   init_vector_prims ();
-  init_error_prims ();
+  marlais_register_error ();
   init_stream_prims ();
   init_read_prims ();
   init_table_prims ();

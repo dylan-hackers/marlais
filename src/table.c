@@ -121,15 +121,15 @@ make_table_driver (Object rest)
   } else if (CAR (rest) == size_keyword) {
     rest = CDR (rest);
     if (EMPTYLISTP (rest)) {
-      error ("make: no argument given to size keyword", NULL);
+      marlais_error ("make: no argument given to size keyword", NULL);
     }
     size = CAR (rest);
     if (!INTEGERP (size)) {
-      error ("make: argument to size keyword must be an integer", size, NULL);
+      marlais_error ("make: argument to size keyword must be an integer", size, NULL);
     }
     return (make_table (INTVAL (size)));
   } else {
-    return error ("make: bad keywords or arguments", rest, NULL);
+    return marlais_error ("make: bad keywords or arguments", rest, NULL);
   }
 }
 
@@ -221,7 +221,7 @@ table_element_handle (Object table, Object key, Object *default_val)
   if (*default_val != default_object) {
     return default_val;
   } else {
-    return error ("element: no element matching key", key, NULL);
+    return marlais_error ("element: no element matching key", key, NULL);
   }
 }
 
@@ -306,7 +306,7 @@ equal_hash (Object key)
      * Need to be able to hash arbitrary instances here!
      */
     if (!hashfun) {
-      error ("no =hash method defined for key class", key, NULL);
+      marlais_error ("no =hash method defined for key class", key, NULL);
     }
     return (apply (hashfun, cons (key, make_empty_list ())));
   } else {
@@ -331,7 +331,7 @@ equal_hash (Object key)
     } else if (SYMBOLP (key) || KEYWORDP (key)) {
       return (make_integer ((int) key));
     } else {
-      /* error ("=hash: don't know how to hash object", key, NULL);  */
+      /* marlais_error ("=hash: don't know how to hash object", key, NULL);  */
       return (make_integer (((int) key)));
     }
   }

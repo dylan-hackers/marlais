@@ -105,7 +105,7 @@ add_top_lvl_binding1(Object sym, Object val, int constant, int exported)
   }
   old_binding = symbol_binding_top_level (binding->sym);
   if (old_binding != NULL) {
-    warning ("Symbol already defined. Previous value", sym,
+    marlais_warning ("Symbol already defined. Previous value", sym,
 	     *(old_binding->val), NULL);
   }
   binding->val = (Object *) marlais_allocate_memory (sizeof (Object *));
@@ -178,7 +178,7 @@ add_bindings (Object syms, Object vals, int constant, struct frame *to_frame)
 
   for (i = 0; i < num_bindings; ++i) {
     if ((!syms) || (!vals)) {
-      error ("mismatched number of symbols and values", NULL);
+      marlais_error ("mismatched number of symbols and values", NULL);
     }
     binding = MARLAIS_ALLOCATE_STRUCT (struct binding);
     binding->sym = CAR (syms);
@@ -219,7 +219,7 @@ add_binding (Object sym, Object val, int constant, struct frame *to_frame)
     binding->val = (Object *) marlais_allocate_memory (sizeof (Object *));
 
     if (!instance (val, binding->type)) {
-	error ("add_binding: value does not satisfy type constraint",
+	marlais_error ("add_binding: value does not satisfy type constraint",
 	       val,
 	       binding->type,
 	       NULL);
@@ -292,13 +292,13 @@ modify_value (Object sym, Object new_val)
 
     binding = symbol_binding (sym);
     if (!binding) {
-	error ("attempt to modify value of unbound symbol", sym, NULL);
+	marlais_error ("attempt to modify value of unbound symbol", sym, NULL);
     } else if (IS_CONSTANT_BINDING (binding)) {
-	error ("attempt to modify value of a constant", sym, NULL);
+	marlais_error ("attempt to modify value of a constant", sym, NULL);
     } else if (instance (new_val, binding->type)) {
 	*(binding->val) = new_val;
     } else {
-	error ("attempt to assign variable an incompatible object",
+	marlais_error ("attempt to assign variable an incompatible object",
 	       sym, new_val, NULL);
     }
 }
@@ -425,7 +425,7 @@ unwind_to_exit (Object exit_proc)
 
     the_env = save_eval_stack->frame;
     eval_stack = save_eval_stack;
-    error ("unwound to end of stack without finding exit context",
+    marlais_error ("unwound to end of stack without finding exit context",
 	   exit_proc,
 	   NULL);
     return 0;
@@ -466,7 +466,7 @@ module_binding (Object module_name)
 	    return (binding);
 	}
     }
-    error ("Unable to find binding for module", module_name, NULL);
+    marlais_error ("Unable to find binding for module", module_name, NULL);
 }
 
 Object
@@ -475,7 +475,7 @@ user_set_module (Object args)
     Object module_name;
 
     if (list_length (args) != 1) {
-	return error ("set-module: requires a single argument", NULL);
+	return marlais_error ("set-module: requires a single argument", NULL);
     } else {
 	module_name = CAR (args);
     }
@@ -486,7 +486,7 @@ user_set_module (Object args)
 				(keyword_to_symbol (module_name)))
 			       ->sym);
     } else {
-	return error ("set-module: argument should be a symbol",
+	return marlais_error ("set-module: argument should be a symbol",
 		      module_name,
 		      NULL);
     }
@@ -628,7 +628,7 @@ use_module (Object module_name,
 			    && GFUNP (*(bindings->val))) {
 			    Object new_methods;
 
-			    warning ("Adding methods to generic function", NULL);
+			    marlais_warning ("Adding methods to generic function", NULL);
 			    /* Add methods to generic function */
 			    for (new_methods = GFMETHODS (*(bindings->val));
 				 !EMPTYLISTP (new_methods);
@@ -637,7 +637,7 @@ use_module (Object module_name,
 					    CAR (new_methods));
 			    }
 			} else if (old_binding->val != bindings->val) {
-			    warning ("Ignoring import that conflicts with defined symbol",
+			    marlais_warning ("Ignoring import that conflicts with defined symbol",
 				     binding->sym,
 				     NULL);
 			}
@@ -691,7 +691,7 @@ use_module (Object module_name,
 	    }
 	}
     } else {
-	error ("use: argument should be a symbol", module_name, NULL);
+	marlais_error ("use: argument should be a symbol", module_name, NULL);
     }
     return unspecified_object;
 }
@@ -732,7 +732,7 @@ show_bindings (Object args)
     int frame_number;
 
     if (list_length (args) != 1 || !INTEGERP (CAR (args))) {
-	error ("show_bindings: requires a single <integer> argument", NULL);
+	marlais_error ("show_bindings: requires a single <integer> argument", NULL);
     }
     frame_number = INTVAL (CAR (args));
 

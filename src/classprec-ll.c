@@ -166,7 +166,7 @@ get_class_index (Object class, prec_graph graph)
 	    high_index = mid_point - 1;
 	}
     }
-    return error ("Unable to find index of class in cpl computation",
+    return marlais_error ("Unable to find index of class in cpl computation",
 		  class,
 		  NULL);
 }
@@ -193,7 +193,7 @@ concatenate_successor (prec_graph graph,
 	vec[i] = successor_class_index;
 	return;
     }
-    error ("Too many successors for class", NULL);
+    marlais_error ("Too many successors for class", NULL);
 }
 
 static
@@ -226,7 +226,7 @@ loops (Object class,
 
     if (new_list.size < graph.num_classes) {
 	/* At least one class didn't make it into the precedence list */
-	error ("Unable to construct precedence list for class",
+	marlais_error ("Unable to construct precedence list for class",
 	       class,
 	       NULL);
     }

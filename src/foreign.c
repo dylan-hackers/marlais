@@ -62,7 +62,7 @@ load_foreign (Object name)
     filename = BYTESTRVAL (name);
     handle = dlopen (filename, RTLD_LAZY);
     if (!handle) {
-	error ("load-foreign: could not load file", name, NULL);
+	marlais_error ("load-foreign: could not load file", name, NULL);
     }
     return (make_integer ((int) handle));
 }
@@ -78,7 +78,7 @@ load_foreign (Object name)
     char *filename;
     void *handle;
 
-    error ("load-foreign: not implemented yet ", name, NULL);
+    marlais_error ("load-foreign: not implemented yet ", name, NULL);
 
 #if 0
     filename = BYTESTRVAL (name);

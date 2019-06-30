@@ -99,7 +99,7 @@ open_file (Object filename)
   FILE *fp;
 
   if (!BYTESTRP (filename)) {
-    error ("load: argument must be a filename", filename, NULL);
+    marlais_error ("load: argument must be a filename", filename, NULL);
   }
   str = BYTESTRVAL (filename);
   fp = fopen (str, "r");
@@ -114,7 +114,7 @@ open_file (Object filename)
       sprintf(file_name, "%s/%s", lib_dir, str);
       fp = fopen(file_name, "r");
       if(!fp) {
-        error ("load: cannot open file", filename, NULL);
+        marlais_error ("load: cannot open file", filename, NULL);
       }
     }
   }
@@ -126,7 +126,7 @@ static void
 close_file (FILE * fp)
 {
   if ((FILE *) FOREIGNPTR (CAR (open_file_list)) != fp) {
-    error ("close-file called with bogus fp (BUG)", NULL);
+    marlais_error ("close-file called with bogus fp (BUG)", NULL);
   }
   fclose (fp);
   open_file_list = CDR (open_file_list);

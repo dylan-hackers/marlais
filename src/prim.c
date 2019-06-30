@@ -64,7 +64,7 @@ apply_prim (Object prim, Object args)
     case 1:
       return (*fun) (FIRST (args));
     default:
-      error ("incorrect number of args to primitive", prim, NULL);
+      marlais_error ("incorrect number of args to primitive", prim, NULL);
     }
   case prim_0_2:
     switch (list_length (args)) {
@@ -75,7 +75,7 @@ apply_prim (Object prim, Object args)
     case 2:
       return (*fun) (FIRST (args), SECOND (args));
     default:
-      error ("incorrect number of args to primitive", prim, NULL);
+      marlais_error ("incorrect number of args to primitive", prim, NULL);
     }
   case prim_0_3:
     switch (list_length (args)) {
@@ -88,7 +88,7 @@ apply_prim (Object prim, Object args)
     case 3:
       return (*fun) (FIRST (args), SECOND (args), THIRD (args));
     default:
-      error ("incorrect number of args to primitive", prim, NULL);
+      marlais_error ("incorrect number of args to primitive", prim, NULL);
     }
   case prim_1_1:
     switch (list_length (args)) {
@@ -97,7 +97,7 @@ apply_prim (Object prim, Object args)
     case 2:
       return (*fun) (FIRST (args), SECOND (args));
     default:
-      error ("incorrect number of args to primitive", prim, NULL);
+      marlais_error ("incorrect number of args to primitive", prim, NULL);
     }
   case prim_2_1:
     switch (list_length (args)) {
@@ -106,7 +106,7 @@ apply_prim (Object prim, Object args)
     case 3:
       return (*fun) (FIRST (args), SECOND (args), THIRD (args));
     default:
-      return error ("incorrect number of args to primitive", prim, 0);
+      return marlais_error ("incorrect number of args to primitive", prim, 0);
     }
   case prim_0_rest:
     return (*fun) (args);
@@ -115,6 +115,6 @@ apply_prim (Object prim, Object args)
   case prim_2_rest:
     return (*fun) (FIRST (args), SECOND (args), CDR (CDR (args)));
   default:
-    return error ("cannot handle primitive type", prim, NULL);
+    return marlais_error ("cannot handle primitive type", prim, NULL);
   }
 }

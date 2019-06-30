@@ -91,7 +91,7 @@ apply_internal (Object fun, Object args)
     }
 #ifdef SMALL_OBJECTS
     if (!POINTERP (fun)) {
-	return error ("apply: cannot apply this object", fun, NULL);
+	return marlais_error ("apply: cannot apply this object", fun, NULL);
     }
 #endif
 
@@ -113,7 +113,7 @@ apply_internal (Object fun, Object args)
 	ret = apply_exit (fun, args);
 	break;
     default:
-	error ("apply: cannot apply this object", fun, NULL);
+	marlais_error ("apply: cannot apply this object", fun, NULL);
     }
     if (trace_functions && trace_level) {
 	int i;
@@ -226,7 +226,7 @@ apply_method (Object meth, Object args, Object rest_methods, Object generic_appl
 		sym = FIRST (param);
 		class = SECOND (param);
 		if (!instance (val, class)) {
-		    error ("apply: argument doesn't match method specializer",
+		    marlais_error ("apply: argument doesn't match method specializer",
 			   val, class, meth, NULL);
 		}
 	    }
@@ -251,7 +251,7 @@ apply_method (Object meth, Object args, Object rest_methods, Object generic_appl
 	    if (!KEYWORDP (keyword)) {
 		/* jnw -- check this out! */
 		if (!rest_var) {
-		    error ("apply: argument to method must be keyword", meth, keyword, NULL);
+		    marlais_error ("apply: argument to method must be keyword", meth, keyword, NULL);
 		} else {
 		    args = CDR (args);
 		    continue;
@@ -273,12 +273,12 @@ apply_method (Object meth, Object args, Object rest_methods, Object generic_appl
 	    }
 	    if (EMPTYLISTP (*tmp_ptr)) {
 		if (member (keyword, dup_list)) {
-		    warning ("Duplicate keyword value ignored",
+		    marlais_warning ("Duplicate keyword value ignored",
 			     keyword,
 			     val,
 			     0);
 		} else if (!METHALLKEYS (meth)) {
-		    error ("apply: Keyword argument not in parameter list",
+		    marlais_error ("apply: Keyword argument not in parameter list",
 			   keyword,
 			   0);
 		}
@@ -309,20 +309,20 @@ apply_method (Object meth, Object args, Object rest_methods, Object generic_appl
 	    /* skip rest of parameters if they are keywords */
 	    while (PAIRP (args)) {
 		if (!KEYWORDP (CAR (args))) {
-		    error ("apply: keyword argument expected", CAR (args),
+		    marlais_error ("apply: keyword argument expected", CAR (args),
 			   NULL);
 		} else if (!PAIRP (CDR (args))) {
-		    error ("apply: keyword has no associated argument value",
+		    marlais_error ("apply: keyword has no associated argument value",
 			   CAR (args), NULL);
 		}
 		args = CDR (CDR (args));
 	    }
 	} else {
-	    error ("Arguments have no matching parameters", args, NULL);
+	    marlais_error ("Arguments have no matching parameters", args, NULL);
 	}
     }
     if (PAIRP (params)) {
-	error ("Required parameters have no matching arguments", params,
+	marlais_error ("Required parameters have no matching arguments", params,
 	       NULL);
     }
     while (!EMPTYLISTP (body)) {
@@ -333,7 +333,7 @@ apply_method (Object meth, Object args, Object rest_methods, Object generic_appl
 	if (EMPTYLISTP (CDR (body))) {
 	    if (trace_functions) {
 		if (!trace_only_user_funs)
-		    warning ("tail position: ", form, NULL);
+		    marlais_warning ("tail position: ", form, NULL);
 		if (trace_level)
 		    --trace_level;
 	    }
@@ -428,7 +428,7 @@ narrow_value_types (Object *values_list_ptr,
 	 * new_rest_values
 	 */
 	if (new_rest_type == NULL) {
-	    error ("Incompatible value specification in call", NULL);
+	    marlais_error ("Incompatible value specification in call", NULL);
 	}
 	values_list = *values_list_ptr;
 	while (!EMPTYLISTP (values_list)) {
@@ -466,7 +466,7 @@ construct_return_values (Object ret,
 	 * This happened on an sgi, but I haven't tracked down the problem yet.
 	 * It seems like an internal error, but I need to find its source.
 	 */
-	error ("return value is invalid", NULL);
+	marlais_error ("return value is invalid", NULL);
     }
     if (!VALUESP (ret)) {
 	ret = make_values (listem (ret, NULL));
@@ -476,7 +476,7 @@ construct_return_values (Object ret,
 	 i < VALUESNUM (ret) && PAIRP (required_values);
 	 i++, required_values = CDR (required_values)) {
 	if (!instance (VALUESELS (ret)[i], CAR (required_values))) {
-	    error ("in value return: return value is not of correct type",
+	    marlais_error ("in value return: return value is not of correct type",
 		   VALUESELS (ret)[i], CAR (required_values), NULL);
 	}
     }
@@ -488,7 +488,7 @@ construct_return_values (Object ret,
 	    for (; i < VALUESNUM (ret); i++) {
 		if (!instance (VALUESELS (ret)[i],
 			       rest_values)) {
-		    error ("in value return: return value is not of correct type",
+		    marlais_error ("in value return: return value is not of correct type",
 			   VALUESELS (ret)[i],
 			   rest_values,
 			   NULL);
@@ -502,7 +502,7 @@ construct_return_values (Object ret,
 	/* Add default values */
 	for (j = 0; PAIRP (required_values); j++, required_values = CDR (required_values)) {
 	    if (!instance (MARLAIS_FALSE, CAR (required_values))) {
-		error ("in value return: default value doesn't match return type",
+		marlais_error ("in value return: default value doesn't match return type",
 		       CAR (required_values),
 		       NULL);
 	    }
@@ -542,7 +542,7 @@ get_specializers (Object gen, Object args)
     result = make_vector (length, NULL);
     for (i = 0; i < length; i++) {
 	if (EMPTYLISTP (tmp)) {
-	    error ("Missing Required Arguments", gen, args, NULL);
+	    marlais_error ("Missing Required Arguments", gen, args, NULL);
 	}
 	SOVELS (result)[i] = objectclass (CAR (tmp));
 	tmp = CDR (tmp);
@@ -631,7 +631,7 @@ apply_generic (Object gen, Object args)
 	    if (applicable_method_p (HDLOBJ (CAR (currentGroup)), args, 0)
 		== MARLAIS_TRUE) {
 		if (method) {
-		    error ("Ambiguous methods in apply generic function", gen, args, NULL);
+		    marlais_error ("Ambiguous methods in apply generic function", gen, args, NULL);
 		} else {
 		    method = HDLOBJ (CAR (currentGroup));
 		}
@@ -643,7 +643,7 @@ apply_generic (Object gen, Object args)
 	    break;
     }
     if (!method) {
-	error ("No applicable methods", gen, args, NULL);
+	marlais_error ("No applicable methods", gen, args, NULL);
     }
     rest_methods = build_rest_methods (cacheEntry, args);
     return apply_method (method, args, rest_methods, gen);
@@ -651,7 +651,7 @@ apply_generic (Object gen, Object args)
     methods = GFMETHODS (gen);
     sorted_methods = FIRSTVAL (sorted_applicable_methods (gen, args));
     if (EMPTYLISTP (sorted_methods)) {
-	error ("Ambiguous methods in apply generic function", gen, args, NULL);
+	marlais_error ("Ambiguous methods in apply generic function", gen, args, NULL);
     } else {
 	return apply_method (CAR (sorted_methods),
 			     args,
@@ -674,7 +674,7 @@ apply_exit (Object exit_proc, Object args)
 	    longjmp (*EXITRET (exit_proc), (int) (values (args)));
 	}
     } else {
-	return error ("No exit procedure binding -- returning", 0);
+	return marlais_error ("No exit procedure binding -- returning", 0);
     }
 }
 
@@ -724,7 +724,7 @@ devalue_args (Object args)
 	    if (VALUESNUM (arg) > 0) {
 		CAR (args) = VALUESELS (arg)[0];
 	    } else {
-		error ("Null values construct used as an argument", NULL);
+		marlais_error ("Null values construct used as an argument", NULL);
 	    }
 	}
 	args = CDR (args);

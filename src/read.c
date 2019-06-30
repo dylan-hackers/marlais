@@ -107,7 +107,7 @@ infix_decode_token (int yychar, FILE * fp)
       } while (yychar == ',');
       
       if (yychar != ']') {
-	return error ("Malformed vector.  Expected a ']'", NULL);
+	return marlais_error ("Malformed vector.  Expected a ']'", NULL);
       }
       return make_sov (new_list);
     }			/* case HASH_BRACKET */
@@ -136,14 +136,14 @@ infix_decode_token (int yychar, FILE * fp)
 	  yychar = 0;
       }
       if (yychar != ')') {
-	return error ("Malformed list.  Expected a ')'", NULL);
+	return marlais_error ("Malformed list.  Expected a ')'", NULL);
       }
       return new_list;
     }			/* case HASH_PAREN */
   case KEYWORD:
     return yylval;
   default:
-    return error ("read couldn't find a literal", NULL);
+    return marlais_error ("read couldn't find a literal", NULL);
   }
 }
 

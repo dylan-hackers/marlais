@@ -120,7 +120,7 @@ initialize_empty_list ()
      ___empty_list = marlais_allocate_object (EmptyList, sizeof (struct object));
 
     } else {
-	error ("initialize_empty_list: second attempt at initialization",
+	marlais_error ("initialize_empty_list: second attempt at initialization",
 	       NULL);
     }
 #endif
@@ -198,7 +198,7 @@ static Object nth(Object lst, Object default_ob, const char* where,
     } else if (default_ob == default_object) {
 	char err_msg[80];
 	sprintf(err_msg, "list has no %s element", where);
-	return error (err_msg, lst, NULL);
+	return marlais_error (err_msg, lst, NULL);
     } else {
 	return default_ob;
     }
@@ -436,7 +436,7 @@ list_element (Object pair, Object index, Object default_ob)
     lst = pair;
     if (EMPTYLISTP (lst)) {
 	if (default_ob == default_object) {
-	    error ("element: no such element", index, pair, NULL);
+	    marlais_error ("element: no such element", index, pair, NULL);
 	} else {
 	    return default_ob;
 	}
@@ -446,7 +446,7 @@ list_element (Object pair, Object index, Object default_ob)
 	lst = CDR (lst);
 	if (EMPTYLISTP (lst)) {
 	    if (default_ob == default_object) {
-		error ("element: no such element", index, pair, NULL);
+		marlais_error ("element: no such element", index, pair, NULL);
 	    } else {
 		return default_ob;
 	    }
@@ -465,7 +465,7 @@ list_element_setter (Object pair, Object index, Object obj)
     el = INTVAL (index);
     lst = pair;
     if (EMPTYLISTP (lst)) {
-	return error ("element-setter: list is empty", NULL);
+	return marlais_error ("element-setter: list is empty", NULL);
     }
     while (!EMPTYLISTP (lst)) {
 	if (i == el) {
@@ -475,7 +475,7 @@ list_element_setter (Object pair, Object index, Object obj)
 	i++;
 	lst = CDR (lst);
     }
-    return error ("element-setter: index too large for list",
+    return marlais_error ("element-setter: index too large for list",
 		  pair,
 		  index,
 		  NULL);
@@ -516,7 +516,7 @@ list_last (Object lst, Object default_ob)
 
     if (EMPTYLISTP (lst)) {
 	if (default_ob == default_object) {
-	    error ("attempt to get last of empty list", NULL);
+	    marlais_error ("attempt to get last of empty list", NULL);
 	} else {
 	    return default_ob;
 	}

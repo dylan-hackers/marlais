@@ -105,7 +105,7 @@ Object
 user_system (Object string)
 {
     if (!BYTESTRTYPE (string)) {
-	return error ("system: argument must be a string", string, NULL);
+	return marlais_error ("system: argument must be a string", string, NULL);
     } else {
 	return make_integer (system (BYTESTRVAL (string)));
 

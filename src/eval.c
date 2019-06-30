@@ -57,20 +57,20 @@ eval (Object obj)
 	if (obj == unspecified_object) {
 	    return obj;
 	} else {
-	    return error ("Trying to eval a values object (this is a bug)",
+	    return marlais_error ("Trying to eval a values object (this is a bug)",
 			  obj,
 			  NULL);
 	}
     case Symbol:
 	val = symbol_value (obj);
 	if (!val) {
-	    return error ("unbound variable", obj, NULL);
+	    return marlais_error ("unbound variable", obj, NULL);
 	}
 	return (val);
     case Pair:
 	return (eval_combination (obj, 0));
     default:
-	return error ("eval: do not know how to eval object", obj, NULL);
+	return marlais_error ("eval: do not know how to eval object", obj, NULL);
     }
 }
 
@@ -85,7 +85,7 @@ tail_eval (Object obj)
 
 #ifdef OPTIMIZE_TAIL_CALLS
     if (trace_functions) {
-	warning ("in tail eval context, parent context",
+	marlais_warning ("in tail eval context, parent context",
 		 eval_stack->context,
 		 eval_stack->next->context,
 		 0);
@@ -93,7 +93,7 @@ tail_eval (Object obj)
     if (PAIRP (obj)) {
 	the_eval_obj = obj;
 	if (the_eval_context == NULL) {
-	    error ("tail_eval called without a prior eval in progress.", NULL);
+	    marlais_error ("tail_eval called without a prior eval in progress.", NULL);
 	}
 	longjmp (*the_eval_context, 1);
     }

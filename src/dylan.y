@@ -182,7 +182,7 @@ evaluable_constituent
 
 	| local_declaration
 		{ *parse_value_ptr = unspecified_object;
-		  warning("local binding outside of block ignored", NULL);
+		  marlais_warning("local binding outside of block ignored", NULL);
 		  YYACCEPT;
 	        }
 
@@ -674,7 +674,7 @@ for_terminator_opt
 							     make_empty_list())),
 					         make_empty_list());
 				  } else {
-					error ("Bogus keyword in if",
+					marlais_error ("Bogus keyword in if",
 						$1,
 						NULL);
 				  }
@@ -693,7 +693,7 @@ block_statement
 		exceptions
 			{ pop_intermediate_words ();
 			  if (! EMPTYLISTP ($9)) {
-				warning ("Exceptions not yet implemented!",
+				marlais_warning ("Exceptions not yet implemented!",
 					 NULL);
 				}
 			}
@@ -855,22 +855,22 @@ slot_spec
 		      mod = CAR (mods);
 		      if (mod == open_symbol) {
 			  if (dynamism_specified) {
-			      error ("Slot dyanamism specified twice", NULL);
+			      marlais_error ("Slot dyanamism specified twice", NULL);
 			  }
 			  dynamism_specified = 1;
 		      } else if (mod == sealed_symbol) {
 			  if (dynamism_specified) {
-			      error ("Slot dyanamism specified twice", NULL);
+			      marlais_error ("Slot dyanamism specified twice", NULL);
 			  }
 			  SECOND (dynamism) = sealed_symbol;
 		      } else if (allocation_word (mod)) {
 			  if (allocation_specified) {
-			      error ("Slot allocation specified twice", NULL);
+			      marlais_error ("Slot allocation specified twice", NULL);
 			  }
 			  allocation_specified = 1;
 			  SECOND (allocation) = mod;
 			  if ( ! EMPTYLISTP (CDR (mods))) {
-			      error ("Slot modifiers follow allocation",
+			      marlais_error ("Slot modifiers follow allocation",
 				     mods, NULL);
 			  }
 		      }
@@ -897,7 +897,7 @@ initialization_argument_spec
 	: SYMBOL KEYWORD comma_arguments_opt
 		{
 		  if ($1 != keyword_symbol) {
-			error ("Bad initialization argument specification", NULL);
+			marlais_error ("Bad initialization argument specification", NULL);
 		  } else {
 			$$ = cons (init_keyword_keyword, cons ($2, $3));
 		  }
@@ -905,7 +905,7 @@ initialization_argument_spec
 	| SYMBOL SYMBOL KEYWORD comma_arguments_opt
 		{
 		  if ($1 != required_symbol || $2 != keyword_symbol) {
-			error ("Bad initialization argument specification", NULL);
+			marlais_error ("Bad initialization argument specification", NULL);
 		  } else {
 			$$ = cons (required_init_keyword_keyword,
 				cons ($3, $4));
@@ -1334,7 +1334,7 @@ void yyerror(char *s)
 {
     char line_str[20];
     sprintf (line_str, " [line #%d]", yylineno);
-    warning (s,
+    marlais_warning (s,
 	     marlais_make_bytestring (yytext),
 	     marlais_make_bytestring (line_str),
 	     NULL);
@@ -1470,7 +1470,7 @@ symtab_insert_bindings (Object bindings)
     Object variable;
 
 #if 0
-    warning ("Got symtab_insert_bindings", bindings, NULL);
+    marlais_warning ("Got symtab_insert_bindings", bindings, NULL);
 #endif
 
     /*
@@ -1482,7 +1482,7 @@ symtab_insert_bindings (Object bindings)
 	variable = CAR (bindings);
 	if (PAIRP (variable)) {
 #if 0
-	    warning ("  symtab element",
+	    marlais_warning ("  symtab element",
 		     CAR (variable),
 		     SECOND (variable),
 		     NULL);
@@ -1502,7 +1502,7 @@ symtab_push_parameters (Object parameters)
 
     symtab = cons (make_table (DEFAULT_TABLE_SIZE), symtab);
 #if 0
-    warning ("Got symtab_insert_parameters", parameters, NULL);
+    marlais_warning ("Got symtab_insert_parameters", parameters, NULL);
 #endif
 
     while (PAIRP (parameters)) {
@@ -1513,7 +1513,7 @@ symtab_push_parameters (Object parameters)
 	}
 	if (PAIRP (variable)) {
 #if 0
-   warning ("  symtab element",
+   marlais_warning ("  symtab element",
 		     CAR (variable),
 		     SECOND (variable),
 		     NULL);

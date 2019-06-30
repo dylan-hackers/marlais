@@ -55,7 +55,7 @@ marlais_allocate_memory (size_t size)
 	obj = GC_malloc (size);
 	/* check */
 	if (!obj) {
-        fatal ("internal error: memory allocation failure.");
+        marlais_fatal ("internal error: memory allocation failure");
 	}
 	/* return */
 	return obj;
@@ -69,7 +69,7 @@ marlais_reallocate_memory(void *old_obj, size_t new_size)
 	obj = GC_realloc (old_obj, new_size);
 	/* check */
 	if (!obj) {
-        fatal ("internal error: memory allocation failure.");
+        marlais_fatal ("internal error: memory allocation failure");
 	}
 	/* return */
 	return obj;
@@ -83,7 +83,7 @@ marlais_allocate_atomic (size_t size)
     obj = GC_malloc_atomic (size);
 	/* check */
     if (!obj) {
-        fatal ("internal error: memory allocation failure.");
+        marlais_fatal ("internal error: memory allocation failure");
     }
 	/* return */
     return obj;

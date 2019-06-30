@@ -125,7 +125,7 @@ keyword_list_insert (Object *list, Object key_binding)
 	} else if (compare > 0) {
 	    break;
 	} else {
-	    error ("keyword specified twice", CAR (key_binding),
+	    marlais_error ("keyword specified twice", CAR (key_binding),
 		   CAR (CAR (*tmp_ptr)), NULL);
 	    return;
 	}
@@ -175,7 +175,7 @@ parse_method_next_parameter (Object meth_obj, Object *params)
       METHNEXTMETH (meth_obj) = CAR (*params);
       *params = CDR (*params);
     } else {
-      error ("method #next designator not followed by a parameter", NULL);
+      marlais_error ("method #next designator not followed by a parameter", NULL);
     }
   } else {
     METHNEXTMETH (meth_obj) = next_method_symbol;
@@ -192,7 +192,7 @@ parse_function_rest_parameter (Object fn_obj, Object *params,
       assign_fn (fn_obj, CAR (*params));
       *params = CDR (*params);
     } else {
-      error ("generic function #rest designator not followed by a parameter",
+      marlais_error ("generic function #rest designator not followed by a parameter",
 	     NULL);
     }
   } else {
@@ -301,7 +301,7 @@ parse_function_key_parameters(Object functor, Object* params,
       bit_mask_fn(functor, 1);
       *params = CDR (*params);
       if (PAIRP (*params) && CAR (*params) != hash_values_symbol) {
-	error ("parameters follow #all-keys", *params);
+	marlais_error ("parameters follow #all-keys", *params);
       }
     }
   }
@@ -382,21 +382,21 @@ parse_generic_function_parameters (Object gf_obj, Object params)
   }
 
     if (PAIRP (params)) {
-	error ("objects encountered after parameter list", params, NULL);
+	marlais_error ("objects encountered after parameter list", params, NULL);
     }
     if (trace_functions) {
-	warning ("Got GF", GFNAME (gf_obj), NULL);
-	warning (" Required parameters", GFREQPARAMS (gf_obj), NULL);
-	warning (" Rest parameter", GFRESTPARAM (gf_obj), NULL);
+	marlais_warning ("Got GF", GFNAME (gf_obj), NULL);
+	marlais_warning (" Required parameters", GFREQPARAMS (gf_obj), NULL);
+	marlais_warning (" Rest parameter", GFRESTPARAM (gf_obj), NULL);
 	if (GFHASKEYS (gf_obj)) {
-	    warning (" Has keys", NULL);
-	    warning (" Key parameters", GFKEYPARAMS (gf_obj), NULL);
+	    marlais_warning (" Has keys", NULL);
+	    marlais_warning (" Key parameters", GFKEYPARAMS (gf_obj), NULL);
 	}
 	if (GFALLKEYS (gf_obj)) {
-	    warning (" All Keys specified", NULL);
+	    marlais_warning (" All Keys specified", NULL);
 	}
-	warning (" Required return values", GFREQVALUES (gf_obj), NULL);
-	warning (" Rest return value type", GFRESTVALUES (gf_obj), NULL);
+	marlais_warning (" Required return values", GFREQVALUES (gf_obj), NULL);
+	marlais_warning (" Rest return value type", GFRESTVALUES (gf_obj), NULL);
     }
 }
 
@@ -443,18 +443,18 @@ parse_method_parameters (Object meth_obj, Object params)
   }
 
   if (PAIRP (params)) {
-    error ("objects encountered after parameter list", params, NULL);
+    marlais_error ("objects encountered after parameter list", params, NULL);
   }
   if (trace_functions) {
-    warning ("Got Method", METHNAME (meth_obj), NULL);
-    warning (" Required parameters", METHREQPARAMS (meth_obj), NULL);
-    warning (" Rest parameter", METHRESTPARAM (meth_obj), NULL);
-    warning (" Key parameters", METHKEYPARAMS (meth_obj), NULL);
+    marlais_warning ("Got Method", METHNAME (meth_obj), NULL);
+    marlais_warning (" Required parameters", METHREQPARAMS (meth_obj), NULL);
+    marlais_warning (" Rest parameter", METHRESTPARAM (meth_obj), NULL);
+    marlais_warning (" Key parameters", METHKEYPARAMS (meth_obj), NULL);
     if (METHALLKEYS (meth_obj)) {
-      warning ("All Keys specified", NULL);
+      marlais_warning ("All Keys specified", NULL);
     }
-    warning (" Required return values", METHREQVALUES (meth_obj), NULL);
-    warning (" Rest return value type", METHRESTVALUES (meth_obj), NULL);
+    marlais_warning (" Required return values", METHREQVALUES (meth_obj), NULL);
+    marlais_warning (" Rest return value type", METHRESTVALUES (meth_obj), NULL);
   }
 }
 
@@ -474,7 +474,7 @@ create_generic_parameters (Object params)
 	    if (PAIRP (params)) {
 		params = CDR (params);
 	    } else {
-		error ("method #rest designator not followed by a parameter", NULL);
+		marlais_error ("method #rest designator not followed by a parameter", NULL);
 	    }
 	    break;
 	}
@@ -574,7 +574,7 @@ generic_function_make (Object arglist)
 
     for (ptr = required; PAIRP (ptr); ptr = CDR (ptr)) {
 	if (!CLASSP (CAR (ptr))) {
-	    error ("make: generic function specializer is not a class",
+	    marlais_error ("make: generic function specializer is not a class",
 		   CAR (ptr),
 		   NULL);
 	} else {
@@ -612,7 +612,7 @@ generic_function_make (Object arglist)
 Object
 make_generic_function_driver (Object args)
 {
-    return error ("make: not implemented for generic functions", NULL);
+    return marlais_error ("make: not implemented for generic functions", NULL);
 }
 
 /* local functions */
@@ -662,10 +662,10 @@ add_method (Object generic, Object method)
 #endif
 
     if (!sub_specializers (new_specs, old_specs)) {
-	error ("add-method: method specializers must be subtypes of generic func. specs.", method, NULL);
+	marlais_error ("add-method: method specializers must be subtypes of generic func. specs.", method, NULL);
     }
     if (!GFRESTPARAM (generic) && METHRESTPARAM (method)) {
-	error ("add-method: generic must have #rest parameters if method does",
+	marlais_error ("add-method: generic must have #rest parameters if method does",
 	       method,
 	       NULL);
     }
@@ -706,7 +706,7 @@ Object
 generic_function_methods (Object gen)
 {
     if (!GFUNP (gen)) {
-	error ("generic-function-methods: argument must be a generic function", gen, NULL);
+	marlais_error ("generic-function-methods: argument must be a generic function", gen, NULL);
     }
     return (GFMETHODS (gen));
 }
@@ -727,7 +727,7 @@ function_specializers (Object func)
     } else if (GFUNP (func)) {
 	params = GFREQPARAMS (func);
     } else {
-	error ("function-specializers: arg. must be a method or generic function",
+	marlais_error ("function-specializers: arg. must be a method or generic function",
 	       func,
 	       NULL);
     }
@@ -746,7 +746,7 @@ function_values (Object func)
 	vals = GFREQVALUES (func);
 	rest = GFRESTVALUES (func);
     } else {
-	error ("function-values: arg. must be a method or generic function",
+	marlais_error ("function-values: arg. must be a method or generic function",
 	       func,
 	       NULL);
     }
@@ -812,9 +812,9 @@ function_arguments (Object fun)
 	}
 	break;
     case Primitive:
-	error ("function-arguments: cannot query arguments of a primitive", fun, NULL);
+	marlais_error ("function-arguments: cannot query arguments of a primitive", fun, NULL);
     default:
-	error ("function-arguments: bad argument", fun, NULL);
+	marlais_error ("function-arguments: bad argument", fun, NULL);
     }
     return (construct_values (3, list_length_int (params), has_rest, keywords));
 }
@@ -854,7 +854,7 @@ applicable_method_p (Object argfun, Object sample_args, int strict_check)
     Object funs, fun;
 
     if (!METHODP (argfun) && !GFUNP (argfun)) {
-	error ("applicable-method?: first argument must be a generic function or method", fun, NULL);
+	marlais_error ("applicable-method?: first argument must be a generic function or method", fun, NULL);
     }
     if (METHODP (argfun)) {
 	funs = cons (argfun, make_empty_list ());
@@ -1090,7 +1090,7 @@ sorted_possible_method_handles (Object fun, Object sample_args)
 	methods = CDR (methods);
     }
     if (EMPTYLISTP (maybe_methods)) {
-	return error ("No applicable methods", fun, sample_args, NULL);
+	return marlais_error ("No applicable methods", fun, sample_args, NULL);
     }
     sorted_methods = sort_methods (maybe_methods, sample_args);
 
@@ -1115,7 +1115,7 @@ sorted_applicable_methods (Object fun, Object sample_args)
 	methods = CDR (methods);
     }
     if (EMPTYLISTP (app_methods)) {
-	return error ("No applicable methods", fun, sample_args, NULL);
+	return marlais_error ("No applicable methods", fun, sample_args, NULL);
     }
     return split_sorted_methods (app_methods, sample_args);
 }
@@ -1297,7 +1297,7 @@ remove_method (Object generic, Object method)
 	    return method;
 	}
     }
-    return error ("remove-method: generic function does not contain method",
+    return marlais_error ("remove-method: generic function does not contain method",
 		  generic, method, NULL);
 }
 

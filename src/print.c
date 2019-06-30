@@ -115,7 +115,7 @@ FILE* file_from_fd(Object fd)
 {
     switch(INTVAL(fd)) {
       case 0:
-	error ("print_object: cannot send output to input-stream", fd, NULL);
+	marlais_error ("print_object: cannot send output to input-stream", fd, NULL);
         break;
       case 1:
         return stdout;
@@ -280,7 +280,7 @@ print_object (Object fd, Object obj, int escaped)
 	fprintf (fp, "}");
 	break;
     default:
-	error ("print: unknown object type", NULL);
+	marlais_error ("print: unknown object type", NULL);
 
     }
 }
@@ -758,6 +758,6 @@ print_type_name (Object fd, Object obj, int escaped)
 	print_object (fd, obj, escaped);
 	break;
     default:
-	error ("print_type_name: object is not a type", obj);
+	marlais_error ("print_type_name: object is not a type", obj);
     }
 }

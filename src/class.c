@@ -373,7 +373,7 @@ make_class (Object obj,
   while (!EMPTYLISTP (allsuperclasses)) {
     /* check for sealed superclass */
     if (SEALEDP (CAR (allsuperclasses))) {
-      error ("Cannot create subclass of sealed class",
+      marlais_error ("Cannot create subclass of sealed class",
 	     CAR (allsuperclasses), NULL);
     }
     super = CAR (allsuperclasses);
@@ -405,7 +405,7 @@ make_class (Object obj,
   if (!CLASSNAME (obj)) {
     CLASSNAME (obj) = make_symbol (debug_name);
     // XXX what is this!?
-    //warning ("Making class name", CLASSNAME(obj), NULL);
+    //marlais_warning ("Making class name", CLASSNAME(obj), NULL);
   }
   /* initialize class and each-subclass slot objects */
   CLASSCSLOTS (obj) = marlais_allocate_object (Instance, sizeof (struct instance));
@@ -433,11 +433,11 @@ add_slot_descriptor_names (Object sd_list, Object *sg_names_ptr)
     sd = CAR (sd_list);
     if (SLOTDSETTER (sd) != MARLAIS_FALSE) {
       if (member_2 (SLOTDGETTER (sd), SLOTDSETTER (sd), *sg_names_ptr)) {
-	error ("slot getter or setter appears in superclass", sd, NULL);
+	marlais_error ("slot getter or setter appears in superclass", sd, NULL);
       }
     } else {
       if (member (SLOTDGETTER (sd), *sg_names_ptr))
-	error ("slot getter appears in superclass", sd, NULL);
+	marlais_error ("slot getter appears in superclass", sd, NULL);
     }
   }
 }
@@ -472,7 +472,7 @@ append_one_slot_descriptor (Object sd, Object **new_sd_list_insert_ptr,
 			    Object *sg_names_ptr)
 {
   if (member_2 (SLOTDGETTER (sd), SLOTDSETTER (sd), *sg_names_ptr)) {
-    error ("slot getter or setter appears in superclass", sd, NULL);
+    marlais_error ("slot getter or setter appears in superclass", sd, NULL);
   }
   *sg_names_ptr = cons (SLOTDGETTER (sd), *sg_names_ptr);
   if (SLOTDSETTER (sd)) {
@@ -503,15 +503,15 @@ make_class_driver (Object args)
     } else if (FIRST (args) == abstract_p_keyword) {
       abstract_obj = SECOND (args);
     } else {
-      error ("make: unsupported keyword for <class> class", FIRST (args), NULL);
+      marlais_error ("make: unsupported keyword for <class> class", FIRST (args), NULL);
     }
     args = CDR (CDR (args));
   }
   if (!debug_obj) {
-    warning ("make <class> no debug-name specified", NULL);
+    marlais_warning ("make <class> no debug-name specified", NULL);
     debug_obj = empty_string;
   } else if (!BYTESTRP (debug_obj)) {
-    error ("make <class> debug-name: must be a string", NULL);
+    marlais_error ("make <class> debug-name: must be a string", NULL);
   }
   if (EMPTYLISTP (supers_obj)) {
     supers_obj = object_class;
@@ -575,7 +575,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
 	 * take appropriate action.  Perhaps memoize the init
 	 * and perform below.
 	 */
-	error ("Bad slot initializers", initializer, NULL);
+	marlais_error ("Bad slot initializers", initializer, NULL);
       }
       initializers = CDR (CDR (initializers));
     }
@@ -602,7 +602,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
 			   NULL);
 	def_ptr = &CDR (CDR (*def_ptr));
       } else if (SLOTDKEYREQ (slotd)) {
-	error ("Required keyword not specified",
+	marlais_error ("Required keyword not specified",
 	       SLOTDINITKEYWORD (slotd), NULL);
       }
     }
@@ -684,20 +684,20 @@ make_limited_int_type (Object args)
   while (!EMPTYLISTP (args)) {
     if (FIRST (args) == min_keyword) {
       if (LIMINTHASMIN (obj)) {
-	error ("Minimum value for limited type specified twice", NULL);
+	marlais_error ("Minimum value for limited type specified twice", NULL);
       } else {
 	LIMINTMIN (obj) = INTVAL (SECOND (args));
 	LIMINTPROPS (obj) |= LIMMINMASK;
       }
     } else if (FIRST (args) == max_keyword) {
       if (LIMINTHASMAX (obj)) {
-	error ("Maximum value for limited type specified twice", NULL);
+	marlais_error ("Maximum value for limited type specified twice", NULL);
       } else {
 	LIMINTMAX (obj) = INTVAL (SECOND (args));
 	LIMINTPROPS (obj) |= LIMMAXMASK;
       }
     } else {
-      error ("make: unsupported keyword for limited integer type",
+      marlais_error ("make: unsupported keyword for limited integer type",
 	     FIRST (args), NULL);
     }
     args = CDR (CDR (args));
@@ -831,7 +831,7 @@ make (Object class, Object rest)
   Object ret, initialize_fun;
 
   if (!INSTANTIABLE (class)) {
-    error ("make: class uninstantiable", class, NULL);
+    marlais_error ("make: class uninstantiable", class, NULL);
     return MARLAIS_FALSE;
   }
   /* special case the builtin classes */
@@ -863,7 +863,7 @@ make (Object class, Object rest)
   if (initialize_fun) {
     apply (initialize_fun, cons (ret, rest));
   } else {
-    warning ("make: no `initialize' generic function", class, NULL);
+    marlais_warning ("make: no `initialize' generic function", class, NULL);
   }
   return (ret);
 }
@@ -1072,7 +1072,7 @@ objectclass (Object obj)
   case UninitializedSlotValue:
     return (object_class);
   default:
-    return error ("object-class: don't know class of object", obj, NULL);
+    return marlais_error ("object-class: don't know class of object", obj, NULL);
   }
 }
 
@@ -1120,7 +1120,7 @@ make_getter_setter_gfs (Object slotds)
 				 make_empty_list ());
 	add_top_level_binding (getter, SLOTDGETTER (CAR (slotds)), 1);
       } else if (!GFUNP (symbol_value (getter))) {
-	error ("Getter symbol not bound to a generic function",
+	marlais_error ("Getter symbol not bound to a generic function",
 	       getter,
 	       symbol_value (getter),
 	       NULL);
@@ -1129,7 +1129,7 @@ make_getter_setter_gfs (Object slotds)
       }
     } else {
       /* getter is not a symbol */
-      error ("Getter name is not a symbol", getter, NULL);
+      marlais_error ("Getter name is not a symbol", getter, NULL);
     }
 
     /* Now fix up the setter */
@@ -1156,7 +1156,7 @@ make_getter_setter_gfs (Object slotds)
 				 SLOTDSETTER (CAR (slotds)),
 				 1);
 	} else if (!GFUNP (symbol_value (setter))) {
-	  error ("Setter symbol not bound to a generic function",
+	  marlais_error ("Setter symbol not bound to a generic function",
 		 setter,
 		 symbol_value (setter),
 		 NULL);
@@ -1167,7 +1167,7 @@ make_getter_setter_gfs (Object slotds)
 	SLOTDSETTER (CAR (slotds)) = setter;
       } else {
 	/* setter is not a symbol */
-	error ("Setter name is not a symbol", setter, NULL);
+	marlais_error ("Setter name is not a symbol", setter, NULL);
       }
 
     }
@@ -1205,7 +1205,7 @@ make_getter_method (Object slot, Object class, int slot_num)
   Object class_location;
 
   if (!GFUNP (SLOTDGETTER (slot))) {
-    error ("Slot getter is not a generic function", SLOTDGETTER (slot), NULL);
+    marlais_error ("Slot getter is not a generic function", SLOTDGETTER (slot), NULL);
   }
   if (CLASSNAME (class)) {
     class_location = CLASSNAME (class);
@@ -1224,7 +1224,7 @@ make_getter_method (Object slot, Object class, int slot_num)
   } else if (allocation == virtual_symbol) {
     return SLOTDGETTER (slot);
   } else if (allocation != constant_symbol) {
-    error ("Bad slot allocation ", allocation, NULL);
+    marlais_error ("Bad slot allocation ", allocation, NULL);
   }
   if (allocation == constant_symbol) {
     body = cons (SLOTDINIT (slot), make_empty_list ());
@@ -1255,7 +1255,7 @@ make_setter_method (Object slot, Object class, int slot_num)
     return NULL;
   }
   if (!GFUNP (SLOTDSETTER (slot))) {
-    error ("Slot setter is not a generic function",
+    marlais_error ("Slot setter is not a generic function",
 	   SLOTDSETTER (slot),
 	   NULL);
   }
@@ -1280,12 +1280,12 @@ make_setter_method (Object slot, Object class, int slot_num)
 			    listem (quote_symbol, class, NULL),
 				NULL);
   } else if (allocation == constant_symbol) {
-    error ("BUG - attempt to allocate setter for constant slot",
+    marlais_error ("BUG - attempt to allocate setter for constant slot",
 	   slot, NULL);
   } else if (allocation == virtual_symbol) {
     return SLOTDSETTER (slot);
   } else {
-    error ("Bad slot allocation ", allocation, NULL);
+    marlais_error ("Bad slot allocation ", allocation, NULL);
   }
   body = listem (listem (set_slot_value_sym,
 			 slot_location,
@@ -1347,23 +1347,23 @@ slot_descriptor_list (Object slots, int do_eval)
 	slotelt = CAR (slot);
 	/* parse keyword-value pairs for slot initialization */
 	if (!KEYWORDP (slotelt) || EMPTYLISTP (CDR (slot))) {
-	  error ("malformed slot descriptor", slot, NULL);
+	  marlais_error ("malformed slot descriptor", slot, NULL);
 	} else if (slotelt == getter_keyword) {
 	  if (getter_seen) {
-	    error ("redundant getter specified", SECOND (slot),
+	    marlais_error ("redundant getter specified", SECOND (slot),
 		   NULL);
 	  }
 	  getter_seen = 1;
 	  getter = SECOND (slot);
 	} else if (slotelt == setter_keyword) {
 	  if (setter != NULL) {
-	    error ("redundant specification for slot setter name",
+	    marlais_error ("redundant specification for slot setter name",
 		   SECOND (slot), NULL);
 	  }
 	  setter = SECOND (slot);
 	} else if (slotelt == allocation_keyword) {
 	  if (allocation_seen) {
-	    error ("redundant specification for allocation",
+	    marlais_error ("redundant specification for allocation",
 		   SECOND (slot), NULL);
 	  }
 	  allocation_seen = 1;
@@ -1373,7 +1373,7 @@ slot_descriptor_list (Object slots, int do_eval)
 	  }
 	} else if (slotelt == type_keyword) {
 	  if (type_seen) {
-	    error ("redundant specification for type", SECOND (slot), NULL);
+	    marlais_error ("redundant specification for type", SECOND (slot), NULL);
 	  }
 	  type_seen = 1;
 	  /*
@@ -1382,7 +1382,7 @@ slot_descriptor_list (Object slots, int do_eval)
 	  type = SECOND (slot);
 	} else if (slotelt == deferred_type_keyword) {
 	  if (type_seen) {
-	    error ("redundant specification for type",
+	    marlais_error ("redundant specification for type",
 		   SECOND (slot), NULL);
 	  }
 	  type_seen = 1;
@@ -1390,14 +1390,14 @@ slot_descriptor_list (Object slots, int do_eval)
 	  properties |= SLOTDDEFERREDTYPEMASK;
 	} else if (slotelt == init_value_keyword) {
 	  if (init_seen) {
-	    error ("redundant specification for initializer",
+	    marlais_error ("redundant specification for initializer",
 		   SECOND (slot), NULL);
 	  }
 	  init_seen = 1;
 	  init = SECOND (slot);
 	} else if (slotelt == init_function_keyword) {
 	  if (init_seen) {
-	    error ("redundant specification for initializer",
+	    marlais_error ("redundant specification for initializer",
 		   SECOND (slot), NULL);
 	  }
 	  init_seen = 1;
@@ -1405,32 +1405,32 @@ slot_descriptor_list (Object slots, int do_eval)
 	  properties |= SLOTDINITFUNCTIONMASK;
 	} else if (slotelt == init_keyword_keyword) {
 	  if (init_keyword) {
-	    error ("redundant init-keyword: specification",
+	    marlais_error ("redundant init-keyword: specification",
 		   SECOND (slot), NULL);
 	  }
 	  init_keyword = SECOND (slot);
 	  if (!KEYWORDP (init_keyword)) {
-	    error ("init-keyword: value is not a keyword", init_keyword, NULL);
+	    marlais_error ("init-keyword: value is not a keyword", init_keyword, NULL);
 	  }
 	} else if (slotelt == required_init_keyword_keyword) {
 	  if (init_keyword) {
-	    error ("redundant required-init-keyword: specification",
+	    marlais_error ("redundant required-init-keyword: specification",
 		   SECOND (slot), NULL);
 	  }
 	  init_keyword = SECOND (slot);
 	  if (!KEYWORDP (init_keyword)) {
-	    error ("required-init-keyword: value is not a keyword",
+	    marlais_error ("required-init-keyword: value is not a keyword",
 		   init_keyword, NULL);
 	  }
 	  properties |= SLOTDKEYREQMASK;
 	} else if (slotelt == dynamism_keyword) {
 	  if (dynamism_seen) {
-	    error ("Dynamism of slot specified twice",
+	    marlais_error ("Dynamism of slot specified twice",
 		   SECOND (slot), NULL);
 	  }
 	  dynamism = SECOND (slot);
 	} else {
-	  error ("unknown slot keyword initializer", slotelt, NULL);
+	  marlais_error ("unknown slot keyword initializer", slotelt, NULL);
 	}
 	slot = CDR (CDR (slot));
       }
@@ -1442,17 +1442,17 @@ slot_descriptor_list (Object slots, int do_eval)
     if (!getter)
 #endif
     {
-      error ("Slot has no getter", CAR (slots), NULL);
+      marlais_error ("Slot has no getter", CAR (slots), NULL);
     }
     if (allocation == constant_symbol) {
       if (init == NULL || properties & SLOTDINITFUNCTIONMASK) {
-	error ("Bad initialization for constant slot",
+	marlais_error ("Bad initialization for constant slot",
 	       CAR (slots), NULL);
       }
     }
     if (properties & SLOTDKEYREQMASK) {
       if (init != uninit_slot_object) {
-	error ("required-init-keyword should not have initial value",
+	marlais_error ("required-init-keyword should not have initial value",
 	       CAR (slots), NULL);
       }
     }

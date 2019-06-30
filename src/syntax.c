@@ -314,7 +314,7 @@ bind_eval (Object form)
     struct frame *binding_env;
 
     if (EMPTYLISTP (CDR (form))) {
-	error ("malformed bind form", form, NULL);
+	marlais_error ("malformed bind form", form, NULL);
     }
     bindings = SECOND (form);
     body = CDR (CDR (form));
@@ -353,7 +353,7 @@ local_bind_eval (Object form)
     struct frame *binding_env;
 
     if (EMPTYLISTP (CDR (form))) {
-	error ("malformed local binding", form, NULL);
+	marlais_error ("malformed local binding", form, NULL);
     }
     bindings = SECOND (form);
 
@@ -378,7 +378,7 @@ local_bind_rec_eval (Object form)
     Object bindings;
 
     if (EMPTYLISTP (CDR (form))) {
-	error ("malformed local binding", form, NULL);
+	marlais_error ("malformed local binding", form, NULL);
     }
     bindings = SECOND (form);
 
@@ -402,7 +402,7 @@ unbinding_begin_eval (Object form)
     Object res;
 
     if (list_length (form) < 2) {
-	error ("Bad unbinding-begin form", form, NULL);
+	marlais_error ("Bad unbinding-begin form", form, NULL);
     }
     i = INTVAL (SECOND (form));
 
@@ -432,16 +432,16 @@ bind_exit_eval (Object form)
     Object exit_obj, sym, body, ret, sec;
 
     if (EMPTYLISTP (CDR (form))) {
-	error ("malformed bind-exit form", form, NULL);
+	marlais_error ("malformed bind-exit form", form, NULL);
     }
     sec = SECOND (form);
     if (!PAIRP (sec)) {
-	error ("bind-exit: second argument must be a list containing a symbol", sec, NULL);
+	marlais_error ("bind-exit: second argument must be a list containing a symbol", sec, NULL);
     }
     sym = CAR (sec);
     body = CDR (CDR (form));
     if (!SYMBOLP (sym)) {
-	error ("bind-exit: bad exit procedure name", sym, NULL);
+	marlais_error ("bind-exit: bad exit procedure name", sym, NULL);
     }
     exit_obj = make_exit (sym);
 
@@ -476,7 +476,7 @@ bind_methods_eval (Object form)
   Object name, params, method_body, method;
 
   if (EMPTYLISTP (CDR (form))) {
-    error ("bind-methods: bad form", form, NULL);
+    marlais_error ("bind-methods: bad form", form, NULL);
   }
   specs = SECOND (form);
   body = CDR (CDR (form));
@@ -484,7 +484,7 @@ bind_methods_eval (Object form)
   push_scope (CAR (form));
   /* first bind method names to dummy values */
   if (!PAIRP (specs)) {
-    error ("bind-methods: First argument must be a list of method bindings",
+    marlais_error ("bind-methods: First argument must be a list of method bindings",
 	   specs,
 	   NULL);
   }
@@ -501,7 +501,7 @@ bind_methods_eval (Object form)
     spec = CAR (specs);
     name = FIRST (spec);
     if (EMPTYLISTP (CDR (spec))) {
-      error ("bind-methods: incomplete method specification", spec, NULL);
+      marlais_error ("bind-methods: incomplete method specification", spec, NULL);
     }
     params = SECOND (spec);
     method_body = CDR (CDR (spec));
@@ -522,11 +522,11 @@ boundp_eval (Object form)
   Object sym;
 
   if (EMPTYLISTP (cdr)) {
-    error ("bound?: missing symbol", form, NULL);
+    marlais_error ("bound?: missing symbol", form, NULL);
   }
   sym = CAR (cdr);
   if (!SYMBOLP (sym)) {
-    error ("bound?: argument must be a symbol", sym, NULL);
+    marlais_error ("bound?: argument must be a symbol", sym, NULL);
   }
   return (symbol_value (sym) == NULL ? MARLAIS_FALSE : MARLAIS_TRUE);
 }
@@ -538,18 +538,18 @@ case_eval (Object form)
   Object match_list, consequents, ret;
 
   if (EMPTYLISTP (CDR (form))) {
-    error ("malformed case", form, NULL);
+    marlais_error ("malformed case", form, NULL);
   }
   target_form = eval (CAR (CDR (form)));
 
   if (EMPTYLISTP (CDR (CDR (form)))) {
-    error ("malformed case", form, NULL);
+    marlais_error ("malformed case", form, NULL);
   }
   branches = CDR (CDR (form));
   while (!EMPTYLISTP (branches)) {
     branch = CAR (branches);
     if (!PAIRP (branch)) {
-      error ("case: malformed branch", branch, NULL);
+      marlais_error ("case: malformed branch", branch, NULL);
     }
     match_list = CAR (branch);
     if ((match_list == MARLAIS_TRUE) || (match_list == else_keyword)) {
@@ -562,7 +562,7 @@ case_eval (Object form)
       return (ret);
     }
     if (!PAIRP (match_list)) {
-      error ("select: malformed test expression", match_list, NULL);
+      marlais_error ("select: malformed test expression", match_list, NULL);
     }
     while (!EMPTYLISTP (match_list)) {
       if (marlais_identical_p (CAR (match_list), target_form)) {
@@ -578,7 +578,7 @@ case_eval (Object form)
     }
     branches = CDR (branches);
   }
-  return error ("case: no matching clause", target_form, NULL);
+  return marlais_error ("case: no matching clause", target_form, NULL);
 }
 
 static Object
@@ -606,7 +606,7 @@ cond_eval (Object form)
 static void define_eval_helper(Object form, int bind_where)
 {
   if (EMPTYLISTP (CDR (form)) || EMPTYLISTP (CDR (CDR (form)))) {
-    error ("DEFINE form requires at least two args: (define {<var>} <init>)",
+    marlais_error ("DEFINE form requires at least two args: (define {<var>} <init>)",
 	   form, NULL);
   } else {
     bind_variables (CDR (form), 1, bind_where, the_env);
@@ -639,7 +639,7 @@ bind_variables (Object init_list,
   int i, value_count;
 
   if (!PAIRP (init_list) || EMPTYLISTP (CDR (init_list))) {
-    error ("Initializer list requires at least two elements", init_list, NULL);
+    marlais_error ("Initializer list requires at least two elements", init_list, NULL);
   }
   variables = init = init_list;
   while (!EMPTYLISTP (CDR (init))) {
@@ -671,7 +671,7 @@ bind_variables (Object init_list,
 	}
 	/* check for no variables after #rest */
 	if (CDR (CDR (variables)) != init) {
-	  error ("Badly placed #rest specifier", init_list, NULL);
+	  marlais_error ("Badly placed #rest specifier", init_list, NULL);
 	}
 	/* finished with bindings */
 	break;
@@ -729,11 +729,11 @@ add_variable_binding (Object var,
 
   if (PAIRP (var)) {
     if (!PAIRP (CDR (var))) {
-      error ("badly formed variable", var, NULL);
+      marlais_error ("badly formed variable", var, NULL);
     }
     type = eval (SECOND (var));
     if (!instance (type, type_class)) {
-      error ("badly formed variable", var, NULL);
+      marlais_error ("badly formed variable", var, NULL);
     }
   } else {
     type = object_class;
@@ -743,7 +743,7 @@ add_variable_binding (Object var,
      * do it here.
      */
     if (!instance (val, type)) {
-      error ("initial value does not satisfy type constraint",
+      marlais_error ("initial value does not satisfy type constraint",
 	     val,
 	     type,
 	     NULL);
@@ -770,13 +770,13 @@ define_class_eval (Object form)
   int primary_class = 0, primary_free_seen = 0;
 
   if (EMPTYLISTP (CDR (tmp_form))) {
-    error ("malfored define-class (no arguments)", form, NULL);
+    marlais_error ("malfored define-class (no arguments)", form, NULL);
   }
   tmp_form = CDR (tmp_form);
   if (PAIRP (CAR (tmp_form))) {
     modifiers = CAR (tmp_form);
     if (CAR (modifiers) != modifiers_keyword) {
-      error ("malformed define-class (bad modifiers)", form, NULL);
+      marlais_error ("malformed define-class (bad modifiers)", form, NULL);
     }
     for (modifiers = CDR (modifiers);
 	 PAIRP (modifiers);
@@ -784,7 +784,7 @@ define_class_eval (Object form)
       modifier = CAR (modifiers);
       if (modifier == abstract_symbol || modifier == concrete_symbol) {
 	if (abstract_concrete_seen) {
-	  error ("redundant or conflicting modifier given to define-class",
+	  marlais_error ("redundant or conflicting modifier given to define-class",
 		 modifier, NULL);
 	}
 	abstract_concrete_seen = 1;
@@ -792,7 +792,7 @@ define_class_eval (Object form)
       }
       if (modifier == primary_symbol || modifier == free_symbol) {
 	if (primary_free_seen) {
-	  error ("redundant or conflicting modifier given to define-class",
+	  marlais_error ("redundant or conflicting modifier given to define-class",
 		 modifier, NULL);
 	}
 	primary_free_seen = 1;
@@ -800,7 +800,7 @@ define_class_eval (Object form)
       }
       if (modifier == open_symbol || modifier == sealed_symbol) {
 	if (open_sealed_seen) {
-	  error ("redundant or conflicting modifier given to define-class",
+	  marlais_error ("redundant or conflicting modifier given to define-class",
 		 modifier, NULL);
 	}
 	open_sealed_seen = 1;
@@ -812,7 +812,7 @@ define_class_eval (Object form)
   name = CAR (tmp_form);
   tmp_form = CDR (tmp_form);
   if (EMPTYLISTP (tmp_form)) {
-    error ("malformed define-class (no superclass)", form, NULL);
+    marlais_error ("malformed define-class (no superclass)", form, NULL);
   }
   /*
    * Must introduce binding for the class before eval'ing
@@ -860,17 +860,17 @@ check_function_syntax (Object form, Object* name, Object* params, char* def)
 
   if (EMPTYLISTP (CDR (form))) {
     strcat(err_msg, "missing name");
-    error (err_msg, form, NULL);
+    marlais_error (err_msg, form, NULL);
   }
   *name = SECOND (form);
   if (EMPTYLISTP (CDR (CDR (form)))) {
     strcat(err_msg, "missing parameters");
-    error (err_msg, form, NULL);
+    marlais_error (err_msg, form, NULL);
   }
   *params = THIRD (form);
   if (!LISTP (*params)) {
     strcat(err_msg, "second argument must be a parameter list");
-    error (err_msg, params, NULL);
+    marlais_error (err_msg, params, NULL);
   }
 }
 
@@ -965,16 +965,16 @@ define_module_eval (Object form)
 		  exports = CDR (option);
 		  exports_specified = 1;
 		} else {
-		  error ("use clause: unknown option", option, NULL);
+		  marlais_error ("use clause: unknown option", option, NULL);
 		}
 
 	      } else {
-		error ("use clause: poorly formed option", CAR (clause), NULL);
+		marlais_error ("use clause: poorly formed option", CAR (clause), NULL);
 	      }
 	      clause = CDR (clause);
 	    }
 	    if (imports_specified && exclusions_specified) {
-	      error ("Define module: Can't specify both imports: "
+	      marlais_error ("Define module: Can't specify both imports: "
 		     "and exclusions:", clause, NULL);
 	    }
 	    old_module = set_module (the_module);
@@ -986,7 +986,7 @@ define_module_eval (Object form)
 			exports);
 	    set_module (old_module);
 	  } else {
-	    error ("define-module: Bad use clause", clause, NULL);
+	    marlais_error ("define-module: Bad use clause", clause, NULL);
 	  }
 	} else if (CAR (clause) == export_symbol) {
 	  fill_table_from_property_set (the_module->exported_bindings,
@@ -999,15 +999,15 @@ define_module_eval (Object form)
 	  fill_table_from_property_set (the_module->exported_bindings,
 					CDR (clause));
 	} else {
-	  error ("define-module: Bad clause", clause, NULL);
+	  marlais_error ("define-module: Bad clause", clause, NULL);
 	}
       } else {
-	error ("define-module: Bad clause", clause, NULL);
+	marlais_error ("define-module: Bad clause", clause, NULL);
       }
       clauses = CDR (clauses);
     }
   } else {
-    error ("define-module: Bad argument list", form, NULL);
+    marlais_error ("define-module: Bad argument list", form, NULL);
   }
   return unspecified_object;
 }
@@ -1019,22 +1019,22 @@ dotimes_eval (Object form)
   int i;
 
   if (EMPTYLISTP (CDR (form))) {
-    error ("malformed dotimes expression", form, NULL);
+    marlais_error ("malformed dotimes expression", form, NULL);
   }
   clause = CAR (CDR (form));
   if (!PAIRP (clause)) {
-    error ("second arg to dotimes must be a list", clause, NULL);
+    marlais_error ("second arg to dotimes must be a list", clause, NULL);
   }
   var = CAR (clause);
   if (!SYMBOLP (var)) {
-    error ("dotimes: first value in spec clause must be a symbol", var, NULL);
+    marlais_error ("dotimes: first value in spec clause must be a symbol", var, NULL);
   }
   if (EMPTYLISTP (CDR (clause))) {
-    error ("dotimes: must specifiy an upper bound", form, NULL);
+    marlais_error ("dotimes: must specifiy an upper bound", form, NULL);
   }
   intval = eval (CAR (CDR (clause)));
   if (!INTEGERP (intval)) {
-    error ("dotimes: upper bound must an integer", intval, NULL);
+    marlais_error ("dotimes: upper bound must an integer", intval, NULL);
   }
   if (!EMPTYLISTP (CDR (CDR (clause)))) {
     resform = CAR (CDR (CDR (clause)));
@@ -1118,7 +1118,7 @@ for_eval (Object form)
   if ((!PAIRP (CDR (form))) ||
       (!PAIRP (CDR (CDR (form)))) ||
       (!PAIRP (THIRD (form)))) {
-    error ("malformed FOR", form, NULL);
+    marlais_error ("malformed FOR", form, NULL);
   }
   test_form = FIRST (THIRD (form));
   return_forms = CDR (THIRD (form));
@@ -1190,7 +1190,7 @@ get_variable (Object var_spec)
 {
   if ((PAIRP (var_spec) && (list_length (var_spec) != 2)) &&
       (!SYMBOLP (var_spec))) {
-    error ("Bad variable specification", var_spec, NULL);
+    marlais_error ("Bad variable specification", var_spec, NULL);
   }
   return var_spec;
 }
@@ -1223,7 +1223,7 @@ get_vars_and_inits (Object var_forms,
       clause_type = variable_keyword;
       var = get_variable (var_spec);
       if (list_length (var_form) != 3) {
-	error ("for: Bad variable initialization", var_form, NULL);
+	marlais_error ("for: Bad variable initialization", var_form, NULL);
       }
       init = cons (eval (SECOND (var_form)), THIRD (var_form));
     } else if (var_spec == range_keyword) {
@@ -1237,7 +1237,7 @@ get_vars_and_inits (Object var_forms,
 
       clause_type = range_keyword;
       if (list_length (var_form) < 3) {
-	error ("for: Bad numeric clause specification", var_form, NULL);
+	marlais_error ("for: Bad numeric clause specification", var_form, NULL);
       }
       var = get_variable (SECOND (var_form));
       rest = CDR (CDR (var_form));
@@ -1255,14 +1255,14 @@ get_vars_and_inits (Object var_forms,
 	  bound = CAR (CDR (rest));
 	  rest = CDR (CDR (rest));
 	} else {
-	  error ("for: badly formed numeric clause", var_form, NULL);
+	  marlais_error ("for: badly formed numeric clause", var_form, NULL);
 	}
       }
       if (PAIRP (rest)) {
 	if (PAIRP (CDR (rest)) && CAR (rest) == by_symbol) {
 	  by = eval (CAR (CDR (rest)));
 	} else {
-	  error ("for: badly formed numeric clause", var_form, NULL);
+	  marlais_error ("for: badly formed numeric clause", var_form, NULL);
 	}
       }
       switch (object_type (by)) {
@@ -1273,7 +1273,7 @@ get_vars_and_inits (Object var_forms,
 	negative = (DFLOATVAL (by) >= 0) ? MARLAIS_FALSE : MARLAIS_TRUE;
 	break;
       default:
-	error ("for: numeric clause has unsupported increment type", by, NULL);
+	marlais_error ("for: numeric clause has unsupported increment type", by, NULL);
       }
 
       init = listem (start, by, negative, termination, bound, NULL);
@@ -1286,7 +1286,7 @@ get_vars_and_inits (Object var_forms,
 
       clause_type = collection_keyword;
       if (list_length (var_form) != 3) {
-	error ("for: Bad collection clause specification", var_form, NULL);
+	marlais_error ("for: Bad collection clause specification", var_form, NULL);
       }
       var = get_variable (SECOND (var_form));
       init = listem (make_empty_list (),
@@ -1556,21 +1556,21 @@ for_each_eval (Object form)
 
   init_state_fun = symbol_value (initial_state_sym);
   if (!init_state_fun) {
-    error ("for-each: no initial-state function defined", NULL);
+    marlais_error ("for-each: no initial-state function defined", NULL);
   }
   next_state_fun = symbol_value (next_state_sym);
   if (!next_state_fun) {
-    error ("for-each: no next-state function defined", NULL);
+    marlais_error ("for-each: no next-state function defined", NULL);
   }
   cur_el_fun = symbol_value (current_element_sym);
   if (!cur_el_fun) {
-    error ("for-each: no current-element function defined", NULL);
+    marlais_error ("for-each: no current-element function defined", NULL);
   }
   if (EMPTYLISTP (CDR (form))) {
-    error ("malformed FOR-EACH", form, NULL);
+    marlais_error ("malformed FOR-EACH", form, NULL);
   }
   if (EMPTYLISTP (CDR (CDR (form)))) {
-    error ("malformed FOR-EACH", form, NULL);
+    marlais_error ("malformed FOR-EACH", form, NULL);
   }
   test_form = FIRST (THIRD (form));
   return_forms = CDR (THIRD (form));
@@ -1625,19 +1625,19 @@ if_eval (Object form)
   Object testval, thenform, elseform;
 
   if (EMPTYLISTP (CDR (form))) {
-    error ("malformed if expression", form, NULL);
+    marlais_error ("malformed if expression", form, NULL);
   }
   testval = SECOND (form);
   if (EMPTYLISTP (CDR (CDR (form)))) {
-    error ("malformed if expression", form, NULL);
+    marlais_error ("malformed if expression", form, NULL);
   }
   thenform = THIRD (form);
   if (EMPTYLISTP (CDR (CDR (CDR (form))))) {
-    error ("if expression must have else clause", form, NULL);
+    marlais_error ("if expression must have else clause", form, NULL);
   }
   elseform = FOURTH (form);
   if (!EMPTYLISTP (CDR (CDR (CDR (CDR (form)))))) {
-    error ("if: too many arguments", NULL);
+    marlais_error ("if: too many arguments", NULL);
   }
   testval = eval (testval);
 
@@ -1654,7 +1654,7 @@ method_eval (Object form)
   Object params, body, method;
 
   if (EMPTYLISTP (CDR (form))) {
-    error ("method: missing parameters", form, NULL);
+    marlais_error ("method: missing parameters", form, NULL);
   }
   params = SECOND (form);
   body = CDR (CDR (form));
@@ -1709,11 +1709,11 @@ qq_help (Object skel)
     if (CAR (head) == unquote_symbol) {
       if (!EMPTYLISTP (tail)) {
 	if (!EMPTYLISTP (CDR (tail))) {
-	  error ("Too many arguments to unquote", NULL);
+	  marlais_error ("Too many arguments to unquote", NULL);
 	}
 	return eval (CAR (tail));
       } else {
-	return error ("missing argument to unquote", NULL);
+	return marlais_error ("missing argument to unquote", NULL);
       }
     } else if (PAIRP (CAR (head))
 	       && CAR (CAR (head)) == unquote_splicing_symbol) {
@@ -1729,7 +1729,7 @@ qq_help (Object skel)
 	CDR (tmp) = qq_help (tail);
 	return head;
       } else {
-	return error ("missing argument to unquote_splicing", NULL);
+	return marlais_error ("missing argument to unquote_splicing", NULL);
       }
     } else {
       return cons (qq_help (CAR (head)), qq_help (tail));
@@ -1750,23 +1750,23 @@ select_eval (Object form)
   Object match_list, consequents, ret;
 
   if (EMPTYLISTP (CDR (form))) {
-    error ("malformed select", form, NULL);
+    marlais_error ("malformed select", form, NULL);
   }
   target_form = eval (CAR (CDR (form)));
 
   if (EMPTYLISTP (CDR (CDR (form)))) {
-    error ("malformed select", form, NULL);
+    marlais_error ("malformed select", form, NULL);
   }
   test = eval (CAR (CDR (CDR (form))));
 
   if (EMPTYLISTP (CDR (CDR (CDR (form))))) {
-    error ("malformed select", form, NULL);
+    marlais_error ("malformed select", form, NULL);
   }
   branches = CDR (CDR (CDR (form)));
   while (!EMPTYLISTP (branches)) {
     branch = CAR (branches);
     if (!PAIRP (branch)) {
-      error ("select: malformed branch", branch, NULL);
+      marlais_error ("select: malformed branch", branch, NULL);
     }
     match_list = CAR (branch);
     if ((match_list == MARLAIS_TRUE) || (match_list == else_keyword)) {
@@ -1778,7 +1778,7 @@ select_eval (Object form)
       return (ret);
     }
     if (!PAIRP (match_list)) {
-      error ("select: malformed test expression", match_list, NULL);
+      marlais_error ("select: malformed test expression", match_list, NULL);
     }
     while (!EMPTYLISTP (match_list)) {
       ret = MARLAIS_FALSE;
@@ -1804,7 +1804,7 @@ set_eval (Object form)
   Object sym, val;
 
   if (EMPTYLISTP (CDR (form))) {
-    error ("set!: missing forms", form, NULL);
+    marlais_error ("set!: missing forms", form, NULL);
   }
   sym = SECOND (form);
 
@@ -1819,7 +1819,7 @@ set_eval (Object form)
 
   }
   if (EMPTYLISTP (CDR (CDR (form)))) {
-    error ("set!: missing forms", form, NULL);
+    marlais_error ("set!: missing forms", form, NULL);
   }
   val = devalue (eval (THIRD (form)));
   modify_value (sym, val);
@@ -1832,7 +1832,7 @@ set_module_eval (Object form)
   if (PAIRP (form) && list_length (form) == 2 && KEYWORDP (SECOND (form))) {
     return user_set_module (devalue (CDR (form)));
   } else {
-    error ("set_module: argument list not a single symbol", form, NULL);
+    marlais_error ("set_module: argument list not a single symbol", form, NULL);
   }
   return unspecified_object;
 }
@@ -1843,7 +1843,7 @@ unless_eval (Object form)
   Object test, body;
 
   if (EMPTYLISTP (CDR (form))) {
-    error ("unless: missing forms", form, NULL);
+    marlais_error ("unless: missing forms", form, NULL);
   }
   test = SECOND (form);
   body = CDR (CDR (form));
@@ -1859,7 +1859,7 @@ until_eval (Object form)
   Object test, body, forms;
 
   if (EMPTYLISTP (CDR (form))) {
-    error ("malformed until statment", form, NULL);
+    marlais_error ("malformed until statment", form, NULL);
   }
   test = CAR (CDR (form));
   body = CDR (CDR (form));
@@ -1880,7 +1880,7 @@ unwind_protect_eval (Object form)
   Object protected, cleanups, unwind, ret;
 
   if (EMPTYLISTP (CDR (form))) {
-    error ("unwind-protect: missing forms", form, NULL);
+    marlais_error ("unwind-protect: missing forms", form, NULL);
   }
   protected = SECOND (form);
   cleanups = CDR (CDR (form));
@@ -1902,7 +1902,7 @@ while_eval (Object form)
   Object test, body, forms;
 
   if (EMPTYLISTP (CDR (form))) {
-    error ("malformed while statment", form, NULL);
+    marlais_error ("malformed while statment", form, NULL);
   }
   test = CAR (CDR (form));
   body = CDR (CDR (form));

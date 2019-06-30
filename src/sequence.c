@@ -53,13 +53,13 @@ void make_sequence_driver(Object args,
     } else {
       char err_msg[80];
       sprintf(err_msg, "make: unsupported keyword for %s class", type);
-      error (err_msg, FIRST (args), NULL);
+      marlais_error (err_msg, FIRST (args), NULL);
     }
     args = CDR (CDR (args));
   }
   if (*size_obj) {
     if (!INTEGERP (*size_obj)) {
-      error ("make: value of size: argument must be an integer",
+      marlais_error ("make: value of size: argument must be an integer",
 	     size_obj, NULL);
     }
     *size = INTVAL (*size_obj);

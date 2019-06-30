@@ -95,7 +95,7 @@ marlais_make_bytestring_entry (Object args)
 
   if (fill_obj != MARLAIS_FALSE) {
     if (!CHARP (fill_obj)) {
-      error ("make: value of fill: must be a character for <string> class",
+      marlais_error ("make: value of fill: must be a character for <string> class",
 	     fill_obj, NULL);
     }
     fill = CHARVAL (fill_obj);
@@ -126,7 +126,7 @@ string_element (Object string, Object index, Object default_ob)
     i = INTVAL (index);
     if ((i < 0) || (i >= BYTESTRSIZE (string))) {
 	if (default_ob == default_object) {
-	    error ("element: argument out of range", string, index, NULL);
+	    marlais_error ("element: argument out of range", string, index, NULL);
 	} else {
 	    return default_ob;
 	}
@@ -141,7 +141,7 @@ string_element_setter (Object string, Object index, Object val)
 
     i = INTVAL (index);
     if ((i < 0) || (i >= BYTESTRSIZE (string))) {
-	error ("element-setter: argument out of range", string, index, NULL);
+	marlais_error ("element-setter: argument out of range", string, index, NULL);
     }
     BYTESTRVAL (string)[i] = CHARVAL (val);
     return (unspecified_object);
@@ -159,7 +159,7 @@ string_size_setter (Object size, Object string)
     int new_size = INTVAL (size);
 
     if ((new_size < 0) || (new_size >= BYTESTRSIZE (string))) {
-	error ("size-setter: new size out of range", new_size, string, NULL);
+	marlais_error ("size-setter: new size out of range", new_size, string, NULL);
     }
     BYTESTRSIZE (string) = new_size;
     BYTESTRVAL (string)[new_size] = '\0';

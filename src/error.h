@@ -34,14 +34,16 @@
 #ifndef ERROR_H
 #define ERROR_H
 
-#include <stdarg.h>
-
 #include "common.h"
 
-void init_error_prims (void);
-void fatal (char *msg);
-Object error (char *msg,...);
-Object warning (char *msg,...);
+/* Register error primitives */
+extern void marlais_register_error (void);
+/* Signal a fatal error */
+extern void marlais_fatal (char *msg);
+/* Signal an error */
+extern Object marlais_error (char *msg, ...);
+/* Signal a warning */
+extern Object marlais_warning (char *msg, ...);
 
 extern int num_debug_contexts;
 extern int NoDebug;

@@ -67,7 +67,7 @@ slot_name (Object slot)
 	if (SYMBOLP (CAR (slot))) {
 	    return (CAR (slot));
 	} else {
-	    error ("Slot has no name but needs one", slot, NULL);
+	    marlais_error ("Slot has no name but needs one", slot, NULL);
 	    return NULL;
 	}
     }
