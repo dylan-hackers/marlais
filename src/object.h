@@ -58,8 +58,8 @@ Stream,
 #define MARLAIS_TRUE  (TRUEVAL)
 #define MARLAIS_FALSE (FALSEVAL)
 #else
-#define MARLAIS_TRUE  (true_object)
-#define MARLAIS_FALSE (false_object)
+#define MARLAIS_TRUE  (marlais_true)
+#define MARLAIS_FALSE (marlais_false)
 #endif
 
 /* globals */

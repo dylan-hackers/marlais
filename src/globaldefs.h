@@ -8,8 +8,8 @@
 
 /* boolean */
 #ifndef SMALL_OBJECTS
-GLOBAL Object true_object;
-GLOBAL Object false_object;
+GLOBAL Object marlais_true;
+GLOBAL Object marlais_false;
 #endif
 
 /* globals */
