@@ -1393,7 +1393,7 @@ nelistem (Object car,...)
 static void
 push_bindings()
 {
-    binding_stack = cons (make_integer(0), binding_stack);
+    binding_stack = cons (marlais_make_integer(0), binding_stack);
 }
 
 static void
@@ -1412,7 +1412,7 @@ bindings_top ()
 static void
 bindings_increment ()
 {
-    CAR (binding_stack) = make_integer (INTVAL (CAR (binding_stack)) + 1);
+    CAR (binding_stack) = marlais_make_integer (INTVAL (CAR (binding_stack)) + 1);
 }
 
 static Object
@@ -1426,7 +1426,7 @@ make_setter_expr (Object place, Object value)
     }
     newsym = gensym(1);
     return listem (unbinding_begin_symbol,
-		   make_integer (1),
+		   marlais_make_integer (1),
 		   cons (local_bind_symbol,
 			 cons(cons(cons(newsym,
 					cons (value,

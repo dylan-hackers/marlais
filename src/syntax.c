@@ -1045,7 +1045,7 @@ dotimes_eval (Object form)
   push_scope (CAR (form));
   add_binding (var, MARLAIS_FALSE, 0, the_env);
   for (i = 0; i < INTVAL (intval); ++i) {
-    change_binding (var, make_integer (i));
+    change_binding (var, marlais_make_integer (i));
     body = CDR (CDR (form));
     while (!EMPTYLISTP (body)) {
       res = eval (CAR (body));
@@ -1242,7 +1242,7 @@ get_vars_and_inits (Object var_forms,
       var = get_variable (SECOND (var_form));
       rest = CDR (CDR (var_form));
 
-      by = make_integer (1);
+      by = marlais_make_integer (1);
       termination = MARLAIS_FALSE;
       start = eval (CAR (rest));
       rest = CDR (rest);

@@ -313,13 +313,13 @@ equal_hash (Object key)
     if (INTEGERP (key)) {
       return (key);
     } else if (CHARP (key)) {
-      return (make_integer (CHARVAL (key)));
+      return (marlais_make_integer (CHARVAL (key)));
     } else if (TRUEP (key)) {
-      return (make_integer (1));
+      return (marlais_make_integer (1));
     } else if (FALSEP (key)) {
-      return (make_integer (0));
+      return (marlais_make_integer (0));
     } else if (EMPTYLISTP (key)) {
-      return (make_integer (2));
+      return (marlais_make_integer (2));
     } else if (PAIRP (key)) {
       return (hash_pair (key));
     } else if (DEQUEP (key)) {
@@ -329,10 +329,10 @@ equal_hash (Object key)
     } else if (SOVP (key)) {
       return (hash_vector (key));
     } else if (SYMBOLP (key) || KEYWORDP (key)) {
-      return (make_integer ((int) key));
+      return (marlais_make_integer ((int) key));
     } else {
       /* marlais_error ("=hash: don't know how to hash object", key, NULL);  */
-      return (make_integer (((int) key)));
+      return (marlais_make_integer (((int) key)));
     }
   }
 }
@@ -341,7 +341,7 @@ static Object
 hash_pair (Object pair)
 {
   int h = INTVAL (equal_hash (CAR (pair))) + INTVAL (equal_hash (CDR (pair)));
-  return (make_integer (h));
+  return (marlais_make_integer (h));
 }
 
 static Object
@@ -355,7 +355,7 @@ hash_deque (Object deq)
     h += INTVAL (equal_hash (DEVALUE (entry)));
     entry = DENEXT (entry);
   }
-  return (make_integer (h));
+  return (marlais_make_integer (h));
 }
 
 static Object
@@ -367,7 +367,7 @@ hash_string (Object string)
   for (i = 0; i < BYTESTRSIZE (string); ++i) {
     h += BYTESTRVAL (string)[i];
   }
-  return (make_integer (h));
+  return (marlais_make_integer (h));
 }
 
 static Object
@@ -377,5 +377,5 @@ hash_vector (Object vector)
   for (i = 0; i < SOVSIZE (vector); ++i) {
     h += INTVAL (equal_hash (SOVELS (vector)[i]));
   }
-  return (make_integer (h));
+  return (marlais_make_integer (h));
 }

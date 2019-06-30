@@ -236,12 +236,12 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
                 }
 
 <ETC>#b[01][01]*	{ /* binary integer */
-		  yylval = make_integer (strtol (yytext+2, NULL, 2));
+		  yylval = marlais_make_integer (strtol (yytext+2, NULL, 2));
 		  return (LITERAL);
 		}
 
 <ETC>#o[0-7][0-7]*	{ /* octal-integer */
-		  yylval = make_integer (strtol (yytext+2, NULL, 8));
+		  yylval = marlais_make_integer (strtol (yytext+2, NULL, 8));
 		  return (LITERAL);
 		}
 
@@ -250,15 +250,15 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 			if (strlen(yytext) >= 10)
 				yylval = make_big_integer_str(yytext, 10);
 			else
-				yylval = make_integer (strtol (yytext, NULL, 10));
+				yylval = marlais_make_integer (strtol (yytext, NULL, 10));
 #else
-    		  yylval = make_integer (strtol (yytext, NULL, 10));
+    		  yylval = marlais_make_integer (strtol (yytext, NULL, 10));
 #endif
 		  return (LITERAL);
 		}
 
 <ETC>#x[0-9A-Fa-f][0-9A-Fa-f]* { /* hex-integer */
-			    yylval = make_integer (strtol (yytext+2, NULL, 16));
+			    yylval = marlais_make_integer (strtol (yytext+2, NULL, 16));
 			    return (LITERAL);
 			  }
 
@@ -267,17 +267,17 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 				  long numerator, denominator;
 				  numerator = strtol (yytext, &ptr, 10);
 				  denominator = strtol (ptr + 1, NULL, 10);
-				  yylval = make_ratio (numerator, denominator);
+				  yylval = marlais_make_ratio (numerator, denominator);
 				  return (LITERAL);
 				}
 
-<ETC>[+-]?[0-9]*\.[0-9][0-9]*{EXP}	{ yylval = make_dfloat (strtod (yytext, NULL));
+<ETC>[+-]?[0-9]*\.[0-9][0-9]*{EXP}	{ yylval = marlais_make_dfloat (strtod (yytext, NULL));
 					  return (LITERAL);
 					}
-<ETC>[+-]?[0-9][0-9]*\.[0-9]*{EXP}	{ yylval = make_dfloat (strtod (yytext, NULL));
+<ETC>[+-]?[0-9][0-9]*\.[0-9]*{EXP}	{ yylval = marlais_make_dfloat (strtod (yytext, NULL));
 				  return (LITERAL);
 				}
-<ETC>[+-]?[0-9][0-9]*{EXP}	{ yylval = make_dfloat (strtod (yytext, NULL));
+<ETC>[+-]?[0-9][0-9]*{EXP}	{ yylval = marlais_make_dfloat (strtod (yytext, NULL));
 				  return (LITERAL);
 				}
 

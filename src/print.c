@@ -97,7 +97,7 @@ pr (Object obj)
 	fprintf (stderr, "*NULL POINTER*\n");
     } else {
 	DebugPrint++;
-	print_object (make_integer(STDERR), obj, 1);
+	print_object (marlais_make_integer(STDERR), obj, 1);
 	fprintf (stderr, "\n");
 	fflush (stderr);
 	DebugPrint--;
@@ -312,7 +312,7 @@ print_obj_escaped (Object fd, Object obj)
 void
 print_err (Object obj)
 {
-    apply_print (make_integer(STDERR), obj, 1);
+    apply_print (marlais_make_integer(STDERR), obj, 1);
     fflush (stderr);
 }
 

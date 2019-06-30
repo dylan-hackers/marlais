@@ -150,7 +150,7 @@ string_element_setter (Object string, Object index, Object val)
 static Object
 string_size (Object string)
 {
-    return (make_integer (BYTESTRSIZE (string)));
+    return (marlais_make_integer (BYTESTRSIZE (string)));
 }
 
 static Object

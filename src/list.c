@@ -287,7 +287,7 @@ list_length_int (Object lst)
     if (len < 0) {
 	return MARLAIS_FALSE;
     } else {
-	return make_integer (len);
+	return marlais_make_integer (len);
     }
 }
 

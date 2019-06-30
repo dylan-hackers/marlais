@@ -207,7 +207,7 @@ print_stack (void)
 	 entry != NULL;
 	 entry = entry->next, i++) {
 	fprintf (stderr, "#%d ", i);
-	print_object (make_integer(STDERR), entry->context, 1);
+	print_object (marlais_make_integer(STDERR), entry->context, 1);
 	fprintf (stderr, "\n");
     }
     return unspecified_object;

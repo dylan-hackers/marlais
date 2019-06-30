@@ -204,7 +204,7 @@ print_dylan_error_helper(const char* kind, Object msg_str, Object rest)
     fprintf (stderr, ": ");
   }
   while (!EMPTYLISTP (rest)) {
-    print_object (make_integer(STDERR), CAR (rest), 0);
+    print_object (marlais_make_integer(STDERR), CAR (rest), 0);
     rest = CDR (rest);
     if (!EMPTYLISTP (rest)) {
       fprintf (stderr, ", ");
@@ -250,7 +250,7 @@ marlais_error (char *msg,...)
     fprintf (stderr, ": ");
   }
   while (obj) {
-    print_object (make_integer(STDERR), obj, 0);
+    print_object (marlais_make_integer(STDERR), obj, 0);
     obj = va_arg (args, Object);
 
     if (obj) {
@@ -317,12 +317,12 @@ marlais_error (char *msg,...)
 	  sequence_num++;
 	}
 	if (object_type (obj) == Values) {
-	  print_obj (make_integer(STDOUT), obj);
+	  print_obj (marlais_make_integer(STDOUT), obj);
 	  if (VALUESNUM (obj)) {
 	    fprintf (stdout, "\n");
 	  }
 	} else {
-	  apply(eval(print_symbol), listem(obj, make_integer(STDOUT), NULL));
+	  apply(eval(print_symbol), listem(obj, marlais_make_integer(STDOUT), NULL));
 	  fprintf (stdout, "\n");
 	}
 	current_prompt = prompt;
@@ -372,7 +372,7 @@ marlais_warning (char *msg,...)
     fprintf (stderr, ": ");
   }
   while (obj) {
-    print_object (make_integer(STDERR), obj, 0);
+    print_object (marlais_make_integer(STDERR), obj, 0);
     obj = va_arg (args, Object);
 
     if (obj) {

@@ -87,5 +87,5 @@ integer_to_character (Object i)
 static Object
 character_to_integer (Object ch)
 {
-    return (make_integer (CHARVAL (ch)));
+    return (marlais_make_integer (CHARVAL (ch)));
 }

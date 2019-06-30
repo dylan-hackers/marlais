@@ -82,9 +82,9 @@ apply_internal (Object fun, Object args)
 	    for (i = 0; i < trace_level; ++i) {
 		putchar ('-');
 	    }
-	    print_object (make_integer(STDOUT), fun, 1);
+	    print_object (marlais_make_integer(STDOUT), fun, 1);
 	    printf (" called with ");
-	    print_object (make_integer(STDOUT), args, 1);
+	    print_object (marlais_make_integer(STDOUT), args, 1);
 	    printf ("\n");
 	    trace_level++;
 	}
@@ -125,7 +125,7 @@ apply_internal (Object fun, Object args)
 		printf ("-");
 	    }
 	    printf ("returned: ");
-	    print_object(make_integer(STDOUT), ret, 1);
+	    print_object(marlais_make_integer(STDOUT), ret, 1);
 	    printf ("\n");
 	}
     }
@@ -158,9 +158,9 @@ apply_method (Object meth, Object args, Object rest_methods, Object generic_appl
 		putchar ('-');
 	    }
 	    printf ("apply-method applying ");
-	    print_object (make_integer(STDOUT), meth, 1);
+	    print_object (marlais_make_integer(STDOUT), meth, 1);
 	    printf (" with args ");
-	    print_object (make_integer(STDOUT), args, 1);
+	    print_object (marlais_make_integer(STDOUT), args, 1);
 	    printf ("\n");
 	}
     }

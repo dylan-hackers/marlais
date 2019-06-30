@@ -509,7 +509,7 @@ initialize_marlais (void)
   default_object = cons (MARLAIS_FALSE, MARLAIS_FALSE);
   add_top_level_binding (make_symbol ("%default-object"), default_object, 1);
 
-  binding_stack = cons (make_integer (0), make_empty_list ());
+  binding_stack = cons (marlais_make_integer (0), make_empty_list ());
 
   /* initialize primitives */
   init_env_prims ();
@@ -520,7 +520,7 @@ initialize_marlais (void)
   init_function_prims ();
   init_values_prims ();
   init_print_prims ();
-  init_number_prims ();
+  marlais_register_number ();
   init_apply_prims ();
   marlais_register_boolean ();
   init_keyword_prims ();

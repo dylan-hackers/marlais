@@ -197,7 +197,7 @@ array_index (Object arr, Object indices, Object default_ob)
 static Object
 array_size (Object arr)
 {
-  return make_integer (ARRSIZE (arr));
+  return marlais_make_integer (ARRSIZE (arr));
 }
 
 /*
@@ -256,7 +256,7 @@ array_dimensions (Object arr)
 static Object
 array_initial_state (Object arr)
 {
-  return (make_integer (0));
+  return (marlais_make_integer (0));
 }
 
 static Object
@@ -277,7 +277,7 @@ array_next_state (Object arr, Object state)
   if (state_val >= total_size) {
     return (MARLAIS_FALSE);
   } else {
-    return (make_integer (state_val));
+    return (marlais_make_integer (state_val));
   }
 }
 
@@ -290,5 +290,5 @@ array_current_element (Object arr, Object state)
 static Object
 array_row_major_index (Object arr, Object indices)
 {
-  return make_integer (array_index (arr, indices, default_object));
+  return marlais_make_integer (array_index (arr, indices, default_object));
 }

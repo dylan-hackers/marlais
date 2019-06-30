@@ -126,7 +126,7 @@ print_graph (prec_graph graph)
 #ifdef NO_COMMON_DYLAN_SPEC
 	print_obj (standard_error_stream, graph.class_vec[i]);
 #else
-	print_obj (make_integer(STDERR), graph.class_vec[i]);
+	print_obj (marlais_make_integer(STDERR), graph.class_vec[i]);
 #endif
 	printf ("   successors:\n");
 	for (j = 0; j < graph.succ_size; j++, index++) {
@@ -135,7 +135,7 @@ print_graph (prec_graph graph)
 #ifdef NO_COMMON_DYLAN_SPEC
 		print_obj (standard_error_stream, graph.class_vec[graph.succ_vec[index]]);
 #else
-		print_obj (make_integer(STDERR),
+		print_obj (marlais_make_integer(STDERR),
                            graph.class_vec[graph.succ_vec[index]]);
 #endif
 		printf ("\n");
@@ -317,7 +317,7 @@ print_l_list (l_list arg, prec_graph graph)
 #ifdef NO_COMMON_DYLAN_SPEC
 	print_obj (standard_error_stream, graph.class_vec[arg.vec[i]]);
 #else
-	print_obj (make_integer(STDERR), graph.class_vec[arg.vec[i]]);
+	print_obj (marlais_make_integer(STDERR), graph.class_vec[arg.vec[i]]);
 #endif
 	printf ("\n");
     }

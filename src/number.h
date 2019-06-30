@@ -36,10 +36,13 @@
 
 #include "common.h"
 
-void init_number_prims (void);
-Object make_integer (int i);
-Object make_ratio (int numerator, int denominator);
-Object make_sfloat (float f);
-Object make_dfloat (double d);
+/* Register number primitives */
+extern void marlais_register_number (void);
+/* Make an <integer> */
+extern Object marlais_make_integer (int i);
+/* Make a <ratio> */
+extern Object marlais_make_ratio (int numerator, int denominator);
+/* Make a <double-float> */
+extern Object marlais_make_dfloat (double d);
 
 #endif

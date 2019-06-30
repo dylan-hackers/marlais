@@ -82,7 +82,7 @@ get_time ()
     time_loc &= POSITIVE_SMALL_INT_MASK;
 #endif
 
-    return make_integer (time_loc);
+    return marlais_make_integer (time_loc);
 }
 
 Object
@@ -98,7 +98,7 @@ get_clock ()
     clock_val = abs ((int) (clock_val << 2)) >> 2;
 #endif
 
-    return make_integer (clock_val);
+    return marlais_make_integer (clock_val);
 }
 
 Object
@@ -107,7 +107,7 @@ user_system (Object string)
     if (!BYTESTRTYPE (string)) {
 	return marlais_error ("system: argument must be a string", string, NULL);
     } else {
-	return make_integer (system (BYTESTRVAL (string)));
+	return marlais_make_integer (system (BYTESTRVAL (string)));
 
     }
 }

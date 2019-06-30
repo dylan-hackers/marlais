@@ -172,5 +172,5 @@ vector_element_setter (Object vec, Object index, Object val)
 static Object
 vector_size (Object vec)
 {
-  return (make_integer (SOVSIZE (vec)));
+  return (marlais_make_integer (SOVSIZE (vec)));
 }

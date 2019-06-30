@@ -1231,7 +1231,7 @@ make_getter_method (Object slot, Object class, int slot_num)
   } else {
     body = listem (listem (slot_val_sym,
 			   slot_location,
-			   make_integer (slot_num),
+			   marlais_make_integer (slot_num),
 			   NULL),
 		   NULL);
   }
@@ -1289,7 +1289,7 @@ make_setter_method (Object slot, Object class, int slot_num)
   }
   body = listem (listem (set_slot_value_sym,
 			 slot_location,
-			 make_integer (slot_num),
+			 marlais_make_integer (slot_num),
 			 val_sym,
 			 NULL),
 		 NULL);

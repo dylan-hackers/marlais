@@ -10,13 +10,15 @@
 
 #ifdef BIG_INTEGERS
 #include "biginteger.h"
+#endif
+
+/* Helper macros */
 
 #define MAX_SMALL_INT ((1 << 29) - 1)
 #define MAX_SMALL_FACTOR (23170)
-
 #define INT_ABS(i) (i < 0 ? -i : i)
 
-#endif
+/* Emulate anint and aint */
 
 #if defined(_CX_UX) || defined(MACOS) || defined(sgi) || defined(_HP_UX) \
 || defined(__hpux) || defined(__SunOS_5__) || defined(__linux__) \
@@ -27,10 +29,9 @@
 #ifdef NO_DOUBLE_INT_ARITH
 static double anint (double x);
 static double aint (double x);
-
 #endif
 
-/* primitives */
+/* Primitives */
 
 static Object prim_odd_p (Object n);
 static Object prim_even_p (Object n);
@@ -82,6 +83,7 @@ static Object prim_ceiling_divide (Object d1, Object d2);
 static Object prim_round_divide (Object d1, Object d2);
 static Object prim_truncate_divide (Object d1, Object d2);
 static Object prim_int_truncate_divide (Object i1, Object i2);
+
 static struct primitive number_prims[] =
 {
     {"%odd?", prim_1, prim_odd_p},
@@ -139,7 +141,7 @@ static struct primitive number_prims[] =
 /* function definitions */
 
 void
-init_number_prims (void)
+marlais_register_number (void)
 {
     int num;
 
@@ -152,49 +154,39 @@ init_number_prims (void)
 #endif
 }
 
-#ifdef BIG_INTEGERS
-
 Object
-make_integer (int i)
+marlais_make_integer (int i)
 {
-#ifndef SMALL_OBJECTS
-    if (INT_ABS (i) <= MAX_SMALL_INT) {
+#ifdef SMALL_OBJECTS
+  if (INT_ABS (i) <= MAX_SMALL_INT) {
+	return (MAKE_INT (i));
+  } else {
+#if BIG_INTEGERS
+	return make_big_integer (i);
+#else /* BIG_INTEGERS */
+	marlais_fatal("Integer to big!");
+#endif /* BIG_INTEGERS */
+  }
+#else /* SMALL_OBJECTS */
+  if (INT_ABS (i) <= MAX_SMALL_INT) {
 	Object obj;
 
 	obj = marlais_allocate_object (Integer, sizeof (struct object));
 
 	INTVAL (obj) = i;
 	return (obj);
-    } else
+  } else {
+#if BIG_INTEGERS
 	return make_big_integer (i);
-#else
-    if (INT_ABS (i) <= MAX_SMALL_INT)
-	return (MAKE_INT (i));
-    else
-	return make_big_integer (i);
-#endif
+#else /* BIG_INTEGERS */
+	marlais_fatal("Integer to big!");
+#endif /* BIG_INTEGERS */
+  }
+#endif /* SMALL_OBJECTS */
 }
 
-#else
-
 Object
-make_integer (int i)
-{
-#ifndef SMALL_OBJECTS
-    Object obj;
-
-    obj = marlais_allocate_object (Integer, sizeof (struct object));
-
-    INTVAL (obj) = i;
-    return (obj);
-#else
-    return (MAKE_INT (i));
-#endif
-}
-#endif
-
-Object
-make_ratio (int numerator, int denominator)
+marlais_make_ratio (int numerator, int denominator)
 {
     Object obj;
 
@@ -206,7 +198,7 @@ make_ratio (int numerator, int denominator)
 }
 
 Object
-make_dfloat (double d)
+marlais_make_dfloat (double d)
 {
     Object obj;
 
@@ -216,7 +208,7 @@ make_dfloat (double d)
     return (obj);
 }
 
-/* primitives */
+/* Static functions */
 
 static Object
 prim_odd_p (Object n)
@@ -311,49 +303,49 @@ prim_integral_p (Object n)
 static Object
 prim_int_to_double (Object n)
 {
-    return (make_dfloat (INTVAL (n)));
+    return (marlais_make_dfloat (INTVAL (n)));
 }
 
 static Object
 prim_double_to_int (Object n)
 {
-    return (make_integer (DFLOATVAL (n)));
+    return (marlais_make_integer (DFLOATVAL (n)));
 }
 
 static Object
 prim_int_negative (Object n)
 {
-    return (make_integer (-INTVAL (n)));
+    return (marlais_make_integer (-INTVAL (n)));
 }
 
 static Object
 prim_double_negative (Object n)
 {
-    return (make_dfloat (-DFLOATVAL (n)));
+    return (marlais_make_dfloat (-DFLOATVAL (n)));
 }
 
 static Object
 prim_int_inverse (Object n)
 {
-    return (make_dfloat (1.0 / INTVAL (n)));
+    return (marlais_make_dfloat (1.0 / INTVAL (n)));
 }
 
 static Object
 prim_double_inverse (Object n)
 {
-    return (make_dfloat (1 / DFLOATVAL (n)));
+    return (marlais_make_dfloat (1 / DFLOATVAL (n)));
 }
 
 static Object
 prim_binary_int_plus (Object n1, Object n2)
 {
-    return (make_integer (INTVAL (n1) + INTVAL (n2)));
+    return (marlais_make_integer (INTVAL (n1) + INTVAL (n2)));
 }
 
 static Object
 prim_binary_int_minus (Object n1, Object n2)
 {
-    return (make_integer (INTVAL (n1) - INTVAL (n2)));
+    return (marlais_make_integer (INTVAL (n1) - INTVAL (n2)));
 }
 
 #ifdef BIG_INTEGERS
@@ -365,7 +357,7 @@ prim_binary_int_times (Object n1, Object n2)
 
     // watch for overflow.
     if (i1 <= MAX_SMALL_FACTOR && i2 <= MAX_SMALL_FACTOR)
-	return make_integer (i1 * i2);
+	return marlais_make_integer (i1 * i2);
     else
 	return binary_bigint_times (make_big_integer (i1), make_big_integer (i2));
 }
@@ -375,7 +367,7 @@ prim_binary_int_times (Object n1, Object n2)
 static Object
 prim_binary_int_times (Object n1, Object n2)
 {
-    return (make_integer (INTVAL (n1) * INTVAL (n2)));
+    return (marlais_make_integer (INTVAL (n1) * INTVAL (n2)));
 }
 
 #endif
@@ -384,34 +376,34 @@ static Object
 prim_binary_int_divide (Object n1, Object n2)
 {
     if ((INTVAL (n1) % INTVAL (n2)) == 0) {
-	return (make_integer (INTVAL (n1) / INTVAL (n2)));
+	return (marlais_make_integer (INTVAL (n1) / INTVAL (n2)));
     } else {
-	return (make_dfloat ((double) INTVAL (n1) / (double) INTVAL (n2)));
+	return (marlais_make_dfloat ((double) INTVAL (n1) / (double) INTVAL (n2)));
     }
 }
 
 static Object
 prim_binary_double_plus (Object n1, Object n2)
 {
-    return (make_dfloat (DFLOATVAL (n1) + DFLOATVAL (n2)));
+    return (marlais_make_dfloat (DFLOATVAL (n1) + DFLOATVAL (n2)));
 }
 
 static Object
 prim_binary_double_minus (Object n1, Object n2)
 {
-    return (make_dfloat (DFLOATVAL (n1) - DFLOATVAL (n2)));
+    return (marlais_make_dfloat (DFLOATVAL (n1) - DFLOATVAL (n2)));
 }
 
 static Object
 prim_binary_double_times (Object n1, Object n2)
 {
-    return (make_dfloat (DFLOATVAL (n1) * DFLOATVAL (n2)));
+    return (marlais_make_dfloat (DFLOATVAL (n1) * DFLOATVAL (n2)));
 }
 
 static Object
 prim_binary_double_divide (Object n1, Object n2)
 {
-    return (make_dfloat (DFLOATVAL (n1) / DFLOATVAL (n2)));
+    return (marlais_make_dfloat (DFLOATVAL (n1) / DFLOATVAL (n2)));
 }
 
 static Object
@@ -455,16 +447,16 @@ prim_int_sqrt (Object n)
 
     ans = sqrt (INTVAL (n));
     if ((ans - floor (ans)) == 0) {
-	return (make_integer (ans));
+	return (marlais_make_integer (ans));
     } else {
-	return (make_dfloat (ans));
+	return (marlais_make_dfloat (ans));
     }
 }
 
 static Object
 prim_double_sqrt (Object n)
 {
-    return (make_dfloat (sqrt (DFLOATVAL (n))));
+    return (marlais_make_dfloat (sqrt (DFLOATVAL (n))));
 }
 
 static Object
@@ -474,7 +466,7 @@ prim_int_abs (Object n)
 
     val = INTVAL (n);
     if (val < 0) {
-	return (make_integer (-val));
+	return (marlais_make_integer (-val));
     } else {
 	return (n);
     }
@@ -483,13 +475,13 @@ prim_int_abs (Object n)
 static Object
 prim_double_abs (Object n)
 {
-    return (make_dfloat (fabs (DFLOATVAL (n))));
+    return (marlais_make_dfloat (fabs (DFLOATVAL (n))));
 }
 
 static Object
 prim_int_quotient (Object n1, Object n2)
 {
-    return (make_integer (INTVAL (n1) / INTVAL (n2)));
+    return (marlais_make_integer (INTVAL (n1) / INTVAL (n2)));
 }
 
 static Object
@@ -498,38 +490,38 @@ prim_ash (Object n, Object count)
     int num;
 
     num = INTVAL (count);
-    return (make_integer ((num > 0) ? (INTVAL (n) << num)
+    return (marlais_make_integer ((num > 0) ? (INTVAL (n) << num)
 			  : (INTVAL (n) >> -num)));
 }
 
 static Object
 prim_double_sin (Object n1)
 {
-    return (make_dfloat (sin (DFLOATVAL (n1))));
+    return (marlais_make_dfloat (sin (DFLOATVAL (n1))));
 }
 
 static Object
 prim_double_cos (Object n1)
 {
-    return (make_dfloat (cos (DFLOATVAL (n1))));
+    return (marlais_make_dfloat (cos (DFLOATVAL (n1))));
 }
 
 static Object
 prim_double_atan2 (Object n1, Object n2)
 {
-    return (make_dfloat (atan2 (DFLOATVAL (n1), DFLOATVAL (n2))));
+    return (marlais_make_dfloat (atan2 (DFLOATVAL (n1), DFLOATVAL (n2))));
 }
 
 static Object
 prim_binary_logand (Object n1, Object n2)
 {
-    return (make_integer (INTVAL (n1) & INTVAL (n2)));
+    return (marlais_make_integer (INTVAL (n1) & INTVAL (n2)));
 }
 
 static Object
 prim_binary_logior (Object n1, Object n2)
 {
-    return (make_integer (INTVAL (n1) | INTVAL (n2)));
+    return (marlais_make_integer (INTVAL (n1) | INTVAL (n2)));
 }
 
 static Object
@@ -538,8 +530,8 @@ prim_floor_func (Object d)
     double dval, tmp = floor (dval = DFLOATVAL (d));
 
     return construct_values (2,
-			     make_integer ((int) tmp),
-			     make_dfloat (dval - tmp));
+			     marlais_make_integer ((int) tmp),
+			     marlais_make_dfloat (dval - tmp));
 }
 
 static Object
@@ -548,8 +540,8 @@ prim_ceiling (Object d)
     double dval, tmp = ceil (dval = DFLOATVAL (d));
 
     return construct_values (2,
-			     make_integer ((int) tmp),
-			     make_dfloat (dval - tmp));
+			     marlais_make_integer ((int) tmp),
+			     marlais_make_dfloat (dval - tmp));
 }
 
 static Object
@@ -558,8 +550,8 @@ prim_round (Object d)
     double dval, tmp = anint (dval = DFLOATVAL (d));
 
     return construct_values (2,
-			     make_integer ((int) tmp),
-			     make_dfloat (dval - tmp));
+			     marlais_make_integer ((int) tmp),
+			     marlais_make_dfloat (dval - tmp));
 }
 
 static Object
@@ -568,8 +560,8 @@ prim_truncate (Object d)
     double dval, tmp = aint (dval = DFLOATVAL (d));
 
     return construct_values (2,
-			     make_integer ((int) tmp),
-			     make_dfloat (dval - tmp));
+			     marlais_make_integer ((int) tmp),
+			     marlais_make_dfloat (dval - tmp));
 }
 
 #if 0
@@ -592,7 +584,7 @@ prim_modulo (Object i1, Object i2)
 	    r += i2val;
 	}
     }
-    return make_integer (r);
+    return marlais_make_integer (r);
 }
 
 #else
@@ -604,7 +596,7 @@ prim_modulo (Object i1, Object i2)
     double d2val;
     double tmp = (d1val = INTVAL (i1)) / (d2val = (float) INTVAL (i2));
 
-    return make_integer ((int) (d1val - d2val * floor (tmp)));
+    return marlais_make_integer ((int) (d1val - d2val * floor (tmp)));
 }
 
 #endif
@@ -616,19 +608,19 @@ prim_modulo_double (Object d1, Object d2)
     double d2val;
     double tmp = (d1val = DFLOATVAL (d1)) / (d2val = DFLOATVAL (d1));
 
-    return make_dfloat (d1val - d2val * floor (tmp));
+    return marlais_make_dfloat (d1val - d2val * floor (tmp));
 }
 
 static Object
 prim_double_exp (Object n1)
 {
-    return (make_dfloat (exp (DFLOATVAL (n1))));
+    return (marlais_make_dfloat (exp (DFLOATVAL (n1))));
 }
 
 static Object
 prim_double_log (Object n1)
 {
-    return (make_dfloat (log (DFLOATVAL (n1))));
+    return (marlais_make_dfloat (log (DFLOATVAL (n1))));
 }
 
 static Object
@@ -639,8 +631,8 @@ prim_floor_divide (Object d1, Object d2)
     int intpart = floor ((d1val = DFLOATVAL (d1)) / (d2val = DFLOATVAL (d2)));
 
     return construct_values (2,
-			     make_integer (intpart),
-			     make_dfloat (d1val - d2val * intpart));
+			     marlais_make_integer (intpart),
+			     marlais_make_dfloat (d1val - d2val * intpart));
 }
 
 static Object
@@ -651,8 +643,8 @@ prim_ceiling_divide (Object d1, Object d2)
     int intpart = ceil ((d1val = DFLOATVAL (d1)) / (d2val = DFLOATVAL (d2)));
 
     return construct_values (2,
-			     make_integer (intpart),
-			     make_dfloat (d1val - d2val * intpart));
+			     marlais_make_integer (intpart),
+			     marlais_make_dfloat (d1val - d2val * intpart));
 }
 
 static Object
@@ -663,8 +655,8 @@ prim_round_divide (Object d1, Object d2)
     int intpart = anint ((d1val = DFLOATVAL (d1)) / (d2val = DFLOATVAL (d2)));
 
     return construct_values (2,
-			     make_integer (intpart),
-			     make_dfloat (d1val - d2val * intpart));
+			     marlais_make_integer (intpart),
+			     marlais_make_dfloat (d1val - d2val * intpart));
 }
 
 static Object
@@ -675,8 +667,8 @@ prim_truncate_divide (Object d1, Object d2)
     int intpart = aint ((d1val = DFLOATVAL (d1)) / (d2val = DFLOATVAL (d2)));
 
     return construct_values (2,
-			     make_integer (intpart),
-			     make_dfloat (d1val - d2val * intpart));
+			     marlais_make_integer (intpart),
+			     marlais_make_dfloat (d1val - d2val * intpart));
 }
 static Object
 prim_int_truncate_divide (Object i1, Object i2)
@@ -686,8 +678,8 @@ prim_int_truncate_divide (Object i1, Object i2)
     int quotient = (int) ((float) (i1val = INTVAL (i1)) / (i2val = INTVAL (i2)));
 
     return construct_values (2,
-			     make_integer (quotient),
-			     make_integer (i1val - i2val * quotient));
+			     marlais_make_integer (quotient),
+			     marlais_make_integer (i1val - i2val * quotient));
 }
 
 static Object
@@ -697,7 +689,7 @@ prim_remainder_double (Object d1, Object d2)
     double d2val;
     int intpart = aint ((d1val = DFLOATVAL (d1)) / (d2val = DFLOATVAL (d2)));
 
-    return make_dfloat (d1val - d2val * intpart);
+    return marlais_make_dfloat (d1val - d2val * intpart);
 }
 
 static Object
@@ -707,7 +699,7 @@ prim_remainder_int (Object i1, Object i2)
     int i2val;
     int quotient = (int) ((float) (i1val = INTVAL (i1)) / (i2val = INTVAL (i2)));
 
-    return make_integer (i1val - i2val * quotient);
+    return marlais_make_integer (i1val - i2val * quotient);
 }
 
 #ifdef NO_DOUBLE_INT_ARITH
