@@ -10,12 +10,6 @@
 #include "number.h"
 #include "prim.h"
 
-/* Globals */
-
-Object marlais_standard_input;
-Object marlais_standard_output;
-Object marlais_standard_error;
-
 /* Primitives */
 
 static Object stream_eof_object_p (Object obj);

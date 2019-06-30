@@ -12,6 +12,11 @@ GLOBAL Object marlais_true;
 GLOBAL Object marlais_false;
 #endif
 
+/* streams */
+GLOBAL Object marlais_standard_input;
+GLOBAL Object marlais_standard_output;
+GLOBAL Object marlais_standard_error;
+
 /* globals */
 GLOBAL jmp_buf error_return;
 GLOBAL int definition_level;
@@ -268,5 +273,3 @@ GLOBAL Object description_symbol;
 GLOBAL Object aref_symbol;
 GLOBAL Object print_symbol;
 GLOBAL Object princ_symbol;
-GLOBAL Object standard_error_stream;
-GLOBAL Object standard_output_stream;

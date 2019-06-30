@@ -5,13 +5,6 @@
 
 #include "common.h"
 
-/* Standard input stream */
-extern Object marlais_standard_input;
-/* Standard output stream */
-extern Object marlais_standard_output;
-/* Standard error stream */
-extern Object marlais_standard_error;
-
 /* Initialize standard streams */
 void marlais_initialize_stream (void);
 /* Registream stream primitives */
