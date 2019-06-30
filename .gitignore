@@ -1,0 +1,7 @@
+*~
+*.o
+src/dylan.output
+src/dylan.tab.c
+src/dylan.tab.h
+src/lex.yy.c
+src/marlais
