@@ -5,20 +5,16 @@
 
 #include "common.h"
 
-void init_stream_prims (void);
-enum { STDIN, STDOUT, STDERR };
+/* Standard input stream */
+extern Object marlais_standard_input;
+/* Standard output stream */
+extern Object marlais_standard_output;
+/* Standard error stream */
+extern Object marlais_standard_error;
 
-#ifdef NO_COMMON_DYLAN_SPEC
-Object make_stream (enum streamtype type, FILE * fp);
-Object open_input_file (Object filename);
-Object open_output_file (Object filename);
-/* globals */
-extern Object standard_input_stream;
-extern Object standard_output_stream;
-extern Object standard_error_stream;
-#endif
-
-Object close_stream (Object stream);
-
+/* Initialize standard streams */
+void marlais_initialize_stream (void);
+/* Registream stream primitives */
+void marlais_register_stream (void);
 
 #endif

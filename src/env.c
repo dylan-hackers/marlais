@@ -128,7 +128,7 @@ add_top_lvl_binding1(Object sym, Object val, int constant, int exported)
   the_env->top_level_env[h] = binding;
 
   if (trace_bindings) {
-    print_obj (marlais_make_integer(STDERR), sym);
+    print_obj (marlais_standard_error, sym);
   }
 }
 
@@ -716,7 +716,7 @@ print_env (struct frame *env)
 
     for (i = 0, frame = env; frame != NULL; frame = frame->next, i++) {
 	fprintf (stderr, "#%d ", i);
-	print_object(marlais_make_integer(STDERR), frame->owner, 1);
+	print_object(marlais_standard_error, frame->owner, 1);
 	fprintf (stderr, "\n");
     }
     return unspecified_object;
@@ -745,7 +745,7 @@ show_bindings (Object args)
     } else {
 	fprintf (stderr, "** Bindings for frame %d [",
 		 frame_number);
-	print_object (marlais_make_integer(STDERR), frame->owner, 1);
+	print_object (marlais_standard_error, frame->owner, 1);
 	fprintf (stderr, "]\n");
 	/*
 	 * Print the bindings in all the frame slots.
@@ -760,13 +760,13 @@ show_bindings (Object args)
 		 binding != NULL;
 		 binding = binding->next) {
 		fprintf (stderr, "   ");
-		print_object (marlais_make_integer(STDERR), binding->sym, 1);
+		print_object (marlais_standard_error, binding->sym, 1);
 		if (binding->type != object_class) {
 		    fprintf (stderr, " :: ");
-		print_object (marlais_make_integer(STDERR), binding->type, 1);
+		print_object (marlais_standard_error, binding->type, 1);
 		}
 		fprintf (stderr, " = ");
-		print_object (marlais_make_integer(STDERR), *(binding->val), 1);
+		print_object (marlais_standard_error, *(binding->val), 1);
 		fprintf (stderr, "\n");
 	    }
 	}

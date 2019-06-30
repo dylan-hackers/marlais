@@ -332,6 +332,8 @@ initialize_marlais (void)
 
   initialize_empty_list ();
 
+  marlais_initialize_stream ();
+
   empty_string = marlais_make_bytestring ("");
   equal_symbol = make_symbol ("=");
 
@@ -527,7 +529,7 @@ initialize_marlais (void)
   marlais_register_bytestring ();
   init_vector_prims ();
   marlais_register_error ();
-  init_stream_prims ();
+  marlais_register_stream ();
   init_read_prims ();
   init_table_prims ();
   marlais_register_character ();

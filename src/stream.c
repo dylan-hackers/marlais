@@ -6,58 +6,72 @@
 
 #include "stream.h"
 
-/* for throwing errors */
 #include "error.h"
-/* for declaring primitives */
+#include "number.h"
 #include "prim.h"
 
-/* primitives */
+/* Globals */
 
-static Object eof_object_p (Object obj);
-static Object dylan_write (Object fd, Object str);
+Object marlais_standard_input;
+Object marlais_standard_output;
+Object marlais_standard_error;
+
+/* Primitives */
+
+static Object stream_eof_object_p (Object obj);
+static Object stream_write (Object fd, Object str);
+static Object stream_close (Object fd);
 
 static struct primitive stream_prims[] =
 {
-  {"%close-stream", prim_1, close_stream},
-  {"%eof-object?", prim_1, eof_object_p},
-  {"%write", prim_2, dylan_write},
+  {"%eof-object?", prim_1, stream_eof_object_p},
+  {"%write", prim_2, stream_write},
+  {"%close-stream", prim_1, stream_close},
 };
 
-/* globals */
-Object standard_output_stream;
-Object standard_error_stream;
+/* Exported functions */
 
 void
-init_stream_prims (void)
+marlais_initialize_stream (void)
+{
+  marlais_standard_input = marlais_make_integer(0);
+  marlais_standard_output = marlais_make_integer(1);
+  marlais_standard_error = marlais_make_integer(2);
+}
+
+void
+marlais_register_stream (void)
 {
   int num = sizeof (stream_prims) / sizeof (struct primitive);
   init_prims (num, stream_prims);
 }
 
-Object
-close_stream (Object stream_fd)
-{
-  int fd = INTVAL(stream_fd);
-  if(fd > 2) { /* ignore closing input/output/error */
-    close (fd);
-  }
-  return (unspecified_object);
-}
+/* Static functions */
 
 static Object
-eof_object_p (Object obj)
+stream_eof_object_p (Object obj)
 {
   if (obj == eof_object) {
-    return (MARLAIS_TRUE);
+    return MARLAIS_TRUE;
   } else {
-    return (MARLAIS_FALSE);
+    return MARLAIS_FALSE;
   }
 }
 
 static Object
-dylan_write(Object fd_obj, Object str)
+stream_write(Object fd_obj, Object str)
 {
   int fd = INTVAL(fd_obj);
   write(fd, BYTESTRVAL(str), BYTESTRSIZE(str));
+  return unspecified_object;
+}
+
+Object
+stream_close (Object fd_obj)
+{
+  int fd = INTVAL(fd_obj);
+  if(fd > 2) { /* ignore closing input/output/error */
+    close (fd);
+  }
   return unspecified_object;
 }
