@@ -57,24 +57,18 @@ marlais_register_character (void)
     init_prims (num, char_prims);
 }
 
+Object
+marlais_make_character (char ch)
+{
 #ifdef SMALL_OBJECTS
-Object
-marlais_make_character (char ch)
-{
     return (MAKE_CHAR (ch));
-}
 #else
-Object
-marlais_make_character (char ch)
-{
     Object obj;
-
     obj = marlais_allocate_object (Character, sizeof (struct object));
-
     CHARVAL (obj) = ch;
     return (obj);
-}
 #endif
+}
 
 /* Static functions */
 
