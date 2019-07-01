@@ -366,7 +366,7 @@ literal	: LITERAL				{ $$ = $1; }
 	| HASH_PAREN list_constants_opt ')'
 		{ $$ = $2; }
 	| HASH_BRACKET constants_opt ']'
-		{ $$ = make_sov ($2); }
+		{ $$ = marlais_make_sov ($2); }
 
 strings	: STRING	    { $$ = $1; }
 	| STRING component_strings

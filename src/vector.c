@@ -42,29 +42,31 @@
 #include "symbol.h"
 #include "sequence.h"
 
-/* primitives */
+/* Primitives */
 
-static Object vector_element_setter (Object vec, Object index, Object val);
 static Object vector_size (Object vec);
+static Object vector_element (Object vec, Object index, Object def);
+static Object vector_element_setter (Object vec, Object index, Object val);
 
 static struct primitive vector_prims[] =
 {
+    {"%vector", prim_1, marlais_make_sov},
+    {"%vector-size", prim_1, vector_size},
     {"%vector-element", prim_3, vector_element},
     {"%vector-element-setter", prim_3, vector_element_setter},
-    {"%vector-size", prim_1, vector_size},
-    {"%vector", prim_1, make_sov},
 };
 
-/* function definitions */
+/* Exported functions */
+
 void
-init_vector_prims (void)
+marlais_register_vector (void)
 {
   int num = sizeof (vector_prims) / sizeof (struct primitive);
   init_prims (num, vector_prims);
 }
 
 Object
-make_sov (Object el_list)
+marlais_make_sov (Object el_list)
 {
   Object obj, els;
   int size, i;
@@ -90,7 +92,7 @@ make_sov (Object el_list)
 }
 
 Object
-make_vector (int size, Object fill_obj)
+marlais_make_vector (int size, Object fill_obj)
 {
   Object res;
   int i;
@@ -107,19 +109,18 @@ make_vector (int size, Object fill_obj)
   return (res);
 }
 
-/* Called with args to make */
 Object
-make_vector_driver (Object args)
+marlais_make_vector_entry (Object args)
 {
   int size;
   Object size_obj, fill_obj;
 
   marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<vector>");
-  return make_vector (size, fill_obj);
+  return marlais_make_vector (size, fill_obj);
 }
 
 Object
-vector_to_list (Object vec)
+marlais_vector_to_list (Object vec)
 {
   int i;
   Object first, cur, acons;
@@ -137,7 +138,13 @@ vector_to_list (Object vec)
   return (first);
 }
 
-/* primitives */
+/* Static functions */
+
+static Object
+vector_size (Object vec)
+{
+  return (marlais_make_integer (SOVSIZE (vec)));
+}
 
 Object
 vector_element (Object vec, Object index, Object default_ob)
@@ -167,10 +174,4 @@ vector_element_setter (Object vec, Object index, Object val)
     marlais_error ("element-setter: index out of range", vec, index, NULL);
   }
   return (SOVELS (vec)[i] = val);
-}
-
-static Object
-vector_size (Object vec)
-{
-  return (marlais_make_integer (SOVSIZE (vec)));
 }

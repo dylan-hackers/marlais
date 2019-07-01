@@ -843,7 +843,7 @@ make (Object class, Object rest)
     ret = make_list_driver (rest);
   } else if ((class == vector_class) ||
 	     (class == simple_object_vector_class)) {
-    ret = make_vector_driver (rest);
+    ret = marlais_make_vector_entry (rest);
   } else if ((class == string_class) || (class == byte_string_class)) {
     ret = marlais_make_bytestring_entry (rest);
   } else if (class == generic_function_class) {

@@ -528,7 +528,7 @@ initialize_marlais (void)
   marlais_register_boolean ();
   init_keyword_prims ();
   marlais_register_bytestring ();
-  init_vector_prims ();
+  marlais_register_vector ();
   marlais_register_error ();
   marlais_register_stream ();
   marlais_register_read ();

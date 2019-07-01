@@ -539,7 +539,7 @@ get_specializers (Object gen, Object args)
 
     tmp = args;
     length = list_length (function_specializers (gen));
-    result = make_vector (length, NULL);
+    result = marlais_make_vector (length, NULL);
     for (i = 0; i < length; i++) {
 	if (EMPTYLISTP (tmp)) {
 	    marlais_error ("Missing Required Arguments", gen, args, NULL);

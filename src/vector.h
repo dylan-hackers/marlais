@@ -36,11 +36,15 @@
 
 #include "common.h"
 
-void init_vector_prims (void);
-Object make_sov (Object el_list);
-Object make_vector (int size, Object fill_obj);
-Object make_vector_driver (Object args);
-Object vector_to_list (Object vec);
-Object vector_element (Object vec, Object index, Object default_ob);
+/* Register vector primitives */
+extern void marlais_register_vector (void);
+/* Make a vector from a list */
+extern Object marlais_make_sov (Object el_list);
+/* Make a <vector> */
+extern Object marlais_make_vector (int size, Object fill_obj);
+/* Entrypoint for make(<vector>) */
+extern Object marlais_make_vector_entry (Object args);
+/* Convert a vector to a list */
+extern Object marlais_vector_to_list (Object vec);
 
 #endif
