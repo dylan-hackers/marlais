@@ -60,8 +60,8 @@ static Object deque_final_state (Object d);
 static Object deque_previous_state (Object d, Object s);
 static Object deque_current_element (Object d, Object s);
 static Object deque_current_element_setter (Object d,
-					    Object s,
-					    Object new_value);
+                                            Object s,
+                                            Object new_value);
 
 static struct primitive deque_prims[] =
 {
@@ -112,7 +112,7 @@ marlais_make_deque_entry (Object args)
   /* actually fabricate the list representing the deque */
   if (size--) {
     first = last = deque_make_entry (make_empty_list (), fill_obj,
-				     make_empty_list ());
+                                     make_empty_list ());
     DEQUEFIRST (deq) = first;
     while (size--) {
       DENEXT (last) = deque_make_entry (last, fill_obj, NULL);
@@ -126,7 +126,7 @@ marlais_make_deque_entry (Object args)
   return (deq);
 }
 
-/* Static functions */
+/* Internal functions */
 
 static Object
 deque_make_entry (Object prev, Object value, Object next)
@@ -241,9 +241,9 @@ deque_element (Object d, Object index, Object default_ob)
     el = DENEXT (el);
     if (EMPTYLISTP (el)) {
       if (default_ob == default_object) {
-	marlais_error ("element: out of range", index, d, NULL);
+        marlais_error ("element: out of range", index, d, NULL);
       } else {
-	return default_ob;
+        return default_ob;
       }
     }
   }
