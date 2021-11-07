@@ -70,7 +70,7 @@ marlais_make_character (char ch)
 #endif
 }
 
-/* Static functions */
+/* Internal functions */
 
 static Object
 integer_to_character (Object i)
