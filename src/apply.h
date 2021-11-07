@@ -10,18 +10,21 @@ extern int trace_functions;
 extern int trace_level;
 extern Object hash_values_symbol;
 extern Object ResultValueStack;
-Object default_result_value (void);
 
-/* external functions */
-void init_apply_prims (void);
-Object apply (Object fun, Object args);
-Object apply_internal (Object fun, Object args);
-Object apply_method (Object meth,
-		     Object args,
-		     Object rest_methods,
-		     Object generic_apply);
-Object construct_return_values (Object ret,
-				Object required_values,
-				Object rest_values);
+/* Register apply primitives */
+extern void marlais_register_apply (void);
+/* Create the default result value */
+extern Object marlais_default_result_value (void);
+/* Internal version of apply */
+extern Object marlais_apply_internal (Object fun, Object args);
+/* Internal version of apply */
+extern Object marlais_apply_method (Object meth,
+				    Object args,
+				    Object rest_methods,
+				    Object generic_apply);
+/* */
+extern Object marlais_construct_return_values (Object ret,
+					       Object required_values,
+					       Object rest_values);
 
 #endif

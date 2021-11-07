@@ -104,7 +104,7 @@ tail_eval (Object obj)
 /* <pcb> moved apply here to permit safe tail recursion. */
 
 Object
-apply (Object fun, Object args)
+marlais_apply (Object fun, Object args)
 {
     return eval_combination (cons (fun, args), 1);
 }
@@ -123,7 +123,7 @@ eval_combination (Object obj, int do_apply)
     Object tail_required_values;
     Object tail_rest_values;
 
-    ResultValueStack = cons (default_result_value (), ResultValueStack);
+    ResultValueStack = cons (marlais_default_result_value (), ResultValueStack);
 
     old_env = the_env;
     old_stack = eval_stack;
@@ -143,7 +143,7 @@ eval_combination (Object obj, int do_apply)
 	fun = CAR (obj);
 	args = CDR (obj);
 	push_eval_stack (fun);
-	ret = apply_internal (fun, args);
+	ret = marlais_apply_internal (fun, args);
 	pop_eval_stack ();
     } else {
 	op = CAR (obj);
@@ -156,7 +156,7 @@ eval_combination (Object obj, int do_apply)
 	    fun = eval (CAR (obj));
 	    push_eval_stack (fun);
 	    args = map (eval, CDR (obj));
-	    ret = apply_internal (fun, args);
+	    ret = marlais_apply_internal (fun, args);
 	    pop_eval_stack ();
 	}
     }
@@ -172,9 +172,9 @@ eval_combination (Object obj, int do_apply)
     tail_rest_values = CDR (CAR (ResultValueStack));
     ResultValueStack = CDR (ResultValueStack);
 
-    ret = construct_return_values (ret,
-				   tail_required_values,
-				   tail_rest_values);
+    ret = marlais_construct_return_values (ret,
+					   tail_required_values,
+					   tail_rest_values);
     return ret;
 }
 

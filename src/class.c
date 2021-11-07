@@ -804,10 +804,10 @@ eval_slotds (Object slotds)
     slotd = CAR (slotds);
     SLOTDSLOTTYPE (slotd) = eval (SLOTDSLOTTYPE (slotd));
     if (SLOTDDEFERREDTYPE (slotd)) {
-      SLOTDSLOTTYPE (slotd) = apply_method (eval (SLOTDSLOTTYPE (slotd)),
-					    make_empty_list (),
-					    make_empty_list (),
-					    NULL);
+      SLOTDSLOTTYPE (slotd) = marlais_apply_method (eval (SLOTDSLOTTYPE (slotd)),
+						    make_empty_list (),
+						    make_empty_list (),
+						    NULL);
     }
     slotds = CDR (slotds);
   }
@@ -860,7 +860,7 @@ make (Object class, Object rest)
   }
   initialize_fun = symbol_value (initialize_symbol);
   if (initialize_fun) {
-    apply (initialize_fun, cons (ret, rest));
+    marlais_apply (initialize_fun, cons (ret, rest));
   } else {
     marlais_warning ("make: no `initialize' generic function", class, NULL);
   }

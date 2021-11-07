@@ -261,7 +261,7 @@ list_map1 (Object fun, Object lst)
     if (EMPTYLISTP (lst)) {
 	return (make_empty_list ());
     } else {
-	return (cons (apply (fun, cons (CAR (lst), make_empty_list ())),
+	return (cons (marlais_apply (fun, cons (CAR (lst), make_empty_list ())),
 		      list_map1 (fun, (CDR (lst)))));
     }
 }
@@ -272,7 +272,7 @@ list_map2 (Object fun, Object l1, Object l2)
     if (EMPTYLISTP (l1) || EMPTYLISTP (l2)) {
 	return (make_empty_list ());
     } else {
-	return (cons (apply (fun, listem (CAR (l1), CAR (l2),
+	return (cons (marlais_apply (fun, listem (CAR (l1), CAR (l2),
 					  NULL)),
 		      list_map2 (fun, CDR (l1), CDR (l2))));
     }
@@ -318,7 +318,7 @@ member_p (Object obj, Object lst, Object test)
     Object l = lst;
     while (!EMPTYLISTP (l)) {
 	if (test != MARLAIS_FALSE) {
-	    if (apply (test, listem (obj, CAR (l), NULL)) != MARLAIS_FALSE) {
+	    if (marlais_apply (test, listem (obj, CAR (l), NULL)) != MARLAIS_FALSE) {
 		return (MARLAIS_TRUE);
 	    }
 	} else {
@@ -358,7 +358,7 @@ list_reduce (Object fun, Object init, Object lst)
 
     val = init;
     while (!EMPTYLISTP (lst)) {
-	val = apply (fun, listem (val, CAR (lst), NULL));
+	val = marlais_apply (fun, listem (val, CAR (lst), NULL));
 	lst = CDR (lst);
     }
     return (val);

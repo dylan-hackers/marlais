@@ -217,7 +217,7 @@ table_element_handle (Object table, Object key, Object *default_val)
   the_env = old_env;
 
   while (entry) {
-    if (apply (equal_fun,
+    if (marlais_apply (equal_fun,
 	       cons (TEKEY (entry), cons (key, make_empty_list ())))
 	!= MARLAIS_FALSE) {
       return &(TEVALUE (entry));
@@ -308,7 +308,7 @@ equal_hash (Object key)
     if (!hashfun) {
       marlais_error ("no =hash method defined for key class", key, NULL);
     }
-    return (apply (hashfun, cons (key, make_empty_list ())));
+    return (marlais_apply (hashfun, cons (key, make_empty_list ())));
   } else {
     if (INTEGERP (key)) {
       return (key);

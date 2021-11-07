@@ -37,6 +37,9 @@
 #include "common.h"
 #include "env.h"
 
+/* Apply arguments to function */
+extern Object marlais_apply (Object fun, Object args);
+
 Object eval (Object obj);
 Object print_stack (void);
 

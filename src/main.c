@@ -89,7 +89,7 @@ static void print_top_level_constant(Object obj, int bind_p)
     sequence_num++;
   }
 
-  apply (eval (print_symbol),
+  marlais_apply (eval (print_symbol),
 	 listem (obj, eval(standard_output_symbol), NULL));
 
   fprintf (stdout, "\n");
@@ -523,7 +523,7 @@ initialize_marlais (void)
   marlais_register_values ();
   marlais_register_print ();
   marlais_register_number ();
-  init_apply_prims ();
+  marlais_register_apply ();
   marlais_register_boolean ();
   init_keyword_prims ();
   marlais_register_bytestring ();

@@ -322,7 +322,7 @@ marlais_error (char *msg,...)
 	    fprintf (stdout, "\n");
 	  }
 	} else {
-	  apply(eval(print_symbol), listem(obj, marlais_standard_output, NULL));
+	  marlais_apply (eval(print_symbol), listem(obj, marlais_standard_output, NULL));
 	  fprintf (stdout, "\n");
 	}
 	current_prompt = prompt;
@@ -338,7 +338,7 @@ marlais_error (char *msg,...)
   }
   signal_value = symbol_value (signal_symbol);
   if (signal_value) {
-    apply (signal_value,
+    marlais_apply (signal_value,
 	   cons (make (simple_error_class, make_empty_list ()),
 		 make_empty_list ()));
   } else {

@@ -1378,12 +1378,12 @@ exhausted_numeric_or_collection_clauses (Object clause_types,
       /* (finished-state? collection state limit) */
       if (!init_call) {
 	/* Bump to the next state to see if it exists */
-	THIRD (CAR (inits)) = apply (VALUESELS (protocol)[2],
+	THIRD (CAR (inits)) = marlais_apply (VALUESELS (protocol)[2],
 				     cons (SECOND (CAR (inits)),
 					   cons (THIRD (CAR (inits)),
 						 make_empty_list ())));
       }
-      if (MARLAIS_TRUE == apply (VALUESELS (protocol)[3],
+      if (MARLAIS_TRUE == marlais_apply (VALUESELS (protocol)[3],
 				cons (SECOND (CAR (inits)),
 				      cons (THIRD (CAR (inits)),
 					    cons (VALUESELS (protocol)[1],
@@ -1456,7 +1456,7 @@ initialize_collection_variables (Object clause_types,
 
       /* (set! var (current-element collection state)) */
       add_binding (CAR (vars),
-		   apply (VALUESELS (protocol)[5],
+		   marlais_apply (VALUESELS (protocol)[5],
 			  cons (SECOND (CAR (inits)),
 				cons (THIRD (CAR (inits)),
 				      make_empty_list ()))),
@@ -1529,7 +1529,7 @@ update_collection_variables (Object clause_types,
 
       /* (set! var (current-element collection state)) */
       modify_value (CAR (vars),
-		    apply (VALUESELS (protocol)[5],
+		    marlais_apply (VALUESELS (protocol)[5],
 			   cons (SECOND (CAR (inits)),
 				 cons (THIRD (CAR (inits)),
 				       make_empty_list ()))));
@@ -1781,7 +1781,7 @@ select_eval (Object form)
     }
     while (!EMPTYLISTP (match_list)) {
       ret = MARLAIS_FALSE;
-      if (apply (test, listem (target_form, eval (CAR (match_list)),
+      if (marlais_apply (test, listem (target_form, eval (CAR (match_list)),
 			       NULL)) != MARLAIS_FALSE) {
 	consequents = CDR (branch);
 	while (!EMPTYLISTP (consequents)) {

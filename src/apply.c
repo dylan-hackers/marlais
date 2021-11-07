@@ -27,7 +27,7 @@ Object ResultValueStack;
 
 /* local function prototypes and data */
 
-Object apply_generic (Object gen, Object args);
+static Object apply_generic (Object gen, Object args);
 static void narrow_value_types (Object *values_list,
 				Object new_values_list,
 				Object *rest_type,
@@ -42,7 +42,7 @@ static Object user_keyword;
 
 static struct primitive apply_prims[] =
 {
-    {"%apply", prim_2, apply},
+    {"%apply", prim_2, marlais_apply},
     {"%trace", prim_1, set_trace},
     {"%eval", prim_1, eval},
 };
@@ -50,7 +50,7 @@ static struct primitive apply_prims[] =
 /* function definitions */
 
 void
-init_apply_prims (void)
+marlais_register_apply (void)
 {
     int num;
 
@@ -63,13 +63,13 @@ init_apply_prims (void)
 }
 
 Object
-default_result_value (void)
+marlais_default_result_value (void)
 {
     return cons (make_empty_list (), object_class);
 }
 
 Object
-apply_internal (Object fun, Object args)
+marlais_apply_internal (Object fun, Object args)
 {
     Object ret;
 
@@ -100,7 +100,7 @@ apply_internal (Object fun, Object args)
 	ret = marlais_apply_prim (fun, args);
 	break;
     case Method:
-	ret = apply_method (fun, args, make_empty_list (), NULL);
+	ret = marlais_apply_method (fun, args, make_empty_list (), NULL);
 	break;
     case GenericFunction:
 	ret = apply_generic (fun, args);
@@ -139,7 +139,7 @@ apply_internal (Object fun, Object args)
  *              -jnw
  */
 Object
-apply_method (Object meth, Object args, Object rest_methods, Object generic_apply)
+marlais_apply_method (Object meth, Object args, Object rest_methods, Object generic_apply)
 {
     Object params, param, sym, val, body, ret;
     Object dup_list;
@@ -353,7 +353,7 @@ apply_method (Object meth, Object args, Object rest_methods, Object generic_appl
 	} else {
 #endif
 
-	    ret = construct_return_values (eval (form),
+	    ret = marlais_construct_return_values (eval (form),
 					   METHREQVALUES (meth),
 					   METHRESTVALUES (meth));
 #ifdef OPTIMIZE_TAIL_CALLS
@@ -446,9 +446,9 @@ narrow_value_types (Object *values_list_ptr,
 }
 
 Object
-construct_return_values (Object ret,
-			 Object required_values,
-			 Object rest_values)
+marlais_construct_return_values (Object ret,
+				 Object required_values,
+				 Object rest_values)
 {
     int i, j;
     Object newret;
@@ -458,7 +458,7 @@ construct_return_values (Object ret,
      * <pcb> could at least wrap it in a stack variable to avoid an alloc.
      */
 
-    ResultValueStack = cons (default_result_value (), ResultValueStack);
+    ResultValueStack = cons (marlais_default_result_value (), ResultValueStack);
 
     if (!ret) {
 	/*
@@ -645,17 +645,17 @@ apply_generic (Object gen, Object args)
 	marlais_error ("No applicable methods", gen, args, NULL);
     }
     rest_methods = build_rest_methods (cacheEntry, args);
-    return apply_method (method, args, rest_methods, gen);
+    return marlais_apply_method (method, args, rest_methods, gen);
 #else
     methods = GFMETHODS (gen);
     sorted_methods = FIRSTVAL (sorted_applicable_methods (gen, args));
     if (EMPTYLISTP (sorted_methods)) {
 	marlais_error ("Ambiguous methods in apply generic function", gen, args, NULL);
     } else {
-	return apply_method (CAR (sorted_methods),
-			     args,
-			     CDR (sorted_methods),
-			     gen);
+	return marlais_apply_method (CAR (sorted_methods),
+				     args,
+				     CDR (sorted_methods),
+				     gen);
     }
 #endif
 }
@@ -696,7 +696,7 @@ apply_next_method (Object next_method, Object args)
     } else {
 	real_args = args;
     }
-    return apply_method (method, real_args, rest_methods, NMGF (next_method));
+    return marlais_apply_method (method, real_args, rest_methods, NMGF (next_method));
 }
 
 static Object
