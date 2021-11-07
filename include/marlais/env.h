@@ -39,7 +39,7 @@
 struct binding {
     Object sym, *val, type;
     int props;
-    struct binding *next;	/* in top_level_env hash chain */
+    struct binding *next; /* in top_level_env hash chain */
 };
 
 #define CONSTANT_BINDING 0x01
@@ -95,11 +95,11 @@ struct frame *module_namespace ();
 struct module_binding *new_module (Object module_name);
 struct module_binding *set_module (struct module_binding *module);
 Object use_module (Object module_name,
-		   Object imports,
-		   Object exclusions,
-		   Object prefix,
-		   Object renames,
-		   Object exports);
+                   Object imports,
+                   Object exclusions,
+                   Object prefix,
+                   Object renames,
+                   Object exports);
 Object user_set_module (Object args);
 struct module_binding *current_module (void);
 struct module_binding *module_binding (Object module_name);

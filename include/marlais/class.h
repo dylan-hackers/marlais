@@ -38,8 +38,11 @@ extern Object marlais_singleton (Object val);
 extern Object marlais_make_union_type (Object typelist);
 
 /* Class creation */
-extern Object marlais_make_class (Object class_object, Object supers, Object slot_descriptors,
-			  Object abstract_p, char *debug_name);
+extern Object marlais_make_class (Object class_object,
+                                  Object supers,
+                                  Object slot_descriptors,
+                                  Object abstract_p,
+                                  char *debug_name);
 extern Object marlais_make_slot_descriptor_list (Object slots, int do_eval);
 extern void marlais_make_getter_setter_gfs (Object slotds);
 extern void marlais_make_class_primary (Object class);

@@ -33,7 +33,7 @@
 
 #include <gc.h>
 
-/* function definitions */
+/* Exported functions */
 
 void
 marlais_initialize_gc (void)
@@ -46,41 +46,41 @@ void *
 marlais_allocate_memory (size_t size)
 {
     void *obj;
-	/* allocate */
-	obj = GC_malloc (size);
-	/* check */
-	if (!obj) {
+    /* allocate */
+    obj = GC_malloc (size);
+    /* check */
+    if (!obj) {
         marlais_fatal ("internal error: memory allocation failure");
-	}
-	/* return */
-	return obj;
+    }
+    /* return */
+    return obj;
 }
 
 void *
 marlais_reallocate_memory(void *old_obj, size_t new_size)
 {
     void *obj;
-	/* allocate */
-	obj = GC_realloc (old_obj, new_size);
-	/* check */
-	if (!obj) {
+    /* allocate */
+    obj = GC_realloc (old_obj, new_size);
+    /* check */
+    if (!obj) {
         marlais_fatal ("internal error: memory allocation failure");
-	}
-	/* return */
-	return obj;
+    }
+    /* return */
+    return obj;
 }
 
 void *
 marlais_allocate_atomic (size_t size)
 {
     void *obj;
-	/* allocate */
+    /* allocate */
     obj = GC_malloc_atomic (size);
-	/* check */
+    /* check */
     if (!obj) {
         marlais_fatal ("internal error: memory allocation failure");
     }
-	/* return */
+    /* return */
     return obj;
 }
 
@@ -105,10 +105,10 @@ marlais_allocate_strdup (const char *str)
 {
     size_t size = strlen (str) + 1;
     char *copy;
-	/* allocate copy */
-	copy = marlais_allocate_atomic(size);
-	/* perform copy */
+    /* allocate copy */
+    copy = marlais_allocate_atomic(size);
+    /* perform copy */
     strcpy (copy, str);
-	/* return result */
+    /* return result */
     return copy;
 }
