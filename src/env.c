@@ -440,14 +440,12 @@ new_module (Object module_name)
     this_module->namespace = initialize_namespace (module_name);
     this_module->exported_bindings = marlais_make_table (DEFAULT_TABLE_SIZE);
 
-
+    modules.size++;
     modules.bindings = (struct module_binding **)
 	marlais_reallocate_memory (modules.bindings,
-			  (modules.size + BIND_ALLOC_CHUNK) *
-			  sizeof (struct module_binding *));
+				   (modules.size * sizeof (struct module_binding *)));
 
-    modules.bindings[modules.size] = this_module;
-    modules.size++;
+    modules.bindings[modules.size - 1] = this_module;
 
     return this_module;
 }
