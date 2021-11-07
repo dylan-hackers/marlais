@@ -89,7 +89,7 @@ MARLAIS_FLAGS = $(SYS_FLAG) \
 
 CC ?= gcc
 
-CFLAGS ?= -g $(MARLAIS_FLAGS)
+CFLAGS ?= -g -Wall -Wextra -Wno-unused $(MARLAIS_FLAGS)
 
 LIBS ?= -lncurses -lreadline -lm -lgc
 
