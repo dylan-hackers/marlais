@@ -810,9 +810,9 @@ function_arguments (Object fun)
 	}
 	break;
     case Primitive:
-	marlais_error ("function-arguments: cannot query arguments of a primitive", fun, NULL);
+	marlais_fatal ("function-arguments: cannot query arguments of a primitive");
     default:
-	marlais_error ("function-arguments: bad argument", fun, NULL);
+	marlais_fatal ("function-arguments: bad argument");
     }
     return (marlais_construct_values (3, list_length_int (params), has_rest, keywords));
 }
@@ -852,7 +852,7 @@ applicable_method_p (Object argfun, Object sample_args, int strict_check)
     Object funs, fun;
 
     if (!METHODP (argfun) && !GFUNP (argfun)) {
-	marlais_error ("applicable-method?: first argument must be a generic function or method", fun, NULL);
+	marlais_fatal ("applicable-method?: first argument must be a generic function or method");
     }
     if (METHODP (argfun)) {
 	funs = cons (argfun, make_empty_list ());
