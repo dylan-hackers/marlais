@@ -42,20 +42,20 @@
 
 static struct primitive values_prims[] =
 {
-  {"values", prim_0_rest, values},
+  {"values", prim_0_rest, marlais_values},
 };
 
 /* function definitions */
 
 void
-init_values_prims (void)
+marlais_register_values (void)
 {
   int num = sizeof (values_prims) / sizeof (struct primitive);
   init_prims (num, values_prims);
 }
 
 Object
-make_values (Object vals)
+marlais_make_values (Object vals)
 {
   Object obj;
   int i;
@@ -78,7 +78,7 @@ make_values (Object vals)
 }
 
 Object
-construct_values (int num,...)
+marlais_construct_values (int num,...)
 {
   Object obj;
   int i;
@@ -98,17 +98,17 @@ construct_values (int num,...)
 }
 
 Object
-values (Object rest)
+marlais_values (Object rest)
 {
   if (EMPTYLISTP (rest) || PAIRP (CDR (rest))) {
-    return make_values (rest);
+    return marlais_make_values (rest);
   } else {
     return (CAR (rest));
   }
 }
 
 Object
-devalue (Object val)
+marlais_devalue (Object val)
 {
   if (VALUESP (val)) {
     if (VALUESNUM (val)) {

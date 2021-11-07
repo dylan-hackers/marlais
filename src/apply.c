@@ -469,7 +469,7 @@ construct_return_values (Object ret,
 	marlais_error ("return value is invalid", NULL);
     }
     if (!VALUESP (ret)) {
-	ret = make_values (listem (ret, NULL));
+	ret = marlais_make_values (listem (ret, NULL));
     }
     /* check return values (not done for non VALUESTYPE values yet */
     for (i = 0;
@@ -671,7 +671,7 @@ apply_exit (Object exit_proc, Object args)
 	case 1:
 	    longjmp (*EXITRET (exit_proc), (int) FIRST (args));
 	default:
-	    longjmp (*EXITRET (exit_proc), (int) (values (args)));
+	    longjmp (*EXITRET (exit_proc), (int) (marlais_values (args)));
 	}
     } else {
 	return marlais_error ("No exit procedure binding -- returning", 0);

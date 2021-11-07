@@ -107,7 +107,7 @@ static int read_eval_print(FILE* f, int dbg_lvl, int bind_constant_p)
       vals = VALUESNUM(obj);
     }
     else {
-      obj = construct_values(1, obj);
+      obj = marlais_construct_values(1, obj);
       vals = 1;
     }
     for(x = 0; x < vals; x++) {
@@ -521,7 +521,7 @@ initialize_marlais (void)
   init_slot_prims ();
   init_file_prims ();
   init_function_prims ();
-  init_values_prims ();
+  marlais_register_values ();
   marlais_register_print ();
   marlais_register_number ();
   init_apply_prims ();

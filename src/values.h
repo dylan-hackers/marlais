@@ -38,10 +38,12 @@
 
 #include "common.h"
 
-void init_values_prims (void);
-Object make_values (Object vals);
-Object values (Object rest);
-Object construct_values (int num,...);
-Object devalue (Object val);
+/* Register vector primitives */
+extern void marlais_register_values (void);
+/* Make a values from a list */
+extern Object marlais_make_values (Object vals);
+extern Object marlais_values (Object rest);
+extern Object marlais_construct_values (int num,...);
+extern Object marlais_devalue (Object val);
 
 #endif

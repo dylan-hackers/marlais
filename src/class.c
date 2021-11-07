@@ -620,8 +620,8 @@ initialize_slots (Object slot_descriptors, Object initializers)
     slotd = CAR (tmp_slotds);
     slots[i] = listem (slot_init_value (slotd), SLOTDSLOTTYPE (slotd), NULL);
   }
-  return construct_values (2, slots, append (default_initializers,
-					     extra_initializers));
+  return marlais_construct_values (2, slots, append (default_initializers,
+						     extra_initializers));
 }
 
 static Object

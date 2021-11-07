@@ -529,9 +529,9 @@ prim_floor_func (Object d)
 {
     double dval, tmp = floor (dval = DFLOATVAL (d));
 
-    return construct_values (2,
-			     marlais_make_integer ((int) tmp),
-			     marlais_make_dfloat (dval - tmp));
+    return marlais_construct_values (2,
+				     marlais_make_integer ((int) tmp),
+				     marlais_make_dfloat (dval - tmp));
 }
 
 static Object
@@ -539,9 +539,9 @@ prim_ceiling (Object d)
 {
     double dval, tmp = ceil (dval = DFLOATVAL (d));
 
-    return construct_values (2,
-			     marlais_make_integer ((int) tmp),
-			     marlais_make_dfloat (dval - tmp));
+    return marlais_construct_values (2,
+				     marlais_make_integer ((int) tmp),
+				     marlais_make_dfloat (dval - tmp));
 }
 
 static Object
@@ -549,9 +549,9 @@ prim_round (Object d)
 {
     double dval, tmp = anint (dval = DFLOATVAL (d));
 
-    return construct_values (2,
-			     marlais_make_integer ((int) tmp),
-			     marlais_make_dfloat (dval - tmp));
+    return marlais_construct_values (2,
+				     marlais_make_integer ((int) tmp),
+				     marlais_make_dfloat (dval - tmp));
 }
 
 static Object
@@ -559,9 +559,9 @@ prim_truncate (Object d)
 {
     double dval, tmp = aint (dval = DFLOATVAL (d));
 
-    return construct_values (2,
-			     marlais_make_integer ((int) tmp),
-			     marlais_make_dfloat (dval - tmp));
+    return marlais_construct_values (2,
+				     marlais_make_integer ((int) tmp),
+				     marlais_make_dfloat (dval - tmp));
 }
 
 #if 0
@@ -630,9 +630,9 @@ prim_floor_divide (Object d1, Object d2)
     double d2val;
     int intpart = floor ((d1val = DFLOATVAL (d1)) / (d2val = DFLOATVAL (d2)));
 
-    return construct_values (2,
-			     marlais_make_integer (intpart),
-			     marlais_make_dfloat (d1val - d2val * intpart));
+    return marlais_construct_values (2,
+				     marlais_make_integer (intpart),
+				     marlais_make_dfloat (d1val - d2val * intpart));
 }
 
 static Object
@@ -642,9 +642,9 @@ prim_ceiling_divide (Object d1, Object d2)
     double d2val;
     int intpart = ceil ((d1val = DFLOATVAL (d1)) / (d2val = DFLOATVAL (d2)));
 
-    return construct_values (2,
-			     marlais_make_integer (intpart),
-			     marlais_make_dfloat (d1val - d2val * intpart));
+    return marlais_construct_values (2,
+				     marlais_make_integer (intpart),
+				     marlais_make_dfloat (d1val - d2val * intpart));
 }
 
 static Object
@@ -654,9 +654,9 @@ prim_round_divide (Object d1, Object d2)
     double d2val;
     int intpart = anint ((d1val = DFLOATVAL (d1)) / (d2val = DFLOATVAL (d2)));
 
-    return construct_values (2,
-			     marlais_make_integer (intpart),
-			     marlais_make_dfloat (d1val - d2val * intpart));
+    return marlais_construct_values (2,
+				     marlais_make_integer (intpart),
+				     marlais_make_dfloat (d1val - d2val * intpart));
 }
 
 static Object
@@ -666,9 +666,9 @@ prim_truncate_divide (Object d1, Object d2)
     double d2val;
     int intpart = aint ((d1val = DFLOATVAL (d1)) / (d2val = DFLOATVAL (d2)));
 
-    return construct_values (2,
-			     marlais_make_integer (intpart),
-			     marlais_make_dfloat (d1val - d2val * intpart));
+    return marlais_construct_values (2,
+				     marlais_make_integer (intpart),
+				     marlais_make_dfloat (d1val - d2val * intpart));
 }
 static Object
 prim_int_truncate_divide (Object i1, Object i2)
@@ -677,9 +677,9 @@ prim_int_truncate_divide (Object i1, Object i2)
     int i2val;
     int quotient = (int) ((float) (i1val = INTVAL (i1)) / (i2val = INTVAL (i2)));
 
-    return construct_values (2,
-			     marlais_make_integer (quotient),
-			     marlais_make_integer (i1val - i2val * quotient));
+    return marlais_construct_values (2,
+				     marlais_make_integer (quotient),
+				     marlais_make_integer (i1val - i2val * quotient));
 }
 
 static Object

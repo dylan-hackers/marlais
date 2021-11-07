@@ -1815,13 +1815,13 @@ set_eval (Object form)
      * (slot-setter new-value obj ...)
      */
     return eval (cons (make_setter_symbol (CAR (sym)),
-		       devalue (cons (THIRD (form), CDR (sym)))));
+		       marlais_devalue (cons (THIRD (form), CDR (sym)))));
 
   }
   if (EMPTYLISTP (CDR (CDR (form)))) {
     marlais_error ("set!: missing forms", form, NULL);
   }
-  val = devalue (eval (THIRD (form)));
+  val = marlais_devalue (eval (THIRD (form)));
   modify_value (sym, val);
   return (val);
 }
@@ -1830,7 +1830,7 @@ static Object
 set_module_eval (Object form)
 {
   if (PAIRP (form) && list_length (form) == 2 && KEYWORDP (SECOND (form))) {
-    return user_set_module (devalue (CDR (form)));
+    return user_set_module (marlais_devalue (CDR (form)));
   } else {
     marlais_error ("set_module: argument list not a single symbol", form, NULL);
   }

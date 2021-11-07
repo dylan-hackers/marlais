@@ -682,10 +682,10 @@ add_method (Object generic, Object method)
 
 	    if (!last) {
 		GFMETHODS (generic) = cons (method, CDR (methods));
-		return (construct_values (2, method, old_method));
+		return (marlais_construct_values (2, method, old_method));
 	    } else {
 		CDR (last) = cons (method, CDR (methods));
-		return (construct_values (2, method, old_method));
+		return (marlais_construct_values (2, method, old_method));
 	    }
 	}
 	last = methods;
@@ -698,7 +698,7 @@ add_method (Object generic, Object method)
     GFCACHE (generic) = make_table (50);
 #endif
 
-    return (construct_values (2, method, MARLAIS_FALSE));
+    return (marlais_construct_values (2, method, MARLAIS_FALSE));
 }
 
 Object
@@ -749,9 +749,9 @@ function_values (Object func)
 	       func,
 	       NULL);
     }
-    return construct_values (2,
-			     vals,
-			     rest == NULL ? MARLAIS_FALSE : rest);
+    return marlais_construct_values (2,
+				     vals,
+				     rest == NULL ? MARLAIS_FALSE : rest);
 
 }
 
@@ -815,7 +815,7 @@ function_arguments (Object fun)
     default:
 	marlais_error ("function-arguments: bad argument", fun, NULL);
     }
-    return (construct_values (3, list_length_int (params), has_rest, keywords));
+    return (marlais_construct_values (3, list_length_int (params), has_rest, keywords));
 }
 
 static int
@@ -1138,7 +1138,7 @@ split_sorted_methods (Object methods, Object sample_args)
 	    break;
 	}
     }
-    return construct_values (2, methods, next);
+    return marlais_construct_values (2, methods, next);
 }
 
 /* See KLUDGE ALERT below */
