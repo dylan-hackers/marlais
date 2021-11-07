@@ -19,22 +19,6 @@ extern int yylineno;
 #define VERSION "0.6.4-io-beta"
 #endif
 
-#ifdef MACOS
-#define main marlais_main
-int marlais_main (int argc, char *argv[]);
-extern void init_mac_prims (void);
-extern void yy_restart (FILE * fp);
-
-// support for asynch loading of a file.
-Boolean theLoadFileFlag = false;
-char thePathToLoad[256];
-int thePromptDirty = false;
-
-// support for general message handling.
-#include "MacMessages.h"
-#include "marlais_utils.h"
-#endif
-
 static int do_not_load_init_file = 0;
 static char *optstring = "dehnpsv";
 char *prompt = "? ";
@@ -235,29 +219,8 @@ main (int argc, char *argv[])
   /* things to do on an error reset */
   if (err) {
     close_open_files ();
-#ifdef MACOS
-    fflush (stdout);
-
-    /* so parser/scanner won't get confused. */
-    clearerr (stdin);
-    fflush (stdin);
-    yy_restart (stdin);
-
-    /* is this a request to load a file? */
-    if (theLoadFileFlag) {
-      theLoadFileFlag = false;
-      load (marlais_make_bytestring (thePathToLoad));
-    }
-    /* some event caused the prompt to be dirty. */
-    if (thePromptDirty) {
-      printf (prompt);
-      fflush (stdout);
-      thePromptDirty = 0;
-    }
-#else
     fflush (stdout);
     clearerr (stdin);
-#endif
     if (trace_functions) {
       printf ("; reset\n");
       trace_level = 0;
@@ -507,7 +470,4 @@ initialize_marlais (void)
   marlais_register_deque ();
   marlais_register_array ();
   init_sys_prims ();
-#ifdef MACOS
-  init_mac_prims ();
-#endif
 }
