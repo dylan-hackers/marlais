@@ -463,7 +463,7 @@ module_binding (Object module_name)
 	    return (binding);
 	}
     }
-    marlais_error ("Unable to find binding for module", module_name, NULL);
+    marlais_fatal ("Unable to find binding for module");
 }
 
 Object
