@@ -81,7 +81,7 @@ marlais_identical_p (Object obj1, Object obj2)
   }
 }
 
-/* Static functions */
+/* Internal functions */
 
 static Object
 boolean_not (Object obj)
@@ -106,9 +106,9 @@ boolean_identical_p (Object obj1, Object obj2, Object rest)
   } else if (INTEGERP (obj1) && INTEGERP (obj2)) {
     if (INTVAL (obj1) == INTVAL (obj2)) {
       if (EMPTYLISTP (rest)) {
-		return (MARLAIS_TRUE);
+        return (MARLAIS_TRUE);
       } else {
-		return (boolean_identical_p (obj2, CAR (rest), CDR (rest)));
+        return (boolean_identical_p (obj2, CAR (rest), CDR (rest)));
       }
     } else {
       return (MARLAIS_FALSE);
@@ -116,9 +116,9 @@ boolean_identical_p (Object obj1, Object obj2, Object rest)
   } else if (CHARP (obj1) && CHARP (obj2)) {
     if (CHARVAL (obj1) == CHARVAL (obj2)) {
       if (EMPTYLISTP (rest)) {
-		return (MARLAIS_TRUE);
+        return (MARLAIS_TRUE);
       } else {
-		return (boolean_identical_p (obj2, CAR (rest), CDR (rest)));
+        return (boolean_identical_p (obj2, CAR (rest), CDR (rest)));
       }
     } else {
       return (MARLAIS_FALSE);
@@ -126,9 +126,9 @@ boolean_identical_p (Object obj1, Object obj2, Object rest)
   } else if (DFLOATP (obj1) && DFLOATP (obj2)) {
     if (DFLOATVAL (obj1) == DFLOATVAL (obj2)) {
       if (EMPTYLISTP (rest)) {
-		return (MARLAIS_TRUE);
+        return (MARLAIS_TRUE);
       } else {
-		return (boolean_identical_p (obj2, CAR (rest), CDR (rest)));
+        return (boolean_identical_p (obj2, CAR (rest), CDR (rest)));
       }
     } else {
       return (MARLAIS_FALSE);
