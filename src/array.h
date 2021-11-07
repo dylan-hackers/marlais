@@ -37,7 +37,7 @@
 #include "common.h"
 
 /* Initialize array primitives */
-extern void marlais_initialize_array (void);
+extern void marlais_register_array (void);
 /* Entrypoint for make(<array>) */
 extern Object marlais_make_array_entry (Object args);
 
