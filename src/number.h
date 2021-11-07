@@ -39,9 +39,9 @@
 /* Register number primitives */
 extern void marlais_register_number (void);
 /* Make an <integer> */
-extern Object marlais_make_integer (int i);
+extern Object marlais_make_integer (DyInteger i);
 /* Make a <ratio> */
-extern Object marlais_make_ratio (int numerator, int denominator);
+extern Object marlais_make_ratio (DyInteger numerator, DyInteger denominator);
 /* Make a <double-float> */
 extern Object marlais_make_dfloat (double d);
 

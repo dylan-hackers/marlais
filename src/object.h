@@ -10,6 +10,9 @@
 #include <setjmp.h>
 #include <limits.h>
 
+typedef intptr_t  DyInteger;
+typedef uintptr_t DyUnsigned;
+
 typedef enum {
     Uninitialized = 0,
 

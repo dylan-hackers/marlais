@@ -154,7 +154,7 @@ marlais_register_number (void)
 }
 
 Object
-marlais_make_integer (int i)
+marlais_make_integer (DyInteger i)
 {
 #ifdef SMALL_OBJECTS
   if (INT_ABS (i) <= MAX_SMALL_INT) {
@@ -185,7 +185,7 @@ marlais_make_integer (int i)
 }
 
 Object
-marlais_make_ratio (int numerator, int denominator)
+marlais_make_ratio (DyInteger numerator, DyInteger denominator)
 {
     Object obj;
 
@@ -529,7 +529,7 @@ prim_floor_func (Object d)
     double dval, tmp = floor (dval = DFLOATVAL (d));
 
     return marlais_construct_values (2,
-				     marlais_make_integer ((int) tmp),
+				     marlais_make_integer ((DyInteger) tmp),
 				     marlais_make_dfloat (dval - tmp));
 }
 
@@ -539,7 +539,7 @@ prim_ceiling (Object d)
     double dval, tmp = ceil (dval = DFLOATVAL (d));
 
     return marlais_construct_values (2,
-				     marlais_make_integer ((int) tmp),
+				     marlais_make_integer ((DyInteger) tmp),
 				     marlais_make_dfloat (dval - tmp));
 }
 
@@ -549,7 +549,7 @@ prim_round (Object d)
     double dval, tmp = anint (dval = DFLOATVAL (d));
 
     return marlais_construct_values (2,
-				     marlais_make_integer ((int) tmp),
+				     marlais_make_integer ((DyInteger) tmp),
 				     marlais_make_dfloat (dval - tmp));
 }
 
@@ -559,7 +559,7 @@ prim_truncate (Object d)
     double dval, tmp = aint (dval = DFLOATVAL (d));
 
     return marlais_construct_values (2,
-				     marlais_make_integer ((int) tmp),
+				     marlais_make_integer ((DyInteger) tmp),
 				     marlais_make_dfloat (dval - tmp));
 }
 
@@ -595,7 +595,7 @@ prim_modulo (Object i1, Object i2)
     double d2val;
     double tmp = (d1val = INTVAL (i1)) / (d2val = (float) INTVAL (i2));
 
-    return marlais_make_integer ((int) (d1val - d2val * floor (tmp)));
+    return marlais_make_integer ((DyInteger) (d1val - d2val * floor (tmp)));
 }
 
 #endif

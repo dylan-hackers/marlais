@@ -330,10 +330,10 @@ equal_hash (Object key)
     } else if (SOVP (key)) {
       return (hash_vector (key));
     } else if (SYMBOLP (key) || KEYWORDP (key)) {
-      return (marlais_make_integer ((int) key));
+      return (marlais_make_integer ((DyInteger)key));
     } else {
       /* marlais_error ("=hash: don't know how to hash object", key, NULL);  */
-      return (marlais_make_integer (((int) key)));
+      return (marlais_make_integer ((DyInteger)key));
     }
   }
 }

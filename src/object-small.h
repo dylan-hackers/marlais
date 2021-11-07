@@ -8,8 +8,6 @@
  */
 
 typedef void *Object;
-typedef intptr_t  DyInteger;
-typedef uintptr_t DyUnsigned;
 
 #define POINTERTAG           0
 #define IMMEDTAG             1
