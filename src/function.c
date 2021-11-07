@@ -922,9 +922,9 @@ applicable_method_p (Object argfun, Object sample_args, int strict_check)
 		return (MARLAIS_FALSE);
 	    }
 	}
-	/* We passed all of the tests. */
-	return (MARLAIS_TRUE);
     }
+    /* We passed all of the tests. */
+    return (MARLAIS_TRUE);
 }
 
 #ifdef USE_METHOD_CACHING
