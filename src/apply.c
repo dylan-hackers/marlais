@@ -664,6 +664,7 @@ static Object
 apply_exit (Object exit_proc, Object args)
 {
     if (unwind_to_exit (exit_proc)) {
+      /* XXX casts are wrong and must be fixed */
 	switch (list_length (args)) {
 	case 0:
 	    longjmp (*EXITRET (exit_proc), (int) (unspecified_object));
