@@ -145,7 +145,7 @@ vector_size (Object vec)
   return (marlais_make_integer (SOVSIZE (vec)));
 }
 
-Object
+static Object
 vector_element (Object vec, Object index, Object default_ob)
 {
   int i, size;
