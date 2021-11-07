@@ -92,7 +92,7 @@ init_list_prims (void)
 
     num = sizeof (list_prims) / sizeof (struct primitive);
 
-    init_prims (num, list_prims);
+    marlais_register_prims (num, list_prims);
 }
 
 #ifndef SMALL_OBJECTS

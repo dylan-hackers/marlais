@@ -102,7 +102,7 @@ init_function_prims (void)
 
     num = sizeof (function_prims) / sizeof (struct primitive);
 
-    init_prims (num, function_prims);
+    marlais_register_prims (num, function_prims);
 }
 
 static void

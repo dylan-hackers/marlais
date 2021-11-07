@@ -37,8 +37,11 @@
 
 #include "common.h"
 
-void init_prims (int num, struct primitive prims[]);
-Object make_primitive (char *name, enum primtype type, Object (*fun) ());
-Object apply_prim (Object prim, Object args);
+/* Register a set of primitives */
+void marlais_register_prims (int num, struct primitive prims[]);
+/* Create a new primitive */
+Object marlais_make_primitive (char *name, enum primtype type, Object (*fun) ());
+/* Apply a primitive */
+Object marlais_apply_prim (Object prim, Object args);
 
 #endif

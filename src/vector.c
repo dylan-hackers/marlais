@@ -61,7 +61,7 @@ void
 marlais_register_vector (void)
 {
   int num = sizeof (vector_prims) / sizeof (struct primitive);
-  init_prims (num, vector_prims);
+  marlais_register_prims (num, vector_prims);
 }
 
 Object

@@ -146,7 +146,7 @@ marlais_register_number (void)
 
     num = sizeof (number_prims) / sizeof (struct primitive);
 
-    init_prims (num, number_prims);
+    marlais_register_prims (num, number_prims);
 
 #ifdef BIG_INTEGERS
     init_big_integer_prims ();

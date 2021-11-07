@@ -10,21 +10,21 @@
 #include "symbol.h"
 
 void
-init_prims (int num, struct primitive prims[])
+marlais_register_prims (int num, struct primitive prims[])
 {
   int i;
   Object sym, prim;
 
   for (i = 0; i < num; ++i) {
     sym = make_symbol (prims[i].name);
-    prim = make_primitive (prims[i].name, prims[i].prim_type, prims[i].fun);
+    prim = marlais_make_primitive (prims[i].name, prims[i].prim_type, prims[i].fun);
     /* just for now, don't add %foo to be exported */
     add_top_lvl_binding1(sym, prim, 0, /* or not prims[i].name[0] != '%' */ 1);
   }
 }
 
 Object
-make_primitive (char *name, enum primtype type, Object (*fun) ())
+marlais_make_primitive (char *name, enum primtype type, Object (*fun) ())
 {
   Object obj;
 
@@ -42,7 +42,7 @@ make_primitive (char *name, enum primtype type, Object (*fun) ())
 
 /* I think this could be handled WAAAY better -- dma */
 Object
-apply_prim (Object prim, Object args)
+marlais_apply_prim (Object prim, Object args)
 {
   Object (*fun) ();
 

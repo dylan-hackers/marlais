@@ -32,7 +32,7 @@ init_slot_prims (void)
 
     num = sizeof (slot_prims) / sizeof (struct primitive);
 
-    init_prims (num, slot_prims);
+    marlais_register_prims (num, slot_prims);
 }
 
 

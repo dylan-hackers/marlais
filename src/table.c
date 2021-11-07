@@ -84,7 +84,7 @@ void
 marlais_register_table (void)
 {
   int num = sizeof (table_prims) / sizeof (struct primitive);
-  init_prims (num, table_prims);
+  marlais_register_prims (num, table_prims);
   table_default = cons (MARLAIS_FALSE, MARLAIS_FALSE);
 }
 

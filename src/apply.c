@@ -56,7 +56,7 @@ init_apply_prims (void)
 
     num = sizeof (apply_prims) / sizeof (struct primitive);
 
-    init_prims (num, apply_prims);
+    marlais_register_prims (num, apply_prims);
 
     user_keyword = make_keyword ("user:");
     ResultValueStack = make_empty_list ();
@@ -97,7 +97,7 @@ apply_internal (Object fun, Object args)
     devalue_args (args);
     switch (POINTERTYPE (fun)) {
     case Primitive:
-	ret = apply_prim (fun, args);
+	ret = marlais_apply_prim (fun, args);
 	break;
     case Method:
 	ret = apply_method (fun, args, make_empty_list (), NULL);

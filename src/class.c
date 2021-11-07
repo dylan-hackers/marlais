@@ -83,7 +83,7 @@ void
 init_class_prims (void)
 {
   int num = sizeof (class_prims) / sizeof (struct primitive);
-  init_prims (num, class_prims);
+  marlais_register_prims (num, class_prims);
 }
 
 void

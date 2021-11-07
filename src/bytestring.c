@@ -70,7 +70,7 @@ void
 marlais_register_bytestring (void)
 {
     int num = sizeof (string_prims) / sizeof (struct primitive);
-    init_prims (num, string_prims);
+    marlais_register_prims (num, string_prims);
 }
 
 Object

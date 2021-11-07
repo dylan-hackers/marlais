@@ -47,7 +47,7 @@ init_foreign_prims (void)
 
     num = sizeof (foreign_prims) / sizeof (struct primitive);
 
-    init_prims (num, foreign_prims);
+    marlais_register_prims (num, foreign_prims);
 }
 
 #ifdef DLOPEN

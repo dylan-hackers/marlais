@@ -54,7 +54,7 @@ void
 marlais_register_character (void)
 {
     int num = sizeof (char_prims) / sizeof (struct primitive);
-    init_prims (num, char_prims);
+    marlais_register_prims (num, char_prims);
 }
 
 Object

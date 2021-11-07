@@ -333,7 +333,7 @@ void
 init_env_prims (void)
 {
     int num = sizeof (env_prims) / sizeof (struct primitive);
-    init_prims (num, env_prims);
+    marlais_register_prims (num, env_prims);
 }
 
 /* local functions */

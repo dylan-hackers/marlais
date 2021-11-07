@@ -173,7 +173,7 @@ marlais_register_error (void)
   debugger_symbol = make_symbol ("<<Debugger>>");
 
   num = sizeof (error_prims) / sizeof (struct primitive);
-  init_prims (num, error_prims);
+  marlais_register_prims (num, error_prims);
   signal_handler_init ();
 }
 
@@ -268,32 +268,32 @@ marlais_error (char *msg,...)
 
       /* Put debugging functions this frame */
       add_binding (print_env_symbol,
-		   make_primitive ("print-env", prim_0, my_print_env),
+		   marlais_make_primitive ("print-env", prim_0, my_print_env),
 		   1,
 		   the_env);
       add_binding (print_stack_symbol,
-		   make_primitive ("print-stack", prim_0, print_stack),
+		   marlais_make_primitive ("print-stack", prim_0, print_stack),
 		   1,
 		   the_env);
       add_binding (show_bindings_symbol,
-		   make_primitive ("show-bindings",
+		   marlais_make_primitive ("show-bindings",
 				   prim_0_rest,
 				   show_bindings),
 		   1,
 		   the_env);
       add_binding (help_symbol,
-		   make_primitive ("help",
+		   marlais_make_primitive ("help",
 				   prim_0_rest,
 				   help_function),
 		   1,
 		   the_env);
 
       add_binding (return_symbol,
-		   make_primitive ("return", prim_0_rest, return_value),
+		   marlais_make_primitive ("return", prim_0_rest, return_value),
 		   1,
 		   the_env);
       add_binding (fail_symbol,
-		   make_primitive ("fail", prim_0, fail_function),
+		   marlais_make_primitive ("fail", prim_0, fail_function),
 		   1,
 		   the_env);
 

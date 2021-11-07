@@ -28,7 +28,7 @@ void
 init_keyword_prims (void)
 {
   int num = sizeof (keyword_prims) / sizeof (struct primitive);
-  init_prims (num, keyword_prims);
+  marlais_register_prims (num, keyword_prims);
 }
 
 /* take a "foo:" keyword and return the symbol "foo" */

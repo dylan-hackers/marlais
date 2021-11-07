@@ -52,7 +52,7 @@ marlais_register_read (void)
 {
 #ifdef NO_COMMON_DYLAN_SPEC
   int num = sizeof (read_prims) / sizeof (struct primitive);
-  init_prims (num, read_prims);
+  marlais_register_prims (num, read_prims);
 #endif
 }
 #ifdef NO_COMMON_DYLAN_SPEC

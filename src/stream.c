@@ -36,7 +36,7 @@ void
 marlais_register_stream (void)
 {
   int num = sizeof (stream_prims) / sizeof (struct primitive);
-  init_prims (num, stream_prims);
+  marlais_register_prims (num, stream_prims);
 }
 
 /* Static functions */

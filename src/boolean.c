@@ -61,7 +61,7 @@ void
 marlais_register_boolean (void)
 {
   int num = sizeof (boolean_prims) / sizeof (struct primitive);
-  init_prims (num, boolean_prims);
+  marlais_register_prims (num, boolean_prims);
 }
 
 int

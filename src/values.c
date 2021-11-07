@@ -50,7 +50,7 @@ void
 marlais_register_values (void)
 {
   int num = sizeof (values_prims) / sizeof (struct primitive);
-  init_prims (num, values_prims);
+  marlais_register_prims (num, values_prims);
 }
 
 Object

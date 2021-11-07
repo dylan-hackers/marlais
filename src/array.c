@@ -77,7 +77,7 @@ void
 marlais_register_array (void)
 {
   int num = sizeof (array_prims) / sizeof (struct primitive);
-  init_prims (num, array_prims);
+  marlais_register_prims (num, array_prims);
 }
 
 Object

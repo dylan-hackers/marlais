@@ -57,7 +57,7 @@ void
 marlais_register_print (void)
 {
   int num = sizeof (print_prims) / sizeof (struct primitive);
-  init_prims (num, print_prims);
+  marlais_register_prims (num, print_prims);
 }
 
 void

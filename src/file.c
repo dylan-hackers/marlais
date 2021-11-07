@@ -28,7 +28,7 @@ void
 init_file_prims (void)
 {
   int num = sizeof (file_prims) / sizeof (struct primitive);
-  init_prims (num, file_prims);
+  marlais_register_prims (num, file_prims);
 }
 
 Object

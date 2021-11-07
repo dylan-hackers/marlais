@@ -56,7 +56,7 @@ init_sys_prims (void)
 
     num = sizeof (sys_prims) / sizeof (struct primitive);
 
-    init_prims (num, sys_prims);
+    marlais_register_prims (num, sys_prims);
 }
 
 Object
