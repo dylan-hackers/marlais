@@ -231,7 +231,7 @@ void
 marlais_fatal (char *msg)
 {
   fprintf (stderr, "%s.\n", msg);
-  exit (-1);
+  abort();
 }
 
 Object
