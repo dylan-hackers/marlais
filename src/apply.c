@@ -19,26 +19,27 @@
 #include <marlais/values.h>
 #include <marlais/vector.h>
 
-/* global data */
+/* Global data */
 int trace_functions = 0;
 int trace_only_user_funs = 0;
 int trace_level = 0;
 Object ResultValueStack;
+static Object user_keyword;
 
-/* local function prototypes and data */
+/* Internal functions */
 
 static Object apply_generic (Object gen, Object args);
 static void narrow_value_types (Object *values_list,
-				Object new_values_list,
-				Object *rest_type,
-				Object new_rest_type);
+                                Object new_values_list,
+                                Object *rest_type,
+                                Object new_rest_type);
 static Object apply_exit (Object exit_proc, Object args);
 static Object apply_next_method (Object next_method, Object args);
-static Object set_trace (Object bool);
 static void devalue_args (Object args);
-static Object user_keyword;
 
-/* primitives */
+/* Primitives */
+
+static Object set_trace (Object bool);
 
 static struct primitive apply_prims[] =
 {
@@ -47,7 +48,7 @@ static struct primitive apply_prims[] =
     {"%eval", prim_1, eval},
 };
 
-/* function definitions */
+/* Exported functions */
 
 void
 marlais_register_apply (void)
@@ -130,8 +131,6 @@ marlais_apply_internal (Object fun, Object args)
     }
     return (ret);
 }
-
-/* local functions */
 
 /*
  * It seems to me that apply method has gotten a little big.
@@ -381,6 +380,8 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
 
     return ret;
 }
+
+/* Internal functions */
 
 static void
 narrow_value_types (Object *values_list_ptr,
