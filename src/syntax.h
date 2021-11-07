@@ -27,7 +27,8 @@ extern Object create_symbol;
 extern Object empty_string;
 
 typedef Object (*syntax_fun) (Object);
-void init_syntax_table (void);
-syntax_fun syntax_function (Object sym);
+
+extern void marlais_register_syntax (void);
+extern syntax_fun marlais_syntax_function (Object sym);
 
 #endif

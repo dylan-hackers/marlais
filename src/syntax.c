@@ -50,16 +50,16 @@ struct syntax_entry *syntax_table[SYNTAX_TABLE_SIZE];
 
 /* local variables and functions */
 
-void install_syntax_entry (char *name, syntax_fun fun);
+static void install_syntax_entry (char *name, syntax_fun fun);
 static void bind_variables (Object init_list,
 			    int top_level,
 			    int constant,
 			    struct frame *to_frame);
-void add_variable_binding (Object var,
-			   Object val,
-			   int top_level,
-			   int constant,
-			   struct frame *to_frame);
+static void add_variable_binding (Object var,
+				  Object val,
+				  int top_level,
+				  int constant,
+				  struct frame *to_frame);
 
 /* functions emobodying evaluation rules for forms */
 
@@ -204,7 +204,7 @@ static syntax_fun syntax_functions[] =
 };
 
 void
-init_syntax_table (void)
+marlais_init_syntax_table (void)
 {
     int numops, i;
 
@@ -217,7 +217,7 @@ init_syntax_table (void)
 }
 
 syntax_fun
-syntax_function (Object sym)
+marlais_syntax_function (Object sym)
 {
     struct syntax_entry *entry;
     int h;
@@ -233,7 +233,9 @@ syntax_function (Object sym)
     return (NULL);
 }
 
-void
+/* <pcb> a single function to evaluate bodies. uses tail_eval. */
+
+static void
 install_syntax_entry (char *name, syntax_fun fun)
 {
     struct syntax_entry *entry;
@@ -250,8 +252,6 @@ install_syntax_entry (char *name, syntax_fun fun)
     entry->next = syntax_table[h];
     syntax_table[h] = entry;
 }
-
-/* <pcb> a single function to evaluate bodies. uses tail_eval. */
 
 static Object
 eval_body (Object body, Object null_body_result_value)
@@ -717,7 +717,7 @@ bind_variables (Object init_list,
   }
 }
 
-void
+static void
 add_variable_binding (Object var,
 		      Object val,
 		      int top_level,

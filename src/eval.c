@@ -147,7 +147,7 @@ eval_combination (Object obj, int do_apply)
 	pop_eval_stack ();
     } else {
 	op = CAR (obj);
-	sf = syntax_function (op);
+	sf = marlais_syntax_function (op);
 	if (sf) {
 	    push_eval_stack (op);
 	    ret = (*sf) (obj);

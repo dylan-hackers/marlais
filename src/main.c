@@ -483,7 +483,7 @@ initialize_marlais (void)
   x_symbol = make_symbol ("x");
 
   /* initialize table of syntax operators and functions */
-  init_syntax_table ();
+  marlais_init_syntax_table ();
   init_reserved_word_symbols ();
   define_test_symbol = make_symbol ("define-test");
   test_symbol = make_symbol ("test");
