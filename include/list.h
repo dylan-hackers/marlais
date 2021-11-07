@@ -38,7 +38,7 @@
 
 #include "common.h"
 
-#ifndef SMALL_OBJECTS
+#ifndef MARLAIS_OBJECT_MODEL_SMALL
 Object make_empty_list (void);
 
 #else

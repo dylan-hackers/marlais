@@ -40,7 +40,7 @@
 Object
 make_eof_object (void)
 {
-#ifndef SMALL_OBJECTS
+#ifndef MARLAIS_OBJECT_MODEL_SMALL
     Object obj = marlais_allocate_object (EndOfFile, sizeof (struct object));
     return (obj);
 #else
@@ -62,7 +62,7 @@ make_unspecified_object (void)
 Object
 make_uninit_slot (void)
 {
-#ifndef SMALL_OBJECTS
+#ifndef MARLAIS_OBJECT_MODEL_SMALL
     Object obj = marlais_allocate_object (UninitializedSlotValue, sizeof (struct object));
     return (obj);
 #else

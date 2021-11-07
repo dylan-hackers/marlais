@@ -22,11 +22,11 @@
 #error No YYSTYPE defined
 #endif
 
-#ifdef BIG_INTEGERS
+#ifdef MARLAIS_ENABLE_BIG_INTEGER
 #include "biginteger.h"
 #endif
 
-#if HAVE_READLINE
+#ifdef MARLAIS_ENABLE_READLINE
 #define _FUNCTION_DEF
 #include <readline/readline.h>
 #endif
@@ -399,7 +399,7 @@ int yywrap() {
 
   if(load_file_context) return 1;
 
-#if defined(HAVE_READLINE)
+#ifdef MARLAIS_ENABLE_READLINE
   input = readline(current_prompt);
   if(input) {
     yy_delete_buffer( YY_CURRENT_BUFFER );

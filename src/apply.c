@@ -88,7 +88,7 @@ marlais_apply_internal (Object fun, Object args)
 	    trace_level++;
 	}
     }
-#ifdef SMALL_OBJECTS
+#ifdef MARLAIS_OBJECT_MODEL_SMALL
     if (!POINTERP (fun)) {
 	return marlais_error ("apply: cannot apply this object", fun, NULL);
     }
@@ -175,7 +175,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
 
     push_scope (meth);
 
-#ifdef USE_METHOD_CACHING
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
     /* next-method stuff only applies to generic function method */
     if (generic_apply) {
 
@@ -193,7 +193,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
 	    /* make next-method and push it into the GF list */
 	    next_method = make_next_method (generic_apply, rest_methods, args);
 
-#ifdef USE_METHOD_CACHING
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
 	    /* push next method on active list */
 	    GFACTIVENM (generic_apply) =
 		cons (next_method, GFACTIVENM (generic_apply));
@@ -202,7 +202,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
 	    /* make constant binding for next method */
 	    add_binding (METHNEXTMETH (meth), next_method, 1, the_env);
 	}
-#ifdef USE_METHOD_CACHING
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
     }
 #endif
     hit_rest = hit_key = hit_values = 0;
@@ -327,7 +327,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
     while (!EMPTYLISTP (body)) {
 	Object form = CAR (body);
 
-#ifdef OPTIMIZE_TAIL_CALLS
+#ifdef MARLAIS_ENABLE_TAIL_CALL_OPTIMIZATION
 	/* when in tail form, we use tail_eval */
 	if (EMPTYLISTP (CDR (body))) {
 	    if (trace_functions) {
@@ -356,14 +356,14 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
 	    ret = marlais_construct_return_values (eval (form),
 					   METHREQVALUES (meth),
 					   METHRESTVALUES (meth));
-#ifdef OPTIMIZE_TAIL_CALLS
+#ifdef MARLAIS_ENABLE_TAIL_CALL_OPTIMIZATION
 	}
 #endif
 
 	body = CDR (body);
     }
 
-#ifdef USE_METHOD_CACHING
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
     /* pop out the next method that I put in the GF. */
     if (generic_apply && PAIRP (rest_methods)) {
 
@@ -528,7 +528,7 @@ marlais_construct_return_values (Object ret,
     return (ret);
 }
 
-#ifdef USE_METHOD_CACHING
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
 static Object
 get_specializers (Object gen, Object args)
 /* Construct vector of classes of agruments */
@@ -605,7 +605,7 @@ Object
 apply_generic (Object gen, Object args)
 {
 
-#ifndef USE_METHOD_CACHING
+#ifndef MARLAIS_ENABLE_METHOD_CACHING
     Object sorted_methods;
     Object methods;
 
@@ -615,7 +615,7 @@ apply_generic (Object gen, Object args)
     Object method;
     Object rest_methods;
 
-#ifdef USE_METHOD_CACHING
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
     /* try the cache first */
     cacheEntry = getCacheEntry (gen, args);
     if (!cacheEntry) {
@@ -684,7 +684,7 @@ apply_next_method (Object next_method, Object args)
     Object method, rest_methods, real_args;
 
     rest_methods = NMREST (next_method);
-#ifdef USE_METHOD_CACHING
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
     method = NMMETH (next_method);
 #else
     method = CAR (rest_methods);

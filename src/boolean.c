@@ -51,7 +51,7 @@ static struct primitive boolean_prims[] =
 void
 marlais_initialize_boolean (void)
 {
-#ifndef SMALL_OBJECTS
+#ifndef MARLAIS_OBJECT_MODEL_SMALL
   marlais_true = marlais_allocate_object (True, sizeof (struct object));
   marlais_false = marlais_allocate_object (False, sizeof (struct object));
 #endif

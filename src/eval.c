@@ -23,13 +23,13 @@ eval (Object obj)
 {
     Object val;
 
-#ifdef SMALL_OBJECTS
+#ifdef MARLAIS_OBJECT_MODEL_SMALL
     if (INTEGERP (obj) || IMMEDP (obj)) {
 	return (obj);
     }
 #endif
 
-#ifdef SMALL_OBJECTS
+#ifdef MARLAIS_OBJECT_MODEL_SMALL
     switch (POINTERTYPE (obj))
 #else
     switch (object_type (obj))
@@ -38,7 +38,7 @@ eval (Object obj)
     case True:
     case False:
     case Integer:
-#ifdef BIG_INTEGERS
+#ifdef MARLAIS_ENABLE_BIG_INTEGERS
     case BigInteger:
 #endif
     case Ratio:
@@ -82,7 +82,7 @@ Object
 tail_eval (Object obj)
 {
 
-#ifdef OPTIMIZE_TAIL_CALLS
+#ifdef MARLAIS_ENABLE_TAIL_CALL_OPTIMIZATION
     if (trace_functions) {
 	marlais_warning ("in tail eval context, parent context",
 		 eval_stack->context,

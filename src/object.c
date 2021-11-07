@@ -5,7 +5,7 @@
 #include "alloc.h"
 #include "number.h"
 
-#ifdef SMALL_OBJECTS
+#ifdef MARLAIS_OBJECT_MODEL_SMALL
 
 ObjectType
 object_type (Object obj)

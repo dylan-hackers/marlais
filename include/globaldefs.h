@@ -7,7 +7,7 @@
 #endif
 
 /* boolean */
-#ifndef SMALL_OBJECTS
+#ifndef MARLAIS_OBJECT_MODEL_SMALL
 GLOBAL Object marlais_true;
 GLOBAL Object marlais_false;
 #endif

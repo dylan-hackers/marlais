@@ -95,7 +95,7 @@ init_list_prims (void)
     marlais_register_prims (num, list_prims);
 }
 
-#ifndef SMALL_OBJECTS
+#ifndef MARLAIS_OBJECT_MODEL_SMALL
 
 /*
  * Cheesy global to make make_empty_list run faster
@@ -112,7 +112,7 @@ void
 initialize_empty_list ()
 {
 
-#ifndef SMALL_OBJECTS
+#ifndef MARLAIS_OBJECT_MODEL_SMALL
     Object obj;
 
     if (___empty_list == NULL) {
@@ -125,7 +125,7 @@ initialize_empty_list ()
 #endif
 }
 
-#ifndef SMALL_OBJECTS
+#ifndef MARLAIS_OBJECT_MODEL_SMALL
 /*
  * Returns the unique empty_list value
  */

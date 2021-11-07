@@ -10,7 +10,7 @@
 INIT_FILE=/usr/local/share/marlais/init.dylan
 
 #INIT_FILE_FLAG = -DINIT_FILE=\"$(INIT_FILE)\"
-INIT_FILE_FLAG = -DINIT_FILE=\"$(INIT_FILE)\" -DINFIX_INIT_FILE
+INIT_FILE_FLAG = -DINIT_FILE=\"$(INIT_FILE)\"
 
 ######################################
 ### Operating System Configuration ###
@@ -32,39 +32,13 @@ STRCASECMP_FLAG =
 #
 SHELL = /bin/sh
 
-# If your system has no readline support, remove this
-#
-READLINE_FLAGS = -DHAVE_READLINE#NOT-NT
-
 ##########################################
 ### Interpreter Customization Features ###
 #
 
-# use compact object representation (you might want
-# to comment this out and completely remake when
-# debugging)
-#
-SMALL_OBJECTS_FLAG= -DSMALL_OBJECTS
-
 # string to mark output of the interpreter
 OUTPUT_MARKER_FLAG = -DOUTPUT_MARKER='"=> "'
 #OUTPUT_MARKER_FLAG = -DOUTPUT_MARKER='""'
-
-#
-# optimize tail calls if OPTIMIZE_TAIL_CALLS is defined
-OPTIMIZE_TAIL_CALL_FLAG = -DOPTIMIZE_TAIL_CALLS
-
-#
-# cache methods in an attempt to improve GF invocation speed.
-METHOD_CACHING_FLAG = -DUSE_METHOD_CACHING
-
-# Determine class precedence algorithm to use
-#
-# L*Loops precedence
-PRECEDENCE_FLAG = -DUSE_LL_PRECEDENCE
-#
-# CLOS precedence
-#PRECEDENCE_FLAG = -DUSE_CLOS_PRECEDENCE
 
 ##########################################
 
@@ -78,13 +52,8 @@ PATCHFILE = $(PROGRAM)-$(PREVIOUS_VERSION)-$(VERSION).diff
 MARLAIS_FLAGS = $(SYS_FLAG) \
 	$(STRCASECMP_FLAG) \
 	$(INIT_FILE_FLAG) \
-	$(READLINE_FLAGS) \
-	$(SMALL_OBJECTS_FLAG) \
-	$(OPTIMIZE_TAIL_CALL_FLAG) \
 	$(OUTPUT_MARKER_FLAG) \
 	$(MISC_FLAGS) \
-	$(METHOD_CACHING_FLAG) \
-	$(PRECEDENCE_FLAG) \
 	 -DVERSION=\"$(VERSION)\"
 
 CC ?= gcc

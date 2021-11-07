@@ -409,7 +409,7 @@ make_generic_function (Object name, Object params, Object methods)
     parse_generic_function_parameters (obj, params);
     GFMETHODS (obj) = methods;
 
-#ifdef USE_METHOD_CACHING
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
     GFCACHE (obj) = marlais_make_table (50);	/* Maybe make 50 a define? */
     GFACTIVENM (obj) = make_empty_list ();
 #endif
@@ -517,7 +517,7 @@ make_method (Object name, Object params, Object body, struct frame *env, int do_
     METHBODY (obj) = body;
     METHENV (obj) = env;
 
-#ifdef USE_METHOD_CACHING
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
     /* create my handle (will redo if replacing existing method) */
     METHHANDLE (obj) = make_handle (obj);
 #endif
@@ -544,7 +544,7 @@ make_next_method (Object generic, Object rest_methods, Object args)
 
     obj = marlais_allocate_object (NextMethod, sizeof (struct next_method));
 
-#ifdef USE_METHOD_CACHING
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
     NMGF (obj) = generic;
     NMMETH (obj) = CAR (rest_methods);
     NMREST (obj) = CDR (rest_methods);
@@ -598,7 +598,7 @@ generic_function_make (Object arglist)
     }
     GFMETHODS (obj) = make_empty_list ();
 
-#ifdef USE_METHOD_CACHING
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
     GFCACHE (obj) = marlais_make_table (50);	/* Maybe make 50 a define? */
     GFACTIVENM (obj) = make_empty_list ();
 #endif
@@ -649,7 +649,7 @@ add_method (Object generic, Object method)
 /* check method for fit with generic specializers */
     old_specs = function_specializers (generic);
 
-#ifdef USE_METHOD_CACHING
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
     /* invalidate next methods when new method added. */
     next_meth_list = GFACTIVENM (generic);
     while (PAIRP (next_meth_list)) {
@@ -674,7 +674,7 @@ add_method (Object generic, Object method)
 	if (same_specializers (new_specs, old_specs)) {
 	    old_method = CAR (methods);
 
-#ifdef USE_METHOD_CACHING
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
 	    METHHANDLE (method) = METHHANDLE (old_method);
 	    HDLOBJ (METHHANDLE (method)) = method;
 #endif
@@ -692,7 +692,7 @@ add_method (Object generic, Object method)
     }
     GFMETHODS (generic) = cons (method, GFMETHODS (generic));
 
-#ifdef USE_METHOD_CACHING
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
     /* Invalidate the method cache */
     GFCACHE (generic) = marlais_make_table (50);
 #endif
@@ -927,7 +927,7 @@ applicable_method_p (Object argfun, Object sample_args, int strict_check)
     return (MARLAIS_TRUE);
 }
 
-#ifdef USE_METHOD_CACHING
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
 Object
 recalc_next_methods (Object fun, Object meth, Object sample_args)
 /* this function recalculates the end of the applicable methods list. */

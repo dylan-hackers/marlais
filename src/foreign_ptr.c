@@ -34,7 +34,7 @@
 
 #include "alloc.h"
 
-#ifndef SMALL_OBJECTS
+#ifndef MARLAIS_OBJECT_MODEL_SMALL
 Object
 make_foreign_ptr (void *ptr)
 {

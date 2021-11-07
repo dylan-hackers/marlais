@@ -8,7 +8,7 @@
 #include "prim.h"
 #include "values.h"
 
-#ifdef BIG_INTEGERS
+#ifdef MARLAIS_ENABLE_BIG_INTEGERS
 #include "biginteger.h"
 #endif
 
@@ -148,7 +148,7 @@ marlais_register_number (void)
 
     marlais_register_prims (num, number_prims);
 
-#ifdef BIG_INTEGERS
+#ifdef MARLAIS_ENABLE_BIG_INTEGERS
     init_big_integer_prims ();
 #endif
 }
@@ -156,17 +156,17 @@ marlais_register_number (void)
 Object
 marlais_make_integer (DyInteger i)
 {
-#ifdef SMALL_OBJECTS
+#ifdef MARLAIS_OBJECT_MODEL_SMALL
   if (INT_ABS (i) <= MAX_SMALL_INT) {
 	return (MAKE_INT (i));
   } else {
-#if BIG_INTEGERS
+#if MARLAIS_ENABLE_BIG_INTEGERS
 	return make_big_integer (i);
-#else /* BIG_INTEGERS */
+#else /* MARLAIS_ENABLE_BIG_INTEGERS */
 	marlais_fatal("Integer to big!");
-#endif /* BIG_INTEGERS */
+#endif /* MARLAIS_ENABLE_BIG_INTEGERS */
   }
-#else /* SMALL_OBJECTS */
+#else /* MARLAIS_OBJECT_MODEL_SMALL */
   if (INT_ABS (i) <= MAX_SMALL_INT) {
 	Object obj;
 
@@ -175,13 +175,13 @@ marlais_make_integer (DyInteger i)
 	INTVAL (obj) = i;
 	return (obj);
   } else {
-#if BIG_INTEGERS
+#if MARLAIS_ENABLE_BIG_INTEGERS
 	return make_big_integer (i);
-#else /* BIG_INTEGERS */
+#else /* MARLAIS_ENABLE_BIG_INTEGERS */
 	marlais_fatal("Integer to big!");
-#endif /* BIG_INTEGERS */
+#endif /* MARLAIS_ENABLE_BIG_INTEGERS */
   }
-#endif /* SMALL_OBJECTS */
+#endif /* MARLAIS_OBJECT_MODEL_SMALL */
 }
 
 Object
@@ -347,7 +347,7 @@ prim_binary_int_minus (Object n1, Object n2)
     return (marlais_make_integer (INTVAL (n1) - INTVAL (n2)));
 }
 
-#ifdef BIG_INTEGERS
+#ifdef MARLAIS_ENABLE_BIG_INTEGERS
 
 static Object
 prim_binary_int_times (Object n1, Object n2)

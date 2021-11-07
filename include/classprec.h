@@ -34,10 +34,12 @@
 #ifndef CLASSPREC_H_
 #define CLASSPREC_H_
 
-#ifdef USE_LL_PRECEDENCE
+#if defined(MARLAIS_CLASS_PRECEDENCE_CLOS)
+#include "classprec-clos.h"
+#elif defined(MARLAIS_CLASS_PRECEDENCE_LL)
 #include "classprec-ll.h"
 #else
-#include "classprec-clos.h"
+#error No class precedence algorithm configured.
 #endif
 
 #endif

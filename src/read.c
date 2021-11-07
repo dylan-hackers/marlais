@@ -21,7 +21,7 @@
 #include "symbol.h"
 #include "vector.h"
 
-#ifdef BIG_INTEGERS
+#ifdef MARLAIS_ENABLE_BIG_INTEGERS
 #include "biginteger.h"
 #endif
 

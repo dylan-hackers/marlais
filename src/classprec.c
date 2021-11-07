@@ -30,8 +30,12 @@
 
  */
 
-#ifdef USE_LL_PRECEDENCE
+#include "common.h"
+
+#if defined(MARLAIS_CLASS_PRECEDENCE_CLOS)
+#include "classprec-close.c"
+#elif defined(MARLAIS_CLASS_PRECEDENCE_LL)
 #include "classprec-ll.c"
 #else
-#include "classprec-clos.c"
+#error No class precedence algorithm configured.
 #endif

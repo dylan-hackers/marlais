@@ -45,13 +45,15 @@ Stream,
     Environment
 } ObjectType;
 
-#ifdef SMALL_OBJECTS
+#if defined(MARLAIS_OBJECT_MODEL_SMALL)
 #include "object-small.h"
-#else
+#elif defined(MARLAIS_OBJECT_MODEL_LARGE)
 #include "object-large.h"
+#else
+#error No object model configured.
 #endif
 
-#ifdef SMALL_OBJECTS
+#ifdef MARLAIS_OBJECT_MODEL_SMALL
 #define MARLAIS_TRUE  (TRUEVAL)
 #define MARLAIS_FALSE (FALSEVAL)
 #else

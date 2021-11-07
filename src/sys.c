@@ -75,7 +75,7 @@ get_time ()
 
     (void) time (&time_loc);
 
-#ifndef SMALL_OBJECTS
+#ifndef MARLAIS_OBJECT_MODEL_SMALL
     time_loc = abs ((int) time_loc);
 #else
     time_loc &= POSITIVE_SMALL_INT_MASK;
@@ -91,7 +91,7 @@ get_clock ()
 
     clock_val = clock ();
 
-#ifndef SMALL_OBJECTS
+#ifndef MARLAIS_OBJECT_MODEL_SMALL
     clock_val = abs ((int) clock_val);
 #else
     clock_val = abs ((int) (clock_val << 2)) >> 2;

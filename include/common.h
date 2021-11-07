@@ -10,6 +10,7 @@
 #include <setjmp.h>
 #include <limits.h>
 
+#include "config.h"
 #include "compiler.h"
 #include "object.h"
 #include "globals.h"

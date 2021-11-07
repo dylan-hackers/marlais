@@ -16,7 +16,7 @@
 #include "slot.h"
 #include "stream.h"
 
-#ifdef BIG_INTEGERS
+#ifdef MARLAIS_ENABLE_BIG_INTEGERS
 #include "biginteger.h"
 #endif
 
@@ -78,7 +78,7 @@ marlais_print_object (Object fd, Object obj, int escaped)
     case Integer:
 	  fprintf (fp, "%d", INTVAL (obj));
 	  break;
-#ifdef BIG_INTEGERS
+#ifdef MARLAIS_ENABLE_BIG_INTEGERS
     case BigInteger:
 	  print_big_integer (fp, obj);
 	  break;

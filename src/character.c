@@ -60,7 +60,7 @@ marlais_register_character (void)
 Object
 marlais_make_character (char ch)
 {
-#ifdef SMALL_OBJECTS
+#ifdef MARLAIS_OBJECT_MODEL_SMALL
     return (MAKE_CHAR (ch));
 #else
     Object obj;

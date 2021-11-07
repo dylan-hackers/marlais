@@ -50,10 +50,9 @@ Object function_specializers (Object meth);
 Object applicable_method_p (Object fun, Object sample_args, int strict_check);
 Object generic_function_methods (Object gen);
 
-#ifdef USE_METHOD_CACHING
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
 Object recalc_next_methods (Object fun, Object meth, Object sample_args);
 Object sorted_possible_method_handles (Object fun, Object sample_args);
-
 #endif
 
 #endif
