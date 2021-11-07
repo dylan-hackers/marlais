@@ -8,9 +8,13 @@ trim_trailing_whitespace = true
 
 [Makefile]
 indent_style = tab
-tab_width = 4
+tab_width = 8
 
-[*.c,*.h]
+[{*.c,*.h}]
+indent_style = space
+indent_size = 4
+
+[{*.l,*.y}]
 indent_style = space
 indent_size = 4
 
