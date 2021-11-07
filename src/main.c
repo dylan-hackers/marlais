@@ -488,7 +488,7 @@ initialize_marlais (void)
   init_env_prims ();
   init_list_prims ();
   init_class_prims ();
-  init_slot_prims ();
+  marlais_register_slot ();
   init_file_prims ();
   init_function_prims ();
   marlais_register_values ();

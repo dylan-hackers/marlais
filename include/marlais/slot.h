@@ -36,21 +36,21 @@
 
 #include <marlais/common.h>
 
-void init_slot_prims (void);
-Object slot_name (Object slot);
-Object slot_getter (Object slot);
-Object slot_setter (Object slot);
-Object slot_type (Object slot);
-Object slot_init_value (Object slot);
-Object slot_init_function (Object slot);
-Object slot_init_keyword (Object slot);
-Object slot_required_init_keyword (Object slot);
-Object slot_allocation (Object slot);
-Object slot_value (Object instance, Object name);
-Object set_slot_value (Object instance, Object name, Object val);
-Object make_slot_descriptor (unsigned char properties, Object getter,
-			     Object setter, Object type, Object init,
-			     Object init_keyword, Object allocation,
-			     Object dynamism);
+extern void marlais_register_slot (void);
+extern Object marlais_slot_name (Object slot);
+extern Object marlais_slot_getter (Object slot);
+extern Object marlais_slot_setter (Object slot);
+extern Object marlais_slot_type (Object slot);
+extern Object marlais_slot_init_value (Object slot);
+extern Object marlais_slot_init_function (Object slot);
+extern Object marlais_slot_init_keyword (Object slot);
+extern Object marlais_slot_required_init_keyword (Object slot);
+extern Object marlais_slot_allocation (Object slot);
+extern Object marlais_slot_value (Object instance, Object name);
+extern Object marlais_set_slot_value (Object instance, Object name, Object val);
+extern Object marlais_make_slot_descriptor (unsigned char properties, Object getter,
+					    Object setter, Object type, Object init,
+					    Object init_keyword, Object allocation,
+					    Object dynamism);
 
 #endif

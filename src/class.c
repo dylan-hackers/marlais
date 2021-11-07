@@ -615,7 +615,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
   tmp_slotds = init_slotds;
   for (i = 0; PAIRP (tmp_slotds); tmp_slotds = CDR (tmp_slotds), i++) {
     slotd = CAR (tmp_slotds);
-    slots[i] = listem (slot_init_value (slotd), SLOTDSLOTTYPE (slotd), NULL);
+    slots[i] = listem (marlais_slot_init_value (slotd), SLOTDSLOTTYPE (slotd), NULL);
   }
   return marlais_construct_values (2, slots, append (default_initializers,
 						     extra_initializers));
@@ -1454,7 +1454,7 @@ slot_descriptor_list (Object slots, int do_eval)
       }
     }
     *desc_ptr =
-      cons (make_slot_descriptor (properties, getter, setter, type,
+      cons (marlais_make_slot_descriptor (properties, getter, setter, type,
 				  init, init_keyword, allocation,
 				  dynamism),
 	    make_empty_list ());
