@@ -93,7 +93,7 @@ marlais_make_bytestring_entry (Object args)
   if (fill_obj != MARLAIS_FALSE) {
     if (!CHARP (fill_obj)) {
       marlais_error ("make: value of fill: must be a character for <string> class",
-	     fill_obj, NULL);
+                     fill_obj, NULL);
     }
     fill = CHARVAL (fill_obj);
   } else {
@@ -113,7 +113,7 @@ marlais_make_bytestring_entry (Object args)
   return (res);
 }
 
-/* Static functions */
+/* Internal functions */
 
 static Object
 string_element (Object string, Object index, Object default_ob)
@@ -122,11 +122,11 @@ string_element (Object string, Object index, Object default_ob)
 
     i = INTVAL (index);
     if ((i < 0) || (i >= BYTESTRSIZE (string))) {
-	if (default_ob == default_object) {
-	    marlais_error ("element: argument out of range", string, index, NULL);
-	} else {
-	    return default_ob;
-	}
+      if (default_ob == default_object) {
+        marlais_error ("element: argument out of range", string, index, NULL);
+      } else {
+        return default_ob;
+      }
     }
     return (marlais_make_character (BYTESTRVAL (string)[i]));
 }
@@ -138,7 +138,7 @@ string_element_setter (Object string, Object index, Object val)
 
     i = INTVAL (index);
     if ((i < 0) || (i >= BYTESTRSIZE (string))) {
-	marlais_error ("element-setter: argument out of range", string, index, NULL);
+      marlais_error ("element-setter: argument out of range", string, index, NULL);
     }
     BYTESTRVAL (string)[i] = CHARVAL (val);
     return (unspecified_object);
@@ -156,7 +156,7 @@ string_size_setter (Object size, Object string)
     int new_size = INTVAL (size);
 
     if ((new_size < 0) || (new_size >= BYTESTRSIZE (string))) {
-	marlais_error ("size-setter: new size out of range", new_size, string, NULL);
+      marlais_error ("size-setter: new size out of range", new_size, string, NULL);
     }
     BYTESTRSIZE (string) = new_size;
     BYTESTRVAL (string)[new_size] = '\0';
@@ -181,12 +181,12 @@ static Object
 string_lessthan (Object str1, Object str2)
 {
     return (strcmp (BYTESTRVAL (str1), BYTESTRVAL (str2)) < 0) ?
-	MARLAIS_TRUE : MARLAIS_FALSE;
+      MARLAIS_TRUE : MARLAIS_FALSE;
 }
 
 static Object
 string_equal (Object str1, Object str2)
 {
     return (strcmp (BYTESTRVAL (str1), BYTESTRVAL (str2)) == 0) ?
-	MARLAIS_TRUE : MARLAIS_FALSE;
+      MARLAIS_TRUE : MARLAIS_FALSE;
 }
