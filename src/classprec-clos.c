@@ -35,7 +35,8 @@
 #include <marlais/list.h>
 #include <marlais/print.h>
 
-/* local functions */
+/* Internal function declarations */
+
 static void print_pnode (Object pnode);
 static void print_slist (Object slist);
 
@@ -53,17 +54,17 @@ static void remove_node_from_slist (Object *slist, Object node);
 static int direct_superclassp (Object super, Object sub);
 static Object find_minimal_elements (Object slist);
 
-/* macros */
+/* Internal macros */
 
 #define MAKE_PNODE(class) (cons (class, cons (make_empty_list(), (cons (make_empty_list(), make_empty_list())))))
 #define PNODE_CLASS(pnode)        (CAR (pnode))
 #define PNODE_SUCCESSORS(pnode)   (CAR (CDR (pnode)))
 #define PNODE_PREDECESSORS(pnode) (CAR (CDR (CDR (pnode))))
 
-/* functions */
+/* Exported functions */
 
 Object
-compute_class_precedence_list (Object class)
+marlais_compute_class_precedence_list (Object class)
 {
     Object slist, class_list, *candidate_list_ptr;
     Object minimal_element_set, node;
@@ -180,6 +181,42 @@ compute_class_precedence_list (Object class)
     return CLASSPRECLIST (class);
 }
 
+/* Internal functions */
+
+static void
+print_pnode (Object pnode)
+{
+    Object nlist;
+
+    fprintf (stderr, "[%s]\n Successors: ",
+	     SYMBOLNAME (CLASSNAME (PNODE_CLASS (pnode))));
+    for (nlist = PNODE_SUCCESSORS (pnode);
+	 PAIRP (nlist);
+	 nlist = CDR (nlist)) {
+	fprintf (stderr, "%s ",
+		 SYMBOLNAME (CLASSNAME (PNODE_CLASS (CAR (nlist)))));
+    }
+    fprintf (stderr, "\n Predecessors: ");
+    for (nlist = PNODE_PREDECESSORS (pnode);
+	 PAIRP (nlist);
+	 nlist = CDR (nlist)) {
+	fprintf (stderr, "%s ",
+		 SYMBOLNAME (CLASSNAME (PNODE_CLASS (CAR (nlist)))));
+    }
+    fprintf (stderr, "\n");
+}
+
+static void
+print_slist (Object slist)
+{
+    Object p;
+
+    for (p = slist; PAIRP (p); p = CDR (p)) {
+	marlais_print_object (standard_output_symbol, CLASSNAME (PNODE_CLASS (CAR (p))), 0);
+	fprintf (stdout, " ");
+    }
+}
+
 static void
 construct_slist (Object *sptr, Object class)
 {
@@ -294,6 +331,7 @@ remove_successor_from_predecessors (Object node)
 	remove_one_successor_arc (CAR (pred_list), node);
     }
 }
+
 static void
 remove_node_from_slist (Object *slist, Object node)
 {
@@ -327,45 +365,6 @@ direct_superclassp (Object super, Object sub)
     }
     return 0;
 }
-
-/*
- * I left this in for debugging purposes
- */
-
-static void
-print_pnode (Object pnode)
-{
-    Object nlist;
-
-    fprintf (stderr, "[%s]\n Successors: ",
-	     SYMBOLNAME (CLASSNAME (PNODE_CLASS (pnode))));
-    for (nlist = PNODE_SUCCESSORS (pnode);
-	 PAIRP (nlist);
-	 nlist = CDR (nlist)) {
-	fprintf (stderr, "%s ",
-		 SYMBOLNAME (CLASSNAME (PNODE_CLASS (CAR (nlist)))));
-    }
-    fprintf (stderr, "\n Predecessors: ");
-    for (nlist = PNODE_PREDECESSORS (pnode);
-	 PAIRP (nlist);
-	 nlist = CDR (nlist)) {
-	fprintf (stderr, "%s ",
-		 SYMBOLNAME (CLASSNAME (PNODE_CLASS (CAR (nlist)))));
-    }
-    fprintf (stderr, "\n");
-}
-
-static void
-print_slist (Object slist)
-{
-    Object p;
-
-    for (p = slist; PAIRP (p); p = CDR (p)) {
-	marlais_print_object (standard_output_symbol, CLASSNAME (PNODE_CLASS (CAR (p))), 0);
-	fprintf (stdout, " ");
-    }
-}
-
 
 static Object
 find_minimal_elements (Object slist)

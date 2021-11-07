@@ -12,25 +12,43 @@
 extern Object standard_error_stream;
 #endif
 
-/* local functions */
-static prec_graph build_l_graph (Object class, Object direct_superclasses);
+/* Internal types */
+
+typedef struct prec_graph {
+    Object *class_vec;
+    int *succ_vec;
+    int succ_size;
+    int num_classes;
+} prec_graph;
+
+typedef struct l_list {
+    int size;
+    int *vec;
+} l_list;
+
+/* Internal function Declarations */
+
 static void print_graph (prec_graph graph);
+static void print_l_list (l_list arg, prec_graph graph);
+
+static prec_graph build_l_graph (Object class, Object direct_superclasses);
 static int get_class_index (Object class, prec_graph graph);
 static void concatenate_successor (prec_graph graph,
 				   int class_index,
 				   int successor_class_index);
 static Object loops (Object class, prec_graph graph);
-static l_list loops_concatenate (l_list list1, l_list list2, prec_graph graph);
-static void print_l_list (l_list arg, prec_graph graph);
-static Object l_list_to_class_list (l_list this_l_list, prec_graph graph);
 static l_list step (int class_index, int *subs, prec_graph graph);
+static l_list loops_concatenate (l_list list1, l_list list2, prec_graph graph);
+static Object l_list_to_class_list (l_list this_l_list, prec_graph graph);
 
-/* macros */
+/* Internal macros */
+
 #define NO_MORE_SUCCS(x)	(-1 == x)
 
-/* functions */
+/* Exported functions */
+
 Object
-compute_class_precedence_list (Object class)
+marlais_compute_class_precedence_list (Object class)
 {
     Object cpl;
     prec_graph graph;
@@ -41,8 +59,44 @@ compute_class_precedence_list (Object class)
     return cpl;
 }
 
-static
-  prec_graph
+/* Internal functions */
+
+static void
+print_graph (prec_graph graph)
+{
+    int i, j, index;
+
+    printf ("graph\n");
+    index = 0;
+    for (i = 0; i < graph.num_classes; i++) {
+	printf ("  class: ");
+	marlais_print_obj (marlais_standard_error, graph.class_vec[i]);
+	printf ("   successors:\n");
+	for (j = 0; j < graph.succ_size; j++, index++) {
+	    if (graph.succ_vec[index] != -1) {
+		printf ("              ");
+		marlais_print_obj (marlais_standard_error,
+				   graph.class_vec[graph.succ_vec[index]]);
+		printf ("\n");
+	    }
+	}
+    }
+}
+
+static void
+print_l_list (l_list arg, prec_graph graph)
+{
+    int i;
+
+    printf ("l-list :size = %d", arg.size);
+    for (i = 0; i < arg.size; i++) {
+	printf ("       [%d] = ", i);
+	marlais_print_obj (marlais_standard_error, graph.class_vec[arg.vec[i]]);
+	printf ("\n");
+    }
+}
+
+static prec_graph
 build_l_graph (Object class,
 	       Object direct_superclasses)
 {
@@ -113,29 +167,6 @@ build_l_graph (Object class,
     return graph;
 }
 
-static
-void
-print_graph (prec_graph graph)
-{
-    int i, j, index;
-
-    printf ("graph\n");
-    index = 0;
-    for (i = 0; i < graph.num_classes; i++) {
-	printf ("  class: ");
-	marlais_print_obj (marlais_standard_error, graph.class_vec[i]);
-	printf ("   successors:\n");
-	for (j = 0; j < graph.succ_size; j++, index++) {
-	    if (graph.succ_vec[index] != -1) {
-		printf ("              ");
-		marlais_print_obj (marlais_standard_error,
-				   graph.class_vec[graph.succ_vec[index]]);
-		printf ("\n");
-	    }
-	}
-    }
-}
-
 static int
 get_class_index (Object class, prec_graph graph)
 {
@@ -163,8 +194,7 @@ get_class_index (Object class, prec_graph graph)
 		  NULL);
 }
 
-static
-void
+static void
 concatenate_successor (prec_graph graph,
 		       int class_index,
 		       int successor_class_index)
@@ -188,8 +218,7 @@ concatenate_successor (prec_graph graph,
     marlais_error ("Too many successors for class", NULL);
 }
 
-static
-Object
+static Object
 loops (Object class,
        prec_graph graph)
 {
@@ -225,8 +254,7 @@ loops (Object class,
     return l_list_to_class_list (new_list, graph);
 }
 
-static
-  l_list
+static l_list
 step (int class_index, int *subs, prec_graph graph)
 {
     int i;
@@ -259,8 +287,7 @@ step (int class_index, int *subs, prec_graph graph)
     return this_l_list;
 }
 
-static
-  l_list
+static l_list
 loops_concatenate (l_list l_list1, l_list l_list2, prec_graph graph)
 {
     l_list new_l_list;
@@ -297,22 +324,7 @@ loops_concatenate (l_list l_list1, l_list l_list2, prec_graph graph)
     return new_l_list;
 }
 
-static
-void
-print_l_list (l_list arg, prec_graph graph)
-{
-    int i;
-
-    printf ("l-list :size = %d", arg.size);
-    for (i = 0; i < arg.size; i++) {
-	printf ("       [%d] = ", i);
-	marlais_print_obj (marlais_standard_error, graph.class_vec[arg.vec[i]]);
-	printf ("\n");
-    }
-}
-
-static
-Object
+static Object
 l_list_to_class_list (l_list this_l_list, prec_graph graph)
 {
     Object new_list;
