@@ -205,7 +205,7 @@ marlais_print_object (Object fd, Object obj, int escaped)
 	  fprintf (fp, "}");
 	  break;
     case ForeignPtr:		/* <pcb> my foreign pointer type. */
-	  fprintf (fp, "{foreign pointer 0x%08x}", (int) FOREIGNPTR (obj));
+	  fprintf (fp, "{foreign pointer %p}", FOREIGNPTR (obj));
 	  break;
     case Environment:
 	  fprintf (fp, "{environment object ");
