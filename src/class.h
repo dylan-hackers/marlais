@@ -33,7 +33,6 @@ Object singleton (Object val);
 Object direct_superclasses (Object class);
 Object direct_subclasses (Object class);
 Object same_class_p (Object class1, Object class2);
-Object eval_slots (Object slots);
 Object eval_slot (Object slot);
 Object eval_slot_key_values (Object slot_tail);
 Object find_getter_name (Object slot);

@@ -29,6 +29,5 @@ extern Object empty_string;
 typedef Object (*syntax_fun) (Object);
 void init_syntax_table (void);
 syntax_fun syntax_function (Object sym);
-Object eval_slots (Object slots);
 
 #endif
