@@ -729,7 +729,7 @@ add_variable_binding (Object var,
       marlais_error ("badly formed variable", var, NULL);
     }
     type = eval (SECOND (var));
-    if (!instance (type, type_class)) {
+    if (!marlais_instance (type, type_class)) {
       marlais_error ("badly formed variable", var, NULL);
     }
   } else {
@@ -739,7 +739,7 @@ add_variable_binding (Object var,
     /* add_top_level_binding can't easily check type match.
      * do it here.
      */
-    if (!instance (val, type)) {
+    if (!marlais_instance (val, type)) {
       marlais_error ("initial value does not satisfy type constraint",
 	     val,
 	     type,
@@ -821,9 +821,9 @@ define_class_eval (Object form)
   add_top_level_binding (name, obj, 0);
   supers = map (eval, CAR (tmp_form));
   if(EMPTYLISTP(supers)) supers = cons(object_class, make_empty_list());
-  slots = slot_descriptor_list (CDR (tmp_form), 1);
-  make_getter_setter_gfs (slots);
-  class = make_class (obj, supers, slots,
+  slots = marlais_make_slot_descriptor_list (CDR (tmp_form), 1);
+  marlais_make_getter_setter_gfs (slots);
+  class = marlais_make_class (obj, supers, slots,
 		      (abstract_class ? MARLAIS_TRUE : MARLAIS_FALSE), NULL);
 
   /* kludge to put these here.  Better to add a param to make_class. */
@@ -831,7 +831,7 @@ define_class_eval (Object form)
 
   /*
     if (abstract_class) {
-    make_uninstantiable (class);
+    marlais_make_class_uninstantiable (class);
     }
   */
   if (!open_class) {
@@ -839,11 +839,11 @@ define_class_eval (Object form)
      * Need to address sealed vs. open classes with library additions.
      */
     /*
-      seal (class);
+      marlais_make_class_sealed (class);
     */
   }
   if (primary_class) {
-    make_primary (class);
+    marlais_make_class_primary (class);
   }
   return (name);
 }

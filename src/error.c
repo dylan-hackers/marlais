@@ -337,7 +337,7 @@ marlais_error (char *msg,...)
   signal_value = symbol_value (signal_symbol);
   if (signal_value) {
     marlais_apply (signal_value,
-	   cons (make (simple_error_class, make_empty_list ()),
+	   cons (marlais_make (simple_error_class, make_empty_list ()),
 		 make_empty_list ()));
   } else {
     longjmp (error_return, 1);

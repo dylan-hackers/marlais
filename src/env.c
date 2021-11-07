@@ -215,7 +215,7 @@ add_binding (Object sym, Object val, int constant, struct frame *to_frame)
     }
     binding->val = (Object *) marlais_allocate_memory (sizeof (Object *));
 
-    if (!instance (val, binding->type)) {
+    if (!marlais_instance (val, binding->type)) {
 	marlais_error ("add_binding: value does not satisfy type constraint",
 	       val,
 	       binding->type,
@@ -257,7 +257,7 @@ change_binding (Object sym, Object val)
 	return (0);
     } else {
 /*
-   if ( ! instance (val, binding->type)) {
+   if ( ! marlais_instance (val, binding->type)) {
  */
 	*(binding->val) = val;
 	return 1;
@@ -292,7 +292,7 @@ modify_value (Object sym, Object new_val)
 	marlais_error ("attempt to modify value of unbound symbol", sym, NULL);
     } else if (IS_CONSTANT_BINDING (binding)) {
 	marlais_error ("attempt to modify value of a constant", sym, NULL);
-    } else if (instance (new_val, binding->type)) {
+    } else if (marlais_instance (new_val, binding->type)) {
 	*(binding->val) = new_val;
     } else {
 	marlais_error ("attempt to assign variable an incompatible object",

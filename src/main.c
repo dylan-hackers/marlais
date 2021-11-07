@@ -464,7 +464,7 @@ initialize_marlais (void)
   princ_symbol = make_symbol ("object-princ");
 
   /* initialize builtin classes */
-  init_class_hierarchy ();
+  marlais_initialize_class ();
 
   unspecified_object = make_unspecified_object ();
 
@@ -487,7 +487,7 @@ initialize_marlais (void)
   /* initialize primitives */
   init_env_prims ();
   init_list_prims ();
-  init_class_prims ();
+  marlais_register_class ();
   marlais_register_slot ();
   init_file_prims ();
   init_function_prims ();

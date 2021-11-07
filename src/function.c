@@ -621,7 +621,7 @@ static int
 sub_specializers (Object s1, Object s2)
 {
     while (!EMPTYLISTP (s1) && !EMPTYLISTP (s2)) {
-	if (!subtype (CAR (s1), CAR (s2))) {
+	if (!marlais_subtype (CAR (s1), CAR (s2))) {
 	    return (0);
 	}
 	s1 = CDR (s1);
@@ -878,7 +878,7 @@ applicable_method_p (Object argfun, Object sample_args, int strict_check)
 	   types of the sample args? */
 	samples = sample_args;
 	for (i = 0; i < num_required; ++i) {
-	    if (!instance (CAR (samples), CAR (specs))) {
+	    if (!marlais_instance (CAR (samples), CAR (specs))) {
 		goto fail;
 /*              return (MARLAIS_FALSE); */
 	    }
@@ -1008,7 +1008,7 @@ broad_class (Object obj)
     Object class_list, union_types;
 
     if (SINGLETONP (obj)) {
-	return (objectclass (SINGLEVAL (obj)));
+	return (marlais_object_class (SINGLEVAL (obj)));
     } else if (LIMINTP (obj)) {
 	return (integer_class);
     } else if (UNIONP (obj)) {
@@ -1018,7 +1018,7 @@ broad_class (Object obj)
 	    class_list = cons (broad_class (CAR (union_types)), class_list);
 	    union_types = CDR (union_types);
 	}
-	return (make_union_type (class_list));
+	return (marlais_make_union_type (class_list));
     } else {
 	return (obj);
     }
@@ -1045,7 +1045,7 @@ possible_method (Object meth, Object class_list)
      * class list? */
     samples = class_list;
     for (i = 0; i < num_required; ++i) {
-	if (!subtype (CAR (samples), broad_class (CAR (specs)))) {
+	if (!marlais_subtype (CAR (samples), broad_class (CAR (specs)))) {
 	    return (0);
 	}
 	samples = CDR (samples);
@@ -1063,7 +1063,7 @@ make_class_list (Object args, int count)
     if (EMPTYLISTP (args) || !count) {
 	return (make_empty_list ());
     }
-    return (cons (objectclass (CAR (args)), make_class_list (CDR (args), count - 1)));
+    return (cons (marlais_object_class (CAR (args)), make_class_list (CDR (args), count - 1)));
 }
 
 Object
@@ -1182,7 +1182,7 @@ static int
 same_specializers (Object s1, Object s2)
 {
     while (!EMPTYLISTP (s1) && !EMPTYLISTP (s2)) {
-	if (same_class_p (CAR (s1), CAR (s2)) == MARLAIS_FALSE) {
+	if (marlais_same_class_p (CAR (s1), CAR (s2)) == MARLAIS_FALSE) {
 	    return (0);
 	}
 	s1 = CDR (s1);
@@ -1210,7 +1210,7 @@ specializer_compare (Object s1, Object s2)
 
 	if (spec1 == spec2) {
 	    /* No help from this specializer */
-	} else if (subtype (spec1, spec2)) {
+	} else if (marlais_subtype (spec1, spec2)) {
 	    /* This suggests less than */
 	    if (ret <= 0) {
 		ret = -1;
@@ -1221,7 +1221,7 @@ specializer_compare (Object s1, Object s2)
 		 */
 		return 0;
 	    }
-	} else if (subtype (spec2, spec1)) {
+	} else if (marlais_subtype (spec2, spec1)) {
 	    /* This suggests greater than */
 	    if (ret >= 0) {
 		ret = 1;
@@ -1230,7 +1230,7 @@ specializer_compare (Object s1, Object s2)
 		return 0;
 	    }
 	} else if (CLASSP (spec1) && CLASSP (spec2)) {
-	    for (class_list = CLASSPRECLIST (objectclass (arg));
+	    for (class_list = CLASSPRECLIST (marlais_object_class (arg));
 		 PAIRP (class_list);
 		 class_list = CDR (class_list)) {
 		if (spec1 == CAR (class_list)) {
@@ -1249,10 +1249,10 @@ specializer_compare (Object s1, Object s2)
 		    }
 		}
 	    }
-	} else if (instance (arg, spec1)
-		   && instance (arg, spec2)
-		   && (!subtype (spec1, spec2))
-		   && (!subtype (spec2, spec1))) {
+	} else if (marlais_instance (arg, spec1)
+		   && marlais_instance (arg, spec2)
+		   && (!marlais_subtype (spec1, spec2))
+		   && (!marlais_subtype (spec2, spec1))) {
 	    /* These are ambiguous according to Design Note 8 */
 	    return 0;
 	}
