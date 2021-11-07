@@ -532,7 +532,7 @@ initialize_marlais (void)
   marlais_register_error ();
   marlais_register_stream ();
   marlais_register_read ();
-  init_table_prims ();
+  marlais_register_table ();
   marlais_register_character ();
   marlais_register_deque ();
   marlais_register_array ();

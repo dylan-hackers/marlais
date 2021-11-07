@@ -49,9 +49,11 @@ extern Object dylan_symbol;
 
 /* local function prototypes */
 
+static Object make_table_entry (int row, Object key, Object value, Object next);
 static Object *table_element_handle (Object table,
 				     Object key,
 				     Object *default_val);
+static int table_vectors_equal (Object vec1, Object vec2);
 static Object table_initial_state (Object table);
 static Object table_next_state (Object table, Object state);
 static Object table_current_element (Object table, Object state);
@@ -69,8 +71,8 @@ static Object table_default = NULL;
 
 static struct primitive table_prims[] =
 {
-  {"%table-element", prim_3, table_element},
-  {"%table-element-setter", prim_3, table_element_setter},
+  {"%table-element", prim_3, marlais_table_element},
+  {"%table-element-setter", prim_3, marlais_table_element_setter},
   {"%table-initial-state", prim_1, table_initial_state},
   {"%table-next-state", prim_2, table_next_state},
   {"%table-current-element", prim_2, table_current_element},
@@ -80,7 +82,7 @@ static struct primitive table_prims[] =
 };
 
 void
-init_table_prims (void)
+marlais_register_table (void)
 {
   int num = sizeof (table_prims) / sizeof (struct primitive);
   init_prims (num, table_prims);
@@ -88,7 +90,7 @@ init_table_prims (void)
 }
 
 Object
-make_table (int size)
+marlais_make_table (int size)
 {
   Object obj = marlais_allocate_object (ObjectTable, sizeof (struct table));
 
@@ -100,24 +102,12 @@ make_table (int size)
 }
 
 Object
-make_table_entry (int row, Object key, Object value, Object next)
-{
-  Object obj = marlais_allocate_object (TableEntry, sizeof (struct table_entry));
-
-  TEROW (obj) = row;
-  TEKEY (obj) = key;
-  TEVALUE (obj) = value;
-  TENEXT (obj) = next;
-  return (obj);
-}
-
-Object
-make_table_driver (Object rest)
+marlais_make_table_driver (Object rest)
 {
   Object size;
 
   if (EMPTYLISTP (rest)) {
-    return (make_table (DEFAULT_TABLE_SIZE));
+    return (marlais_make_table (DEFAULT_TABLE_SIZE));
   } else if (CAR (rest) == size_keyword) {
     rest = CDR (rest);
     if (EMPTYLISTP (rest)) {
@@ -127,30 +117,39 @@ make_table_driver (Object rest)
     if (!INTEGERP (size)) {
       marlais_error ("make: argument to size keyword must be an integer", size, NULL);
     }
-    return (make_table (INTVAL (size)));
+    return (marlais_make_table (INTVAL (size)));
   } else {
     return marlais_error ("make: bad keywords or arguments", rest, NULL);
   }
 }
 
-/* local functions */
-
-static int
-vectors_equal (Object vec1, Object vec2)
+Object
+marlais_table_element (Object table, Object key, Object default_val)
 {
-  int i;
+  return *table_element_handle (table, key, &default_val);
+}
 
-  if (SOVSIZE (vec1) != SOVSIZE (vec2))
-    return (0);
-  for (i = 0; i < SOVSIZE (vec1); i++) {
-    if (SOVELS (vec1)[i] != SOVELS (vec2)[i])
-      return (0);
+Object
+marlais_table_element_setter (Object table, Object key, Object val)
+{
+  Object hval, entry;
+  Object *element_handle;
+  int h;
+
+  if ((element_handle = table_element_handle (table, key, &table_default))
+      != &table_default) {
+    *element_handle = val;
+  } else {
+    hval = equal_hash (key);
+    h = abs (INTVAL (hval)) % TABLESIZE (table);
+    entry = make_table_entry (h, key, val, TABLETABLE (table)[h]);
+    TABLETABLE (table)[h] = entry;
   }
-  return (1);
+  return (unspecified_object);
 }
 
 Object *
-table_element_by_vector (Object table, Object key)
+marlais_table_element_by_vector (Object table, Object key)
 {
   Object hval, entry;
   int h;
@@ -160,7 +159,7 @@ table_element_by_vector (Object table, Object key)
   entry = TABLETABLE (table)[h];
 
   while (entry) {
-    if (vectors_equal (key, TEKEY (entry))) {
+    if (table_vectors_equal (key, TEKEY (entry))) {
       return (TEVALUE (entry));
     }
     entry = TENEXT (entry);
@@ -169,13 +168,13 @@ table_element_by_vector (Object table, Object key)
 }
 
 Object
-table_element_setter_by_vector (Object table, Object key, Object val)
+marlais_table_element_setter_by_vector (Object table, Object key, Object val)
 {
   Object hval, entry;
   Object *element_handle;
   int h;
 
-  element_handle = table_element_by_vector (table, key);
+  element_handle = marlais_table_element_by_vector (table, key);
   if (element_handle) {
     *element_handle = val;
   } else {
@@ -188,10 +187,18 @@ table_element_setter_by_vector (Object table, Object key, Object val)
   return (unspecified_object);
 }
 
-Object
-table_element (Object table, Object key, Object default_val)
+/* local functions */
+
+static Object
+make_table_entry (int row, Object key, Object value, Object next)
 {
-  return *table_element_handle (table, key, &default_val);
+  Object obj = marlais_allocate_object (TableEntry, sizeof (struct table_entry));
+
+  TEROW (obj) = row;
+  TEKEY (obj) = key;
+  TEVALUE (obj) = value;
+  TENEXT (obj) = next;
+  return (obj);
 }
 
 static Object *
@@ -225,24 +232,18 @@ table_element_handle (Object table, Object key, Object *default_val)
   }
 }
 
-
-Object
-table_element_setter (Object table, Object key, Object val)
+static int
+table_vectors_equal (Object vec1, Object vec2)
 {
-  Object hval, entry;
-  Object *element_handle;
-  int h;
+  int i;
 
-  if ((element_handle = table_element_handle (table, key, &table_default))
-      != &table_default) {
-    *element_handle = val;
-  } else {
-    hval = equal_hash (key);
-    h = abs (INTVAL (hval)) % TABLESIZE (table);
-    entry = make_table_entry (h, key, val, TABLETABLE (table)[h]);
-    TABLETABLE (table)[h] = entry;
+  if (SOVSIZE (vec1) != SOVSIZE (vec2))
+    return (0);
+  for (i = 0; i < SOVSIZE (vec1); i++) {
+    if (SOVELS (vec1)[i] != SOVELS (vec2)[i])
+      return (0);
   }
-  return (unspecified_object);
+  return (1);
 }
 
 /* iteration protocol */

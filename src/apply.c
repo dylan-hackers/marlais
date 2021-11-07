@@ -556,7 +556,7 @@ getCacheEntry (Object gen, Object args)
     Object arg_vec, cacheEntry;
 
     arg_vec = get_specializers (gen, args);
-    cacheEntry = table_element_by_vector (GFCACHE (gen), arg_vec);
+    cacheEntry = marlais_table_element_by_vector (GFCACHE (gen), arg_vec);
     return (cacheEntry);
 }
 
@@ -567,7 +567,7 @@ add_method_cache (Object gen, Object args)
 
     arg_vec = get_specializers (gen, args);
     new_item = sorted_possible_method_handles (gen, args);
-    table_element_setter_by_vector (GFCACHE (gen), arg_vec, new_item);
+    marlais_table_element_setter_by_vector (GFCACHE (gen), arg_vec, new_item);
     return (new_item);
 }
 

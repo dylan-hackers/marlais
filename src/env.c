@@ -439,7 +439,7 @@ new_module (Object module_name)
     this_module = MARLAIS_ALLOCATE_STRUCT (struct module_binding);
     this_module->sym = module_name;
     this_module->namespace = initialize_namespace (module_name);
-    this_module->exported_bindings = make_table (DEFAULT_TABLE_SIZE);
+    this_module->exported_bindings = marlais_make_table (DEFAULT_TABLE_SIZE);
 
 
     modules.bindings = (struct module_binding **)
@@ -549,9 +549,9 @@ use_module (Object module_name,
     /*
      * Store property sets in tables for quick reference.
      */
-    renames_table = make_table (DEFAULT_TABLE_SIZE);
+    renames_table = marlais_make_table (DEFAULT_TABLE_SIZE);
     if (imports != all_symbol) {
-	imports_table = make_table (DEFAULT_TABLE_SIZE);
+	imports_table = marlais_make_table (DEFAULT_TABLE_SIZE);
 	fill_imports_table_from_property_set (imports_table,
 					      imports,
 					      renames_table);
@@ -559,12 +559,12 @@ use_module (Object module_name,
 	all_imports = 1;
     }
 
-    exclusions_table = make_table (DEFAULT_TABLE_SIZE);
+    exclusions_table = marlais_make_table (DEFAULT_TABLE_SIZE);
     fill_table_from_property_set (exclusions_table, exclusions);
 
     fill_table_from_property_set (renames_table, renames);
     if (exports != all_symbol) {
-	exports_table = make_table (DEFAULT_TABLE_SIZE);
+	exports_table = marlais_make_table (DEFAULT_TABLE_SIZE);
 	fill_table_from_property_set (exports_table, exports);
     }
     if (prefix == empty_string) {
@@ -591,11 +591,11 @@ use_module (Object module_name,
 	    while (binding) {
 		if (IS_EXPORTED_BINDING (binding) &&
 		    (import_module->exported_bindings == all_symbol ||
-		     table_element (import_module->exported_bindings,
+		     marlais_table_element (import_module->exported_bindings,
 				    binding->sym,
 				    MARLAIS_FALSE) != MARLAIS_FALSE) &&
 		    (all_imports ||
-		     (table_element (imports_table, binding, MARLAIS_FALSE)
+		     (marlais_table_element (imports_table, binding, MARLAIS_FALSE)
 		      != MARLAIS_FALSE))) {
 
 		    /*
@@ -607,7 +607,7 @@ use_module (Object module_name,
 		    /*
 		     * See what the bindings name needs to be.
 		     */
-		    if ((new_sym = table_element (renames_table,
+		    if ((new_sym = marlais_table_element (renames_table,
 						  binding->sym,
 						  MARLAIS_FALSE))
 			== MARLAIS_FALSE) {
@@ -651,7 +651,7 @@ use_module (Object module_name,
 		     */
 		    bindings->sym = new_sym;
 		    if (exports != all_symbol &&
-			(table_element (exports_table,
+			(marlais_table_element (exports_table,
 					new_sym,
 					MARLAIS_FALSE)
 			 == MARLAIS_FALSE)) {
@@ -813,11 +813,11 @@ fill_table_from_property_set (Object the_table, Object the_set)
     while (!EMPTYLISTP (the_set)) {
 	the_element = CAR (the_set);
 	if (PAIRP (the_element)) {
-	    table_element_setter (the_table,
+	    marlais_table_element_setter (the_table,
 				  CAR (the_element),
 				  CDR (the_element));
 	} else {
-	    table_element_setter (the_table, the_element, the_element);
+	    marlais_table_element_setter (the_table, the_element, the_element);
 	}
 	the_set = CDR (the_set);
     }
@@ -836,12 +836,12 @@ fill_imports_table_from_property_set (Object imports_table,
     while (!EMPTYLISTP (imports_set)) {
 	the_element = CAR (imports_set);
 	if (PAIRP (the_element)) {
-	    table_element_setter (imports_table, the_element, the_element);
-	    table_element_setter (renames_table,
+	    marlais_table_element_setter (imports_table, the_element, the_element);
+	    marlais_table_element_setter (renames_table,
 				  CAR (the_element),
 				  CDR (the_element));
 	} else {
-	    table_element_setter (imports_table, the_element, the_element);
+	    marlais_table_element_setter (imports_table, the_element, the_element);
 	}
 	imports_set = CDR (imports_set);
     }

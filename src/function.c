@@ -411,7 +411,7 @@ make_generic_function (Object name, Object params, Object methods)
     GFMETHODS (obj) = methods;
 
 #ifdef USE_METHOD_CACHING
-    GFCACHE (obj) = make_table (50);	/* Maybe make 50 a define? */
+    GFCACHE (obj) = marlais_make_table (50);	/* Maybe make 50 a define? */
     GFACTIVENM (obj) = make_empty_list ();
 #endif
 
@@ -600,7 +600,7 @@ generic_function_make (Object arglist)
     GFMETHODS (obj) = make_empty_list ();
 
 #ifdef USE_METHOD_CACHING
-    GFCACHE (obj) = make_table (50);	/* Maybe make 50 a define? */
+    GFCACHE (obj) = marlais_make_table (50);	/* Maybe make 50 a define? */
     GFACTIVENM (obj) = make_empty_list ();
 #endif
 
@@ -695,7 +695,7 @@ add_method (Object generic, Object method)
 
 #ifdef USE_METHOD_CACHING
     /* Invalidate the method cache */
-    GFCACHE (generic) = make_table (50);
+    GFCACHE (generic) = marlais_make_table (50);
 #endif
 
     return (marlais_construct_values (2, method, MARLAIS_FALSE));
