@@ -2,6 +2,7 @@
 
 #include <marlais/marlais.h>
 
+#include <getopt.h>
 #include <stdlib.h>
 #include <stdio.h>
 
