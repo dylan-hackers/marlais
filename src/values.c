@@ -34,7 +34,6 @@
 #include "values.h"
 
 #include "alloc.h"
-#include "error.h"
 #include "list.h"
 #include "prim.h"
 

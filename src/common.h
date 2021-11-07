@@ -6,5 +6,6 @@
 #include "compiler.h"
 #include "object.h"
 #include "globals.h"
+#include "error.h"
 
 #endif

@@ -7,7 +7,6 @@
 #include "alloc.h"
 #include "bytestring.h"
 #include "class.h"
-#include "error.h"
 #include "eval.h"
 #include "function.h"
 #include "keyword.h"

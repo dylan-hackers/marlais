@@ -5,7 +5,6 @@
 #include "alloc.h"
 #include "apply.h"
 #include "class.h"
-#include "error.h"
 #include "eval.h"
 #include "keyword.h"
 #include "list.h"

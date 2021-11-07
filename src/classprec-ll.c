@@ -2,7 +2,6 @@
 
 #include "alloc.h"
 #include "classprec.h"
-#include "error.h"
 #include "list.h"
 #include "number.h"
 #include "print.h"

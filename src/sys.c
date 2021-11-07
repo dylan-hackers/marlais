@@ -35,7 +35,6 @@
 #include "sys.h"
 
 #include "bytestring.h"
-#include "error.h"
 #include "number.h"
 #include "prim.h"
 #include "values.h"

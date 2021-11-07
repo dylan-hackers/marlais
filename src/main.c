@@ -15,7 +15,6 @@
 #include "deque.h"
 #include "dylan_lexer.h"
 #include "env.h"
-#include "error.h"
 #include "eval.h"
 #include "file.h"
 #include "function.h"

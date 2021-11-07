@@ -7,7 +7,6 @@
 #include "dylan_lexer.h"
 #include "env.h"
 #include "eval.h"
-#include "error.h"
 #include "foreign_ptr.h"
 #include "list.h"
 #include "parse.h"

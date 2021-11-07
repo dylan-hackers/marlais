@@ -38,7 +38,6 @@
 
 #include "alloc.h"
 #include "character.h"
-#include "error.h"
 #include "number.h"
 #include "prim.h"
 #include "symbol.h"

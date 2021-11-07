@@ -32,7 +32,6 @@
 
 #include "classprec.h"
 
-#include "error.h"
 #include "list.h"
 #include "print.h"
 

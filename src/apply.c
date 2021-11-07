@@ -6,7 +6,6 @@
 #include "class.h"
 #include "env.h"
 #include "eval.h"
-#include "error.h"
 #include "function.h"
 #include "keyword.h"
 #include "list.h"

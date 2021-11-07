@@ -3,7 +3,6 @@
 #include "common.h"
 
 #include "alloc.h"
-#include "error.h"
 #include "number.h"
 
 #ifdef SMALL_OBJECTS

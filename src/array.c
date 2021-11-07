@@ -34,7 +34,6 @@
 
 #include "array.h"
 #include "alloc.h"
-#include "error.h"
 #include "list.h"
 #include "number.h"
 #include "prim.h"

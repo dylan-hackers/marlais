@@ -35,8 +35,6 @@
 
 #include "sequence.h"
 
-#include "error.h"
-
 void marlais_make_sequence_entry
     (Object args,
 	 int* size,

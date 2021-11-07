@@ -12,7 +12,6 @@
 #include "classprec.h"
 #include "deque.h"
 #include "env.h"
-#include "error.h"
 #include "eval.h"
 #include "function.h"
 #include "keyword.h"

@@ -8,7 +8,6 @@
 
 #include "apply.h"
 #include "character.h"
-#include "error.h"
 #include "eval.h"
 #include "function.h"
 #include "list.h"

@@ -5,7 +5,6 @@
 #include "alloc.h"
 #include "apply.h"
 #include "env.h"
-#include "error.h"
 #include "list.h"
 #include "number.h"
 #include "print.h"

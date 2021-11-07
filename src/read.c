@@ -13,7 +13,6 @@
 #include "character.h"
 #include "dylan_lexer.h"
 #include "dylan.tab.h"
-#include "error.h"
 #include "file.h"
 #include "list.h"
 #include "number.h"

@@ -36,7 +36,6 @@
 #include "alloc.h"
 
 /* for throwing errors */
-#include "error.h"
 
 /* function definitions */
 

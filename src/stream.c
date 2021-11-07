@@ -6,7 +6,6 @@
 
 #include "stream.h"
 
-#include "error.h"
 #include "number.h"
 #include "prim.h"
 

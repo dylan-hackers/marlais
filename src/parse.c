@@ -34,7 +34,6 @@
 
 #include "parse.h"
 
-#include "error.h"
 #include "print.h"
 #include "yystype.h"
 

@@ -6,7 +6,6 @@
 
 #include "alloc.h"
 #include "bytestring.h"
-#include "error.h"
 #include "list.h"
 #include "symbol.h"
 
