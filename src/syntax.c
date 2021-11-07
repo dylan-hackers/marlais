@@ -202,7 +202,7 @@ static syntax_fun syntax_functions[] =
 };
 
 void
-marlais_init_syntax_table (void)
+marlais_initialize_syntax (void)
 {
     int numops, i;
 
