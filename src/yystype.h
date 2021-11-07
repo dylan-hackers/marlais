@@ -24,6 +24,7 @@
 #include "dylan_lexer.h"
 
 #define YYSTYPE Object
+#define YYSTYPE_IS_DECLARED 1
 
 int yyparse (void);
 

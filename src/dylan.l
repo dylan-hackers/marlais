@@ -10,15 +10,25 @@
 #include "alloc.h"
 #include "bytestring.h"
 #include "character.h"
-#include "dylan.tab.h"
 #include "list.h"
 #include "number.h"
-
+#include "env.h"
 #include "symbol.h"
+
 #include "yystype.h"
+#include "dylan.tab.h"
+
+#ifndef YYSTYPE
+#error No YYSTYPE defined
+#endif
 
 #ifdef BIG_INTEGERS
 #include "biginteger.h"
+#endif
+
+#if HAVE_READLINE
+#define _FUNCTION_DEF
+#include <readline/readline.h>
 #endif
 
 extern char* prompt_continuation;
@@ -751,8 +761,9 @@ void
 make_header_val()
 {
 	if (header_key == module_keyword) {
-		set_module (module_binding
-			    (make_symbol (get_nonws_symbol (yytext))));
+		Object symbol = make_symbol (get_nonws_symbol (yytext));
+		struct module_binding *module = module_binding (symbol);
+		set_module (module);
 	}
 }
 

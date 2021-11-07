@@ -49,7 +49,6 @@
 /* #define OPTIMIZE_SPECIALIZERS */
 
 #include "common.h"
-
 #include "boolean.h"
 #include "bytestring.h"
 #include "error.h"
@@ -59,7 +58,12 @@
 #include "symbol.h"
 #include "table.h"
 #include "vector.h"
+
 #include "yystype.h"
+
+#ifndef YYSTYPE
+#error No YYSTYPE defined
+#endif
 
 void yyerror (char *);
 static Object append_bang (Object l1, Object l2);
