@@ -3,13 +3,6 @@
 #ifndef OBJECT_H
 #define OBJECT_H
 
-#include <stdlib.h>
-#include <stdio.h>
-#include <stdarg.h>
-#include <stdint.h>
-#include <setjmp.h>
-#include <limits.h>
-
 typedef intptr_t  DyInteger;
 typedef uintptr_t DyUnsigned;
 

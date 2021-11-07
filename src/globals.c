@@ -2,7 +2,7 @@
 
 /* This file DEFINES all globals */
 
-#include "globals.h"
+#include "common.h"
 
 #define GLOBAL
 #include "globaldefs.h"

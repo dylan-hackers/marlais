@@ -5,8 +5,6 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
-#include "object.h"
-
 #define GLOBAL
 #include "globaldefs.h"
 #undef  GLOBAL
