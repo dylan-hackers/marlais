@@ -11,12 +11,12 @@ typedef struct object *Object;
 #define FALSEP(obj)       ((obj)->type == False)
 
 struct integer {
-    int val;
+    DyInteger val;
 };
 
 #define INTVAL(obj)       ((obj)->u.integer.val)
 #define INTEGERP(obj)     ((obj)->type == Integer)
-#define MAX_SMALL_INT     (INT_MAX)
+#define MAX_SMALL_INT     (INTPTR_MAX)
 
 struct big_integer {
     void *val;

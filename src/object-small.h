@@ -86,7 +86,7 @@ struct big_integer {
 
 struct ratio {
     ObjectType type;
-    int numerator, denominator;
+    DyInteger numerator, denominator;
 };
 
 #define RATIOTYPE(obj)    (((struct ratio *)obj)->type)
