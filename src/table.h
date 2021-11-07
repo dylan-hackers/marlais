@@ -44,7 +44,7 @@ extern Object equal_symbol;
 extern void marlais_register_table (void);
 /* Make a new table of given size */
 extern Object marlais_make_table (int size);
-/* Make a new table driver */
+/* Entrypoint for make(<table>) */
 extern Object marlais_make_table_driver (Object rest);
 /* Get value in table */
 extern Object marlais_table_element (Object table, Object key, Object default_val);
