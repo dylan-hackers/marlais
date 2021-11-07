@@ -14,7 +14,6 @@
 
 /* Helper macros */
 
-#define MAX_SMALL_INT ((1 << 29) - 1)
 #define MAX_SMALL_FACTOR (23170)
 #define INT_ABS(i) (i < 0 ? -i : i)
 

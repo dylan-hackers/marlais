@@ -8,6 +8,7 @@
 #include <stdarg.h>
 #include <stdint.h>
 #include <setjmp.h>
+#include <limits.h>
 
 typedef enum {
     Uninitialized = 0,

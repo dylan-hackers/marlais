@@ -18,6 +18,8 @@ typedef uintptr_t DyUnsigned;
 #define POINTERP(obj)        (((DyUnsigned)obj & 3) == POINTERTAG)
 #define IMMEDP(obj)          (((DyUnsigned)obj & 3) == IMMEDTAG)
 #define INTEGERP(obj)        (((DyUnsigned)obj & 3) == INTEGERTAG)
+#define MAX_SMALL_INT        (INTPTR_MAX >> 3)
+
 
 /* macros for identifying immediates other than integers
  */

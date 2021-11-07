@@ -16,6 +16,7 @@ struct integer {
 
 #define INTVAL(obj)       ((obj)->u.integer.val)
 #define INTEGERP(obj)     ((obj)->type == Integer)
+#define MAX_SMALL_INT     (INT_MAX)
 
 struct big_integer {
     void *val;
