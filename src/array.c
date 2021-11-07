@@ -40,7 +40,7 @@
 #include <marlais/prim.h>
 #include <marlais/symbol.h>
 
-/* Static declarations */
+/* Internatl function declarations */
 
 static Object array_make (Object dims, Object fill);
 static int    array_index (Object arr, Object indices, Object default_ob);
@@ -96,14 +96,14 @@ marlais_make_array_entry (Object args)
       fill_obj = SECOND (args);
     } else {
       marlais_error ("make: unsupported keyword for <array> class",
-	     FIRST (args), NULL);
+                     FIRST (args), NULL);
     }
     args = CDR (CDR (args));
   }
   if (dim_obj) {
     if (!LISTP (dim_obj)) {
       marlais_error ("make: value of dimensions: argument must be a list of integers",
-	     dim_obj, NULL);
+                     dim_obj, NULL);
     }
   } else {
     marlais_error ("make: dimensions: must be specified for <array>", args, NULL);
@@ -174,10 +174,10 @@ array_index (Object arr, Object indices, Object default_ob)
     ind_val = INTVAL (ind);
     if ((ind_val < 0) || (ind_val >= dim_val)) {
       if (default_ob == default_object) {
-	marlais_error ("element: array indices out of range", indices,
-	       ARRDIMS (arr), NULL);
+          marlais_error ("element: array indices out of range", indices,
+                         ARRDIMS (arr), NULL);
       } else {
-	return -1;
+          return -1;
       }
     }
     offset += (ind_val * index_stride);
@@ -225,7 +225,7 @@ array_element (Object arr, Object index, Object default_ob)
   if ((ind_val < 0) || (ind_val >= ARRSIZE (arr))) {
     if (default_ob == default_object) {
       return marlais_error ("element: array index out of range", index,
-		    ARRDIMS (arr), NULL);
+                            ARRDIMS (arr), NULL);
     } else {
       return default_ob;
     }
@@ -241,7 +241,7 @@ array_element_setter (Object arr, Object index, Object new_val)
 
   if ((ind_val < 0) || (ind_val >= ARRSIZE (arr))) {
     marlais_error ("element_setter: array index out of range", index,
-	   ARRDIMS (arr), NULL);
+                   ARRDIMS (arr), NULL);
   }
   ARRELS (arr)[ind_val] = new_val;
   return (unspecified_object);
