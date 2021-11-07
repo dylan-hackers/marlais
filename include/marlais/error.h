@@ -31,10 +31,10 @@
 
  */
 
-#ifndef ERROR_H
-#define ERROR_H
+#ifndef MARLAIS_ERROR_H
+#define MARLAIS_ERROR_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 /* Register error primitives */
 extern void marlais_register_error (void);

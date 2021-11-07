@@ -31,10 +31,10 @@
 
  */
 
-#ifndef PRINT_H
-#define PRINT_H
+#ifndef MARLAIS_PRINT_H
+#define MARLAIS_PRINT_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 /* Register print primitives */
 extern void marlais_register_print (void);

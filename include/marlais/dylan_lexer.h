@@ -2,10 +2,11 @@
    dylan_lexer.h
  */
 
-#ifndef DYLAN_LEXER_H
-#define DYLAN_LEXER_H
+#ifndef MARLAIS_DYLAN_LEXER_H
+#define MARLAIS_DYLAN_LEXER_H
 
-#include <stdio.h>
+#include <marlais/common.h>
+#include <marlais/yystype.h>
 
 void init_reserved_word_symbols (void);
 

@@ -1,9 +1,9 @@
 /* object.c -- see COPYRIGHT for use */
 
-#include "common.h"
+#include <marlais/common.h>
 
-#include "alloc.h"
-#include "number.h"
+#include <marlais/alloc.h>
+#include <marlais/number.h>
 
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
 

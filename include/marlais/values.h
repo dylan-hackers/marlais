@@ -31,12 +31,10 @@
 
  */
 
-#ifndef VALUES_H
-#define VALUES_H
+#ifndef MARLAIS_VALUES_H
+#define MARLAIS_VALUES_H
 
-#include <stdarg.h>
-
-#include "common.h"
+#include <marlais/common.h>
 
 /* Register vector primitives */
 extern void marlais_register_values (void);

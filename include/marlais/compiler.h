@@ -1,7 +1,7 @@
 /* compiler.h -- see COPYRIGHT for use */
 
-#ifndef COMPILER_H
-#define COMPILER_H
+#ifndef MARLAIS_COMPILER_H
+#define MARLAIS_COMPILER_H
 
 /* attribute macros */
 #ifdef __GNUC__

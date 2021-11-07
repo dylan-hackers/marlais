@@ -31,16 +31,13 @@
 
  */
 
-#ifndef LIST_H
-#define LIST_H
+#ifndef MARLAIS_LIST_H
+#define MARLAIS_LIST_H
 
-#include <stdarg.h>
-
-#include "common.h"
+#include <marlais/common.h>
 
 #ifndef MARLAIS_OBJECT_MODEL_SMALL
 Object make_empty_list (void);
-
 #else
 #define make_empty_list() EMPTYLISTVAL
 #endif

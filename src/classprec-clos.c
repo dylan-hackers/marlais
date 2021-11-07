@@ -30,10 +30,10 @@
 
  */
 
-#include "classprec.h"
+#include <marlais/classprec.h>
 
-#include "list.h"
-#include "print.h"
+#include <marlais/list.h>
+#include <marlais/print.h>
 
 /* local functions */
 static void print_pnode (Object pnode);

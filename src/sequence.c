@@ -33,7 +33,7 @@
 
 /* general operations that all sequences (vectors, deques, etc) use */
 
-#include "sequence.h"
+#include <marlais/sequence.h>
 
 void marlais_make_sequence_entry
     (Object args,

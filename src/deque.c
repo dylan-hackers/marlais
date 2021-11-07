@@ -32,13 +32,13 @@
 
  */
 
-#include "deque.h"
+#include <marlais/deque.h>
 
-#include "alloc.h"
-#include "list.h"
-#include "prim.h"
-#include "symbol.h"
-#include "sequence.h"
+#include <marlais/alloc.h>
+#include <marlais/list.h>
+#include <marlais/prim.h>
+#include <marlais/sequence.h>
+#include <marlais/symbol.h>
 
 /* Static declarations */
 

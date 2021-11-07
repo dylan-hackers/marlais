@@ -31,13 +31,16 @@
  */
 
 
-#ifndef CLASSPREC_H_
-#define CLASSPREC_H_
+#ifndef MARLAIS_CLASSPREC_H
+#define MARLAIS_CLASSPREC_H
+
+#include <marlais/common.h>
+#include <marlais/class.h>
 
 #if defined(MARLAIS_CLASS_PRECEDENCE_CLOS)
-#include "classprec-clos.h"
+#include <marlais/classprec-clos.h>
 #elif defined(MARLAIS_CLASS_PRECEDENCE_LL)
-#include "classprec-ll.h"
+#include <marlais/classprec-ll.h>
 #else
 #error No class precedence algorithm configured.
 #endif

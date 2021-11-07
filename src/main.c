@@ -1,38 +1,9 @@
 /* main.c -- see COPYRIGHT for use */
 
+#include <marlais/marlais.h>
+
 #include <stdlib.h>
 #include <stdio.h>
-
-#include "common.h"
-
-#include "alloc.h"
-#include "apply.h"
-#include "array.h"
-#include "boolean.h"
-#include "bytestring.h"
-#include "character.h"
-#include "class.h"
-#include "deque.h"
-#include "dylan_lexer.h"
-#include "env.h"
-#include "eval.h"
-#include "file.h"
-#include "function.h"
-#include "keyword.h"
-#include "list.h"
-#include "misc.h"
-#include "number.h"
-#include "parse.h"
-#include "print.h"
-#include "read.h"
-#include "slot.h"
-#include "symbol.h"
-#include "syntax.h"
-#include "stream.h"
-#include "sys.h"
-#include "table.h"
-#include "values.h"
-#include "vector.h"
 
 void initialize_reservered_word_symbols (void);
 void initialize_marlais (void);

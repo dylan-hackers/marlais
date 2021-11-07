@@ -29,11 +29,9 @@
    conditions set forth in this notice.
  */
 
-#include <string.h>
+#include <marlais/alloc.h>
 
 #include <gc.h>
-
-#include "alloc.h"
 
 /* function definitions */
 

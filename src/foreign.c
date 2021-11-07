@@ -30,8 +30,9 @@
 
  */
 
-#include "foreign.h"
-#include "prim.h"
+#include <marlais/foreign.h>
+
+#include <marlais/prim.h>
 
 static Object load_foreign (Object name);
 

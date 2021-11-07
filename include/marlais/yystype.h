@@ -16,12 +16,11 @@
    Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 
  */
-#ifndef YYSTYPE_h_
-#define YYSTYPE_h_
+#ifndef MARLAIS_YYSTYPE_H
+#define MARLAIS_YYSTYPE_H
 
-#include "common.h"
-
-#include "dylan_lexer.h"
+#include <marlais/common.h>
+#include <marlais/dylan_lexer.h>
 
 #define YYSTYPE Object
 #define YYSTYPE_IS_DECLARED 1

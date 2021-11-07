@@ -30,7 +30,7 @@
 
  */
 
-#include "common.h"
+#include <marlais/common.h>
 
 #if defined(MARLAIS_CLASS_PRECEDENCE_CLOS)
 #include "classprec-close.c"

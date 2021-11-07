@@ -1,9 +1,9 @@
 /* syntax.h -- see COPYRIGHT for use */
 
-#ifndef SYNTAX_H
-#define SYNTAX_H
+#ifndef MARLAIS_SYNTAX_H
+#define MARLAIS_SYNTAX_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 /* global objects */
 extern Object type_class, initial_state_sym, next_state_sym;

@@ -30,10 +30,11 @@
    conditions set forth in this notice.
 
  */
-#ifndef BYTESTRING_H
-#define BYTESTRING_H
 
-#include "common.h"
+#ifndef MARLAIS_BYTESTRING_H
+#define MARLAIS_BYTESTRING_H
+
+#include <marlais/common.h>
 
 /* Register bytestring primitives */
 extern void marlais_register_bytestring (void);

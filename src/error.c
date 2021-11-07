@@ -1,25 +1,23 @@
 /* error.c -- see COPYRIGHT for use */
 
-#include <stdarg.h>
-#include <stdio.h>
+#include <marlais/error.h>
+
+#include <marlais/alloc.h>
+#include <marlais/apply.h>
+#include <marlais/bytestring.h>
+#include <marlais/class.h>
+#include <marlais/env.h>
+#include <marlais/eval.h>
+#include <marlais/list.h>
+#include <marlais/number.h>
+#include <marlais/parse.h>
+#include <marlais/prim.h>
+#include <marlais/print.h>
+#include <marlais/read.h>
+#include <marlais/stream.h>
+#include <marlais/yystype.h>
+
 #include <signal.h>
-
-#include "error.h"
-
-#include "alloc.h"
-#include "apply.h"
-#include "bytestring.h"
-#include "class.h"
-#include "env.h"
-#include "eval.h"
-#include "list.h"
-#include "number.h"
-#include "parse.h"
-#include "prim.h"
-#include "print.h"
-#include "read.h"
-#include "stream.h"
-#include "yystype.h"
 
 extern Object print_symbol;
 extern char* prompt;

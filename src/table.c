@@ -32,17 +32,15 @@
 
  */
 
-#include <string.h>
+#include <marlais/table.h>
 
-#include "table.h"
-
-#include "alloc.h"
-#include "apply.h"
-#include "env.h"
-#include "list.h"
-#include "number.h"
-#include "prim.h"
-#include "symbol.h"
+#include <marlais/alloc.h>
+#include <marlais/apply.h>
+#include <marlais/env.h>
+#include <marlais/list.h>
+#include <marlais/number.h>
+#include <marlais/prim.h>
+#include <marlais/symbol.h>
 
 extern Object dylan_symbol;
 

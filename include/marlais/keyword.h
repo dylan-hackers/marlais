@@ -48,10 +48,10 @@
 
  */
 
-#ifndef KEYWORD_H
-#define KEYWORD_H
+#ifndef MARLAIS_KEYWORD_H
+#define MARLAIS_KEYWORD_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 void init_keyword_prims (void);
 Object keyword_to_symbol (Object keyword);

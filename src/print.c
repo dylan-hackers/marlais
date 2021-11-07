@@ -1,24 +1,24 @@
 /* print.c -- see COPYRIGHT for use */
 
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
+#include <marlais/print.h>
 
-#include "print.h"
-
-#include "apply.h"
-#include "character.h"
-#include "eval.h"
-#include "function.h"
-#include "list.h"
-#include "number.h"
-#include "prim.h"
-#include "slot.h"
-#include "stream.h"
+#include <marlais/apply.h>
+#include <marlais/character.h>
+#include <marlais/eval.h>
+#include <marlais/function.h>
+#include <marlais/list.h>
+#include <marlais/number.h>
+#include <marlais/prim.h>
+#include <marlais/slot.h>
+#include <marlais/stream.h>
 
 #ifdef MARLAIS_ENABLE_BIG_INTEGERS
 #include "biginteger.h"
 #endif
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
 
 /* Static variables */
 

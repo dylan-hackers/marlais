@@ -32,10 +32,10 @@
 
  */
 
-#include "misc.h"
+#include <marlais/misc.h>
 
-#include "alloc.h"
-#include "prim.h"
+#include <marlais/alloc.h>
+#include <marlais/prim.h>
 
 Object
 make_eof_object (void)

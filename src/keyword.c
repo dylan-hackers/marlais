@@ -1,13 +1,11 @@
 /* keyword.c -- see COPYRIGHT for use */
 
-#include <string.h>
+#include <marlais/keyword.h>
 
-#include "keyword.h"
-
-#include "bytestring.h"
-#include "list.h"
-#include "prim.h"
-#include "symbol.h"
+#include <marlais/bytestring.h>
+#include <marlais/list.h>
+#include <marlais/prim.h>
+#include <marlais/symbol.h>
 
 /* primitives */
 

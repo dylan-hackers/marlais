@@ -31,10 +31,10 @@
 
  */
 
-#ifndef ALLOC_H
-#define ALLOC_H
+#ifndef MARLAIS_ALLOC_H
+#define MARLAIS_ALLOC_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 /* initialize the garbage collector */
 extern void  marlais_initialize_gc (void);

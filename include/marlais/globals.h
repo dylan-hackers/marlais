@@ -2,8 +2,8 @@
 
 /* This file DECLARES all globals */
 
-#ifndef GLOBALS_H
-#define GLOBALS_H
+#ifndef MARLAIS_GLOBALS_H
+#define MARLAIS_GLOBALS_H
 
 #define GLOBAL
 #include "globaldefs.h"

@@ -1,9 +1,9 @@
 /* stream.h -- see COPYRIGHT for use */
 
-#ifndef STREAM_H
-#define STREAM_H
+#ifndef MARLAIS_STREAM_H
+#define MARLAIS_STREAM_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 /* Initialize standard streams */
 void marlais_initialize_stream (void);

@@ -21,4 +21,4 @@
 /* Use LL version of class precedence */
 #define MARLAIS_CLASS_PRECEDENCE_LL
 
-#endif /* !MARLAIS_CONFIG_H */
+#endif

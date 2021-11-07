@@ -31,10 +31,10 @@
 
  */
 
-#ifndef FILE_H
-#define FILE_H
+#ifndef MARLAIS_FILE_H
+#define MARLAIS_FILE_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 void init_file_prims (void);
 Object load (Object filename);

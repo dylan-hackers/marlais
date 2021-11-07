@@ -32,10 +32,10 @@
 
  */
 
-#ifndef READ_H
-#define READ_H
+#ifndef MARLAIS_READ_H
+#define MARLAIS_READ_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 /* Register read primitives */
 void marlais_register_read (void);

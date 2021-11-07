@@ -2,21 +2,20 @@
 /*   Lexical analyzer for Dylan interm report tokens
      see COPYRIGHT for use */
 
-#include <string.h>
-#include <sys/time.h>
+#include <marlais/common.h>
 
-#include "common.h"
+#include <marlais/alloc.h>
+#include <marlais/bytestring.h>
+#include <marlais/character.h>
+#include <marlais/list.h>
+#include <marlais/number.h>
+#include <marlais/env.h>
+#include <marlais/symbol.h>
+#include <marlais/yystype.h>
 
-#include "alloc.h"
-#include "bytestring.h"
-#include "character.h"
-#include "list.h"
-#include "number.h"
-#include "env.h"
-#include "symbol.h"
-
-#include "yystype.h"
 #include "dylan.tab.h"
+
+#include <sys/time.h>
 
 #ifndef YYSTYPE
 #error No YYSTYPE defined

@@ -1,13 +1,11 @@
 /* prim.c -- see COPYRIGHT for use */
 
-#include <string.h>
+#include <marlais/prim.h>
 
-#include "prim.h"
-
-#include "alloc.h"
-#include "bytestring.h"
-#include "list.h"
-#include "symbol.h"
+#include <marlais/alloc.h>
+#include <marlais/bytestring.h>
+#include <marlais/list.h>
+#include <marlais/symbol.h>
 
 void
 marlais_register_prims (int num, struct primitive prims[])

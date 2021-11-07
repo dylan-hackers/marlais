@@ -1,9 +1,9 @@
 /* apply.h -- see COPYRIGHT for use */
 
-#ifndef APPLY_H
-#define APPLY_H
+#ifndef MARLAIS_APPLY_H
+#define MARLAIS_APPLY_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 /* global data */
 extern int trace_functions;

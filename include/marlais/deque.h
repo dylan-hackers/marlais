@@ -31,10 +31,10 @@
 
  */
 
-#ifndef DEQUE_H
-#define DEQUE_H
+#ifndef MARLAIS_DEQUE_H
+#define MARLAIS_DEQUE_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 /* Register deque primitives */
 extern void marlais_register_deque (void);

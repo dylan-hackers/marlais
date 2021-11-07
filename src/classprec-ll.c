@@ -1,11 +1,12 @@
 /* classprec-ll.c -- see COPYRIGHT for use */
 
-#include "alloc.h"
-#include "classprec.h"
-#include "list.h"
-#include "number.h"
-#include "print.h"
-#include "stream.h"
+#include <marlais/classprec.h>
+
+#include <marlais/alloc.h>
+#include <marlais/list.h>
+#include <marlais/number.h>
+#include <marlais/print.h>
+#include <marlais/stream.h>
 
 #ifdef NO_COMMON_DYLAN_SPEC
 extern Object standard_error_stream;

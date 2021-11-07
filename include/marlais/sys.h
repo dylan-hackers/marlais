@@ -30,10 +30,10 @@
 
  */
 
-#ifndef SYS_H
-#define SYS_H
+#ifndef MARLAIS_SYS_H
+#define MARLAIS_SYS_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 void init_sys_prims (void);
 Object get_ctime (void);

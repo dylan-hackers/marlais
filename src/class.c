@@ -1,28 +1,26 @@
 /* class.c -- see COPYRIGHT for use */
 
-#include <string.h>
+#include <marlais/class.h>
 
-#include "class.h"
-
-#include "alloc.h"
-#include "apply.h"
-#include "array.h"
-#include "boolean.h"
-#include "bytestring.h"
-#include "classprec.h"
-#include "deque.h"
-#include "env.h"
-#include "eval.h"
-#include "function.h"
-#include "keyword.h"
-#include "list.h"
-#include "number.h"
-#include "prim.h"
-#include "slot.h"
-#include "symbol.h"
-#include "table.h"
-#include "values.h"
-#include "vector.h"
+#include <marlais/alloc.h>
+#include <marlais/apply.h>
+#include <marlais/array.h>
+#include <marlais/boolean.h>
+#include <marlais/bytestring.h>
+#include <marlais/classprec.h>
+#include <marlais/deque.h>
+#include <marlais/env.h>
+#include <marlais/eval.h>
+#include <marlais/function.h>
+#include <marlais/keyword.h>
+#include <marlais/list.h>
+#include <marlais/number.h>
+#include <marlais/prim.h>
+#include <marlais/slot.h>
+#include <marlais/symbol.h>
+#include <marlais/table.h>
+#include <marlais/values.h>
+#include <marlais/vector.h>
 
 extern struct binding *symbol_binding (Object sym);
 

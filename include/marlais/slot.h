@@ -31,10 +31,10 @@
 
  */
 
-#ifndef SLOT_H
-#define SLOT_H
+#ifndef MARLAIS_SLOT_H
+#define MARLAIS_SLOT_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 void init_slot_prims (void);
 Object slot_name (Object slot);

@@ -31,10 +31,10 @@
 
  */
 
-#ifndef TABLE_H
-#define TABLE_H
+#ifndef MARLAIS_TABLE_H
+#define MARLAIS_TABLE_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 #define DEFAULT_TABLE_SIZE 101
 

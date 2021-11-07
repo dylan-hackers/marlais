@@ -1,10 +1,10 @@
 /* class.h -- see COPYRIGHT for use */
 
-#ifndef CLASS_H
-#define CLASS_H
+#ifndef MARLAIS_CLASS_H
+#define MARLAIS_CLASS_H
 
-#include "common.h"
-#include "symbol.h"
+#include <marlais/common.h>
+#include <marlais/symbol.h>
 
 /* globals */
 

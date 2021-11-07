@@ -31,10 +31,10 @@
 
  */
 
-#ifndef NUMBER_H
-#define NUMBER_H
+#ifndef MARLAIS_NUMBER_H
+#define MARLAIS_NUMBER_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 /* Register number primitives */
 extern void marlais_register_number (void);

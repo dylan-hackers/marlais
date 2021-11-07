@@ -1,17 +1,18 @@
 /* slot.c -- see COPYRIGHT for use */
 
-#include "slot.h"
+#include <marlais/slot.h>
 
-#include "alloc.h"
-#include "apply.h"
-#include "class.h"
-#include "eval.h"
-#include "keyword.h"
-#include "list.h"
-#include "prim.h"
-#include "vector.h"
+#include <marlais/alloc.h>
+#include <marlais/apply.h>
+#include <marlais/class.h>
+#include <marlais/eval.h>
+#include <marlais/keyword.h>
+#include <marlais/list.h>
+#include <marlais/prim.h>
+#include <marlais/vector.h>
 
-/* primitives */
+/* Primitives */
+
 static Object instance_slots (Object instance);
 static Object class_slots (Object class);
 
@@ -23,7 +24,7 @@ static struct primitive slot_prims[] =
     {"%class-slots", prim_1, class_slots},
 };
 
-/* function definitions */
+/* Exported functions */
 
 void
 init_slot_prims (void)
@@ -165,6 +166,8 @@ set_slot_value (Object instance, Object slot_num, Object val)
     CAR (INSTSLOTS (instance)[INTVAL (slot_num)]) = val;
     return val;
 }
+
+/* Internal functions */
 
 static Object
 instance_slots (Object instance)

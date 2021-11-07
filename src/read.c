@@ -4,10 +4,7 @@
 
 #ifdef NO_COMMON_DYLAN_SPEC
 
-#include <stdio.h>
-#include <ctype.h>
-
-#include "read.h"
+#include <marlais/read.h>
 
 #include "bytestring.h"
 #include "character.h"
@@ -20,6 +17,9 @@
 #include "prim.h"
 #include "symbol.h"
 #include "vector.h"
+
+#include <stdio.h>
+#include <ctype.h>
 
 #ifdef MARLAIS_ENABLE_BIG_INTEGERS
 #include "biginteger.h"

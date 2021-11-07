@@ -1,26 +1,24 @@
 /* syntax.c -- see COPYRIGHT for use */
 
-#include <string.h>
+#include <marlais/syntax.h>
 
-#include "syntax.h"
-
-#include "alloc.h"
-#include "apply.h"
-#include "boolean.h"
-#include "bytestring.h"
-#include "class.h"
-#include "env.h"
-#include "eval.h"
-#include "keyword.h"
-#include "list.h"
-#include "function.h"
-#include "misc.h"
-#include "number.h"
-#include "print.h"
-#include "stream.h"
-#include "symbol.h"
-#include "table.h"
-#include "values.h"
+#include <marlais/alloc.h>
+#include <marlais/apply.h>
+#include <marlais/boolean.h>
+#include <marlais/bytestring.h>
+#include <marlais/class.h>
+#include <marlais/env.h>
+#include <marlais/eval.h>
+#include <marlais/function.h>
+#include <marlais/keyword.h>
+#include <marlais/list.h>
+#include <marlais/misc.h>
+#include <marlais/number.h>
+#include <marlais/print.h>
+#include <marlais/stream.h>
+#include <marlais/symbol.h>
+#include <marlais/table.h>
+#include <marlais/values.h>
 
 extern Object dylan_symbol;
 extern Object dylan_user_symbol;

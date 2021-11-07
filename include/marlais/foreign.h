@@ -30,10 +30,10 @@
 
  */
 
-#ifndef FOREIGN_H
-#define FOREIGN_H
+#ifndef MARLAIS_FOREIGN_H
+#define MARLAIS_FOREIGN_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 void init_foreign_prims (void);
 

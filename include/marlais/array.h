@@ -31,10 +31,10 @@
 
  */
 
-#ifndef ARRAY_H
-#define ARRAY_H
+#ifndef MARLAIS_ARRAY_H
+#define MARLAIS_ARRAY_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 /* Initialize array primitives */
 extern void marlais_register_array (void);

@@ -31,10 +31,10 @@
 
  */
 
-#ifndef CHARACTER_H
-#define CHARACTER_H
+#ifndef MARLAIS_CHARACTER_H
+#define MARLAIS_CHARACTER_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 /* Register character primitives */
 extern void marlais_register_character (void);

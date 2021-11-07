@@ -1,17 +1,15 @@
 /* file.c -- see COPYRIGHT for use */
 
-#include <stdio.h>
+#include <marlais/file.h>
 
-#include "file.h"
-
-#include "dylan_lexer.h"
-#include "env.h"
-#include "eval.h"
-#include "foreign_ptr.h"
-#include "list.h"
-#include "parse.h"
-#include "prim.h"
-#include "read.h"
+#include <marlais/dylan_lexer.h>
+#include <marlais/env.h>
+#include <marlais/eval.h>
+#include <marlais/foreign_ptr.h>
+#include <marlais/list.h>
+#include <marlais/parse.h>
+#include <marlais/prim.h>
+#include <marlais/read.h>
 
 extern Object open_file_list;
 

@@ -31,10 +31,10 @@
 
  */
 
-#ifndef SYMBOL_H
-#define SYMBOL_H
+#ifndef MARLAIS_SYMBOL_H
+#define MARLAIS_SYMBOL_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 struct symtab {
     Object sym;

@@ -30,9 +30,9 @@
 
  */
 
-#include "foreign_ptr.h"
+#include <marlais/foreign_ptr.h>
 
-#include "alloc.h"
+#include <marlais/alloc.h>
 
 #ifndef MARLAIS_OBJECT_MODEL_SMALL
 Object

@@ -1,13 +1,13 @@
 /* stream.c, see COPYRIGHT for use */
 
+#include <marlais/stream.h>
+
+#include <marlais/number.h>
+#include <marlais/prim.h>
+
 #include <fcntl.h>
 #include <stdio.h>
 #include <unistd.h>
-
-#include "stream.h"
-
-#include "number.h"
-#include "prim.h"
 
 /* Primitives */
 

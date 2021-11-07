@@ -1,19 +1,20 @@
 /* common.h -- see COPYRIGHT for use */
 
-#ifndef COMMON_H
-#define COMMON_H
+#ifndef MARLAIS_COMMON_H
+#define MARLAIS_COMMON_H
 
-#include <stdlib.h>
-#include <stdio.h>
+#include <setjmp.h>
 #include <stdarg.h>
 #include <stdint.h>
-#include <setjmp.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <limits.h>
 
-#include "config.h"
-#include "compiler.h"
-#include "object.h"
-#include "globals.h"
-#include "error.h"
+#include <marlais/config.h>
+#include <marlais/compiler.h>
+#include <marlais/object.h>
+#include <marlais/globals.h>
+#include <marlais/error.h>
 
 #endif

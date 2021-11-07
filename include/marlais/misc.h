@@ -32,10 +32,10 @@
 
  */
 
-#ifndef MISC_H
-#define MISC_H
+#ifndef MARLAIS_MISC_H
+#define MARLAIS_MISC_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 Object make_eof_object (void);
 Object make_unspecified_object (void);

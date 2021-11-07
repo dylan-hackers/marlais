@@ -31,10 +31,10 @@
 
  */
 
-#ifndef BOOLEAN_H
-#define BOOLEAN_H
+#ifndef MARLAIS_BOOLEAN_H
+#define MARLAIS_BOOLEAN_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 /* Initialize boolean globals */
 extern void marlais_initialize_boolean (void);

@@ -30,12 +30,10 @@
 
  */
 
-#include <stdio.h>
+#include <marlais/parse.h>
 
-#include "parse.h"
-
-#include "print.h"
-#include "yystype.h"
+#include <marlais/print.h>
+#include <marlais/yystype.h>
 
 Object *parse_value_ptr;
 extern FILE *yyin;

@@ -31,10 +31,10 @@
 
  */
 
-#ifndef FUNCTION_H
-#define FUNCTION_H
+#ifndef MARLAIS_FUNCTION_H
+#define MARLAIS_FUNCTION_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 /* global objects */
 extern Object allkeys_symbol, all_symbol;

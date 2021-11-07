@@ -33,10 +33,10 @@
 
 /* general operations that all sequences (vectors, deques, etc) use */
 
-#ifndef SEQUENCE_H
-#define SEQUENCE_H
+#ifndef MARLAIS_SEQUENCE_H
+#define MARLAIS_SEQUENCE_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 extern void marlais_make_sequence_entry
     (Object args,

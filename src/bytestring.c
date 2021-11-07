@@ -32,16 +32,14 @@
 
  */
 
-#include <string.h>
+#include <marlais/bytestring.h>
 
-#include "bytestring.h"
-
-#include "alloc.h"
-#include "character.h"
-#include "number.h"
-#include "prim.h"
-#include "symbol.h"
-#include "sequence.h"
+#include <marlais/alloc.h>
+#include <marlais/character.h>
+#include <marlais/number.h>
+#include <marlais/prim.h>
+#include <marlais/sequence.h>
+#include <marlais/symbol.h>
 
 /* Primitives */
 

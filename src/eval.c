@@ -1,15 +1,15 @@
 /* eval.c -- see COPYRIGHT for use */
 
-#include "eval.h"
+#include <marlais/eval.h>
 
-#include "alloc.h"
-#include "apply.h"
-#include "env.h"
-#include "list.h"
-#include "number.h"
-#include "print.h"
-#include "stream.h"
-#include "syntax.h"
+#include <marlais/alloc.h>
+#include <marlais/apply.h>
+#include <marlais/env.h>
+#include <marlais/list.h>
+#include <marlais/number.h>
+#include <marlais/print.h>
+#include <marlais/stream.h>
+#include <marlais/syntax.h>
 
 struct eval_stack *eval_stack = 0;
 

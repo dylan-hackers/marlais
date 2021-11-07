@@ -31,11 +31,11 @@
 
  */
 
-#ifndef EVAL_H
-#define EVAL_H
+#ifndef MARLAIS_EVAL_H
+#define MARLAIS_EVAL_H
 
-#include "common.h"
-#include "env.h"
+#include <marlais/common.h>
+#include <marlais/env.h>
 
 /* Apply arguments to function */
 extern Object marlais_apply (Object fun, Object args);

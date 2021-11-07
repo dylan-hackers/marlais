@@ -31,20 +31,20 @@
 
  */
 
-#include "values.h"
+#include <marlais/values.h>
 
-#include "alloc.h"
-#include "list.h"
-#include "prim.h"
+#include <marlais/alloc.h>
+#include <marlais/list.h>
+#include <marlais/prim.h>
 
-/* primitives */
+/* Primitives */
 
 static struct primitive values_prims[] =
 {
   {"values", prim_0_rest, marlais_values},
 };
 
-/* function definitions */
+/* Exported functions */
 
 void
 marlais_register_values (void)

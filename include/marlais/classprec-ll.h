@@ -34,9 +34,6 @@
 #ifndef CLASSPREC2_LL_H_
 #define CLASSPREC2_LL_H_
 
-#include "common.h"
-#include "class.h"
-
 typedef
 struct prec_graph {
     Object *class_vec;

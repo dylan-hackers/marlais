@@ -1,7 +1,7 @@
 /* object.h -- see COPYRIGHT for use */
 
-#ifndef OBJECT_H
-#define OBJECT_H
+#ifndef MARLAIS_OBJECT_H
+#define MARLAIS_OBJECT_H
 
 typedef intptr_t  DyInteger;
 typedef uintptr_t DyUnsigned;
@@ -46,9 +46,9 @@ Stream,
 } ObjectType;
 
 #if defined(MARLAIS_OBJECT_MODEL_SMALL)
-#include "object-small.h"
+#include <marlais/object-small.h>
 #elif defined(MARLAIS_OBJECT_MODEL_LARGE)
-#include "object-large.h"
+#include <marlais/object-large.h>
 #else
 #error No object model configured.
 #endif

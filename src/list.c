@@ -32,15 +32,15 @@
 
  */
 
-#include "list.h"
+#include <marlais/list.h>
 
-#include "alloc.h"
-#include "apply.h"
-#include "boolean.h"
-#include "number.h"
-#include "prim.h"
-#include "symbol.h"
-#include "sequence.h"
+#include <marlais/alloc.h>
+#include <marlais/apply.h>
+#include <marlais/boolean.h>
+#include <marlais/number.h>
+#include <marlais/prim.h>
+#include <marlais/sequence.h>
+#include <marlais/symbol.h>
 
 /* globals */
 

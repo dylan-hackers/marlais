@@ -1,23 +1,23 @@
 /* apply.c -- see COPYRIGHT for use */
 
-#include "apply.h"
+#include <marlais/apply.h>
 
-#include "alloc.h"
-#include "class.h"
-#include "env.h"
-#include "eval.h"
-#include "function.h"
-#include "keyword.h"
-#include "list.h"
-#include "number.h"
-#include "print.h"
-#include "prim.h"
-#include "stream.h"
-#include "symbol.h"
-#include "syntax.h"
-#include "table.h"
-#include "values.h"
-#include "vector.h"
+#include <marlais/alloc.h>
+#include <marlais/class.h>
+#include <marlais/env.h>
+#include <marlais/eval.h>
+#include <marlais/function.h>
+#include <marlais/keyword.h>
+#include <marlais/list.h>
+#include <marlais/number.h>
+#include <marlais/print.h>
+#include <marlais/prim.h>
+#include <marlais/stream.h>
+#include <marlais/symbol.h>
+#include <marlais/syntax.h>
+#include <marlais/table.h>
+#include <marlais/values.h>
+#include <marlais/vector.h>
 
 /* global data */
 int trace_functions = 0;

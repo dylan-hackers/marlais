@@ -32,12 +32,13 @@
 
  */
 
-#include "array.h"
-#include "alloc.h"
-#include "list.h"
-#include "number.h"
-#include "prim.h"
-#include "symbol.h"
+#include <marlais/array.h>
+
+#include <marlais/alloc.h>
+#include <marlais/list.h>
+#include <marlais/number.h>
+#include <marlais/prim.h>
+#include <marlais/symbol.h>
 
 /* Static declarations */
 

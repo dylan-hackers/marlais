@@ -30,15 +30,16 @@
 
  */
 
+#include <marlais/sys.h>
+
+#include <marlais/bytestring.h>
+#include <marlais/number.h>
+#include <marlais/prim.h>
+#include <marlais/values.h>
+
 #include <time.h>
 
-#include "sys.h"
-
-#include "bytestring.h"
-#include "number.h"
-#include "prim.h"
-#include "values.h"
-
+/* XXX this must be fixed */
 #define POSITIVE_SMALL_INT_MASK	01777777777
 
 static struct primitive sys_prims[] =

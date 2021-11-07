@@ -30,10 +30,10 @@
 
  */
 
-#ifndef PARSE_H
-#define PARSE_H
+#ifndef MARLAIS_PARSE_H
+#define MARLAIS_PARSE_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 extern int load_file_context;
 

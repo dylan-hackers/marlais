@@ -31,11 +31,11 @@
 
  */
 
-#include "character.h"
+#include <marlais/character.h>
 
-#include "alloc.h"
-#include "number.h"
-#include "prim.h"
+#include <marlais/alloc.h>
+#include <marlais/number.h>
+#include <marlais/prim.h>
 
 /* Primitives */
 

@@ -29,10 +29,10 @@
 
  */
 
-#ifndef FOREIGN_PTR_H
-#define FOREIGN_PTR_H
+#ifndef MARLAIS_FOREIGN_PTR_H
+#define MARLAIS_FOREIGN_PTR_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 Object make_foreign_ptr (void *ptr);
 

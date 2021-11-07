@@ -31,16 +31,15 @@
 
  */
 
-#include <string.h>
+#include <marlais/symbol.h>
+
+#include <marlais/alloc.h>
+#include <marlais/bytestring.h>
+
 #include <ctype.h>
 
-#include "symbol.h"
+/* local function prototypes */
 
-#include "alloc.h"
-#include "bytestring.h"
-
-/* local function prototypes
- */
 static Object intern_symbol (char *name);
 
 #ifdef NO_STRCASECMP
@@ -48,16 +47,15 @@ int strcasecmp (unsigned char *s1, unsigned char *s2);
 
 #endif
 
-/* local data
- */
+/* local data */
 
 /* If SYMTAB_SIZE is not a power of 2, see change required below. */
 #define SYMTAB_SIZE 1024
 struct symtab *symbol_table[SYMTAB_SIZE];
 unsigned char chartable[1 << sizeof (char) * 8];
 
-/* function definitions
- */
+/* function definitions */
+
 void
 init_symbol_prims (void)
 {

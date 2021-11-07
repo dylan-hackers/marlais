@@ -48,18 +48,17 @@
 
 /* #define OPTIMIZE_SPECIALIZERS */
 
-#include "common.h"
-#include "boolean.h"
-#include "bytestring.h"
-#include "error.h"
-#include "gc.h"
-#include "list.h"
-#include "number.h"
-#include "symbol.h"
-#include "table.h"
-#include "vector.h"
+#include <marlais/common.h>
 
-#include "yystype.h"
+#include <marlais/boolean.h>
+#include <marlais/bytestring.h>
+#include <marlais/error.h>
+#include <marlais/list.h>
+#include <marlais/number.h>
+#include <marlais/symbol.h>
+#include <marlais/table.h>
+#include <marlais/vector.h>
+#include <marlais/yystype.h>
 
 #ifndef YYSTYPE
 #error No YYSTYPE defined

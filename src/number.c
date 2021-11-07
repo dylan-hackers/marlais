@@ -1,16 +1,16 @@
 /* number.c -- see COPYRIGHT for use */
 
-#include <math.h>
+#include <marlais/number.h>
 
-#include "number.h"
-
-#include "alloc.h"
-#include "prim.h"
-#include "values.h"
+#include <marlais/alloc.h>
+#include <marlais/prim.h>
+#include <marlais/values.h>
 
 #ifdef MARLAIS_ENABLE_BIG_INTEGERS
 #include "biginteger.h"
 #endif
+
+#include <math.h>
 
 /* Helper macros */
 

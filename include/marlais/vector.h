@@ -31,10 +31,10 @@
 
  */
 
-#ifndef VECTOR_H
-#define VECTOR_H
+#ifndef MARLAIS_VECTOR_H
+#define MARLAIS_VECTOR_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 /* Register vector primitives */
 extern void marlais_register_vector (void);

@@ -2,8 +2,8 @@
 
 /* This file DEFINES all globals */
 
-#include "common.h"
+#include <marlais/common.h>
 
 #define GLOBAL
-#include "globaldefs.h"
+#include <marlais/globaldefs.h>
 #undef  GLOBAL

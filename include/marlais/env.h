@@ -31,10 +31,10 @@
 
  */
 
-#ifndef ENV_H
-#define ENV_H
+#ifndef MARLAIS_ENV_H
+#define MARLAIS_ENV_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 struct binding {
     Object sym, *val, type;

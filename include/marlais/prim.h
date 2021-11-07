@@ -32,10 +32,10 @@
 
  */
 
-#ifndef PRIM_H
-#define PRIM_H
+#ifndef MARLAIS_PRIM_H
+#define MARLAIS_PRIM_H
 
-#include "common.h"
+#include <marlais/common.h>
 
 /* Register a set of primitives */
 void marlais_register_prims (int num, struct primitive prims[]);
