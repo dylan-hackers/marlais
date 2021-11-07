@@ -196,7 +196,7 @@ signal_handler_init ()
   }
 }
 
-static Object
+static void
 print_dylan_error_helper(const char* kind, Object msg_str, Object rest)
 {
   fprintf (stderr, "%s: %s", kind, BYTESTRVAL (msg_str));
@@ -240,7 +240,7 @@ marlais_error (char *msg,...)
   va_list args;
   Object obj, signal_value, ret;
   jmp_buf *jmp_buf_ptr;
-  static message_printed = 0;
+  static int message_printed = 0;
 
   va_start (args, msg);
   fprintf (stderr, "error: %s", msg);
@@ -355,7 +355,7 @@ signal_error_jump ()
 static Object
 enter_debugger (void)
 {
-  return error ("entering debugger", NULL);
+  return marlais_error ("entering debugger", NULL);
 }
 
 Object
