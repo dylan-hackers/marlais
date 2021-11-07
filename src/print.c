@@ -46,9 +46,6 @@ static void print_type_name (Object stream, Object class, int escaped);
 
 /* Primitives */
 
-static Object print_obj (Object stream, Object obj);
-static Object print_obj_escaped (Object stream, Object obj);
-
 static struct primitive print_prims[] =
 {
   {"%print", prim_2, marlais_print_obj},

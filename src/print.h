@@ -40,9 +40,9 @@
 extern void marlais_register_print (void);
 /* Print an object */
 extern void   marlais_print_object (Object stream, Object obj, int escaped);
-/* Print on object without escaping */
+/* Print an object without escaping */
 extern Object marlais_print_obj (Object stream, Object obj);
-/* Print on object with escaping */
+/* Print an object with escaping */
 extern Object marlais_print_obj_escaped (Object stream, Object obj);
 /* Print to *standard-output* without escaping */
 extern Object marlais_print_out (Object obj);
