@@ -124,14 +124,6 @@ define method make (gftype == <generic-function>,
   end if;
 end method make;
 
-define method debug-name-setter (s :: <variable-name>, m :: <method>)
-  %debug-name-setter(m, s);
-end method debug-name-setter;
-
-define method debug-name (c :: <class>) => (name :: <variable-name>)
-   %class-debug-name(c);
-end method debug-name;
-
 
 define method apply (f :: <function>, #rest args)
 
