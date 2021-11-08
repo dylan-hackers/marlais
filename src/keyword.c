@@ -70,23 +70,6 @@ find_keyword_val (Object keyword, Object lst)
     return (NULL);
 }
 
-/* Return all keywords in the given list. */
-Object
-all_keywords (Object lst)
-{
-    Object l, keywords;
-
-    l = lst;
-    keywords = make_empty_list ();
-    while (!EMPTYLISTP (l)) {
-	if (KEYWORDP (CAR (l))) {
-	    keywords = cons (CAR (l), keywords);
-	}
-	l = CDR (l);
-    }
-    return (keywords);
-}
-
 /* locals */
 
 static Object
