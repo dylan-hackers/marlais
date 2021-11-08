@@ -532,7 +532,7 @@ print_param_list (Object fd, Object params, int escaped)
 static void
 print_unparenthesized_list (Object fd, Object pair, int escaped)
 {
-  print_list_helper(fd, pair, escaped, marlais_print_obj, " ");
+  print_list_helper(fd, pair, escaped, marlais_print_object, " ");
 }
 
 static void
