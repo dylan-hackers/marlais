@@ -86,7 +86,7 @@ marlais_make_name (char *name)
 }
 
 Object
-marlais_make_keyword (char *name)
+marlais_make_symbol (char *name)
 {
   Object obj;
 
@@ -140,7 +140,7 @@ marlais_symbol_to_keyword (Object symbol)
 
   strcpy (name, SYMBOLNAME (symbol));
   strcat (name, ":");
-  return (marlais_make_keyword (name));
+  return (marlais_make_symbol (name));
 }
 
 /* Internal functions */

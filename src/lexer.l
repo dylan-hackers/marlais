@@ -325,12 +325,12 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 
 <ETC>#{STRING}	{ /* Do some nasty business with yytext */
 		  yytext[yyleng-1] = ':';
-		  mylval = marlais_make_keyword (yytext + 2);
+		  mylval = marlais_make_symbol (yytext + 2);
 		  return (SYMBOL);
 		}
 
 <ETC>{WORD}:	{
-		  mylval = marlais_make_keyword (yytext);
+		  mylval = marlais_make_symbol (yytext);
 		  if (mydebug) {
 			printf("yydebug: got symbol [%s]\n",  yytext);
 			}
@@ -725,7 +725,7 @@ which_operator( char *string, int length)
 static void
 make_header_key()
 {
-	header_key = marlais_make_keyword (yytext);
+	header_key = marlais_make_symbol (yytext);
 }
 
 static void
