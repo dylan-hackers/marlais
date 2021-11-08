@@ -417,7 +417,6 @@ initialize_marlais (void)
   marlais_initialize_lexer ();
   define_test_symbol = marlais_make_name ("define-test");
   test_symbol = marlais_make_name ("test");
-  description_symbol = marlais_make_keyword ("description:");
   aref_symbol = marlais_make_name ("aref");
   print_symbol = marlais_make_name ("print-object");
   princ_symbol = marlais_make_name ("object-princ");

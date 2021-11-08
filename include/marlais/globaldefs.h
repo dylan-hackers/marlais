@@ -273,7 +273,6 @@ GLOBAL Object test_symbol;
 GLOBAL Object x_symbol;
 
 GLOBAL Object open_file_list;
-GLOBAL Object description_symbol;
 GLOBAL Object aref_symbol;
 GLOBAL Object print_symbol;
 GLOBAL Object princ_symbol;

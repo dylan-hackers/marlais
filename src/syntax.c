@@ -28,7 +28,7 @@ extern Object primary_symbol;
 extern Object free_symbol;
 extern Object open_symbol;
 extern Object sealed_symbol;
-extern Object description_symbol;
+extern Object description_keyword;
 extern Object error_class;
 extern Object unwind_protect_symbol;
 
