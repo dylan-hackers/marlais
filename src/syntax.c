@@ -599,28 +599,27 @@ cond_eval (Object form)
   return (MARLAIS_FALSE);
 }
 
-static void define_eval_helper(Object form, int bind_where)
+static void define_eval_helper(Object form, int top_level, int constant)
 {
   if (EMPTYLISTP (CDR (form)) || EMPTYLISTP (CDR (CDR (form)))) {
     marlais_error ("DEFINE form requires at least two args: (define {<var>} <init>)",
                    form, NULL);
   } else {
-    bind_variables (CDR (form), 1, bind_where, the_env);
+    bind_variables (CDR (form), top_level, constant, the_env);
   }
 }
 
 static Object
 define_eval (Object form)
 {
-  define_eval_helper(form, 0);
+  define_eval_helper(form, 1, 0);
   return unspecified_object;
 }
-
 
 static Object
 define_constant_eval (Object form)
 {
-  define_eval_helper(form, 1);
+  define_eval_helper(form, 1, 1);
   return unspecified_object;
 }
 
