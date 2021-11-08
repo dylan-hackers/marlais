@@ -325,12 +325,12 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 
 <ETC>#{STRING}	{ /* Do some nasty business with yytext */
 		  yytext[yyleng-1] = ':';
-		  mylval = make_keyword (yytext + 2);
+		  mylval = marlais_make_keyword (yytext + 2);
 		  return (KEYWORD);
 		}
 
 <ETC>{SYMBOL}:	{
-		  mylval = make_keyword (yytext);
+		  mylval = marlais_make_keyword (yytext);
 		  if (mydebug) {
 			printf("yydebug: got symbol [%s]\n",  yytext);
 			}
@@ -436,46 +436,46 @@ marlais_initialize_lexer (void)
     intermediate_words = NULL;
 
     for (i = 0; i < NUM_COREWORDS; i++) {
-	*(coreword_table[i].symbol) = make_symbol(coreword_table[i].word);
+	*(coreword_table[i].symbol) = marlais_make_symbol(coreword_table[i].word);
     }
     for (i = 0; i < NUM_BEGIN_WORDS; i++) {
 	*(begin_word_table[i].symbol) =
-	    make_symbol (begin_word_table[i].word);
+	    marlais_make_symbol (begin_word_table[i].word);
     }
     for (i = 0; i < NUM_DEFINING_WORDS; i++) {
 	*(defining_word_table[i].symbol) =
-	    make_symbol (defining_word_table[i].word);
+	    marlais_make_symbol (defining_word_table[i].word);
     }
     for (i = 0; i < NUM_IF_INTERMEDIATE_WORDS; i++) {
 	*(if_intermediate_word_table[i].symbol) =
-	    make_symbol (if_intermediate_word_table[i].word);
+	    marlais_make_symbol (if_intermediate_word_table[i].word);
     }
     for (i = 0; i < NUM_SELECT_INTERMEDIATE_WORDS; i++) {
 	*(select_intermediate_word_table[i].symbol) =
-	    make_symbol (select_intermediate_word_table[i].word);
+	    marlais_make_symbol (select_intermediate_word_table[i].word);
     }
     for (i = 0; i < NUM_CLASS_INTERMEDIATE_WORDS; i++) {
 	*(class_intermediate_word_table[i].symbol) =
-	    make_symbol (class_intermediate_word_table[i].word);
+	    marlais_make_symbol (class_intermediate_word_table[i].word);
     }
     for (i = 0; i < NUM_FOR_INTERMEDIATE_WORDS; i++) {
 	*(for_intermediate_word_table[i].symbol) =
-	    make_symbol (for_intermediate_word_table[i].word);
+	    marlais_make_symbol (for_intermediate_word_table[i].word);
     }
     for (i = 0; i < NUM_FOR_CLAUSE_WORDS; i++) {
 	*(for_clause_word_table[i].symbol) =
-	    make_symbol (for_clause_word_table[i].word);
+	    marlais_make_symbol (for_clause_word_table[i].word);
     }
    for (i = 0; i < NUM_BLOCK_INTERMEDIATE_WORDS; i++) {
 	*(block_intermediate_word_table[i].symbol) =
-	    make_symbol (block_intermediate_word_table[i].word);
+	    marlais_make_symbol (block_intermediate_word_table[i].word);
     }
    for (i = 0; i < NUM_MODULE_INTERMEDIATE_WORDS; i++) {
 	*(module_intermediate_word_table[i].symbol) =
-	    make_symbol (module_intermediate_word_table[i].word);
+	    marlais_make_symbol (module_intermediate_word_table[i].word);
     }
-    equal_arrow_symbol = make_symbol("=>");
-    colon_colon_symbol = make_symbol("::");
+    equal_arrow_symbol = marlais_make_symbol("=>");
+    colon_colon_symbol = marlais_make_symbol("::");
 }
 
 void
@@ -608,7 +608,7 @@ symbol_or_resword (char *string, YYSTYPE *obj_ptr)
 	*obj_ptr = *(result->symbol);
 	return result->token;
     }
-    *obj_ptr = make_symbol(string);
+    *obj_ptr = marlais_make_symbol(string);
     return SYMBOL;
 }
 
@@ -725,7 +725,7 @@ which_operator( char *string, int length)
 static void
 make_header_key()
 {
-	header_key = make_keyword (yytext);
+	header_key = marlais_make_keyword (yytext);
 }
 
 static void
@@ -758,7 +758,7 @@ static void
 make_header_val()
 {
 	if (header_key == module_keyword) {
-		Object symbol = make_symbol (get_nonws_symbol (yytext));
+		Object symbol = marlais_make_symbol (get_nonws_symbol (yytext));
 		struct module_binding *module = module_binding (symbol);
 		set_module (module);
 	}

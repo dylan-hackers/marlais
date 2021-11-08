@@ -36,14 +36,17 @@
 
 #include <marlais/common.h>
 
-struct symtab {
-    Object sym;
-    struct symtab *next;
-};
+extern void marlais_register_symbol (void);
 
-Object make_symbol (char *name);
-Object make_keyword (char *name);
-Object make_setter_symbol (Object sym);
-void init_symbol_prims (void);
+extern Object marlais_make_symbol (char *name);
+extern Object marlais_make_keyword (char *name);
+extern Object marlais_make_setter_symbol (Object sym);
+
+extern Object marlais_symbol_to_string (Object symbol);
+extern Object marlais_string_to_symbol (Object keyword);
+
+extern Object marlais_symbol_to_keyword (Object symbol);
+extern Object marlais_keyword_to_symbol (Object keyword);
+
 
 #endif

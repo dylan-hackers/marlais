@@ -38,25 +38,44 @@
 
 #include <ctype.h>
 
-/* local function prototypes */
+/* Internal types */
 
-static Object intern_symbol (char *name);
+struct symtab {
+    Object sym;
+    struct symtab *next;
+};
 
-/* local data */
+/* Internal variables */
 
 /* If SYMTAB_SIZE is not a power of 2, see change required below. */
 #define SYMTAB_SIZE 1024
 struct symtab *symbol_table[SYMTAB_SIZE];
 
-/* function definitions */
+/* Internal function declarations */
+
+static Object intern_symbol (char *name);
+
+/* Primitives */
+
+static struct primitive symbol_prims[] =
+{
+    {"%symbol->string", prim_1, marlais_symbol_to_string},
+    {"%string->symbol", prim_1, marlais_string_to_symbol},
+    {"%keyword->symbol", prim_1, marlais_keyword_to_symbol},
+    {"%symbol->keyword", prim_1, marlais_symbol_to_keyword},
+};
+
+/* Exported functions */
 
 void
-init_symbol_prims (void)
+marlais_register_symbol (void)
 {
+  int num = sizeof (symbol_prims) / sizeof (struct primitive);
+  marlais_register_prims (num, symbol_prims);
 }
 
 Object
-make_symbol (char *name)
+marlais_make_symbol (char *name)
 {
   Object obj;
 
@@ -65,7 +84,7 @@ make_symbol (char *name)
 }
 
 Object
-make_keyword (char *name)
+marlais_make_keyword (char *name)
 {
   Object obj;
 
@@ -76,7 +95,7 @@ make_keyword (char *name)
 
 
 Object
-make_setter_symbol (Object sym)
+marlais_make_setter_symbol (Object sym)
 {
   size_t namelen;
   char *name;
@@ -86,9 +105,44 @@ make_setter_symbol (Object sym)
   strcpy (name, SYMBOLNAME (sym));
   strcat (name, "-setter");
 
-  return (make_symbol (name));
+  return (marlais_make_symbol (name));
 }
 
+Object
+marlais_symbol_to_string (Object sym)
+{
+    return (marlais_make_bytestring (SYMBOLNAME (sym)));
+}
+
+Object
+marlais_string_to_symbol (Object str)
+{
+    return (marlais_make_symbol (BYTESTRVAL (str)));
+}
+
+Object
+marlais_keyword_to_symbol (Object keyword)
+{
+    char name[MAX_SYMBOL_SIZE];
+    int size;
+
+    strcpy (name, KEYNAME (keyword));
+    size = strlen (name);
+    name[size - 1] = '\0';
+    return (marlais_make_symbol (name));
+}
+
+Object
+marlais_symbol_to_keyword (Object symbol)
+{
+    char name[MAX_SYMBOL_SIZE];
+
+    strcpy (name, SYMBOLNAME (symbol));
+    strcat (name, ":");
+    return (marlais_make_keyword (name));
+}
+
+/* Internal functions */
 
 static Object
 intern_symbol (char *name)

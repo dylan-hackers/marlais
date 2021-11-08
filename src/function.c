@@ -1314,6 +1314,6 @@ is_param_name (Object parameter_name)
 static Object
 param_name_to_keyword (Object param_name)
 {
-    return symbol_to_keyword (SYMBOLP (param_name) ? param_name
+    return marlais_symbol_to_keyword (SYMBOLP (param_name) ? param_name
 			      : CAR (param_name));
 }

@@ -14,7 +14,7 @@ marlais_register_prims (int num, struct primitive prims[])
   Object sym, prim;
 
   for (i = 0; i < num; ++i) {
-    sym = make_symbol (prims[i].name);
+    sym = marlais_make_symbol (prims[i].name);
     prim = marlais_make_primitive (prims[i].name, prims[i].prim_type, prims[i].fun);
     /* just for now, don't add %foo to be exported */
     add_top_lvl_binding1(sym, prim, 0, /* or not prims[i].name[0] != '%' */ 1);

@@ -59,7 +59,7 @@ marlais_register_apply (void)
 
     marlais_register_prims (num, apply_prims);
 
-    user_keyword = make_keyword ("user:");
+    user_keyword = marlais_make_keyword ("user:");
     ResultValueStack = make_empty_list ();
 }
 

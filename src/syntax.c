@@ -240,7 +240,7 @@ install_syntax_entry (char *name, syntax_fun fun)
     Object sym;
     int h;
 
-    sym = make_symbol (name);
+    sym = marlais_make_symbol (name);
     h = ((DyInteger) sym) % SYNTAX_TABLE_SIZE;
     entry = (struct syntax_entry *)
       marlais_allocate_memory (sizeof (struct syntax_entry));
@@ -1811,7 +1811,7 @@ set_eval (Object form)
      * (set! (slot obj ...) new-value) should become
      * (slot-setter new-value obj ...)
      */
-    return eval (cons (make_setter_symbol (CAR (sym)),
+    return eval (cons (marlais_make_setter_symbol (CAR (sym)),
                        marlais_devalue (cons (THIRD (form), CDR (sym)))));
 
   }

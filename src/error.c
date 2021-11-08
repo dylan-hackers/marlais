@@ -161,13 +161,13 @@ marlais_register_error (void)
 {
   int num;
 
-  print_env_symbol = make_symbol ("print-env");
-  print_stack_symbol = make_symbol ("print-stack");
-  show_bindings_symbol = make_symbol ("show-bindings");
-  help_symbol = make_symbol ("help");
-  return_symbol = make_symbol ("return");
-  fail_symbol = make_symbol ("fail");
-  debugger_symbol = make_symbol ("<<Debugger>>");
+  print_env_symbol = marlais_make_symbol ("print-env");
+  print_stack_symbol = marlais_make_symbol ("print-stack");
+  show_bindings_symbol = marlais_make_symbol ("show-bindings");
+  help_symbol = marlais_make_symbol ("help");
+  return_symbol = marlais_make_symbol ("return");
+  fail_symbol = marlais_make_symbol ("fail");
+  debugger_symbol = marlais_make_symbol ("<<Debugger>>");
 
   num = sizeof (error_prims) / sizeof (struct primitive);
   marlais_register_prims (num, error_prims);
@@ -308,7 +308,7 @@ marlais_error (char *msg,...)
 	  char symbol_name[12];
 
 	  snprintf (symbol_name, 12, "$%i", sequence_num);
-	  symbol = make_symbol (symbol_name);
+	  symbol = marlais_make_symbol (symbol_name);
 	  add_top_level_binding (symbol, obj, 1);
 	  fprintf (stdout, " $%i = ", sequence_num);
 	  sequence_num++;

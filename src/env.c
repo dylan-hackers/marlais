@@ -476,9 +476,9 @@ user_set_module (Object args)
     }
     if (KEYWORDP (module_name)) {
 	return
-	    symbol_to_keyword (set_module
+	    marlais_symbol_to_keyword (set_module
 			       (module_binding
-				(keyword_to_symbol (module_name)))
+				(marlais_keyword_to_symbol (module_name)))
 			       ->sym);
     } else {
 	return marlais_error ("set-module: argument should be a symbol",
@@ -694,7 +694,7 @@ use_module (Object module_name,
 Object
 user_current_module ()
 {
-    return symbol_to_keyword (current_module ()->sym);
+    return marlais_symbol_to_keyword (current_module ()->sym);
 }
 
 struct module_binding *
@@ -792,7 +792,7 @@ concat_prefix (char *prefix_string, Object sym)
     strcpy (new_str, prefix_string);
     strcpy (new_str + prefix_len, old_str);
 
-    return make_symbol (new_str);
+    return marlais_make_symbol (new_str);
 }
 
 /*

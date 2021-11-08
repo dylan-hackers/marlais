@@ -1433,7 +1433,7 @@ make_setter_expr (Object place, Object value)
 					      make_empty_list())),
 				   make_empty_list()),
 			      make_empty_list())),
-		   cons (make_setter_symbol (FIRST (place)),
+		   cons (marlais_make_setter_symbol (FIRST (place)),
 			 cons (newsym, CDR (place))),
 		   newsym,
 		   NULL);
@@ -1446,7 +1446,7 @@ static Object
 gensym(int i)
 {
     sprintf( gensymbuf, "\"tmp%d", i);
-    return make_symbol (gensymbuf);
+    return marlais_make_symbol (gensymbuf);
 }
 
 static int

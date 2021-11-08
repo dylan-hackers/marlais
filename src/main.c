@@ -39,7 +39,7 @@ static void print_top_level_constant(Object obj, int bind_p)
 
   if(bind_p) {
     snprintf (symbol_name, 12, "$%i", sequence_num);
-    symbol = make_symbol (symbol_name);
+    symbol = marlais_make_symbol (symbol_name);
     add_top_level_binding (symbol, obj, 1);
     fprintf (stdout, " $%i = ", sequence_num);
     sequence_num++;
@@ -248,16 +248,13 @@ initialize_marlais (void)
   /* intialize garbage collector */
   marlais_initialize_gc ();
 
-  dylan_symbol = make_symbol ("dylan");
-  dylan_user_symbol = make_symbol ("dylan-user");
+  dylan_symbol = marlais_make_symbol ("dylan");
+  dylan_user_symbol = marlais_make_symbol ("dylan-user");
 
   set_module (new_module (dylan_symbol));
 
-  all_symbol = make_symbol ("all");
+  all_symbol = marlais_make_symbol ("all");
   (current_module ())->exported_bindings = all_symbol;
-
-  /* initialize symbol table primitives -- MUST BE DONE EARLY!! */
-  init_symbol_prims ();
 
   /* intialize global objects */
   marlais_initialize_boolean ();
@@ -267,163 +264,163 @@ initialize_marlais (void)
   marlais_initialize_stream ();
 
   empty_string = marlais_make_bytestring ("");
-  equal_symbol = make_symbol ("=");
+  equal_symbol = marlais_make_symbol ("=");
 
-  apply_symbol = make_symbol ("apply");
-  key_symbol = make_symbol ("#key");
-  keyword_symbol = make_symbol ("keyword");
-  required_symbol = make_symbol ("required");
-  allkeys_symbol = make_symbol ("#all-keys");
-  hash_rest_symbol = make_symbol ("#rest");
-  next_symbol = make_symbol ("#next");
-  values_symbol = make_symbol ("values");
-  hash_values_symbol = make_symbol ("#values");
-  quote_symbol = make_symbol ("quote");
+  apply_symbol = marlais_make_symbol ("apply");
+  key_symbol = marlais_make_symbol ("#key");
+  keyword_symbol = marlais_make_symbol ("keyword");
+  required_symbol = marlais_make_symbol ("required");
+  allkeys_symbol = marlais_make_symbol ("#all-keys");
+  hash_rest_symbol = marlais_make_symbol ("#rest");
+  next_symbol = marlais_make_symbol ("#next");
+  values_symbol = marlais_make_symbol ("values");
+  hash_values_symbol = marlais_make_symbol ("#values");
+  quote_symbol = marlais_make_symbol ("quote");
   eof_object = make_eof_object ();
-  unwind_symbol = make_symbol ("%unwind");
-  next_method_symbol = make_symbol ("next-method");
-  initialize_symbol = make_symbol ("initialize");
-  equal_hash_symbol = make_symbol ("=hash");
+  unwind_symbol = marlais_make_symbol ("%unwind");
+  next_method_symbol = marlais_make_symbol ("next-method");
+  initialize_symbol = marlais_make_symbol ("initialize");
+  equal_hash_symbol = marlais_make_symbol ("=hash");
   uninit_slot_object = make_uninit_slot ();
-  standard_input_symbol = make_symbol ("*standard-input*");
-  standard_output_symbol = make_symbol ("*standard-output*");
-  standard_error_symbol = make_symbol ("*standard-error*");
+  standard_input_symbol = marlais_make_symbol ("*standard-input*");
+  standard_output_symbol = marlais_make_symbol ("*standard-output*");
+  standard_error_symbol = marlais_make_symbol ("*standard-error*");
 
 /* this looks like lisp -- should it go? */
-  quasiquote_symbol = make_symbol ("quasiquote");
-  unquote_symbol = make_symbol ("unquote");
-  unquote_splicing_symbol = make_symbol ("unquote-splicing");
+  quasiquote_symbol = marlais_make_symbol ("quasiquote");
+  unquote_symbol = marlais_make_symbol ("unquote");
+  unquote_splicing_symbol = marlais_make_symbol ("unquote-splicing");
 
-  element_symbol = make_symbol ("element");
-  element_setter_symbol = make_symbol ("element-setter");
-  signal_symbol = make_symbol ("signal");
-  concatenate_symbol = make_symbol ("concatenate");
-  cond_symbol = make_symbol ("cond");
+  element_symbol = marlais_make_symbol ("element");
+  element_setter_symbol = marlais_make_symbol ("element-setter");
+  signal_symbol = marlais_make_symbol ("signal");
+  concatenate_symbol = marlais_make_symbol ("concatenate");
+  cond_symbol = marlais_make_symbol ("cond");
 
   /* often used keywords */
-  getter_keyword = make_keyword ("getter:");
-  setter_keyword = make_keyword ("setter:");
-  until_keyword = make_keyword ("until:");
-  while_keyword = make_keyword ("while:");
-  else_keyword = make_keyword ("else:");
-  type_keyword = make_keyword ("type:");
-  deferred_type_keyword = make_keyword ("deferred-type:");
-  init_value_keyword = make_keyword ("init-value:");
-  init_function_keyword = make_keyword ("init-function:");
-  init_keyword_keyword = make_keyword ("init-keyword:");
-  required_init_keyword_keyword = make_keyword ("required-init-keyword:");
-  allocation_keyword = make_keyword ("allocation:");
-  super_classes_keyword = make_keyword ("superclasses:");
-  slots_keyword = make_keyword ("slots:");
-  abstract_p_keyword = make_keyword ("abstract?:");
-  debug_name_keyword = make_keyword ("debug-name:");
-  size_keyword = make_keyword ("size:");
-  fill_keyword = make_keyword ("fill:");
-  dim_keyword = make_keyword ("dimensions:");
-  min_keyword = make_keyword ("min:");
-  max_keyword = make_keyword ("max:");
+  getter_keyword = marlais_make_keyword ("getter:");
+  setter_keyword = marlais_make_keyword ("setter:");
+  until_keyword = marlais_make_keyword ("until:");
+  while_keyword = marlais_make_keyword ("while:");
+  else_keyword = marlais_make_keyword ("else:");
+  type_keyword = marlais_make_keyword ("type:");
+  deferred_type_keyword = marlais_make_keyword ("deferred-type:");
+  init_value_keyword = marlais_make_keyword ("init-value:");
+  init_function_keyword = marlais_make_keyword ("init-function:");
+  init_keyword_keyword = marlais_make_keyword ("init-keyword:");
+  required_init_keyword_keyword = marlais_make_keyword ("required-init-keyword:");
+  allocation_keyword = marlais_make_keyword ("allocation:");
+  super_classes_keyword = marlais_make_keyword ("superclasses:");
+  slots_keyword = marlais_make_keyword ("slots:");
+  abstract_p_keyword = marlais_make_keyword ("abstract?:");
+  debug_name_keyword = marlais_make_keyword ("debug-name:");
+  size_keyword = marlais_make_keyword ("size:");
+  fill_keyword = marlais_make_keyword ("fill:");
+  dim_keyword = marlais_make_keyword ("dimensions:");
+  min_keyword = marlais_make_keyword ("min:");
+  max_keyword = marlais_make_keyword ("max:");
 
   /* often used symbols */
-  instance_symbol = make_symbol ("instance");
-  class_symbol = make_symbol ("class");
-  each_subclass_symbol = make_symbol ("each-subclass");
-  inherited_symbol = make_symbol ("inherited");
-  constant_symbol = make_symbol ("constant");
-  virtual_symbol = make_symbol ("virtual");
-  object_class_symbol = make_symbol ("object-class");
+  instance_symbol = marlais_make_symbol ("instance");
+  class_symbol = marlais_make_symbol ("class");
+  each_subclass_symbol = marlais_make_symbol ("each-subclass");
+  inherited_symbol = marlais_make_symbol ("inherited");
+  constant_symbol = marlais_make_symbol ("constant");
+  virtual_symbol = marlais_make_symbol ("virtual");
+  object_class_symbol = marlais_make_symbol ("object-class");
 
-  obj_sym = make_symbol ("obj");
-  slot_val_sym = make_symbol ("slot-value");
-  set_slot_value_sym = make_symbol ("set-slot-value!");
-  val_sym = make_symbol ("val");
-  initial_state_sym = make_symbol ("initial-state");
-  next_state_sym = make_symbol ("next-state");
-  current_element_sym = make_symbol ("current-element");
+  obj_sym = marlais_make_symbol ("obj");
+  slot_val_sym = marlais_make_symbol ("slot-value");
+  set_slot_value_sym = marlais_make_symbol ("set-slot-value!");
+  val_sym = marlais_make_symbol ("val");
+  initial_state_sym = marlais_make_symbol ("initial-state");
+  next_state_sym = marlais_make_symbol ("next-state");
+  current_element_sym = marlais_make_symbol ("current-element");
 
-  colon_equal_symbol = make_symbol (":=");
-  not_equal_symbol = make_symbol ("~=");
-  not_equal_equal_symbol = make_symbol ("~==");
-  equal_equal_symbol = make_symbol ("==");
-  greater_equal_symbol = make_symbol (">=");
-  lesser_equal_symbol = make_symbol ("<=");
-  or_symbol = make_symbol ("|");
-  and_symbol = make_symbol ("&");
-  greater_symbol = make_symbol (">");
-  lesser_symbol = make_symbol ("<");
-  exponent_symbol = make_symbol ("^");
-  divides_symbol = make_symbol ("/");
-  times_symbol = make_symbol ("*");
-  minus_symbol = make_symbol ("-");
-  plus_symbol = make_symbol ("+");
-  not_symbol = make_symbol ("~");
+  colon_equal_symbol = marlais_make_symbol (":=");
+  not_equal_symbol = marlais_make_symbol ("~=");
+  not_equal_equal_symbol = marlais_make_symbol ("~==");
+  equal_equal_symbol = marlais_make_symbol ("==");
+  greater_equal_symbol = marlais_make_symbol (">=");
+  lesser_equal_symbol = marlais_make_symbol ("<=");
+  or_symbol = marlais_make_symbol ("|");
+  and_symbol = marlais_make_symbol ("&");
+  greater_symbol = marlais_make_symbol (">");
+  lesser_symbol = marlais_make_symbol ("<");
+  exponent_symbol = marlais_make_symbol ("^");
+  divides_symbol = marlais_make_symbol ("/");
+  times_symbol = marlais_make_symbol ("*");
+  minus_symbol = marlais_make_symbol ("-");
+  plus_symbol = marlais_make_symbol ("+");
+  not_symbol = marlais_make_symbol ("~");
 
   /** dma -- I think these are classic syntax constructs */
-  local_bind_symbol = make_symbol ("\"local-bind");
-  local_bind_rec_symbol = make_symbol ("\"local-bind-rec");
-  unbinding_begin_symbol = make_symbol ("\"unbinding-begin");
-  define_variable_symbol = make_symbol ("define-variable");
-  define_constant_symbol = make_symbol ("define-constant");
-  define_class_symbol = make_symbol ("define-class");
-  define_generic_function_symbol = make_symbol ("define-generic-function");
-  define_method_symbol = make_symbol ("define-method");
-  define_function_symbol = make_symbol ("define-function");
+  local_bind_symbol = marlais_make_symbol ("\"local-bind");
+  local_bind_rec_symbol = marlais_make_symbol ("\"local-bind-rec");
+  unbinding_begin_symbol = marlais_make_symbol ("\"unbinding-begin");
+  define_variable_symbol = marlais_make_symbol ("define-variable");
+  define_constant_symbol = marlais_make_symbol ("define-constant");
+  define_class_symbol = marlais_make_symbol ("define-class");
+  define_generic_function_symbol = marlais_make_symbol ("define-generic-function");
+  define_method_symbol = marlais_make_symbol ("define-method");
+  define_function_symbol = marlais_make_symbol ("define-function");
 
-  seal_symbol = make_symbol ("seal");
-  set_bang_symbol = make_symbol ("set!");
-  singleton_symbol = make_symbol ("singleton");
-  sealed_symbol = make_symbol ("sealed");
-  open_symbol = make_symbol ("open");
-  dynamism_keyword = make_keyword ("dynamism:");
-  negative_symbol = make_symbol ("negative");
-  list_symbol = make_symbol ("list");
-  pair_symbol = make_symbol ("pair");
-  variable_keyword = make_keyword ("variable:");
-  to_symbol = make_symbol ("to");
-  above_symbol = make_symbol ("above");
-  below_symbol = make_symbol ("below");
-  by_symbol = make_symbol ("by");
-  range_keyword = make_keyword ("range:");
-  collection_keyword = make_keyword ("collection:");
+  seal_symbol = marlais_make_symbol ("seal");
+  set_bang_symbol = marlais_make_symbol ("set!");
+  singleton_symbol = marlais_make_symbol ("singleton");
+  sealed_symbol = marlais_make_symbol ("sealed");
+  open_symbol = marlais_make_symbol ("open");
+  dynamism_keyword = marlais_make_keyword ("dynamism:");
+  negative_symbol = marlais_make_symbol ("negative");
+  list_symbol = marlais_make_symbol ("list");
+  pair_symbol = marlais_make_symbol ("pair");
+  variable_keyword = marlais_make_keyword ("variable:");
+  to_symbol = marlais_make_symbol ("to");
+  above_symbol = marlais_make_symbol ("above");
+  below_symbol = marlais_make_symbol ("below");
+  by_symbol = marlais_make_symbol ("by");
+  range_keyword = marlais_make_keyword ("range:");
+  collection_keyword = marlais_make_keyword ("collection:");
   forward_iteration_protocol_symbol =
-    make_symbol ("forward-iteration-protocol");
-  plus_symbol = make_symbol ("+");
-  bind_symbol = make_symbol ("bind");
-  bind_exit_symbol = make_symbol ("bind-exit");
-  exit_symbol = make_symbol ("exit");
-  unwind_protect_symbol = make_symbol ("unwind-protect");
-  vals_symbol = make_symbol ("\"vals");
-  modifiers_keyword = make_keyword ("modifiers:");
-  abstract_symbol = make_symbol ("abstract");
-  concrete_symbol = make_symbol ("concrete");
-  primary_symbol = make_symbol ("primary");
-  free_symbol = make_symbol ("free");
-  use_symbol = make_symbol ("use");
-  export_symbol = make_symbol ("export");
-  create_symbol = make_symbol ("create");
-  module_symbol = make_symbol ("module");
-  define_module_symbol = make_symbol ("define-module");
-  module_keyword = make_keyword ("module:");
-  import_keyword = make_keyword ("import:");
-  exclude_keyword = make_keyword ("exclude:");
-  prefix_keyword = make_keyword ("prefix:");
-  rename_keyword = make_keyword ("rename:");
-  export_keyword = make_keyword ("export:");
+    marlais_make_symbol ("forward-iteration-protocol");
+  plus_symbol = marlais_make_symbol ("+");
+  bind_symbol = marlais_make_symbol ("bind");
+  bind_exit_symbol = marlais_make_symbol ("bind-exit");
+  exit_symbol = marlais_make_symbol ("exit");
+  unwind_protect_symbol = marlais_make_symbol ("unwind-protect");
+  vals_symbol = marlais_make_symbol ("\"vals");
+  modifiers_keyword = marlais_make_keyword ("modifiers:");
+  abstract_symbol = marlais_make_symbol ("abstract");
+  concrete_symbol = marlais_make_symbol ("concrete");
+  primary_symbol = marlais_make_symbol ("primary");
+  free_symbol = marlais_make_symbol ("free");
+  use_symbol = marlais_make_symbol ("use");
+  export_symbol = marlais_make_symbol ("export");
+  create_symbol = marlais_make_symbol ("create");
+  module_symbol = marlais_make_symbol ("module");
+  define_module_symbol = marlais_make_symbol ("define-module");
+  module_keyword = marlais_make_keyword ("module:");
+  import_keyword = marlais_make_keyword ("import:");
+  exclude_keyword = marlais_make_keyword ("exclude:");
+  prefix_keyword = marlais_make_keyword ("prefix:");
+  rename_keyword = marlais_make_keyword ("rename:");
+  export_keyword = marlais_make_keyword ("export:");
 
   /* infrequently used, but important symbols */
-  instance_slots_symbol = make_symbol ("%instance-slots");
-  class_slots_symbol = make_symbol ("%class-slots");
-  each_subclass_slots_symbol = make_symbol ("%each-subclass-slots");
-  x_symbol = make_symbol ("x");
+  instance_slots_symbol = marlais_make_symbol ("%instance-slots");
+  class_slots_symbol = marlais_make_symbol ("%class-slots");
+  each_subclass_slots_symbol = marlais_make_symbol ("%each-subclass-slots");
+  x_symbol = marlais_make_symbol ("x");
 
   /* initialize table of syntax operators and functions */
   marlais_initialize_syntax ();
   marlais_initialize_lexer ();
-  define_test_symbol = make_symbol ("define-test");
-  test_symbol = make_symbol ("test");
-  description_symbol = make_keyword ("description:");
-  aref_symbol = make_symbol ("aref");
-  print_symbol = make_symbol ("print-object");
-  princ_symbol = make_symbol ("object-princ");
+  define_test_symbol = marlais_make_symbol ("define-test");
+  test_symbol = marlais_make_symbol ("test");
+  description_symbol = marlais_make_keyword ("description:");
+  aref_symbol = marlais_make_symbol ("aref");
+  print_symbol = marlais_make_symbol ("print-object");
+  princ_symbol = marlais_make_symbol ("object-princ");
 
   /* initialize builtin classes */
   marlais_initialize_class ();
@@ -431,24 +428,25 @@ initialize_marlais (void)
   unspecified_object = make_unspecified_object ();
 
   /* make the unspecified object available */
-  add_top_level_binding (make_symbol ("%unspecified"),
+  add_top_level_binding (marlais_make_symbol ("%unspecified"),
 			 unspecified_object,
 			 1);
 
   /* make the uninitialize slot value available */
-  add_top_level_binding (make_symbol ("%uninitialized-slot-value"),
+  add_top_level_binding (marlais_make_symbol ("%uninitialized-slot-value"),
 			 uninit_slot_object,
 			 1);
 
   /* make default object */
   default_object = cons (MARLAIS_FALSE, MARLAIS_FALSE);
-  add_top_level_binding (make_symbol ("%default-object"), default_object, 1);
+  add_top_level_binding (marlais_make_symbol ("%default-object"), default_object, 1);
 
   binding_stack = cons (marlais_make_integer (0), make_empty_list ());
 
   /* initialize primitives */
   init_env_prims ();
   init_list_prims ();
+  marlais_register_symbol ();
   marlais_register_class ();
   marlais_register_slot ();
   init_file_prims ();
@@ -458,7 +456,6 @@ initialize_marlais (void)
   marlais_register_number ();
   marlais_register_apply ();
   marlais_register_boolean ();
-  init_keyword_prims ();
   marlais_register_bytestring ();
   marlais_register_vector ();
   marlais_register_error ();
