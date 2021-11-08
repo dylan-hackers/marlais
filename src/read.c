@@ -92,53 +92,53 @@ infix_decode_token (int yychar, FILE * fp)
       Object *new_list_ptr = &new_list;
 
       do {
-	if ((yychar = yylex ()) < 0)
-	  yychar = 0;
-	if (yychar == ']')
-	  return new_list;
+        if ((yychar = yylex ()) < 0)
+          yychar = 0;
+        if (yychar == ']')
+          return new_list;
 
-	*new_list_ptr = cons (infix_decode_token (yychar, fp),
-			      make_empty_list ());
-	new_list_ptr = &CDR (*new_list_ptr);
+        *new_list_ptr = cons (infix_decode_token (yychar, fp),
+                              make_empty_list ());
+        new_list_ptr = &CDR (*new_list_ptr);
 
-	if ((yychar = yylex ()) < 0)
-	  yychar = 0;
+        if ((yychar = yylex ()) < 0)
+          yychar = 0;
       } while (yychar == ',');
 
       if (yychar != ']') {
-	return marlais_error ("Malformed vector.  Expected a ']'", NULL);
+        return marlais_error ("Malformed vector.  Expected a ']'", NULL);
       }
       return marlais_make_sov (new_list);
-    }			/* case HASH_BRACKET */
+    } /* case HASH_BRACKET */
   case HASH_PAREN:
     {
       Object new_list = make_empty_list ();
       Object *new_list_ptr = &new_list;
 
       do {
-	if ((yychar = yylex ()) < 0)
-	  yychar = 0;
-	if (yychar == ')')
-	  return new_list;
+        if ((yychar = yylex ()) < 0)
+          yychar = 0;
+        if (yychar == ')')
+          return new_list;
 
-	*new_list_ptr = cons (infix_decode_token (yychar, fp),
-			      make_empty_list ());
-	new_list_ptr = &CDR (*new_list_ptr);
+        *new_list_ptr = cons (infix_decode_token (yychar, fp),
+                              make_empty_list ());
+        new_list_ptr = &CDR (*new_list_ptr);
 
-	if ((yychar = yylex ()) < 0)
-	  yychar = 0;
+        if ((yychar = yylex ()) < 0)
+          yychar = 0;
       } while (yychar == ',');
 
       if (yychar == '.') {
-	*new_list_ptr = infix_read_object (fp);
-	if ((yychar = yylex ()) < 0)
-	  yychar = 0;
+        *new_list_ptr = infix_read_object (fp);
+        if ((yychar = yylex ()) < 0)
+          yychar = 0;
       }
       if (yychar != ')') {
-	return marlais_error ("Malformed list.  Expected a ')'", NULL);
+        return marlais_error ("Malformed list.  Expected a ')'", NULL);
       }
       return new_list;
-    }			/* case HASH_PAREN */
+    } /* case HASH_PAREN */
   case KEYWORD:
     return yylval;
   default:

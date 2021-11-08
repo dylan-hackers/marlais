@@ -135,7 +135,7 @@ intern_symbol (char *name)
   while (entry) {
 #ifdef NO_STRCASECMP
     if (strcasecmp ((unsigned char *) name,
-		    (unsigned char *) SYMBOLNAME (entry->sym)) == 0) {
+                    (unsigned char *) SYMBOLNAME (entry->sym)) == 0) {
 #else
     if (strcasecmp (name, SYMBOLNAME (entry->sym)) == 0) {
 #endif

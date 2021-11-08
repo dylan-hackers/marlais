@@ -42,10 +42,6 @@
 #include <marlais/sequence.h>
 #include <marlais/symbol.h>
 
-/* globals */
-
-/* primitives */
-
 /* local function prototypes */
 static Object car (Object pair);
 static Object cdr (Object pair);

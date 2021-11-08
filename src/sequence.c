@@ -37,10 +37,10 @@
 
 void marlais_make_sequence_entry
     (Object args,
-	 int* size,
-	 Object* size_obj,
-	 Object* fill_obj,
-	 const char* type)
+     int* size,
+     Object* size_obj,
+     Object* fill_obj,
+     const char* type)
 {
   *size = 0;
   *size_obj = NULL;
@@ -61,7 +61,7 @@ void marlais_make_sequence_entry
   if (*size_obj) {
     if (!INTEGERP (*size_obj)) {
       marlais_error ("make: value of size: argument must be an integer",
-	     size_obj, NULL);
+                     size_obj, NULL);
     }
     *size = INTVAL (*size_obj);
   }

@@ -39,97 +39,97 @@ marlais_register_slot (void)
 Object
 marlais_slot_name (Object slot)
 {
-    if (!PAIRP (slot)) {
-	return (slot);
+  if (!PAIRP (slot)) {
+    return (slot);
+  } else {
+    if (SYMBOLP (CAR (slot))) {
+      return (CAR (slot));
     } else {
-	if (SYMBOLP (CAR (slot))) {
-	    return (CAR (slot));
-	} else {
-	    marlais_error ("Slot has no name but needs one", slot, NULL);
-	    return NULL;
-	}
+      marlais_error ("Slot has no name but needs one", slot, NULL);
+      return NULL;
     }
+  }
 }
 
 Object
 marlais_slot_getter (Object slot)
 {
-    if (!PAIRP (slot)) {
-	return (NULL);
-    } else {
-	return (find_keyword_val (getter_keyword, slot));
-    }
+  if (!PAIRP (slot)) {
+    return (NULL);
+  } else {
+    return (find_keyword_val (getter_keyword, slot));
+  }
 }
 
 Object
 marlais_slot_setter (Object slot)
 {
-    if (!PAIRP (slot)) {
-	return (NULL);
-    } else {
-	return (find_keyword_val (setter_keyword, slot));
-    }
+  if (!PAIRP (slot)) {
+    return (NULL);
+  } else {
+    return (find_keyword_val (setter_keyword, slot));
+  }
 }
 
 Object
 marlais_slot_type (Object slot)
 {
-    if (!PAIRP (slot)) {
-	return (NULL);
-    } else {
-	return (find_keyword_val (type_keyword, slot));
-    }
+  if (!PAIRP (slot)) {
+    return (NULL);
+  } else {
+    return (find_keyword_val (type_keyword, slot));
+  }
 }
 
 Object
 marlais_slot_init_value (Object slotd)
 {
-    if (SLOTDINITFUNCTION (slotd)) {
-	return eval (cons (listem (quote_symbol, SLOTDINIT (slotd), NULL),
-			   make_empty_list ()));
-    } else {
-	return SLOTDINIT (slotd);
-    }
+  if (SLOTDINITFUNCTION (slotd)) {
+    return eval (cons (listem (quote_symbol, SLOTDINIT (slotd), NULL),
+                       make_empty_list ()));
+  } else {
+    return SLOTDINIT (slotd);
+  }
 }
 
 Object
 marlais_slot_init_function (Object slot)
 {
-    if (!PAIRP (slot)) {
-	return (NULL);
-    } else {
-	return (find_keyword_val (init_function_keyword, slot));
-    }
+  if (!PAIRP (slot)) {
+    return (NULL);
+  } else {
+    return (find_keyword_val (init_function_keyword, slot));
+  }
 }
 
 Object
 marlais_slot_init_keyword (Object slot)
 {
-    if (!PAIRP (slot)) {
-	return (NULL);
-    } else {
-	return (find_keyword_val (init_keyword_keyword, slot));
-    }
+  if (!PAIRP (slot)) {
+    return (NULL);
+  } else {
+    return (find_keyword_val (init_keyword_keyword, slot));
+  }
 }
 
 Object
 marlais_slot_required_init_keyword (Object slot)
 {
-    if (!PAIRP (slot)) {
-	return (NULL);
-    } else {
-	return (find_keyword_val (required_init_keyword_keyword, slot));
-    }
+  if (!PAIRP (slot)) {
+    return (NULL);
+  } else {
+    return (find_keyword_val (required_init_keyword_keyword, slot));
+  }
 }
 
 Object
 marlais_slot_allocation (Object slot)
 {
-    if (!PAIRP (slot)) {
-	return (NULL);
-    } else {
-	return (find_keyword_val (allocation_keyword, slot));
-    }
+  if (!PAIRP (slot)) {
+    return (NULL);
+  } else {
+    return (find_keyword_val (allocation_keyword, slot));
+  }
 }
 
 Object
@@ -147,8 +147,8 @@ marlais_set_slot_value (Object instance, Object slot_num, Object val)
 
 Object
 marlais_make_slot_descriptor (unsigned char properties, Object getter, Object setter,
-			      Object type, Object init, Object init_keyword,
-			      Object allocation, Object dynamism)
+                              Object type, Object init, Object init_keyword,
+                              Object allocation, Object dynamism)
 {
     Object obj;
 

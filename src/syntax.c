@@ -50,14 +50,14 @@ struct syntax_entry *syntax_table[SYNTAX_TABLE_SIZE];
 
 static void install_syntax_entry (char *name, syntax_fun fun);
 static void bind_variables (Object init_list,
-			    int top_level,
-			    int constant,
-			    struct frame *to_frame);
+                            int top_level,
+                            int constant,
+                            struct frame *to_frame);
 static void add_variable_binding (Object var,
-				  Object val,
-				  int top_level,
-				  int constant,
-				  struct frame *to_frame);
+                                  Object val,
+                                  int top_level,
+                                  int constant,
+                                  struct frame *to_frame);
 
 /* functions emobodying evaluation rules for forms */
 
@@ -81,28 +81,28 @@ static Object dotimes_eval (Object form);
 static Object for_eval (Object form);
 static Object get_variable (Object var_spec);
 static void get_vars_and_inits (Object var_forms,
-				Object *clause_types_ptr,
-				Object *vars_ptr,
-				Object *inits_ptr);
+                                Object *clause_types_ptr,
+                                Object *vars_ptr,
+                                Object *inits_ptr);
 static void initialize_step_and_numeric_vars (Object clause_types,
-					      Object vars,
-					      Object inits);
+                                              Object vars,
+                                              Object inits);
 static void initialize_collection_inits (Object clause_types,
-					 Object vars,
-					 Object inits);
+                                         Object vars,
+                                         Object inits);
 static int exhausted_numeric_or_collection_clauses (Object clause_types,
-						    Object vars,
-						    Object inits,
-						    int init_call);
+                                                    Object vars,
+                                                    Object inits,
+                                                    int init_call);
 static void initialize_collection_variables (Object clause_types,
-					     Object vars,
-					     Object inits);
+                                             Object vars,
+                                             Object inits);
 static void update_explicit_and_numeric_clauses (Object clause_types,
-						 Object vars,
-						 Object inits);
+                                                 Object vars,
+                                                 Object inits);
 static void update_collection_variables (Object clause_types,
-					 Object vars,
-					 Object inits);
+                                         Object vars,
+                                         Object inits);
 static Object for_each_eval (Object form);
 static Object if_eval (Object form);
 static Object method_eval (Object form);
@@ -209,8 +209,8 @@ marlais_initialize_syntax (void)
     numops = sizeof (syntax_operators) / sizeof (char *);
 
     for (i = 0; i < numops; ++i) {
-	install_syntax_entry (syntax_operators[i],
-			      syntax_functions[i]);
+      install_syntax_entry (syntax_operators[i],
+                            syntax_functions[i]);
     }
 }
 
@@ -223,10 +223,10 @@ marlais_syntax_function (Object sym)
     h = ((DyInteger) sym) % SYNTAX_TABLE_SIZE;
     entry = syntax_table[h];
     while (entry) {
-	if (entry->sym == sym) {
-	    return (entry->fun);
-	}
-	entry = entry->next;
+      if (entry->sym == sym) {
+        return (entry->fun);
+      }
+      entry = entry->next;
     }
     return (NULL);
 }
@@ -243,7 +243,7 @@ install_syntax_entry (char *name, syntax_fun fun)
     sym = make_symbol (name);
     h = ((DyInteger) sym) % SYNTAX_TABLE_SIZE;
     entry = (struct syntax_entry *)
-	marlais_allocate_memory (sizeof (struct syntax_entry));
+      marlais_allocate_memory (sizeof (struct syntax_entry));
 
     entry->sym = sym;
     entry->fun = fun;
@@ -257,14 +257,14 @@ eval_body (Object body, Object null_body_result_value)
     Object result = null_body_result_value;
 
     while (!EMPTYLISTP (body)) {
-	Object next = CDR (body);
+      Object next = CDR (body);
 
-	if (EMPTYLISTP (next)) {
-	    result = tail_eval (CAR (body));
-	} else {
-	    result = eval (CAR (body));
-	}
-	body = next;
+      if (EMPTYLISTP (next)) {
+        result = tail_eval (CAR (body));
+      } else {
+        result = eval (CAR (body));
+      }
+      body = next;
     }
 
     return result;
@@ -280,18 +280,18 @@ and_eval (Object form)
 
     clauses = CDR (form);
     while (!EMPTYLISTP (clauses)) {
-	ret = eval (CAR (clauses));
-	if (VALUESP (ret)) {
-	    if (PAIRP (CDR (clauses))) {
-		ret = FIRSTVAL (ret);
-	    } else {
-		return ret;
-	    }
-	}
-	if (ret == MARLAIS_FALSE) {
-	    return (MARLAIS_FALSE);
-	}
-	clauses = CDR (clauses);
+      ret = eval (CAR (clauses));
+      if (VALUESP (ret)) {
+        if (PAIRP (CDR (clauses))) {
+          ret = FIRSTVAL (ret);
+        } else {
+          return ret;
+        }
+      }
+      if (ret == MARLAIS_FALSE) {
+        return (MARLAIS_FALSE);
+      }
+      clauses = CDR (clauses);
     }
     return (ret);
 }
@@ -311,7 +311,7 @@ bind_eval (Object form)
     struct frame *binding_env;
 
     if (EMPTYLISTP (CDR (form))) {
-	marlais_error ("malformed bind form", form, NULL);
+      marlais_error ("malformed bind form", form, NULL);
     }
     bindings = SECOND (form);
     body = CDR (CDR (form));
@@ -320,17 +320,17 @@ bind_eval (Object form)
     initial_env = the_env;
 
     while (!EMPTYLISTP (bindings)) {
-	/* <pcb> some hackery to make bind work correctly. */
-	enclosing_env = the_env;
-	push_scope (CAR (form));
-	binding_env = the_env;
-	the_env = enclosing_env;
+      /* <pcb> some hackery to make bind work correctly. */
+      enclosing_env = the_env;
+      push_scope (CAR (form));
+      binding_env = the_env;
+      the_env = enclosing_env;
 
-	bind_variables (CAR (bindings), 0, 0, binding_env);
-	bindings = CDR (bindings);
+      bind_variables (CAR (bindings), 0, 0, binding_env);
+      bindings = CDR (bindings);
 
-	/* begin the next loop iteration in this new scope. */
-	the_env = binding_env;
+      /* begin the next loop iteration in this new scope. */
+      the_env = binding_env;
     }
 
     result = eval_body (body, unspecified_object);
@@ -350,7 +350,7 @@ local_bind_eval (Object form)
     struct frame *binding_env;
 
     if (EMPTYLISTP (CDR (form))) {
-	marlais_error ("malformed local binding", form, NULL);
+      marlais_error ("malformed local binding", form, NULL);
     }
     bindings = SECOND (form);
 
@@ -361,8 +361,8 @@ local_bind_eval (Object form)
     the_env = enclosing_env;
 
     while (!EMPTYLISTP (bindings)) {
-	bind_variables (CAR (bindings), 0, 0, binding_env);
-	bindings = CDR (bindings);
+      bind_variables (CAR (bindings), 0, 0, binding_env);
+      bindings = CDR (bindings);
     }
 
     the_env = binding_env;
@@ -375,15 +375,15 @@ local_bind_rec_eval (Object form)
     Object bindings;
 
     if (EMPTYLISTP (CDR (form))) {
-	marlais_error ("malformed local binding", form, NULL);
+      marlais_error ("malformed local binding", form, NULL);
     }
     bindings = SECOND (form);
 
     push_scope (CAR (form));
 
     while (!EMPTYLISTP (bindings)) {
-	bind_variables (CAR (bindings), 0, 0, the_env);
-	bindings = CDR (bindings);
+      bind_variables (CAR (bindings), 0, 0, the_env);
+      bindings = CDR (bindings);
     }
 
     return unspecified_object;
@@ -399,25 +399,25 @@ unbinding_begin_eval (Object form)
     Object res;
 
     if (list_length (form) < 2) {
-	marlais_error ("Bad unbinding-begin form", form, NULL);
+      marlais_error ("Bad unbinding-begin form", form, NULL);
     }
     i = INTVAL (SECOND (form));
 
     res = unspecified_object;
     form = CDR (CDR (form));
     while (PAIRP (form)) {
-	Object next_form = CDR (form);
+      Object next_form = CDR (form);
 
-	if (EMPTYLISTP (next_form)) {
-	    res = tail_eval (CAR (form));
-	} else {
-	    res = eval (CAR (form));
-	}
-	form = next_form;
+      if (EMPTYLISTP (next_form)) {
+        res = tail_eval (CAR (form));
+      } else {
+        res = eval (CAR (form));
+      }
+      form = next_form;
     }
 
     while (i-- > 0) {
-	pop_scope ();
+      pop_scope ();
     }
 
     return res;
@@ -429,16 +429,16 @@ bind_exit_eval (Object form)
     Object exit_obj, sym, body, ret, sec;
 
     if (EMPTYLISTP (CDR (form))) {
-	marlais_error ("malformed bind-exit form", form, NULL);
+      marlais_error ("malformed bind-exit form", form, NULL);
     }
     sec = SECOND (form);
     if (!PAIRP (sec)) {
-	marlais_error ("bind-exit: second argument must be a list containing a symbol", sec, NULL);
+      marlais_error ("bind-exit: second argument must be a list containing a symbol", sec, NULL);
     }
     sym = CAR (sec);
     body = CDR (CDR (form));
     if (!SYMBOLP (sym)) {
-	marlais_error ("bind-exit: bad exit procedure name", sym, NULL);
+      marlais_error ("bind-exit: bad exit procedure name", sym, NULL);
     }
     exit_obj = make_exit (sym);
 
@@ -450,19 +450,19 @@ bind_exit_eval (Object form)
 
     if (!ret) {
 #if 1
-	ret = MARLAIS_FALSE;
-	while (!EMPTYLISTP (body)) {
-	    ret = eval (CAR (body));
-	    body = CDR (body);
-	}
+      ret = MARLAIS_FALSE;
+      while (!EMPTYLISTP (body)) {
+        ret = eval (CAR (body));
+        body = CDR (body);
+      }
 #else
-	eval_body (body, MARLAIS_FALSE);
+      eval_body (body, MARLAIS_FALSE);
 #endif
-	pop_scope ();
-	return (ret);
+      pop_scope ();
+      return (ret);
     } else {
-	pop_scope ();
-	return (ret);
+      pop_scope ();
+      return (ret);
     }
 }
 
@@ -482,8 +482,8 @@ bind_methods_eval (Object form)
   /* first bind method names to dummy values */
   if (!PAIRP (specs)) {
     marlais_error ("bind-methods: First argument must be a list of method bindings",
-	   specs,
-	   NULL);
+                   specs,
+                   NULL);
   }
   while (!EMPTYLISTP (specs)) {
     spec = CAR (specs);
@@ -553,8 +553,8 @@ case_eval (Object form)
       consequents = CDR (branch);
       ret = MARLAIS_FALSE;
       while (!EMPTYLISTP (consequents)) {
-	ret = eval (CAR (consequents));
-	consequents = CDR (consequents);
+        ret = eval (CAR (consequents));
+        consequents = CDR (consequents);
       }
       return (ret);
     }
@@ -563,13 +563,13 @@ case_eval (Object form)
     }
     while (!EMPTYLISTP (match_list)) {
       if (marlais_identical_p (CAR (match_list), target_form)) {
-	consequents = CDR (branch);
-	ret = MARLAIS_FALSE;
-	while (!EMPTYLISTP (consequents)) {
-	  ret = eval (CAR (consequents));
-	  consequents = CDR (consequents);
-	}
-	return (ret);
+        consequents = CDR (branch);
+        ret = MARLAIS_FALSE;
+        while (!EMPTYLISTP (consequents)) {
+          ret = eval (CAR (consequents));
+          consequents = CDR (consequents);
+        }
+        return (ret);
       }
       match_list = CDR (match_list);
     }
@@ -604,7 +604,7 @@ static void define_eval_helper(Object form, int bind_where)
 {
   if (EMPTYLISTP (CDR (form)) || EMPTYLISTP (CDR (CDR (form)))) {
     marlais_error ("DEFINE form requires at least two args: (define {<var>} <init>)",
-	   form, NULL);
+                   form, NULL);
   } else {
     bind_variables (CDR (form), 1, bind_where, the_env);
   }
@@ -627,9 +627,9 @@ define_constant_eval (Object form)
 
 static void
 bind_variables (Object init_list,
-		int top_level,
-		int constant,
-		struct frame *to_frame)
+                int top_level,
+                int constant,
+                struct frame *to_frame)
 {
   Object variable, variables, init, val;
   Object first, last, new;
@@ -648,43 +648,43 @@ bind_variables (Object init_list,
     while (variables != init) {
       variable = CAR (variables);
       if (variable == hash_rest_symbol) {
-	variable = SECOND (variables);
-	last = NULL;
-	first = make_empty_list ();
-	/* bind rest values */
-	for (i = value_count; i < VALUESNUM (val); ++i) {
-	  new = cons (VALUESELS (val)[i], make_empty_list ());
-	  if (last) {
-	    CDR (last) = new;
-	  } else {
-	    first = new;
-	  }
-	  last = new;
-	}
-	if (top_level) {
-	  add_top_level_binding (variable, first, constant);
-	} else {
-	  add_binding (variable, first, constant, to_frame);
-	}
-	/* check for no variables after #rest */
-	if (CDR (CDR (variables)) != init) {
-	  marlais_error ("Badly placed #rest specifier", init_list, NULL);
-	}
-	/* finished with bindings */
-	break;
+        variable = SECOND (variables);
+        last = NULL;
+        first = make_empty_list ();
+        /* bind rest values */
+        for (i = value_count; i < VALUESNUM (val); ++i) {
+          new = cons (VALUESELS (val)[i], make_empty_list ());
+          if (last) {
+            CDR (last) = new;
+          } else {
+            first = new;
+          }
+          last = new;
+        }
+        if (top_level) {
+          add_top_level_binding (variable, first, constant);
+        } else {
+          add_binding (variable, first, constant, to_frame);
+        }
+        /* check for no variables after #rest */
+        if (CDR (CDR (variables)) != init) {
+          marlais_error ("Badly placed #rest specifier", init_list, NULL);
+        }
+        /* finished with bindings */
+        break;
       } else {
-	/* check for not enough inits */
-	if (value_count < VALUESNUM (val)) {
-	  new = VALUESELS (val)[value_count];
-	} else {
-	  new = MARLAIS_FALSE;
-	}
-	add_variable_binding (variable,
-			      new,
-			      top_level,
-			      constant,
-			      to_frame);
-	value_count++;
+        /* check for not enough inits */
+        if (value_count < VALUESNUM (val)) {
+          new = VALUESELS (val)[value_count];
+        } else {
+          new = MARLAIS_FALSE;
+        }
+        add_variable_binding (variable,
+                              new,
+                              top_level,
+                              constant,
+                              to_frame);
+        value_count++;
       }
       variables = CDR (variables);
     }
@@ -692,24 +692,24 @@ bind_variables (Object init_list,
     /* init is not a values object */
     if (CAR (variables) == hash_rest_symbol) {
       add_variable_binding (SECOND (variables),
-			    cons (val, make_empty_list ()),
-			    top_level,
-			    constant,
-			    to_frame);
+                            cons (val, make_empty_list ()),
+                            top_level,
+                            constant,
+                            to_frame);
     } else {
       add_variable_binding (CAR (variables),
-			    val,
-			    top_level,
-			    constant,
-			    to_frame);
+                            val,
+                            top_level,
+                            constant,
+                            to_frame);
       for (variables = CDR (variables);
-	   variables != init;
-	   variables = CDR (variables)) {
-	add_variable_binding (CAR (variables),
-			      MARLAIS_FALSE,
-			      top_level,
-			      constant,
-			      to_frame);
+           variables != init;
+           variables = CDR (variables)) {
+        add_variable_binding (CAR (variables),
+                              MARLAIS_FALSE,
+                              top_level,
+                              constant,
+                              to_frame);
       }
     }
   }
@@ -717,10 +717,10 @@ bind_variables (Object init_list,
 
 static void
 add_variable_binding (Object var,
-		      Object val,
-		      int top_level,
-		      int constant,
-		      struct frame *to_frame)
+                      Object val,
+                      int top_level,
+                      int constant,
+                      struct frame *to_frame)
 {
   Object type;
 
@@ -741,9 +741,9 @@ add_variable_binding (Object var,
      */
     if (!marlais_instance (val, type)) {
       marlais_error ("initial value does not satisfy type constraint",
-	     val,
-	     type,
-	     NULL);
+                     val,
+                     type,
+                     NULL);
     }
     add_top_level_binding (var, val, constant);
   } else {
@@ -776,32 +776,32 @@ define_class_eval (Object form)
       marlais_error ("malformed define-class (bad modifiers)", form, NULL);
     }
     for (modifiers = CDR (modifiers);
-	 PAIRP (modifiers);
-	 modifiers = CDR (modifiers)) {
+         PAIRP (modifiers);
+         modifiers = CDR (modifiers)) {
       modifier = CAR (modifiers);
       if (modifier == abstract_symbol || modifier == concrete_symbol) {
-	if (abstract_concrete_seen) {
-	  marlais_error ("redundant or conflicting modifier given to define-class",
-		 modifier, NULL);
-	}
-	abstract_concrete_seen = 1;
-	abstract_class = (modifier == abstract_symbol);
+        if (abstract_concrete_seen) {
+          marlais_error ("redundant or conflicting modifier given to define-class",
+                         modifier, NULL);
+        }
+        abstract_concrete_seen = 1;
+        abstract_class = (modifier == abstract_symbol);
       }
       if (modifier == primary_symbol || modifier == free_symbol) {
-	if (primary_free_seen) {
-	  marlais_error ("redundant or conflicting modifier given to define-class",
-		 modifier, NULL);
-	}
-	primary_free_seen = 1;
-	primary_class = (modifier == primary_symbol);
+        if (primary_free_seen) {
+          marlais_error ("redundant or conflicting modifier given to define-class",
+                         modifier, NULL);
+        }
+        primary_free_seen = 1;
+        primary_class = (modifier == primary_symbol);
       }
       if (modifier == open_symbol || modifier == sealed_symbol) {
-	if (open_sealed_seen) {
-	  marlais_error ("redundant or conflicting modifier given to define-class",
-		 modifier, NULL);
-	}
-	open_sealed_seen = 1;
-	open_class = (modifier == open_symbol);
+        if (open_sealed_seen) {
+          marlais_error ("redundant or conflicting modifier given to define-class",
+                         modifier, NULL);
+        }
+        open_sealed_seen = 1;
+        open_class = (modifier == open_symbol);
       }
     }
     tmp_form = CDR (tmp_form);
@@ -824,7 +824,7 @@ define_class_eval (Object form)
   slots = marlais_make_slot_descriptor_list (CDR (tmp_form), 1);
   marlais_make_getter_setter_gfs (slots);
   class = marlais_make_class (obj, supers, slots,
-		      (abstract_class ? MARLAIS_TRUE : MARLAIS_FALSE), NULL);
+                              (abstract_class ? MARLAIS_TRUE : MARLAIS_FALSE), NULL);
 
   /* kludge to put these here.  Better to add a param to make_class. */
   CLASSPROPS (class) |= CLASSSLOTSUNINIT;
@@ -921,85 +921,85 @@ define_module_eval (Object form)
     while (PAIRP (clauses)) {
       clause = CAR (clauses);
       if (PAIRP (clause)) {
-	if (CAR (clause) == use_symbol) {
-	  Object imports = all_symbol;
-	  Object exclusions = make_empty_list ();
-	  Object prefix = empty_string;
-	  Object renames = make_empty_list ();
-	  Object exports = make_empty_list ();
+        if (CAR (clause) == use_symbol) {
+          Object imports = all_symbol;
+          Object exclusions = make_empty_list ();
+          Object prefix = empty_string;
+          Object renames = make_empty_list ();
+          Object exports = make_empty_list ();
 
-	  int imports_specified = 0;
-	  int exclusions_specified = 0;
-	  int prefix_specified = 0;
-	  int renames_specified = 0;
-	  int exports_specified = 0;
-	  struct module_binding *old_module;
+          int imports_specified = 0;
+          int exclusions_specified = 0;
+          int prefix_specified = 0;
+          int renames_specified = 0;
+          int exports_specified = 0;
+          struct module_binding *old_module;
 
-	  if (list_length (clause) >= 2) {
-	    module_name = SECOND (clause);
-	    clause = CDR (CDR (clause));
-	    while (PAIRP (clause)) {
-	      option = CAR (clause);
-	      if (PAIRP (option)) {
-		if (CAR (option) == import_keyword &&
-		    !imports_specified) {
-		  imports = CDR (option);
-		  imports_specified = 1;
-		} else if (CAR (option) == exclude_keyword &&
-			   !exclusions_specified) {
-		  exclusions = CDR (option);
-		  exclusions_specified = 1;
-		} else if (CAR (option) == prefix_keyword &&
-			   !prefix_specified) {
-		  prefix = CDR (option);
-		  prefix_specified = 1;
-		} else if (CAR (option) == rename_keyword &&
-			   !renames_specified) {
-		  renames = CDR (option);
-		  renames_specified = 1;
-		} else if (CAR (option) == export_keyword &&
-			   !exports_specified) {
-		  exports = CDR (option);
-		  exports_specified = 1;
-		} else {
-		  marlais_error ("use clause: unknown option", option, NULL);
-		}
+          if (list_length (clause) >= 2) {
+            module_name = SECOND (clause);
+            clause = CDR (CDR (clause));
+            while (PAIRP (clause)) {
+              option = CAR (clause);
+              if (PAIRP (option)) {
+                if (CAR (option) == import_keyword &&
+                    !imports_specified) {
+                  imports = CDR (option);
+                  imports_specified = 1;
+                } else if (CAR (option) == exclude_keyword &&
+                           !exclusions_specified) {
+                  exclusions = CDR (option);
+                  exclusions_specified = 1;
+                } else if (CAR (option) == prefix_keyword &&
+                           !prefix_specified) {
+                  prefix = CDR (option);
+                  prefix_specified = 1;
+                } else if (CAR (option) == rename_keyword &&
+                           !renames_specified) {
+                  renames = CDR (option);
+                  renames_specified = 1;
+                } else if (CAR (option) == export_keyword &&
+                           !exports_specified) {
+                  exports = CDR (option);
+                  exports_specified = 1;
+                } else {
+                  marlais_error ("use clause: unknown option", option, NULL);
+                }
 
-	      } else {
-		marlais_error ("use clause: poorly formed option", CAR (clause), NULL);
-	      }
-	      clause = CDR (clause);
-	    }
-	    if (imports_specified && exclusions_specified) {
-	      marlais_error ("Define module: Can't specify both imports: "
-		     "and exclusions:", clause, NULL);
-	    }
-	    old_module = set_module (the_module);
-	    use_module (module_name,
-			imports,
-			exclusions,
-			prefix,
-			renames,
-			exports);
-	    set_module (old_module);
-	  } else {
-	    marlais_error ("define-module: Bad use clause", clause, NULL);
-	  }
-	} else if (CAR (clause) == export_symbol) {
-	  fill_table_from_property_set (the_module->exported_bindings,
-					CDR (clause));
-	} else if (CAR (clause) == create_symbol) {
-	  /*
+              } else {
+                marlais_error ("use clause: poorly formed option", CAR (clause), NULL);
+              }
+              clause = CDR (clause);
+            }
+            if (imports_specified && exclusions_specified) {
+              marlais_error ("Define module: Can't specify both imports: "
+                             "and exclusions:", clause, NULL);
+            }
+            old_module = set_module (the_module);
+            use_module (module_name,
+                        imports,
+                        exclusions,
+                        prefix,
+                        renames,
+                        exports);
+            set_module (old_module);
+          } else {
+            marlais_error ("define-module: Bad use clause", clause, NULL);
+          }
+        } else if (CAR (clause) == export_symbol) {
+          fill_table_from_property_set (the_module->exported_bindings,
+                                        CDR (clause));
+        } else if (CAR (clause) == create_symbol) {
+          /*
 	   * Aside from this, it's not clear to me (jnw) what
 	   * needs to be done for create clause.
 	   */
-	  fill_table_from_property_set (the_module->exported_bindings,
-					CDR (clause));
-	} else {
-	  marlais_error ("define-module: Bad clause", clause, NULL);
-	}
+          fill_table_from_property_set (the_module->exported_bindings,
+                                        CDR (clause));
+        } else {
+          marlais_error ("define-module: Bad clause", clause, NULL);
+        }
       } else {
-	marlais_error ("define-module: Bad clause", clause, NULL);
+        marlais_error ("define-module: Bad clause", clause, NULL);
       }
       clauses = CDR (clauses);
     }
@@ -1135,9 +1135,9 @@ for_eval (Object form)
   /* IRM Step 3 */
   initialize_collection_inits (clause_types, vars, inits);
   if (!exhausted_numeric_or_collection_clauses (clause_types,
-						vars,
-						inits,
-						1)) {
+                                                vars,
+                                                inits,
+                                                1)) {
 
     /* IRM Step 4 */
 
@@ -1147,13 +1147,13 @@ for_eval (Object form)
     do {
       /* IRM Step 5 */
       if (eval (test_form) != MARLAIS_FALSE) {
-	break;
+        break;
       }
       /* IRM Step 6 */
       body = CDR (CDR (CDR (form)));
       while (!EMPTYLISTP (body)) {
-	eval (CAR (body));
-	body = CDR (body);
+        eval (CAR (body));
+        body = CDR (body);
       }
 
       /* IRM Steps 7 and 8 */
@@ -1161,14 +1161,14 @@ for_eval (Object form)
 
       /* IRM Step 3 (again) */
       if (exhausted_numeric_or_collection_clauses (clause_types,
-						   vars,
-						   inits,
-						   0)) {
-	break;
+                                                   vars,
+                                                   inits,
+                                                   0)) {
+        break;
       }
       update_collection_variables (clause_types, vars, inits);
     } while (1);
-    pop_scope ();		/* To get rid of collection variables */
+    pop_scope (); /* To get rid of collection variables */
   }
   if (!PAIRP (return_forms)) {
     ret = MARLAIS_FALSE;
@@ -1200,9 +1200,9 @@ variable_name (Object var_spec)
 
 static void
 get_vars_and_inits (Object var_forms,
-		    Object *clause_types_ptr,
-		    Object *vars_ptr,
-		    Object *inits_ptr)
+                    Object *clause_types_ptr,
+                    Object *vars_ptr,
+                    Object *inits_ptr)
 {
   Object var_form, var_spec;
   Object clause_type, var, init;
@@ -1220,7 +1220,7 @@ get_vars_and_inits (Object var_forms,
       clause_type = variable_keyword;
       var = get_variable (var_spec);
       if (list_length (var_form) != 3) {
-	marlais_error ("for: Bad variable initialization", var_form, NULL);
+        marlais_error ("for: Bad variable initialization", var_form, NULL);
       }
       init = cons (eval (SECOND (var_form)), THIRD (var_form));
     } else if (var_spec == range_keyword) {
@@ -1234,7 +1234,7 @@ get_vars_and_inits (Object var_forms,
 
       clause_type = range_keyword;
       if (list_length (var_form) < 3) {
-	marlais_error ("for: Bad numeric clause specification", var_form, NULL);
+        marlais_error ("for: Bad numeric clause specification", var_form, NULL);
       }
       var = get_variable (SECOND (var_form));
       rest = CDR (CDR (var_form));
@@ -1245,32 +1245,32 @@ get_vars_and_inits (Object var_forms,
       rest = CDR (rest);
       bound = MARLAIS_FALSE;
       if (PAIRP (rest)) {
-	termination = CAR (rest);
-	if (PAIRP (CDR (rest)) &&
-	    (termination == to_symbol || termination == above_symbol ||
-	     termination == below_symbol)) {
-	  bound = CAR (CDR (rest));
-	  rest = CDR (CDR (rest));
-	} else {
-	  marlais_error ("for: badly formed numeric clause", var_form, NULL);
-	}
+        termination = CAR (rest);
+        if (PAIRP (CDR (rest)) &&
+            (termination == to_symbol || termination == above_symbol ||
+             termination == below_symbol)) {
+          bound = CAR (CDR (rest));
+          rest = CDR (CDR (rest));
+        } else {
+          marlais_error ("for: badly formed numeric clause", var_form, NULL);
+        }
       }
       if (PAIRP (rest)) {
-	if (PAIRP (CDR (rest)) && CAR (rest) == by_symbol) {
-	  by = eval (CAR (CDR (rest)));
-	} else {
-	  marlais_error ("for: badly formed numeric clause", var_form, NULL);
-	}
+        if (PAIRP (CDR (rest)) && CAR (rest) == by_symbol) {
+          by = eval (CAR (CDR (rest)));
+        } else {
+          marlais_error ("for: badly formed numeric clause", var_form, NULL);
+        }
       }
       switch (object_type (by)) {
       case Integer:
-	negative = (INTVAL (by) >= 0) ? MARLAIS_FALSE : MARLAIS_TRUE;
-	break;
+        negative = (INTVAL (by) >= 0) ? MARLAIS_FALSE : MARLAIS_TRUE;
+        break;
       case DoubleFloat:
-	negative = (DFLOATVAL (by) >= 0) ? MARLAIS_FALSE : MARLAIS_TRUE;
-	break;
+        negative = (DFLOATVAL (by) >= 0) ? MARLAIS_FALSE : MARLAIS_TRUE;
+        break;
       default:
-	marlais_error ("for: numeric clause has unsupported increment type", by, NULL);
+        marlais_error ("for: numeric clause has unsupported increment type", by, NULL);
       }
 
       init = listem (start, by, negative, termination, bound, NULL);
@@ -1283,13 +1283,13 @@ get_vars_and_inits (Object var_forms,
 
       clause_type = collection_keyword;
       if (list_length (var_form) != 3) {
-	marlais_error ("for: Bad collection clause specification", var_form, NULL);
+        marlais_error ("for: Bad collection clause specification", var_form, NULL);
       }
       var = get_variable (SECOND (var_form));
       init = listem (make_empty_list (),
-		     eval (THIRD (var_form)),
-		     make_empty_list (),
-		     NULL);
+                     eval (THIRD (var_form)),
+                     make_empty_list (),
+                     NULL);
     }
     *clause_types_ptr = cons (clause_type, make_empty_list ());
     *vars_ptr = cons (var, make_empty_list ());
@@ -1305,8 +1305,8 @@ get_vars_and_inits (Object var_forms,
 
 static void
 initialize_step_and_numeric_vars (Object clause_types,
-				  Object vars,
-				  Object inits)
+                                  Object vars,
+                                  Object inits)
 {
   while (PAIRP (clause_types)) {
     if (CAR (clause_types) == variable_keyword) {
@@ -1328,8 +1328,8 @@ initialize_step_and_numeric_vars (Object clause_types,
  */
 static void
 initialize_collection_inits (Object clause_types,
-			     Object vars,
-			     Object inits)
+                             Object vars,
+                             Object inits)
 {
   Object clause_type, protocol;
 
@@ -1337,10 +1337,10 @@ initialize_collection_inits (Object clause_types,
     clause_type = CAR (clause_types);
     if (clause_type == collection_keyword) {
       protocol = eval (cons (forward_iteration_protocol_symbol,
-			     cons (cons (quote_symbol,
-					 cons (SECOND (CAR (inits)),
-					       make_empty_list ())),
-				   make_empty_list ())));
+                             cons (cons (quote_symbol,
+                                         cons (SECOND (CAR (inits)),
+                                               make_empty_list ())),
+                                   make_empty_list ())));
       CAR (CAR (inits)) = protocol;
       THIRD (CAR (inits)) = VALUESELS (protocol)[0];
     }
@@ -1360,9 +1360,9 @@ initialize_collection_inits (Object clause_types,
 
 static int
 exhausted_numeric_or_collection_clauses (Object clause_types,
-					 Object vars,
-					 Object inits,
-					 int init_call)
+                                         Object vars,
+                                         Object inits,
+                                         int init_call)
 {
   Object clause_type;
   Object protocol;
@@ -1375,62 +1375,62 @@ exhausted_numeric_or_collection_clauses (Object clause_types,
 
       /* (finished-state? collection state limit) */
       if (!init_call) {
-	/* Bump to the next state to see if it exists */
-	THIRD (CAR (inits)) = marlais_apply (VALUESELS (protocol)[2],
-				     cons (SECOND (CAR (inits)),
-					   cons (THIRD (CAR (inits)),
-						 make_empty_list ())));
+        /* Bump to the next state to see if it exists */
+        THIRD (CAR (inits)) = marlais_apply (VALUESELS (protocol)[2],
+                                             cons (SECOND (CAR (inits)),
+                                                   cons (THIRD (CAR (inits)),
+                                                         make_empty_list ())));
       }
       if (MARLAIS_TRUE == marlais_apply (VALUESELS (protocol)[3],
-				cons (SECOND (CAR (inits)),
-				      cons (THIRD (CAR (inits)),
-					    cons (VALUESELS (protocol)[1],
-						  make_empty_list ()))))) {
-	return 1;
+                                         cons (SECOND (CAR (inits)),
+                                               cons (THIRD (CAR (inits)),
+                                                     cons (VALUESELS (protocol)[1],
+                                                           make_empty_list ()))))) {
+        return 1;
       }
     } else if (clause_type == range_keyword) {
 
       init = CAR (inits);
-      current = CAR (init);	/* FIRST */
+      current = CAR (init); /* FIRST */
       init = CDR (init);
-      increment = CAR (init);	/* SECOND */
+      increment = CAR (init); /* SECOND */
       init = CDR (init);
-      negative = CAR (init);	/* THIRD */
+      negative = CAR (init); /* THIRD */
       init = CDR (init);
-      termination = CAR (init);	/* FOURTH */
+      termination = CAR (init); /* FOURTH */
       init = CDR (init);
-      bound = CAR (init);	/* FIFTH */
+      bound = CAR (init); /* FIFTH */
 
       if (termination == MARLAIS_FALSE) {
-	/* do nothing */
+        /* do nothing */
       } else if (termination == to_symbol) {
-	if (negative == MARLAIS_TRUE) {
-	  if (MARLAIS_TRUE == eval (listem (lesser_symbol,
-					   current,
-					   bound,
-					   NULL))) {
-	    return 1;
-	  }
-	} else if (MARLAIS_TRUE == eval (listem (greater_symbol,
-						current,
-						bound,
-						NULL))) {
-	  return 1;
-	}
+        if (negative == MARLAIS_TRUE) {
+          if (MARLAIS_TRUE == eval (listem (lesser_symbol,
+                                            current,
+                                            bound,
+                                            NULL))) {
+            return 1;
+          }
+        } else if (MARLAIS_TRUE == eval (listem (greater_symbol,
+                                                 current,
+                                                 bound,
+                                                 NULL))) {
+          return 1;
+        }
       } else if (termination == above_symbol) {
-	if (MARLAIS_TRUE == eval (listem (lesser_equal_symbol,
-					 current,
-					 bound,
-					 NULL))) {
-	  return 1;
-	}
+        if (MARLAIS_TRUE == eval (listem (lesser_equal_symbol,
+                                          current,
+                                          bound,
+                                          NULL))) {
+          return 1;
+        }
       } else if (termination == below_symbol) {
-	if (MARLAIS_TRUE == eval (listem (greater_equal_symbol,
-					 current,
-					 bound,
-					 NULL))) {
-	  return 1;
-	}
+        if (MARLAIS_TRUE == eval (listem (greater_equal_symbol,
+                                          current,
+                                          bound,
+                                          NULL))) {
+          return 1;
+        }
       }
     }
     clause_types = CDR (clause_types);
@@ -1443,8 +1443,8 @@ exhausted_numeric_or_collection_clauses (Object clause_types,
 
 static void
 initialize_collection_variables (Object clause_types,
-				 Object vars,
-				 Object inits)
+                                 Object vars,
+                                 Object inits)
 {
   Object protocol;
 
@@ -1454,12 +1454,12 @@ initialize_collection_variables (Object clause_types,
 
       /* (set! var (current-element collection state)) */
       add_binding (CAR (vars),
-		   marlais_apply (VALUESELS (protocol)[5],
-			  cons (SECOND (CAR (inits)),
-				cons (THIRD (CAR (inits)),
-				      make_empty_list ()))),
-		   0,
-		   the_env);
+                   marlais_apply (VALUESELS (protocol)[5],
+                                  cons (SECOND (CAR (inits)),
+                                        cons (THIRD (CAR (inits)),
+                                              make_empty_list ()))),
+                   0,
+                   the_env);
     }
     clause_types = CDR (clause_types);
     vars = CDR (vars);
@@ -1469,8 +1469,8 @@ initialize_collection_variables (Object clause_types,
 
 static void
 update_explicit_and_numeric_clauses (Object clause_types,
-				     Object vars,
-				     Object inits)
+                                     Object vars,
+                                     Object inits)
 {
   Object vars_copy, new_values, *new_values_ptr, new_value;
   Object clause_type;
@@ -1488,9 +1488,9 @@ update_explicit_and_numeric_clauses (Object clause_types,
        *  (+ var increment)
        */
       new_value = eval (listem (plus_symbol,
-				variable_name (CAR (vars)),
-				SECOND (CAR (inits)),
-				NULL));
+                                variable_name (CAR (vars)),
+                                SECOND (CAR (inits)),
+                                NULL));
 
       FIRST (CAR (inits)) = new_value;
     }
@@ -1507,7 +1507,7 @@ update_explicit_and_numeric_clauses (Object clause_types,
   while (PAIRP (vars_copy)) {
     if (!EMPTYLISTP (new_values)) {
       modify_value (variable_name (CAR (vars_copy)),
-		    CAR (new_values));
+                    CAR (new_values));
       vars_copy = CDR (vars_copy);
       new_values = CDR (new_values);
     }
@@ -1516,8 +1516,8 @@ update_explicit_and_numeric_clauses (Object clause_types,
 
 static void
 update_collection_variables (Object clause_types,
-			     Object vars,
-			     Object inits)
+                             Object vars,
+                             Object inits)
 {
   Object protocol;
 
@@ -1527,10 +1527,10 @@ update_collection_variables (Object clause_types,
 
       /* (set! var (current-element collection state)) */
       modify_value (CAR (vars),
-		    marlais_apply (VALUESELS (protocol)[5],
-			   cons (SECOND (CAR (inits)),
-				 cons (THIRD (CAR (inits)),
-				       make_empty_list ()))));
+                    marlais_apply (VALUESELS (protocol)[5],
+                                   cons (SECOND (CAR (inits)),
+                                         cons (THIRD (CAR (inits)),
+                                               make_empty_list ()))));
     }
     clause_types = CDR (clause_types);
     vars = CDR (vars);
@@ -1672,9 +1672,9 @@ or_eval (Object form)
     ret = eval (CAR (clauses));
     if (VALUESP (ret)) {
       if (PAIRP (CDR (clauses))) {
-	ret = FIRSTVAL (ret);
+        ret = FIRSTVAL (ret);
       } else {
-	return (ret);
+        return (ret);
       }
     }
     if (ret != MARLAIS_FALSE) {
@@ -1705,28 +1705,28 @@ qq_help (Object skel)
     tail = CDR (skel);
     if (CAR (head) == unquote_symbol) {
       if (!EMPTYLISTP (tail)) {
-	if (!EMPTYLISTP (CDR (tail))) {
-	  marlais_error ("Too many arguments to unquote", NULL);
-	}
-	return eval (CAR (tail));
+        if (!EMPTYLISTP (CDR (tail))) {
+          marlais_error ("Too many arguments to unquote", NULL);
+        }
+        return eval (CAR (tail));
       } else {
-	return marlais_error ("missing argument to unquote", NULL);
+        return marlais_error ("missing argument to unquote", NULL);
       }
     } else if (PAIRP (CAR (head))
-	       && CAR (CAR (head)) == unquote_splicing_symbol) {
+               && CAR (CAR (head)) == unquote_splicing_symbol) {
 
       if (!EMPTYLISTP (CDR (CAR (head)))) {
-	tmp = eval (CAR (CDR (CAR (head))));
-	CAR (head) = CAR (tmp);
-	CDR (head) = CDR (tmp);
-	tmp = head;
-	while (!EMPTYLISTP (CDR (tmp))) {
-	  tmp = CDR (tmp);
-	}
-	CDR (tmp) = qq_help (tail);
-	return head;
+        tmp = eval (CAR (CDR (CAR (head))));
+        CAR (head) = CAR (tmp);
+        CDR (head) = CDR (tmp);
+        tmp = head;
+        while (!EMPTYLISTP (CDR (tmp))) {
+          tmp = CDR (tmp);
+        }
+        CDR (tmp) = qq_help (tail);
+        return head;
       } else {
-	return marlais_error ("missing argument to unquote_splicing", NULL);
+        return marlais_error ("missing argument to unquote_splicing", NULL);
       }
     } else {
       return cons (qq_help (CAR (head)), qq_help (tail));
@@ -1769,8 +1769,8 @@ select_eval (Object form)
     if ((match_list == MARLAIS_TRUE) || (match_list == else_keyword)) {
       consequents = CDR (branch);
       while (!EMPTYLISTP (consequents)) {
-	ret = eval (CAR (consequents));
-	consequents = CDR (consequents);
+        ret = eval (CAR (consequents));
+        consequents = CDR (consequents);
       }
       return (ret);
     }
@@ -1780,13 +1780,13 @@ select_eval (Object form)
     while (!EMPTYLISTP (match_list)) {
       ret = MARLAIS_FALSE;
       if (marlais_apply (test, listem (target_form, eval (CAR (match_list)),
-			       NULL)) != MARLAIS_FALSE) {
-	consequents = CDR (branch);
-	while (!EMPTYLISTP (consequents)) {
-	  ret = eval (CAR (consequents));
-	  consequents = CDR (consequents);
-	}
-	return (ret);
+                                       NULL)) != MARLAIS_FALSE) {
+        consequents = CDR (branch);
+        while (!EMPTYLISTP (consequents)) {
+          ret = eval (CAR (consequents));
+          consequents = CDR (consequents);
+        }
+        return (ret);
       }
       match_list = CDR (match_list);
     }
@@ -1812,7 +1812,7 @@ set_eval (Object form)
      * (slot-setter new-value obj ...)
      */
     return eval (cons (make_setter_symbol (CAR (sym)),
-		       marlais_devalue (cons (THIRD (form), CDR (sym)))));
+                       marlais_devalue (cons (THIRD (form), CDR (sym)))));
 
   }
   if (EMPTYLISTP (CDR (CDR (form)))) {

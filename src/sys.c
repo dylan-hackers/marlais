@@ -40,7 +40,7 @@
 #include <time.h>
 
 /* XXX this must be fixed */
-#define POSITIVE_SMALL_INT_MASK	01777777777
+#define POSITIVE_SMALL_INT_MASK 01777777777
 
 static struct primitive sys_prims[] =
 {
@@ -105,9 +105,8 @@ Object
 user_system (Object string)
 {
     if (!BYTESTRTYPE (string)) {
-	return marlais_error ("system: argument must be a string", string, NULL);
+      return marlais_error ("system: argument must be a string", string, NULL);
     } else {
-	return marlais_make_integer (system (BYTESTRVAL (string)));
-
+      return marlais_make_integer (system (BYTESTRVAL (string)));
     }
 }

@@ -48,8 +48,8 @@ extern Object dylan_symbol;
 
 static Object make_table_entry (int row, Object key, Object value, Object next);
 static Object *table_element_handle (Object table,
-				     Object key,
-				     Object *default_val);
+                                     Object key,
+                                     Object *default_val);
 static int table_vectors_equal (Object vec1, Object vec2);
 static Object table_initial_state (Object table);
 static Object table_next_state (Object table, Object state);
@@ -216,8 +216,8 @@ table_element_handle (Object table, Object key, Object *default_val)
 
   while (entry) {
     if (marlais_apply (equal_fun,
-	       cons (TEKEY (entry), cons (key, make_empty_list ())))
-	!= MARLAIS_FALSE) {
+                       cons (TEKEY (entry), cons (key, make_empty_list ())))
+        != MARLAIS_FALSE) {
       return &(TEVALUE (entry));
     }
     entry = TENEXT (entry);
