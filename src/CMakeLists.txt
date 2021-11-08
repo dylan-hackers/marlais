@@ -1,13 +1,13 @@
 
 bison_target(
   PARSER parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.gen.c
-  COMPILE_FLAGS "-v -t"
+  COMPILE_FLAGS "-v -t -p marlais_yy"
   DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/parser.gen.h
   REPORT_FILE ${CMAKE_CURRENT_BINARY_DIR}/parser.gen.log
 )
 flex_target(
   LEXER lexer.l ${CMAKE_CURRENT_BINARY_DIR}/lexer.gen.c
-  COMPILE_FLAGS "-v -I"
+  COMPILE_FLAGS "-v -I -P marlais_yy"
   DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/lexer.gen.h
 )
 add_flex_bison_dependency(LEXER PARSER)

@@ -62,7 +62,8 @@
 
 #include "lexer.gen.h"
 
-void yyerror (char *);
+void marlais_yyerror (char *);
+
 static Object append_bang (Object l1, Object l2);
 static Object nelistem (Object car,...);
 
@@ -1332,12 +1333,12 @@ value_list_opt
 
 %%
 
-void yyerror(char *s)
+void marlais_yyerror(char *s)
 {
     char line_str[20];
-    sprintf (line_str, " [line #%d]", yylineno);
+    sprintf (line_str, " [line #%d]", marlais_yylineno);
     marlais_warning (s,
-	     marlais_make_bytestring (yytext),
+	     marlais_make_bytestring (marlais_yytext),
 	     marlais_make_bytestring (line_str),
 	     NULL);
 }

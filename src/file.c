@@ -80,13 +80,13 @@ Object
 load (Object filename)
 {
   Object res;
-  FILE *old_yyin = yyin;
+  FILE *old_yyin = marlais_yyin;
 
   res = i_load (filename);
   if (old_yyin == stdin) {
     clearerr (stdin);
     fflush (stdin);
-    yyrestart (stdin);
+    marlais_yyrestart (stdin);
   }
   return res;
 }

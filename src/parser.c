@@ -54,14 +54,14 @@ marlais_parse_object (FILE * fp, int debug)
 {
   Object parse_value;
 
-  if (!yyin) {
-    yyin = fp;
-  } else if (yyin && fp != yyin) {
+  if (!marlais_yyin) {
+    marlais_yyin = fp;
+  } else if (marlais_yyin && fp != marlais_yyin) {
     marlais_parser_reset (fp);
   }
-  yydebug = debug;
+  marlais_yydebug = debug;
   parse_value_ptr = &parse_value;
-  if (yyparse () == 0) {
+  if (marlais_yyparse () == 0) {
     return parse_value;
   } else {
     marlais_warning ("Parser failed in inexplicable way", parse_value, NULL);

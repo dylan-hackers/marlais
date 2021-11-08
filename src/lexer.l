@@ -23,6 +23,9 @@
 #include <readline/history.h>
 #endif
 
+#define mydebug  marlais_yydebug
+#define mylval   marlais_yylval
+
 extern char* prompt_continuation;
 extern char* current_prompt;
 extern int load_file_context;
@@ -191,7 +194,7 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 		  yyless(0);
 		}
 
-<INITIAL,INI,KEY,VAL,ETC><<EOF>>	{ yylval = eof_object;
+<INITIAL,INI,KEY,VAL,ETC><<EOF>>	{ mylval = eof_object;
 					  return EOF_TOKEN;
 					}
 
@@ -234,29 +237,29 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
                 }
 
 <ETC>#b[01][01]*	{ /* binary integer */
-		  yylval = marlais_make_integer (strtol (yytext+2, NULL, 2));
+		  mylval = marlais_make_integer (strtol (yytext+2, NULL, 2));
 		  return (LITERAL);
 		}
 
 <ETC>#o[0-7][0-7]*	{ /* octal-integer */
-		  yylval = marlais_make_integer (strtol (yytext+2, NULL, 8));
+		  mylval = marlais_make_integer (strtol (yytext+2, NULL, 8));
 		  return (LITERAL);
 		}
 
 <ETC>[+-]?[0-9][0-9]*	{ /* decimal integer */
 #ifdef BIG_INTEGERS
 			if (strlen(yytext) >= 10)
-				yylval = make_big_integer_str(yytext, 10);
+				mylval = make_big_integer_str(yytext, 10);
 			else
-				yylval = marlais_make_integer (strtol (yytext, NULL, 10));
+				mylval = marlais_make_integer (strtol (yytext, NULL, 10));
 #else
-    		  yylval = marlais_make_integer (strtol (yytext, NULL, 10));
+    		  mylval = marlais_make_integer (strtol (yytext, NULL, 10));
 #endif
 		  return (LITERAL);
 		}
 
 <ETC>#x[0-9A-Fa-f][0-9A-Fa-f]* { /* hex-integer */
-			    yylval = marlais_make_integer (strtol (yytext+2, NULL, 16));
+			    mylval = marlais_make_integer (strtol (yytext+2, NULL, 16));
 			    return (LITERAL);
 			  }
 
@@ -265,22 +268,22 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 				  long numerator, denominator;
 				  numerator = strtol (yytext, &ptr, 10);
 				  denominator = strtol (ptr + 1, NULL, 10);
-				  yylval = marlais_make_ratio (numerator, denominator);
+				  mylval = marlais_make_ratio (numerator, denominator);
 				  return (LITERAL);
 				}
 
-<ETC>[+-]?[0-9]*\.[0-9][0-9]*{EXP}	{ yylval = marlais_make_dfloat (strtod (yytext, NULL));
+<ETC>[+-]?[0-9]*\.[0-9][0-9]*{EXP}	{ mylval = marlais_make_dfloat (strtod (yytext, NULL));
 					  return (LITERAL);
 					}
-<ETC>[+-]?[0-9][0-9]*\.[0-9]*{EXP}	{ yylval = marlais_make_dfloat (strtod (yytext, NULL));
+<ETC>[+-]?[0-9][0-9]*\.[0-9]*{EXP}	{ mylval = marlais_make_dfloat (strtod (yytext, NULL));
 				  return (LITERAL);
 				}
-<ETC>[+-]?[0-9][0-9]*{EXP}	{ yylval = marlais_make_dfloat (strtod (yytext, NULL));
+<ETC>[+-]?[0-9][0-9]*{EXP}	{ mylval = marlais_make_dfloat (strtod (yytext, NULL));
 				  return (LITERAL);
 				}
 
 <ETC>\'([^\\\']|(\\.))\' { char ch = yytext [yyleng-2];
-			   yylval =
+			   mylval =
 			    marlais_make_character(yytext[1] == '\\' ?
 					   expand_escaped_character(ch) : ch );
 			   return (LITERAL);
@@ -292,54 +295,54 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 			}
 
 <ETC>[\(\)\[\]\{\}\.\,\;\~\?]	{ /* return char as token */
-				  yylval = (Object)0;
+				  mylval = (Object)0;
 				  return *yytext;
 				}
 
-<ETC>=>		{ yylval = equal_arrow_symbol;
+<ETC>=>		{ mylval = equal_arrow_symbol;
 		  return (EQUAL_ARROW);
 		}
 
-<ETC>::		{ yylval = colon_colon_symbol;
+<ETC>::		{ mylval = colon_colon_symbol;
 		  return (COLON_COLON);
 		 }
 
-<ETC>#\(		{ yylval = NULL;
+<ETC>#\(		{ mylval = NULL;
 		  return (HASH_PAREN);
 		 }
 
-<ETC>#\[		{ yylval = NULL;
+<ETC>#\[		{ mylval = NULL;
 		  return (HASH_BRACKET);
 		 }
 
-<ETC>\?\?		{ yylval = NULL;
+<ETC>\?\?		{ mylval = NULL;
 		  return (QUESTION_QUESTION);
 		 }
 
-<ETC>\.\.\.		{ yylval = NULL;
+<ETC>\.\.\.		{ mylval = NULL;
 		  return (ELLIPSIS);
 		 }
 
 <ETC>#{STRING}	{ /* Do some nasty business with yytext */
 		  yytext[yyleng-1] = ':';
-		  yylval = make_keyword (yytext + 2);
+		  mylval = make_keyword (yytext + 2);
 		  return (KEYWORD);
 		}
 
 <ETC>{SYMBOL}:	{
-		  yylval = make_keyword (yytext);
-		  if (yydebug) {
+		  mylval = make_keyword (yytext);
+		  if (mydebug) {
 			printf("yydebug: got symbol [%s]\n",  yytext);
 			}
 		  return (KEYWORD);
 		 }
 
-<ETC>#[a-zA-Z][a-zA-Z\-]*	{ return search_for_poundword (yytext, &yylval);
+<ETC>#[a-zA-Z][a-zA-Z\-]*	{ return search_for_poundword (yytext, &mylval);
 			}
 
 
-<ETC>{SYMBOL}	{ int tmp = symbol_or_resword (yytext, &yylval);
-		  if (yydebug && tmp == SYMBOL) {
+<ETC>{SYMBOL}	{ int tmp = symbol_or_resword (yytext, &mylval);
+		  if (mydebug && tmp == SYMBOL) {
 			printf ("yydebug: got symbol [%s]\n", yytext);
 			}
 		  return tmp;
@@ -375,7 +378,7 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 		}
 
 <ETC>{STRING}	{ yytext[yyleng-1] = '\0';
-		  yylval = make_expanded_byte_string (yytext+1);
+		  mylval = make_expanded_byte_string (yytext+1);
 		  return (STRING);
 		}
 
@@ -657,60 +660,60 @@ which_operator( char *string, int length)
   if (length == 1) {
     switch (*string) {
 	case '+':
-	    yylval = plus_symbol;
+	    mylval = plus_symbol;
 	    break;
 	case '-':
-	    yylval = minus_symbol;
+	    mylval = minus_symbol;
 	    break;
 	case '*':
-	    yylval = times_symbol;
+	    mylval = times_symbol;
 	    break;
 	case '/':
-	    yylval = divides_symbol;
+	    mylval = divides_symbol;
 	    break;
 	case '^':
-	    yylval = exponent_symbol;
+	    mylval = exponent_symbol;
 	    break;
 	case '<':
-	    yylval = lesser_symbol;
+	    mylval = lesser_symbol;
 	    break;
 	case '>':
-	    yylval = greater_symbol;
+	    mylval = greater_symbol;
 	    break;
 	case '=':
-	    yylval = equal_symbol;
+	    mylval = equal_symbol;
 	    break;
 	case '&':
-	    yylval = and_symbol;
+	    mylval = and_symbol;
 	    break;
 	case '|':
-	    yylval = or_symbol;
+	    mylval = or_symbol;
 	    break;
 	case '~':
-	    yylval = not_symbol;
+	    mylval = not_symbol;
 	    break;
 	}
 	return *string;
     } else if (length == 2) {
 	switch (*string) {
 	case '<':
-	    yylval = lesser_equal_symbol;
+	    mylval = lesser_equal_symbol;
 	    return LESSER_EQUAL;
 	case '>':
-	    yylval = greater_equal_symbol;
+	    mylval = greater_equal_symbol;
 	    return GREATER_EQUAL;
 	case '=':
-	    yylval = equal_equal_symbol;
+	    mylval = equal_equal_symbol;
 	    return EQUAL_EQUAL;
 	case '~':
-	    yylval = not_equal_symbol;
+	    mylval = not_equal_symbol;
 	    return NOT_EQUAL;
 	case ':':
-	    yylval = colon_equal_symbol;
+	    mylval = colon_equal_symbol;
 	    return COLON_EQUAL;
 	}
     } else if(length == 3) {
-      yylval = not_equal_equal_symbol;
+      mylval = not_equal_equal_symbol;
       return NOT_EQUAL_EQUAL;
     }
 

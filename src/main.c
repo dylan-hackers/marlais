@@ -191,7 +191,7 @@ main (int argc, char *argv[])
     char command[256]; // win32 MSVC++ requires a constant here
     sprintf(command, "%s;", argv[optind]);
     marlais_parser_reset(stdin);
-    yy_scan_string(command);
+    marlais_yy_scan_string(command);
     read_eval_print(stdin, debug, 0);
     if(!stay) exit(0);
     optind++;
@@ -210,7 +210,7 @@ main (int argc, char *argv[])
   load_file_context = 0;
   /* <pcb> needs to be cleared after loading file */
   marlais_parser_reset(stdin);
-  yy_scan_string("");
+  marlais_yy_scan_string("");
 
   cache_env = the_env;
   current_prompt = prompt;
