@@ -63,6 +63,9 @@ target_link_libraries(marlais PUBLIC dl)
 # libm
 target_link_libraries(marlais PUBLIC m)
 
+# libreadline
+target_link_libraries(marlais PUBLIC readline)
+
 # libgc
 target_link_libraries(marlais PUBLIC ${BDWGC_LINK_LIBRARIES})
 target_include_directories(marlais PRIVATE ${BDWGC_INCLUDE_DIRS})
