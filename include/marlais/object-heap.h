@@ -1,4 +1,8 @@
 
+struct empty {
+    ObjectHeader header;
+};
+
 #ifdef MARLAIS_OBJECT_MODEL_LARGE
 struct integer {
     ObjectHeader header;
