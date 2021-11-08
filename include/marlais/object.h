@@ -121,11 +121,6 @@ extern Object allocate_object (size_t size);
 #define FOURTHVAL(vals) (VALUESELS(vals)[3])
 #define FIFTHVAL(vals)  (VALUESELS(vals)[4])
 
-/* arbitrary constants */
-#define MAX_STRING_SIZE 10240
-#define MAX_SYMBOL_SIZE 1024
-#define MAX_NUMBER_SIZE 255
-
 ObjectType object_type (Object obj);
 
 #endif
