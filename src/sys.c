@@ -104,7 +104,7 @@ get_clock ()
 Object
 user_system (Object string)
 {
-    if (!BYTESTRTYPE (string)) {
+    if (!BYTESTRP (string)) {
       return marlais_error ("system: argument must be a string", string, NULL);
     } else {
       return marlais_make_integer (system (BYTESTRVAL (string)));
