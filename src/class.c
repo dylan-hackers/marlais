@@ -673,7 +673,7 @@ marlais_make_class (Object obj,
   if (!CLASSNAME (obj)) {
     CLASSNAME (obj) = make_symbol (debug_name);
     // XXX what is this!?
-    //marlais_warning ("Making class name", CLASSNAME(obj), NULL);
+    marlais_warning ("Making class name", CLASSNAME(obj), NULL);
   }
   /* initialize class and each-subclass slot objects */
   CLASSCSLOTS (obj) = marlais_allocate_object (Instance, sizeof (struct instance));
