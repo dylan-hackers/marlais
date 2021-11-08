@@ -38,10 +38,10 @@
 #include <marlais/common.h>
 
 /* Register a set of primitives */
-void marlais_register_prims (int num, struct primitive prims[]);
+extern void marlais_register_prims (int num, struct primitive prims[]);
 /* Create a new primitive */
-Object marlais_make_primitive (char *name, enum primtype type, Object (*fun) ());
+extern Object marlais_make_primitive (char *name, enum primtype type, Object (*fun) ());
 /* Apply a primitive */
-Object marlais_apply_prim (Object prim, Object args);
+extern Object marlais_apply_prim (Object prim, Object args);
 
 #endif
