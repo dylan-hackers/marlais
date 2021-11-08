@@ -148,7 +148,7 @@ define method apply (f :: <function>, #rest args)
 	      for (val in argseq)
 		res := pair (val, res);
 	      end for;
-	      
+
 	      // now fix up the arguments again
 	      reverse!(res);
 	  end case;
@@ -184,7 +184,7 @@ define constant \~= =
 
 define method \< (o1, o2)
   error("\<: Can't compare these objects", o1, o2);
-end method \<;	
+end method \<;
 
 // >, <=, and >= are defined by <.
 
@@ -513,7 +513,7 @@ define method map (f :: <function>, c :: <collection>, #rest more-collections)
     = apply (map-forward-iteration-protocol, collections);
   let new = make (type-for-copy (c), size: c.size);
   for (states = initial-states then map2* (next-states, collections, states),
-       i = 0 then i + 1, 
+       i = 0 then i + 1,
        while: ~reduce (method (x, y) x & y end,
 		       #t,
 		       map3*(finished-state?s, collections, states, limits)))
@@ -546,7 +546,7 @@ define method map-as (class :: <class>, f :: <function>, c :: <collection>,
     new;
   end for;
 end method map-as;
-       
+
 define method map-into (mc :: <mutable-collection>,
 			f :: <function>,
 			collection :: <collection>,
@@ -647,7 +647,7 @@ define method reduce1 (f :: <function>, c :: <collection>)
   for (state = next-state (c, initial-state) then next-state (c, state),
        until: finished-state?(c, state, limit))
     value := f (value, current-element (c, state));
-  finally 
+  finally
     value;
   end for;
 end method reduce1;
@@ -876,7 +876,7 @@ end method add;
 define method add-new (s :: <sequence>, new-el, #key test = \==)
   if (member? (new-el, s, test: test))
     s;
-  else 
+  else
     add (s, new-el);
   end if;
 end method add-new;
@@ -884,7 +884,7 @@ end method add-new;
 define method add-new! (s :: <sequence>, new-el, #key test = \==)
   if (member? (new-el, s, test: test))
     s;
-  else 
+  else
     add! (s, new-el);
   end if;
 end method add-new!;
@@ -893,7 +893,7 @@ define method remove (s :: <sequence>, value, #key test = \==, count)
   let lst = as (<list>, s);
   as (type-for-copy (s), remove (lst, value, test: test, count: count));
 end method remove;
-	      
+
 //
 // Default remove! method can't share storage!
 //
@@ -950,7 +950,7 @@ define method remove-duplicates (s :: <sequence>, #key test = \==)
     end for;
     unless (already-there)
       new-list := pair (val1, new-list);
-    end unless; 
+    end unless;
   end for;
   as (s.type-for-copy, new-list);
 end method remove-duplicates;
@@ -1083,7 +1083,7 @@ define method sort (s :: <sequence>, #key test = \<, stable = #t)
 end method sort;
 
 define method sort!(a :: <sequence>, #key test = \<, stable = #f)
-  let quicksort! = 
+  let quicksort! =
    method(a, test)
      local method sort-partition(l, r)
         let i = l; let j = r;
@@ -1095,7 +1095,7 @@ define method sort!(a :: <sequence>, #key test = \<, stable = #f)
             let w = a[i];
             a[i] := a[j];
             a[j] := w;
-            i := i + 1; 
+            i := i + 1;
 	    j := j - 1;
           end if;
         end until;
@@ -1177,7 +1177,7 @@ define method last-setter (new-value, s :: <sequence>)
 end method last-setter;
 
 define method subsequence-position(in-string :: <sequence>,
-				   match :: <sequence> , 
+				   match :: <sequence> ,
 				   #key test = \= , count = 1)
   begin
   let len1 = length(match);
@@ -1189,15 +1189,15 @@ define method subsequence-position(in-string :: <sequence>,
     while((i <= maxi) & (exitval == #f) & (local-count > 0))
        for(j from 0 below len1,
            while: test(match[j] , in-string[i + j]))
-       finally if (j = len1) 
+       finally if (j = len1)
                  local-count := local-count - 1;
                  if (local-count = 0) exitval := i; end if;
                  end if;
-       end for; 
+       end for;
   i := i + 1;
   end while;
   exitval;
-  end; 
+  end;
 end method subsequence-position;
 
 //
@@ -1269,7 +1269,7 @@ define method type-for-copy (l == #())
 end method type-for-copy;
 
 define method head (lst :: <list>) => result :: <object>;
-  %head(lst); 
+  %head(lst);
 end method head;
 
 define method tail (lst :: <list>) => result :: <object>;
@@ -1750,7 +1750,7 @@ define method element (range :: <range>, index :: <small-integer>,
   select (range.size)
     0  => if (default == %default-object)
 	    error ("element: no elements in range");
-	  else 
+	  else
 	    default;
 	  end if;
     #f => if (index >= 0)
@@ -1767,7 +1767,7 @@ define method element (range :: <range>, index :: <small-integer>,
 	  else
 	    default;
 	  end if;
-      else 
+      else
 	range.from + range.by * index;
       end if;
   end select;
@@ -1788,7 +1788,7 @@ define method member? (value, range :: <range>, #key test = \==)
     end for;
   end if;
 end method member?;
-    
+
 define method shallow-copy (r :: <range>)
   range(from: r.from, by: r.by,
     to: r.to, above: r.above, below: r.below);
@@ -1839,7 +1839,7 @@ end method reverse!;
 define method reverse (r :: <range>)
   if (r.size)
     range (from: r.last, size: r.size, by: -r.by);
-  else 
+  else
     error ("reverse: unable to operate on unbounded range");
   end if;
 end method reverse;
@@ -1857,7 +1857,7 @@ define method initial-state (r :: <range>)
   let result = element (r, 0, default: x);
   if (x == result)
     #f;
-  else 
+  else
     0;
   end if;
 end method initial-state;
@@ -2101,7 +2101,7 @@ end method current-element-setter;
 
 define method key-sequence (t :: <object-table>)
   let keys = #();
-  let (init, limit, next, end?, key, elt) = 
+  let (init, limit, next, end?, key, elt) =
     forward-iteration-protocol (t);
   for (state = init then next (t, state),
       until: end? (t, state, limit))
@@ -2786,8 +2786,8 @@ define method gcd(int1 :: <integer>, int2 :: <integer>)
   let int2 = abs(int2);
   if (int1 > int2)
     gcd-internal(int1, int2);
-  else                         
-    gcd-internal(int2, int1);  
+  else
+    gcd-internal(int2, int1);
   end if;
 end method gcd;
 
@@ -2854,7 +2854,7 @@ define method \^ (base :: <number>, exponent :: <integer>)
 	    power (b, e - 1, residual * b);
 	  end if;
 	end method power;
-  
+
   if (exponent.negative?)
     1.0 / power (base, - exponent, 1);
   else
