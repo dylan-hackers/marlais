@@ -217,8 +217,8 @@ struct symbol {
 #define SYMBOLTYPE(obj)   (((struct symbol *)obj)->type)
 #define SYMBOLNAME(obj)   (((struct symbol *)obj)->name)
 #define SYMBOLP(obj)      (POINTERP(obj) && (SYMBOLTYPE(obj) == Symbol))
-#define KEYNAME(obj)      (((struct symbol *)obj)->name)
-#define KEYWORDP(obj)     (POINTERP(obj) && (SYMBOLTYPE(obj) == Keyword))
+#define NAMENAME(obj)     (((struct symbol *)obj)->name)
+#define NAMEP(obj)        (POINTERP(obj) && (SYMBOLTYPE(obj) == Name))
 
 struct slot_descriptor {
     ObjectType type;

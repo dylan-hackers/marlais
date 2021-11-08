@@ -252,7 +252,7 @@ expression
 	: binary_operand	{ $$ = $1; }
 /*	| unparenthesized_operand COLON_EQUAL expression */
 	| expression COLON_EQUAL expression
-           { if (SYMBOLP ( $1)) {
+           { if (NAMEP ( $1)) {
 		 $$ = listem (set_bang_symbol, $1, $3, NULL);
 	     } else {
 		 $$ = make_setter_expr ($1, $3);
@@ -1507,7 +1507,7 @@ symtab_push_parameters (Object parameters)
 
     while (PAIRP (parameters)) {
 	variable = CAR (parameters);
-	if (! PAIRP (variable) && ! SYMBOLP (variable) ) {
+	if (! PAIRP (variable) && ! NAMEP (variable) ) {
 	    /* we got to a keyword parameter or a hash-word */
 	    break;
 	}

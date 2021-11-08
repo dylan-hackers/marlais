@@ -81,6 +81,7 @@ marlais_make_symbol (char *name)
   Object obj;
 
   obj = intern_symbol (name);
+  SYMBOLTYPE (obj) = Name;
   return (obj);
 }
 
@@ -90,7 +91,7 @@ marlais_make_keyword (char *name)
   Object obj;
 
   obj = intern_symbol (name);
-  SYMBOLTYPE (obj) = Keyword;
+  SYMBOLTYPE (obj) = Symbol;
   return (obj);
 }
 
@@ -127,7 +128,7 @@ marlais_keyword_to_symbol (Object keyword)
     char name[MAX_SYMBOL_SIZE];
     int size;
 
-    strcpy (name, KEYNAME (keyword));
+    strcpy (name, NAMENAME (keyword));
     size = strlen (name);
     name[size - 1] = '\0';
     return (marlais_make_symbol (name));

@@ -109,6 +109,7 @@ GLOBAL Object standard_error_symbol;
 
 /* builtin classes */
 GLOBAL Object object_class;
+GLOBAL Object name_class;
 GLOBAL Object boolean_class;
 GLOBAL Object number_class;
 GLOBAL Object complex_class;
@@ -153,7 +154,6 @@ GLOBAL Object restart_class;
 GLOBAL Object simple_restart_class;
 GLOBAL Object abort_class;
 GLOBAL Object symbol_class;
-GLOBAL Object keyword_class;
 GLOBAL Object character_class;
 GLOBAL Object function_class;
 GLOBAL Object primitive_class;

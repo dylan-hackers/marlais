@@ -473,7 +473,7 @@ user_set_module (Object args)
     } else {
 	module_name = CAR (args);
     }
-    if (KEYWORDP (module_name)) {
+    if (SYMBOLP (module_name)) {
 	return
 	    marlais_symbol_to_keyword (set_module
 			       (module_binding
@@ -573,7 +573,7 @@ use_module (Object module_name,
      * hand, if imports != all, we might want to just look at the
      * symbols to be imported.
      */
-    if (SYMBOLP (module_name)) {
+    if (NAMEP (module_name)) {
 
 	import_module = module_binding (module_name);
 	frame = import_module->namespace;

@@ -274,7 +274,7 @@ parse_function_key_parameters(Object functor, Object* params,
 	break;
       }
       /* get a keyword-parameter pair */
-      if (SYMBOLP (entry)) {
+      if (NAMEP (entry)) {
 	keyword_list_insert (get_params_fn (functor),
 			     listem (param_name_to_keyword (entry),
 				     entry,
@@ -287,7 +287,7 @@ parse_function_key_parameters(Object functor, Object* params,
 				     CAR (entry),
 				     SECOND (entry),
 				     NULL));
-      } else if (PAIRP (entry) && KEYWORDP (CAR (entry))) {
+      } else if (PAIRP (entry) && SYMBOLP (CAR (entry))) {
 	xform_key_fn(functor, entry);
       }
       *params = CDR(*params);
@@ -897,7 +897,7 @@ applicable_method_p (Object argfun, Object sample_args, int strict_check)
 		 * in sample_args are in the keyword list
 		 */
 		while (PAIRP (samples)) {
-		    if (!KEYWORDP (CAR (samples)) ||
+		    if (!SYMBOLP (CAR (samples)) ||
 			EMPTYLISTP (CDR (samples))) {
 			/* Has non keyword where our method needs one */
 			goto fail;
@@ -1306,13 +1306,13 @@ debug_name_setter (Object method, Object name)
 static int
 is_param_name (Object parameter_name)
 {
-    return SYMBOLP (parameter_name) ||
-	(PAIRP (parameter_name) && SYMBOLP (CAR (parameter_name)));
+    return NAMEP (parameter_name) ||
+	(PAIRP (parameter_name) && NAMEP (CAR (parameter_name)));
 }
 
 static Object
 param_name_to_keyword (Object param_name)
 {
-    return marlais_symbol_to_keyword (SYMBOLP (param_name) ? param_name
+    return marlais_symbol_to_keyword (NAMEP (param_name) ? param_name
 			      : CAR (param_name));
 }

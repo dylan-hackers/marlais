@@ -436,7 +436,7 @@ bind_exit_eval (Object form)
     }
     sym = CAR (sec);
     body = CDR (CDR (form));
-    if (!SYMBOLP (sym)) {
+    if (!NAMEP (sym)) {
       marlais_error ("bind-exit: bad exit procedure name", sym, NULL);
     }
     exit_obj = make_exit (sym);
@@ -521,7 +521,7 @@ boundp_eval (Object form)
     marlais_error ("bound?: missing symbol", form, NULL);
   }
   sym = CAR (cdr);
-  if (!SYMBOLP (sym)) {
+  if (!NAMEP (sym)) {
     marlais_error ("bound?: argument must be a symbol", sym, NULL);
   }
   return (symbol_value (sym) == NULL ? MARLAIS_FALSE : MARLAIS_TRUE);
@@ -912,7 +912,7 @@ define_module_eval (Object form)
   struct module_binding *the_module;
 
   /* Bogus for now */
-  if (PAIRP (form) && list_length (form) >= 2 && SYMBOLP (SECOND (form))) {
+  if (PAIRP (form) && list_length (form) >= 2 && NAMEP (SECOND (form))) {
     the_module = new_module (SECOND (form));
     clauses = CDR (CDR (form));
 
@@ -1021,7 +1021,7 @@ dotimes_eval (Object form)
     marlais_error ("second arg to dotimes must be a list", clause, NULL);
   }
   var = CAR (clause);
-  if (!SYMBOLP (var)) {
+  if (!NAMEP (var)) {
     marlais_error ("dotimes: first value in spec clause must be a symbol", var, NULL);
   }
   if (EMPTYLISTP (CDR (clause))) {
@@ -1184,7 +1184,7 @@ static Object
 get_variable (Object var_spec)
 {
   if ((PAIRP (var_spec) && (list_length (var_spec) != 2)) &&
-      (!SYMBOLP (var_spec))) {
+      (!NAMEP (var_spec))) {
     marlais_error ("Bad variable specification", var_spec, NULL);
   }
   return var_spec;
@@ -1209,7 +1209,7 @@ get_vars_and_inits (Object var_forms,
   while (PAIRP (var_forms)) {
     var_form = CAR (var_forms);
     var_spec = CAR (var_form);
-    if (PAIRP (var_spec) || SYMBOLP (var_spec)) {
+    if (PAIRP (var_spec) || NAMEP (var_spec)) {
 
       /* Explicit Step Clause: init is of form
        *    (init-value . next-value)
@@ -1696,7 +1696,7 @@ qq_help (Object skel)
 {
   Object head, tmp, tail;
 
-  if (EMPTYLISTP (skel) || SYMBOLP (skel) || !PAIRP (skel)) {
+  if (EMPTYLISTP (skel) || NAMEP (skel) || !PAIRP (skel)) {
     return skel;
   } else {
     head = skel;
@@ -1824,7 +1824,7 @@ set_eval (Object form)
 static Object
 set_module_eval (Object form)
 {
-  if (PAIRP (form) && list_length (form) == 2 && KEYWORDP (SECOND (form))) {
+  if (PAIRP (form) && list_length (form) == 2 && SYMBOLP (SECOND (form))) {
     return user_set_module (marlais_devalue (CDR (form)));
   } else {
     marlais_error ("set_module: argument list not a single symbol", form, NULL);

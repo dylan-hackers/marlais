@@ -217,7 +217,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
 	    hit_values = 1;
 	} else {
 	    val = CAR (args);
-	    if (SYMBOLP (param)) {
+	    if (NAMEP (param)) {
 		sym = param;
 	    } else {
 		sym = FIRST (param);
@@ -245,7 +245,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
 	/* Bind each of the keyword args that is present. */
 	while (!EMPTYLISTP (args)) {
 	    keyword = FIRST (args);
-	    if (!KEYWORDP (keyword)) {
+	    if (!SYMBOLP (keyword)) {
 		/* jnw -- check this out! */
 		if (!rest_var) {
 		    marlais_error ("apply: argument to method must be keyword", meth, keyword, NULL);
@@ -305,7 +305,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
 	if (METHALLKEYS (meth)) {
 	    /* skip rest of parameters if they are keywords */
 	    while (PAIRP (args)) {
-		if (!KEYWORDP (CAR (args))) {
+		if (!SYMBOLP (CAR (args))) {
 		    marlais_error ("apply: keyword argument expected", CAR (args),
 			   NULL);
 		} else if (!PAIRP (CDR (args))) {

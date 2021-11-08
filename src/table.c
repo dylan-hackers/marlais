@@ -326,7 +326,7 @@ equal_hash (Object key)
       return (hash_string (key));
     } else if (SOVP (key)) {
       return (hash_vector (key));
-    } else if (SYMBOLP (key) || KEYWORDP (key)) {
+    } else if (NAMEP (key) || SYMBOLP (key)) {
       return (marlais_make_integer ((DyInteger)key));
     } else {
       /* marlais_error ("=hash: don't know how to hash object", key, NULL);  */

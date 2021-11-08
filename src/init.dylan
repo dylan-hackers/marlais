@@ -39,7 +39,7 @@ define method as (sc == <string>, s :: <symbol>)
 end method as;
 
 /* <pcb> added so we can use the reader. */
-define method as (sc == <string>, s :: <variable-name>)
+define method as (sc == <string>, s :: <name>)
   %symbol->string(s);
 end method as;
 

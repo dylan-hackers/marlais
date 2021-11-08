@@ -46,7 +46,7 @@ eval (Object obj)
     case DoubleFloat:
     case ByteString:
     case SimpleObjectVector:
-    case Keyword:
+    case Symbol:
     case Character:
     case EndOfFile:
     case EmptyList:		/* is this right? */
@@ -60,7 +60,7 @@ eval (Object obj)
 			  obj,
 			  NULL);
 	}
-    case Symbol:
+    case Name:
 	val = symbol_value (obj);
 	if (!val) {
 	    return marlais_error ("unbound variable", obj, NULL);

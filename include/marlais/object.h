@@ -9,6 +9,9 @@ typedef uintptr_t DyUnsigned;
 typedef enum {
     Uninitialized = 0,
 
+    /* names */
+    Name,
+
     /* booleans */
     True, False,
 
@@ -22,8 +25,8 @@ typedef enum {
     /* conditions */
     Condition,
 
-    /* keywords and symbols */
-    Symbol, Keyword,
+    /* symbols */
+    Symbol,
 
     /* characters */
     Character,
@@ -80,6 +83,7 @@ extern Object quasiquote_symbol, unquote_symbol, unquote_splicing_symbol;
 
 /* builtin classes */
 extern Object object_class;
+extern Object name_class;
 extern Object boolean_class;
 extern Object number_class, real_class, integer_class, ratio_class;
 extern Object single_float_class, double_float_class;
@@ -91,7 +95,7 @@ extern Object stretchy_vector_class;
 extern Object explicit_key_collection_class, mutable_explicit_key_collection_class;
 extern Object table_class, deque_class, array_class;
 extern Object condition_class;
-extern Object symbol_class, keyword_class;
+extern Object symbol_class;
 extern Object character_class;
 extern Object function_class, primitive_class, generic_function_class,
   method_class;

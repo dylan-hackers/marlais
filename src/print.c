@@ -89,15 +89,15 @@ marlais_print_object (Object fd, Object obj, int escaped)
   case DoubleFloat:
     fprintf (fp, "%f", DFLOATVAL (obj));
     break;
-  case Symbol:
-    fprintf (fp, "%s", SYMBOLNAME (obj));
+  case Name:
+    fprintf (fp, "%s", NAMENAME (obj));
     break;
-  case Keyword:
+  case Symbol:
     {
       int i;
       char *cp;
       fprintf (fp, "#\"");
-      cp = KEYNAME (obj);
+      cp = SYMBOLNAME (obj);
       for (i = strlen (cp) - 1; i > 0; i--) {
         fputc (*(cp++), fp);
       }
@@ -541,7 +541,7 @@ print_generic_function (Object fd, Object gf, int escaped)
   int some_args_printed = 0;
   FILE *fp = print_file_from_fd(fd);
 
-  if (SYMBOLP (GFNAME (gf))) {
+  if (NAMEP (GFNAME (gf))) {
     fprintf (fp, "{the generic function %s (", SYMBOLNAME (GFNAME (gf)));
   } else {
     fprintf (fp, "{an anonymous generic function (");

@@ -158,8 +158,8 @@ struct symbol {
 #define SYMBOLNAME(obj)   ((obj)->u.symbol.name)
 #define SYMBOLP(obj)      ((obj)->type == Symbol)
 #define SYMBOLTYPE(obj)   ((obj)->type)
-#define KEYNAME(obj)      ((obj)->u.symbol.name)
-#define KEYWORDP(obj)     ((obj)->type == Keyword)
+#define NAMENAME(obj)     ((obj)->u.symbol.name)
+#define NAMEP(obj)        ((obj)->type == Name)
 
 struct character {
     char val;

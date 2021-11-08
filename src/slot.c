@@ -45,7 +45,7 @@ marlais_slot_name (Object slot)
   if (!PAIRP (slot)) {
     return (slot);
   } else {
-    if (SYMBOLP (CAR (slot))) {
+    if (NAMEP (CAR (slot))) {
       return (CAR (slot));
     } else {
       marlais_error ("Slot has no name but needs one", slot, NULL);

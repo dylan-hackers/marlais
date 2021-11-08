@@ -191,8 +191,8 @@ marlais_initialize_class (void)
 					 error_class);
   sealed_object_error_class =
     make_builtin_class ("<sealed-object-error>", error_class);
-  symbol_class = make_builtin_class ("<variable-name>", object_class);
-  keyword_class = make_builtin_class ("<symbol>", object_class);
+  symbol_class = make_builtin_class ("<symbol>", object_class);
+  name_class = make_builtin_class ("<name>", object_class);
   character_class = make_builtin_class ("<character>", object_class);
   function_class = make_builtin_class ("<function>", object_class);
   primitive_class = make_builtin_class ("<primitive>", function_class);
@@ -298,8 +298,8 @@ marlais_object_class (Object obj)
     return (condition_class);
   case Symbol:
     return (symbol_class);
-  case Keyword:
-    return (keyword_class);
+  case Name:
+    return (name_class);
   case Character:
     return (character_class);
   case NextMethod:
@@ -745,11 +745,11 @@ marlais_make_slot_descriptor_list (Object slots, int do_eval)
     properties = 0;
     inherited_slot = 0;
 
-    if (SYMBOLP (slot)) {
+    if (NAMEP (slot)) {
       /* simple slot descriptor */
       getter = slot;
     } else {
-      if (SYMBOLP (CAR (slot))) {
+      if (NAMEP (CAR (slot))) {
 	/* first elt is getter name */
 	getter = CAR (slot);
 	slot = CDR (slot);
@@ -758,7 +758,7 @@ marlais_make_slot_descriptor_list (Object slots, int do_eval)
       while (PAIRP (slot)) {
 	slotelt = CAR (slot);
 	/* parse keyword-value pairs for slot initialization */
-	if (!KEYWORDP (slotelt) || EMPTYLISTP (CDR (slot))) {
+	if (!SYMBOLP (slotelt) || EMPTYLISTP (CDR (slot))) {
 	  marlais_error ("malformed slot descriptor", slot, NULL);
 	} else if (slotelt == getter_keyword) {
 	  if (getter_seen) {
@@ -821,7 +821,7 @@ marlais_make_slot_descriptor_list (Object slots, int do_eval)
 		   SECOND (slot), NULL);
 	  }
 	  init_keyword = SECOND (slot);
-	  if (!KEYWORDP (init_keyword)) {
+	  if (!SYMBOLP (init_keyword)) {
 	    marlais_error ("init-keyword: value is not a keyword", init_keyword, NULL);
 	  }
 	} else if (slotelt == required_init_keyword_keyword) {
@@ -830,7 +830,7 @@ marlais_make_slot_descriptor_list (Object slots, int do_eval)
 		   SECOND (slot), NULL);
 	  }
 	  init_keyword = SECOND (slot);
-	  if (!KEYWORDP (init_keyword)) {
+	  if (!SYMBOLP (init_keyword)) {
 	    marlais_error ("required-init-keyword: value is not a keyword",
 		   init_keyword, NULL);
 	  }
@@ -890,7 +890,7 @@ marlais_make_getter_setter_gfs (Object slotds)
     /* Fix up the getter first */
 
     getter = SLOTDGETTER (CAR (slotds));
-    if (SYMBOLP (getter)) {
+    if (NAMEP (getter)) {
       if (NULL == symbol_value (getter)) {
 	SLOTDGETTER (CAR (slotds)) =
 	  make_generic_function (getter,
@@ -923,7 +923,7 @@ marlais_make_getter_setter_gfs (Object slotds)
 	  SLOTDSETTER (CAR (slotds)) =
 	  marlais_make_setter_symbol (getter);
       }
-      if (SYMBOLP (setter)) {
+      if (NAMEP (setter)) {
 	if (NULL == symbol_value (setter)) {
 	  SLOTDSETTER (CAR (slotds)) =
 	    make_generic_function (setter,
@@ -1057,7 +1057,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
     init_slotds = copy_list (slot_descriptors);
     while (!EMPTYLISTP (initializers)) {
       initializer = CAR (initializers);
-      if (KEYWORDP (initializer) && !EMPTYLISTP (CDR (initializers))) {
+      if (SYMBOLP (initializer) && !EMPTYLISTP (CDR (initializers))) {
 	extra = replace_slotd_init (init_slotds,
 				    initializer,
 				    SECOND (initializers));
