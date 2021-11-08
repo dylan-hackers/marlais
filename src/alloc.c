@@ -98,6 +98,9 @@ marlais_allocate_object (ObjectType type, size_t size)
 #ifdef POINTERTYPE
   POINTERTYPE(obj) = type;
 #endif
+#ifdef POINTERSIZE
+  POINTERSIZE(obj) = size;
+#endif
   /* return result */
   return obj;
 }
