@@ -30,7 +30,6 @@ add_executable(marlais
   foreign_ptr.c
   function.c
   globals.c
-  keyword.c
   lexer.c
   list.c
   misc.c
