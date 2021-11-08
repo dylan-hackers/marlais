@@ -56,7 +56,7 @@ static int read_eval_print(FILE* f, int dbg_lvl, int bind_constant_p)
   int x, vals;
   Object obj;
 
-  if ((obj = parse_object (f, dbg_lvl)) && (obj != eof_object)) {
+  if ((obj = marlais_parse_object (f, dbg_lvl)) && (obj != eof_object)) {
     obj = eval (obj);
     if(POINTERP(obj) && POINTERTYPE(obj) == Values) {
       vals = VALUESNUM(obj);

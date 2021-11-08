@@ -10,12 +10,11 @@
 #include <marlais/eval.h>
 #include <marlais/list.h>
 #include <marlais/number.h>
-#include <marlais/parse.h>
+#include <marlais/parser.h>
 #include <marlais/prim.h>
 #include <marlais/print.h>
 #include <marlais/read.h>
 #include <marlais/stream.h>
-#include <marlais/yystype.h>
 
 #include <signal.h>
 
@@ -302,7 +301,7 @@ marlais_error (char *msg,...)
       yy_restart (stdin);
       prompt = prompt_buf;
       current_prompt = prompt;
-      while ((obj = parse_object (stdin, 0)) && (obj != eof_object)) {
+      while ((obj = marlais_parse_object (stdin, 0)) && (obj != eof_object)) {
 	obj = eval (obj);
 	if (obj != unspecified_object) {
 	  Object symbol;

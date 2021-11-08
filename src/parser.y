@@ -1424,7 +1424,7 @@ make_setter_expr (Object place, Object value)
     Object newsym;
 
     if ( ! PAIRP (place)) {
-	error("Trying to make a setter from something that's not a place",
+	marlais_error("Trying to make a setter from something that's not a place",
 	      place, NULL);
     }
     newsym = gensym(1);

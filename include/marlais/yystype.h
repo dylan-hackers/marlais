@@ -20,11 +20,8 @@
 #define MARLAIS_YYSTYPE_H
 
 #include <marlais/common.h>
-#include <marlais/dylan_lexer.h>
 
 #define YYSTYPE Object
 #define YYSTYPE_IS_DECLARED 1
-
-int yyparse (void);
 
 #endif

@@ -1,6 +1,6 @@
 /*
 
-   parse.c
+   parse.h
 
    This software is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,49 +30,14 @@
 
  */
 
-#include <marlais/parse.h>
+#ifndef MARLAIS_PARSE_H
+#define MARLAIS_PARSE_H
 
-#include <marlais/print.h>
-#include <marlais/yystype.h>
+#include <marlais/common.h>
 
-Object *parse_value_ptr;
-extern FILE *yyin;
-extern Object standard_error_stream;
-
-void yy_restart (FILE * new_file);
-
-extern int yydebug;
-extern int echo_prefix;
-extern int yychar;
-extern int yylineno;
 extern int load_file_context;
 
-extern Object eof_object;
+extern Object marlais_parse_object (FILE * fp, int debug);
+extern void marlais_reset_parser (FILE * fp);
 
-Object
-parse_object (FILE * fp, int debug)
-{
-  Object parse_value;
-
-  if (!yyin) {
-    yyin = fp;
-  } else if (yyin && fp != yyin) {
-    reset_parser (fp);
-  }
-  yydebug = debug;
-  parse_value_ptr = &parse_value;
-  if (yyparse () == 0) {
-    return parse_value;
-  } else {
-    marlais_warning ("Parser failed in inexplicable way", parse_value, NULL);
-    return eof_object;
-  }
-}
-
-void
-reset_parser (FILE * fp)
-{
-  fflush (stderr);
-  yy_restart (fp);
-  yylineno = 1;
-}
+#endif

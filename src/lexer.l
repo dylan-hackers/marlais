@@ -13,7 +13,7 @@
 #include <marlais/symbol.h>
 #include <marlais/yystype.h>
 
-#include "dylan.tab.h"
+#include "parser.gen.h"
 
 #include <sys/time.h>
 

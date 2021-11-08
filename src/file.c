@@ -2,12 +2,12 @@
 
 #include <marlais/file.h>
 
-#include <marlais/dylan_lexer.h>
 #include <marlais/env.h>
 #include <marlais/eval.h>
 #include <marlais/foreign_ptr.h>
+#include <marlais/lexer.h>
 #include <marlais/list.h>
-#include <marlais/parse.h>
+#include <marlais/parser.h>
 #include <marlais/prim.h>
 #include <marlais/read.h>
 
@@ -46,14 +46,14 @@ i_load (Object filename)
 
     fp = open_file (filename);
 
-    reset_parser (fp);
+    marlais_reset_parser (fp);
 
     /*
      * Cons up the list of expressions in the file, then eval them.
      */
 
     expr_list_ptr = &expr_list;
-    while ((obj = parse_object (fp, 0)) && (obj != eof_object)) {
+    while ((obj = marlais_parse_object (fp, 0)) && (obj != eof_object)) {
 	*expr_list_ptr = cons (obj, make_empty_list ());
 	expr_list_ptr = &CDR (*expr_list_ptr);
     }
