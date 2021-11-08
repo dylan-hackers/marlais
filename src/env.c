@@ -791,7 +791,7 @@ concat_prefix (char *prefix_string, Object sym)
     strcpy (new_str, prefix_string);
     strcpy (new_str + prefix_len, old_str);
 
-    return marlais_make_symbol (new_str);
+    return marlais_make_name (new_str);
 }
 
 /*

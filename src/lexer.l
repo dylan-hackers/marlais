@@ -436,46 +436,46 @@ marlais_initialize_lexer (void)
     intermediate_words = NULL;
 
     for (i = 0; i < NUM_COREWORDS; i++) {
-	*(coreword_table[i].symbol) = marlais_make_symbol(coreword_table[i].word);
+	*(coreword_table[i].symbol) = marlais_make_name(coreword_table[i].word);
     }
     for (i = 0; i < NUM_BEGIN_WORDS; i++) {
 	*(begin_word_table[i].symbol) =
-	    marlais_make_symbol (begin_word_table[i].word);
+	    marlais_make_name (begin_word_table[i].word);
     }
     for (i = 0; i < NUM_DEFINING_WORDS; i++) {
 	*(defining_word_table[i].symbol) =
-	    marlais_make_symbol (defining_word_table[i].word);
+	    marlais_make_name (defining_word_table[i].word);
     }
     for (i = 0; i < NUM_IF_INTERMEDIATE_WORDS; i++) {
 	*(if_intermediate_word_table[i].symbol) =
-	    marlais_make_symbol (if_intermediate_word_table[i].word);
+	    marlais_make_name (if_intermediate_word_table[i].word);
     }
     for (i = 0; i < NUM_SELECT_INTERMEDIATE_WORDS; i++) {
 	*(select_intermediate_word_table[i].symbol) =
-	    marlais_make_symbol (select_intermediate_word_table[i].word);
+	    marlais_make_name (select_intermediate_word_table[i].word);
     }
     for (i = 0; i < NUM_CLASS_INTERMEDIATE_WORDS; i++) {
 	*(class_intermediate_word_table[i].symbol) =
-	    marlais_make_symbol (class_intermediate_word_table[i].word);
+	    marlais_make_name (class_intermediate_word_table[i].word);
     }
     for (i = 0; i < NUM_FOR_INTERMEDIATE_WORDS; i++) {
 	*(for_intermediate_word_table[i].symbol) =
-	    marlais_make_symbol (for_intermediate_word_table[i].word);
+	    marlais_make_name (for_intermediate_word_table[i].word);
     }
     for (i = 0; i < NUM_FOR_CLAUSE_WORDS; i++) {
 	*(for_clause_word_table[i].symbol) =
-	    marlais_make_symbol (for_clause_word_table[i].word);
+	    marlais_make_name (for_clause_word_table[i].word);
     }
    for (i = 0; i < NUM_BLOCK_INTERMEDIATE_WORDS; i++) {
 	*(block_intermediate_word_table[i].symbol) =
-	    marlais_make_symbol (block_intermediate_word_table[i].word);
+	    marlais_make_name (block_intermediate_word_table[i].word);
     }
    for (i = 0; i < NUM_MODULE_INTERMEDIATE_WORDS; i++) {
 	*(module_intermediate_word_table[i].symbol) =
-	    marlais_make_symbol (module_intermediate_word_table[i].word);
+	    marlais_make_name (module_intermediate_word_table[i].word);
     }
-    equal_arrow_symbol = marlais_make_symbol("=>");
-    colon_colon_symbol = marlais_make_symbol("::");
+    equal_arrow_symbol = marlais_make_name("=>");
+    colon_colon_symbol = marlais_make_name("::");
 }
 
 void
@@ -608,7 +608,7 @@ symbol_or_resword (char *string, YYSTYPE *obj_ptr)
 	*obj_ptr = *(result->symbol);
 	return result->token;
     }
-    *obj_ptr = marlais_make_symbol(string);
+    *obj_ptr = marlais_make_name(string);
     return NAME;
 }
 
@@ -758,7 +758,7 @@ static void
 make_header_val()
 {
 	if (header_key == module_keyword) {
-		Object symbol = marlais_make_symbol (get_nonws_symbol (yytext));
+		Object symbol = marlais_make_name (get_nonws_symbol (yytext));
 		struct module_binding *module = module_binding (symbol);
 		set_module (module);
 	}

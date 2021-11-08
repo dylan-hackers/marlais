@@ -76,7 +76,7 @@ marlais_register_symbol (void)
 }
 
 Object
-marlais_make_symbol (char *name)
+marlais_make_name (char *name)
 {
   Object obj;
 
@@ -95,7 +95,6 @@ marlais_make_keyword (char *name)
   return (obj);
 }
 
-
 Object
 marlais_make_setter_symbol (Object sym)
 {
@@ -107,7 +106,7 @@ marlais_make_setter_symbol (Object sym)
   strcpy (name, SYMBOLNAME (sym));
   strcat (name, "-setter");
 
-  return (marlais_make_symbol (name));
+  return (marlais_make_name (name));
 }
 
 Object
@@ -119,7 +118,7 @@ marlais_symbol_to_string (Object sym)
 Object
 marlais_string_to_symbol (Object str)
 {
-  return (marlais_make_symbol (BYTESTRVAL (str)));
+  return (marlais_make_name (BYTESTRVAL (str)));
 }
 
 Object
@@ -131,7 +130,7 @@ marlais_keyword_to_symbol (Object keyword)
   strcpy (name, NAMENAME (keyword));
   size = strlen (name);
   name[size - 1] = '\0';
-  return (marlais_make_symbol (name));
+  return (marlais_make_name (name));
 }
 
 Object

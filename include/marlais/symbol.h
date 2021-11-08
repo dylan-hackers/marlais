@@ -38,7 +38,7 @@
 
 extern void marlais_register_symbol (void);
 
-extern Object marlais_make_symbol (char *name);
+extern Object marlais_make_name (char *name);
 extern Object marlais_make_keyword (char *name);
 extern Object marlais_make_setter_symbol (Object sym);
 

@@ -1446,7 +1446,7 @@ static Object
 gensym(int i)
 {
     sprintf( gensymbuf, "\"tmp%d", i);
-    return marlais_make_symbol (gensymbuf);
+    return marlais_make_name (gensymbuf);
 }
 
 static int

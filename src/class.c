@@ -670,7 +670,7 @@ marlais_make_class (Object obj,
   }
 
   if (!CLASSNAME (obj)) {
-    CLASSNAME (obj) = marlais_make_symbol (debug_name);
+    CLASSNAME (obj) = marlais_make_name (debug_name);
     // XXX what is this!?
     marlais_warning ("Making class name", CLASSNAME(obj), NULL);
   }
@@ -1012,7 +1012,7 @@ make_class_driver (Object args)
   }
   obj = marlais_allocate_object (Class, sizeof (struct clas));
 
-  CLASSNAME (obj) = marlais_make_symbol (BYTESTRVAL (debug_obj));
+  CLASSNAME (obj) = marlais_make_name (BYTESTRVAL (debug_obj));
   CLASSPROPS (obj) |= CLASSSLOTSUNINIT;
   return marlais_make_class (obj, supers_obj, slots_obj, abstract_obj, BYTESTRVAL(debug_obj));
 }
@@ -1351,7 +1351,7 @@ make_builtin_class (char *name, Object supers)
 
   obj = marlais_allocate_object (Class, sizeof (struct clas));
 
-  CLASSNAME (obj) = marlais_make_symbol (name);
+  CLASSNAME (obj) = marlais_make_name (name);
   CLASSPROPS (obj) &= ~CLASSSLOTSUNINIT;
   add_top_level_binding (CLASSNAME (obj), obj, 1);
   return marlais_make_class (obj, supers, make_empty_list (), MARLAIS_FALSE, NULL);

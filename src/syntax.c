@@ -239,7 +239,7 @@ install_syntax_entry (char *name, syntax_fun fun)
     Object sym;
     int h;
 
-    sym = marlais_make_symbol (name);
+    sym = marlais_make_name (name);
     h = ((DyInteger) sym) % SYNTAX_TABLE_SIZE;
     entry = (struct syntax_entry *)
       marlais_allocate_memory (sizeof (struct syntax_entry));
