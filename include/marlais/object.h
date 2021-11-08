@@ -105,9 +105,6 @@ extern Object class_class, table_entry_class, deque_entry_class;
 stream_class,
 #endif
 
-/* from alloc.c */
-extern Object allocate_object (size_t size);
-
 /* convenience macro functions */
 #define FIRST(obj)      (CAR(obj))
 #define SECOND(obj)     (CAR(CDR(obj)))
