@@ -66,10 +66,7 @@ void yyerror (char *);
 static Object append_bang (Object l1, Object l2);
 static Object nelistem (Object car,...);
 
-extern char *yytext;
 extern Object *parse_value_ptr;
-
-extern int yylineno;
 
 void marlais_lexer_push_intermediate_words (Object begin_word);
 void marlais_lexer_pop_intermediate_words (void);

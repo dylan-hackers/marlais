@@ -27,8 +27,6 @@ extern char* prompt_continuation;
 extern char* current_prompt;
 extern int load_file_context;
 
-int strcasecmp (const char *s1, const char *s2);
-
 Object header_key;
 Object header_val;
 
