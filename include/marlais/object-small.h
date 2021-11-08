@@ -7,125 +7,201 @@
 
  */
 
+/* Type for marlais objects */
 typedef void *Object;
 
-#define POINTERTAG           0
-#define IMMEDTAG             1
-#define INTEGERTAG           2
+/* Type for handling value tags */
+typedef DyUnsigned MarlaisTag;
+#define MARLAIS_TAG_POINTER       (0x0)
+#define MARLAIS_TAG_IMMEDIATE     (0x1)
+#define MARLAIS_TAG_INTEGER       (0x2)
+#define MARLAIS_TAG_MASK          (0x3)
 
-#define POINTERP(obj)        (((DyUnsigned)obj & 3) == POINTERTAG)
-#define IMMEDP(obj)          (((DyUnsigned)obj & 3) == IMMEDTAG)
-#define INTEGERP(obj)        (((DyUnsigned)obj & 3) == INTEGERTAG)
-#define MAX_SMALL_INT        (INTPTR_MAX >> 3)
+/* Type for handling value subtags */
+typedef DyUnsigned MarlaisSub;
+#define MARLAIS_SUB_SHIFT         2
+#define MARLAIS_SUB_TRUE          (0x0 << MARLAIS_SUB_SHIFT)
+#define MARLAIS_SUB_FALSE         (0x1 << MARLAIS_SUB_SHIFT)
+#define MARLAIS_SUB_EMPTYLIST     (0x2 << MARLAIS_SUB_SHIFT)
+#define MARLAIS_SUB_CHARACTER     (0x3 << MARLAIS_SUB_SHIFT)
+#define MARLAIS_SUB_EOF           (0x4 << MARLAIS_SUB_SHIFT)
+#define MARLAIS_SUB_UNSPECIFIED   (0x5 << MARLAIS_SUB_SHIFT)
+#define MARLAIS_SUB_UNINITIALIZED (0x6 << MARLAIS_SUB_SHIFT)
+#define MARLAIS_SUB_MASK          (0xf << MARLAIS_SUB_SHIFT)
 
+/* Shift distances for value fields */
+#define MARLAIS_INTEGER_SHIFT   (2)
+#define MARLAIS_IMMEDIATE_SHIFT (6)
 
-/* macros for identifying immediates other than integers
- */
-#define SUBPART(obj)         (((DyUnsigned)obj & 0x3c) >> 2)
+/* Immediate constants */
+#define TRUEVAL         ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_TRUE))
+#define FALSEVAL        ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_FALSE))
+#define EMPTYLISTVAL    ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_EMPTYLIST))
+#define EOFVAL          ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_EOF))
+#define UNSPECVAL       ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_UNSPECIFIED))
+#define UNINITVAL       ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_UNINITIALIZED))
+#define MAX_SMALL_INT   (INTPTR_MAX >> MARLAIS_INTEGER_SHIFT)
 
-#define TRUESUB    0x00
-#define FALSESUB   0x01
-#define EMPTYSUB   0x02
-#define CHARSUB    0x03
-#define EOFSUB     0x04
-#define UNSPECSUB  0x05
-#define UNINITSUB  0x06
-/* add more immediate types here */
-/* WARNING!! These macros cause obj to be evaluated more than once */
+/* Field extraction */
+static inline DyUnsigned TAGPART(Object obj) {
+  return (((DyUnsigned)obj) & MARLAIS_TAG_MASK);
+}
+static inline DyUnsigned SUBPART(Object obj) {
+  return (((DyUnsigned)obj) & MARLAIS_SUB_MASK);
+}
+static inline DyUnsigned INTEGERPART(Object obj) {
+  return (((DyUnsigned)obj) >> MARLAIS_INTEGER_SHIFT);
+}
+static inline DyUnsigned IMMEDPART(Object obj) {
+  return (((DyUnsigned)obj) >> MARLAIS_IMMEDIATE_SHIFT);
+}
 
-#define TRUEP(obj)          (IMMEDP(obj) && (SUBPART(obj) == TRUESUB))
-#define FALSEP(obj)         (IMMEDP(obj) && (SUBPART(obj) == FALSESUB))
-#define EMPTYLISTP(obj)     (IMMEDP(obj) && (SUBPART(obj) == EMPTYSUB))
-#define CHARP(obj)          (IMMEDP(obj) && (SUBPART(obj) == CHARSUB))
-#define EOFP(obj)           (IMMEDP(obj) && (SUBPART(obj) == EOFSUB))
-#define UNSPECP(obj)        (IMMEDP(obj) && (SUBPART(obj) == UNSPECSUB))
-#define UNINITSLOTP(obj)    (IMMEDP(obj) && (SUBPART(obj) == UNINITSUB))
+/* Tag type predicates */
+static inline bool POINTERP(Object obj) {
+  return (TAGPART(obj) == MARLAIS_TAG_POINTER);
+}
+static inline bool IMMEDP(Object obj) {
+  return (TAGPART(obj) == MARLAIS_TAG_IMMEDIATE);
+}
+static inline bool INTEGERP(Object obj) {
+  return (TAGPART(obj) == MARLAIS_TAG_INTEGER);
+}
 
-#define NULLP(obj)       (EMPTYLISTP(obj))
-#define LISTP(obj)       (NULLP(obj) || PAIRP(obj))
+/* Immediate extraction */
+static inline DyInteger INTVAL(Object obj) {
+  return ((DyInteger)INTEGERPART(obj));
+}
+static inline DyUnsigned CHARVAL(Object obj) {
+  return ((DyUnsigned)IMMEDPART(obj));
+}
 
-/* actual values of constant immediates
- */
-#define TRUEVAL         ((Object)((TRUESUB << 2)   | IMMEDTAG))
-#define FALSEVAL        ((Object)((FALSESUB << 2)  | IMMEDTAG))
-#define EMPTYLISTVAL    ((Object)((EMPTYSUB << 2)  | IMMEDTAG))
-#define EOFVAL          ((Object)((EOFSUB << 2)    | IMMEDTAG))
-#define UNSPECVAL       ((Object)((UNSPECSUB << 2) | IMMEDTAG))
-#define UNINITVAL       ((Object)((UNINITSUB << 2) | IMMEDTAG))
+/* Immediate composition */
+static inline Object MAKE_IMMEDIATE(MarlaisSub sub, DyUnsigned val) {
+  return (Object)(MARLAIS_TAG_IMMEDIATE|sub|(val << MARLAIS_IMMEDIATE_SHIFT));
+}
+static inline Object MAKE_CHAR(DyUnsigned ch) {
+  return MAKE_IMMEDIATE(MARLAIS_SUB_CHARACTER, ch);
+}
+static inline Object MAKE_INT(DyInteger ch) {
+  return (Object)(MARLAIS_TAG_INTEGER|(((DyUnsigned)ch) << MARLAIS_INTEGER_SHIFT));
+}
 
-/* macros for extracting relevant parts of object
- */
-#define POINTER_PART(obj)    (obj)
-#define IMMED_PART(obj)      ((DyUnsigned)obj >> 6)
-#define INTEGER_PART(obj)    ((DyInteger)obj >> 2)
-#define INTVAL(obj)          ((DyInteger)obj >> 2)
-#define CHARVAL(obj)         ((DyUnsigned)obj >> 6)
+/* Common header of all heap objects */
+typedef struct {
+  /* Low-level type of the object */
+  ObjectType object_type;
+  /* Size of the object in bytes */
+  size_t     object_size;
+} ObjectHeader;
 
-/* macros for synthesizing immediates
- */
-#define MAKE_CHAR(ch)        ((Object)(((DyUnsigned)ch << 6) | (CHARSUB << 2) | IMMEDTAG))
-#define MAKE_INT(i)          ((Object)((i << 2) | INTEGERTAG))
+/* Accessor for the type of a heap object */
+#define POINTERTYPE(obj) (((ObjectHeader *)obj)->object_type)
+#define POINTERSIZE(obj) (((ObjectHeader *)obj)->object_size)
 
-/* common structure of all heap objects */
-struct object {
-  ObjectType type;
-};
+/* Immediate type predicates */
+#define DEFINE_IMMEDP_PREDICATE(_name, _sub)        \
+  static inline bool _name(Object obj) {            \
+    return (IMMEDP(obj) && (SUBPART(obj) == _sub)); \
+  }
+DEFINE_IMMEDP_PREDICATE(TRUEP, MARLAIS_SUB_TRUE);
+DEFINE_IMMEDP_PREDICATE(FALSEP, MARLAIS_SUB_FALSE);
+DEFINE_IMMEDP_PREDICATE(EMPTYLISTP, MARLAIS_SUB_EMPTYLIST);
+DEFINE_IMMEDP_PREDICATE(CHARP, MARLAIS_SUB_CHARACTER);
+DEFINE_IMMEDP_PREDICATE(EOFP, MARLAIS_SUB_EOF);
+DEFINE_IMMEDP_PREDICATE(UNSPECP, MARLAIS_SUB_UNSPECIFIED);
+DEFINE_IMMEDP_PREDICATE(UNINITSLOTP, MARLAIS_SUB_UNINITIALIZED);
+#undef DEFINE_IMMEDP_PREDICATE
 
-#define POINTERTYPE(obj)     (((struct object *)obj)->type)
+/* Pointer type predicates */
+#define DEFINE_POINTERP_PREDICATE(_name, _type)                \
+  static inline bool _name(Object obj) {                   \
+    return (POINTERP(obj) && (POINTERTYPE(obj) == _type)); \
+  }
+DEFINE_POINTERP_PREDICATE(BIGINTP, BigInteger);
+DEFINE_POINTERP_PREDICATE(DFLOATP, DoubleFloat);
+DEFINE_POINTERP_PREDICATE(PAIRP, Pair);
+DEFINE_POINTERP_PREDICATE(BYTESTRP, ByteString);
+DEFINE_POINTERP_PREDICATE(SOVP, SimpleObjectVector);
+DEFINE_POINTERP_PREDICATE(TEP, TableEntry);
+DEFINE_POINTERP_PREDICATE(TABLEP, ObjectTable);
+DEFINE_POINTERP_PREDICATE(DEP, DequeEntry);
+DEFINE_POINTERP_PREDICATE(DEQUEP, Deque);
+DEFINE_POINTERP_PREDICATE(ARRAYP, Array);
+DEFINE_POINTERP_PREDICATE(CONDP, Condition);
+DEFINE_POINTERP_PREDICATE(NAMEP, Name);
+DEFINE_POINTERP_PREDICATE(SYMBOLP, Symbol);
+DEFINE_POINTERP_PREDICATE(SLOTDP, SlotDescriptor);
+DEFINE_POINTERP_PREDICATE(INSTANCEP, Instance);
+DEFINE_POINTERP_PREDICATE(CLASSP, Class);
+DEFINE_POINTERP_PREDICATE(SINGLETONP, Singleton);
+DEFINE_POINTERP_PREDICATE(LIMINTP, LimitedIntType);
+DEFINE_POINTERP_PREDICATE(UNIONP, UnionType);
+DEFINE_POINTERP_PREDICATE(PRIMP, Primitive);
+DEFINE_POINTERP_PREDICATE(GFUNP, GenericFunction);
+DEFINE_POINTERP_PREDICATE(METHODP, Method);
+DEFINE_POINTERP_PREDICATE(NMETHP, NextMethod);
+DEFINE_POINTERP_PREDICATE(VALUESP, Values);
+DEFINE_POINTERP_PREDICATE(EXITP, Exit);
+DEFINE_POINTERP_PREDICATE(UNWINDP, Unwind);
+#ifdef NO_COMMON_DYLAN_SPEC
+DEFINE_POINTERP_PREDICATE(STREAMP, Stream);
+#endif
+DEFINE_POINTERP_PREDICATE(FOREIGNP, ForeignPtr);
+DEFINE_POINTERP_PREDICATE(ENVIRONMENTP, Environment);
+DEFINE_POINTERP_PREDICATE(HDLP, ObjectHandle);
+#undef DEFINE_POINTERP_PREDICATE
 
-/* BigInteger support. <pcb> */
+/* List type predicates */
+static inline bool NULLP(Object obj) {
+  return EMPTYLISTP(obj);
+}
+static inline bool LISTP(Object obj) {
+  return NULLP(obj)||PAIRP(obj);
+}
 
 struct big_integer {
-    ObjectType type;
+    ObjectHeader header;
     void *val;
 };
 
 #define BIGINTVAL(obj)    (((struct big_integer *)obj)->val)
-#define BIGINTP(obj)      (((struct big_integer *)obj)->type == BigInteger)
-#define BIGINTTYPE(obj)   (((struct big_integer *)obj)->type)
 
 struct ratio {
-    ObjectType type;
+    ObjectHeader header;
     DyInteger numerator, denominator;
 };
 
 #define RATIOTYPE(obj)    (((struct ratio *)obj)->type)
 #define RATIONUM(obj)     (((struct ratio *)obj)->numerator)
 #define RATIODEN(obj)     (((struct ratio *)obj)->denominator)
-#define RATIOP(obj)       (POINTERP(obj) && (RATIOTYPE(obj) == Ratio))
 
 struct double_float {
-    ObjectType type;
+    ObjectHeader header;
     double val;
 };
 
 #define DFLOATTYPE(obj)   (((struct double_float *)obj)->type)
 #define DFLOATVAL(obj)    (((struct double_float *)obj)->val)
-#define DFLOATP(obj)      (POINTERP(obj) && (DFLOATTYPE(obj) == DoubleFloat))
 
 struct pair {
-    ObjectType type;
+    ObjectHeader header;
     Object car, cdr;
 };
 
-#define PAIRTYPE(obj)     (((struct pair *)obj)->type)
 #define CAR(obj)          (((struct pair *)obj)->car)
 #define CDR(obj)          (((struct pair *)obj)->cdr)
-#define PAIRP(obj)        (POINTERP(obj) && (PAIRTYPE(obj) == Pair))
 
 struct byte_string {
-    ObjectType type;
+    ObjectHeader header;
     int size;
     char *val;
 };
 
-#define BYTESTRTYPE(obj)  (((struct byte_string *)obj)->type)
 #define BYTESTRSIZE(obj)  (((struct byte_string *)obj)->size)
 #define BYTESTRVAL(obj)   (((struct byte_string *)obj)->val)
-#define BYTESTRP(obj)     (POINTERP(obj) && (BYTESTRTYPE(obj) == ByteString))
 
 struct simple_object_vector {
-    ObjectType type;
+    ObjectHeader header;
     int size;
     Object *els;
 };
@@ -133,10 +209,9 @@ struct simple_object_vector {
 #define SOVTYPE(obj)      (((struct simple_object_vector *)obj)->type)
 #define SOVSIZE(obj)      (((struct simple_object_vector *)obj)->size)
 #define SOVELS(obj)       (((struct simple_object_vector *)obj)->els)
-#define SOVP(obj)         (POINTERP(obj) && (SOVTYPE(obj) == SimpleObjectVector))
 
 struct table_entry {
-    ObjectType type;
+    ObjectHeader header;
     int row;
     Object key;
     Object value;
@@ -148,80 +223,66 @@ struct table_entry {
 #define TEKEY(obj)        (((struct table_entry *)obj)->key)
 #define TEVALUE(obj)      (((struct table_entry *)obj)->value)
 #define TENEXT(obj)       (((struct table_entry *)obj)->next)
-#define TEP(obj)          (POINTERP(obj) && (TETYPE(obj) == TableEntry))
 
 struct table {
-    ObjectType type;
+    ObjectHeader header;
     int size;
     Object *the_table;
 };
 
-#define TABLETYPE(obj)    (((struct table *)obj)->type)
 #define TABLESIZE(obj)    (((struct table *)obj)->size)
 #define TABLETABLE(obj)   (((struct table *)obj)->the_table)
-#define TABLEP(obj)       (POINTERP(obj) && (TABLETYPE(obj) == ObjectTable))
 
 struct deque_entry {
-    ObjectType type;
+    ObjectHeader header;
     Object value;
     Object prev, next;
 };
 
-#define DETYPE(obj)       (((struct deque_entry *)obj)->type)
 #define DEVALUE(obj)      (((struct deque_entry *)obj)->value)
 #define DEPREV(obj)       (((struct deque_entry *)obj)->prev)
 #define DENEXT(obj)       (((struct deque_entry *)obj)->next)
-#define DEP(obj)          (POINTERP(obj) && (DETYPE(obj) == Deque))
 
 struct deque {
-    ObjectType type;
+    ObjectHeader header;
     Object first, last;
 };
 
-#define DEQUETYPE(obj)    (((struct deque *)obj)->type)
 #define DEQUEFIRST(obj)   (((struct deque *)obj)->first)
 #define DEQUELAST(obj)    (((struct deque *)obj)->last)
-#define DEQUEP(obj)       (POINTERP(obj) && (DEQUETYPE(obj) == Deque))
 
 struct array {
-    ObjectType type;
+    ObjectHeader header;
     int size;
     Object dimensions;
     Object *elements;
 };
 
-#define ARRTYPE(obj)      (((struct array *)obj)->type)
 #define ARRSIZE(obj)      (((struct array *)obj)->size)
 #define ARRDIMS(obj)      (((struct array *)obj)->dimensions)
 #define ARRELS(obj)       (((struct array *)obj)->elements)
-#define ARRAYP(obj)       (POINTERP(obj) && (ARRTYPE(obj) == Array))
 
 enum condtype {
     SimpleError, TypeError, SimpleWarning,
     SimpleRestart, Abort
 };
 struct condition {
-    ObjectType type;
+    ObjectHeader header;
     enum condtype condtype;
 };
 
-#define CONDTYPE(obj)     (((struct condition *)obj)->type)
 #define CONDCTYPE(obj)    (((struct condition *)obj)->condtype)
-#define CONDP(obj)        (POINTERP(obj) && (CONDTYPE(obj) == Condition))
 
 struct symbol {
-    ObjectType type;
+    ObjectHeader header;
     char *name;
 };
 
-#define SYMBOLTYPE(obj)   (((struct symbol *)obj)->type)
 #define SYMBOLNAME(obj)   (((struct symbol *)obj)->name)
-#define SYMBOLP(obj)      (POINTERP(obj) && (SYMBOLTYPE(obj) == Symbol))
 #define NAMENAME(obj)     (((struct symbol *)obj)->name)
-#define NAMEP(obj)        (POINTERP(obj) && (SYMBOLTYPE(obj) == Name))
 
 struct slot_descriptor {
-    ObjectType type;
+    ObjectHeader header;
     unsigned char properties;
     Object getter_name;
     Object setter_name;
@@ -248,11 +309,9 @@ struct slot_descriptor {
 #define SLOTDINITKEYWORD(obj)  (((struct slot_descriptor *)obj)->init_keyword)
 #define SLOTDALLOCATION(obj)   (((struct slot_descriptor *)obj)->allocation)
 #define SLOTDDYNAMISM(obj)     (((struct slot_descriptor *)obj)->dynamism)
-#define SLOTDP(obj)            (POINTERP(obj) && (CLASSTYPE(obj) == SlotDescriptor))
-#define SLOTDTYPE(obj)         (((struct slot_descriptor *)obj)->type)
 
 struct clas {
-    ObjectType type;
+    ObjectHeader header;
     Object name;
     Object supers;
     Object subs;
@@ -272,7 +331,6 @@ struct clas {
     struct frame *creation_env;
 };
 
-#define CLASSTYPE(obj)    (((struct clas *)obj)->type)
 #define CLASSNAME(obj)    (((struct clas *)obj)->name)
 #define CLASSSUPERS(obj)  (((struct clas *)obj)->supers)
 #define CLASSSUBS(obj)    (((struct clas *)obj)->subs)
@@ -287,7 +345,6 @@ struct clas {
 #define CLASSPRECLIST(obj)(((struct clas *)obj)->precedence_list)
 #define CLASSSORTEDPRECS(obj) (((struct clas *)obj)->sorted_prec_list)
 #define CLASSNUMPRECS(obj) (((struct clas *)obj)->num_precs)
-#define CLASSP(obj)       (POINTERP(obj) && (CLASSTYPE(obj) == Class))
 #define CLASSPROPS(obj)   (((struct clas *)obj)->properties)
 #define CLASSSEAL         0x01
 #define SEALEDP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & CLASSSEAL))
@@ -299,28 +356,24 @@ struct clas {
 #define CLASSINDEX(obj)     (((struct clas *)obj)->ordinal_index)
 
 struct instance {
-    ObjectType type;
+    ObjectHeader header;
     Object class;
     Object *slots;
 };
 
-#define INSTTYPE(obj)     (((struct instance *)obj)->type)
 #define INSTCLASS(obj)    (((struct instance *)obj)->class)
 #define INSTSLOTS(obj)    (((struct instance *)obj)->slots)
-#define INSTANCEP(obj)    (POINTERP(obj) && (INSTTYPE(obj) == Instance))
 
 struct singleton {
-    ObjectType type;
+    ObjectHeader header;
     Object val;
 };
 
-#define SINGLETYPE(obj)   (((struct singleton *)obj)->type)
 #define SINGLEVAL(obj)    (((struct singleton *)obj)->val)
-#define SINGLETONP(obj)   (POINTERP(obj) && (SINGLETYPE(obj) == Singleton))
 
 
 struct limited_int_type {
-    ObjectType type;
+    ObjectHeader header;
     unsigned char properties;
     int min, max;
 };
@@ -332,16 +385,11 @@ struct limited_int_type {
 #define LIMINTHASMAX(obj) (LIMINTPROPS (obj) & LIMMAXMASK)
 #define LIMINTMIN(obj)    (((struct limited_int_type *)obj)->min)
 #define LIMINTMAX(obj)    (((struct limited_int_type *)obj)->max)
-#define LIMINTP(obj)      (POINTERP(obj) && (LIMINTTYPE(obj) == LimitedIntType))
-#define LIMINTTYPE(obj)   (((struct limited_int_type *)obj)->type)
 
 struct union_type {
-    ObjectType type;
+    ObjectHeader header;
     Object list;
 };
-
-#define UNIONP(obj)       (POINTERP(obj) && (UNIONTYPE(obj) == UnionType))
-#define UNIONTYPE(obj)    (((struct union_type *)obj)->type)
 #define UNIONLIST(obj)    (((struct union_type *)obj)->list)
 enum primtype {
     /* prim_n: n required  */
@@ -360,18 +408,16 @@ struct primitive {
 };
 
 struct prim {
-    ObjectType type;
+    ObjectHeader header;
     struct primitive p;
 };
 
-#define PRIMTYPE(obj)     (((struct prim *)obj)->type)
 #define PRIMNAME(obj)     (((struct prim *)obj)->p.name)
 #define PRIMPTYPE(obj)    (((struct prim *)obj)->p.prim_type)
 #define PRIMFUN(obj)      (((struct prim *)obj)->p.fun)
-#define PRIMP(obj)        (POINTERP(obj) && (PRIMTYPE(obj) == Primitive))
 
 struct generic_function {
-    ObjectType type;
+    ObjectHeader header;
     Object name;
     unsigned char properties;
     Object required_params;
@@ -384,7 +430,6 @@ struct generic_function {
     Object active_next_methods;
 };
 
-#define GFTYPE(obj)       (((struct generic_function *)obj)->type)
 #define GFNAME(obj)       (((struct generic_function *)obj)->name)
 #define GFNAME(obj)       (((struct generic_function *)obj)->name)
 #define GFPROPS(obj)      (((struct generic_function *)obj)->properties)
@@ -400,10 +445,9 @@ struct generic_function {
 #define GFMETHODS(obj)    (((struct generic_function *)obj)->methods)
 #define GFCACHE(obj)      (((struct generic_function *)obj)->method_cache)
 #define GFACTIVENM(obj)   (((struct generic_function *)obj)->active_next_methods)
-#define GFUNP(obj)        (POINTERP(obj) && (GFTYPE(obj) == GenericFunction))
 
 struct method {
-    ObjectType type;
+    ObjectHeader header;
     Object name;
     unsigned char properties;
     Object required_params;
@@ -417,7 +461,6 @@ struct method {
     struct frame *env;
 };
 
-#define METHTYPE(obj)       (((struct method *)obj)->type)
 #define METHNAME(obj)       (((struct method *)obj)->name)
 #define METHNEXTMETH(obj)   (((struct method *)obj)->next_method)
 #define METHPROPS(obj)      (((struct method *)obj)->properties)
@@ -431,101 +474,80 @@ struct method {
 #define METHBODY(obj)       (((struct method *)obj)->body)
 #define METHENV(obj)        (((struct method *)obj)->env)
 #define METHHANDLE(obj)     (((struct method *)obj)->my_handle)
-#define METHODP(obj)        (POINTERP(obj) && (METHTYPE(obj) == Method))
 
 struct next_method {
-    ObjectType type;
+    ObjectHeader header;
     Object generic_function;
     Object next_method_;
     Object rest_methods;
     Object args;
 };
 
-#define NMTYPE(obj)       (((struct next_method *)obj)->type)
 #define NMGF(obj)         (((struct next_method *)obj)->generic_function)
 #define NMMETH(obj)       (((struct next_method *)obj)->next_method_)
 #define NMREST(obj)       (((struct next_method *)obj)->rest_methods)
 #define NMARGS(obj)       (((struct next_method *)obj)->args)
-#define NMETHP(obj)       (POINTERP(obj) && (NMTYPE(obj) == NextMethod))
 
 struct values {
-    ObjectType type;
+    ObjectHeader header;
     int num;
     Object *els;
 };
 
-#define VALUESTYPE(obj)   (((struct values *)obj)->type)
 #define VALUESNUM(obj)    (((struct values *)obj)->num)
 #define VALUESELS(obj)    (((struct values *)obj)->els)
-#define VALUESP(obj)      (POINTERP(obj) && (VALUESTYPE(obj) == Values))
-
-#define UNSPECIFIEDP(obj) ((obj)->type == Unspecified)
 
 struct exitproc {
-    ObjectType type;
+    ObjectHeader header;
     Object sym;
     jmp_buf *ret;
     struct binding *exit_binding;
 };
 
-#define EXITTYPE(obj)     (((struct exitproc *)obj)->type)
 #define EXITSYM(obj)      (((struct exitproc *)obj)->sym)
 #define EXITRET(obj)      (((struct exitproc *)obj)->ret)
 #define EXITBINDING(obj)  (((struct exitproc *)obj)->exit_binding)
-#define EXITP(obj)        (POINTERP(obj) && (EXITTYPE(obj) == Exit))
 
 struct unwind {
-    ObjectType type;
+    ObjectHeader header;
     Object body;
 };
 
-#define UNWINDTYPE(obj)   (((struct unwind *)obj)->type)
 #define UNWINDBODY(obj)   (((struct unwind *)obj)->body)
-#define UNWINDP(obj)      (POINTERP(obj) && (UNWINDTYPE(obj) == Unwind)
 
 #ifdef NO_COMMON_DYLAN_SPEC
 enum streamtype {
     Input, Output
 };
 struct stream {
-    ObjectType type;
+    ObjectHeader header;
     enum streamtype stream_type;
     FILE *fp;
 };
 
-#define STREAMTYPE(obj)    (((struct stream *)obj)->type)
 #define STREAMSTYPE(obj)   (((struct stream *)obj)->stream_type)
 #define STREAMFP(obj)      (((struct stream *)obj)->fp)
-#define STREAMP(obj)       (POINTERP(obj) && (STREAMTYPE(obj) == Stream))
 #define INPUTSTREAMP(obj)  (STREAMP(obj) && (STREAMSTYPE(obj) == Input))
 #define OUTPUTSTREAMP(obj) (STREAMP(obj) && (STREAMSTYPE(obj) == Output))
 #endif
 
-/* <pcb> a wrapper around a system poiter. */
-
 struct foreign_ptr {
-    ObjectType type;
+    ObjectHeader header;
     void *ptr;
 };
 
 #define FOREIGNPTR(obj)      (((struct foreign_ptr *)obj)->ptr)
-#define FOREIGNP(obj)        (POINTERP(obj) && (POINTERTYPE(obj) == ForeignPtr))
-#define FOREIGNTYPE(obj)     (((struct foreign_ptr *)obj)->type)
 
 struct environment {
-    ObjectType type;
+    ObjectHeader header;
     struct frame *env;
 };
 
 #define ENVIRONMENT(obj)      (((struct environment *)obj)->env)
-#define ENVIRONMENTP(obj)        (POINTERP(obj) && (POINTERTYPE(obj) == Environment))
-#define ENVIRONMENTTYPE(obj)     (((struct environment *)obj)->type)
 
 struct object_handle {
-    ObjectType type;
+    ObjectHeader header;
     Object the_object;
 };
 
 #define HDLOBJ(obj)      (((struct object_handle *)obj)->the_object)
-#define HDLTYPE(obj)     (((struct object_handle *)obj)->type)
-#define HDLP(obj)        (POINTERP(obj) && (HDLTYPE(obj) == ObjectHandle))

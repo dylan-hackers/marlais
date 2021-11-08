@@ -11,22 +11,22 @@ ObjectType
 object_type (Object obj)
 {
   if (POINTERP (obj)) {
-    return (PAIRTYPE (obj));
+    return (POINTERTYPE (obj));
   } else if (IMMEDP (obj)) {
     switch (SUBPART (obj)) {
-    case TRUESUB:
+    case MARLAIS_SUB_TRUE:
       return (True);
-    case FALSESUB:
+    case MARLAIS_SUB_FALSE:
       return (False);
-    case EMPTYSUB:
+    case MARLAIS_SUB_EMPTYLIST:
       return (EmptyList);
-    case CHARSUB:
+    case MARLAIS_SUB_CHARACTER:
       return (Character);
-    case EOFSUB:
+    case MARLAIS_SUB_EOF:
       return (EndOfFile);
-    case UNSPECSUB:
+    case MARLAIS_SUB_UNSPECIFIED:
       return (Unspecified);
-    case UNINITSUB:
+    case MARLAIS_SUB_UNINITIALIZED:
       return (UninitializedSlotValue);
     default:
       marlais_fatal ("internal error: object with unknown immediate tag");
