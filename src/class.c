@@ -1015,7 +1015,7 @@ make_class_driver (Object args)
 
   CLASSNAME (obj) = make_symbol (BYTESTRVAL (debug_obj));
   CLASSPROPS (obj) |= CLASSSLOTSUNINIT;
-  return marlais_make_class (obj, supers_obj, slots_obj, abstract_obj, debug_obj);
+  return marlais_make_class (obj, supers_obj, slots_obj, abstract_obj, BYTESTRVAL(debug_obj));
 }
 
 /*
