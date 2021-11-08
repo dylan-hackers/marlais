@@ -4,6 +4,13 @@ struct empty {
 };
 
 #ifdef MARLAIS_OBJECT_MODEL_LARGE
+struct character {
+    ObjectHeader header;
+    int val;
+};
+
+#define CHARVAL(obj)       (((struct integer *)obj)->val)
+
 struct integer {
     ObjectHeader header;
     DyInteger val;
