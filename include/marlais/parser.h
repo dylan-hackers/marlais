@@ -35,8 +35,11 @@
 
 #include <marlais/common.h>
 
-extern void marlais_parser_reset (FILE * fp);
+extern void marlais_parser_reset (void);
 
-extern Object marlais_parse_object (FILE * fp, int debug);
+extern void marlais_parser_prepare_stream (FILE *fp, int debug);
+extern void marlais_parser_prepare_string (const char *str, int debug);
+
+extern Object marlais_parse_object (void);
 
 #endif

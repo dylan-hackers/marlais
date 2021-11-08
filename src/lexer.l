@@ -482,7 +482,6 @@ void
 marlais_lexer_reset (FILE *new_file)
 {
 	yylineno = 1;
-	/* yyrestart(new_file); */
 	BEGIN(INI);
 }
 

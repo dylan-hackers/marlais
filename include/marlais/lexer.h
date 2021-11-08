@@ -9,7 +9,7 @@
 
 extern void marlais_initialize_lexer (void);
 
-extern void marlais_lexer_reset (FILE * new_file);
+extern void marlais_lexer_reset (void);
 
 static void marlais_lexer_push_intermediate_words (Object begin_word);
 static void marlais_lexer_pop_intermediate_words (void);

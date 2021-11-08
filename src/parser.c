@@ -44,22 +44,40 @@ Object *parse_value_ptr;
 extern int load_file_context;
 
 void
-marlais_parser_reset (FILE * new_file)
+marlais_parser_reset (void)
 {
-  marlais_lexer_reset (new_file);
+  /* reset the lexer */
+  marlais_lexer_reset ();
+  /* reset the parser */
+  marlais_yyrestart (NULL);
+}
+
+void
+marlais_parser_prepare_stream (FILE *fp, int debug)
+{
+  /* reset the parser */
+  marlais_parser_reset ();
+  /* configure debugging */
+  marlais_yydebug = debug;
+  /* prepare the parser */
+  marlais_yyrestart (fp);
+}
+
+void
+marlais_parser_prepare_string (const char *str, int debug)
+{
+  /* reset the parser */
+  marlais_parser_reset ();
+  /* configure debugging */
+  marlais_yydebug = debug;
+  /* prepare the parser */
+  marlais_yy_scan_string (str);
 }
 
 Object
-marlais_parse_object (FILE * fp, int debug)
+marlais_parse_object (void)
 {
   Object parse_value;
-
-  if (!marlais_yyin) {
-    marlais_yyin = fp;
-  } else if (marlais_yyin && fp != marlais_yyin) {
-    marlais_parser_reset (fp);
-  }
-  marlais_yydebug = debug;
   parse_value_ptr = &parse_value;
   if (marlais_yyparse () == 0) {
     return parse_value;

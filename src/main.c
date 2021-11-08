@@ -51,12 +51,12 @@ static void print_top_level_constant(Object obj, int bind_p)
   fprintf (stdout, "\n");
 }
 
-static int read_eval_print(FILE* f, int dbg_lvl, int bind_constant_p)
+static int read_eval_print(FILE* f, int bind_constant_p)
 {
   int x, vals;
   Object obj;
 
-  if ((obj = marlais_parse_object (f, dbg_lvl)) && (obj != eof_object)) {
+  if ((obj = marlais_parse_object ()) && (obj != eof_object)) {
     obj = eval (obj);
     if(POINTERP(obj) && POINTERTYPE(obj) == Values) {
       vals = VALUESNUM(obj);
@@ -190,9 +190,8 @@ main (int argc, char *argv[])
     /* put in a ; in case the user forgets */
     char command[256]; // win32 MSVC++ requires a constant here
     sprintf(command, "%s;", argv[optind]);
-    marlais_parser_reset(stdin);
-    marlais_yy_scan_string(command);
-    read_eval_print(stdin, debug, 0);
+    marlais_parser_prepare_string(command, debug);
+    read_eval_print(stdin, 0);
     if(!stay) exit(0);
     optind++;
   }
@@ -209,8 +208,7 @@ main (int argc, char *argv[])
 
   load_file_context = 0;
   /* <pcb> needs to be cleared after loading file */
-  marlais_parser_reset(stdin);
-  marlais_yy_scan_string("");
+  marlais_parser_prepare_string("", debug);
 
   cache_env = the_env;
   current_prompt = prompt;
@@ -235,7 +233,7 @@ main (int argc, char *argv[])
     current_prompt = prompt;
   }
 
-  while(read_eval_print(stdin, debug, 1)) {
+  while(read_eval_print(stdin, 1)) {
     cache_env = the_env;
     current_prompt = prompt;
   }

@@ -48,14 +48,13 @@ i_load (Object filename)
 
     fp = open_file (filename);
 
-    marlais_parser_reset (fp);
-
     /*
      * Cons up the list of expressions in the file, then eval them.
      */
 
     expr_list_ptr = &expr_list;
-    while ((obj = marlais_parse_object (fp, 0)) && (obj != eof_object)) {
+    marlais_parser_prepare_stream (fp, 0);
+    while ((obj = marlais_parse_object ()) && (obj != eof_object)) {
 	*expr_list_ptr = cons (obj, make_empty_list ());
 	expr_list_ptr = &CDR (*expr_list_ptr);
     }

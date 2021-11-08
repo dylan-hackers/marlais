@@ -298,10 +298,10 @@ marlais_error (char *msg,...)
 	help_function ();
 	message_printed = 1;
       }
-      marlais_parser_reset (stdin);
       prompt = prompt_buf;
       current_prompt = prompt;
-      while ((obj = marlais_parse_object (stdin, 0)) && (obj != eof_object)) {
+      marlais_parser_prepare_stream (stdin, 0);
+      while ((obj = marlais_parse_object ()) && (obj != eof_object)) {
 	obj = eval (obj);
 	if (obj != unspecified_object) {
 	  Object symbol;
