@@ -60,9 +60,7 @@
 #include <marlais/vector.h>
 #include <marlais/yystype.h>
 
-#ifndef YYSTYPE
-#error No YYSTYPE defined
-#endif
+#include "lexer.gen.h"
 
 void yyerror (char *);
 static Object append_bang (Object l1, Object l2);
@@ -73,12 +71,15 @@ extern Object *parse_value_ptr;
 
 extern int yylineno;
 
-void push_intermediate_words (Object begin_word);
-void pop_intermediate_words (void);
+void marlais_lexer_push_intermediate_words (Object begin_word);
+void marlais_lexer_pop_intermediate_words (void);
 
 Object binding_stack;
 Object symtab;
 Object methnames, methdefs;
+
+/* Internal function declarations */
+
 static void push_bindings();
 static void pop_bindings();
 static Object bindings_top ();
@@ -86,6 +87,7 @@ static void bindings_increment ();
 static Object gensym(int i);
 static Object make_setter_expr (Object place, Object value);
 static int allocation_word (Object word);
+
 %}
 
 /*
@@ -433,10 +435,10 @@ begin_statement
 
 
 if_statement
-	: IF		{ push_intermediate_words ($1); }
+	: IF		{ marlais_lexer_push_intermediate_words ($1); }
 		'(' expression ')' then_body
 		else_parts
-			{ pop_intermediate_words (); }
+			{ marlais_lexer_pop_intermediate_words (); }
 		END IF_opt
 			{ $$ = cons ($1,
 				     cons ($4,
@@ -533,9 +535,9 @@ case_label
 		{ $$ = else_keyword; }
 
 select_statement
-	: SELECT	{ push_intermediate_words ($1); }
+	: SELECT	{ marlais_lexer_push_intermediate_words ($1); }
 		'(' expression test_opt
-			{ pop_intermediate_words (); }
+			{ marlais_lexer_pop_intermediate_words (); }
 		')' select_body
 		END SELECT_opt
 		{ $$ = cons ($1, cons ($4, cons ($5 ? $5 : equal_equal_symbol,
@@ -615,12 +617,12 @@ until_statement
 		{ $$ = cons ($1, cons ($3, cons ($5, make_empty_list()))); }
 
 for_statement
-	: FOR		{ push_intermediate_words ($1); }
+	: FOR		{ marlais_lexer_push_intermediate_words ($1); }
 
 		'(' for_clauses_opt for_terminator_opt
-			{ pop_intermediate_words (); }
+			{ marlais_lexer_pop_intermediate_words (); }
 		')' body
-		 finally_opt END { pop_intermediate_words (); } FOR_opt
+		 finally_opt END { marlais_lexer_pop_intermediate_words (); } FOR_opt
 		{ $$ = listem (for_symbol,
 			       $4,
 			       append_bang($5, $9),
@@ -688,13 +690,13 @@ finally_opt
 	| FINALLY body		{ $$ = cons ($2, make_empty_list()); }
 
 block_statement
-	: BLOCK		{ push_intermediate_words ($1); }
+	: BLOCK		{ marlais_lexer_push_intermediate_words ($1); }
 		'(' variable_name ')'
 		body
 		afterwards_opt
 		cleanup_opt
 		exceptions
-			{ pop_intermediate_words ();
+			{ marlais_lexer_pop_intermediate_words ();
 			  if (! EMPTYLISTP ($9)) {
 				marlais_warning ("Exceptions not yet implemented!",
 					 NULL);
@@ -796,9 +798,9 @@ defining_form
 		{ $$ = cons (define_constant_symbol, CAR ($3)); }
 
 	| DEFINE modifiers_opt CLASS
-		{ push_intermediate_words ($3); }
+		{ marlais_lexer_push_intermediate_words ($3); }
 	  class_definition
-		{ pop_intermediate_words ();
+		{ marlais_lexer_pop_intermediate_words ();
 		  if (EMPTYLISTP ($2)) {
 			$$ = cons (define_class_symbol, $5);
 		  } else {
@@ -813,7 +815,7 @@ defining_form
 */
 
 	| DEFINE MODULE
-		{ push_intermediate_words ($2); }
+		{ marlais_lexer_push_intermediate_words ($2); }
 	  module_definition
 		{ $$ = cons (define_module_symbol, $4); }
 

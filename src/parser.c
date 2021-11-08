@@ -32,6 +32,7 @@
 
 #include <marlais/parser.h>
 
+#include <marlais/lexer.h>
 #include <marlais/print.h>
 #include <marlais/yystype.h>
 
@@ -40,12 +41,13 @@
 
 Object *parse_value_ptr;
 
-void yy_restart (FILE * new_file);
-
 extern int load_file_context;
 
-extern Object standard_error_stream;
-extern Object eof_object;
+void
+marlais_parser_reset (FILE * new_file)
+{
+  marlais_lexer_reset (new_file);
+}
 
 Object
 marlais_parse_object (FILE * fp, int debug)
@@ -55,7 +57,7 @@ marlais_parse_object (FILE * fp, int debug)
   if (!yyin) {
     yyin = fp;
   } else if (yyin && fp != yyin) {
-    marlais_reset_parser (fp);
+    marlais_parser_reset (fp);
   }
   yydebug = debug;
   parse_value_ptr = &parse_value;
@@ -65,12 +67,4 @@ marlais_parse_object (FILE * fp, int debug)
     marlais_warning ("Parser failed in inexplicable way", parse_value, NULL);
     return eof_object;
   }
-}
-
-void
-marlais_reset_parser (FILE * fp)
-{
-  fflush (stderr);
-  yy_restart (fp);
-  yylineno = 1;
 }

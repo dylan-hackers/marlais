@@ -30,14 +30,13 @@
 
  */
 
-#ifndef MARLAIS_PARSE_H
-#define MARLAIS_PARSE_H
+#ifndef MARLAIS_PARSER_H
+#define MARLAIS_PARSER_H
 
 #include <marlais/common.h>
 
-extern int load_file_context;
+extern void marlais_parser_reset (FILE * fp);
 
 extern Object marlais_parse_object (FILE * fp, int debug);
-extern void marlais_reset_parser (FILE * fp);
 
 #endif

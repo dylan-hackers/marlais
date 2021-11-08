@@ -298,7 +298,7 @@ marlais_error (char *msg,...)
 	help_function ();
 	message_printed = 1;
       }
-      yy_restart (stdin);
+      marlais_parser_reset (stdin);
       prompt = prompt_buf;
       current_prompt = prompt;
       while ((obj = marlais_parse_object (stdin, 0)) && (obj != eof_object)) {

@@ -66,7 +66,7 @@ infix_read_object (FILE * fp)
   load_file_context = 1;
 
   if (yyin != fp) {
-    marlais_reset_parser (fp);
+    marlais_parser_reset (fp);
   }
   if ((yychar = yylex ()) < 0)
     yychar = 0;

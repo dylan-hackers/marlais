@@ -17,31 +17,22 @@
 
 #include <sys/time.h>
 
-#ifndef YYSTYPE
-#error No YYSTYPE defined
-#endif
-
-#ifdef MARLAIS_ENABLE_BIG_INTEGER
-#include "biginteger.h"
-#endif
-
 #ifdef MARLAIS_ENABLE_READLINE
 #define _FUNCTION_DEF
 #include <readline/readline.h>
+#include <readline/history.h>
 #endif
 
 extern char* prompt_continuation;
 extern char* current_prompt;
-extern int yydebug;
 extern int load_file_context;
 
-int charready (FILE *stream);
 int strcasecmp (const char *s1, const char *s2);
 
 Object header_key;
 Object header_val;
 
-/* reserved struct and tables */
+/* Internal types */
 
 struct resword
 {
@@ -155,31 +146,31 @@ struct resword module_intermediate_word_table [NUM_MODULE_INTERMEDIATE_WORDS] =
 	{"create", CREATE, &create_symbol},
 };
 
-/*  */
+/* Internal function declarations */
 
-int search_for_poundword (char *string, YYSTYPE *obj_ptr);
-int symbol_or_resword (char *string, YYSTYPE *obj_ptr);
+static int search_for_poundword (char *string, YYSTYPE *obj_ptr);
+static int symbol_or_resword (char *string, YYSTYPE *obj_ptr);
 static struct resword *search_for_resword (char *string,
 					   struct resword *resword_table,
 					   int num_ords);
-int resword_compare (struct resword *c1, struct resword *c2);
+static int resword_compare (struct resword *c1, struct resword *c2);
 
 static struct resword *search_intermediate_word (char *string);
 
 static void process_unrecognized_character (char *yytext);
-int which_operator (char *string, int length);
-void push_intermediate_words (Object begin_word);
-void pop_intermediate_words (void);
+static int which_operator (char *string, int length);
 
-void make_header_key (void);
-void make_header_end (void);
-void make_header_val (void);
+static void make_header_key (void);
+static void make_header_end (void);
+static void make_header_val (void);
 
-char *get_nonws_symbol (char *text);
-char expand_escaped_character (char ch);
-char* make_expanded_byte_string (char *str);
+static char *get_nonws_symbol (char *text);
+static char expand_escaped_character (char ch);
+
+static Object make_expanded_byte_string (char *str);
 
 static int countlines(char *str);
+
 %}
 %pointer
 
@@ -391,6 +382,7 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 		}
 
 %%
+
 int yywrap() {
 #define BUFSIZE 1024
   char buffer[BUFSIZE];
@@ -433,11 +425,110 @@ int yywrap() {
     return 1;
   }
 #endif
-
-
 }
 
-int
+void
+marlais_initialize_lexer (void)
+{
+    int i;
+
+    intermediate_words = NULL;
+
+    for (i = 0; i < NUM_COREWORDS; i++) {
+	*(coreword_table[i].symbol) = make_symbol(coreword_table[i].word);
+    }
+    for (i = 0; i < NUM_BEGIN_WORDS; i++) {
+	*(begin_word_table[i].symbol) =
+	    make_symbol (begin_word_table[i].word);
+    }
+    for (i = 0; i < NUM_DEFINING_WORDS; i++) {
+	*(defining_word_table[i].symbol) =
+	    make_symbol (defining_word_table[i].word);
+    }
+    for (i = 0; i < NUM_IF_INTERMEDIATE_WORDS; i++) {
+	*(if_intermediate_word_table[i].symbol) =
+	    make_symbol (if_intermediate_word_table[i].word);
+    }
+    for (i = 0; i < NUM_SELECT_INTERMEDIATE_WORDS; i++) {
+	*(select_intermediate_word_table[i].symbol) =
+	    make_symbol (select_intermediate_word_table[i].word);
+    }
+    for (i = 0; i < NUM_CLASS_INTERMEDIATE_WORDS; i++) {
+	*(class_intermediate_word_table[i].symbol) =
+	    make_symbol (class_intermediate_word_table[i].word);
+    }
+    for (i = 0; i < NUM_FOR_INTERMEDIATE_WORDS; i++) {
+	*(for_intermediate_word_table[i].symbol) =
+	    make_symbol (for_intermediate_word_table[i].word);
+    }
+    for (i = 0; i < NUM_FOR_CLAUSE_WORDS; i++) {
+	*(for_clause_word_table[i].symbol) =
+	    make_symbol (for_clause_word_table[i].word);
+    }
+   for (i = 0; i < NUM_BLOCK_INTERMEDIATE_WORDS; i++) {
+	*(block_intermediate_word_table[i].symbol) =
+	    make_symbol (block_intermediate_word_table[i].word);
+    }
+   for (i = 0; i < NUM_MODULE_INTERMEDIATE_WORDS; i++) {
+	*(module_intermediate_word_table[i].symbol) =
+	    make_symbol (module_intermediate_word_table[i].word);
+    }
+    equal_arrow_symbol = make_symbol("=>");
+    colon_colon_symbol = make_symbol("::");
+}
+
+void
+marlais_lexer_reset (FILE *new_file)
+{
+	yylineno = 1;
+	/* yyrestart(new_file); */
+	BEGIN(INI);
+}
+
+void
+marlais_lexer_push_intermediate_words(Object begin_word)
+{
+    struct intermediate_word_struct *new_table;
+
+    new_table = (struct intermediate_word_struct *)
+	marlais_allocate_memory (sizeof (struct intermediate_word_struct));
+
+    if (begin_word == if_symbol) {
+	new_table->num_words = NUM_IF_INTERMEDIATE_WORDS;
+	new_table->reswords = if_intermediate_word_table;
+    } else if (begin_word == select_symbol) {
+	new_table->num_words = NUM_SELECT_INTERMEDIATE_WORDS;
+	new_table->reswords = select_intermediate_word_table;
+    } else if(begin_word == class_symbol) {
+	new_table->num_words = NUM_CLASS_INTERMEDIATE_WORDS;
+	new_table->reswords = class_intermediate_word_table;
+    } else if (begin_word == for_symbol) {
+	new_table->num_words = NUM_FOR_INTERMEDIATE_WORDS;
+	new_table->reswords = for_intermediate_word_table;
+	new_table->next = intermediate_words;
+	intermediate_words = new_table;
+	new_table = (struct intermediate_word_struct *)
+	    marlais_allocate_memory (sizeof (struct intermediate_word_struct));
+	new_table->num_words = NUM_FOR_CLAUSE_WORDS;
+	new_table->reswords = for_clause_word_table;
+    } else if (begin_word == block_symbol) {
+	new_table->num_words = NUM_BLOCK_INTERMEDIATE_WORDS;
+	new_table->reswords = block_intermediate_word_table;
+    } else if (begin_word == module_symbol) {
+	new_table->num_words = NUM_MODULE_INTERMEDIATE_WORDS;
+	new_table->reswords = module_intermediate_word_table;
+    }
+    new_table->next = intermediate_words;
+    intermediate_words = new_table;
+}
+
+void
+marlais_lexer_pop_intermediate_words()
+{
+    intermediate_words = intermediate_words->next;
+}
+
+static int
 search_for_poundword (char *string, YYSTYPE *obj_ptr)
 {
     switch (string[1]) {
@@ -488,7 +579,7 @@ search_for_poundword (char *string, YYSTYPE *obj_ptr)
     return UNRECOGNIZED;
 }
 
-int
+static int
 symbol_or_resword (char *string, YYSTYPE *obj_ptr)
 {
     struct resword *result, target;
@@ -549,7 +640,7 @@ search_intermediate_word (char *string)
     return NULL;
 }
 
-int
+static int
 resword_compare (struct resword *r1, struct resword *r2)
 {
 	return strcasecmp (r1->word, r2->word);
@@ -562,57 +653,7 @@ process_unrecognized_character (char *yytext)
 	fprintf(stderr, "Unrecognized character '%c' (0x%02x).\n", c, c);
 }
 
-void
-init_reserved_word_symbols (void)
-{
-    int i;
-
-    intermediate_words = NULL;
-
-    for (i = 0; i < NUM_COREWORDS; i++) {
-	*(coreword_table[i].symbol) = make_symbol(coreword_table[i].word);
-    }
-    for (i = 0; i < NUM_BEGIN_WORDS; i++) {
-	*(begin_word_table[i].symbol) =
-	    make_symbol (begin_word_table[i].word);
-    }
-    for (i = 0; i < NUM_DEFINING_WORDS; i++) {
-	*(defining_word_table[i].symbol) =
-	    make_symbol (defining_word_table[i].word);
-    }
-    for (i = 0; i < NUM_IF_INTERMEDIATE_WORDS; i++) {
-	*(if_intermediate_word_table[i].symbol) =
-	    make_symbol (if_intermediate_word_table[i].word);
-    }
-    for (i = 0; i < NUM_SELECT_INTERMEDIATE_WORDS; i++) {
-	*(select_intermediate_word_table[i].symbol) =
-	    make_symbol (select_intermediate_word_table[i].word);
-    }
-    for (i = 0; i < NUM_CLASS_INTERMEDIATE_WORDS; i++) {
-	*(class_intermediate_word_table[i].symbol) =
-	    make_symbol (class_intermediate_word_table[i].word);
-    }
-    for (i = 0; i < NUM_FOR_INTERMEDIATE_WORDS; i++) {
-	*(for_intermediate_word_table[i].symbol) =
-	    make_symbol (for_intermediate_word_table[i].word);
-    }
-    for (i = 0; i < NUM_FOR_CLAUSE_WORDS; i++) {
-	*(for_clause_word_table[i].symbol) =
-	    make_symbol (for_clause_word_table[i].word);
-    }
-   for (i = 0; i < NUM_BLOCK_INTERMEDIATE_WORDS; i++) {
-	*(block_intermediate_word_table[i].symbol) =
-	    make_symbol (block_intermediate_word_table[i].word);
-    }
-   for (i = 0; i < NUM_MODULE_INTERMEDIATE_WORDS; i++) {
-	*(module_intermediate_word_table[i].symbol) =
-	    make_symbol (module_intermediate_word_table[i].word);
-    }
-    equal_arrow_symbol = make_symbol("=>");
-    colon_colon_symbol = make_symbol("::");
-}
-
-int
+static int
 which_operator( char *string, int length)
 {
   if (length == 1) {
@@ -681,62 +722,19 @@ which_operator( char *string, int length)
     abort();
 }
 
-void
-push_intermediate_words(Object begin_word)
-{
-    struct intermediate_word_struct *new_table;
-
-    new_table = (struct intermediate_word_struct *)
-	marlais_allocate_memory (sizeof (struct intermediate_word_struct));
-
-    if (begin_word == if_symbol) {
-	new_table->num_words = NUM_IF_INTERMEDIATE_WORDS;
-	new_table->reswords = if_intermediate_word_table;
-    } else if (begin_word == select_symbol) {
-	new_table->num_words = NUM_SELECT_INTERMEDIATE_WORDS;
-	new_table->reswords = select_intermediate_word_table;
-    } else if(begin_word == class_symbol) {
-	new_table->num_words = NUM_CLASS_INTERMEDIATE_WORDS;
-	new_table->reswords = class_intermediate_word_table;
-    } else if (begin_word == for_symbol) {
-	new_table->num_words = NUM_FOR_INTERMEDIATE_WORDS;
-	new_table->reswords = for_intermediate_word_table;
-	new_table->next = intermediate_words;
-	intermediate_words = new_table;
-	new_table = (struct intermediate_word_struct *)
-	    marlais_allocate_memory (sizeof (struct intermediate_word_struct));
-	new_table->num_words = NUM_FOR_CLAUSE_WORDS;
-	new_table->reswords = for_clause_word_table;
-    } else if (begin_word == block_symbol) {
-	new_table->num_words = NUM_BLOCK_INTERMEDIATE_WORDS;
-	new_table->reswords = block_intermediate_word_table;
-    } else if (begin_word == module_symbol) {
-	new_table->num_words = NUM_MODULE_INTERMEDIATE_WORDS;
-	new_table->reswords = module_intermediate_word_table;
-    }
-    new_table->next = intermediate_words;
-    intermediate_words = new_table;
-}
-
-void
-pop_intermediate_words()
-{
-    intermediate_words = intermediate_words->next;
-}
-
-void
+static void
 make_header_key()
 {
 	header_key = make_keyword (yytext);
 }
 
-void
+static void
 make_header_end()
 {
 
 }
 
-char *
+static char *
 get_nonws_symbol (char *text)
 {
 	char *buffer, *buf_ptr, *start_ptr, *end_ptr;
@@ -756,7 +754,7 @@ get_nonws_symbol (char *text)
 	return buffer;
 }
 
-void
+static void
 make_header_val()
 {
 	if (header_key == module_keyword) {
@@ -766,15 +764,7 @@ make_header_val()
 	}
 }
 
-void
-yy_restart(FILE *new_file)
-{
-	yylineno = 1;
-	/* yyrestart(new_file); */
-	BEGIN(INI);
-}
-
-char
+static char
 expand_escaped_character (char ch)
 {
 	switch (ch) {
@@ -796,7 +786,7 @@ expand_escaped_character (char ch)
 	return ch;
 }
 
-char* make_expanded_byte_string(char* str)
+static Object make_expanded_byte_string(char* str)
 {
 	char* backslash = strchr(str, '\\');
 	if (backslash) {

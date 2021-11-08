@@ -190,7 +190,7 @@ main (int argc, char *argv[])
     /* put in a ; in case the user forgets */
     char command[256]; // win32 MSVC++ requires a constant here
     sprintf(command, "%s;", argv[optind]);
-    yy_restart(stdin);
+    marlais_parser_reset(stdin);
     yy_scan_string(command);
     read_eval_print(stdin, debug, 0);
     if(!stay) exit(0);
@@ -208,8 +208,8 @@ main (int argc, char *argv[])
   printf("Marlais %s\n", VERSION);
 
   load_file_context = 0;
-	/* <pcb> needs to be cleared after loading file */
-  yy_restart(stdin);
+  /* <pcb> needs to be cleared after loading file */
+  marlais_parser_reset(stdin);
   yy_scan_string("");
 
   cache_env = the_env;
@@ -419,7 +419,7 @@ initialize_marlais (void)
 
   /* initialize table of syntax operators and functions */
   marlais_initialize_syntax ();
-  init_reserved_word_symbols ();
+  marlais_initialize_lexer ();
   define_test_symbol = make_symbol ("define-test");
   test_symbol = make_symbol ("test");
   description_symbol = make_keyword ("description:");

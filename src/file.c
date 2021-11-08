@@ -11,6 +11,8 @@
 #include <marlais/prim.h>
 #include <marlais/read.h>
 
+#include "lexer.gen.h"
+
 extern Object open_file_list;
 
 static struct primitive file_prims[] =
@@ -46,7 +48,7 @@ i_load (Object filename)
 
     fp = open_file (filename);
 
-    marlais_reset_parser (fp);
+    marlais_parser_reset (fp);
 
     /*
      * Cons up the list of expressions in the file, then eval them.

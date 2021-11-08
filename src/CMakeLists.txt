@@ -31,6 +31,7 @@ add_executable(marlais
   function.c
   globals.c
   keyword.c
+  lexer.c
   list.c
   misc.c
   number.c
