@@ -54,7 +54,7 @@ struct symtab *symbol_table[SYMTAB_SIZE];
 
 /* Internal function declarations */
 
-static Object intern_symbol (char *name);
+static Object intern_symbol (ObjectType type, char *name);
 
 /* Primitives */
 
@@ -80,8 +80,7 @@ marlais_make_name (char *name)
 {
   Object obj;
 
-  obj = intern_symbol (name);
-  SYMBOLTYPE (obj) = Name;
+  obj = intern_symbol (Name, name);
   return (obj);
 }
 
@@ -90,8 +89,7 @@ marlais_make_symbol (char *name)
 {
   Object obj;
 
-  obj = intern_symbol (name);
-  SYMBOLTYPE (obj) = Symbol;
+  obj = intern_symbol (Symbol, name);
   return (obj);
 }
 
@@ -146,7 +144,7 @@ marlais_name_to_symbol (Object symbol)
 /* Internal functions */
 
 static Object
-intern_symbol (char *name)
+intern_symbol (ObjectType type, char *name)
 {
   int i;
   unsigned h;
@@ -173,7 +171,7 @@ intern_symbol (char *name)
   }
 
     /* not found, create new entry for it. */
-  sym = marlais_allocate_object (Symbol, sizeof (struct symbol));
+  sym = marlais_allocate_object (type, sizeof (struct symbol));
 
   SYMBOLNAME (sym) = marlais_allocate_strdup (name);
 
