@@ -89,11 +89,7 @@ marlais_allocate_object (ObjectType type, size_t size)
 {
   Object obj;
   /* allocate memory for the object */
-#ifndef MARLAIS_OBJECT_MODEL_SMALL
-  obj = (Object) marlais_allocate_memory (sizeof (struct object));
-#else
   obj = (Object) marlais_allocate_memory (size);
-#endif
   /* initialize header fields */
 #ifdef POINTERTYPE
   POINTERTYPE(obj) = type;
