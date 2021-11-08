@@ -44,8 +44,8 @@ static Object character_to_integer (Object ch);
 
 static struct primitive char_prims[] =
 {
-    {"%integer->character", prim_1, integer_to_character},
-    {"%character->integer", prim_1, character_to_integer},
+  {"%integer->character", prim_1, integer_to_character},
+  {"%character->integer", prim_1, character_to_integer},
 };
 
 /* Exported functions */
@@ -53,20 +53,20 @@ static struct primitive char_prims[] =
 void
 marlais_register_character (void)
 {
-    int num = sizeof (char_prims) / sizeof (struct primitive);
-    marlais_register_prims (num, char_prims);
+  int num = sizeof (char_prims) / sizeof (struct primitive);
+  marlais_register_prims (num, char_prims);
 }
 
 Object
 marlais_make_character (char ch)
 {
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
-    return (MAKE_CHAR (ch));
+  return (MAKE_CHAR (ch));
 #else
-    Object obj;
-    obj = marlais_allocate_object (Character, sizeof (struct object));
-    CHARVAL (obj) = ch;
-    return (obj);
+  Object obj;
+  obj = marlais_allocate_object (Character, sizeof (struct object));
+  CHARVAL (obj) = ch;
+  return (obj);
 #endif
 }
 
@@ -75,11 +75,11 @@ marlais_make_character (char ch)
 static Object
 integer_to_character (Object i)
 {
-    return (marlais_make_character (INTVAL (i)));
+  return (marlais_make_character (INTVAL (i)));
 }
 
 static Object
 character_to_integer (Object ch)
 {
-    return (marlais_make_integer (CHARVAL (ch)));
+  return (marlais_make_integer (CHARVAL (ch)));
 }
