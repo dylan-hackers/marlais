@@ -1,4 +1,13 @@
 
+#ifdef MARLAIS_OBJECT_MODEL_LARGE
+struct integer {
+    ObjectHeader header;
+    DyInteger val;
+};
+
+#define INTVAL(obj)       (((struct integer *)obj)->val)
+#endif
+
 struct big_integer {
     ObjectHeader header;
     void *val;
@@ -13,6 +22,13 @@ struct ratio {
 
 #define RATIONUM(obj)     (((struct ratio *)obj)->numerator)
 #define RATIODEN(obj)     (((struct ratio *)obj)->denominator)
+
+struct single_float {
+    ObjectHeader header;
+    float val;
+};
+
+#define SFLOATVAL(obj)    (((struct single_float *)obj)->val)
 
 struct double_float {
     ObjectHeader header;
