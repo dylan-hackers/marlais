@@ -35,6 +35,7 @@
 
 #include <marlais/alloc.h>
 #include <marlais/bytestring.h>
+#include <marlais/prim.h>
 
 #include <ctype.h>
 
