@@ -165,12 +165,7 @@ intern_symbol (char *name)
 
   entry = symbol_table[h];
   while (entry) {
-#ifdef NO_STRCASECMP
-    if (strcasecmp ((unsigned char *) name,
-                    (unsigned char *) SYMBOLNAME (entry->sym)) == 0) {
-#else
     if (strcasecmp (name, SYMBOLNAME (entry->sym)) == 0) {
-#endif
       return (entry->sym);
     }
     entry = entry->next;
