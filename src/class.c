@@ -61,21 +61,21 @@ static int member_2 (Object obj1, Object obj2, Object obj_list);
 static Object make_builtin_class (char *name, Object superclasses);
 static void add_slot_descriptor_names (Object sd_list, Object *sg_names_ptr);
 static void append_slot_descriptors (Object sd_list,
-				     Object **new_sd_list_insert_ptr,
-				     Object *sg_names_ptr);
+                                     Object **new_sd_list_insert_ptr,
+                                     Object *sg_names_ptr);
 static void append_one_slot_descriptor (Object sd,
-					Object **new_sd_list_insert_ptr,
-					Object *sg_names_ptr);
+                                        Object **new_sd_list_insert_ptr,
+                                        Object *sg_names_ptr);
 static void make_getters_setters (Object class, Object slots);
 static Object make_getter_method (Object getter_name,
-				  Object class,
-				  int slot_num);
+                                  Object class,
+                                  int slot_num);
 static Object make_setter_method (Object slot,
-				  Object class,
-				  int slot_num);
+                                  Object class,
+                                  int slot_num);
 static Object pair_list_reverse (Object lst);
 static Object replace_slotd_init (Object init_slotds, Object keyword,
-				  Object init);
+                                  Object init);
 static void initialize_slotds (Object class);
 static void eval_slotds (Object slotds);
 static Object merge_sorted_precedence_lists (Object class, Object supers);
@@ -104,7 +104,7 @@ marlais_initialize_class (void)
   rational_class = make_builtin_class ("<rational>", real_class);
   integer_class = make_builtin_class ("<integer>", rational_class);
   small_integer_class = make_builtin_class ("<small-integer>",
-					    integer_class);
+                                            integer_class);
   big_integer_class = make_builtin_class ("<big-integer>", integer_class);
 
   ratio_class = make_builtin_class ("<ratio>", rational_class);
@@ -116,7 +116,7 @@ marlais_initialize_class (void)
   collection_class = make_builtin_class ("<collection>", object_class);
   explicit_key_collection_class =
     make_builtin_class ("<explicit-key-collection>",
-			collection_class);
+                        collection_class);
   stretchy_collection_class =
     make_builtin_class ("<stretchy-collection>", collection_class);
   mutable_collection_class =
@@ -125,28 +125,28 @@ marlais_initialize_class (void)
     make_builtin_class ("<sequence>", collection_class);
   mutable_explicit_key_collection_class =
     make_builtin_class ("<mutable-explicit-key-collection>",
-			listem (explicit_key_collection_class,
-				mutable_collection_class,
-				NULL));
+                        listem (explicit_key_collection_class,
+                                mutable_collection_class,
+                                NULL));
   mutable_sequence_class =
     make_builtin_class ("<mutable-sequence>",
-			listem (mutable_collection_class,
-				sequence_class,
-				NULL));
+                        listem (mutable_collection_class,
+                                sequence_class,
+                                NULL));
   table_class =
     make_builtin_class ("<table>",
-			listem (mutable_explicit_key_collection_class,
-				stretchy_collection_class,
-				NULL));
+                        listem (mutable_explicit_key_collection_class,
+                                stretchy_collection_class,
+                                NULL));
 
   object_table_class =
     make_builtin_class ("<object-table>", table_class);
 
   deque_class =
     make_builtin_class ("<deque>",
-			listem (mutable_sequence_class,
-				stretchy_collection_class,
-				NULL));
+                        listem (mutable_sequence_class,
+                                stretchy_collection_class,
+                                NULL));
   array_class =
       make_builtin_class ("<array>", mutable_sequence_class);
   list_class = make_builtin_class ("<list>", mutable_sequence_class);
@@ -155,40 +155,40 @@ marlais_initialize_class (void)
   string_class = make_builtin_class ("<string>", mutable_sequence_class);
   vector_class = make_builtin_class ("<vector>", array_class);
   stretchy_vector_class = make_builtin_class("<stretchy-vector>",
-					     listem(vector_class,
-						    stretchy_collection_class,
-						    NULL));
+                                             listem(vector_class,
+                                                    stretchy_collection_class,
+                                                    NULL));
 
 
   byte_string_class =
     make_builtin_class ("<byte-string>",
-			listem (string_class,
-				vector_class,
-				NULL));
+                        listem (string_class,
+                                vector_class,
+                                NULL));
   unicode_string_class =
     make_builtin_class ("<unicode-string>",
-			listem (string_class,
-				vector_class,
-				NULL));
+                        listem (string_class,
+                                vector_class,
+                                NULL));
   simple_object_vector_class =
     make_builtin_class ("<simple-object-vector>", vector_class);
 
   /* Condition classes */
   condition_class = make_builtin_class ("<condition>", object_class);
   serious_condition_class = make_builtin_class ("<serious-condition>",
-						condition_class);
+                                                condition_class);
   warning_class = make_builtin_class ("<warning>", condition_class);
   simple_warning_class = make_builtin_class ("<simple-warning>",
-					     warning_class);
+                                             warning_class);
   restart_class = make_builtin_class ("<restart>", condition_class);
   simple_restart_class = make_builtin_class ("<simple-restart>",
-					     restart_class);
+                                             restart_class);
   abort_class = make_builtin_class ("<abort>", restart_class);
   error_class = make_builtin_class ("<error>", condition_class);
   simple_error_class = make_builtin_class ("<simple-error>",
-					   error_class);
+                                           error_class);
   type_error_class = make_builtin_class ("<type-error>",
-					 error_class);
+                                         error_class);
   sealed_object_error_class =
     make_builtin_class ("<sealed-object-error>", error_class);
   symbol_class = make_builtin_class ("<symbol>", object_class);
@@ -217,7 +217,7 @@ marlais_initialize_class (void)
     make_builtin_class ("<object-handle>", object_class);
 
   foreign_pointer_class =
-    make_builtin_class ("<foreign-pointer>", object_class);	/* <pcb> */
+    make_builtin_class ("<foreign-pointer>", object_class);
 
   marlais_make_class_sealed (integer_class);
   marlais_make_class_sealed (ratio_class);
@@ -235,7 +235,7 @@ marlais_initialize_class (void)
 
   /* here, need to make things like sequence_class uninstantiable */
 
-  marlais_make_class_uninstantiable (object_class); /* DMA, August 20, 2001 */
+  marlais_make_class_uninstantiable (object_class);
 
   marlais_make_class_uninstantiable (collection_class);
   marlais_make_class_uninstantiable (explicit_key_collection_class);
@@ -338,7 +338,7 @@ marlais_object_class (Object obj)
   case ObjectHandle:
     return (object_handle_class);
   case ForeignPtr:
-    return (foreign_pointer_class);		/* <pcb> */
+    return (foreign_pointer_class);
   case UninitializedSlotValue:
     return (object_class);
   default:
@@ -361,10 +361,10 @@ marlais_instance (Object obj, Object type)
     return marlais_identical_p (obj, SINGLEVAL (type));
   } else if (LIMINTP (type)) {
     if (INTEGERP (obj) &&
-	((!LIMINTHASMIN (type)) ||
-	 INTVAL (obj) >= LIMINTMIN (type)) &&
-	((!LIMINTHASMAX (type)) ||
-	 INTVAL (obj) <= LIMINTMAX (type))) {
+        ((!LIMINTHASMIN (type)) ||
+         INTVAL (obj) >= LIMINTMIN (type)) &&
+        ((!LIMINTHASMAX (type)) ||
+         INTVAL (obj) <= LIMINTMAX (type))) {
       return 1;
     } else {
       return 0;
@@ -377,7 +377,7 @@ marlais_instance (Object obj, Object type)
 
     for (ptr = UNIONLIST (type); PAIRP (ptr); ptr = CDR (ptr)) {
       if (marlais_instance (obj, (CAR (ptr)))) {
-	return 1;
+        return 1;
       }
     }
     return 0;
@@ -408,15 +408,15 @@ marlais_subtype (Object type1, Object type2)
   } else if (LIMINTP (type1)) {
     if (LIMINTP (type2)) {
       if (((!LIMINTHASMIN (type2)) ||
-	   (LIMINTHASMIN (type1) &&
-	    (LIMINTMIN (type1) >= LIMINTMIN (type2))))
-	  &&
-	  ((!LIMINTHASMAX (type2)) ||
-	   (LIMINTHASMAX (type1) &&
-	    (LIMINTMAX (type1) <= LIMINTMAX (type2))))) {
-	return 1;
+           (LIMINTHASMIN (type1) &&
+            (LIMINTMIN (type1) >= LIMINTMIN (type2))))
+          &&
+          ((!LIMINTHASMAX (type2)) ||
+           (LIMINTHASMAX (type1) &&
+            (LIMINTMAX (type1) <= LIMINTMAX (type2))))) {
+        return 1;
       } else {
-	return 0;
+        return 0;
       }
     } else {
       return (marlais_subtype (integer_class, type2));
@@ -426,7 +426,7 @@ marlais_subtype (Object type1, Object type2)
 
     for (ptr = UNIONLIST (type1); PAIRP (ptr); ptr = CDR (ptr)) {
       if (!marlais_subtype (CAR (ptr), type2)) {
-	return 0;
+        return 0;
       }
     }
     return 1;
@@ -435,7 +435,7 @@ marlais_subtype (Object type1, Object type2)
 
     for (ptr = UNIONLIST (type2); PAIRP (ptr); ptr = CDR (ptr)) {
       if (marlais_subtype (type1, CAR (ptr))) {
-	return 1;
+        return 1;
       }
     }
     return 0;
@@ -446,7 +446,7 @@ marlais_subtype (Object type1, Object type2)
     }
     while (!EMPTYLISTP (supers)) {
       if (marlais_subtype (CAR (supers), type2)) {
-	return 1;
+        return 1;
       }
       supers = CDR (supers);
     }
@@ -460,7 +460,7 @@ marlais_same_class_p (Object class1, Object class2)
   if (class1 == class2) {
     return (MARLAIS_TRUE);
   } else if ((POINTERTYPE (class1) == Singleton) &&
-	     (POINTERTYPE (class2) == Singleton)) {
+             (POINTERTYPE (class2) == Singleton)) {
     if (marlais_identical_p (SINGLEVAL(class1), SINGLEVAL(class2))) {
       return MARLAIS_TRUE;
     } else {
@@ -504,7 +504,7 @@ marlais_make (Object class, Object rest)
   } else if (class == list_class) {
     ret = make_list_driver (rest);
   } else if ((class == vector_class) ||
-	     (class == simple_object_vector_class)) {
+             (class == simple_object_vector_class)) {
     ret = marlais_make_vector_entry (rest);
   } else if ((class == string_class) || (class == byte_string_class)) {
     ret = marlais_make_bytestring_entry (rest);
@@ -556,7 +556,7 @@ marlais_make_union_type (Object typelist)
   for (ptr = typelist; PAIRP (ptr); ptr = CDR (ptr)) {
     if (UNIONP (CAR (ptr))) {
       for (qtr = UNIONLIST (CAR (ptr)); PAIRP (qtr); qtr = CDR (qtr)) {
-	union_types = cons (CAR (qtr), union_types);
+        union_types = cons (CAR (qtr), union_types);
       }
     } else {
       union_types = cons (CAR (ptr), union_types);
@@ -569,10 +569,10 @@ marlais_make_union_type (Object typelist)
 
 Object
 marlais_make_class (Object obj,
-		    Object supers,
-		    Object slot_descriptors,
-		    Object abstract_p,
-		    char *debug_name)
+                    Object supers,
+                    Object slot_descriptors,
+                    Object abstract_p,
+                    char *debug_name)
 {
   Object allsuperclasses, super;
   Object tmp, slot;
@@ -641,14 +641,14 @@ marlais_make_class (Object obj,
     /* check for sealed superclass */
     if (SEALEDP (CAR (allsuperclasses))) {
       marlais_error ("Cannot create subclass of sealed class",
-	     CAR (allsuperclasses), NULL);
+                     CAR (allsuperclasses), NULL);
     }
     super = CAR (allsuperclasses);
     append_slot_descriptors (CLASSSLOTDS (super), &i_tmp_ptr, &sg_names);
     append_slot_descriptors (CLASSESSLOTDS (super), &es_tmp_ptr,
-			     &sg_names);
+                             &sg_names);
     append_slot_descriptors (CLASSCONSTSLOTDS (super),
-			     &co_tmp_ptr, &sg_names);
+                             &co_tmp_ptr, &sg_names);
     add_slot_descriptor_names (CLASSVSLOTDS (super), &sg_names);
     allsuperclasses = CDR (allsuperclasses);
   }
@@ -685,8 +685,8 @@ marlais_make_class (Object obj,
    */
   INSTSLOTS (CLASSCSLOTS (obj)) =
     (Object *) (VALUESELS (initialize_slots (append (CLASSCSLOTDS (obj),
-						     CLASSESSLOTDS (obj)),
-					     make_empty_list ()))[0]);
+                                                     CLASSESSLOTDS (obj)),
+                                             make_empty_list ()))[0]);
 
   return (obj);
 }
@@ -750,101 +750,101 @@ marlais_make_slot_descriptor_list (Object slots, int do_eval)
       getter = slot;
     } else {
       if (NAMEP (CAR (slot))) {
-	/* first elt is getter name */
-	getter = CAR (slot);
-	slot = CDR (slot);
-	getter_seen = 1;
+        /* first elt is getter name */
+        getter = CAR (slot);
+        slot = CDR (slot);
+        getter_seen = 1;
       }
       while (PAIRP (slot)) {
-	slotelt = CAR (slot);
-	/* parse keyword-value pairs for slot initialization */
-	if (!SYMBOLP (slotelt) || EMPTYLISTP (CDR (slot))) {
-	  marlais_error ("malformed slot descriptor", slot, NULL);
-	} else if (slotelt == getter_keyword) {
-	  if (getter_seen) {
-	    marlais_error ("redundant getter specified", SECOND (slot),
-		   NULL);
-	  }
-	  getter_seen = 1;
-	  getter = SECOND (slot);
-	} else if (slotelt == setter_keyword) {
-	  if (setter != NULL) {
-	    marlais_error ("redundant specification for slot setter name",
-		   SECOND (slot), NULL);
-	  }
-	  setter = SECOND (slot);
-	} else if (slotelt == allocation_keyword) {
-	  if (allocation_seen) {
-	    marlais_error ("redundant specification for allocation",
-		   SECOND (slot), NULL);
-	  }
-	  allocation_seen = 1;
-	  allocation = SECOND (slot);
-	  if (marlais_identical_p (allocation, inherited_symbol)) {
-	    inherited_slot = 1;
-	  }
-	} else if (slotelt == type_keyword) {
-	  if (type_seen) {
-	    marlais_error ("redundant specification for type", SECOND (slot), NULL);
-	  }
-	  type_seen = 1;
-	  /*
+        slotelt = CAR (slot);
+        /* parse keyword-value pairs for slot initialization */
+        if (!SYMBOLP (slotelt) || EMPTYLISTP (CDR (slot))) {
+          marlais_error ("malformed slot descriptor", slot, NULL);
+        } else if (slotelt == getter_keyword) {
+          if (getter_seen) {
+            marlais_error ("redundant getter specified", SECOND (slot),
+                           NULL);
+          }
+          getter_seen = 1;
+          getter = SECOND (slot);
+        } else if (slotelt == setter_keyword) {
+          if (setter != NULL) {
+            marlais_error ("redundant specification for slot setter name",
+                           SECOND (slot), NULL);
+          }
+          setter = SECOND (slot);
+        } else if (slotelt == allocation_keyword) {
+          if (allocation_seen) {
+            marlais_error ("redundant specification for allocation",
+                           SECOND (slot), NULL);
+          }
+          allocation_seen = 1;
+          allocation = SECOND (slot);
+          if (marlais_identical_p (allocation, inherited_symbol)) {
+            inherited_slot = 1;
+          }
+        } else if (slotelt == type_keyword) {
+          if (type_seen) {
+            marlais_error ("redundant specification for type", SECOND (slot), NULL);
+          }
+          type_seen = 1;
+          /*
 	   * type_keyword indicates eval this slot!
 	   */
-	  type = SECOND (slot);
-	} else if (slotelt == deferred_type_keyword) {
-	  if (type_seen) {
-	    marlais_error ("redundant specification for type",
-		   SECOND (slot), NULL);
-	  }
-	  type_seen = 1;
-	  type = SECOND (slot);
-	  properties |= SLOTDDEFERREDTYPEMASK;
-	} else if (slotelt == init_value_keyword) {
-	  if (init_seen) {
-	    marlais_error ("redundant specification for initializer",
-		   SECOND (slot), NULL);
-	  }
-	  init_seen = 1;
-	  init = SECOND (slot);
-	} else if (slotelt == init_function_keyword) {
-	  if (init_seen) {
-	    marlais_error ("redundant specification for initializer",
-		   SECOND (slot), NULL);
-	  }
-	  init_seen = 1;
-	  init = do_eval ? eval (SECOND (slot)) : SECOND (slot);
-	  properties |= SLOTDINITFUNCTIONMASK;
-	} else if (slotelt == init_keyword_keyword) {
-	  if (init_keyword) {
-	    marlais_error ("redundant init-keyword: specification",
-		   SECOND (slot), NULL);
-	  }
-	  init_keyword = SECOND (slot);
-	  if (!SYMBOLP (init_keyword)) {
-	    marlais_error ("init-keyword: value is not a keyword", init_keyword, NULL);
-	  }
-	} else if (slotelt == required_init_keyword_keyword) {
-	  if (init_keyword) {
-	    marlais_error ("redundant required-init-keyword: specification",
-		   SECOND (slot), NULL);
-	  }
-	  init_keyword = SECOND (slot);
-	  if (!SYMBOLP (init_keyword)) {
-	    marlais_error ("required-init-keyword: value is not a keyword",
-		   init_keyword, NULL);
-	  }
-	  properties |= SLOTDKEYREQMASK;
-	} else if (slotelt == dynamism_keyword) {
-	  if (dynamism_seen) {
-	    marlais_error ("Dynamism of slot specified twice",
-		   SECOND (slot), NULL);
-	  }
-	  dynamism = SECOND (slot);
-	} else {
-	  marlais_error ("unknown slot keyword initializer", slotelt, NULL);
-	}
-	slot = CDR (CDR (slot));
+          type = SECOND (slot);
+        } else if (slotelt == deferred_type_keyword) {
+          if (type_seen) {
+            marlais_error ("redundant specification for type",
+                           SECOND (slot), NULL);
+          }
+          type_seen = 1;
+          type = SECOND (slot);
+          properties |= SLOTDDEFERREDTYPEMASK;
+        } else if (slotelt == init_value_keyword) {
+          if (init_seen) {
+            marlais_error ("redundant specification for initializer",
+                           SECOND (slot), NULL);
+          }
+          init_seen = 1;
+          init = SECOND (slot);
+        } else if (slotelt == init_function_keyword) {
+          if (init_seen) {
+            marlais_error ("redundant specification for initializer",
+                           SECOND (slot), NULL);
+          }
+          init_seen = 1;
+          init = do_eval ? eval (SECOND (slot)) : SECOND (slot);
+          properties |= SLOTDINITFUNCTIONMASK;
+        } else if (slotelt == init_keyword_keyword) {
+          if (init_keyword) {
+            marlais_error ("redundant init-keyword: specification",
+                           SECOND (slot), NULL);
+          }
+          init_keyword = SECOND (slot);
+          if (!SYMBOLP (init_keyword)) {
+            marlais_error ("init-keyword: value is not a keyword", init_keyword, NULL);
+          }
+        } else if (slotelt == required_init_keyword_keyword) {
+          if (init_keyword) {
+            marlais_error ("redundant required-init-keyword: specification",
+                           SECOND (slot), NULL);
+          }
+          init_keyword = SECOND (slot);
+          if (!SYMBOLP (init_keyword)) {
+            marlais_error ("required-init-keyword: value is not a keyword",
+                           init_keyword, NULL);
+          }
+          properties |= SLOTDKEYREQMASK;
+        } else if (slotelt == dynamism_keyword) {
+          if (dynamism_seen) {
+            marlais_error ("Dynamism of slot specified twice",
+                           SECOND (slot), NULL);
+          }
+          dynamism = SECOND (slot);
+        } else {
+          marlais_error ("unknown slot keyword initializer", slotelt, NULL);
+        }
+        slot = CDR (CDR (slot));
       }
     }
 
@@ -858,21 +858,21 @@ marlais_make_slot_descriptor_list (Object slots, int do_eval)
     }
     if (allocation == constant_symbol) {
       if (init == NULL || properties & SLOTDINITFUNCTIONMASK) {
-	marlais_error ("Bad initialization for constant slot",
-	       CAR (slots), NULL);
+        marlais_error ("Bad initialization for constant slot",
+                       CAR (slots), NULL);
       }
     }
     if (properties & SLOTDKEYREQMASK) {
       if (init != uninit_slot_object) {
-	marlais_error ("required-init-keyword should not have initial value",
-	       CAR (slots), NULL);
+        marlais_error ("required-init-keyword should not have initial value",
+                       CAR (slots), NULL);
       }
     }
     *desc_ptr =
       cons (marlais_make_slot_descriptor (properties, getter, setter, type,
-				  init, init_keyword, allocation,
-				  dynamism),
-	    make_empty_list ());
+                                          init, init_keyword, allocation,
+                                          dynamism),
+            make_empty_list ());
     desc_ptr = &CDR (*desc_ptr);
 
     slots = CDR (slots);
@@ -892,21 +892,21 @@ marlais_make_getter_setter_gfs (Object slotds)
     getter = SLOTDGETTER (CAR (slotds));
     if (NAMEP (getter)) {
       if (NULL == symbol_value (getter)) {
-	SLOTDGETTER (CAR (slotds)) =
-	  make_generic_function (getter,
-				 listem (x_symbol,
-					 hash_rest_symbol,
-					 x_symbol,
-					 NULL),
-				 make_empty_list ());
-	add_top_level_binding (getter, SLOTDGETTER (CAR (slotds)), 1);
+        SLOTDGETTER (CAR (slotds)) =
+          make_generic_function (getter,
+                                 listem (x_symbol,
+                                         hash_rest_symbol,
+                                         x_symbol,
+                                         NULL),
+                                 make_empty_list ());
+        add_top_level_binding (getter, SLOTDGETTER (CAR (slotds)), 1);
       } else if (!GFUNP (symbol_value (getter))) {
-	marlais_error ("Getter symbol not bound to a generic function",
-	       getter,
-	       symbol_value (getter),
-	       NULL);
+        marlais_error ("Getter symbol not bound to a generic function",
+                       getter,
+                       symbol_value (getter),
+                       NULL);
       } else {
-	SLOTDGETTER (CAR (slotds)) = symbol_value (getter);
+        SLOTDGETTER (CAR (slotds)) = symbol_value (getter);
       }
     } else {
       /* getter is not a symbol */
@@ -918,37 +918,37 @@ marlais_make_getter_setter_gfs (Object slotds)
     if (SLOTDALLOCATION (CAR (slotds)) != constant_symbol) {
       setter = SLOTDSETTER (CAR (slotds));
       if (NULL == setter) {
-	/* Manufacture the setter name */
-	setter =
-	  SLOTDSETTER (CAR (slotds)) =
-	  marlais_make_setter_symbol (getter);
+        /* Manufacture the setter name */
+        setter =
+          SLOTDSETTER (CAR (slotds)) =
+          marlais_make_setter_symbol (getter);
       }
       if (NAMEP (setter)) {
-	if (NULL == symbol_value (setter)) {
-	  SLOTDSETTER (CAR (slotds)) =
-	    make_generic_function (setter,
-				   listem (x_symbol,
-					   x_symbol,
-					   hash_rest_symbol,
-					   x_symbol,
-					   NULL),
-				   make_empty_list ());
-	  add_top_level_binding (setter,
-				 SLOTDSETTER (CAR (slotds)),
-				 1);
-	} else if (!GFUNP (symbol_value (setter))) {
-	  marlais_error ("Setter symbol not bound to a generic function",
-		 setter,
-		 symbol_value (setter),
-		 NULL);
-	} else {
-	  SLOTDSETTER (CAR (slotds)) = symbol_value (setter);
-	}
+        if (NULL == symbol_value (setter)) {
+          SLOTDSETTER (CAR (slotds)) =
+            make_generic_function (setter,
+                                   listem (x_symbol,
+                                           x_symbol,
+                                           hash_rest_symbol,
+                                           x_symbol,
+                                           NULL),
+                                   make_empty_list ());
+          add_top_level_binding (setter,
+                                 SLOTDSETTER (CAR (slotds)),
+                                 1);
+        } else if (!GFUNP (symbol_value (setter))) {
+          marlais_error ("Setter symbol not bound to a generic function",
+                         setter,
+                         symbol_value (setter),
+                         NULL);
+        } else {
+          SLOTDSETTER (CAR (slotds)) = symbol_value (setter);
+        }
       } else if (setter == MARLAIS_FALSE) {
-	SLOTDSETTER (CAR (slotds)) = setter;
+        SLOTDSETTER (CAR (slotds)) = setter;
       } else {
-	/* setter is not a symbol */
-	marlais_error ("Setter name is not a symbol", setter, NULL);
+        /* setter is not a symbol */
+        marlais_error ("Setter name is not a symbol", setter, NULL);
       }
 
     }
@@ -969,7 +969,7 @@ make_instance (Object class, Object *initializers)
   INSTCLASS (obj) = class;
   initialize_slotds (class);
   ret = initialize_slots (append (CLASSINSLOTDS (class), CLASSSLOTDS (class)),
-			  *initializers);
+                          *initializers);
   INSTSLOTS (obj) = (Object *) (VALUESELS (ret)[0]);
   *initializers = VALUESELS (ret)[1];
 
@@ -1058,18 +1058,18 @@ initialize_slots (Object slot_descriptors, Object initializers)
     while (!EMPTYLISTP (initializers)) {
       initializer = CAR (initializers);
       if (SYMBOLP (initializer) && !EMPTYLISTP (CDR (initializers))) {
-	extra = replace_slotd_init (init_slotds,
-				    initializer,
-				    SECOND (initializers));
-	if (extra != NULL) {
-	  extra_initializers = append (extra, extra_initializers);
-	}
+        extra = replace_slotd_init (init_slotds,
+                                    initializer,
+                                    SECOND (initializers));
+        if (extra != NULL) {
+          extra_initializers = append (extra, extra_initializers);
+        }
       } else {
-	/* Should check for class or subclass initializer and
-	 * take appropriate action.  Perhaps memoize the init
-	 * and perform below.
-	 */
-	marlais_error ("Bad slot initializers", initializer, NULL);
+        /* Should check for class or subclass initializer and
+         * take appropriate action.  Perhaps memoize the init
+         * and perform below.
+         */
+        marlais_error ("Bad slot initializers", initializer, NULL);
       }
       initializers = CDR (CDR (initializers));
     }
@@ -1091,13 +1091,13 @@ initialize_slots (Object slot_descriptors, Object initializers)
     slotd = CAR (tmp_slotds);
     if (SLOTDINITKEYWORD (slotd)) {
       if (SLOTDINIT (slotd) != uninit_slot_object) {
-	*def_ptr = listem (SLOTDINITKEYWORD (slotd),
-			   SLOTDINIT (slotd),
-			   NULL);
-	def_ptr = &CDR (CDR (*def_ptr));
+        *def_ptr = listem (SLOTDINITKEYWORD (slotd),
+                           SLOTDINIT (slotd),
+                           NULL);
+        def_ptr = &CDR (CDR (*def_ptr));
       } else if (SLOTDKEYREQ (slotd)) {
-	marlais_error ("Required keyword not specified",
-	       SLOTDINITKEYWORD (slotd), NULL);
+        marlais_error ("Required keyword not specified",
+                       SLOTDINITKEYWORD (slotd), NULL);
       }
     }
   }
@@ -1107,7 +1107,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
    * from the list of modified slot descriptors (init_slotds)
    */
   slots = (Object *) marlais_allocate_memory (list_length (init_slotds) *
-				      sizeof (Object));
+                                              sizeof (Object));
 
   tmp_slotds = init_slotds;
   for (i = 0; PAIRP (tmp_slotds); tmp_slotds = CDR (tmp_slotds), i++) {
@@ -1115,7 +1115,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
     slots[i] = listem (marlais_slot_init_value (slotd), SLOTDSLOTTYPE (slotd), NULL);
   }
   return marlais_construct_values (2, slots, append (default_initializers,
-						     extra_initializers));
+                                                     extra_initializers));
 }
 
 static void
@@ -1127,23 +1127,23 @@ add_slot_descriptor_names (Object sd_list, Object *sg_names_ptr)
     sd = CAR (sd_list);
     if (SLOTDSETTER (sd) != MARLAIS_FALSE) {
       if (member_2 (SLOTDGETTER (sd), SLOTDSETTER (sd), *sg_names_ptr)) {
-	marlais_error ("slot getter or setter appears in superclass", sd, NULL);
+        marlais_error ("slot getter or setter appears in superclass", sd, NULL);
       }
     } else {
       if (member (SLOTDGETTER (sd), *sg_names_ptr))
-	marlais_error ("slot getter appears in superclass", sd, NULL);
+        marlais_error ("slot getter appears in superclass", sd, NULL);
     }
   }
 }
 
 static void
 append_slot_descriptors (Object sd_list, Object **new_sd_list_insert_ptr,
-			 Object *sg_names_ptr)
+                         Object *sg_names_ptr)
 {
   while (!EMPTYLISTP (sd_list)) {
     append_one_slot_descriptor (CAR (sd_list),
-				new_sd_list_insert_ptr,
-				sg_names_ptr);
+                                new_sd_list_insert_ptr,
+                                sg_names_ptr);
     sd_list = CDR (sd_list);
   }
 }
@@ -1162,7 +1162,7 @@ append_slot_descriptors (Object sd_list, Object **new_sd_list_insert_ptr,
  */
 static void
 append_one_slot_descriptor (Object sd, Object **new_sd_list_insert_ptr,
-			    Object *sg_names_ptr)
+                            Object *sg_names_ptr)
 {
   if (member_2 (SLOTDGETTER (sd), SLOTDSETTER (sd), *sg_names_ptr)) {
     marlais_error ("slot getter or setter appears in superclass", sd, NULL);
@@ -1235,21 +1235,21 @@ make_limited_int_type (Object args)
   while (!EMPTYLISTP (args)) {
     if (FIRST (args) == min_keyword) {
       if (LIMINTHASMIN (obj)) {
-	marlais_error ("Minimum value for limited type specified twice", NULL);
+        marlais_error ("Minimum value for limited type specified twice", NULL);
       } else {
-	LIMINTMIN (obj) = INTVAL (SECOND (args));
-	LIMINTPROPS (obj) |= LIMMINMASK;
+        LIMINTMIN (obj) = INTVAL (SECOND (args));
+        LIMINTPROPS (obj) |= LIMMINMASK;
       }
     } else if (FIRST (args) == max_keyword) {
       if (LIMINTHASMAX (obj)) {
-	marlais_error ("Maximum value for limited type specified twice", NULL);
+        marlais_error ("Maximum value for limited type specified twice", NULL);
       } else {
-	LIMINTMAX (obj) = INTVAL (SECOND (args));
-	LIMINTPROPS (obj) |= LIMMAXMASK;
+        LIMINTMAX (obj) = INTVAL (SECOND (args));
+        LIMINTPROPS (obj) |= LIMMAXMASK;
       }
     } else {
       marlais_error ("make: unsupported keyword for limited integer type",
-	     FIRST (args), NULL);
+                     FIRST (args), NULL);
     }
     args = CDR (CDR (args));
   }
@@ -1283,12 +1283,12 @@ initialize_slotds (Object class)
   the_env = CLASSENV (class);
   eval_slotds (CLASSSLOTDS (class));
   make_getters_setters (class, append (CLASSINSLOTDS (class),
-				       CLASSSLOTDS (class)));
+                                       CLASSSLOTDS (class)));
 
   eval_slotds (CLASSESSLOTDS (class));
   eval_slotds (CLASSCSLOTDS (class));
   make_getters_setters (class, append (CLASSCSLOTDS (class),
-				       CLASSESSLOTDS (class)));
+                                       CLASSESSLOTDS (class)));
 
   make_getters_setters (class, CLASSCONSTSLOTDS (class));
 
@@ -1308,9 +1308,9 @@ eval_slotds (Object slotds)
     SLOTDSLOTTYPE (slotd) = eval (SLOTDSLOTTYPE (slotd));
     if (SLOTDDEFERREDTYPE (slotd)) {
       SLOTDSLOTTYPE (slotd) = marlais_apply_method (eval (SLOTDSLOTTYPE (slotd)),
-						    make_empty_list (),
-						    make_empty_list (),
-						    NULL);
+                                                    make_empty_list (),
+                                                    make_empty_list (),
+                                                    NULL);
     }
     slotds = CDR (slotds);
   }
@@ -1400,9 +1400,9 @@ make_getter_method (Object slot, Object class, int slot_num)
   if (allocation == instance_symbol) {
     slot_location = obj_sym;
   } else if (allocation == class_symbol ||
-	     allocation == each_subclass_symbol) {
+             allocation == each_subclass_symbol) {
     slot_location = listem (class_slots_symbol,
-			    listem (quote_symbol, class, NULL), NULL);
+                            listem (quote_symbol, class, NULL), NULL);
   } else if (allocation == virtual_symbol) {
     return SLOTDGETTER (slot);
   } else if (allocation != constant_symbol) {
@@ -1412,13 +1412,13 @@ make_getter_method (Object slot, Object class, int slot_num)
     body = cons (SLOTDINIT (slot), make_empty_list ());
   } else {
     body = listem (listem (slot_val_sym,
-			   slot_location,
-			   marlais_make_integer (slot_num),
-			   NULL),
-		   NULL);
+                           slot_location,
+                           marlais_make_integer (slot_num),
+                           NULL),
+                   NULL);
   }
   return (make_method (GFNAME (SLOTDGETTER (slot)),
-		       params, body, the_env, 1));
+                       params, body, the_env, 1));
 }
 
 /*
@@ -1438,8 +1438,8 @@ make_setter_method (Object slot, Object class, int slot_num)
   }
   if (!GFUNP (SLOTDSETTER (slot))) {
     marlais_error ("Slot setter is not a generic function",
-	   SLOTDSETTER (slot),
-	   NULL);
+                   SLOTDSETTER (slot),
+                   NULL);
   }
   if (CLASSNAME (class)) {
     class_location = CLASSNAME (class);
@@ -1447,36 +1447,36 @@ make_setter_method (Object slot, Object class, int slot_num)
     class_location = listem (quote_symbol, class, NULL);
   }
   params = listem (listem (val_sym,
-			   listem (quote_symbol,
-				   SLOTDSLOTTYPE (slot),
-				   NULL),
-			   NULL),
-		   listem (obj_sym, class_location, NULL),
-		   NULL);
+                           listem (quote_symbol,
+                                   SLOTDSLOTTYPE (slot),
+                                   NULL),
+                           NULL),
+                   listem (obj_sym, class_location, NULL),
+                   NULL);
   allocation = SLOTDALLOCATION (slot);
   if (allocation == instance_symbol) {
     slot_location = obj_sym;
   } else if (allocation == class_symbol ||
-	     allocation == each_subclass_symbol) {
+             allocation == each_subclass_symbol) {
     slot_location = listem (class_slots_symbol,
-			    listem (quote_symbol, class, NULL),
-				NULL);
+                            listem (quote_symbol, class, NULL),
+                            NULL);
   } else if (allocation == constant_symbol) {
     marlais_error ("BUG - attempt to allocate setter for constant slot",
-	   slot, NULL);
+                   slot, NULL);
   } else if (allocation == virtual_symbol) {
     return SLOTDSETTER (slot);
   } else {
     marlais_error ("Bad slot allocation ", allocation, NULL);
   }
   body = listem (listem (set_slot_value_sym,
-			 slot_location,
-			 marlais_make_integer (slot_num),
-			 val_sym,
-			 NULL),
-		 NULL);
+                         slot_location,
+                         marlais_make_integer (slot_num),
+                         val_sym,
+                         NULL),
+                 NULL);
   return (make_method (GFNAME (SLOTDSETTER (slot)),
-		       params, body, the_env, 1));
+                       params, body, the_env, 1));
 }
 
 static Object
@@ -1498,7 +1498,7 @@ merge_sorted_precedence_lists (Object class, Object supers)
 
   while (!EMPTYLISTP (supers)) {
     new_list = merge_class_lists (new_list,
-				  CLASSSORTEDPRECS (CAR (supers)));
+                                  CLASSSORTEDPRECS (CAR (supers)));
     supers = CDR (supers);
   }
   return merge_class_lists (new_list, cons (class, make_empty_list ()));
