@@ -11,6 +11,10 @@
 #include <marlais/prim.h>
 #include <marlais/vector.h>
 
+/* Internal function declarations */
+
+static Object find_keyword (Object keyword, Object lst);
+
 /* Primitives */
 
 static Object instance_slots (Object instance);
@@ -57,7 +61,7 @@ marlais_slot_getter (Object slot)
   if (!PAIRP (slot)) {
     return (NULL);
   } else {
-    return (find_keyword_val (getter_keyword, slot));
+    return (find_keyword (getter_keyword, slot));
   }
 }
 
@@ -67,7 +71,7 @@ marlais_slot_setter (Object slot)
   if (!PAIRP (slot)) {
     return (NULL);
   } else {
-    return (find_keyword_val (setter_keyword, slot));
+    return (find_keyword (setter_keyword, slot));
   }
 }
 
@@ -77,7 +81,7 @@ marlais_slot_type (Object slot)
   if (!PAIRP (slot)) {
     return (NULL);
   } else {
-    return (find_keyword_val (type_keyword, slot));
+    return (find_keyword (type_keyword, slot));
   }
 }
 
@@ -98,7 +102,7 @@ marlais_slot_init_function (Object slot)
   if (!PAIRP (slot)) {
     return (NULL);
   } else {
-    return (find_keyword_val (init_function_keyword, slot));
+    return (find_keyword (init_function_keyword, slot));
   }
 }
 
@@ -108,7 +112,7 @@ marlais_slot_init_keyword (Object slot)
   if (!PAIRP (slot)) {
     return (NULL);
   } else {
-    return (find_keyword_val (init_keyword_keyword, slot));
+    return (find_keyword (init_keyword_keyword, slot));
   }
 }
 
@@ -118,7 +122,7 @@ marlais_slot_required_init_keyword (Object slot)
   if (!PAIRP (slot)) {
     return (NULL);
   } else {
-    return (find_keyword_val (required_init_keyword_keyword, slot));
+    return (find_keyword (required_init_keyword_keyword, slot));
   }
 }
 
@@ -128,7 +132,7 @@ marlais_slot_allocation (Object slot)
   if (!PAIRP (slot)) {
     return (NULL);
   } else {
-    return (find_keyword_val (allocation_keyword, slot));
+    return (find_keyword (allocation_keyword, slot));
   }
 }
 
@@ -178,4 +182,19 @@ static Object
 class_slots (Object class)
 {
     return (Object) (CLASSCSLOTS (class));
+}
+
+static Object
+find_keyword (Object keyword, Object lst)
+{
+  if (!LISTP (lst)) {
+    return (NULL);
+  }
+  while (!EMPTYLISTP (lst)) {
+    if (CAR (lst) == keyword && !EMPTYLISTP (CDR (lst))) {
+      return SECOND (lst);
+    }
+    lst = CDR (lst);
+  }
+  return (NULL);
 }

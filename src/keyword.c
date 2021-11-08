@@ -52,24 +52,6 @@ symbol_to_keyword (Object symbol)
     return (make_keyword (name));
 }
 
-/* Return the value of a keyword from a list, e.g., 
-
-   (find-keyword foo: '(wagga fooga :bar 3 :foo 6 :baz 8)) => 6 */
-Object
-find_keyword_val (Object keyword, Object lst)
-{
-    if (!LISTP (lst)) {
-	return (NULL);
-    }
-    while (!EMPTYLISTP (lst)) {
-	if (CAR (lst) == keyword && !EMPTYLISTP (CDR (lst))) {
-	    return SECOND (lst);
-	}
-	lst = CDR (lst);
-    }
-    return (NULL);
-}
-
 /* locals */
 
 static Object
