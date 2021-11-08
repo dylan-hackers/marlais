@@ -38,7 +38,7 @@ static Object load_foreign (Object name);
 
 static struct primitive foreign_prims[] =
 {
-    {"%load_foreign", prim_1, load_foreign},
+ //    {"%load_foreign", prim_1, load_foreign},
 };
 
 void
