@@ -170,7 +170,7 @@ marlais_make_integer (DyInteger i)
   if (INT_ABS (i) <= MAX_SMALL_INT) {
 	Object obj;
 
-	obj = marlais_allocate_object (Integer, sizeof (struct object));
+	obj = marlais_allocate_object (Integer, sizeof (struct integer));
 
 	INTVAL (obj) = i;
 	return (obj);

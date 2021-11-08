@@ -113,7 +113,7 @@ initialize_empty_list ()
     Object obj;
 
     if (___empty_list == NULL) {
-     ___empty_list = marlais_allocate_object (EmptyList, sizeof (struct object));
+     ___empty_list = marlais_allocate_object (EmptyList, sizeof (struct empty));
 
     } else {
 	marlais_error ("initialize_empty_list: second attempt at initialization",

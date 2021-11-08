@@ -64,7 +64,7 @@ marlais_make_character (char ch)
   return (MAKE_CHAR (ch));
 #else
   Object obj;
-  obj = marlais_allocate_object (Character, sizeof (struct object));
+  obj = marlais_allocate_object (Character, sizeof (struct character));
   CHARVAL (obj) = ch;
   return (obj);
 #endif

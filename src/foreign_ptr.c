@@ -34,18 +34,6 @@
 
 #include <marlais/alloc.h>
 
-#ifndef MARLAIS_OBJECT_MODEL_SMALL
-Object
-make_foreign_ptr (void *ptr)
-{
-    Object obj;
-
-    obj = marlais_allocate_object (ForeignPtr, sizeof (struct object));
-
-    FOREIGNPTR (obj) = ptr;
-    return (obj);
-}
-#else
 Object
 make_foreign_ptr (void *ptr)
 {
@@ -56,4 +44,3 @@ make_foreign_ptr (void *ptr)
     FOREIGNPTR (obj) = ptr;
     return (obj);
 }
-#endif
