@@ -39,7 +39,7 @@ static void devalue_args (Object args);
 
 /* Primitives */
 
-static Object set_trace (Object bool);
+static Object set_trace (Object flag);
 
 static struct primitive apply_prims[] =
 {
