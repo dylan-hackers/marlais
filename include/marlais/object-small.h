@@ -139,11 +139,3 @@ DEFINE_POINTERP_PREDICATE(FOREIGNP, ForeignPtr);
 DEFINE_POINTERP_PREDICATE(ENVIRONMENTP, Environment);
 DEFINE_POINTERP_PREDICATE(HDLP, ObjectHandle);
 #undef DEFINE_POINTERP_PREDICATE
-
-/* List type predicates */
-static inline bool NULLP(Object obj) {
-  return EMPTYLISTP(obj);
-}
-static inline bool LISTP(Object obj) {
-  return NULLP(obj)||PAIRP(obj);
-}

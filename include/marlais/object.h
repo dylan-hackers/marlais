@@ -78,6 +78,14 @@ typedef struct {
 #define MARLAIS_FALSE (marlais_false)
 #endif
 
+/* List type predicates */
+static inline bool NULLP(Object obj) {
+  return EMPTYLISTP(obj);
+}
+static inline bool LISTP(Object obj) {
+  return NULLP(obj)||PAIRP(obj);
+}
+
 /* globals */
 extern jmp_buf error_return;
 
