@@ -113,35 +113,35 @@ marlais_make_setter_symbol (Object sym)
 Object
 marlais_symbol_to_string (Object sym)
 {
-    return (marlais_make_bytestring (SYMBOLNAME (sym)));
+  return (marlais_make_bytestring (SYMBOLNAME (sym)));
 }
 
 Object
 marlais_string_to_symbol (Object str)
 {
-    return (marlais_make_symbol (BYTESTRVAL (str)));
+  return (marlais_make_symbol (BYTESTRVAL (str)));
 }
 
 Object
 marlais_keyword_to_symbol (Object keyword)
 {
-    char name[MAX_SYMBOL_SIZE];
-    int size;
+  char name[MAX_SYMBOL_SIZE];
+  int size;
 
-    strcpy (name, NAMENAME (keyword));
-    size = strlen (name);
-    name[size - 1] = '\0';
-    return (marlais_make_symbol (name));
+  strcpy (name, NAMENAME (keyword));
+  size = strlen (name);
+  name[size - 1] = '\0';
+  return (marlais_make_symbol (name));
 }
 
 Object
 marlais_symbol_to_keyword (Object symbol)
 {
-    char name[MAX_SYMBOL_SIZE];
+  char name[MAX_SYMBOL_SIZE];
 
-    strcpy (name, SYMBOLNAME (symbol));
-    strcat (name, ":");
-    return (marlais_make_keyword (name));
+  strcpy (name, SYMBOLNAME (symbol));
+  strcat (name, ":");
+  return (marlais_make_keyword (name));
 }
 
 /* Internal functions */
