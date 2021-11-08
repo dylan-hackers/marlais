@@ -94,8 +94,10 @@ marlais_allocate_object (ObjectType type, size_t size)
 #else
   obj = (Object) marlais_allocate_memory (size);
 #endif
-  /* initialize the type field */
+  /* initialize header fields */
+#ifdef POINTERTYPE
   POINTERTYPE(obj) = type;
+#endif
   /* return result */
   return obj;
 }
