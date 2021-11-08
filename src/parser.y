@@ -147,10 +147,7 @@ static int allocation_word (Object word);
 /* IF intermediate words */
 %token ELSE ELSEIF
 
-/* SELECT intermediate words */
-%token BY
-
-/* FOR intermediate words */
+/* FOR/SELECT intermediate words */
 %token FINALLY
 %token THEN IN FROM TO ABOVE BELOW BY
 
