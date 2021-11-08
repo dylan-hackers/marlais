@@ -96,8 +96,8 @@ static int allocation_word (Object word);
 
 %start evaluable_constituent
 
-%token	SYMBOL				/* identifier */
-%token	KEYWORD				/* identifier: */
+%token	NAME				/* identifier */
+%token	SYMBOL				/* identifier: */
 %token	LITERAL				/* #"..." */
 %token	STRING				/* "..." */
 
@@ -294,7 +294,7 @@ expression
 
 
 binary_operand
-	: KEYWORD			{ $$ = $1; }
+	: SYMBOL			{ $$ = $1; }
 	| keyless_binary_operand	{ $$ = $1; }
 
 keyless_binary_operand
@@ -342,9 +342,9 @@ unparenthesized_operand
 	| unparenthesized_leaf		{ $$ = $1; }
 
 arguments
-	: KEYWORD expression		{ $$ = listem ($1, $2, NULL); }
+	: SYMBOL expression		{ $$ = listem ($1, $2, NULL); }
 	| expression		{ $$ = cons ($1, make_empty_list()); }
-	| KEYWORD expression ',' arguments
+	| SYMBOL expression ',' arguments
 		{ $$ = cons ($1, cons ($2, $4)); }
 	| expression ',' arguments
 		{ $$ = cons ($1, $3); }
@@ -393,7 +393,7 @@ list_constants
 
 constant
 	: literal			{ $$ = $1; }
-	| KEYWORD			{ $$ = $1; }
+	| SYMBOL			{ $$ = $1; }
 
 
 /* Statements */
@@ -666,7 +666,7 @@ for_terminator_opt
 					           cons ($2,
                                                          make_empty_list())),
                                              make_empty_list()); }
-	| KEYWORD expression	{ if ($1 == until_keyword) {
+	| SYMBOL expression	{ if ($1 == until_keyword) {
 				      $$ =cons ($2, make_empty_list());
 				  } else if ($1 == while_keyword) {
 				      $$ = cons (cons (not_symbol,
@@ -890,11 +890,11 @@ slot_spec
 
 slot_modifiers_opt
 	: 				{ $$ = make_empty_list(); }
-	| SYMBOL slot_modifiers_opt 	{ $$ = cons ($1, $2); }
+	| NAME slot_modifiers_opt 	{ $$ = cons ($1, $2); }
 	| CLASS slot_modifiers_opt	{ $$ = cons ($1, $2); }
 
 initialization_argument_spec
-	: SYMBOL KEYWORD comma_arguments_opt
+	: NAME SYMBOL comma_arguments_opt
 		{
 		  if ($1 != keyword_symbol) {
 			marlais_error ("Bad initialization argument specification", NULL);
@@ -902,7 +902,7 @@ initialization_argument_spec
 			$$ = cons (init_keyword_keyword, cons ($2, $3));
 		  }
 		}
-	| SYMBOL SYMBOL KEYWORD comma_arguments_opt
+	| NAME NAME SYMBOL comma_arguments_opt
 		{
 		  if ($1 != required_symbol || $2 != keyword_symbol) {
 			marlais_error ("Bad initialization argument specification", NULL);
@@ -952,8 +952,8 @@ create_clause
 	: CREATE item_names	{ $$ = cons ($1, $2); }
 
 modifiers
-	: SYMBOL		{ $$ = cons ($1, make_empty_list()); }
-	| SYMBOL modifiers 	{ $$ = cons ($1, $2); }
+	: NAME		{ $$ = cons ($1, make_empty_list()); }
+	| NAME modifiers 	{ $$ = cons ($1, $2); }
 
 expression_list
 	: '(' expressions_opt ')'	{ $$ = $2; }
@@ -1072,7 +1072,7 @@ keyword_parameters
 
 
 keyword_parameter
-	: KEYWORD variable_name type_designator_opt default_opt
+	: SYMBOL variable_name type_designator_opt default_opt
 		{ Object variable = $3 == NULL? $2
                                               : listem ($2, $3, NULL);
 		  if ($4) {
@@ -1194,7 +1194,7 @@ variable
 			: $1); }
 
 variable_name
-	: SYMBOL		{ $$ = $1; }
+	: NAME		{ $$ = $1; }
 	| defining_word		{ $$ = $1; }
 
 variable_name_opt
@@ -1214,7 +1214,7 @@ property_list
 	| property  property_list	{ $$ = cons ($1, $2); }
 
 property
-	: ',' KEYWORD value
+	: ',' SYMBOL value
 		{ $$ = cons ($2, $3); }
 
 value	: expression			{ $$ = $1; }

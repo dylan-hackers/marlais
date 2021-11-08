@@ -326,7 +326,7 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 <ETC>#{STRING}	{ /* Do some nasty business with yytext */
 		  yytext[yyleng-1] = ':';
 		  mylval = marlais_make_keyword (yytext + 2);
-		  return (KEYWORD);
+		  return (SYMBOL);
 		}
 
 <ETC>{WORD}:	{
@@ -334,7 +334,7 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 		  if (mydebug) {
 			printf("yydebug: got symbol [%s]\n",  yytext);
 			}
-		  return (KEYWORD);
+		  return (SYMBOL);
 		 }
 
 <ETC>#[a-zA-Z][a-zA-Z\-]*	{ return search_for_poundword (yytext, &mylval);
@@ -349,7 +349,7 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 		}
 
 <ETC>\\{OPERATOR}	{ which_operator (yytext+1, yyleng-1);
-			  return SYMBOL;
+			  return NAME;
 			}
 
 <INI,KEY,VAL,ETC>.	{ process_unrecognized_character (yytext);
@@ -609,7 +609,7 @@ symbol_or_resword (char *string, YYSTYPE *obj_ptr)
 	return result->token;
     }
     *obj_ptr = marlais_make_symbol(string);
-    return SYMBOL;
+    return NAME;
 }
 
 static struct resword *
