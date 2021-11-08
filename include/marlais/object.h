@@ -48,6 +48,18 @@ Stream,
     Environment
 } ObjectType;
 
+/* Common header of all heap objects */
+typedef struct {
+  /* Low-level type of the object */
+  ObjectType object_type;
+  /* Size of the object in bytes */
+  size_t     object_size;
+} ObjectHeader;
+
+/* Accessor for the type of a heap object */
+#define POINTERTYPE(obj) (((ObjectHeader *)obj)->object_type)
+#define POINTERSIZE(obj) (((ObjectHeader *)obj)->object_size)
+
 #if defined(MARLAIS_OBJECT_MODEL_SMALL)
 #include <marlais/object-small.h>
 #elif defined(MARLAIS_OBJECT_MODEL_LARGE)

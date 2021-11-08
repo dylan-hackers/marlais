@@ -86,18 +86,6 @@ static inline Object MAKE_INT(DyInteger ch) {
   return (Object)(MARLAIS_TAG_INTEGER|(((DyUnsigned)ch) << MARLAIS_INTEGER_SHIFT));
 }
 
-/* Common header of all heap objects */
-typedef struct {
-  /* Low-level type of the object */
-  ObjectType object_type;
-  /* Size of the object in bytes */
-  size_t     object_size;
-} ObjectHeader;
-
-/* Accessor for the type of a heap object */
-#define POINTERTYPE(obj) (((ObjectHeader *)obj)->object_type)
-#define POINTERSIZE(obj) (((ObjectHeader *)obj)->object_size)
-
 /* Immediate type predicates */
 #define DEFINE_IMMEDP_PREDICATE(_name, _sub)        \
   static inline bool _name(Object obj) {            \
