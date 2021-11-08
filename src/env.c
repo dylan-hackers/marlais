@@ -475,9 +475,9 @@ user_set_module (Object args)
     }
     if (SYMBOLP (module_name)) {
 	return
-	    marlais_symbol_to_keyword (set_module
+	    marlais_name_to_symbol (set_module
 			       (module_binding
-				(marlais_keyword_to_symbol (module_name)))
+				(marlais_symbol_to_name (module_name)))
 			       ->sym);
     } else {
 	return marlais_error ("set-module: argument should be a symbol",
@@ -693,7 +693,7 @@ use_module (Object module_name,
 Object
 user_current_module ()
 {
-    return marlais_symbol_to_keyword (current_module ()->sym);
+    return marlais_name_to_symbol (current_module ()->sym);
 }
 
 struct module_binding *

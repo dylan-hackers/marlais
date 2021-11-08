@@ -35,7 +35,7 @@ define method as (c :: <class>, obj :: <object>)
 end method as;
 
 define method as (sc == <string>, s :: <symbol>)
-  %symbol->string(%keyword->symbol (s));
+  %symbol->string(%symbol->name (s));
 end method as;
 
 /* <pcb> added so we can use the reader. */
@@ -44,7 +44,7 @@ define method as (sc == <string>, s :: <name>)
 end method as;
 
 define method as (sc == <symbol>, s :: <string>)
-  %symbol->keyword (%string->symbol (s));
+  %name->symbol (%string->symbol (s));
 end method as;
 
 define method error (msg :: <string>, #rest args)

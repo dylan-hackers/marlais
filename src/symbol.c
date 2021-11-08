@@ -62,8 +62,8 @@ static struct primitive symbol_prims[] =
 {
     {"%symbol->string", prim_1, marlais_symbol_to_string},
     {"%string->symbol", prim_1, marlais_string_to_symbol},
-    {"%keyword->symbol", prim_1, marlais_keyword_to_symbol},
-    {"%symbol->keyword", prim_1, marlais_symbol_to_keyword},
+    {"%symbol->name", prim_1, marlais_symbol_to_name},
+    {"%name->symbol", prim_1, marlais_name_to_symbol},
 };
 
 /* Exported functions */
@@ -122,7 +122,7 @@ marlais_string_to_symbol (Object str)
 }
 
 Object
-marlais_keyword_to_symbol (Object keyword)
+marlais_symbol_to_name (Object keyword)
 {
   char name[MAX_SYMBOL_SIZE];
   int size;
@@ -134,7 +134,7 @@ marlais_keyword_to_symbol (Object keyword)
 }
 
 Object
-marlais_symbol_to_keyword (Object symbol)
+marlais_name_to_symbol (Object symbol)
 {
   char name[MAX_SYMBOL_SIZE];
 

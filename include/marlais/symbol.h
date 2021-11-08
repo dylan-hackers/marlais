@@ -45,8 +45,8 @@ extern Object marlais_make_setter_symbol (Object sym);
 extern Object marlais_symbol_to_string (Object symbol);
 extern Object marlais_string_to_symbol (Object keyword);
 
-extern Object marlais_symbol_to_keyword (Object symbol);
-extern Object marlais_keyword_to_symbol (Object keyword);
+extern Object marlais_symbol_to_name (Object symbol);
+extern Object marlais_name_to_symbol (Object keyword);
 
 
 #endif
