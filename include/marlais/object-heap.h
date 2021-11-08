@@ -11,7 +11,6 @@ struct ratio {
     DyInteger numerator, denominator;
 };
 
-#define RATIOTYPE(obj)    (((struct ratio *)obj)->type)
 #define RATIONUM(obj)     (((struct ratio *)obj)->numerator)
 #define RATIODEN(obj)     (((struct ratio *)obj)->denominator)
 
@@ -20,7 +19,6 @@ struct double_float {
     double val;
 };
 
-#define DFLOATTYPE(obj)   (((struct double_float *)obj)->type)
 #define DFLOATVAL(obj)    (((struct double_float *)obj)->val)
 
 struct pair {
@@ -46,7 +44,6 @@ struct simple_object_vector {
     Object *els;
 };
 
-#define SOVTYPE(obj)      (((struct simple_object_vector *)obj)->type)
 #define SOVSIZE(obj)      (((struct simple_object_vector *)obj)->size)
 #define SOVELS(obj)       (((struct simple_object_vector *)obj)->els)
 
@@ -58,7 +55,6 @@ struct table_entry {
     Object next;
 };
 
-#define TETYPE(obj)       (((struct table_entry *)obj)->type)
 #define TEROW(obj)        (((struct table_entry *)obj)->row)
 #define TEKEY(obj)        (((struct table_entry *)obj)->key)
 #define TEVALUE(obj)      (((struct table_entry *)obj)->value)
