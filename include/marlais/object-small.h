@@ -266,6 +266,7 @@ enum condtype {
     SimpleError, TypeError, SimpleWarning,
     SimpleRestart, Abort
 };
+
 struct condition {
     ObjectHeader header;
     enum condtype condtype;
@@ -371,7 +372,6 @@ struct singleton {
 
 #define SINGLEVAL(obj)    (((struct singleton *)obj)->val)
 
-
 struct limited_int_type {
     ObjectHeader header;
     unsigned char properties;
@@ -390,7 +390,9 @@ struct union_type {
     ObjectHeader header;
     Object list;
 };
+
 #define UNIONLIST(obj)    (((struct union_type *)obj)->list)
+
 enum primtype {
     /* prim_n: n required  */
     /* prim_n_m: n requied, m optional */
@@ -400,13 +402,11 @@ enum primtype {
     prim_1_1, prim_1_2, prim_2_1,
     prim_0_rest, prim_1_rest, prim_2_rest
 };
-
 struct primitive {
     char *name;
     enum primtype prim_type;
     Object (*fun) ();
 };
-
 struct prim {
     ObjectHeader header;
     struct primitive p;
