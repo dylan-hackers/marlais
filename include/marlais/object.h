@@ -68,6 +68,8 @@ typedef struct {
 #error No object model configured.
 #endif
 
+#include <marlais/object-heap.h>
+
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
 #define MARLAIS_TRUE  (TRUEVAL)
 #define MARLAIS_FALSE (FALSEVAL)
