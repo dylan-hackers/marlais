@@ -181,8 +181,8 @@ alphaCHAR	[a-zA-Z]
 leadALPHA	[a-zA-Z]{anyCHAR}*
 leadNUMERIC	[0-9]{anyCHAR}*
 leadGRAPHIC	[!&\*<=>\|\^\$%@_]{anyCHAR}*
-OPSYMS		[-~\+\*\/\^=\<\>&\|]|([\<\>=:~]=)|(~==)
-SYMBOL		{leadALPHA}|({leadNUMERIC}[a-zA-Z]{leadALPHA})|([!&\*<=>\|\^\$%@_]{anyCHAR}*{leadALPHA})|(\${anyCHAR}*)
+OPERATOR	[-~\+\*\/\^=\<\>&\|]|([\<\>=:~]=)|(~==)
+WORD		{leadALPHA}|({leadNUMERIC}[a-zA-Z]{leadALPHA})|([!&\*<=>\|\^\$%@_]{anyCHAR}*{leadALPHA})|(\${anyCHAR}*)
 STRING		\"([^\\\"]|(\\(.|\n)))*\"
 
 %x INI KEY VAL ETC
@@ -290,7 +290,7 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 			 }
 
 
-<ETC>{OPSYMS}		{ /* OPERATOR  SYMBOL */
+<ETC>{OPERATOR}		{ /* OPERATOR  SYMBOL */
 			  return which_operator(yytext, yyleng);
 			}
 
@@ -329,7 +329,7 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 		  return (KEYWORD);
 		}
 
-<ETC>{SYMBOL}:	{
+<ETC>{WORD}:	{
 		  mylval = marlais_make_keyword (yytext);
 		  if (mydebug) {
 			printf("yydebug: got symbol [%s]\n",  yytext);
@@ -341,16 +341,16 @@ STRING		\"([^\\\"]|(\\(.|\n)))*\"
 			}
 
 
-<ETC>{SYMBOL}	{ int tmp = symbol_or_resword (yytext, &mylval);
+<ETC>{WORD}	{ int tmp = symbol_or_resword (yytext, &mylval);
 		  if (mydebug && tmp == SYMBOL) {
 			printf ("yydebug: got symbol [%s]\n", yytext);
 			}
 		  return tmp;
 		}
 
-<ETC>\\{OPSYMS}	{ which_operator (yytext+1, yyleng-1);
-		  return SYMBOL;
-		}
+<ETC>\\{OPERATOR}	{ which_operator (yytext+1, yyleng-1);
+			  return SYMBOL;
+			}
 
 <INI,KEY,VAL,ETC>.	{ process_unrecognized_character (yytext);
 			}
