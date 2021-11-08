@@ -37,6 +37,7 @@
 #include <marlais/alloc.h>
 #include <marlais/apply.h>
 #include <marlais/boolean.h>
+#include <marlais/eval.h>
 #include <marlais/number.h>
 #include <marlais/prim.h>
 #include <marlais/sequence.h>
