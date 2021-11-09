@@ -15,8 +15,8 @@ flex_target(
 # Link parser and lexer
 add_flex_bison_dependency(LEXER PARSER)
 
-# Main executable
-add_executable(marlais
+# Main library
+add_library(libmarlais
   alloc.c
   apply.c
   array.c
@@ -56,21 +56,19 @@ add_executable(marlais
 
   ${BISON_PARSER_OUTPUTS}
   ${FLEX_LEXER_OUTPUTS}
-
-  main.c
 )
 
-target_include_directories(marlais PUBLIC ../include)
+target_include_directories(libmarlais PUBLIC ../include)
 
 # libdl
-target_link_libraries(marlais PUBLIC dl)
+target_link_libraries(libmarlais PUBLIC dl)
 
 # libm
-target_link_libraries(marlais PUBLIC m)
+target_link_libraries(libmarlais PUBLIC m)
 
 # libreadline
-target_link_libraries(marlais PUBLIC readline)
+target_link_libraries(libmarlais PUBLIC readline)
 
 # libgc
-target_link_libraries(marlais PUBLIC ${BDWGC_LINK_LIBRARIES})
-target_include_directories(marlais PRIVATE ${BDWGC_INCLUDE_DIRS})
+target_link_libraries(libmarlais PUBLIC ${BDWGC_LINK_LIBRARIES})
+target_include_directories(libmarlais PRIVATE ${BDWGC_INCLUDE_DIRS})

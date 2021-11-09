@@ -9,3 +9,4 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(BDWGC REQUIRED bdw-gc)
 
 add_subdirectory(src)
+add_subdirectory(bin)

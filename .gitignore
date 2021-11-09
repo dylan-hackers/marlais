@@ -8,4 +8,4 @@ CMakeFiles
 cmake_install.cmake
 src/lexer.gen.*
 src/parser.gen.*
-src/marlais
+bin/marlais
