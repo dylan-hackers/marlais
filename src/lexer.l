@@ -28,7 +28,6 @@
 
 extern char* prompt_continuation;
 extern char* current_prompt;
-extern int load_file_context;
 
 Object header_key;
 Object header_val;

@@ -14,26 +14,9 @@
 #include <marlais/stream.h>
 #include <marlais/table.h>
 
-extern Object dylan_symbol;
-extern Object dylan_user_symbol;
-extern Object empty_string;
-extern Object unwind_protect_symbol;
-extern jmp_buf *the_eval_context;
 
-int trace_bindings = 0;
-
-/* the environment */
-struct frame *the_env;
-
-struct module_binding *the_current_module;
-
-struct modules {
-    int size;
-    struct module_binding **bindings;
-};
-
-struct modules modules =
-{0, NULL};
+/* XXX remaining global */
+struct modules modules;
 
 /* the top level environment */
 #define BIND_ALLOC_CHUNK 4

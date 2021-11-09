@@ -88,9 +88,6 @@ static inline bool LISTP(Object obj) {
   return NULLP(obj)||PAIRP(obj);
 }
 
-/* globals */
-extern jmp_buf error_return;
-
 Object make_handle (Object an_object);
 
 /* important objects */

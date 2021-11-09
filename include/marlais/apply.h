@@ -5,12 +5,6 @@
 
 #include <marlais/common.h>
 
-/* global data */
-extern int trace_functions;
-extern int trace_level;
-extern Object hash_values_symbol;
-extern Object ResultValueStack;
-
 /* Register apply primitives */
 extern void marlais_register_apply (void);
 /* Create the default result value */

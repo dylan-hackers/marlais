@@ -19,9 +19,17 @@ GLOBAL Object marlais_standard_error;
 
 /* globals */
 GLOBAL jmp_buf error_return;
-GLOBAL int definition_level;
-GLOBAL int classic_syntax;
 GLOBAL int load_file_context;
+GLOBAL struct frame *the_env;
+GLOBAL jmp_buf *the_eval_context;
+GLOBAL Object default_module;
+GLOBAL Object all_symbol;
+GLOBAL struct module_binding *the_current_module;
+GLOBAL Object ResultValueStack;
+GLOBAL int trace_bindings;
+GLOBAL int trace_functions;
+GLOBAL int trace_only_user_funs;
+GLOBAL int trace_level;
 
 /* important objects */
 GLOBAL Object apply_symbol;
@@ -66,6 +74,7 @@ GLOBAL Object debug_name_keyword;
 GLOBAL Object min_keyword;
 GLOBAL Object max_keyword;
 GLOBAL Object dim_keyword;
+GLOBAL Object user_keyword;
 
 GLOBAL Object instance_symbol;
 GLOBAL Object class_symbol;

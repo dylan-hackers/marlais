@@ -18,14 +18,6 @@
 #include <marlais/values.h>
 #include <marlais/vector.h>
 
-/* Global data */
-
-int trace_functions = 0;
-int trace_only_user_funs = 0;
-int trace_level = 0;
-Object ResultValueStack;
-static Object user_keyword;
-
 /* Internal functions */
 
 static Object apply_generic (Object gen, Object args);

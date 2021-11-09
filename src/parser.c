@@ -41,8 +41,6 @@
 
 Object *parse_value_ptr;
 
-extern int load_file_context;
-
 void
 marlais_parser_reset (void)
 {

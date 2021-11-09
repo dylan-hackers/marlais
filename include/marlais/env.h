@@ -51,6 +51,11 @@ struct binding {
 #define IS_EXPORTED_BINDING(binding) (binding->props & EXPORTED_BINDING)
 
 
+struct modules {
+    int size;
+    struct module_binding **bindings;
+};
+
 struct module_binding {
     Object sym;
     struct frame *namespace;
@@ -64,10 +69,6 @@ struct frame {
     struct frame *next;
     struct binding **top_level_env;
 };
-
-extern struct frame *the_env;
-extern Object default_module;
-extern Object all_symbol;
 
 void init_env_prims (void);
 
