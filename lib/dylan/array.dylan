@@ -1,9 +1,14 @@
 module: dylan
 
 //
-// array.dyl
+// array.dylan
 //
-// Brent Benson
+// Authors:
+//   Brent Benson
+//
+
+//
+// element
 //
 
 define method element (a :: <array>,
@@ -18,6 +23,10 @@ define method element (a :: <array>,
   %array-ref (a, indices, default);
 end method element;
 
+//
+// element-setter
+//
+
 define method element-setter (new-value, a :: <array>, index :: <integer>)
   %array-element-setter (a, index, new-value);
 end method element-setter;
@@ -26,19 +35,35 @@ define method element-setter (new-value, a :: <array>, indices :: <list>)
   %array-ref-setter (a, indices, new-value);
 end method element-setter;
 
+//
+// dimensions
+//
+
 define method dimensions (a :: <array>)
   %array-dimensions (a);
 end method dimensions;
 
+//
+// size
+//
+
 define method size (a :: <array>)
   %array-size (a);
 end method size;
+
+//
+// rank
+//
 
 define generic rank (a :: <array>) => rank :: <integer>;
 
 define method rank (a :: <array>)
   %array-dimensions (a).size;
 end method rank;
+
+//
+// row-major-index
+//
 
 define generic row-major-index (a :: <array>, #rest subscripts)
  => index :: <integer>;
@@ -47,11 +72,23 @@ define method row-major-index (a :: <array>, #rest subscripts)
   %array-row-major-index (a, subscripts);
 end method row-major-index;
 
+//
+// aref
+//
+
 define generic aref (a :: <array>, #rest indices);
 
 define method aref (a :: <array>, #rest indices)
   %array-ref (a, indices, %default-object);
 end method aref;
+
+define method aref (v :: <vector>, #rest indices)
+  %vector-element (v, indices.first, %default-object);
+end method aref;
+
+//
+// aref-setter
+//
 
 define generic aref-setter (new-val, a :: <array>, #rest indices);
 
@@ -59,13 +96,13 @@ define method aref-setter (new-val, a :: <array>, #rest indices)
   %array-ref-setter (a, indices, new-val);
 end method aref-setter;
 
-define method aref (v :: <vector>, #rest indices)
-  %vector-element (v, indices.first, %default-object);
-end method aref;
-
 define method aref-setter (new-val, v :: <vector>, #rest indices)
   %vector-element-setter (v, indices.first, new-val);
 end method aref-setter;
+
+//
+// dimension
+//
 
 define generic dimension (a :: <array>, axis :: <integer>)
  => dimension :: <integer>;
@@ -73,6 +110,10 @@ define generic dimension (a :: <array>, axis :: <integer>)
 define method dimension (array :: <array>, axis :: <small-integer>)
   element (dimensions (array), axis);
 end method dimension;
+
+//
+// shallow-copy
+//
 
 define method shallow-copy (a :: <array>)
   let new-array = make (<array>, dimensions: dimensions (a));
@@ -83,7 +124,7 @@ define method shallow-copy (a :: <array>)
 end method shallow-copy;
 
 //
-// iteration protocol
+// forward-iteration-protocol implementation
 //
 
 define method initial-state (a :: <array>) => value :: <integer-state>;
@@ -97,5 +138,3 @@ end method next-state;
 define method current-element (a :: <array>, s :: <integer-state>)
   %array-current-element (a, s);
 end method current-element;
-
-// end array.dyl
