@@ -631,7 +631,7 @@ add_module_binding(Object sym, Object val, int constant, int exported)
   the_env->top_level_env[h] = binding;
 
   if (trace_bindings) {
-    marlais_print_obj (marlais_standard_error, sym);
+    fprintf(stderr, "%s %s\n", (exported?"Export":"Binding"), str);
   }
 }
 
