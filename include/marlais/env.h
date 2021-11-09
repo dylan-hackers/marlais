@@ -70,22 +70,27 @@ struct frame {
     struct binding **top_level_env;
 };
 
-void init_env_prims (void);
+extern void marlais_register_env (void);
 
 extern void marlais_module_binding(Object sym, Object val, int constant);
 extern void marlais_module_export(Object sym, Object val, int constant);
 
-void push_scope (Object owner);
-void pop_scope (void);
-Object print_env (struct frame *env);
-Object show_bindings (Object args);
+extern void marlais_push_scope (Object owner);
+extern void marlais_pop_scope (void);
 
 /* Warning!!! - you can't mix calls to add_bindings() and
    add_binding() within the same frame.  Things will get
    hopelessly screwed up.
  */
-void add_bindings (Object syms, Object vals, int constant, struct frame *to_frame);
-void add_binding (Object sym, Object val, int constant, struct frame *to_frame);
+extern void marlais_add_bindings (Object syms, Object vals, int constant,
+				  struct frame *to_frame);
+extern void marlais_add_binding (Object sym, Object val, int constant,
+				 struct frame *to_frame);
+
+
+Object print_env (struct frame *env);
+Object show_bindings (Object args);
+
 int change_binding (Object sym, Object val);
 
 Object symbol_value (Object sym);

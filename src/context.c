@@ -206,7 +206,7 @@ marlais_initialize (void)
   binding_stack = cons (marlais_make_integer (0), make_empty_list ());
 
   /* initialize primitives */
-  init_env_prims ();
+  marlais_register_env ();
   init_list_prims ();
   marlais_register_symbol ();
   marlais_register_class ();

@@ -261,35 +261,35 @@ marlais_error (char *msg,...)
   if (!NoDebug) {
     /* debugger eval loop */
     if (!ret) {
-      push_scope (debugger_symbol);
+      marlais_push_scope (debugger_symbol);
 
       /* Put debugging functions this frame */
-      add_binding (print_env_symbol,
+      marlais_add_binding (print_env_symbol,
 		   marlais_make_primitive ("print-env", prim_0, my_print_env),
 		   1,
 		   the_env);
-      add_binding (print_stack_symbol,
+      marlais_add_binding (print_stack_symbol,
 		   marlais_make_primitive ("print-stack", prim_0, print_stack),
 		   1,
 		   the_env);
-      add_binding (show_bindings_symbol,
+      marlais_add_binding (show_bindings_symbol,
 		   marlais_make_primitive ("show-bindings",
 				   prim_0_rest,
 				   show_bindings),
 		   1,
 		   the_env);
-      add_binding (help_symbol,
+      marlais_add_binding (help_symbol,
 		   marlais_make_primitive ("help",
 				   prim_0_rest,
 				   help_function),
 		   1,
 		   the_env);
 
-      add_binding (return_symbol,
+      marlais_add_binding (return_symbol,
 		   marlais_make_primitive ("return", prim_0_rest, return_value),
 		   1,
 		   the_env);
-      add_binding (fail_symbol,
+      marlais_add_binding (fail_symbol,
 		   marlais_make_primitive ("fail", prim_0, fail_function),
 		   1,
 		   the_env);
@@ -327,7 +327,7 @@ marlais_error (char *msg,...)
       }
       fprintf (stderr, "\n");
       prompt = "? ";
-      pop_scope ();
+      marlais_pop_scope ();
       error_ok_return_pop ();
     } else {
       return ret;
@@ -398,7 +398,7 @@ return_value (Object args)
   if (list_length (args) != 1) {
     fprintf (stderr, "return: Requires one argument\n");
   }
-  pop_scope ();
+  marlais_pop_scope ();
   pop_eval_stack ();
   buf = error_ok_return_pop ();
   longjmp (*buf, (int) (CAR (args)));

@@ -321,7 +321,7 @@ bind_eval (Object form)
     while (!EMPTYLISTP (bindings)) {
       /* <pcb> some hackery to make bind work correctly. */
       enclosing_env = the_env;
-      push_scope (CAR (form));
+      marlais_push_scope (CAR (form));
       binding_env = the_env;
       the_env = enclosing_env;
 
@@ -355,7 +355,7 @@ local_bind_eval (Object form)
 
     /* <pcb> some hackery to make local bind work correctly. */
     enclosing_env = the_env;
-    push_scope (CAR (form));
+    marlais_push_scope (CAR (form));
     binding_env = the_env;
     the_env = enclosing_env;
 
@@ -378,7 +378,7 @@ local_bind_rec_eval (Object form)
     }
     bindings = SECOND (form);
 
-    push_scope (CAR (form));
+    marlais_push_scope (CAR (form));
 
     while (!EMPTYLISTP (bindings)) {
       bind_variables (CAR (bindings), 0, 0, the_env);
@@ -416,7 +416,7 @@ unbinding_begin_eval (Object form)
     }
 
     while (i-- > 0) {
-      pop_scope ();
+      marlais_pop_scope ();
     }
 
     return res;
@@ -441,8 +441,8 @@ bind_exit_eval (Object form)
     }
     exit_obj = make_exit (sym);
 
-    push_scope (CAR (form));
-    add_binding (sym, exit_obj, 1, the_env);
+    marlais_push_scope (CAR (form));
+    marlais_add_binding (sym, exit_obj, 1, the_env);
     EXITBINDING (exit_obj) = the_env->bindings[0];
     ret = (Object) setjmp (*EXITRET (exit_obj));
 
@@ -457,10 +457,10 @@ bind_exit_eval (Object form)
 #else
       eval_body (body, MARLAIS_FALSE);
 #endif
-      pop_scope ();
+      marlais_pop_scope ();
       return (ret);
     } else {
-      pop_scope ();
+      marlais_pop_scope ();
       return (ret);
     }
 }
@@ -477,7 +477,7 @@ bind_methods_eval (Object form)
   specs = SECOND (form);
   body = CDR (CDR (form));
 
-  push_scope (CAR (form));
+  marlais_push_scope (CAR (form));
   /* first bind method names to dummy values */
   if (!PAIRP (specs)) {
     marlais_error ("bind-methods: First argument must be a list of method bindings",
@@ -487,7 +487,7 @@ bind_methods_eval (Object form)
   while (!EMPTYLISTP (specs)) {
     spec = CAR (specs);
     name = FIRST (spec);
-    add_binding (name, MARLAIS_FALSE, 0, the_env);
+    marlais_add_binding (name, MARLAIS_FALSE, 0, the_env);
     specs = CDR (specs);
   }
 
@@ -507,7 +507,7 @@ bind_methods_eval (Object form)
   }
 
   ret = eval_body (body, unspecified_object);
-  pop_scope ();
+  marlais_pop_scope ();
   return (ret);
 }
 
@@ -662,7 +662,7 @@ bind_variables (Object init_list,
         if (top_level) {
           marlais_module_export (variable, first, constant);
         } else {
-          add_binding (variable, first, constant, to_frame);
+          marlais_add_binding (variable, first, constant, to_frame);
         }
         /* check for no variables after #rest */
         if (CDR (CDR (variables)) != init) {
@@ -745,7 +745,7 @@ add_variable_binding (Object var,
     }
     marlais_module_export (var, val, constant);
   } else {
-    add_binding (var, val, constant, to_frame);
+    marlais_add_binding (var, val, constant, to_frame);
   }
 }
 
@@ -1037,8 +1037,8 @@ dotimes_eval (Object form)
     resform = NULL;
   }
 
-  push_scope (CAR (form));
-  add_binding (var, MARLAIS_FALSE, 0, the_env);
+  marlais_push_scope (CAR (form));
+  marlais_add_binding (var, MARLAIS_FALSE, 0, the_env);
   for (i = 0; i < INTVAL (intval); ++i) {
     change_binding (var, marlais_make_integer (i));
     body = CDR (CDR (form));
@@ -1052,7 +1052,7 @@ dotimes_eval (Object form)
   } else {
     res = MARLAIS_FALSE;
   }
-  pop_scope ();
+  marlais_pop_scope ();
   return (res);
 }
 
@@ -1127,7 +1127,7 @@ for_eval (Object form)
   get_vars_and_inits (var_forms, &clause_types, &vars, &inits);
 
   /* IRM Step 2 */
-  push_scope (CAR (form));
+  marlais_push_scope (CAR (form));
   initialize_step_and_numeric_vars (clause_types, vars, inits);
 
   /* IRM Step 3 */
@@ -1139,7 +1139,7 @@ for_eval (Object form)
 
     /* IRM Step 4 */
 
-    push_scope (CAR (form));
+    marlais_push_scope (CAR (form));
     initialize_collection_variables (clause_types, vars, inits);
 
     do {
@@ -1166,7 +1166,7 @@ for_eval (Object form)
       }
       update_collection_variables (clause_types, vars, inits);
     } while (1);
-    pop_scope (); /* To get rid of collection variables */
+    marlais_pop_scope (); /* To get rid of collection variables */
   }
   if (!PAIRP (return_forms)) {
     ret = MARLAIS_FALSE;
@@ -1176,7 +1176,7 @@ for_eval (Object form)
       return_forms = CDR (return_forms);
     }
   }
-  pop_scope ();
+  marlais_pop_scope ();
   return ret;
 }
 
@@ -1309,9 +1309,9 @@ initialize_step_and_numeric_vars (Object clause_types,
   while (PAIRP (clause_types)) {
     if (CAR (clause_types) == variable_keyword) {
       /* explicit step clause */
-      add_binding (CAR (vars), CAR (CAR (inits)), 0, the_env);
+      marlais_add_binding (CAR (vars), CAR (CAR (inits)), 0, the_env);
     } else if (CAR (clause_types) == range_keyword) {
-      add_binding (CAR (vars), CAR (CAR (inits)), 0, the_env);
+      marlais_add_binding (CAR (vars), CAR (CAR (inits)), 0, the_env);
     }
     clause_types = CDR (clause_types);
     vars = CDR (vars);
@@ -1451,7 +1451,7 @@ initialize_collection_variables (Object clause_types,
       protocol = FIRST (CAR (inits));
 
       /* (set! var (current-element collection state)) */
-      add_binding (CAR (vars),
+      marlais_add_binding (CAR (vars),
                    marlais_apply (VALUESELS (protocol)[5],
                                   cons (SECOND (CAR (inits)),
                                         cons (THIRD (CAR (inits)),
@@ -1580,8 +1580,8 @@ for_each_eval (Object form)
     return (MARLAIS_FALSE);
   }
   vals = list_map2 (cur_el_fun, collections, states);
-  push_scope (CAR (form));
-  add_bindings (vars, vals, 0, the_env);
+  marlais_push_scope (CAR (form));
+  marlais_add_bindings (vars, vals, 0, the_env);
 
   while (eval (test_form) == MARLAIS_FALSE) {
     body = CDR (CDR (CDR (form)));
@@ -1591,7 +1591,7 @@ for_each_eval (Object form)
     }
     states = list_map2 (next_state_fun, collections, states);
     if (member (MARLAIS_FALSE, states)) {
-      pop_scope ();
+      marlais_pop_scope ();
       return (MARLAIS_FALSE);
     }
     vals = list_map2 (cur_el_fun, collections, states);
@@ -1610,7 +1610,7 @@ for_each_eval (Object form)
   } else {
     ret = eval_body (return_forms, MARLAIS_FALSE);
   }
-  pop_scope ();
+  marlais_pop_scope ();
   return (ret);
 }
 
@@ -1881,13 +1881,13 @@ unwind_protect_eval (Object form)
   cleanups = CDR (CDR (form));
   unwind = make_unwind (cleanups);
 
-  push_scope (CAR (form));
+  marlais_push_scope (CAR (form));
 
-  add_binding (unwind_symbol, unwind, 1, the_env);
+  marlais_add_binding (unwind_symbol, unwind, 1, the_env);
 
   ret = eval (protected);
 
-  pop_scope ();
+  marlais_pop_scope ();
   return (ret);
 }
 

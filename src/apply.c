@@ -163,7 +163,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
   old_env = the_env;
   the_env = METHENV (meth);
 
-  push_scope (meth);
+  marlais_push_scope (meth);
 
 #ifdef MARLAIS_ENABLE_METHOD_CACHING
   /* next-method stuff only applies to generic function method */
@@ -190,7 +190,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
 #endif
 
       /* make constant binding for next method */
-      add_binding (METHNEXTMETH (meth), next_method, 1, the_env);
+      marlais_add_binding (METHNEXTMETH (meth), next_method, 1, the_env);
     }
 #ifdef MARLAIS_ENABLE_METHOD_CACHING
   }
@@ -219,7 +219,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
                          val, class, meth, NULL);
         }
       }
-      add_binding (sym, val, 0, the_env);
+      marlais_add_binding (sym, val, 0, the_env);
       args = CDR (args);
       params = CDR (params);
     }
@@ -227,7 +227,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
   /* now process #rest and #key parameters */
 
   if ((rest_var = METHRESTPARAM (meth)) != NULL) {
-    add_binding (rest_var, args, 0, the_env);
+    marlais_add_binding (rest_var, args, 0, the_env);
   }
   if (PAIRP (METHKEYPARAMS (meth))) {
     /* copy keys */
@@ -272,7 +272,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
                          0);
         }
       } else {
-        add_binding (SECOND (CAR (*tmp_ptr)), val, 0, the_env);
+        marlais_add_binding (SECOND (CAR (*tmp_ptr)), val, 0, the_env);
         dup_list = cons (keyword, dup_list);
         *tmp_ptr = CDR (*tmp_ptr);
       }
@@ -280,7 +280,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
     }
     /* Bind the missing keyword args to default_object */
     while (PAIRP (keys)) {
-      add_binding (SECOND (CAR (keys)),
+      marlais_add_binding (SECOND (CAR (keys)),
                    eval (THIRD (CAR (keys))),
                    0,
                    the_env);
@@ -361,8 +361,8 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
   }
 #endif
 
-  /* When the_env disappears, we'll need this pop_scope()! */
-  pop_scope ();
+  /* When the_env disappears, we'll need this marlais_pop_scope()! */
+  marlais_pop_scope ();
 
   /* re-assert environment present at the beginning of this function
    */

@@ -119,7 +119,7 @@ marlais_module_export (Object sym, Object val, int constant)
 }
 
 void
-push_scope (Object owner)
+marlais_push_scope (Object owner)
 {
   struct frame *frame;
 
@@ -136,13 +136,13 @@ push_scope (Object owner)
 }
 
 void
-pop_scope (void)
+marlais_pop_scope (void)
 {
   the_env = the_env->next;
 }
 
 void
-add_bindings (Object syms, Object vals, int constant, struct frame *to_frame)
+marlais_add_bindings (Object syms, Object vals, int constant, struct frame *to_frame)
 {
   struct frame *frame;
   struct binding *binding;
@@ -189,7 +189,7 @@ add_bindings (Object syms, Object vals, int constant, struct frame *to_frame)
 }
 
 void
-add_binding (Object sym, Object val, int constant, struct frame *to_frame)
+marlais_add_binding (Object sym, Object val, int constant, struct frame *to_frame)
 {
   struct frame *frame;
   struct binding *binding;
@@ -314,7 +314,7 @@ static struct primitive env_prims[] =
 /* functions */
 
 void
-init_env_prims (void)
+marlais_register_env (void)
 {
   int num = sizeof (env_prims) / sizeof (struct primitive);
   marlais_register_prims (num, env_prims);
