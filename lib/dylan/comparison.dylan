@@ -45,9 +45,3 @@ define constant \>= =
   method (o1, o2)
     ~(o1 < o2);
   end method;
-
-// comparisons
-
-define method \< (c1 :: <character>, c2 :: <character>)
-  as(<integer>, c1) < as(<integer>, c2);
-end method \<;

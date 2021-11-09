@@ -10,6 +10,10 @@ module: dylan
 // Brent Benson
 //
 
+define method \< (c1 :: <character>, c2 :: <character>)
+  as(<integer>, c1) < as(<integer>, c2);
+end method \<;
+
 define method as (ic == <small-integer>, ch :: <character>)
   %character->integer(ch);
 end method as;
