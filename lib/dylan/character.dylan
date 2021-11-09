@@ -1,11 +1,6 @@
 module: dylan
 
-//
-// characters
-//
-
-//
-// character.dyl
+// character.dylan
 //
 // Brent Benson
 //
