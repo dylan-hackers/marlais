@@ -10,15 +10,15 @@ module: dylan
 // Brent Benson
 //
 
-define method \< (c1 :: <character>, c2 :: <character>)
+define sealed method \< (c1 :: <character>, c2 :: <character>)
   %character->integer(c1) < %character->integer(c2);
 end method \<;
 
-define method as (ic == <small-integer>, ch :: <character>)
+define sealed method as (ic == <small-integer>, ch :: <character>)
   %character->integer(ch);
 end method as;
 
-define method as (cc == <character>, i :: <small-integer>)
+define sealed method as (cc == <character>, i :: <small-integer>)
   %integer->character(i);
 end method as;
 
@@ -26,7 +26,7 @@ begin
   let uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   let lowercase = "abcdefghijklmnopqrstuvwxyz";
 
-  define method as-lowercase(c :: <character>)
+  define sealed method as-lowercase(c :: <character>)
     let i = find-key(uppercase,curry(\=,c));
     if (i)
       lowercase[i]
@@ -35,7 +35,7 @@ begin
     end
   end method as-lowercase;
 
-  define method as-uppercase(c :: <character>)
+  define sealed method as-uppercase(c :: <character>)
     let i = find-key(lowercase,curry(\=,c));
     if (i)
       uppercase[i]
