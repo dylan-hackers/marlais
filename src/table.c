@@ -210,8 +210,8 @@ table_element_handle (Object table, Object key, Object *default_val)
   entry = TABLETABLE (table)[h];
 
   old_env = the_env;
-  the_env = module_binding (dylan_symbol)->namespace;
-  equal_fun = symbol_value (equal_symbol);
+  the_env = marlais_get_module (dylan_symbol)->namespace;
+  equal_fun = marlais_symbol_value (equal_symbol);
   the_env = old_env;
 
   while (entry) {
@@ -299,7 +299,7 @@ equal_hash (Object key)
   Object hashfun;
 
   if (INSTANCEP (key)) {
-    hashfun = symbol_value (equal_hash_symbol);
+    hashfun = marlais_symbol_value (equal_hash_symbol);
     /*
      * Need to be able to hash arbitrary instances here!
      */

@@ -35,7 +35,7 @@ static void print_top_level_constant(Object obj, int bind_p)
   if(bind_p) {
     snprintf (symbol_name, 12, "$%i", sequence_num);
     symbol = marlais_make_name (symbol_name);
-    marlais_module_export (symbol, obj, 1);
+    marlais_add_export (symbol, obj, 1);
     fprintf (stdout, " $%i = ", sequence_num);
     sequence_num++;
   }
@@ -157,10 +157,10 @@ main (int argc, char *argv[])
     load(marlais_make_bytestring (init_file));
   }
 
-  set_module (new_module (dylan_user_symbol));
-  current_module ()->exported_bindings = all_symbol;
+  marlais_set_module (marlais_new_module (dylan_user_symbol));
+  marlais_current_module ()->exported_bindings = all_symbol;
 
-  use_module (dylan_symbol,
+  marlais_use_module (dylan_symbol,
 	      all_symbol,
 	      make_empty_list (),
 	      empty_string,
@@ -222,7 +222,7 @@ main (int argc, char *argv[])
     load_file_context = 0;
     the_env = cache_env;
     eval_stack = 0;
-    push_eval_stack (current_module ()->sym);
+    push_eval_stack (marlais_current_module ()->sym);
     num_debug_contexts = 0;
     prompt = "? ";
     current_prompt = prompt;

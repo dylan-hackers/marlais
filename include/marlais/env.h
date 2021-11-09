@@ -72,45 +72,53 @@ struct frame {
 
 extern void marlais_register_env (void);
 
-extern void marlais_module_binding(Object sym, Object val, int constant);
-extern void marlais_module_export(Object sym, Object val, int constant);
+extern Object marlais_make_environment (struct frame *env);
+extern struct frame *marlais_current_environment (void);
 
 extern void marlais_push_scope (Object owner);
 extern void marlais_pop_scope (void);
 
-/* Warning!!! - you can't mix calls to add_bindings() and
-   add_binding() within the same frame.  Things will get
+/* Warning!!! - you can't mix calls to add_locals() and
+   add_local() within the same frame.  Things will get
    hopelessly screwed up.
  */
-extern void marlais_add_bindings (Object syms, Object vals, int constant,
-				  struct frame *to_frame);
-extern void marlais_add_binding (Object sym, Object val, int constant,
-				 struct frame *to_frame);
+extern void marlais_add_locals (Object syms, Object vals, int constant,
+				struct frame *to_frame);
+extern void marlais_add_local (Object sym, Object val, int constant,
+			       struct frame *to_frame);
+
+extern struct module_binding *marlais_get_module (Object module_name);
+extern struct module_binding *marlais_new_module (Object module_name);
+extern struct module_binding *marlais_set_module (struct module_binding *module);
+extern struct module_binding *marlais_current_module (void);
+
+extern void marlais_add_binding(Object sym, Object val, int constant);
+extern void marlais_add_export(Object sym, Object val, int constant);
+extern void marlais_change_binding (Object sym, Object new_val);
+
+extern Object marlais_use_module (Object module_name,
+				  Object imports,
+				  Object exclusions,
+				  Object prefix,
+				  Object renames,
+				  Object exports);
+
+extern Object marlais_user_current_module (void);
+extern Object marlais_user_set_module (Object args);
+
+extern Object marlais_symbol_value (Object sym);
+extern void marlais_modify_value (Object sym, Object new_val);
+
+extern struct binding *marlais_symbol_binding (Object sym);
+extern struct binding *marlais_symbol_binding_top_level (Object sym);
 
 
+
+void fill_table_from_property_set (Object the_table, Object the_set);
 Object print_env (struct frame *env);
 Object show_bindings (Object args);
-
-int change_binding (Object sym, Object val);
-
-Object symbol_value (Object sym);
-void modify_value (Object sym, Object new_val);
-struct frame *current_env (void);
 int unwind_to_exit (Object exit_sym);
-struct binding *symbol_binding_top_level (Object sym);
 struct frame *module_namespace ();
-struct module_binding *new_module (Object module_name);
-struct module_binding *set_module (struct module_binding *module);
-Object use_module (Object module_name,
-                   Object imports,
-                   Object exclusions,
-                   Object prefix,
-                   Object renames,
-                   Object exports);
-Object user_set_module (Object args);
-struct module_binding *current_module (void);
-struct module_binding *module_binding (Object module_name);
-Object make_environment (struct frame *env);
-void fill_table_from_property_set (Object the_table, Object the_set);
+
 
 #endif

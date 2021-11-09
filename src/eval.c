@@ -61,7 +61,7 @@ eval (Object obj)
 			  NULL);
 	}
     case Name:
-	val = symbol_value (obj);
+	val = marlais_symbol_value (obj);
 	if (!val) {
 	    return marlais_error ("unbound variable", obj, NULL);
 	}

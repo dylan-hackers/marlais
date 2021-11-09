@@ -442,7 +442,7 @@ bind_exit_eval (Object form)
     exit_obj = make_exit (sym);
 
     marlais_push_scope (CAR (form));
-    marlais_add_binding (sym, exit_obj, 1, the_env);
+    marlais_add_local (sym, exit_obj, 1, the_env);
     EXITBINDING (exit_obj) = the_env->bindings[0];
     ret = (Object) setjmp (*EXITRET (exit_obj));
 
@@ -487,7 +487,7 @@ bind_methods_eval (Object form)
   while (!EMPTYLISTP (specs)) {
     spec = CAR (specs);
     name = FIRST (spec);
-    marlais_add_binding (name, MARLAIS_FALSE, 0, the_env);
+    marlais_add_local (name, MARLAIS_FALSE, 0, the_env);
     specs = CDR (specs);
   }
 
@@ -502,7 +502,7 @@ bind_methods_eval (Object form)
     params = SECOND (spec);
     method_body = CDR (CDR (spec));
     method = make_method (name, params, method_body, the_env, 0);
-    modify_value (name, method);
+    marlais_modify_value (name, method);
     specs = CDR (specs);
   }
 
@@ -524,7 +524,7 @@ boundp_eval (Object form)
   if (!NAMEP (sym)) {
     marlais_error ("bound?: argument must be a symbol", sym, NULL);
   }
-  return (symbol_value (sym) == NULL ? MARLAIS_FALSE : MARLAIS_TRUE);
+  return (marlais_symbol_value (sym) == NULL ? MARLAIS_FALSE : MARLAIS_TRUE);
 }
 
 static Object
@@ -660,9 +660,9 @@ bind_variables (Object init_list,
           last = new;
         }
         if (top_level) {
-          marlais_module_export (variable, first, constant);
+          marlais_add_export (variable, first, constant);
         } else {
-          marlais_add_binding (variable, first, constant, to_frame);
+          marlais_add_local (variable, first, constant, to_frame);
         }
         /* check for no variables after #rest */
         if (CDR (CDR (variables)) != init) {
@@ -734,7 +734,7 @@ add_variable_binding (Object var,
     type = object_class;
   }
   if (top_level) {
-    /* marlais_module_export can't easily check type match.
+    /* marlais_add_export can't easily check type match.
      * do it here.
      */
     if (!marlais_instance (val, type)) {
@@ -743,9 +743,9 @@ add_variable_binding (Object var,
                      type,
                      NULL);
     }
-    marlais_module_export (var, val, constant);
+    marlais_add_export (var, val, constant);
   } else {
-    marlais_add_binding (var, val, constant, to_frame);
+    marlais_add_local (var, val, constant, to_frame);
   }
 }
 
@@ -816,7 +816,7 @@ define_class_eval (Object form)
   obj = marlais_allocate_object (Class, sizeof (struct clas));
 
   CLASSNAME (obj) = name;
-  marlais_module_export (name, obj, 0);
+  marlais_add_export (name, obj, 0);
   supers = map (eval, CAR (tmp_form));
   if(EMPTYLISTP(supers)) supers = cons(object_class, make_empty_list());
   slots = marlais_make_slot_descriptor_list (CDR (tmp_form), 1);
@@ -876,7 +876,7 @@ define_generic_function_eval (Object form)
 
   check_function_syntax(form, &name, &params, "define-generic-function");
   gf = make_generic_function (name, params, make_empty_list ());
-  marlais_module_export (name, gf, 0);
+  marlais_add_export (name, gf, 0);
   return (unspecified_object);
 }
 
@@ -913,7 +913,7 @@ define_module_eval (Object form)
 
   /* Bogus for now */
   if (PAIRP (form) && list_length (form) >= 2 && NAMEP (SECOND (form))) {
-    the_module = new_module (SECOND (form));
+    the_module = marlais_new_module (SECOND (form));
     clauses = CDR (CDR (form));
 
     while (PAIRP (clauses)) {
@@ -972,14 +972,14 @@ define_module_eval (Object form)
               marlais_error ("Define module: Can't specify both imports: "
                              "and exclusions:", clause, NULL);
             }
-            old_module = set_module (the_module);
-            use_module (module_name,
+            old_module = marlais_set_module (the_module);
+            marlais_use_module (module_name,
                         imports,
                         exclusions,
                         prefix,
                         renames,
                         exports);
-            set_module (old_module);
+            marlais_set_module (old_module);
           } else {
             marlais_error ("define-module: Bad use clause", clause, NULL);
           }
@@ -1038,9 +1038,9 @@ dotimes_eval (Object form)
   }
 
   marlais_push_scope (CAR (form));
-  marlais_add_binding (var, MARLAIS_FALSE, 0, the_env);
+  marlais_add_local (var, MARLAIS_FALSE, 0, the_env);
   for (i = 0; i < INTVAL (intval); ++i) {
-    change_binding (var, marlais_make_integer (i));
+    marlais_change_binding (var, marlais_make_integer (i));
     body = CDR (CDR (form));
     while (!EMPTYLISTP (body)) {
       res = eval (CAR (body));
@@ -1309,9 +1309,9 @@ initialize_step_and_numeric_vars (Object clause_types,
   while (PAIRP (clause_types)) {
     if (CAR (clause_types) == variable_keyword) {
       /* explicit step clause */
-      marlais_add_binding (CAR (vars), CAR (CAR (inits)), 0, the_env);
+      marlais_add_local (CAR (vars), CAR (CAR (inits)), 0, the_env);
     } else if (CAR (clause_types) == range_keyword) {
-      marlais_add_binding (CAR (vars), CAR (CAR (inits)), 0, the_env);
+      marlais_add_local (CAR (vars), CAR (CAR (inits)), 0, the_env);
     }
     clause_types = CDR (clause_types);
     vars = CDR (vars);
@@ -1451,7 +1451,7 @@ initialize_collection_variables (Object clause_types,
       protocol = FIRST (CAR (inits));
 
       /* (set! var (current-element collection state)) */
-      marlais_add_binding (CAR (vars),
+      marlais_add_local (CAR (vars),
                    marlais_apply (VALUESELS (protocol)[5],
                                   cons (SECOND (CAR (inits)),
                                         cons (THIRD (CAR (inits)),
@@ -1504,7 +1504,7 @@ update_explicit_and_numeric_clauses (Object clause_types,
   /* Do the bindings */
   while (PAIRP (vars_copy)) {
     if (!EMPTYLISTP (new_values)) {
-      modify_value (variable_name (CAR (vars_copy)),
+      marlais_modify_value (variable_name (CAR (vars_copy)),
                     CAR (new_values));
       vars_copy = CDR (vars_copy);
       new_values = CDR (new_values);
@@ -1524,7 +1524,7 @@ update_collection_variables (Object clause_types,
       protocol = FIRST (CAR (inits));
 
       /* (set! var (current-element collection state)) */
-      modify_value (CAR (vars),
+      marlais_modify_value (CAR (vars),
                     marlais_apply (VALUESELS (protocol)[5],
                                    cons (SECOND (CAR (inits)),
                                          cons (THIRD (CAR (inits)),
@@ -1549,15 +1549,15 @@ for_each_eval (Object form)
   Object vars, collections, states, vals, body, ret, temp_vars;
   Object init_state_fun, next_state_fun, cur_el_fun;
 
-  init_state_fun = symbol_value (initial_state_sym);
+  init_state_fun = marlais_symbol_value (initial_state_sym);
   if (!init_state_fun) {
     marlais_error ("for-each: no initial-state function defined", NULL);
   }
-  next_state_fun = symbol_value (next_state_sym);
+  next_state_fun = marlais_symbol_value (next_state_sym);
   if (!next_state_fun) {
     marlais_error ("for-each: no next-state function defined", NULL);
   }
-  cur_el_fun = symbol_value (current_element_sym);
+  cur_el_fun = marlais_symbol_value (current_element_sym);
   if (!cur_el_fun) {
     marlais_error ("for-each: no current-element function defined", NULL);
   }
@@ -1581,7 +1581,7 @@ for_each_eval (Object form)
   }
   vals = list_map2 (cur_el_fun, collections, states);
   marlais_push_scope (CAR (form));
-  marlais_add_bindings (vars, vals, 0, the_env);
+  marlais_add_locals (vars, vals, 0, the_env);
 
   while (eval (test_form) == MARLAIS_FALSE) {
     body = CDR (CDR (CDR (form)));
@@ -1599,7 +1599,7 @@ for_each_eval (Object form)
     /* modify bindings */
     temp_vars = vars;
     while (!EMPTYLISTP (temp_vars)) {
-      modify_value (CAR (temp_vars), CAR (vals));
+      marlais_modify_value (CAR (temp_vars), CAR (vals));
       temp_vars = CDR (temp_vars);
       vals = CDR (vals);
     }
@@ -1817,7 +1817,7 @@ set_eval (Object form)
     marlais_error ("set!: missing forms", form, NULL);
   }
   val = marlais_devalue (eval (THIRD (form)));
-  modify_value (sym, val);
+  marlais_modify_value (sym, val);
   return (val);
 }
 
@@ -1825,7 +1825,7 @@ static Object
 set_module_eval (Object form)
 {
   if (PAIRP (form) && list_length (form) == 2 && SYMBOLP (SECOND (form))) {
-    return user_set_module (marlais_devalue (CDR (form)));
+    return marlais_user_set_module (marlais_devalue (CDR (form)));
   } else {
     marlais_error ("set_module: argument list not a single symbol", form, NULL);
   }
@@ -1883,7 +1883,7 @@ unwind_protect_eval (Object form)
 
   marlais_push_scope (CAR (form));
 
-  marlais_add_binding (unwind_symbol, unwind, 1, the_env);
+  marlais_add_local (unwind_symbol, unwind, 1, the_env);
 
   ret = eval (protected);
 

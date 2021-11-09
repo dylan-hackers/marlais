@@ -520,12 +520,12 @@ make_method (Object name, Object params, Object body, struct frame *env, int do_
 #endif
 
   if (do_generic && name) {
-    gf = symbol_value (name);
+    gf = marlais_symbol_value (name);
     if (!gf) {
       gf = make_generic_function (name,
                                   create_generic_parameters (params),
                                   make_empty_list ());
-      marlais_module_export (name, gf, 0);
+      marlais_add_export (name, gf, 0);
     }
     add_method (gf, obj);
     return (gf);

@@ -4,6 +4,7 @@
 
 #include <marlais/alloc.h>
 #include <marlais/bytestring.h>
+#include <marlais/env.h>
 #include <marlais/list.h>
 #include <marlais/symbol.h>
 
@@ -16,7 +17,7 @@ marlais_register_prims (int num, struct primitive prims[])
   for (i = 0; i < num; ++i) {
     sym = marlais_make_name (prims[i].name);
     prim = marlais_make_primitive (prims[i].name, prims[i].prim_type, prims[i].fun);
-    marlais_module_export (sym, prim, 0);
+    marlais_add_binding (sym, prim, 0);
   }
 }
 

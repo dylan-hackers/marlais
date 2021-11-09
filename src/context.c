@@ -14,10 +14,10 @@ marlais_initialize (void)
   dylan_symbol = marlais_make_name ("dylan");
   dylan_user_symbol = marlais_make_name ("dylan-user");
 
-  set_module (new_module (dylan_symbol));
+  marlais_set_module (marlais_new_module (dylan_symbol));
 
   all_symbol = marlais_make_name ("all");
-  (current_module ())->exported_bindings = all_symbol;
+  (marlais_current_module ())->exported_bindings = all_symbol;
 
   /* intialize global objects */
   marlais_initialize_boolean ();
@@ -190,18 +190,18 @@ marlais_initialize (void)
   unspecified_object = make_unspecified_object ();
 
   /* make the unspecified object available */
-  marlais_module_export (marlais_make_name ("%unspecified"),
+  marlais_add_export (marlais_make_name ("%unspecified"),
                          unspecified_object,
                          1);
 
   /* make the uninitialize slot value available */
-  marlais_module_export (marlais_make_name ("%uninitialized-slot-value"),
+  marlais_add_export (marlais_make_name ("%uninitialized-slot-value"),
                          uninit_slot_object,
                          1);
 
   /* make default object */
   default_object = cons (MARLAIS_FALSE, MARLAIS_FALSE);
-  marlais_module_export (marlais_make_name ("%default-object"), default_object, 1);
+  marlais_add_export (marlais_make_name ("%default-object"), default_object, 1);
 
   binding_stack = cons (marlais_make_integer (0), make_empty_list ());
 

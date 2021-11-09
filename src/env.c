@@ -25,97 +25,50 @@ struct modules modules;
 #define TOP_LEVEL_SIZE 1024
 /* struct binding *top_level_env[TOP_LEVEL_SIZE]; */
 
-/* local function prototypes */
-struct binding *symbol_binding (Object sym);
+/* Internal function declarations */
+
+static struct frame *initialize_namespace (Object owner);
+static void add_module_binding(Object sym, Object val,
+			       int constant, int exported);
+
 static Object concat_prefix (char *prefix_string, Object sym);
 static void fill_imports_table_from_property_set (Object imports_table,
-                                                  Object imports_set,
-                                                  Object renames_table);
+						  Object imports_set,
+						  Object renames_table);
 
-/* function definitions */
+/* Primitives */
 
-static struct frame *
-initialize_namespace (Object owner)
+static struct primitive env_prims[] =
 {
-  struct frame *frame;
+    {"current-module", prim_0, marlais_user_current_module},
+    {"set-module", prim_0_rest, marlais_user_set_module},
+#if 0
+    {"reset-module", prim_0_rest, reset_module},
+#endif
+};
 
-  frame = MARLAIS_ALLOCATE_STRUCT (struct frame);
-  frame->size = TOP_LEVEL_SIZE;
-  frame->owner = owner;
-  frame->bindings =
-    (struct binding **) marlais_allocate_memory (TOP_LEVEL_SIZE * sizeof (struct binding));
-  frame->next = NULL;
-  frame->top_level_env = frame->bindings;
-
-  return frame;
-}
-
-static void
-marlais_module_binding_internal(Object sym, Object val, int constant, int exported)
-{
-  struct binding *binding, *old_binding;
-  int i;
-  unsigned h;
-  char *str;
-
-  binding = MARLAIS_ALLOCATE_STRUCT (struct binding);
-
-  if (PAIRP (sym)) {
-    binding->sym = CAR (sym);
-    binding->type = eval (SECOND (sym));
-  } else {
-    binding->sym = sym;
-    binding->type = object_class;
-  }
-
-  binding->props &= !IMPORTED_BINDING;
-
-  /* Just for now, hide all bindings starting with '%' */
-  if(exported)
-    binding->props |= EXPORTED_BINDING;
-
-  if (constant) {
-    binding->props |= CONSTANT_BINDING;
-  }
-  old_binding = symbol_binding_top_level (binding->sym);
-  if (old_binding != NULL) {
-    marlais_warning ("Symbol already defined. Previous value", sym,
-                     *(old_binding->val), NULL);
-  }
-  binding->val = (Object *) marlais_allocate_memory (sizeof (Object *));
-
-  *(binding->val) = val;
-
-  i = h = 0;
-  str = SYMBOLNAME (binding->sym);
-  while (str[i]) {
-    h += str[i++];
-  }
-/*
-   h = h % TOP_LEVEL_SIZE;
- */
-
-  /* Works only if TOP_LEVEL_SIZE is a power of 2 */
-  h &= (TOP_LEVEL_SIZE - 1);
-
-  binding->next = the_env->top_level_env[h];
-  the_env->top_level_env[h] = binding;
-
-  if (trace_bindings) {
-    marlais_print_obj (marlais_standard_error, sym);
-  }
-}
+/* Exported functions */
 
 void
-marlais_module_binding (Object sym, Object val, int constant)
+marlais_register_env (void)
 {
-  marlais_module_binding_internal(sym, val, constant, 0);
+  int num = sizeof (env_prims) / sizeof (struct primitive);
+  marlais_register_prims (num, env_prims);
 }
 
-void
-marlais_module_export (Object sym, Object val, int constant)
+Object
+marlais_make_environment (struct frame *env)
 {
-  marlais_module_binding_internal(sym, val, constant, 1);
+  Object obj;
+  obj = marlais_allocate_object (Environment, sizeof (struct environment));
+  ENVIRONMENT (obj) = env;
+  return obj;
+}
+
+struct frame *
+marlais_current_environment (void)
+{
+  return (the_env);
 }
 
 void
@@ -142,7 +95,7 @@ marlais_pop_scope (void)
 }
 
 void
-marlais_add_bindings (Object syms, Object vals, int constant, struct frame *to_frame)
+marlais_add_locals (Object syms, Object vals, int constant, struct frame *to_frame)
 {
   struct frame *frame;
   struct binding *binding;
@@ -189,7 +142,7 @@ marlais_add_bindings (Object syms, Object vals, int constant, struct frame *to_f
 }
 
 void
-marlais_add_binding (Object sym, Object val, int constant, struct frame *to_frame)
+marlais_add_local (Object sym, Object val, int constant, struct frame *to_frame)
 {
   struct frame *frame;
   struct binding *binding;
@@ -205,7 +158,7 @@ marlais_add_binding (Object sym, Object val, int constant, struct frame *to_fram
   binding->val = (Object *) marlais_allocate_memory (sizeof (Object *));
 
   if (!marlais_instance (val, binding->type)) {
-    marlais_error ("add_binding: value does not satisfy type constraint",
+    marlais_error ("add_local: value does not satisfy type constraint",
                    val,
                    binding->type,
                    NULL);
@@ -228,194 +181,23 @@ marlais_add_binding (Object sym, Object val, int constant, struct frame *to_fram
   frame->size++;
 }
 
-/* Change the binding of the symbol in top-most frame.
-   Return 1 on success.  If there is no such binding,
-   return 0.
-
-   This isn't correct.  It uses symbol_binding() which
-   checks *all* bindings of the symbol, not just the
-   top level.
- */
-int
-change_binding (Object sym, Object val)
+struct module_binding *
+marlais_get_module (Object module_name)
 {
-  struct binding *binding;
-
-  binding = symbol_binding (sym);
-  if (!binding) {
-    return (0);
-  } else {
-    /* if ( ! marlais_instance (val, binding->type)) { */
-    *(binding->val) = val;
-    return 1;
-    /* } else {
-       error("attempt to assign binding of wrong type", sym, val,NULL);
-       return 0;
-       }
-    */
-  }
-}
-
-Object
-symbol_value (Object sym)
-{
-  struct binding *binding;
-
-  binding = symbol_binding (sym);
-  if (!binding) {
-    return (NULL);
-  }
-  return (*(binding->val));
-}
-
-void
-modify_value (Object sym, Object new_val)
-{
-  struct binding *binding;
-
-  binding = symbol_binding (sym);
-  if (!binding) {
-    marlais_error ("attempt to modify value of unbound symbol", sym, NULL);
-  } else if (IS_CONSTANT_BINDING (binding)) {
-    marlais_error ("attempt to modify value of a constant", sym, NULL);
-  } else if (marlais_instance (new_val, binding->type)) {
-    *(binding->val) = new_val;
-  } else {
-    marlais_error ("attempt to assign variable an incompatible object",
-                   sym, new_val, NULL);
-  }
-}
-
-struct frame *
-current_env (void)
-{
-  return (the_env);
-}
-
-/* primitives */
-
-Object user_current_module (void);
-Object user_set_module (Object args);
-
-#if 0
-static Object reset_module (Object args);
-
-#endif
-
-static struct primitive env_prims[] =
-{
-  {"current-module", prim_0, user_current_module},
-  {"set-module", prim_0_rest, user_set_module},
-#if 0
-  {"reset-module", prim_0_rest, reset_module},
-#endif
-};
-
-/* functions */
-
-void
-marlais_register_env (void)
-{
-  int num = sizeof (env_prims) / sizeof (struct primitive);
-  marlais_register_prims (num, env_prims);
-}
-
-/* local functions */
-
-/* made symbol_binding non local to be able to fix <object> binding */
-struct binding *
-symbol_binding (Object sym)
-{
-  struct frame *frame;
-  struct binding *binding;
+  struct module_binding *binding;
   int i;
 
-  frame = the_env;
-  while (frame->bindings != frame->top_level_env) {
-    for (i = 0; i < frame->size; ++i) {
-      binding = frame->bindings[i];
-      if (binding->sym == sym) {
-        return (binding);
-      }
-    }
-    frame = frame->next;
-    if (!frame)
-      break; /* <pcb> I/'ve observed this to be nil in a special case. */
-  }
-  /* can't find binding in frames, look at top_level */
-  return (symbol_binding_top_level (sym));
-}
-
-struct binding *
-symbol_binding_top_level (Object sym)
-{
-  struct binding *binding;
-  int h, i;
-  char *str;
-
-  i = h = 0;
-  str = SYMBOLNAME (sym);
-  while (str[i]) {
-    h += str[i++];
-  }
-  h = h % TOP_LEVEL_SIZE;
-
-  binding = the_env->top_level_env[h];
-  while (binding) {
-    if (binding->sym == sym) {
+  for (i = 0; i < modules.size; ++i) {
+    binding = modules.bindings[i];
+    if (binding->sym == module_name) {
       return (binding);
     }
-    binding = binding->next;
   }
-  return (NULL);
-}
-
-/* Unwind the eval stack until we reach a context having a frame
- * with exit_sym as its only binding.  Perform unwind-protect
- * cleanups when we find them.
- */
-int
-unwind_to_exit (Object exit_proc)
-{
-  struct frame *frame;
-  Object body;
-  struct eval_stack *tmp_eval_stack, *save_eval_stack;
-
-  /* pop the current frame off the stack.  It can't be right. */
-  save_eval_stack = eval_stack;
-  tmp_eval_stack = eval_stack->next;
-
-  while (tmp_eval_stack) {
-    frame = tmp_eval_stack->frame;
-    if (frame->bindings) {
-      if (frame->bindings[0] == EXITBINDING (exit_proc)) {
-        the_env = tmp_eval_stack->frame;
-        eval_stack = tmp_eval_stack;
-        return 1;
-      }
-      if (tmp_eval_stack->context == unwind_protect_symbol) {
-        body = UNWINDBODY (*(frame->bindings[0]->val));
-        the_env = tmp_eval_stack->frame;
-        while (!EMPTYLISTP (body)) {
-          eval (CAR (body));
-          body = CDR (body);
-        }
-      }
-    }
-    save_eval_stack = tmp_eval_stack;
-    tmp_eval_stack = tmp_eval_stack->next;
-  }
-
-  the_env = save_eval_stack->frame;
-  eval_stack = save_eval_stack;
-  marlais_error ("unwound to end of stack without finding exit context",
-                 exit_proc,
-                 NULL);
-  return 0;
+  marlais_fatal ("Unable to find binding for module");
 }
 
 struct module_binding *
-new_module (Object module_name)
+marlais_new_module (Object module_name)
 {
   struct module_binding *this_module;
 
@@ -434,49 +216,10 @@ new_module (Object module_name)
   return this_module;
 }
 
-
 struct module_binding *
-module_binding (Object module_name)
+marlais_set_module (struct module_binding *new_module)
 {
-  struct module_binding *binding;
-  int i;
-
-  for (i = 0; i < modules.size; ++i) {
-    binding = modules.bindings[i];
-    if (binding->sym == module_name) {
-      return (binding);
-    }
-  }
-  marlais_fatal ("Unable to find binding for module");
-}
-
-Object
-user_set_module (Object args)
-{
-  Object module_name;
-
-  if (list_length (args) != 1) {
-    return marlais_error ("set-module: requires a single argument", NULL);
-  } else {
-    module_name = CAR (args);
-  }
-  if (SYMBOLP (module_name)) {
-    return
-      marlais_name_to_symbol (set_module
-                              (module_binding
-                               (marlais_symbol_to_name (module_name)))
-                              ->sym);
-  } else {
-    return marlais_error ("set-module: argument should be a symbol",
-                          module_name,
-                          NULL);
-  }
-}
-
-struct module_binding *
-set_module (struct module_binding *new_module)
-{
-  struct module_binding *old_module = current_module ();
+  struct module_binding *old_module = marlais_current_module ();
 
   the_env = new_module->namespace;
   if (eval_stack && eval_stack->next == 0) {
@@ -487,6 +230,42 @@ set_module (struct module_binding *new_module)
 
   the_current_module = new_module;
   return old_module;
+}
+
+struct module_binding *
+marlais_current_module ()
+{
+  return the_current_module;
+}
+
+void
+marlais_add_binding (Object sym, Object val, int constant)
+{
+  add_module_binding(sym, val, constant, 0);
+}
+
+void
+marlais_add_export (Object sym, Object val, int constant)
+{
+  add_module_binding(sym, val, constant, 1);
+}
+
+void
+marlais_change_binding (Object sym, Object new_val)
+{
+  struct binding *binding;
+
+  binding = marlais_symbol_binding_top_level (sym);
+  if (!binding) {
+    marlais_error ("attempt to modify value of unbound symbol", sym, NULL);
+  } else if (IS_CONSTANT_BINDING (binding)) {
+    marlais_error ("attempt to modify value of a constant", sym, NULL);
+  } else if (marlais_instance (new_val, binding->type)) {
+    *(binding->val) = new_val;
+  } else {
+    marlais_error ("attempt to assign variable an incompatible object",
+                   sym, new_val, NULL);
+  }
 }
 
 static void
@@ -508,12 +287,12 @@ import_top_level_binding (struct binding *import_binding,
 }
 
 Object
-use_module (Object module_name,
-            Object imports,
-            Object exclusions,
-            Object prefix,
-            Object renames,
-            Object exports)
+marlais_use_module (Object module_name,
+		    Object imports,
+		    Object exclusions,
+		    Object prefix,
+		    Object renames,
+		    Object exports)
 {
   struct frame *frame;
   struct binding *binding;
@@ -561,7 +340,7 @@ use_module (Object module_name,
    */
   if (NAMEP (module_name)) {
 
-    import_module = module_binding (module_name);
+    import_module = marlais_get_module (module_name);
     frame = import_module->namespace;
     /* Look at each has location */
     for (i = 0; i < TOP_LEVEL_SIZE; i++) {
@@ -602,7 +381,7 @@ use_module (Object module_name,
            *     module (Squawk but don't die).
            *  2. We're importing the same symbol again (Say nothing).
            */
-          old_binding = symbol_binding_top_level (new_sym);
+          old_binding = marlais_symbol_binding_top_level (new_sym);
           if (old_binding != NULL) {
             if (GFUNP (*(old_binding->val))
                 && GFUNP (*(bindings->val))) {
@@ -676,15 +455,243 @@ use_module (Object module_name,
 }
 
 Object
-user_current_module ()
+marlais_user_set_module (Object args)
 {
-  return marlais_name_to_symbol (current_module ()->sym);
+  Object module_name;
+
+  if (list_length (args) != 1) {
+    return marlais_error ("set-module: requires a single argument", NULL);
+  } else {
+    module_name = CAR (args);
+  }
+  if (SYMBOLP (module_name)) {
+    return
+      marlais_name_to_symbol (marlais_set_module
+                              (marlais_get_module
+                               (marlais_symbol_to_name (module_name)))
+                              ->sym);
+  } else {
+    return marlais_error ("set-module: argument should be a symbol",
+                          module_name,
+                          NULL);
+  }
 }
 
-struct module_binding *
-current_module ()
+Object
+marlais_user_current_module ()
 {
-  return the_current_module;
+  return marlais_name_to_symbol (marlais_current_module ()->sym);
+}
+
+Object
+marlais_symbol_value (Object sym)
+{
+  struct binding *binding;
+
+  binding = marlais_symbol_binding (sym);
+  if (!binding) {
+    return (NULL);
+  }
+  return (*(binding->val));
+}
+
+void
+marlais_modify_value (Object sym, Object new_val)
+{
+  struct binding *binding;
+
+  binding = marlais_symbol_binding (sym);
+  if (!binding) {
+    marlais_error ("attempt to modify value of unbound symbol", sym, NULL);
+  } else if (IS_CONSTANT_BINDING (binding)) {
+    marlais_error ("attempt to modify value of a constant", sym, NULL);
+  } else if (marlais_instance (new_val, binding->type)) {
+    *(binding->val) = new_val;
+  } else {
+    marlais_error ("attempt to assign variable an incompatible object",
+                   sym, new_val, NULL);
+  }
+}
+
+/* made symbol_binding non local to be able to fix <object> binding */
+struct binding *
+marlais_symbol_binding (Object sym)
+{
+  struct frame *frame;
+  struct binding *binding;
+  int i;
+
+  frame = the_env;
+  while (frame->bindings != frame->top_level_env) {
+    for (i = 0; i < frame->size; ++i) {
+      binding = frame->bindings[i];
+      if (binding->sym == sym) {
+        return (binding);
+      }
+    }
+    frame = frame->next;
+    if (!frame)
+      break; /* <pcb> I/'ve observed this to be nil in a special case. */
+  }
+  /* can't find binding in frames, look at top_level */
+  return (marlais_symbol_binding_top_level (sym));
+}
+
+struct binding *
+marlais_symbol_binding_top_level (Object sym)
+{
+  struct binding *binding;
+  int h, i;
+  char *str;
+
+  i = h = 0;
+  str = SYMBOLNAME (sym);
+  while (str[i]) {
+    h += str[i++];
+  }
+  h = h % TOP_LEVEL_SIZE;
+
+  binding = the_env->top_level_env[h];
+  while (binding) {
+    if (binding->sym == sym) {
+      return (binding);
+    }
+    binding = binding->next;
+  }
+  return (NULL);
+}
+
+/* Internal functions */
+
+static struct frame *
+initialize_namespace (Object owner)
+{
+  struct frame *frame;
+
+  frame = MARLAIS_ALLOCATE_STRUCT (struct frame);
+  frame->size = TOP_LEVEL_SIZE;
+  frame->owner = owner;
+  frame->bindings =
+    (struct binding **) marlais_allocate_memory (TOP_LEVEL_SIZE * sizeof (struct binding));
+  frame->next = NULL;
+  frame->top_level_env = frame->bindings;
+
+  return frame;
+}
+
+static void
+add_module_binding(Object sym, Object val, int constant, int exported)
+{
+  struct binding *binding, *old_binding;
+  int i;
+  unsigned h;
+  char *str;
+
+  binding = MARLAIS_ALLOCATE_STRUCT (struct binding);
+
+  if (PAIRP (sym)) {
+    binding->sym = CAR (sym);
+    binding->type = eval (SECOND (sym));
+  } else {
+    binding->sym = sym;
+    binding->type = object_class;
+  }
+
+  binding->props &= !IMPORTED_BINDING;
+
+  /* Just for now, hide all bindings starting with '%' */
+  if(exported)
+    binding->props |= EXPORTED_BINDING;
+
+  if (constant) {
+    binding->props |= CONSTANT_BINDING;
+  }
+  old_binding = marlais_symbol_binding_top_level (binding->sym);
+  if (old_binding != NULL) {
+    marlais_warning ("Symbol already defined. Previous value", sym,
+                     *(old_binding->val), NULL);
+  }
+  binding->val = (Object *) marlais_allocate_memory (sizeof (Object *));
+
+  *(binding->val) = val;
+
+  i = h = 0;
+  str = SYMBOLNAME (binding->sym);
+  while (str[i]) {
+    h += str[i++];
+  }
+/*
+   h = h % TOP_LEVEL_SIZE;
+ */
+
+  /* Works only if TOP_LEVEL_SIZE is a power of 2 */
+  h &= (TOP_LEVEL_SIZE - 1);
+
+  binding->next = the_env->top_level_env[h];
+  the_env->top_level_env[h] = binding;
+
+  if (trace_bindings) {
+    marlais_print_obj (marlais_standard_error, sym);
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Unwind the eval stack until we reach a context having a frame
+ * with exit_sym as its only binding.  Perform unwind-protect
+ * cleanups when we find them.
+ */
+int
+unwind_to_exit (Object exit_proc)
+{
+  struct frame *frame;
+  Object body;
+  struct eval_stack *tmp_eval_stack, *save_eval_stack;
+
+  /* pop the current frame off the stack.  It can't be right. */
+  save_eval_stack = eval_stack;
+  tmp_eval_stack = eval_stack->next;
+
+  while (tmp_eval_stack) {
+    frame = tmp_eval_stack->frame;
+    if (frame->bindings) {
+      if (frame->bindings[0] == EXITBINDING (exit_proc)) {
+        the_env = tmp_eval_stack->frame;
+        eval_stack = tmp_eval_stack;
+        return 1;
+      }
+      if (tmp_eval_stack->context == unwind_protect_symbol) {
+        body = UNWINDBODY (*(frame->bindings[0]->val));
+        the_env = tmp_eval_stack->frame;
+        while (!EMPTYLISTP (body)) {
+          eval (CAR (body));
+          body = CDR (body);
+        }
+      }
+    }
+    save_eval_stack = tmp_eval_stack;
+    tmp_eval_stack = tmp_eval_stack->next;
+  }
+
+  the_env = save_eval_stack->frame;
+  eval_stack = save_eval_stack;
+  marlais_error ("unwound to end of stack without finding exit context",
+                 exit_proc,
+                 NULL);
+  return 0;
 }
 
 Object
@@ -752,17 +759,6 @@ show_bindings (Object args)
 
   }
   return unspecified_object;
-}
-
-Object
-make_environment (struct frame *env)
-{
-  Object obj;
-
-  obj = marlais_allocate_object (Environment, sizeof (struct environment));
-
-  ENVIRONMENT (obj) = env;
-  return obj;
 }
 
 /* XXX move to symbol.c */

@@ -264,32 +264,32 @@ marlais_error (char *msg,...)
       marlais_push_scope (debugger_symbol);
 
       /* Put debugging functions this frame */
-      marlais_add_binding (print_env_symbol,
+      marlais_add_local (print_env_symbol,
 		   marlais_make_primitive ("print-env", prim_0, my_print_env),
 		   1,
 		   the_env);
-      marlais_add_binding (print_stack_symbol,
+      marlais_add_local (print_stack_symbol,
 		   marlais_make_primitive ("print-stack", prim_0, print_stack),
 		   1,
 		   the_env);
-      marlais_add_binding (show_bindings_symbol,
+      marlais_add_local (show_bindings_symbol,
 		   marlais_make_primitive ("show-bindings",
 				   prim_0_rest,
 				   show_bindings),
 		   1,
 		   the_env);
-      marlais_add_binding (help_symbol,
+      marlais_add_local (help_symbol,
 		   marlais_make_primitive ("help",
 				   prim_0_rest,
 				   help_function),
 		   1,
 		   the_env);
 
-      marlais_add_binding (return_symbol,
+      marlais_add_local (return_symbol,
 		   marlais_make_primitive ("return", prim_0_rest, return_value),
 		   1,
 		   the_env);
-      marlais_add_binding (fail_symbol,
+      marlais_add_local (fail_symbol,
 		   marlais_make_primitive ("fail", prim_0, fail_function),
 		   1,
 		   the_env);
@@ -309,7 +309,7 @@ marlais_error (char *msg,...)
 
 	  snprintf (symbol_name, 12, "$%i", sequence_num);
 	  symbol = marlais_make_name (symbol_name);
-	  marlais_module_export (symbol, obj, 1);
+	  marlais_add_export (symbol, obj, 1);
 	  fprintf (stdout, " $%i = ", sequence_num);
 	  sequence_num++;
 	}
@@ -333,7 +333,7 @@ marlais_error (char *msg,...)
       return ret;
     }
   }
-  signal_value = symbol_value (signal_symbol);
+  signal_value = marlais_symbol_value (signal_symbol);
   if (signal_value) {
     marlais_apply (signal_value,
 	   cons (marlais_make (simple_error_class, make_empty_list ()),

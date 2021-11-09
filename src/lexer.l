@@ -758,8 +758,8 @@ make_header_val()
 {
 	if (header_key == module_keyword) {
 		Object symbol = marlais_make_name (get_nonws_symbol (yytext));
-		struct module_binding *module = module_binding (symbol);
-		set_module (module);
+		struct module_binding *module = marlais_get_module (symbol);
+		marlais_set_module (module);
 	}
 }
 

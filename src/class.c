@@ -21,8 +21,6 @@
 #include <marlais/values.h>
 #include <marlais/vector.h>
 
-extern struct binding *symbol_binding (Object sym);
-
 int last_class_index = 0;
 static Object class_slots_class;
 
@@ -92,7 +90,7 @@ marlais_initialize_class (void)
   {
     struct binding *binding;
 
-    binding = symbol_binding (CLASSNAME (object_class));
+    binding = marlais_symbol_binding (CLASSNAME (object_class));
     binding->type = object_class;
   }
   boolean_class = make_builtin_class ("<boolean>", object_class);
@@ -521,7 +519,7 @@ marlais_make (Object class, Object rest)
   } else {
     ret = make_instance (class, &rest);
   }
-  initialize_fun = symbol_value (initialize_symbol);
+  initialize_fun = marlais_symbol_value (initialize_symbol);
   if (initialize_fun) {
     marlais_apply (initialize_fun, cons (ret, rest));
   } else {
@@ -891,7 +889,7 @@ marlais_make_getter_setter_gfs (Object slotds)
 
     getter = SLOTDGETTER (CAR (slotds));
     if (NAMEP (getter)) {
-      if (NULL == symbol_value (getter)) {
+      if (NULL == marlais_symbol_value (getter)) {
         SLOTDGETTER (CAR (slotds)) =
           make_generic_function (getter,
                                  listem (x_symbol,
@@ -899,14 +897,14 @@ marlais_make_getter_setter_gfs (Object slotds)
                                          x_symbol,
                                          NULL),
                                  make_empty_list ());
-        marlais_module_export (getter, SLOTDGETTER (CAR (slotds)), 1);
-      } else if (!GFUNP (symbol_value (getter))) {
+        marlais_add_export (getter, SLOTDGETTER (CAR (slotds)), 1);
+      } else if (!GFUNP (marlais_symbol_value (getter))) {
         marlais_error ("Getter symbol not bound to a generic function",
                        getter,
-                       symbol_value (getter),
+                       marlais_symbol_value (getter),
                        NULL);
       } else {
-        SLOTDGETTER (CAR (slotds)) = symbol_value (getter);
+        SLOTDGETTER (CAR (slotds)) = marlais_symbol_value (getter);
       }
     } else {
       /* getter is not a symbol */
@@ -924,7 +922,7 @@ marlais_make_getter_setter_gfs (Object slotds)
           marlais_make_setter_symbol (getter);
       }
       if (NAMEP (setter)) {
-        if (NULL == symbol_value (setter)) {
+        if (NULL == marlais_symbol_value (setter)) {
           SLOTDSETTER (CAR (slotds)) =
             make_generic_function (setter,
                                    listem (x_symbol,
@@ -933,16 +931,16 @@ marlais_make_getter_setter_gfs (Object slotds)
                                            x_symbol,
                                            NULL),
                                    make_empty_list ());
-          marlais_module_export (setter,
+          marlais_add_export (setter,
                                  SLOTDSETTER (CAR (slotds)),
                                  1);
-        } else if (!GFUNP (symbol_value (setter))) {
+        } else if (!GFUNP (marlais_symbol_value (setter))) {
           marlais_error ("Setter symbol not bound to a generic function",
                          setter,
-                         symbol_value (setter),
+                         marlais_symbol_value (setter),
                          NULL);
         } else {
-          SLOTDSETTER (CAR (slotds)) = symbol_value (setter);
+          SLOTDSETTER (CAR (slotds)) = marlais_symbol_value (setter);
         }
       } else if (setter == MARLAIS_FALSE) {
         SLOTDSETTER (CAR (slotds)) = setter;
@@ -1353,7 +1351,7 @@ make_builtin_class (char *name, Object supers)
 
   CLASSNAME (obj) = marlais_make_name (name);
   CLASSPROPS (obj) &= ~CLASSSLOTSUNINIT;
-  marlais_module_export (CLASSNAME (obj), obj, 1);
+  marlais_add_export (CLASSNAME (obj), obj, 1);
   return marlais_make_class (obj, supers, make_empty_list (), MARLAIS_FALSE, NULL);
 }
 

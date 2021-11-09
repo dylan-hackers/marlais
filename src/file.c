@@ -44,7 +44,7 @@ i_load (Object filename)
     /* save current states. */
     old_load_file_context = load_file_context;
     load_file_context = 1;
-    old_module = current_module ();
+    old_module = marlais_current_module ();
 
     fp = open_file (filename);
 
@@ -67,7 +67,7 @@ i_load (Object filename)
     }
 
 #ifdef NO_LOADING_LIBRARIES
-    set_module (old_module);
+    marlais_set_module (old_module);
 #endif
 
     load_file_context = old_load_file_context;
