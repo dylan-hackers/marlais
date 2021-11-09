@@ -37,15 +37,21 @@
 #include <marlais/number.h>
 #include <marlais/prim.h>
 
+#include <ctype.h>
+
 /* Primitives */
 
 static Object integer_to_character (Object i);
 static Object character_to_integer (Object ch);
+static Object character_to_lowercase (Object ch);
+static Object character_to_uppercase (Object ch);
 
 static struct primitive char_prims[] =
 {
   {"%integer->character", prim_1, integer_to_character},
   {"%character->integer", prim_1, character_to_integer},
+  {"%character-to-lowercase", prim_1, character_to_lowercase},
+  {"%character-to-uppercase", prim_1, character_to_uppercase},
 };
 
 /* Exported functions */
@@ -82,4 +88,16 @@ static Object
 character_to_integer (Object ch)
 {
   return (marlais_make_integer (CHARVAL (ch)));
+}
+
+static Object
+character_to_lowercase (Object ch)
+{
+  return (MAKE_CHAR(tolower(CHARVAL(ch))));
+}
+
+static Object
+character_to_uppercase (Object ch)
+{
+  return (MAKE_CHAR(toupper(CHARVAL(ch))));
 }

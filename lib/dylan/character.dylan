@@ -22,25 +22,10 @@ define sealed method as (cc == <character>, i :: <small-integer>)
   %integer->character(i);
 end method as;
 
-begin
-  let uppercase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  let lowercase = "abcdefghijklmnopqrstuvwxyz";
+define sealed method as-lowercase(c :: <character>)
+  %character-to-lowercase(c);
+end method as-lowercase;
 
-  define sealed method as-lowercase(c :: <character>)
-    let i = find-key(uppercase,curry(\=,c));
-    if (i)
-      lowercase[i]
-    else
-      c
-    end
-  end method as-lowercase;
-
-  define sealed method as-uppercase(c :: <character>)
-    let i = find-key(lowercase,curry(\=,c));
-    if (i)
-      uppercase[i]
-    else
-      c
-    end
-  end method as-uppercase;
-end;
+define sealed method as-uppercase(c :: <character>)
+  %character-to-uppercase(c);
+end method as-uppercase;
