@@ -35,10 +35,10 @@
 
 #include <marlais/common.h>
 
-void init_sys_prims (void);
-Object get_ctime (void);
-Object get_time (void);
-Object get_clock (void);
-Object user_system (Object string);
+extern void marlais_register_sys (void);
+extern Object marlais_get_ctime (void);
+extern Object marlais_get_time (void);
+extern Object marlais_get_clock (void);
+extern Object marlais_user_system (Object string);
 
 #endif

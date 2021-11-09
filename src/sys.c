@@ -44,14 +44,14 @@
 
 static struct primitive sys_prims[] =
 {
-    {"ctime", prim_0, get_ctime},
-    {"time", prim_0, get_time},
-    {"clock", prim_0, get_clock},
-    {"system", prim_1, user_system},
+    {"ctime", prim_0, marlais_get_ctime},
+    {"time", prim_0, marlais_get_time},
+    {"clock", prim_0, marlais_get_clock},
+    {"system", prim_1, marlais_user_system},
 };
 
 void
-init_sys_prims (void)
+marlais_register_sys (void)
 {
     int num;
 
@@ -61,7 +61,7 @@ init_sys_prims (void)
 }
 
 Object
-get_ctime ()
+marlais_get_ctime ()
 {
     time_t time_loc;
 
@@ -70,7 +70,7 @@ get_ctime ()
 }
 
 Object
-get_time ()
+marlais_get_time ()
 {
     time_t time_loc;
 
@@ -86,7 +86,7 @@ get_time ()
 }
 
 Object
-get_clock ()
+marlais_get_clock ()
 {
     clock_t clock_val;
 
@@ -102,7 +102,7 @@ get_clock ()
 }
 
 Object
-user_system (Object string)
+marlais_user_system (Object string)
 {
     if (!BYTESTRP (string)) {
       return marlais_error ("system: argument must be a string", string, NULL);

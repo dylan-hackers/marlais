@@ -213,5 +213,5 @@ marlais_initialize (void)
   marlais_register_character ();
   marlais_register_deque ();
   marlais_register_array ();
-  init_sys_prims ();
+  marlais_register_sys ();
 }
