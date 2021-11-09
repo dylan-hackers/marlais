@@ -72,8 +72,9 @@ struct frame {
 
 void init_env_prims (void);
 
-void add_top_lvl_binding1(Object sym, Object val, int constant, int exported);
-void add_top_level_binding(Object sym, Object val, int constant);
+extern void marlais_module_binding(Object sym, Object val, int constant);
+extern void marlais_module_export(Object sym, Object val, int constant);
+
 void push_scope (Object owner);
 void pop_scope (void);
 Object print_env (struct frame *env);

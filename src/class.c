@@ -899,7 +899,7 @@ marlais_make_getter_setter_gfs (Object slotds)
                                          x_symbol,
                                          NULL),
                                  make_empty_list ());
-        add_top_level_binding (getter, SLOTDGETTER (CAR (slotds)), 1);
+        marlais_module_export (getter, SLOTDGETTER (CAR (slotds)), 1);
       } else if (!GFUNP (symbol_value (getter))) {
         marlais_error ("Getter symbol not bound to a generic function",
                        getter,
@@ -933,7 +933,7 @@ marlais_make_getter_setter_gfs (Object slotds)
                                            x_symbol,
                                            NULL),
                                    make_empty_list ());
-          add_top_level_binding (setter,
+          marlais_module_export (setter,
                                  SLOTDSETTER (CAR (slotds)),
                                  1);
         } else if (!GFUNP (symbol_value (setter))) {
@@ -1353,7 +1353,7 @@ make_builtin_class (char *name, Object supers)
 
   CLASSNAME (obj) = marlais_make_name (name);
   CLASSPROPS (obj) &= ~CLASSSLOTSUNINIT;
-  add_top_level_binding (CLASSNAME (obj), obj, 1);
+  marlais_module_export (CLASSNAME (obj), obj, 1);
   return marlais_make_class (obj, supers, make_empty_list (), MARLAIS_FALSE, NULL);
 }
 

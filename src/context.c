@@ -190,18 +190,18 @@ marlais_initialize (void)
   unspecified_object = make_unspecified_object ();
 
   /* make the unspecified object available */
-  add_top_level_binding (marlais_make_name ("%unspecified"),
+  marlais_module_export (marlais_make_name ("%unspecified"),
                          unspecified_object,
                          1);
 
   /* make the uninitialize slot value available */
-  add_top_level_binding (marlais_make_name ("%uninitialized-slot-value"),
+  marlais_module_export (marlais_make_name ("%uninitialized-slot-value"),
                          uninit_slot_object,
                          1);
 
   /* make default object */
   default_object = cons (MARLAIS_FALSE, MARLAIS_FALSE);
-  add_top_level_binding (marlais_make_name ("%default-object"), default_object, 1);
+  marlais_module_export (marlais_make_name ("%default-object"), default_object, 1);
 
   binding_stack = cons (marlais_make_integer (0), make_empty_list ());
 

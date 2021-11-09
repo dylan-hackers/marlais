@@ -660,7 +660,7 @@ bind_variables (Object init_list,
           last = new;
         }
         if (top_level) {
-          add_top_level_binding (variable, first, constant);
+          marlais_module_export (variable, first, constant);
         } else {
           add_binding (variable, first, constant, to_frame);
         }
@@ -734,7 +734,7 @@ add_variable_binding (Object var,
     type = object_class;
   }
   if (top_level) {
-    /* add_top_level_binding can't easily check type match.
+    /* marlais_module_export can't easily check type match.
      * do it here.
      */
     if (!marlais_instance (val, type)) {
@@ -743,7 +743,7 @@ add_variable_binding (Object var,
                      type,
                      NULL);
     }
-    add_top_level_binding (var, val, constant);
+    marlais_module_export (var, val, constant);
   } else {
     add_binding (var, val, constant, to_frame);
   }
@@ -816,7 +816,7 @@ define_class_eval (Object form)
   obj = marlais_allocate_object (Class, sizeof (struct clas));
 
   CLASSNAME (obj) = name;
-  add_top_level_binding (name, obj, 0);
+  marlais_module_export (name, obj, 0);
   supers = map (eval, CAR (tmp_form));
   if(EMPTYLISTP(supers)) supers = cons(object_class, make_empty_list());
   slots = marlais_make_slot_descriptor_list (CDR (tmp_form), 1);
@@ -876,7 +876,7 @@ define_generic_function_eval (Object form)
 
   check_function_syntax(form, &name, &params, "define-generic-function");
   gf = make_generic_function (name, params, make_empty_list ());
-  add_top_level_binding (name, gf, 0);
+  marlais_module_export (name, gf, 0);
   return (unspecified_object);
 }
 

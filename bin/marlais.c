@@ -35,7 +35,7 @@ static void print_top_level_constant(Object obj, int bind_p)
   if(bind_p) {
     snprintf (symbol_name, 12, "$%i", sequence_num);
     symbol = marlais_make_name (symbol_name);
-    add_top_level_binding (symbol, obj, 1);
+    marlais_module_export (symbol, obj, 1);
     fprintf (stdout, " $%i = ", sequence_num);
     sequence_num++;
   }

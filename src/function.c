@@ -525,7 +525,7 @@ make_method (Object name, Object params, Object body, struct frame *env, int do_
       gf = make_generic_function (name,
                                   create_generic_parameters (params),
                                   make_empty_list ());
-      add_top_level_binding (name, gf, 0);
+      marlais_module_export (name, gf, 0);
     }
     add_method (gf, obj);
     return (gf);

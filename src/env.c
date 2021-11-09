@@ -50,13 +50,8 @@ initialize_namespace (Object owner)
   return frame;
 }
 
-void add_top_level_binding(Object sym, Object val, int constant)
-{
-  add_top_lvl_binding1(sym, val, constant, 1);
-}
-
-void
-add_top_lvl_binding1(Object sym, Object val, int constant, int exported)
+static void
+marlais_module_binding_internal(Object sym, Object val, int constant, int exported)
 {
   struct binding *binding, *old_binding;
   int i;
@@ -109,6 +104,18 @@ add_top_lvl_binding1(Object sym, Object val, int constant, int exported)
   if (trace_bindings) {
     marlais_print_obj (marlais_standard_error, sym);
   }
+}
+
+void
+marlais_module_binding (Object sym, Object val, int constant)
+{
+  marlais_module_binding_internal(sym, val, constant, 0);
+}
+
+void
+marlais_module_export (Object sym, Object val, int constant)
+{
+  marlais_module_binding_internal(sym, val, constant, 1);
 }
 
 void
