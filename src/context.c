@@ -211,7 +211,7 @@ marlais_initialize (void)
   marlais_register_symbol ();
   marlais_register_class ();
   marlais_register_slot ();
-  init_file_prims ();
+  marlais_register_file ();
   init_function_prims ();
   marlais_register_values ();
   marlais_register_print ();

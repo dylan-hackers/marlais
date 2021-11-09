@@ -13,26 +13,29 @@
 
 #include "lexer.gen.h"
 
-extern Object open_file_list;
+/* Primitives */
 
 static struct primitive file_prims[] =
 {
-    {"load", prim_1, load},
+    {"load", prim_1, marlais_load},
 };
 
-/* function definitions */
+/* Internal function declarations */
+
 static FILE * open_file (Object filename);
 static void close_file (FILE * fp);
 
+/* Exported functions */
+
 void
-init_file_prims (void)
+marlais_register_file (void)
 {
   int num = sizeof (file_prims) / sizeof (struct primitive);
   marlais_register_prims (num, file_prims);
 }
 
-Object
-i_load (Object filename)
+static Object
+load_internal (Object filename)
 {
     FILE *fp;
     Object obj, res;
@@ -76,12 +79,12 @@ i_load (Object filename)
 }
 
 Object
-load (Object filename)
+marlais_load (Object filename)
 {
   Object res;
   FILE *old_yyin = marlais_yyin;
 
-  res = i_load (filename);
+  res = load_internal (filename);
   if (old_yyin == stdin) {
     clearerr (stdin);
     fflush (stdin);
@@ -89,6 +92,17 @@ load (Object filename)
   }
   return res;
 }
+
+void
+marlais_close_open_files (void)
+{
+  while (PAIRP (open_file_list)) {
+    fclose ((FILE *) FOREIGNPTR (CAR (open_file_list)));
+    open_file_list = CDR (open_file_list);
+  }
+}
+
+/* Internal functions */
 
 static FILE *
 open_file (Object filename)
@@ -128,13 +142,4 @@ close_file (FILE * fp)
   }
   fclose (fp);
   open_file_list = CDR (open_file_list);
-}
-
-void
-close_open_files (void)
-{
-  while (PAIRP (open_file_list)) {
-    fclose ((FILE *) FOREIGNPTR (CAR (open_file_list)));
-    open_file_list = CDR (open_file_list);
-  }
 }

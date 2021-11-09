@@ -36,9 +36,8 @@
 
 #include <marlais/common.h>
 
-void init_file_prims (void);
-Object load (Object filename);
-Object i_load (Object filename);
-void close_open_files (void);
+extern void marlais_register_file (void);
+extern Object marlais_load (Object filename);
+extern void marlais_close_open_files (void);
 
 #endif

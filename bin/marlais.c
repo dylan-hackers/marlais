@@ -154,7 +154,7 @@ main (int argc, char *argv[])
     if(!init_file) {
       init_file = INIT_FILE;
     }
-    load(marlais_make_bytestring (init_file));
+    marlais_load(marlais_make_bytestring (init_file));
   }
 
   marlais_set_module (marlais_new_module (dylan_user_symbol));
@@ -177,7 +177,7 @@ main (int argc, char *argv[])
       common_dylan = COMMON_DYLAN_LIB_DIR;
     }
     sprintf(file, "%s/common-dylan.dylan", common_dylan);
-    load(marlais_make_bytestring(file));
+    marlais_load(marlais_make_bytestring(file));
   }
 #endif
 
@@ -193,7 +193,7 @@ main (int argc, char *argv[])
 
   /* load any source files specified on command line */
   while (optind < argc) {
-    load (marlais_make_bytestring (argv[optind]));
+    marlais_load (marlais_make_bytestring (argv[optind]));
     maybe_quit = 1;
     optind++;
   }
@@ -212,7 +212,7 @@ main (int argc, char *argv[])
   err = setjmp (error_return);
   /* things to do on an error reset */
   if (err) {
-    close_open_files ();
+    marlais_close_open_files ();
     fflush (stdout);
     clearerr (stdin);
     if (trace_functions) {
