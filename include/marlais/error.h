@@ -39,11 +39,11 @@
 /* Register error primitives */
 extern void marlais_register_error (void);
 /* Signal a fatal error */
-extern void MARLAIS_FUN_NORETURN marlais_fatal (char *msg);
+extern void MARLAIS_FUN_NORETURN marlais_fatal (const char *msg);
 /* Signal an error */
-extern Object marlais_error (char *msg, ...);
+extern Object marlais_error (const char *msg, ...);
 /* Signal a warning */
-extern Object marlais_warning (char *msg, ...);
+extern Object marlais_warning (const char *msg, ...);
 
 extern int num_debug_contexts;
 extern int NoDebug;

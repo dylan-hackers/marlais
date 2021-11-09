@@ -225,14 +225,14 @@ dylan_warning (Object msg_str, Object rest)
 }
 
 void
-marlais_fatal (char *msg)
+marlais_fatal (const char *msg)
 {
   fprintf (stderr, "%s.\n", msg);
   abort();
 }
 
 Object
-marlais_error (char *msg,...)
+marlais_error (const char *msg,...)
 {
   va_list args;
   Object obj, signal_value, ret;
@@ -356,7 +356,7 @@ enter_debugger (void)
 }
 
 Object
-marlais_warning (char *msg,...)
+marlais_warning (const char *msg,...)
 {
   va_list args;
   Object obj;
@@ -383,11 +383,7 @@ marlais_warning (char *msg,...)
 static void
 signal_handler (int sig)
 {
-#ifdef __SunOS_5__
-  error ((char *) _sys_siglist[sig], NULL);
-#else
-  error (sys_siglist[sig], NULL);
-#endif
+  marlais_fatal (sys_siglist[sig]);
 }
 
 static Object
