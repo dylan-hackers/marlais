@@ -5,7 +5,7 @@
 #ifndef MARLAIS_GLOBALS_H
 #define MARLAIS_GLOBALS_H
 
-#define GLOBAL
+#define GLOBAL extern
 #include "globaldefs.h"
 #undef  GLOBAL
 
