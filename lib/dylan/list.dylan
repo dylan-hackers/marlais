@@ -7,16 +7,24 @@ module: dylan
 //
 
 //
-// list specific operations
+// pair
 //
 
 define method pair (car, cdr)
   %pair(car, cdr);
 end method pair;
 
+//
+// list
+//
+
 define method list (#rest els)
   els
 end method list;
+
+//
+// type-for-copy
+//
 
 define method type-for-copy (p :: <pair>)
   <list>;
@@ -26,17 +34,33 @@ define method type-for-copy (l == #())
   <list>;
 end method type-for-copy;
 
+//
+// head
+//
+
 define method head (lst :: <list>) => result :: <object>;
   %head(lst);
 end method head;
+
+//
+// head-setter
+//
+
+define method head-setter (obj, p :: <pair>)
+  %head-setter(p, obj);
+end method head-setter;
+
+//
+// tail
+//
 
 define method tail (lst :: <list>) => result :: <object>;
   %tail(lst);
 end method tail;
 
-define method head-setter (obj, p :: <pair>)
-  %head-setter(p, obj);
-end method head-setter;
+//
+// tail-setter
+//
 
 define method tail-setter (obj, p :: <pair>)
   %tail-setter(p, obj);

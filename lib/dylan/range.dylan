@@ -1,9 +1,7 @@
 module: dylan
 
 //
-// range.dyl
-//
-// range operations
+// range.dylan
 //
 
 define class <range> (<sequence>)

@@ -1,9 +1,7 @@
 module: dylan
 
 //
-// string.dyl
-//
-// string operations
+// string.dylan
 //
 
 define method element (s :: <string>, i :: <small-integer>,
@@ -101,5 +99,3 @@ end method \<;
 define method \= (s1 :: <string>, s2 :: <string>)
   %string=(s1, s2);
 end method \=;
-
-// end string.dyl

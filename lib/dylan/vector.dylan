@@ -1,34 +1,55 @@
 module: dylan
 
 //
-// vector.dyl
+// vector.dylan
 //
-// Brent Benson
+// Authors:
+//   Brent Benson
+//
+
+//
+// vector
 //
 
 define method vector (#rest els)
   %vector (els);
 end method vector;
 
+//
+// element
+//
+
 define method element (v :: <vector>, i :: <small-integer>,
 		       #key default = %default-object)
   %vector-element (v, i, default);
 end method element;
 
+//
+// element-setter
+//
+
 define method element-setter (obj, v :: <vector>, i :: <small-integer>)
   %vector-element-setter (v, i, obj);
 end method element-setter;
 
+//
+// size
+//
+
 define method size (v :: <vector>)
   %vector-size (v);
 end method size;
+
+//
+// dimensions
+//
 
 define method dimensions (v :: <vector>)
   list (%vector-size (v));
 end method dimensions;
 
 //
-// iteration protocol
+// forward-iteration-protocol implementation
 //
 
 define method initial-state (v :: <vector>)
@@ -72,5 +93,3 @@ end method previous-state;
 define method final-state (v :: <vector>)
   v.size - 1;
 end method final-state;
-
-// end vector.dyl

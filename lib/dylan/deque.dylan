@@ -3,29 +3,53 @@ module: dylan
 //
 // deque.dyl
 //
-// Brent Benson
+// Authors:
+//   Brent Benson
+//
+
+//
+// push
 //
 
 define method push (d :: <deque>, new)
   %push (d, new);
 end method push;
 
+//
+// pop
+//
+
 define method pop (d :: <deque>)
   %pop (d);
 end method pop;
 
+//
+// push-last
+//
 
 define method push-last (d :: <deque>, new)
   %push-last (d, new);
 end method push-last;
 
+//
+// pop-last
+//
+
 define method pop-last (d :: <deque>)
   %pop-last (d);
 end method pop-last;
 
+//
+// first
+//
+
 define method first (d ::<deque>, #key default = %default-object)
   %deque-first (d, default);
 end method first;
+
+//
+// last
+//
 
 define method last (d :: <deque>, #key default = %default-object)
   %deque-last (d, default)
@@ -33,25 +57,37 @@ end method last;
 
 // should add specific (define-method last-setter ((d <deque>) new-value) ...)
 
+//
+// element
+//
+
 define method element (d ::<deque>, i :: <small-integer>,
 		       #key default = %default-object)
   %deque-element (d, i, default)
 end method element;
 
+//
+// element-setter
+//
+
 define method element-setter (new, d :: <deque>, i :: <small-integer>)
   %deque-element-setter (d, i, new)
 end method element-setter;
+
+//
+// add!
+//
 
 define method add! (d :: <deque>, new)
   %push (d, new);
 end method add;
 
 //
-// add remove!
+// missing: remove!
 //
 
 //
-// iteration protocol
+// forward-iteration-protocol implementation
 //
 
 define method initial-state (d :: <deque>)
