@@ -1,17 +1,21 @@
 
+# Generate parser
 bison_target(
   PARSER parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.gen.c
   COMPILE_FLAGS "-v -t -p marlais_yy"
   DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/parser.gen.h
   REPORT_FILE ${CMAKE_CURRENT_BINARY_DIR}/parser.gen.log
 )
+# Generate lexer
 flex_target(
   LEXER lexer.l ${CMAKE_CURRENT_BINARY_DIR}/lexer.gen.c
   COMPILE_FLAGS "-v -I -P marlais_yy"
   DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/lexer.gen.h
 )
+# Link parser and lexer
 add_flex_bison_dependency(LEXER PARSER)
 
+# Main executable
 add_executable(marlais
   alloc.c
   apply.c
