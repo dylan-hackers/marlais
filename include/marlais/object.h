@@ -52,13 +52,15 @@ Stream,
 typedef struct {
   /* Low-level type of the object */
   ObjectType object_type;
+#if 0
   /* Size of the object in bytes */
   size_t     object_size;
+#endif
 } ObjectHeader;
 
 /* Accessor for the type of a heap object */
 #define POINTERTYPE(obj) (((ObjectHeader *)obj)->object_type)
-#define POINTERSIZE(obj) (((ObjectHeader *)obj)->object_size)
+//#define POINTERSIZE(obj) (((ObjectHeader *)obj)->object_size)
 
 #if defined(MARLAIS_OBJECT_MODEL_SMALL)
 #include <marlais/object-small.h>
