@@ -9,8 +9,6 @@
 void initialize_reservered_word_symbols (void);
 void initialize_marlais (void);
 extern Object binding_stack;
-extern FILE *yyin;
-extern int yylineno;
 
 #ifndef INIT_FILE
 #define INIT_FILE "init.dylan"
