@@ -21,14 +21,14 @@ marlais_initialize (void)
 
   /* intialize global objects */
   marlais_initialize_boolean ();
-
   initialize_empty_list ();
-
   marlais_initialize_stream ();
-
   empty_string = marlais_make_bytestring ("");
-  equal_symbol = marlais_make_name ("=");
+  eof_object = make_eof_object ();
+  unspecified_object = make_unspecified_object ();
 
+  /* initialize symbols */
+  equal_symbol = marlais_make_name ("=");
   apply_symbol = marlais_make_name ("apply");
   key_symbol = marlais_make_name ("#key");
   keyword_symbol = marlais_make_name ("keyword");
@@ -39,7 +39,6 @@ marlais_initialize (void)
   values_symbol = marlais_make_name ("values");
   hash_values_symbol = marlais_make_name ("#values");
   quote_symbol = marlais_make_name ("quote");
-  eof_object = make_eof_object ();
   unwind_symbol = marlais_make_name ("%unwind");
   next_method_symbol = marlais_make_name ("next-method");
   initialize_symbol = marlais_make_name ("initialize");
@@ -48,42 +47,14 @@ marlais_initialize (void)
   standard_input_symbol = marlais_make_name ("*standard-input*");
   standard_output_symbol = marlais_make_name ("*standard-output*");
   standard_error_symbol = marlais_make_name ("*standard-error*");
-
-/* this looks like lisp -- should it go? */
   quasiquote_symbol = marlais_make_name ("quasiquote");
   unquote_symbol = marlais_make_name ("unquote");
   unquote_splicing_symbol = marlais_make_name ("unquote-splicing");
-
   element_symbol = marlais_make_name ("element");
   element_setter_symbol = marlais_make_name ("element-setter");
   signal_symbol = marlais_make_name ("signal");
   concatenate_symbol = marlais_make_name ("concatenate");
   cond_symbol = marlais_make_name ("cond");
-
-  /* often used keywords */
-  getter_keyword = marlais_make_symbol ("getter:");
-  setter_keyword = marlais_make_symbol ("setter:");
-  until_keyword = marlais_make_symbol ("until:");
-  while_keyword = marlais_make_symbol ("while:");
-  else_keyword = marlais_make_symbol ("else:");
-  type_keyword = marlais_make_symbol ("type:");
-  deferred_type_keyword = marlais_make_symbol ("deferred-type:");
-  init_value_keyword = marlais_make_symbol ("init-value:");
-  init_function_keyword = marlais_make_symbol ("init-function:");
-  init_keyword_keyword = marlais_make_symbol ("init-keyword:");
-  required_init_keyword_keyword = marlais_make_symbol ("required-init-keyword:");
-  allocation_keyword = marlais_make_symbol ("allocation:");
-  super_classes_keyword = marlais_make_symbol ("superclasses:");
-  slots_keyword = marlais_make_symbol ("slots:");
-  abstract_p_keyword = marlais_make_symbol ("abstract?:");
-  debug_name_keyword = marlais_make_symbol ("debug-name:");
-  size_keyword = marlais_make_symbol ("size:");
-  fill_keyword = marlais_make_symbol ("fill:");
-  dim_keyword = marlais_make_symbol ("dimensions:");
-  min_keyword = marlais_make_symbol ("min:");
-  max_keyword = marlais_make_symbol ("max:");
-
-  /* often used symbols */
   instance_symbol = marlais_make_name ("instance");
   class_symbol = marlais_make_name ("class");
   each_subclass_symbol = marlais_make_name ("each-subclass");
@@ -91,15 +62,6 @@ marlais_initialize (void)
   constant_symbol = marlais_make_name ("constant");
   virtual_symbol = marlais_make_name ("virtual");
   object_class_symbol = marlais_make_name ("object-class");
-
-  obj_sym = marlais_make_name ("obj");
-  slot_val_sym = marlais_make_name ("slot-value");
-  set_slot_value_sym = marlais_make_name ("set-slot-value!");
-  val_sym = marlais_make_name ("val");
-  initial_state_sym = marlais_make_name ("initial-state");
-  next_state_sym = marlais_make_name ("next-state");
-  current_element_sym = marlais_make_name ("current-element");
-
   colon_equal_symbol = marlais_make_name (":=");
   not_equal_symbol = marlais_make_name ("~=");
   not_equal_equal_symbol = marlais_make_name ("~==");
@@ -116,18 +78,6 @@ marlais_initialize (void)
   minus_symbol = marlais_make_name ("-");
   plus_symbol = marlais_make_name ("+");
   not_symbol = marlais_make_name ("~");
-
-  /** dma -- I think these are classic syntax constructs */
-  local_bind_symbol = marlais_make_name ("\"local-bind");
-  local_bind_rec_symbol = marlais_make_name ("\"local-bind-rec");
-  unbinding_begin_symbol = marlais_make_name ("\"unbinding-begin");
-  define_variable_symbol = marlais_make_name ("define-variable");
-  define_constant_symbol = marlais_make_name ("define-constant");
-  define_class_symbol = marlais_make_name ("define-class");
-  define_generic_function_symbol = marlais_make_name ("define-generic-function");
-  define_method_symbol = marlais_make_name ("define-method");
-  define_function_symbol = marlais_make_name ("define-function");
-
   seal_symbol = marlais_make_name ("seal");
   set_bang_symbol = marlais_make_name ("set!");
   singleton_symbol = marlais_make_name ("singleton");
@@ -137,7 +87,6 @@ marlais_initialize (void)
   negative_symbol = marlais_make_name ("negative");
   list_symbol = marlais_make_name ("list");
   pair_symbol = marlais_make_name ("pair");
-  variable_keyword = marlais_make_symbol ("variable:");
   to_symbol = marlais_make_name ("to");
   above_symbol = marlais_make_name ("above");
   below_symbol = marlais_make_name ("below");
@@ -162,6 +111,56 @@ marlais_initialize (void)
   create_symbol = marlais_make_name ("create");
   module_symbol = marlais_make_name ("module");
   define_module_symbol = marlais_make_name ("define-module");
+  instance_slots_symbol = marlais_make_name ("%instance-slots");
+  class_slots_symbol = marlais_make_name ("%class-slots");
+  each_subclass_slots_symbol = marlais_make_name ("%each-subclass-slots");
+  x_symbol = marlais_make_name ("x");
+  define_test_symbol = marlais_make_name ("define-test");
+  test_symbol = marlais_make_name ("test");
+  aref_symbol = marlais_make_name ("aref");
+  print_symbol = marlais_make_name ("print-object");
+  princ_symbol = marlais_make_name ("object-princ");
+  obj_sym = marlais_make_name ("obj");
+  slot_val_sym = marlais_make_name ("slot-value");
+  set_slot_value_sym = marlais_make_name ("set-slot-value!");
+  val_sym = marlais_make_name ("val");
+  initial_state_sym = marlais_make_name ("initial-state");
+  next_state_sym = marlais_make_name ("next-state");
+  current_element_sym = marlais_make_name ("current-element");
+  /** dma -- I think these are classic syntax constructs */
+  local_bind_symbol = marlais_make_name ("\"local-bind");
+  local_bind_rec_symbol = marlais_make_name ("\"local-bind-rec");
+  unbinding_begin_symbol = marlais_make_name ("\"unbinding-begin");
+  define_variable_symbol = marlais_make_name ("define-variable");
+  define_constant_symbol = marlais_make_name ("define-constant");
+  define_class_symbol = marlais_make_name ("define-class");
+  define_generic_function_symbol = marlais_make_name ("define-generic-function");
+  define_method_symbol = marlais_make_name ("define-method");
+  define_function_symbol = marlais_make_name ("define-function");
+
+  /* initialize keywords */
+  getter_keyword = marlais_make_symbol ("getter:");
+  setter_keyword = marlais_make_symbol ("setter:");
+  until_keyword = marlais_make_symbol ("until:");
+  while_keyword = marlais_make_symbol ("while:");
+  else_keyword = marlais_make_symbol ("else:");
+  type_keyword = marlais_make_symbol ("type:");
+  deferred_type_keyword = marlais_make_symbol ("deferred-type:");
+  init_value_keyword = marlais_make_symbol ("init-value:");
+  init_function_keyword = marlais_make_symbol ("init-function:");
+  init_keyword_keyword = marlais_make_symbol ("init-keyword:");
+  required_init_keyword_keyword = marlais_make_symbol ("required-init-keyword:");
+  allocation_keyword = marlais_make_symbol ("allocation:");
+  super_classes_keyword = marlais_make_symbol ("superclasses:");
+  slots_keyword = marlais_make_symbol ("slots:");
+  abstract_p_keyword = marlais_make_symbol ("abstract?:");
+  debug_name_keyword = marlais_make_symbol ("debug-name:");
+  size_keyword = marlais_make_symbol ("size:");
+  fill_keyword = marlais_make_symbol ("fill:");
+  dim_keyword = marlais_make_symbol ("dimensions:");
+  min_keyword = marlais_make_symbol ("min:");
+  max_keyword = marlais_make_symbol ("max:");
+  variable_keyword = marlais_make_symbol ("variable:");
   module_keyword = marlais_make_symbol ("module:");
   import_keyword = marlais_make_symbol ("import:");
   exclude_keyword = marlais_make_symbol ("exclude:");
@@ -169,25 +168,12 @@ marlais_initialize (void)
   rename_keyword = marlais_make_symbol ("rename:");
   export_keyword = marlais_make_symbol ("export:");
 
-  /* infrequently used, but important symbols */
-  instance_slots_symbol = marlais_make_name ("%instance-slots");
-  class_slots_symbol = marlais_make_name ("%class-slots");
-  each_subclass_slots_symbol = marlais_make_name ("%each-subclass-slots");
-  x_symbol = marlais_make_name ("x");
-
   /* initialize table of syntax operators and functions */
   marlais_initialize_syntax ();
   marlais_initialize_lexer ();
-  define_test_symbol = marlais_make_name ("define-test");
-  test_symbol = marlais_make_name ("test");
-  aref_symbol = marlais_make_name ("aref");
-  print_symbol = marlais_make_name ("print-object");
-  princ_symbol = marlais_make_name ("object-princ");
 
   /* initialize builtin classes */
   marlais_initialize_class ();
-
-  unspecified_object = make_unspecified_object ();
 
   /* make the unspecified object available */
   marlais_add_export (marlais_make_name ("%unspecified"),
