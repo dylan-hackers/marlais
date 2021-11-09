@@ -10,6 +10,7 @@ copyright: (c) 2001, Marlais Hackers, LGPL (see "COPYRIGHT" file)
 
 load("dylan/object.dylan");
 load("dylan/error.dylan");
+load("dylan/function.dylan");
 load("dylan/comparison.dylan");
 load("dylan/collection.dylan");
 load("dylan/list.dylan");
