@@ -15,9 +15,14 @@ marlais_register_prims (int num, struct primitive prims[])
   Object sym, prim;
 
   for (i = 0; i < num; ++i) {
-    sym = marlais_make_name (prims[i].name);
-    prim = marlais_make_primitive (prims[i].name, prims[i].prim_type, prims[i].fun);
-    marlais_add_binding (sym, prim, 0);
+    struct primitive *p = &prims[i];
+    sym = marlais_make_name (p->name);
+    prim = marlais_make_primitive (p->name, p->prim_type, p->fun);
+    if(p->name[0] != '%') {
+      marlais_add_export (sym, prim, 1);
+    } else {
+      marlais_add_binding (sym, prim, 1);
+    }
   }
 }
 
