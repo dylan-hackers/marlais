@@ -54,7 +54,7 @@ struct symtab *symbol_table[SYMTAB_SIZE];
 
 /* Internal function declarations */
 
-static Object intern_symbol (ObjectType type, char *name);
+static Object intern_symbol (ObjectType type, const char *name);
 
 /* Primitives */
 
@@ -76,7 +76,7 @@ marlais_register_symbol (void)
 }
 
 Object
-marlais_make_name (char *name)
+marlais_make_name (const char *name)
 {
   Object obj;
 
@@ -85,7 +85,7 @@ marlais_make_name (char *name)
 }
 
 Object
-marlais_make_symbol (char *name)
+marlais_make_symbol (const char *name)
 {
   Object obj;
 
@@ -144,7 +144,7 @@ marlais_name_to_symbol (Object symbol)
 /* Internal functions */
 
 static Object
-intern_symbol (ObjectType type, char *name)
+intern_symbol (ObjectType type, const char *name)
 {
   int i;
   unsigned h;
