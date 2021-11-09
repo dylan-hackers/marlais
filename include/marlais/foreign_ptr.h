@@ -34,6 +34,6 @@
 
 #include <marlais/common.h>
 
-Object make_foreign_ptr (void *ptr);
+extern Object marlais_make_foreign_ptr (void *ptr);
 
 #endif

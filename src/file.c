@@ -116,7 +116,7 @@ open_file (Object filename)
       }
     }
   }
-  open_file_list = cons (make_foreign_ptr (fp), open_file_list);
+  open_file_list = cons (marlais_make_foreign_ptr (fp), open_file_list);
   return fp;
 }
 

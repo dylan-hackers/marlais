@@ -35,7 +35,7 @@
 #include <marlais/alloc.h>
 
 Object
-make_foreign_ptr (void *ptr)
+marlais_make_foreign_ptr (void *ptr)
 {
     Object obj;
 
