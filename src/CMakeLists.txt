@@ -21,6 +21,7 @@ add_executable(marlais
   character.c
   class.c
   classprec.c
+  context.c
   deque.c
   env.c
   error.c

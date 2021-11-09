@@ -18,6 +18,7 @@
 #include <marlais/character.h>
 #include <marlais/class.h>
 #include <marlais/classprec.h>
+#include <marlais/context.h>
 #include <marlais/deque.h>
 #include <marlais/env.h>
 #include <marlais/eval.h>
