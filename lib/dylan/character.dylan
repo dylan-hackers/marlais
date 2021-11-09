@@ -11,7 +11,7 @@ module: dylan
 //
 
 define method \< (c1 :: <character>, c2 :: <character>)
-  as(<integer>, c1) < as(<integer>, c2);
+  %character->integer(c1) < %character->integer(c2);
 end method \<;
 
 define method as (ic == <small-integer>, ch :: <character>)
