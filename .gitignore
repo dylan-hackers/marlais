@@ -6,6 +6,7 @@ Makefile
 CMakeCache.txt
 CMakeFiles
 cmake_install.cmake
+install_manifest.txt
 src/lexer.gen.*
 src/parser.gen.*
 bin/marlais

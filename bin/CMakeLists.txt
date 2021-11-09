@@ -1,4 +1,7 @@
 
-add_executable(marlais marlais.c)
+add_executable(marlais_bin marlais.c)
 
-target_link_libraries(marlais PUBLIC libmarlais)
+target_link_libraries(marlais_bin PUBLIC marlais)
+
+set_target_properties(marlais_bin
+  PROPERTIES OUTPUT_NAME marlais)
