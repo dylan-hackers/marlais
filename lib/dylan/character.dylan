@@ -2,7 +2,8 @@ module: dylan
 
 // character.dylan
 //
-// Brent Benson
+// Authors:
+//   Brent Benson
 //
 
 define sealed method \< (c1 :: <character>, c2 :: <character>)
