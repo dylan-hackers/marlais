@@ -556,23 +556,23 @@ define method sqrt (d :: <double-float>)
 end method sqrt;
 
 define method sin (n :: <number>) => value :: <number>;
-  %sin (as (<double-float>, n));
+  %double-sin (as (<double-float>, n));
 end method sin;
 
 define method cos (n :: <number>) => value :: <number>;
-  %cos (as (<double-float>, n));
+  %double-cos (as (<double-float>, n));
 end method cos;
 
 define method atan2 (d1 :: <number>, d2 :: <number>)
-  %atan2 (as (<double-float>, d1), as (<double-float>, d2));
+  %double-atan2 (as (<double-float>, d1), as (<double-float>, d2));
 end method atan2;
 
 define method exp (n :: <number>)
-  %exp(as(<double-float>, n));
+  %double-exp(as(<double-float>, n));
 end method exp;
 
 define method ln (n :: <number>)
-  %ln(as(<double-float>, n));
+  %double-ln(as(<double-float>, n));
 end method ln;
 
 // end number.dyl
