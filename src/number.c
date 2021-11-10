@@ -38,6 +38,10 @@ static Object integer_cache[MARLAIS_CONFIG_INTEGER_CACHE];
 #endif
 #endif
 
+#if MARLAIS_CONFIG_RATIO_CACHE > 0
+static Object ratio_cache[MARLAIS_CONFIG_RATIO_CACHE^2];
+#endif
+
 static Object sfloat_zero;
 static Object sfloat_one;
 
@@ -200,10 +204,27 @@ marlais_make_ratio (DyInteger numerator, DyInteger denominator)
 {
     Object obj;
 
-    obj = marlais_allocate_object (Ratio, sizeof (struct ratio));
+#if MARLAIS_CONFIG_RATIO_CACHE > 0
+    DyInteger index = -1;
+    if(numerator >= 0 && numerator < MARLAIS_CONFIG_RATIO_CACHE
+       && denominator >= 0 && denominator < MARLAIS_CONFIG_RATIO_CACHE) {
+      index = numerator + denominator * MARLAIS_CONFIG_RATIO_CACHE;
+      if(ratio_cache[index]) {
+        return ratio_cache[index];
+      }
+    }
+#endif
 
+    obj = marlais_allocate_object (Ratio, sizeof (struct ratio));
     RATIONUM (obj) = numerator;
     RATIODEN (obj) = denominator;
+
+#if MARLAIS_CONFIG_RATIO_CACHE > 0
+    if(index != -1) {
+      ratio_cache[index] = obj;
+    }
+#endif
+
     return (obj);
 }
 

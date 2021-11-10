@@ -21,6 +21,8 @@
 
 /* Cache the first N characters */
 #define MARLAIS_CONFIG_CHARACTER_CACHE 256
+/* Cache the first N^2 ratios */
+#define MARLAIS_CONFIG_RATIO_CACHE 16
 /* Cache the first N integers */
 #define MARLAIS_CONFIG_INTEGER_CACHE 1024
 
