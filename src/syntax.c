@@ -19,21 +19,6 @@
 #include <marlais/table.h>
 #include <marlais/values.h>
 
-extern Object dylan_symbol;
-extern Object dylan_user_symbol;
-extern Object modifiers_keyword;
-extern Object abstract_symbol;
-extern Object concrete_symbol;
-extern Object primary_symbol;
-extern Object free_symbol;
-extern Object open_symbol;
-extern Object sealed_symbol;
-extern Object description_keyword;
-extern Object error_class;
-extern Object unwind_protect_symbol;
-
-extern Object eval_combination (Object obj, int do_apply);
-
 /* data structures */
 
 struct syntax_entry {

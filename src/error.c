@@ -18,7 +18,6 @@
 
 #include <signal.h>
 
-extern Object print_symbol;
 extern char* prompt;
 extern char* current_prompt;
 extern int sequence_num;
@@ -72,8 +71,6 @@ char *sys_siglist[32] =
 
 #endif
 #endif
-extern Object signal_symbol;
-extern Object simple_error_class;
 
 int signal_response[32] =
     {IGNORE,

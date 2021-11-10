@@ -43,8 +43,6 @@
 #include <marlais/prim.h>
 #include <marlais/symbol.h>
 
-extern Object dylan_symbol;
-
 /* local function prototypes */
 
 static Object make_table_entry (int row, Object key, Object value, Object next);

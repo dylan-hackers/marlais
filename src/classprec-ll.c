@@ -8,10 +8,6 @@
 #include <marlais/print.h>
 #include <marlais/stream.h>
 
-#ifdef NO_COMMON_DYLAN_SPEC
-extern Object standard_error_stream;
-#endif
-
 /* Internal types */
 
 typedef struct prec_graph {

@@ -12,6 +12,8 @@
 #include <marlais/syntax.h>
 
 struct eval_stack *eval_stack = 0;
+jmp_buf *the_eval_context = NULL;
+static Object the_eval_obj = NULL;
 
 /* local function prototypes */
 Object eval_combination (Object obj, int do_apply);
@@ -72,11 +74,6 @@ eval (Object obj)
 	return marlais_error ("eval: do not know how to eval object", obj, NULL);
     }
 }
-
-jmp_buf *the_eval_context = NULL;
-static Object the_eval_obj = NULL;
-
-extern struct frame *the_env;
 
 Object
 tail_eval (Object obj)
