@@ -140,6 +140,7 @@ GLOBAL Object string_class;
 GLOBAL Object byte_string_class;
 GLOBAL Object unicode_string_class;
 GLOBAL Object vector_class;
+GLOBAL Object simple_vector_class;
 GLOBAL Object stretchy_vector_class;
 GLOBAL Object simple_object_vector_class;
 GLOBAL Object explicit_key_collection_class;
