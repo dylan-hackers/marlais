@@ -114,6 +114,7 @@ marlais_initialize_class (void)
   float_class = make_builtin_class ("<float>", real_class);
   single_float_class = make_builtin_class ("<single-float>", float_class);
   double_float_class = make_builtin_class ("<double-float>", float_class);
+  extended_float_class = make_builtin_class ("<extended-float>", float_class);
 
   /* Collection base classes */
   collection_class =
@@ -210,7 +211,6 @@ marlais_initialize_class (void)
                                          error_class);
   sealed_object_error_class =
     make_builtin_class ("<sealed-object-error>", error_class);
-
 
   /* Function classes */
   function_class = make_builtin_class ("<function>", object_class);

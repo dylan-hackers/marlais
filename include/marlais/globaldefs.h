@@ -131,6 +131,7 @@ GLOBAL Object ratio_class;
 GLOBAL Object float_class;
 GLOBAL Object single_float_class;
 GLOBAL Object double_float_class;
+GLOBAL Object extended_float_class;
 GLOBAL Object collection_class;
 GLOBAL Object mutable_sequence_class;
 GLOBAL Object list_class;
