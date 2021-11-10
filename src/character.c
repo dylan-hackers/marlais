@@ -63,18 +63,17 @@ marlais_register_character (void)
   marlais_register_prims (num, char_prims);
 }
 
+#ifndef MARLAIS_OBJECT_MODEL_SMALL
+/* small version is inline */
 Object
 marlais_make_character (char ch)
 {
-#ifdef MARLAIS_OBJECT_MODEL_SMALL
-  return (MAKE_CHAR (ch));
-#else
   Object obj;
   obj = marlais_allocate_object (Character, sizeof (struct character));
   CHARVAL (obj) = ch;
   return (obj);
-#endif
 }
+#endif
 
 /* Internal functions */
 
