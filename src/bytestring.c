@@ -41,6 +41,8 @@
 #include <marlais/sequence.h>
 #include <marlais/symbol.h>
 
+#include <ctype.h>
+
 /* Internal function declarations */
 
 static Object make_string(char *str, size_t len);
@@ -54,6 +56,10 @@ static Object string_size_setter (Object size, Object string);
 static Object string_append2 (Object str1, Object str2);
 static Object string_lessthan (Object str1, Object str2);
 static Object string_equal (Object str1, Object str2);
+static Object string_as_lowercase (Object string);
+static Object string_as_uppercase (Object string);
+static Object string_as_lowercase_bang (Object string);
+static Object string_as_uppercase_bang (Object string);
 
 static struct primitive string_prims[] =
 {
@@ -64,6 +70,10 @@ static struct primitive string_prims[] =
     {"%string-append2", prim_2, string_append2},
     {"%string<", prim_2, string_lessthan},
     {"%string=", prim_2, string_equal},
+    {"%string-as-lowercase", prim_1, string_as_lowercase},
+    {"%string-as-uppercase", prim_1, string_as_uppercase},
+    {"%string-as-lowercase!", prim_1, string_as_lowercase_bang},
+    {"%string-as-uppercase!", prim_1, string_as_uppercase_bang},
 };
 
 /* Exported functions */
@@ -209,4 +219,74 @@ string_equal (Object str1, Object str2)
 {
     return (strcmp (BYTESTRVAL (str1), BYTESTRVAL (str2)) == 0) ?
       MARLAIS_TRUE : MARLAIS_FALSE;
+}
+
+static Object
+string_as_lowercase (Object string)
+{
+    int len, i;
+    char *oldstr, *newstr;
+
+    len = BYTESTRSIZE (string);
+    oldstr = BYTESTRVAL (string);
+    newstr = MARLAIS_ALLOCATE_STRING (len + 1);
+
+    for(i = 0; i < len; i++) {
+      newstr[i] = tolower (oldstr[i]);
+    }
+    newstr[len] = 0;
+
+    return (make_string (newstr, len));
+}
+
+static Object
+string_as_uppercase (Object string)
+{
+    int len, i;
+    char *oldstr, *newstr;
+
+    len = BYTESTRSIZE (string);
+    oldstr = BYTESTRVAL (string);
+    newstr = MARLAIS_ALLOCATE_STRING (len + 1);
+
+    for(i = 0; i < len; i++) {
+      newstr[i] = toupper (oldstr[i]);
+    }
+    newstr[len] = 0;
+
+    return (make_string (newstr, len));
+}
+
+static Object
+string_as_lowercase_bang (Object string)
+{
+    int len, i;
+    char *str;
+
+    len = BYTESTRSIZE (string);
+    str = BYTESTRVAL (string);
+
+    for(i = 0; i < len; i++) {
+      str[i] = tolower (str[i]);
+    }
+    str[len] = 0;
+
+    return (string);
+}
+
+static Object
+string_as_uppercase_bang (Object string)
+{
+    int len, i;
+    char *str;
+
+    len = BYTESTRSIZE (string);
+    str = BYTESTRVAL (string);
+
+    for(i = 0; i < len; i++) {
+      str[i] = toupper (str[i]);
+    }
+    str[len] = 0;
+
+    return (string);
 }

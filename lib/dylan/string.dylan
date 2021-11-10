@@ -74,22 +74,6 @@ define method copy-state (s :: <string>, state :: <integer-state>)
   state;
 end method copy-state;
 
-define method as-uppercase!(s :: <string>)
-  map-into(s,as-uppercase,s);
-end method;
-
-define method as-lowercase!(s :: <string>)
-  map-into(s,as-lowercase,s);
-end method;
-
-define method as-uppercase(s :: <string>)
-  map(as-uppercase,s);
-end method;
-
-define method as-lowercase(s :: <string>)
-  map(as-lowercase,s);
-end method;
-
 // comparisons
 
 define method \< (s1 :: <string>, s2 :: <string>)
@@ -99,3 +83,21 @@ end method \<;
 define method \= (s1 :: <string>, s2 :: <string>)
   %string=(s1, s2);
 end method \=;
+
+// case conversion
+
+define method as-lowercase(s :: <string>)
+  %string-as-lowercase(s);
+end method;
+
+define method as-lowercase!(s :: <string>)
+  %string-as-lowercase!(s);
+end method;
+
+define method as-uppercase(s :: <string>)
+  %string-as-uppercase(s);
+end method;
+
+define method as-uppercase!(s :: <string>)
+  %string-as-uppercase!(s);
+end method;
