@@ -93,11 +93,11 @@ character_to_integer (Object ch)
 static Object
 character_to_lowercase (Object ch)
 {
-  return (MAKE_CHAR(tolower(CHARVAL(ch))));
+  return (marlais_make_character(tolower(CHARVAL(ch))));
 }
 
 static Object
 character_to_uppercase (Object ch)
 {
-  return (MAKE_CHAR(toupper(CHARVAL(ch))));
+  return (marlais_make_character(toupper(CHARVAL(ch))));
 }
