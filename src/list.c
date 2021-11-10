@@ -54,8 +54,6 @@ static Object set_cdr (Object pair, Object val);
 static Object list_element (Object pair, Object index, Object default_ob);
 static Object list_element_setter (Object pair, Object index, Object obj);
 static Object list_last (Object lst, Object default_ob);
-Object list_sort (Object lst, Object test);
-Object list_sort_bang (Object lst, Object test);
 
 static struct primitive list_prims[] =
 {
