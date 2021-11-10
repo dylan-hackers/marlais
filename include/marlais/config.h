@@ -11,15 +11,13 @@
 /* Enable tail call optimization */
 #define MARLAIS_ENABLE_TAIL_CALL_OPTIMIZATION
 
-/* Small object model (tagging) */
-#undef MARLAIS_OBJECT_MODEL_SMALL
-/* Large object model (boxing) */
-#define MARLAIS_OBJECT_MODEL_LARGE
-
-/* Use CLOS version of class precedence */
+/* Select class precedence algorithm */
 #undef MARLAIS_CLASS_PRECEDENCE_CLOS
-/* Use LL version of class precedence */
 #define MARLAIS_CLASS_PRECEDENCE_LL
+
+/* Select object model */
+#undef MARLAIS_OBJECT_MODEL_LARGE
+#define MARLAIS_OBJECT_MODEL_SMALL
 
 #define MAX_STRING_SIZE 10240
 #define MAX_SYMBOL_SIZE 1024
