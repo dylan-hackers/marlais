@@ -49,7 +49,7 @@ static Object vector_element_setter (Object vec, Object index, Object val);
 
 static struct primitive vector_prims[] =
 {
-    {"%vector", prim_1, marlais_make_sov},
+    {"%vector", prim_1, marlais_vector},
     {"%vector-size", prim_1, vector_size},
     {"%vector-element", prim_3, vector_element},
     {"%vector-element-setter", prim_3, vector_element_setter},
@@ -65,7 +65,7 @@ marlais_register_vector (void)
 }
 
 Object
-marlais_make_sov (Object el_list)
+marlais_vector (Object list)
 {
   Object obj, els;
   int size, i;
@@ -73,7 +73,7 @@ marlais_make_sov (Object el_list)
   obj = marlais_allocate_object (SimpleObjectVector, sizeof (struct simple_object_vector));
 
   size = 0;
-  els = el_list;
+  els = list;
   while (PAIRP (els)) {
     size++;
     els = CDR (els);
@@ -81,7 +81,7 @@ marlais_make_sov (Object el_list)
   SOVSIZE (obj) = size;
   SOVELS (obj) = (Object *) marlais_allocate_memory (size * sizeof (Object));
 
-  els = el_list;
+  els = list;
   i = 0;
   while (PAIRP (els)) {
     SOVELS (obj)[i++] = CAR (els);

@@ -39,7 +39,7 @@
 /* Register vector primitives */
 extern void marlais_register_vector (void);
 /* Make a vector from a list */
-extern Object marlais_make_sov (Object el_list);
+extern Object marlais_vector (Object list);
 /* Make a <vector> */
 extern Object marlais_make_vector (int size, Object fill_obj);
 /* Entrypoint for make(<vector>) */

@@ -1157,7 +1157,7 @@ sort_methods (Object methods, Object sample_args)
   sort_driver_args____ = sample_args;
 
   if (PAIRP (CDR (methods))) {
-    method_vector = marlais_make_sov (methods);
+    method_vector = marlais_vector (methods);
     qsort (SOVELS (method_vector),
            SOVSIZE (method_vector),
            sizeof (Object),

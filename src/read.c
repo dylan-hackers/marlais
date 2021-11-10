@@ -108,7 +108,7 @@ infix_decode_token (int yychar, FILE * fp)
       if (yychar != ']') {
         return marlais_error ("Malformed vector.  Expected a ']'", NULL);
       }
-      return marlais_make_sov (new_list);
+      return marlais_vector (new_list);
     } /* case HASH_BRACKET */
   case HASH_PAREN:
     {
