@@ -93,7 +93,12 @@ marlais_initialize_class (void)
     binding = marlais_symbol_binding (CLASSNAME (object_class));
     binding->type = object_class;
   }
+
+  /* Basic classes */
   boolean_class = make_builtin_class ("<boolean>", object_class);
+  character_class = make_builtin_class ("<character>", object_class);
+  symbol_class = make_builtin_class ("<symbol>", object_class);
+  name_class = make_builtin_class ("<name>", object_class);
 
   /* Numeric classes */
   number_class = make_builtin_class ("<number>", object_class);
@@ -108,11 +113,11 @@ marlais_initialize_class (void)
   single_float_class = make_builtin_class ("<single-float>", float_class);
   double_float_class = make_builtin_class ("<double-float>", float_class);
 
-  /* Collection classes */
-  collection_class = make_builtin_class ("<collection>", object_class);
+  /* Collection base classes */
+  collection_class =
+    make_builtin_class ("<collection>", object_class);
   explicit_key_collection_class =
-    make_builtin_class ("<explicit-key-collection>",
-                        collection_class);
+    make_builtin_class ("<explicit-key-collection>", collection_class);
   stretchy_collection_class =
     make_builtin_class ("<stretchy-collection>", collection_class);
   mutable_collection_class =
@@ -129,34 +134,51 @@ marlais_initialize_class (void)
                         listem (mutable_collection_class,
                                 sequence_class,
                                 NULL));
-  table_class =
-    make_builtin_class ("<table>",
-                        listem (mutable_explicit_key_collection_class,
-                                stretchy_collection_class,
-                                NULL));
 
-  object_table_class =
-    make_builtin_class ("<object-table>", table_class);
+  /* List classes */
+  list_class =
+    make_builtin_class ("<list>", mutable_sequence_class);
+  empty_list_class =
+    make_builtin_class ("<empty-list>", list_class);
+  pair_class =
+    make_builtin_class ("<pair>", list_class);
 
+  /* Array classes */
+  array_class =
+    make_builtin_class ("<array>", mutable_sequence_class);
+
+  /* Deque classes */
   deque_class =
     make_builtin_class ("<deque>",
                         listem (mutable_sequence_class,
                                 stretchy_collection_class,
                                 NULL));
-  array_class =
-      make_builtin_class ("<array>", mutable_sequence_class);
-  list_class = make_builtin_class ("<list>", mutable_sequence_class);
-  empty_list_class = make_builtin_class ("<empty-list>", list_class);
-  pair_class = make_builtin_class ("<pair>", list_class);
-  string_class = make_builtin_class ("<string>", mutable_sequence_class);
-  vector_class = make_builtin_class ("<vector>", array_class);
-  simple_vector_class = make_builtin_class ("<simple-vector>", vector_class);
-  stretchy_vector_class = make_builtin_class("<stretchy-vector>",
-                                             listem(vector_class,
-                                                    stretchy_collection_class,
-                                                    NULL));
 
+  /* Table classes */
+  table_class =
+    make_builtin_class ("<table>",
+                        listem (mutable_explicit_key_collection_class,
+                                stretchy_collection_class,
+                                NULL));
+  object_table_class =
+    make_builtin_class ("<object-table>", table_class);
 
+  /* Vector classes */
+  vector_class =
+    make_builtin_class ("<vector>", array_class);
+  simple_vector_class =
+    make_builtin_class ("<simple-vector>", vector_class);
+  stretchy_vector_class =
+    make_builtin_class("<stretchy-vector>",
+                       listem(vector_class,
+                              stretchy_collection_class,
+                              NULL));
+  simple_object_vector_class =
+    make_builtin_class ("<simple-object-vector>", simple_vector_class);
+
+  /* String classes */
+  string_class =
+    make_builtin_class ("<string>", mutable_sequence_class);
   byte_string_class =
     make_builtin_class ("<byte-string>",
                         listem (string_class,
@@ -167,8 +189,6 @@ marlais_initialize_class (void)
                         listem (string_class,
                                 vector_class,
                                 NULL));
-  simple_object_vector_class =
-    make_builtin_class ("<simple-object-vector>", simple_vector_class);
 
   /* Condition classes */
   condition_class = make_builtin_class ("<condition>", object_class);
@@ -188,9 +208,9 @@ marlais_initialize_class (void)
                                          error_class);
   sealed_object_error_class =
     make_builtin_class ("<sealed-object-error>", error_class);
-  symbol_class = make_builtin_class ("<symbol>", object_class);
-  name_class = make_builtin_class ("<name>", object_class);
-  character_class = make_builtin_class ("<character>", object_class);
+
+
+  /* Function classes */
   function_class = make_builtin_class ("<function>", object_class);
   primitive_class = make_builtin_class ("<primitive>", function_class);
   generic_function_class =
@@ -200,10 +220,13 @@ marlais_initialize_class (void)
     make_builtin_class ("<exit-function>", function_class);
   unwind_protect_function_class =
     make_builtin_class ("<unwind-protect-function>", function_class);
+
+  /* Type classes */
   type_class = make_builtin_class ("<type>", object_class);
   singleton_class = make_builtin_class ("<singleton>", type_class);
   class_class = make_builtin_class ("<class>", type_class);
 
+  /* Marlais collection internals */
   table_entry_class = make_builtin_class ("<table-entry>", object_class);
   deque_entry_class = make_builtin_class ("<deque-entry>", object_class);
 
