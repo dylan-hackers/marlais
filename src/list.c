@@ -46,7 +46,7 @@
 /* local function prototypes */
 static Object car (Object pair);
 static Object cdr (Object pair);
-static Object first (Object pair, Object default_ob);
+static Object first_d (Object pair, Object default_ob);
 static Object second_d (Object pair, Object default_ob);
 static Object third_d (Object pair, Object default_ob);
 static Object set_car (Object pair, Object val);
@@ -60,7 +60,7 @@ static struct primitive list_prims[] =
     {"%pair", prim_2, cons},
     {"%head", prim_1, car},
     {"%tail", prim_1, cdr},
-    {"%first", prim_2, first},
+    {"%first", prim_2, first_d},
     {"%second", prim_2, second_d},
     {"%third", prim_2, third_d},
     {"%head-setter", prim_2, set_car},
@@ -199,7 +199,7 @@ static Object nth(Object lst, Object default_ob, const char* where,
 }
 
 static Object
-first (Object lst, Object default_ob)
+first_d (Object lst, Object default_ob)
 {
   return nth(lst, default_ob, "first", PAIRP(lst), car);
 }
