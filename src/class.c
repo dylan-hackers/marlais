@@ -224,7 +224,10 @@ marlais_initialize_class (void)
   /* Type classes */
   type_class = make_builtin_class ("<type>", object_class);
   singleton_class = make_builtin_class ("<singleton>", type_class);
+  union_class = make_builtin_class ("<union>", type_class);
   class_class = make_builtin_class ("<class>", type_class);
+  limited_type_class = make_builtin_class ("<limited-type>", type_class);
+  limited_integer_class = make_builtin_class ("<limited-integer>", limited_type_class);
 
   /* Marlais collection internals */
   table_entry_class = make_builtin_class ("<table-entry>", object_class);
@@ -328,13 +331,10 @@ marlais_object_class (Object obj)
     return (class_class);
   case Instance:
     return (INSTCLASS (obj));
-
-    /* need to check the following two cases */
   case LimitedIntType:
-    return (type_class);
+    return (limited_integer_class);
   case UnionType:
-    return (type_class);
-
+    return (union_class);
   case Primitive:
     return (primitive_class);
   case GenericFunction:
