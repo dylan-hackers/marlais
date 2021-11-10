@@ -48,6 +48,8 @@ extern Object marlais_make_integer (DyInteger i);
 #endif
 /* Make a <ratio> */
 extern Object marlais_make_ratio (DyInteger numerator, DyInteger denominator);
+/* Make a <single-float> */
+extern Object marlais_make_sfloat (float f);
 /* Make a <double-float> */
 extern Object marlais_make_dfloat (double d);
 

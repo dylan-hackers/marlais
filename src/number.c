@@ -180,6 +180,17 @@ marlais_make_ratio (DyInteger numerator, DyInteger denominator)
 }
 
 Object
+marlais_make_sfloat (float f)
+{
+    Object obj;
+
+    obj = marlais_allocate_object (SingleFloat, sizeof (struct single_float));
+
+    SFLOATVAL (obj) = f;
+    return (obj);
+}
+
+Object
 marlais_make_dfloat (double d)
 {
     Object obj;
