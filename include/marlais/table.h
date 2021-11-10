@@ -45,7 +45,7 @@ extern void marlais_register_table (void);
 /* Make a new table of given size */
 extern Object marlais_make_table (int size);
 /* Entrypoint for make(<table>) */
-extern Object marlais_make_table_driver (Object rest);
+extern Object marlais_make_table_entrypoint (Object rest);
 /* Get value in table */
 extern Object marlais_table_element (Object table, Object key, Object default_val);
 /* Set value in table */

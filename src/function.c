@@ -804,7 +804,7 @@ generic_function_make (Object arglist)
 }
 
 Object
-marlais_make_generic_function_driver (Object args)
+marlais_make_generic_entrypoint (Object args)
 {
   return marlais_error ("make: not implemented for generic functions", NULL);
 }

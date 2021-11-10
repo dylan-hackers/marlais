@@ -82,7 +82,7 @@ marlais_make_bytestring (char *str)
 }
 
 Object
-marlais_make_bytestring_entry (Object args)
+marlais_make_bytestring_entrypoint (Object args)
 {
   int size, i;
   char fill;

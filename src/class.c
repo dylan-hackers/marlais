@@ -53,7 +53,7 @@ static struct primitive class_prims[] =
 /* Internal function prototypes */
 
 static Object make_instance (Object class, Object *initializers);
-static Object make_class_driver (Object args);
+static Object make_class_entrypoint (Object args);
 static Object initialize_slots (Object descriptors, Object initializers);
 static int member_2 (Object obj1, Object obj2, Object obj_list);
 static Object make_builtin_class (char *name, Object superclasses);
@@ -501,19 +501,19 @@ marlais_make (Object class, Object rest)
     ret = make_list_driver (rest);
   } else if ((class == vector_class) ||
              (class == simple_object_vector_class)) {
-    ret = marlais_make_vector_entry (rest);
+    ret = marlais_make_vector_entrypoint (rest);
   } else if ((class == string_class) || (class == byte_string_class)) {
-    ret = marlais_make_bytestring_entry (rest);
+    ret = marlais_make_bytestring_entrypoint (rest);
   } else if (class == generic_function_class) {
-    ret = marlais_make_generic_function_driver (rest);
+    ret = marlais_make_generic_entrypoint (rest);
   } else if ((class == table_class) || (class == object_table_class)) {
-    ret = marlais_make_table_driver (rest);
+    ret = marlais_make_table_entrypoint (rest);
   } else if (class == deque_class) {
-    ret = marlais_make_deque_entry (rest);
+    ret = marlais_make_deque_entrypoint (rest);
   } else if (class == array_class) {
-    ret = marlais_make_array_entry (rest);
+    ret = marlais_make_array_entrypoint (rest);
   } else if (class == class_class) {
-    ret = make_class_driver (rest);
+    ret = make_class_entrypoint (rest);
   } else {
     ret = make_instance (class, &rest);
   }
@@ -973,7 +973,7 @@ make_instance (Object class, Object *initializers)
 }
 
 static Object
-make_class_driver (Object args)
+make_class_entrypoint (Object args)
 {
   Object supers_obj, slots_obj, debug_obj, abstract_obj;
   Object obj;

@@ -82,7 +82,7 @@ marlais_register_array (void)
 }
 
 Object
-marlais_make_array_entry (Object args)
+marlais_make_array_entrypoint (Object args)
 {
   Object dim_obj, fill_obj, res;
 

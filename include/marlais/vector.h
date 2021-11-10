@@ -43,7 +43,7 @@ extern Object marlais_vector (Object list);
 /* Make a <vector> */
 extern Object marlais_make_vector (int size, Object fill_obj);
 /* Entrypoint for make(<vector>) */
-extern Object marlais_make_vector_entry (Object args);
+extern Object marlais_make_vector_entrypoint (Object args);
 /* Convert a vector to a list */
 extern Object marlais_vector_to_list (Object vec);
 

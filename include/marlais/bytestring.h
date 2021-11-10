@@ -41,6 +41,6 @@ extern void marlais_register_bytestring (void);
 /* Make a <bytestring> */
 extern Object marlais_make_bytestring (char *str);
 /* Entrypoint for make(<bytestring>) */
-extern Object marlais_make_bytestring_entry (Object args);
+extern Object marlais_make_bytestring_entrypoint (Object args);
 
 #endif

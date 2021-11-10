@@ -42,6 +42,7 @@ extern Object marlais_function_specializers (Object meth);
 extern Object marlais_generic_methods (Object generic);
 
 extern Object marlais_make_generic (Object name, Object params, Object methods);
+extern Object marlais_make_generic_entrypoint (Object args);
 extern Object marlais_make_method (Object name, Object params, Object body, struct frame *env, int do_generic);
 extern Object marlais_add_method (Object generic, Object method);
 extern Object marlais_make_next_method (Object generic, Object rest_methods, Object args);
@@ -49,7 +50,6 @@ extern Object marlais_make_next_method (Object generic, Object rest_methods, Obj
 extern Object marlais_applicable_method_p (Object fun, Object sample_args, int strict_check);
 extern Object marlais_sorted_applicable_methods (Object fun, Object sample_args);
 
-extern Object marlais_make_generic_function_driver (Object args);
 
 #ifdef MARLAIS_ENABLE_METHOD_CACHING
 extern Object marlais_recalc_next_methods (Object fun, Object meth, Object sample_args);

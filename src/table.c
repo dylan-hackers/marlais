@@ -100,7 +100,7 @@ marlais_make_table (int size)
 }
 
 Object
-marlais_make_table_driver (Object rest)
+marlais_make_table_entrypoint (Object rest)
 {
   Object size;
 

@@ -109,7 +109,7 @@ marlais_make_vector (int size, Object fill_obj)
 }
 
 Object
-marlais_make_vector_entry (Object args)
+marlais_make_vector_entrypoint (Object args)
 {
   int size;
   Object size_obj, fill_obj;

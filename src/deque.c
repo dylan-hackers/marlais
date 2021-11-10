@@ -101,7 +101,7 @@ marlais_make_deque (void)
 }
 
 Object
-marlais_make_deque_entry (Object args)
+marlais_make_deque_entrypoint (Object args)
 {
   int size;
   Object size_obj, fill_obj, first, last, deq;

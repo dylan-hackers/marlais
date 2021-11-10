@@ -39,6 +39,6 @@
 /* Initialize array primitives */
 extern void marlais_register_array (void);
 /* Entrypoint for make(<array>) */
-extern Object marlais_make_array_entry (Object args);
+extern Object marlais_make_array_entrypoint (Object args);
 
 #endif

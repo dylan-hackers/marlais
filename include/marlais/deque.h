@@ -41,6 +41,6 @@ extern void marlais_register_deque (void);
 /* Make an empty <deque> */
 extern Object marlais_make_deque (void);
 /* Entrypoint for make(<deque>) */
-extern Object marlais_make_deque_entry (Object args);
+extern Object marlais_make_deque_entrypoint (Object args);
 
 #endif /* ! DEQUE_H */
