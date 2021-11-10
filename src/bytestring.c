@@ -41,6 +41,10 @@
 #include <marlais/sequence.h>
 #include <marlais/symbol.h>
 
+/* Internal function declarations */
+
+static Object make_string(char *str, size_t len);
+
 /* Primitives */
 
 static Object string_element (Object string, Object index, Object default_ob);
@@ -72,21 +76,28 @@ marlais_register_bytestring (void)
 }
 
 Object
-marlais_make_bytestring (char *str)
+marlais_make_bytestring (const char *str)
 {
-    Object obj = marlais_allocate_object (ByteString, sizeof (struct byte_string));
+    int size;
+    char *new;
 
-    BYTESTRSIZE (obj) = strlen (str);
-    BYTESTRVAL (obj) = marlais_allocate_strdup (str);
-    return (obj);
+    size = strlen (str);
+
+    new = MARLAIS_ALLOCATE_STRING (size + 1);
+
+    strncpy (new, str, size);
+    new[size] = 0;
+
+    return (make_string (new, size));
 }
 
 Object
 marlais_make_bytestring_entrypoint (Object args)
 {
-  int size, i;
-  char fill;
-  Object size_obj, fill_obj, res;
+  int size;
+  Object size_obj, fill_obj;
+  char fill = ' ';
+  char *new;
 
   marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<string>");
 
@@ -96,24 +107,28 @@ marlais_make_bytestring_entrypoint (Object args)
                      fill_obj, NULL);
     }
     fill = CHARVAL (fill_obj);
-  } else {
-    fill = ' ';
   }
 
-  /* actually fabricate the string */
-  res = marlais_allocate_object (ByteString, sizeof (struct byte_string));
+  new = MARLAIS_ALLOCATE_STRING (size + 1);
 
-  BYTESTRSIZE (res) = size;
-  BYTESTRVAL (res) = MARLAIS_ALLOCATE_STRING (size + 1);
-  for (i = 0; i < size; ++i) {
-    BYTESTRVAL (res)[i] = fill;
-  }
-  BYTESTRVAL (res)[i] = '\0';
+  memset (new, fill, size);
+  new[size] = 0;
 
-  return (res);
+  return (make_string (new, size));
 }
 
 /* Internal functions */
+
+static Object
+make_string(char *str, size_t len) {
+  Object obj;
+
+  obj = marlais_allocate_object (ByteString, sizeof (struct byte_string));
+  BYTESTRVAL (obj) = str;
+  BYTESTRSIZE (obj) = len;
+
+  return obj;
+}
 
 static Object
 string_element (Object string, Object index, Object default_ob)
@@ -166,15 +181,20 @@ string_size_setter (Object size, Object string)
 static Object
 string_append2 (Object str1, Object str2)
 {
-    char *new_str;
-    int new_size;
+    int len1, len2, newlen;
+    char *newstr;
 
-    new_size = BYTESTRSIZE (str1) + BYTESTRSIZE (str2);
-    new_str = (char *) marlais_allocate_memory ((new_size * sizeof (char)) + 1);
+    len1 = BYTESTRSIZE (str1);
+    len2 = BYTESTRSIZE (str2);
+    newlen = len1 + len2;
 
-    strcpy (new_str, BYTESTRVAL (str1));
-    strcat (new_str, BYTESTRVAL (str2));
-    return (marlais_make_bytestring (new_str));
+    newstr = MARLAIS_ALLOCATE_STRING (newlen + 1);
+
+    strncpy (newstr, str1, len1);
+    strncpy (newstr + len1, str2, len2);
+    newstr[newlen] = 0;
+
+    return (make_string (newstr, newlen));
 }
 
 static Object
