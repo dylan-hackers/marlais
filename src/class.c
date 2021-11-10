@@ -150,6 +150,7 @@ marlais_initialize_class (void)
   pair_class = make_builtin_class ("<pair>", list_class);
   string_class = make_builtin_class ("<string>", mutable_sequence_class);
   vector_class = make_builtin_class ("<vector>", array_class);
+  simple_vector_class = make_builtin_class ("<simple-vector>", vector_class);
   stretchy_vector_class = make_builtin_class("<stretchy-vector>",
                                              listem(vector_class,
                                                     stretchy_collection_class,
@@ -167,7 +168,7 @@ marlais_initialize_class (void)
                                 vector_class,
                                 NULL));
   simple_object_vector_class =
-    make_builtin_class ("<simple-object-vector>", vector_class);
+    make_builtin_class ("<simple-object-vector>", simple_vector_class);
 
   /* Condition classes */
   condition_class = make_builtin_class ("<condition>", object_class);
