@@ -298,7 +298,6 @@ marlais_object_class (Object obj)
   case True:
   case False:
     return (boolean_class);
-    break;
   case Ratio:
     return (ratio_class);
   case SingleFloat:
