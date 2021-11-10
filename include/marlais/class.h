@@ -17,25 +17,13 @@ extern void marlais_register_class (void);
 /* Instance methods */
 extern Object marlais_object_class (Object obj);
 
-/* Instance check */
-extern Object marlais_instance_p (Object obj, Object class);
-extern int marlais_instance (Object obj, Object class);
-
-/* Subtype check */
-extern Object marlais_subtype_p (Object class1, Object class2);
-extern int marlais_subtype (Object class1, Object class2);
-
-/* Same-class check */
-extern Object marlais_same_class_p (Object class1, Object class2);
-
 /* Class methods */
 extern Object marlais_direct_subclasses (Object class);
 extern Object marlais_direct_superclasses (Object class);
-extern Object marlais_make (Object class, Object rest);
+extern Object marlais_all_superclasses (Object class);
 
-/* Type creation */
-extern Object marlais_singleton (Object val);
-extern Object marlais_make_union_type (Object typelist);
+/* Instance creation */
+extern Object marlais_make (Object class, Object rest);
 
 /* Class creation */
 extern Object marlais_make_class (Object class_object,

@@ -214,7 +214,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
       } else {
         sym = FIRST (param);
         class = SECOND (param);
-        if (!marlais_instance (val, class)) {
+        if (!marlais_instance_p (val, class)) {
           marlais_error ("apply: argument doesn't match method specializer",
                          val, class, meth, NULL);
         }
@@ -390,7 +390,7 @@ narrow_value_types (Object *values_list_ptr,
     if (EMPTYLISTP (new_values_list)) {
       break;
     }
-    if (marlais_subtype (CAR (new_values_list), CAR (*values_list_ptr))) {
+    if (marlais_subtype_p (CAR (new_values_list), CAR (*values_list_ptr))) {
       CAR (*values_list_ptr) = CAR (new_values_list);
     }
   }
@@ -403,7 +403,7 @@ narrow_value_types (Object *values_list_ptr,
      * be added to the list.
      */
     while (!EMPTYLISTP (new_values_list)) {
-      if (marlais_subtype (CAR (new_values_list), *rest_type)) {
+      if (marlais_subtype_p (CAR (new_values_list), *rest_type)) {
         *values_list_ptr = cons (CAR (new_values_list),
                                  make_empty_list ());
       } else {
@@ -422,7 +422,7 @@ narrow_value_types (Object *values_list_ptr,
     }
     values_list = *values_list_ptr;
     while (!EMPTYLISTP (values_list)) {
-      if (marlais_subtype (new_rest_type, CAR (values_list))) {
+      if (marlais_subtype_p (new_rest_type, CAR (values_list))) {
         CAR (values_list) = new_rest_type;
       }
       values_list = CDR (values_list);
@@ -431,7 +431,7 @@ narrow_value_types (Object *values_list_ptr,
   if (new_rest_type == NULL) {
     /* No rest values are allowed to be returned */
     *rest_type = NULL;
-  } else if (*rest_type == NULL || marlais_subtype (*rest_type, new_rest_type)) {
+  } else if (*rest_type == NULL || marlais_subtype_p (*rest_type, new_rest_type)) {
     *rest_type = new_rest_type;
   }
 }
@@ -465,7 +465,7 @@ marlais_construct_return_values (Object ret,
   for (i = 0;
        i < VALUESNUM (ret) && PAIRP (required_values);
        i++, required_values = CDR (required_values)) {
-    if (!marlais_instance (VALUESELS (ret)[i], CAR (required_values))) {
+    if (!marlais_instance_p (VALUESELS (ret)[i], CAR (required_values))) {
       marlais_error ("in value return: return value is not of correct type",
                      VALUESELS (ret)[i], CAR (required_values), NULL);
     }
@@ -476,7 +476,7 @@ marlais_construct_return_values (Object ret,
      */
     if (rest_values != NULL) {
       for (; i < VALUESNUM (ret); i++) {
-        if (!marlais_instance (VALUESELS (ret)[i],
+        if (!marlais_instance_p (VALUESELS (ret)[i],
                                rest_values)) {
           marlais_error ("in value return: return value is not of correct type",
                          VALUESELS (ret)[i],
@@ -491,7 +491,7 @@ marlais_construct_return_values (Object ret,
   } else if (PAIRP (required_values)) {
     /* Add default values */
     for (j = 0; PAIRP (required_values); j++, required_values = CDR (required_values)) {
-      if (!marlais_instance (MARLAIS_FALSE, CAR (required_values))) {
+      if (!marlais_instance_p (MARLAIS_FALSE, CAR (required_values))) {
         marlais_error ("in value return: default value doesn't match return type",
                        CAR (required_values),
                        NULL);

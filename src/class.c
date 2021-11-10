@@ -25,29 +25,21 @@ int last_class_index = 0;
 static Object class_slots_class;
 
 /* primitives */
-static Object class_debug_name (Object class);
-static Object class_precedence_list (Object class);
 
-static Object make_limited_int_type (Object args);
-static Object make_union_type (Object typelist);
+static Object class_debug_name (Object class);
 
 static struct primitive class_prims[] =
 {
     {"%object-class", prim_1, marlais_object_class},
 
     {"%make", prim_2, marlais_make},
-    {"%instance?", prim_2, marlais_instance_p},
-    {"%subtype?", prim_2, marlais_subtype_p},
 
-    {"%singleton", prim_1, marlais_singleton},
-    {"%union-type", prim_1, marlais_make_union_type},
-
+    {"%class-debug-name", prim_1, class_debug_name},
     {"%direct-superclasses", prim_1, marlais_direct_superclasses},
     {"%direct-subclasses", prim_1, marlais_direct_subclasses},
+    {"%all-superclasses", prim_1, marlais_all_superclasses},
+
     {"%seal", prim_1, marlais_make_class_sealed},
-    {"%limited-integer", prim_1, make_limited_int_type},
-    {"%all-superclasses", prim_1, class_precedence_list},
-    {"%class-debug-name", prim_1, class_debug_name},
 };
 
 /* Internal function prototypes */
@@ -368,147 +360,6 @@ marlais_object_class (Object obj)
 }
 
 Object
-marlais_instance_p (Object obj, Object type)
-{
-  return (marlais_instance (obj, type) ? MARLAIS_TRUE : MARLAIS_FALSE);
-}
-
-int
-marlais_instance (Object obj, Object type)
-{
-  Object objtype;
-
-  if (SINGLETONP (type)) {
-    return marlais_identical_p (obj, SINGLEVAL (type));
-  } else if (LIMINTP (type)) {
-    if (INTEGERP (obj) &&
-        ((!LIMINTHASMIN (type)) ||
-         INTVAL (obj) >= LIMINTMIN (type)) &&
-        ((!LIMINTHASMAX (type)) ||
-         INTVAL (obj) <= LIMINTMAX (type))) {
-      return 1;
-    } else {
-      return 0;
-    }
-  } else if (LIMINTP (obj)) {
-    /* not sure on this one.  jnw */
-    return marlais_subtype (type_class, type);
-  } else if (UNIONP (type)) {
-    Object ptr;
-
-    for (ptr = UNIONLIST (type); PAIRP (ptr); ptr = CDR (ptr)) {
-      if (marlais_instance (obj, (CAR (ptr)))) {
-        return 1;
-      }
-    }
-    return 0;
-  }
-  objtype = marlais_object_class (obj);
-  if (objtype == type) {
-    return 1;
-  } else {
-    return (marlais_subtype (objtype, type));
-  }
-}
-
-Object
-marlais_subtype_p (Object type1, Object type2)
-{
-  return (marlais_subtype (type1, type2) ? MARLAIS_TRUE : MARLAIS_FALSE);
-}
-
-int
-marlais_subtype (Object type1, Object type2)
-{
-  Object supers;
-
-  if (type1 == type2) {
-    return 1;
-  } else if (SINGLETONP (type1)) {
-    return (marlais_instance (SINGLEVAL (type1), type2));
-  } else if (LIMINTP (type1)) {
-    if (LIMINTP (type2)) {
-      if (((!LIMINTHASMIN (type2)) ||
-           (LIMINTHASMIN (type1) &&
-            (LIMINTMIN (type1) >= LIMINTMIN (type2))))
-          &&
-          ((!LIMINTHASMAX (type2)) ||
-           (LIMINTHASMAX (type1) &&
-            (LIMINTMAX (type1) <= LIMINTMAX (type2))))) {
-        return 1;
-      } else {
-        return 0;
-      }
-    } else {
-      return (marlais_subtype (integer_class, type2));
-    }
-  } else if (UNIONP (type1)) {
-    Object ptr;
-
-    for (ptr = UNIONLIST (type1); PAIRP (ptr); ptr = CDR (ptr)) {
-      if (!marlais_subtype (CAR (ptr), type2)) {
-        return 0;
-      }
-    }
-    return 1;
-  } else if (UNIONP (type2)) {
-    Object ptr;
-
-    for (ptr = UNIONLIST (type2); PAIRP (ptr); ptr = CDR (ptr)) {
-      if (marlais_subtype (type1, CAR (ptr))) {
-        return 1;
-      }
-    }
-    return 0;
-  } else {
-    supers = CLASSSUPERS (type1);
-    if (!supers) {
-      return 0;
-    }
-    while (!EMPTYLISTP (supers)) {
-      if (marlais_subtype (CAR (supers), type2)) {
-        return 1;
-      }
-      supers = CDR (supers);
-    }
-    return 0;
-  }
-}
-
-Object
-marlais_same_class_p (Object class1, Object class2)
-{
-  if (class1 == class2) {
-    return (MARLAIS_TRUE);
-  } else if ((POINTERTYPE (class1) == Singleton) &&
-             (POINTERTYPE (class2) == Singleton)) {
-    if (marlais_identical_p (SINGLEVAL(class1), SINGLEVAL(class2))) {
-      return MARLAIS_TRUE;
-    } else {
-      return MARLAIS_FALSE;
-    }
-  } else {
-    return MARLAIS_FALSE;
-  }
-}
-
-Object
-marlais_direct_subclasses (Object class)
-{
-  return CLASSSUBS (class);
-}
-
-Object
-marlais_direct_superclasses (Object class)
-{
-  if (!SEALEDP (class)) {
-    return CLASSSUPERS (class);
-  } else {
-    return make_empty_list ();
-  }
-}
-
-Object
 marlais_make (Object class, Object rest)
 {
   Object ret, initialize_fun;
@@ -551,41 +402,36 @@ marlais_make (Object class, Object rest)
   return (ret);
 }
 
-Object
-marlais_singleton (Object val)
+static Object
+class_debug_name (Object class)
 {
-  Object obj;
-
-  obj = marlais_allocate_object (Singleton, sizeof (struct singleton));
-
-  SINGLEVAL (obj) = val;
-  return (obj);
+  return CLASSNAME (class);
 }
 
-/*
- * Incredibly speculative!
- */
 Object
-marlais_make_union_type (Object typelist)
+marlais_direct_subclasses (Object class)
 {
-  Object obj, ptr, qtr, union_types;
+  return CLASSSUBS (class);
+}
 
-  obj = marlais_allocate_object (UnionType, sizeof (struct union_type));
-
-  union_types = make_empty_list ();
-
-  for (ptr = typelist; PAIRP (ptr); ptr = CDR (ptr)) {
-    if (UNIONP (CAR (ptr))) {
-      for (qtr = UNIONLIST (CAR (ptr)); PAIRP (qtr); qtr = CDR (qtr)) {
-        union_types = cons (CAR (qtr), union_types);
-      }
-    } else {
-      union_types = cons (CAR (ptr), union_types);
-    }
+Object
+marlais_direct_superclasses (Object class)
+{
+  if (!SEALEDP (class)) {
+    return CLASSSUPERS (class);
+  } else {
+    return make_empty_list ();
   }
-  UNIONLIST (obj) = union_types;
+}
 
-  return obj;
+Object
+marlais_all_superclasses (Object class)
+{
+  if (SEALEDP (class)) {
+    return make_empty_list ();
+  } else {
+    return CLASSPRECLIST (class);
+  }
 }
 
 Object
@@ -1230,6 +1076,7 @@ replace_slotd_init (Object init_slotds, Object keyword, Object init)
   return listem (keyword, init, NULL);
 }
 
+/* XXX eliminate */
 static Object
 pair_list_reverse (Object lst)
 {
@@ -1243,40 +1090,6 @@ pair_list_reverse (Object lst)
   return result;
 }
 
-/*
- * Largely speculative.  Probably will change all around.
- */
-static Object
-make_limited_int_type (Object args)
-{
-  Object obj;
-
-  obj = marlais_allocate_object (LimitedIntType, sizeof (struct limited_int_type));
-
-  while (!EMPTYLISTP (args)) {
-    if (FIRST (args) == min_keyword) {
-      if (LIMINTHASMIN (obj)) {
-        marlais_error ("Minimum value for limited type specified twice", NULL);
-      } else {
-        LIMINTMIN (obj) = INTVAL (SECOND (args));
-        LIMINTPROPS (obj) |= LIMMINMASK;
-      }
-    } else if (FIRST (args) == max_keyword) {
-      if (LIMINTHASMAX (obj)) {
-        marlais_error ("Maximum value for limited type specified twice", NULL);
-      } else {
-        LIMINTMAX (obj) = INTVAL (SECOND (args));
-        LIMINTPROPS (obj) |= LIMMAXMASK;
-      }
-    } else {
-      marlais_error ("make: unsupported keyword for limited integer type",
-                     FIRST (args), NULL);
-    }
-    args = CDR (CDR (args));
-  }
-
-  return (obj);
-}
 
 static void
 initialize_slotds (Object class)
@@ -1335,22 +1148,6 @@ eval_slotds (Object slotds)
     }
     slotds = CDR (slotds);
   }
-}
-
-static Object
-class_precedence_list (Object class)
-{
-  if (SEALEDP (class)) {
-    return make_empty_list ();
-  } else {
-    return CLASSPRECLIST (class);
-  }
-}
-
-static Object
-class_debug_name (Object class)
-{
-  return CLASSNAME (class);
 }
 
 static int

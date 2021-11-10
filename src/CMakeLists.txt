@@ -51,6 +51,7 @@ add_library(marlais_lib
   syntax.c
   sys.c
   table.c
+  type.c
   values.c
   vector.c
 

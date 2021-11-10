@@ -8,12 +8,13 @@
 #include <marlais/object.h>
 #include <marlais/globals.h>
 #include <marlais/error.h>
+#include <marlais/boolean.h>
+#include <marlais/type.h>
 #endif
 
 #include <marlais/alloc.h>
 #include <marlais/apply.h>
 #include <marlais/array.h>
-#include <marlais/boolean.h>
 #include <marlais/bytestring.h>
 #include <marlais/character.h>
 #include <marlais/class.h>

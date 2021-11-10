@@ -712,7 +712,7 @@ add_variable_binding (Object var,
       marlais_error ("badly formed variable", var, NULL);
     }
     type = eval (SECOND (var));
-    if (!marlais_instance (type, type_class)) {
+    if (!marlais_instance_p (type, type_class)) {
       marlais_error ("badly formed variable", var, NULL);
     }
   } else {
@@ -722,7 +722,7 @@ add_variable_binding (Object var,
     /* marlais_add_export can't easily check type match.
      * do it here.
      */
-    if (!marlais_instance (val, type)) {
+    if (!marlais_instance_p (val, type)) {
       marlais_error ("initial value does not satisfy type constraint",
                      val,
                      type,

@@ -17,5 +17,7 @@
 #include <marlais/object.h>
 #include <marlais/globals.h>
 #include <marlais/error.h>
+#include <marlais/boolean.h>
+#include <marlais/type.h>
 
 #endif
