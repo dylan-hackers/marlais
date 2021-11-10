@@ -64,7 +64,7 @@ marlais_register_character (void)
 }
 
 #ifndef MARLAIS_OBJECT_MODEL_SMALL
-/* small version is inline */
+/* small version is inline in marlais/character.h */
 Object
 marlais_make_character (char ch)
 {
