@@ -39,7 +39,13 @@
 /* Register number primitives */
 extern void marlais_register_number (void);
 /* Make an <integer> */
+#ifdef MARLAIS_OBJECT_MODEL_SMALL
+static inline Object marlais_make_integer(DyInteger i) {
+  return (MAKE_INT (i));
+}
+#else
 extern Object marlais_make_integer (DyInteger i);
+#endif
 /* Make a <ratio> */
 extern Object marlais_make_ratio (DyInteger numerator, DyInteger denominator);
 /* Make a <double-float> */

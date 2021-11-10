@@ -153,36 +153,19 @@ marlais_register_number (void)
 #endif
 }
 
+#ifndef MARLAIS_OBJECT_MODEL_SMALL
+/* small version is inline in marlais/number.h */
 Object
 marlais_make_integer (DyInteger i)
 {
-#ifdef MARLAIS_OBJECT_MODEL_SMALL
-  if (INT_ABS (i) <= MAX_SMALL_INT) {
-	return (MAKE_INT (i));
-  } else {
-#if MARLAIS_ENABLE_BIG_INTEGERS
-	return make_big_integer (i);
-#else /* MARLAIS_ENABLE_BIG_INTEGERS */
-	marlais_fatal("Integer to big!");
-#endif /* MARLAIS_ENABLE_BIG_INTEGERS */
-  }
-#else /* MARLAIS_OBJECT_MODEL_SMALL */
-  if (INT_ABS (i) <= MAX_SMALL_INT) {
-	Object obj;
+  Object obj;
 
-	obj = marlais_allocate_object (Integer, sizeof (struct integer));
+  obj = marlais_allocate_object (Integer, sizeof (struct integer));
 
-	INTVAL (obj) = i;
-	return (obj);
-  } else {
-#if MARLAIS_ENABLE_BIG_INTEGERS
-	return make_big_integer (i);
-#else /* MARLAIS_ENABLE_BIG_INTEGERS */
-	marlais_fatal("Integer to big!");
-#endif /* MARLAIS_ENABLE_BIG_INTEGERS */
-  }
-#endif /* MARLAIS_OBJECT_MODEL_SMALL */
+  INTVAL (obj) = i;
+  return (obj);
 }
+#endif
 
 Object
 marlais_make_ratio (DyInteger numerator, DyInteger denominator)
