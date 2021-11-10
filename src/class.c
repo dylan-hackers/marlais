@@ -94,11 +94,13 @@ marlais_initialize_class (void)
     binding->type = object_class;
   }
 
-  /* Basic classes */
+  /* Literal classes */
   boolean_class = make_builtin_class ("<boolean>", object_class);
   character_class = make_builtin_class ("<character>", object_class);
-  symbol_class = make_builtin_class ("<symbol>", object_class);
+
+  /* Symbol classes */
   name_class = make_builtin_class ("<name>", object_class);
+  symbol_class = make_builtin_class ("<symbol>", object_class);
 
   /* Numeric classes */
   number_class = make_builtin_class ("<number>", object_class);
