@@ -32,19 +32,23 @@ static double aint (double x);
 
 /* Internal variables */
 
+/* Cache for <short-integer> */
 #ifndef MARLAIS_OBJECT_MODEL_SMALL
 #if MARLAIS_CONFIG_INTEGER_CACHE > 0
 static Object integer_cache[MARLAIS_CONFIG_INTEGER_CACHE];
 #endif
 #endif
 
+/* Cache for <ratio> */
 #if MARLAIS_CONFIG_RATIO_CACHE > 0
 static Object ratio_cache[MARLAIS_CONFIG_RATIO_CACHE^2];
 #endif
 
+/* Cache for <single-float> */
 static Object sfloat_zero;
 static Object sfloat_one;
 
+/* Cache for <double-float> */
 static Object dfloat_zero;
 static Object dfloat_one;
 
