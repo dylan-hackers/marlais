@@ -40,7 +40,7 @@
 #include <marlais/prim.h>
 #include <marlais/symbol.h>
 
-/* Internatl function declarations */
+/* Internal function declarations */
 
 static Object array_make (Object dims, Object fill);
 static int    array_index (Object arr, Object indices, Object default_ob);
@@ -174,10 +174,10 @@ array_index (Object arr, Object indices, Object default_ob)
     ind_val = INTVAL (ind);
     if ((ind_val < 0) || (ind_val >= dim_val)) {
       if (default_ob == default_object) {
-          marlais_error ("element: array indices out of range", indices,
-                         ARRDIMS (arr), NULL);
+        marlais_error ("element: array indices out of range", indices,
+                       ARRDIMS (arr), NULL);
       } else {
-          return -1;
+        return -1;
       }
     }
     offset += (ind_val * index_stride);
