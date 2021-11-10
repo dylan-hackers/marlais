@@ -41,6 +41,7 @@ extern void marlais_register_number (void);
 /* Make an <integer> */
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
 static inline Object marlais_make_integer(DyInteger i) {
+  /* XXX bignum support */
   return (MAKE_INT (i));
 }
 #else
