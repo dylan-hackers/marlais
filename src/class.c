@@ -101,10 +101,8 @@ marlais_initialize_class (void)
   real_class = make_builtin_class ("<real>", complex_class);
   rational_class = make_builtin_class ("<rational>", real_class);
   integer_class = make_builtin_class ("<integer>", rational_class);
-  small_integer_class = make_builtin_class ("<small-integer>",
-                                            integer_class);
+  small_integer_class = make_builtin_class ("<small-integer>", integer_class);
   big_integer_class = make_builtin_class ("<big-integer>", integer_class);
-
   ratio_class = make_builtin_class ("<ratio>", rational_class);
   float_class = make_builtin_class ("<float>", real_class);
   single_float_class = make_builtin_class ("<single-float>", float_class);
