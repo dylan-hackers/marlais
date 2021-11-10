@@ -12,7 +12,7 @@ add_subdirectory(src)
 add_subdirectory(bin)
 
 install(
-  TARGETS marlais marlais_bin
+  TARGETS marlais_lib marlais_bin
   RUNTIME DESTINATION bin
   ARCHIVE DESTINATION lib
   PUBLIC_HEADER DESTINATION include/marlais

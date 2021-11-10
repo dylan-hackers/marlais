@@ -16,7 +16,7 @@ flex_target(
 add_flex_bison_dependency(LEXER PARSER)
 
 # Main library
-add_library(marlais
+add_library(marlais_lib
   alloc.c
   apply.c
   array.c
@@ -58,21 +58,25 @@ add_library(marlais
   ${FLEX_LEXER_OUTPUTS}
 )
 
+# actual name
+set_target_properties(marlais_lib
+  PROPERTIES OUTPUT_NAME marlais)
+
 # includes
-target_include_directories(marlais PUBLIC ../include)
+target_include_directories(marlais_lib PUBLIC ../include)
 file(GLOB_RECURSE MARLAIS_INCLUDES "../include/*.h")
-set_target_properties(marlais
+set_target_properties(marlais_lib
   PROPERTIES PUBLIC_HEADER "${MARLAIS_INCLUDES}")
 
 # libdl
-target_link_libraries(marlais PUBLIC dl)
+target_link_libraries(marlais_lib PUBLIC dl)
 
 # libm
-target_link_libraries(marlais PUBLIC m)
+target_link_libraries(marlais_lib PUBLIC m)
 
 # libreadline
-target_link_libraries(marlais PUBLIC readline)
+target_link_libraries(marlais_lib PUBLIC readline)
 
 # libgc
-target_link_libraries(marlais PUBLIC ${BDWGC_LINK_LIBRARIES})
-target_include_directories(marlais PRIVATE ${BDWGC_INCLUDE_DIRS})
+target_link_libraries(marlais_lib PUBLIC ${BDWGC_LINK_LIBRARIES})
+target_include_directories(marlais_lib PRIVATE ${BDWGC_INCLUDE_DIRS})
