@@ -19,6 +19,11 @@
 #undef MARLAIS_OBJECT_MODEL_LARGE
 #define MARLAIS_OBJECT_MODEL_SMALL
 
+/* Cache the first N characters */
+#define MARLAIS_CONFIG_CHARACTER_CACHE 256
+/* Cache the first N integers */
+#define MARLAIS_CONFIG_INTEGER_CACHE 1024
+
 #define MAX_STRING_SIZE 10240
 #define MAX_SYMBOL_SIZE 1024
 #define MAX_NUMBER_SIZE 255

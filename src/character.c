@@ -39,6 +39,12 @@
 
 #include <ctype.h>
 
+/* Internal variables */
+
+#if MARLAIS_CONFIG_CHARACTER_CACHE > 0
+static Object character_cache[MARLAIS_CONFIG_CHARACTER_CACHE];
+#endif
+
 /* Primitives */
 
 static Object integer_to_character (Object i);
@@ -69,8 +75,24 @@ Object
 marlais_make_character (char ch)
 {
   Object obj;
+
+#if MARLAIS_CONFIG_CHARACTER_CACHE > 0
+  if(ch >= 0 && ch < MARLAIS_CONFIG_CHARACTER_CACHE) {
+    if(character_cache[ch] != NULL) {
+      return character_cache[ch];
+    }
+  }
+#endif
+
   obj = marlais_allocate_object (Character, sizeof (struct character));
   CHARVAL (obj) = ch;
+
+#if MARLAIS_CONFIG_CHARACTER_CACHE > 0
+  if(ch >= 0 && ch < MARLAIS_CONFIG_CHARACTER_CACHE) {
+    character_cache[ch] = obj;
+  }
+#endif
+
   return (obj);
 }
 #endif

@@ -30,6 +30,20 @@ static double anint (double x);
 static double aint (double x);
 #endif
 
+/* Internal variables */
+
+#ifndef MARLAIS_OBJECT_MODEL_SMALL
+#if MARLAIS_CONFIG_INTEGER_CACHE > 0
+static Object integer_cache[MARLAIS_CONFIG_INTEGER_CACHE];
+#endif
+#endif
+
+static Object sfloat_zero;
+static Object sfloat_one;
+
+static Object dfloat_zero;
+static Object dfloat_one;
+
 /* Primitives */
 
 static Object prim_odd_p (Object n);
@@ -160,9 +174,23 @@ marlais_make_integer (DyInteger i)
 {
   Object obj;
 
-  obj = marlais_allocate_object (Integer, sizeof (struct integer));
+#if MARLAIS_CONFIG_INTEGER_CACHE > 0
+  if(i >= 0 && i < MARLAIS_CONFIG_INTEGER_CACHE) {
+    if(integer_cache[i] != NULL) {
+      return integer_cache[i];
+    }
+  }
+#endif
 
+  obj = marlais_allocate_object (Integer, sizeof (struct integer));
   INTVAL (obj) = i;
+
+#if MARLAIS_CONFIG_INTEGER_CACHE > 0
+  if(i >= 0 && i < MARLAIS_CONFIG_INTEGER_CACHE) {
+    integer_cache[i] = obj;
+  }
+#endif
+
   return (obj);
 }
 #endif
@@ -184,9 +212,21 @@ marlais_make_sfloat (float f)
 {
     Object obj;
 
-    obj = marlais_allocate_object (SingleFloat, sizeof (struct single_float));
+    if(f == 0.0 && sfloat_zero) {
+      return sfloat_zero;
+    } else if (f == 1.0 && sfloat_one) {
+      return sfloat_one;
+    }
 
+    obj = marlais_allocate_object (SingleFloat, sizeof (struct single_float));
     SFLOATVAL (obj) = f;
+
+    if(f == 0.0) {
+      sfloat_zero = obj;
+    } else if (f == 1.0) {
+      sfloat_one = obj;
+    }
+
     return (obj);
 }
 
@@ -195,9 +235,21 @@ marlais_make_dfloat (double d)
 {
     Object obj;
 
-    obj = marlais_allocate_object (DoubleFloat, sizeof (struct double_float));
+    if(d == 0.0 && dfloat_zero) {
+      return dfloat_zero;
+    } else if (d == 1.0 && dfloat_one) {
+      return dfloat_one;
+    }
 
+    obj = marlais_allocate_object (DoubleFloat, sizeof (struct double_float));
     DFLOATVAL (obj) = d;
+
+    if(d == 0.0) {
+      dfloat_zero = obj;
+    } else if (d == 1.0) {
+      dfloat_one = obj;
+    }
+
     return (obj);
 }
 
