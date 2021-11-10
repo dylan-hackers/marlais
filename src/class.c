@@ -505,7 +505,7 @@ marlais_make (Object class, Object rest)
   } else if ((class == string_class) || (class == byte_string_class)) {
     ret = marlais_make_bytestring_entry (rest);
   } else if (class == generic_function_class) {
-    ret = make_generic_function_driver (rest);
+    ret = marlais_make_generic_function_driver (rest);
   } else if ((class == table_class) || (class == object_table_class)) {
     ret = marlais_make_table_driver (rest);
   } else if (class == deque_class) {
@@ -889,7 +889,7 @@ marlais_make_getter_setter_gfs (Object slotds)
     if (NAMEP (getter)) {
       if (NULL == marlais_symbol_value (getter)) {
         SLOTDGETTER (CAR (slotds)) =
-          make_generic_function (getter,
+          marlais_make_generic (getter,
                                  listem (x_symbol,
                                          hash_rest_symbol,
                                          x_symbol,
@@ -922,7 +922,7 @@ marlais_make_getter_setter_gfs (Object slotds)
       if (NAMEP (setter)) {
         if (NULL == marlais_symbol_value (setter)) {
           SLOTDSETTER (CAR (slotds)) =
-            make_generic_function (setter,
+            marlais_make_generic (setter,
                                    listem (x_symbol,
                                            x_symbol,
                                            hash_rest_symbol,
@@ -1413,7 +1413,7 @@ make_getter_method (Object slot, Object class, int slot_num)
                            NULL),
                    NULL);
   }
-  return (make_method (GFNAME (SLOTDGETTER (slot)),
+  return (marlais_make_method (GFNAME (SLOTDGETTER (slot)),
                        params, body, the_env, 1));
 }
 
@@ -1471,7 +1471,7 @@ make_setter_method (Object slot, Object class, int slot_num)
                          val_sym,
                          NULL),
                  NULL);
-  return (make_method (GFNAME (SLOTDSETTER (slot)),
+  return (marlais_make_method (GFNAME (SLOTDSETTER (slot)),
                        params, body, the_env, 1));
 }
 

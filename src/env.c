@@ -392,7 +392,7 @@ marlais_use_module (Object module_name,
               for (new_methods = GFMETHODS (*(bindings->val));
                    !EMPTYLISTP (new_methods);
                    new_methods = CDR (new_methods)) {
-                add_method (*(old_binding->val),
+                marlais_add_method (*(old_binding->val),
                             CAR (new_methods));
               }
             } else if (old_binding->val != bindings->val) {

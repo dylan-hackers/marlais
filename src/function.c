@@ -46,10 +46,10 @@
 #include <marlais/values.h>
 #include <marlais/vector.h>
 
-extern Object x_symbol;
+/* Internal function prototypes */
 
-/* local function prototypes */
-
+static int sub_specializers (Object s1, Object s2);
+static int find_keyword_in_list (Object keyword, Object keyword_list);
 static Object generic_function_make (Object arglist);
 static Object generic_function_mandatory_keywords (Object generic);
 static Object function_values (Object func);
@@ -68,39 +68,312 @@ static Object remove_method (Object generic, Object method);
 static Object debug_name_setter (Object method, Object name);
 static int is_param_name (Object parameter_name);
 static Object param_name_to_keyword (Object param_name);
-
+static void parse_generic_function_parameters (Object gf_obj, Object params);
+static void parse_method_parameters (Object meth_obj, Object params);
+static Object create_generic_parameters (Object params);
 
 /* primitives */
 
 static struct primitive function_prims[] =
 {
-    {"%add-method", prim_2, add_method},
-    {"%generic-function-make", prim_1, generic_function_make},
-    {"%generic-function-methods", prim_1, generic_function_methods},
-    {"%generic-function-mandatory-keywords", prim_1,
-     generic_function_mandatory_keywords},
-    {"%function-specializers", prim_1, function_specializers},
-    {"%function-values", prim_1, function_values},
-    {"%function-arguments", prim_1, function_arguments},
-    {"%applicable-method?", prim_1_rest, user_applicable_method_p},
-    {"%sorted-applicable-methods", prim_1_rest, sorted_applicable_methods},
-    {"%find-method", prim_2, find_method},
-    {"%remove-method", prim_2, remove_method},
-    {"%debug-name-setter", prim_2, debug_name_setter},
+  {"%add-method", prim_2, marlais_add_method},
+  {"%generic-function-make", prim_1, generic_function_make},
+  {"%generic-function-methods", prim_1, marlais_generic_methods},
+  {"%generic-function-mandatory-keywords", prim_1,
+   generic_function_mandatory_keywords},
+  {"%function-specializers", prim_1, marlais_function_specializers},
+  {"%function-values", prim_1, function_values},
+  {"%function-arguments", prim_1, function_arguments},
+  {"%applicable-method?", prim_1_rest, user_applicable_method_p},
+  {"%sorted-applicable-methods", prim_1_rest, marlais_sorted_applicable_methods},
+  {"%find-method", prim_2, find_method},
+  {"%remove-method", prim_2, remove_method},
+  {"%debug-name-setter", prim_2, debug_name_setter},
 };
 
-/* function definitions */
-
+/* Exported functions */
 
 void
-init_function_prims (void)
+marlais_register_function (void)
 {
   int num;
 
   num = sizeof (function_prims) / sizeof (struct primitive);
-
   marlais_register_prims (num, function_prims);
 }
+
+Object
+marlais_function_specializers (Object func)
+{
+  Object params;
+
+  if (METHODP (func)) {
+    params = METHREQPARAMS (func);
+  } else if (GFUNP (func)) {
+    params = GFREQPARAMS (func);
+  } else {
+    marlais_error ("function-specializers: arg. must be a method or generic function",
+                   func,
+                   NULL);
+  }
+  return make_specializers_from_params (params);
+}
+
+Object
+marlais_generic_methods (Object gen)
+{
+  if (!GFUNP (gen)) {
+    marlais_error ("generic-function-methods: argument must be a generic function", gen, NULL);
+  }
+  return (GFMETHODS (gen));
+}
+
+Object
+marlais_make_generic (Object name, Object params, Object methods)
+{
+  Object obj;
+
+  obj = marlais_allocate_object (GenericFunction, sizeof (struct generic_function));
+
+  GFNAME (obj) = name;
+  parse_generic_function_parameters (obj, params);
+  GFMETHODS (obj) = methods;
+
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
+  GFCACHE (obj) = marlais_make_table (50); /* Maybe make 50 a define? */
+  GFACTIVENM (obj) = make_empty_list ();
+#endif
+
+  return (obj);
+}
+
+Object
+marlais_make_method (Object name, Object params, Object body, struct frame *env, int do_generic)
+{
+  Object obj, gf;
+
+  obj = marlais_allocate_object (Method, sizeof (struct method));
+
+  if (name) {
+    METHNAME (obj) = name;
+  } else {
+    METHNAME (obj) = NULL;
+  }
+  parse_method_parameters (obj, params);
+  METHBODY (obj) = body;
+  METHENV (obj) = env;
+
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
+  /* create my handle (will redo if replacing existing method) */
+  METHHANDLE (obj) = make_handle (obj);
+#endif
+
+  if (do_generic && name) {
+    gf = marlais_symbol_value (name);
+    if (!gf) {
+      gf = marlais_make_generic (name,
+				  create_generic_parameters (params),
+				  make_empty_list ());
+      marlais_add_export (name, gf, 0);
+    }
+    marlais_add_method (gf, obj);
+    return (gf);
+  } else {
+    return (obj);
+  }
+}
+
+/* add a method, replacing one with matching parameters
+ * if it's already there
+ */
+Object
+marlais_add_method (Object generic, Object method)
+{
+  Object new_specs, old_specs, methods, last, old_method, next_meth_list;
+
+  new_specs = marlais_function_specializers (method);
+
+  /* check method for fit with generic specializers */
+  old_specs = marlais_function_specializers (generic);
+
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
+  /* invalidate next methods when new method added. */
+  next_meth_list = GFACTIVENM (generic);
+  while (PAIRP (next_meth_list)) {
+    NMREST (CAR (next_meth_list)) = cons (MARLAIS_FALSE,
+                                          make_empty_list ());
+    next_meth_list = CDR (next_meth_list);
+  }
+#endif
+
+  if (!sub_specializers (new_specs, old_specs)) {
+    marlais_error ("add-method: method specializers must be subtypes of generic func. specs.", method, NULL);
+  }
+  if (!GFRESTPARAM (generic) && METHRESTPARAM (method)) {
+    marlais_error ("add-method: generic must have #rest parameters if method does",
+                   method,
+                   NULL);
+  }
+  methods = GFMETHODS (generic);
+  last = 0;
+  while (!EMPTYLISTP (methods)) {
+    old_specs = marlais_function_specializers (CAR (methods));
+    if (same_specializers (new_specs, old_specs)) {
+      old_method = CAR (methods);
+
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
+      METHHANDLE (method) = METHHANDLE (old_method);
+      HDLOBJ (METHHANDLE (method)) = method;
+#endif
+
+      if (!last) {
+        GFMETHODS (generic) = cons (method, CDR (methods));
+        return (marlais_construct_values (2, method, old_method));
+      } else {
+        CDR (last) = cons (method, CDR (methods));
+        return (marlais_construct_values (2, method, old_method));
+      }
+    }
+    last = methods;
+    methods = CDR (methods);
+  }
+  GFMETHODS (generic) = cons (method, GFMETHODS (generic));
+
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
+  /* Invalidate the method cache */
+  GFCACHE (generic) = marlais_make_table (50);
+#endif
+
+  return (marlais_construct_values (2, method, MARLAIS_FALSE));
+}
+
+Object
+marlais_make_next_method (Object generic, Object rest_methods, Object args)
+{
+  Object obj;
+
+  obj = marlais_allocate_object (NextMethod, sizeof (struct next_method));
+
+#ifdef MARLAIS_ENABLE_METHOD_CACHING
+  NMGF (obj) = generic;
+  NMMETH (obj) = CAR (rest_methods);
+  NMREST (obj) = CDR (rest_methods);
+#else
+  NMREST (obj) = rest_methods;
+#endif
+  NMARGS (obj) = args;
+  return (obj);
+}
+
+/*
+ * In applicable_method_p, strict_check is true if we should complain
+ * about extra keyword arguments.  It should be set to 0 for internal
+ * tests for generic function dispatch, etc.
+ */
+Object
+marlais_applicable_method_p (Object argfun, Object sample_args, int strict_check)
+{
+  Object args, specs, samples, keywords;
+  int num_required, i, check_keywords = 1;
+  Object funs, fun;
+
+  if (!METHODP (argfun) && !GFUNP (argfun)) {
+    marlais_fatal ("applicable-method?: first argument must be a generic function or method");
+  }
+  if (METHODP (argfun)) {
+    funs = cons (argfun, make_empty_list ());
+  } else {
+    strict_check = 0;
+    funs = GFMETHODS (argfun);
+  }
+
+ fail:
+  if (EMPTYLISTP (funs)) {
+    return MARLAIS_FALSE;
+  }
+  while (PAIRP (funs)) {
+    fun = CAR (funs);
+    funs = CDR (funs);
+    args = function_arguments (fun);
+    specs = marlais_function_specializers (fun);
+
+    /* Are there more sample args than required args? */
+    num_required = INTVAL (FIRSTVAL (args));
+    if (list_length (sample_args) < num_required) {
+      return (MARLAIS_FALSE);
+    }
+    /* Do the types of the required args match the
+       types of the sample args? */
+    samples = sample_args;
+    for (i = 0; i < num_required; ++i) {
+      if (!marlais_instance (CAR (samples), CAR (specs))) {
+        goto fail;
+/*              return (MARLAIS_FALSE); */
+      }
+      samples = CDR (samples);
+      specs = CDR (specs);
+    }
+
+    if (PAIRP (samples)) {
+      keywords = THIRDVAL (args);
+      /* If the method accepts keywords, make sure supplied keywords match */
+      if (PAIRP (keywords) || keywords == all_symbol) {
+        if (keywords == all_symbol) {
+          check_keywords = 0;
+        }
+        /* If keywords != all_symbol, make sure rest of sample_args
+         * are keyword specified, and that all keywords
+         * in sample_args are in the keyword list
+         */
+        while (PAIRP (samples)) {
+          if (!SYMBOLP (CAR (samples)) ||
+              EMPTYLISTP (CDR (samples))) {
+            /* Has non keyword where our method needs one */
+            goto fail;
+            /* return (MARLAIS_FALSE); */
+          } else if (check_keywords) {
+            if (strict_check &&
+                !find_keyword_in_list (CAR (samples), keywords)) {
+              /* Has a keyword not in the method */
+              goto fail;
+              /* return (MARLAIS_FALSE); */
+            }
+          }
+          samples = CDR (CDR (samples));
+        }
+      } else if (SECONDVAL (args) == MARLAIS_FALSE) {
+        /* We have no rest parameter.  If there are more arguments, this
+         * ain't a match.
+         */
+        return (MARLAIS_FALSE);
+      }
+    }
+  }
+  /* We passed all of the tests. */
+  return (MARLAIS_TRUE);
+}
+
+Object
+marlais_sorted_applicable_methods (Object fun, Object sample_args)
+{
+  Object methods, app_methods, method;
+
+  methods = GFMETHODS (fun);
+  app_methods = make_empty_list ();
+  while (!EMPTYLISTP (methods)) {
+    method = CAR (methods);
+    if (marlais_applicable_method_p (method, sample_args, 0) != MARLAIS_FALSE) {
+      app_methods = cons (method, app_methods);
+    }
+    methods = CDR (methods);
+  }
+  if (EMPTYLISTP (app_methods)) {
+    return marlais_error ("No applicable methods", fun, sample_args, NULL);
+  }
+  return split_sorted_methods (app_methods, sample_args);
+}
+
+/* Internal functions */
 
 static void
 keyword_list_insert (Object *list, Object key_binding)
@@ -395,25 +668,6 @@ parse_generic_function_parameters (Object gf_obj, Object params)
   }
 }
 
-Object
-make_generic_function (Object name, Object params, Object methods)
-{
-  Object obj;
-
-  obj = marlais_allocate_object (GenericFunction, sizeof (struct generic_function));
-
-  GFNAME (obj) = name;
-  parse_generic_function_parameters (obj, params);
-  GFMETHODS (obj) = methods;
-
-#ifdef MARLAIS_ENABLE_METHOD_CACHING
-  GFCACHE (obj) = marlais_make_table (50); /* Maybe make 50 a define? */
-  GFACTIVENM (obj) = make_empty_list ();
-#endif
-
-  return (obj);
-}
-
 static void
 parse_method_parameters (Object meth_obj, Object params)
 {
@@ -498,60 +752,6 @@ create_generic_parameters (Object params)
   return (gf_params);
 }
 
-Object
-make_method (Object name, Object params, Object body, struct frame *env, int do_generic)
-{
-  Object obj, gf;
-
-  obj = marlais_allocate_object (Method, sizeof (struct method));
-
-  if (name) {
-    METHNAME (obj) = name;
-  } else {
-    METHNAME (obj) = NULL;
-  }
-  parse_method_parameters (obj, params);
-  METHBODY (obj) = body;
-  METHENV (obj) = env;
-
-#ifdef MARLAIS_ENABLE_METHOD_CACHING
-  /* create my handle (will redo if replacing existing method) */
-  METHHANDLE (obj) = make_handle (obj);
-#endif
-
-  if (do_generic && name) {
-    gf = marlais_symbol_value (name);
-    if (!gf) {
-      gf = make_generic_function (name,
-                                  create_generic_parameters (params),
-                                  make_empty_list ());
-      marlais_add_export (name, gf, 0);
-    }
-    add_method (gf, obj);
-    return (gf);
-  } else {
-    return (obj);
-  }
-}
-
-Object
-make_next_method (Object generic, Object rest_methods, Object args)
-{
-  Object obj;
-
-  obj = marlais_allocate_object (NextMethod, sizeof (struct next_method));
-
-#ifdef MARLAIS_ENABLE_METHOD_CACHING
-  NMGF (obj) = generic;
-  NMMETH (obj) = CAR (rest_methods);
-  NMREST (obj) = CDR (rest_methods);
-#else
-  NMREST (obj) = rest_methods;
-#endif
-  NMARGS (obj) = args;
-  return (obj);
-}
-
 static Object
 generic_function_make (Object arglist)
 {
@@ -604,12 +804,10 @@ generic_function_make (Object arglist)
 }
 
 Object
-make_generic_function_driver (Object args)
+marlais_make_generic_function_driver (Object args)
 {
   return marlais_error ("make: not implemented for generic functions", NULL);
 }
-
-/* local functions */
 
 /* compare specializer lists s1 and s2 to see if each specializer in s1
  * is a subclass of the corresponding specializer in s2
@@ -632,100 +830,11 @@ sub_specializers (Object s1, Object s2)
   return (1);
 }
 
-/* add a method, replacing one with matching parameters
- * if it's already there
- */
-Object
-add_method (Object generic, Object method)
-{
-  Object new_specs, old_specs, methods, last, old_method, next_meth_list;
-
-  new_specs = function_specializers (method);
-
-  /* check method for fit with generic specializers */
-  old_specs = function_specializers (generic);
-
-#ifdef MARLAIS_ENABLE_METHOD_CACHING
-  /* invalidate next methods when new method added. */
-  next_meth_list = GFACTIVENM (generic);
-  while (PAIRP (next_meth_list)) {
-    NMREST (CAR (next_meth_list)) = cons (MARLAIS_FALSE,
-                                          make_empty_list ());
-    next_meth_list = CDR (next_meth_list);
-  }
-#endif
-
-  if (!sub_specializers (new_specs, old_specs)) {
-    marlais_error ("add-method: method specializers must be subtypes of generic func. specs.", method, NULL);
-  }
-  if (!GFRESTPARAM (generic) && METHRESTPARAM (method)) {
-    marlais_error ("add-method: generic must have #rest parameters if method does",
-                   method,
-                   NULL);
-  }
-  methods = GFMETHODS (generic);
-  last = 0;
-  while (!EMPTYLISTP (methods)) {
-    old_specs = function_specializers (CAR (methods));
-    if (same_specializers (new_specs, old_specs)) {
-      old_method = CAR (methods);
-
-#ifdef MARLAIS_ENABLE_METHOD_CACHING
-      METHHANDLE (method) = METHHANDLE (old_method);
-      HDLOBJ (METHHANDLE (method)) = method;
-#endif
-
-      if (!last) {
-        GFMETHODS (generic) = cons (method, CDR (methods));
-        return (marlais_construct_values (2, method, old_method));
-      } else {
-        CDR (last) = cons (method, CDR (methods));
-        return (marlais_construct_values (2, method, old_method));
-      }
-    }
-    last = methods;
-    methods = CDR (methods);
-  }
-  GFMETHODS (generic) = cons (method, GFMETHODS (generic));
-
-#ifdef MARLAIS_ENABLE_METHOD_CACHING
-  /* Invalidate the method cache */
-  GFCACHE (generic) = marlais_make_table (50);
-#endif
-
-  return (marlais_construct_values (2, method, MARLAIS_FALSE));
-}
-
-Object
-generic_function_methods (Object gen)
-{
-  if (!GFUNP (gen)) {
-    marlais_error ("generic-function-methods: argument must be a generic function", gen, NULL);
-  }
-  return (GFMETHODS (gen));
-}
 
 static Object
 generic_function_mandatory_keywords (Object generic)
 {
   return (GFKEYPARAMS (generic));
-}
-
-Object
-function_specializers (Object func)
-{
-  Object params;
-
-  if (METHODP (func)) {
-    params = METHREQPARAMS (func);
-  } else if (GFUNP (func)) {
-    params = GFREQPARAMS (func);
-  } else {
-    marlais_error ("function-specializers: arg. must be a method or generic function",
-                   func,
-                   NULL);
-  }
-  return make_specializers_from_params (params);
 }
 
 static Object
@@ -831,100 +940,12 @@ find_keyword_in_list (Object keyword, Object keyword_list)
 static Object
 user_applicable_method_p (Object argfun, Object sample_args)
 {
-  return applicable_method_p (argfun, sample_args, 1);
-}
-
-/*
- * In applicable_method_p, strict_check is true if we should complain
- * about extra keyword arguments.  It should be set to 0 for internal
- * tests for generic function dispatch, etc.
- */
-Object
-applicable_method_p (Object argfun, Object sample_args, int strict_check)
-{
-  Object args, specs, samples, keywords;
-  int num_required, i, check_keywords = 1;
-  Object funs, fun;
-
-  if (!METHODP (argfun) && !GFUNP (argfun)) {
-    marlais_fatal ("applicable-method?: first argument must be a generic function or method");
-  }
-  if (METHODP (argfun)) {
-    funs = cons (argfun, make_empty_list ());
-  } else {
-    strict_check = 0;
-    funs = GFMETHODS (argfun);
-  }
-
- fail:
-  if (EMPTYLISTP (funs)) {
-    return MARLAIS_FALSE;
-  }
-  while (PAIRP (funs)) {
-    fun = CAR (funs);
-    funs = CDR (funs);
-    args = function_arguments (fun);
-    specs = function_specializers (fun);
-
-    /* Are there more sample args than required args? */
-    num_required = INTVAL (FIRSTVAL (args));
-    if (list_length (sample_args) < num_required) {
-      return (MARLAIS_FALSE);
-    }
-    /* Do the types of the required args match the
-       types of the sample args? */
-    samples = sample_args;
-    for (i = 0; i < num_required; ++i) {
-      if (!marlais_instance (CAR (samples), CAR (specs))) {
-        goto fail;
-/*              return (MARLAIS_FALSE); */
-      }
-      samples = CDR (samples);
-      specs = CDR (specs);
-    }
-
-    if (PAIRP (samples)) {
-      keywords = THIRDVAL (args);
-      /* If the method accepts keywords, make sure supplied keywords match */
-      if (PAIRP (keywords) || keywords == all_symbol) {
-        if (keywords == all_symbol) {
-          check_keywords = 0;
-        }
-        /* If keywords != all_symbol, make sure rest of sample_args
-         * are keyword specified, and that all keywords
-         * in sample_args are in the keyword list
-         */
-        while (PAIRP (samples)) {
-          if (!SYMBOLP (CAR (samples)) ||
-              EMPTYLISTP (CDR (samples))) {
-            /* Has non keyword where our method needs one */
-            goto fail;
-            /* return (MARLAIS_FALSE); */
-          } else if (check_keywords) {
-            if (strict_check &&
-                !find_keyword_in_list (CAR (samples), keywords)) {
-              /* Has a keyword not in the method */
-              goto fail;
-              /* return (MARLAIS_FALSE); */
-            }
-          }
-          samples = CDR (CDR (samples));
-        }
-      } else if (SECONDVAL (args) == MARLAIS_FALSE) {
-        /* We have no rest parameter.  If there are more arguments, this
-         * ain't a match.
-         */
-        return (MARLAIS_FALSE);
-      }
-    }
-  }
-  /* We passed all of the tests. */
-  return (MARLAIS_TRUE);
+  return marlais_applicable_method_p (argfun, sample_args, 1);
 }
 
 #ifdef MARLAIS_ENABLE_METHOD_CACHING
 Object
-recalc_next_methods (Object fun, Object meth, Object sample_args)
+marlais_recalc_next_methods (Object fun, Object meth, Object sample_args)
 /* this function recalculates the end of the applicable methods list. */
 {
   Object methods, app_methods, sorted_methods, method;
@@ -937,7 +958,7 @@ recalc_next_methods (Object fun, Object meth, Object sample_args)
   /* add all applicable methods */
   while (!EMPTYLISTP (methods)) {
     method = CAR (methods);
-    if (applicable_method_p (method, sample_args, 0) != MARLAIS_FALSE) {
+    if (marlais_applicable_method_p (method, sample_args, 0) != MARLAIS_FALSE) {
       if (meth == method) {
         current_method_added = 1;
         /* detect add of current method */
@@ -988,8 +1009,8 @@ build_sorted_handles (Object methods, Object current_group)
   }
   /* add to current group or build new group into list */
   if (EMPTYLISTP (current_group) ||
-      specializer_compare (function_specializers (HDLOBJ (CAR (current_group))),
-                           function_specializers (CAR (methods))) == 0) {
+      specializer_compare (marlais_function_specializers (HDLOBJ (CAR (current_group))),
+                           marlais_function_specializers (CAR (methods))) == 0) {
     return (build_sorted_handles (CDR (methods),
                                   cons (METHHANDLE (CAR (methods)),
                                         current_group)));
@@ -1033,7 +1054,7 @@ possible_method (Object meth, Object class_list)
   int num_required, i;
 
   args = function_arguments (meth);
-  specs = function_specializers (meth);
+  specs = marlais_function_specializers (meth);
 
   /* Are there more sample args than required args?
    */
@@ -1067,7 +1088,7 @@ make_class_list (Object args, int count)
 }
 
 Object
-sorted_possible_method_handles (Object fun, Object sample_args)
+marlais_sorted_possible_method_handles (Object fun, Object sample_args)
 /* build a cache entry, a list of lists of mutually ambiguous methods ordered
    overall by subtype */
 {
@@ -1096,26 +1117,6 @@ sorted_possible_method_handles (Object fun, Object sample_args)
 
 #endif
 
-Object
-sorted_applicable_methods (Object fun, Object sample_args)
-{
-  Object methods, app_methods, method;
-
-  methods = GFMETHODS (fun);
-  app_methods = make_empty_list ();
-  while (!EMPTYLISTP (methods)) {
-    method = CAR (methods);
-    if (applicable_method_p (method, sample_args, 0) != MARLAIS_FALSE) {
-      app_methods = cons (method, app_methods);
-    }
-    methods = CDR (methods);
-  }
-  if (EMPTYLISTP (app_methods)) {
-    return marlais_error ("No applicable methods", fun, sample_args, NULL);
-  }
-  return split_sorted_methods (app_methods, sample_args);
-}
-
 
 static Object
 split_sorted_methods (Object methods, Object sample_args)
@@ -1128,8 +1129,8 @@ split_sorted_methods (Object methods, Object sample_args)
   for (prev_ptr = &methods, next = CDR (methods);
        PAIRP (next);
        prev_ptr = &CDR (*prev_ptr), next = CDR (next)) {
-    if (specializer_compare (function_specializers (CAR (*prev_ptr)),
-                             function_specializers (CAR (next))) == 0) {
+    if (specializer_compare (marlais_function_specializers (CAR (*prev_ptr)),
+                             marlais_function_specializers (CAR (next))) == 0) {
       next = *prev_ptr;
       *prev_ptr = make_empty_list ();
       break;
@@ -1172,8 +1173,8 @@ sort_driver (Object *pmeth1, Object *pmeth2)
 {
   Object specs1, specs2;
 
-  specs1 = function_specializers (*pmeth1);
-  specs2 = function_specializers (*pmeth2);
+  specs1 = marlais_function_specializers (*pmeth1);
+  specs2 = marlais_function_specializers (*pmeth2);
   return specializer_compare (specs1, specs2);
 }
 
@@ -1271,7 +1272,7 @@ find_method (Object generic, Object spec_list)
   for (methods = GFMETHODS (generic);
        PAIRP (methods);
        methods = CDR (methods)) {
-    if (same_specializers (function_specializers (CAR (methods)),
+    if (same_specializers (marlais_function_specializers (CAR (methods)),
                            spec_list)) {
       return CAR (methods);
     }

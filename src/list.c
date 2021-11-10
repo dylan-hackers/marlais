@@ -570,7 +570,7 @@ add_new_at_end (Object *lst, Object elt)
 
 
 /* Can't use qsort in sorting as use of test function will call
- * function_specializers, which applies qsort, leading to all sorts
+ * marlais_function_specializers, which applies qsort, leading to all sorts
  * or horrid consequences, as Unix qsort is not multi-thread or
  * hierarchically nestable (even though it could be!
  */

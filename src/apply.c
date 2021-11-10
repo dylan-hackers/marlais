@@ -171,7 +171,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
 
     /* re-calculate next methods if invalidated. */
     if (PAIRP (rest_methods) && CAR (rest_methods) == MARLAIS_FALSE) {
-      rest_methods = recalc_next_methods (generic_apply, meth, args);
+      rest_methods = marlais_recalc_next_methods (generic_apply, meth, args);
     }
 #endif
 
@@ -181,7 +181,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
       Object next_method;
 
       /* make next-method and push it into the GF list */
-      next_method = make_next_method (generic_apply, rest_methods, args);
+      next_method = marlais_make_next_method (generic_apply, rest_methods, args);
 
 #ifdef MARLAIS_ENABLE_METHOD_CACHING
       /* push next method on active list */
@@ -528,7 +528,7 @@ get_specializers (Object gen, Object args)
   Object result, tmp;
 
   tmp = args;
-  length = list_length (function_specializers (gen));
+  length = list_length (marlais_function_specializers (gen));
   result = marlais_make_vector (length, NULL);
   for (i = 0; i < length; i++) {
     if (EMPTYLISTP (tmp)) {
@@ -556,7 +556,7 @@ add_method_cache (Object gen, Object args)
   Object arg_vec, new_item;
 
   arg_vec = get_specializers (gen, args);
-  new_item = sorted_possible_method_handles (gen, args);
+  new_item = marlais_sorted_possible_method_handles (gen, args);
   marlais_table_element_setter_by_vector (GFCACHE (gen), arg_vec, new_item);
   return (new_item);
 }
@@ -618,7 +618,7 @@ apply_generic (Object gen, Object args)
   while (!EMPTYLISTP (cacheEntry)) {
     currentGroup = CAR (cacheEntry);
     while (!EMPTYLISTP (currentGroup)) {
-      if (applicable_method_p (HDLOBJ (CAR (currentGroup)), args, 0)
+      if (marlais_applicable_method_p (HDLOBJ (CAR (currentGroup)), args, 0)
           == MARLAIS_TRUE) {
         if (method) {
           marlais_error ("Ambiguous methods in apply generic function", gen, args, NULL);

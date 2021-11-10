@@ -501,7 +501,7 @@ bind_methods_eval (Object form)
     }
     params = SECOND (spec);
     method_body = CDR (CDR (spec));
-    method = make_method (name, params, method_body, the_env, 0);
+    method = marlais_make_method (name, params, method_body, the_env, 0);
     marlais_modify_value (name, method);
     specs = CDR (specs);
   }
@@ -875,7 +875,7 @@ define_generic_function_eval (Object form)
   Object name, params, gf;
 
   check_function_syntax(form, &name, &params, "define-generic-function");
-  gf = make_generic_function (name, params, make_empty_list ());
+  gf = marlais_make_generic (name, params, make_empty_list ());
   marlais_add_export (name, gf, 0);
   return (unspecified_object);
 }
@@ -887,7 +887,7 @@ define_method_eval_helper (Object form, int do_generic_p)
 
   check_function_syntax(form, &name, &params, "define-method");
   body = CDR (CDR (CDR (form)));
-  method = make_method (name, params, body, the_env, do_generic_p);
+  method = marlais_make_method (name, params, body, the_env, do_generic_p);
   return (name);
 }
 
@@ -1653,7 +1653,7 @@ method_eval (Object form)
   }
   params = SECOND (form);
   body = CDR (CDR (form));
-  method = make_method (NULL, params, body, the_env, 0);
+  method = marlais_make_method (NULL, params, body, the_env, 0);
   return (method);
 }
 
