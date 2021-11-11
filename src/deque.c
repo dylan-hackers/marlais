@@ -65,10 +65,10 @@ static Object deque_current_element_setter (Object d,
 
 static struct primitive deque_prims[] =
 {
-  {"%push", prim_2, deque_push},
-  {"%pop", prim_1, deque_pop},
-  {"%push-last", prim_2, deque_push_last},
-  {"%pop-last", prim_1, deque_pop_last},
+  {"%deque-push", prim_2, deque_push},
+  {"%deque-pop", prim_1, deque_pop},
+  {"%deque-push-last", prim_2, deque_push_last},
+  {"%deque-pop-last", prim_1, deque_pop_last},
   {"%deque-first", prim_2, deque_first},
   {"%deque-last", prim_2, deque_last},
   {"%deque-element", prim_3, deque_element},

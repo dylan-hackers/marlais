@@ -12,7 +12,7 @@ module: dylan
 //
 
 define method push (d :: <deque>, new)
-  %push (d, new);
+  %deque-push (d, new);
 end method push;
 
 //
@@ -20,7 +20,7 @@ end method push;
 //
 
 define method pop (d :: <deque>)
-  %pop (d);
+  %deque-pop (d);
 end method pop;
 
 //
@@ -28,7 +28,7 @@ end method pop;
 //
 
 define method push-last (d :: <deque>, new)
-  %push-last (d, new);
+  %deque-push-last (d, new);
 end method push-last;
 
 //
@@ -36,7 +36,7 @@ end method push-last;
 //
 
 define method pop-last (d :: <deque>)
-  %pop-last (d);
+  %deque-pop-last (d);
 end method pop-last;
 
 //
