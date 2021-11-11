@@ -17,11 +17,20 @@ static char expand_escaped_character (char ch);
 Object
 marlais_lexer_expand_char (char *str)
 {
+  char c;
   size_t len = strlen(str);
-  char c = str[1];
-  if(c == '\\') {
+  /* be checky */
+  if((len == 3) && (str[0] == '\'') && (str[2] == '\'')) {
+    /* unescaped case */
+    c = str[1];
+  } else if((len == 4) && (str[0] == '\'')
+            && (str[1] == '\\') && (str[3] == '\'')) {
+    /* escaped case */
     c = expand_escaped_character(str[2]);
+  } else {
+    marlais_fatal("Expanding malformed character literal");
   }
+  /* return result */
   return marlais_make_character(c);
 }
 
