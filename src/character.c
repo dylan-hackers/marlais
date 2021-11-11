@@ -41,8 +41,10 @@
 
 /* Internal variables */
 
+#ifndef MARLAIS_OBJECT_MODEL_SMALL
 #if MARLAIS_CONFIG_CHARACTER_CACHE > 0
 static Object character_cache[MARLAIS_CONFIG_CHARACTER_CACHE];
+#endif
 #endif
 
 /* Primitives */
