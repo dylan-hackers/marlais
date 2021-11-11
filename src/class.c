@@ -177,12 +177,12 @@ marlais_initialize_class (void)
   byte_string_class =
     make_builtin_class ("<byte-string>",
                         listem (string_class,
-                                vector_class,
+                                simple_vector_class,
                                 NULL));
   unicode_string_class =
     make_builtin_class ("<unicode-string>",
                         listem (string_class,
-                                vector_class,
+                                simple_vector_class,
                                 NULL));
 
   /* Condition classes */
