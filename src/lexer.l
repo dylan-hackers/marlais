@@ -338,6 +338,14 @@ hexDIGIT        [0-9a-fA-f]
 
 EXP             ([Ee][\+\-]?[0-9][0-9]*)?
 
+/*
+exponent:
+        E signopt decimal-integer
+*/
+
+EXP             [Ee][\+\-]?[0-9][0-9]*
+EXPOPT          ({EXP})?
+
 /* Custom definitions
 */
 
@@ -475,11 +483,17 @@ WHITESPACE      [\ \t\f\v\r]
                                 }
 
  /* Floats */
+ /*
+ floating-point:
+        signopt decimal-integeropt . decimal-integer exponentopt
+        signopt decimal-integer . decimal-integeropt exponentopt
+        signopt decimal-integer exponent
+ */
 
-<ETC>[+-]?[0-9]*\.[0-9][0-9]*{EXP}      { mylval = marlais_make_dfloat (strtod (yytext, NULL));
+<ETC>[+-]?[0-9]*\.[0-9][0-9]*{EXPOPT}   { mylval = marlais_make_dfloat (strtod (yytext, NULL));
                                           return (LITERAL);
                                         }
-<ETC>[+-]?[0-9][0-9]*\.[0-9]*{EXP}      { mylval = marlais_make_dfloat (strtod (yytext, NULL));
+<ETC>[+-]?[0-9][0-9]*\.[0-9]*{EXPOPT}   { mylval = marlais_make_dfloat (strtod (yytext, NULL));
                                           return (LITERAL);
                                         }
 <ETC>[+-]?[0-9][0-9]*{EXP}              { mylval = marlais_make_dfloat (strtod (yytext, NULL));
