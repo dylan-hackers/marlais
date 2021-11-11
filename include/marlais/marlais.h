@@ -15,7 +15,6 @@
 #include <marlais/alloc.h>
 #include <marlais/apply.h>
 #include <marlais/array.h>
-#include <marlais/bytestring.h>
 #include <marlais/character.h>
 #include <marlais/class.h>
 #include <marlais/classprec.h>
@@ -36,6 +35,7 @@
 #include <marlais/sequence.h>
 #include <marlais/slot.h>
 #include <marlais/stream.h>
+#include <marlais/string.h>
 #include <marlais/symbol.h>
 #include <marlais/syntax.h>
 #include <marlais/sys.h>
