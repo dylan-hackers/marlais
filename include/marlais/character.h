@@ -41,8 +41,8 @@ extern void marlais_register_character (void);
 
 /* Make a <character> */
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
-static inline Object marlais_make_character (char c) {
-  return MAKE_CHAR(c);
+static inline Object marlais_make_character (char ch) {
+  return MAKE_CHAR(ch);
 }
 #else
 extern Object marlais_make_character (char ch);
