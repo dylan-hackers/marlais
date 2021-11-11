@@ -7,6 +7,7 @@
 #include <marlais/alloc.h>
 #include <marlais/bytestring.h>
 #include <marlais/character.h>
+#include <marlais/lexer.h>
 #include <marlais/list.h>
 #include <marlais/number.h>
 #include <marlais/env.h>
@@ -165,9 +166,6 @@ static void make_header_end (void);
 static void make_header_val (void);
 
 static char *get_nonws_symbol (char *text);
-static char expand_escaped_character (char ch);
-
-static Object make_expanded_byte_string (char *str);
 
 static int countlines(char *str);
 
@@ -441,10 +439,7 @@ EXP             ([Ee][\+\-]?[0-9][0-9]*)?
 				  return (LITERAL);
 				}
 
-<ETC>\'([^\\\']|(\\.))\' { char ch = yytext [yyleng-2];
-			   mylval =
-			    marlais_make_character(yytext[1] == '\\' ?
-					   expand_escaped_character(ch) : ch );
+<ETC>\'([^\\\']|(\\.))\' { mylval = marlais_lexer_expand_char (yytext);
 			   return (LITERAL);
 			 }
 
@@ -537,7 +532,7 @@ EXP             ([Ee][\+\-]?[0-9][0-9]*)?
 		}
 
 <ETC>{STRING}	{ yytext[yyleng-1] = '\0';
-		  mylval = make_expanded_byte_string (yytext+1);
+		  mylval = marlais_lexer_expand_string (yytext+1);
 		  return (STRING);
 		}
 
@@ -921,54 +916,6 @@ make_header_val()
 		struct module_binding *module = marlais_get_module (symbol);
 		marlais_set_module (module);
 	}
-}
-
-static char
-expand_escaped_character (char ch)
-{
-	switch (ch) {
-	case 'a':
-		return '\a';
-	case 'b':
-		return '\b';
-	case 'f':
-		return '\f';
-	case 'n':
-		return '\n';
-	case 'r':
-		return '\r';
-	case 't':
-		return '\t';
-	case 'v':
-		return '\v';
-	}
-	return ch;
-}
-
-static Object make_expanded_byte_string(char* str)
-{
-	char* backslash = strchr(str, '\\');
-	if (backslash) {
-		char* exp_str;
-		Object obj;
-
-		exp_str = marlais_allocate_strdup (str);
-		exp_str[0] = '\0';
-		while (backslash) {
-			backslash[0] = expand_escaped_character(backslash[1]);
-			backslash[1] = '\0';
-			strcat(exp_str, str);
-			str = backslash + 2;
-			backslash = strchr(str, '\\');
-		}
-		strcat(exp_str, str);
-
-		obj = marlais_allocate_object (ByteString, sizeof (struct byte_string));
-		BYTESTRSIZE(obj) = strlen (exp_str);
-		BYTESTRVAL(obj) = exp_str;
-		return (obj);
-	}
-	return marlais_make_bytestring(str);
 }
 
 static int countlines(char *str)
