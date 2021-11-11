@@ -2,27 +2,39 @@ cmake_minimum_required(VERSION 3.0.0)
 
 project(marlais)
 
+# Find pkg-config
+find_package(PkgConfig REQUIRED)
+# Find lexer and parser generators
 find_package(BISON REQUIRED)
 find_package(FLEX REQUIRED)
-find_package(PkgConfig REQUIRED)
 
+# Check for the BDWgarbage collector
 pkg_check_modules(BDWGC REQUIRED bdw-gc)
 
+# Configuration for CLang and GNU compilers
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
     OR CMAKE_CXX_COMPILER_ID STREQUAL "CLang")
+
+  # Always enable lots of warnings
   add_compile_options(-Wall -Wextra -Wno-unused)
+
 endif ()
 
+# Configuration for GNU compilers
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-  option(GCC_ENABLE_BOUNDSCHECK "Enable bounds checking" ON)
+
+  # Optionally enable bounds checking
+  option(GCC_ENABLE_BOUNDSCHECK "Enable bounds checking" OFF)
   if (GCC_ENABLE_BOUNDSCHECK)
     add_compile_options(-fbounds-check)
   endif ()
 endif ()
 
+# Include subdirectories
 add_subdirectory(src)
 add_subdirectory(bin)
 
+# Define installation
 install(
   TARGETS marlais_lib marlais_bin
   RUNTIME DESTINATION bin
