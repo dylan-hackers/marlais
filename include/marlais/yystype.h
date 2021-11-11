@@ -21,7 +21,17 @@
 
 #include <marlais/common.h>
 
-#define YYSTYPE Object
+typedef Object YYSTYPE;
 #define YYSTYPE_IS_DECLARED 1
+
+struct YYLTYPE
+{
+  int first_line;
+  int first_column;
+  int last_line;
+  int last_column;
+};
+typedef struct YYLTYPE YYLTYPE;
+# define YYLTYPE_IS_DECLARED 1
 
 #endif
