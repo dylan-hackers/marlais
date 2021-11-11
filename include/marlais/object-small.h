@@ -72,8 +72,8 @@ static inline bool INTEGERP(Object obj) {
 static inline DyInteger INTVAL(Object obj) {
   return ((DyInteger)INTEGERPART(obj));
 }
-static inline DyUnsigned CHARVAL(Object obj) {
-  return ((DyUnsigned)IMMEDPART(obj));
+static inline char CHARVAL(Object obj) {
+  return ((char)(IMMEDPART(obj) & 0xFF));
 }
 #ifdef MARLAIS_ENABLE_WCHAR
 static inline wchar_t WCHARVAL(Object obj) {
@@ -85,8 +85,8 @@ static inline wchar_t WCHARVAL(Object obj) {
 static inline Object MAKE_IMMEDIATE(MarlaisSub sub, DyUnsigned val) {
   return (Object)(MARLAIS_TAG_IMMEDIATE|sub|(val << MARLAIS_IMMEDIATE_SHIFT));
 }
-static inline Object MAKE_CHAR(DyUnsigned ch) {
-  return MAKE_IMMEDIATE(MARLAIS_SUB_CHARACTER, ch);
+static inline Object MAKE_CHAR(char ch) {
+  return MAKE_IMMEDIATE(MARLAIS_SUB_CHARACTER, (ch & 0xFF));
 }
 #ifdef MARLAIS_ENABLE_WCHAR
 static inline Object MAKE_WCHAR(wchar_t ch) {
