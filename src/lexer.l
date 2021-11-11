@@ -287,6 +287,7 @@ binaryOPERATOR  [\+\-\*\/\^\=\<\>\&\|]|([\<\>=:~]=)|(~==)
 
 /*
 operator:       # this definition is custom
+                # operators are passed to parser with no regard for arity
                 unary-operator
                 binary-operator
 */
@@ -337,27 +338,37 @@ hexDIGIT        [0-9a-fA-f]
 
 EXP             ([Ee][\+\-]?[0-9][0-9]*)?
 
+/* Custom definitions
+*/
+
+WHITESPACE      [\ \t\f\v\r]
+
 /******************************************************************************/
 /* END OF DEFINITIONS                                                         */
 /******************************************************************************/
 
+/******************************************************************************/
+/* BEGINING OF RULES                                                          */
+/******************************************************************************/
 
 %x INI KEY VAL ETC
 /* start contexts courtesy of Roger Critchlow */
 
 %%
 
+ /* Start the INI context when the parse begins */
+
 <INITIAL>.      { BEGIN(INI);
                   yyless(0);
                 }
+
+ /* Emit EOF token on end-of-file in any state */
 
 <INITIAL,INI,KEY,VAL,ETC><<EOF>>        { mylval = eof_object;
                                           return EOF_TOKEN;
                                         }
 
-<INI>.          { BEGIN(ETC);
-                  yyless(0);
-                }
+ /* Match for interpreter command at beginning of file */
 
 <INI>^#!.*\n    { BEGIN(KEY);
                   /* warn(line_count, "ignoring initial #! interpreter comment\n"); */
@@ -365,16 +376,20 @@ EXP             ([Ee][\+\-]?[0-9][0-9]*)?
                   ++yylineno;
                 }
 
-<INI,KEY>^[A-Za-z][-A-Za-z0-9]*:        { BEGIN(VAL);
-                                  make_header_key();
-                                  return yylex();
-                                }
+ /* Otherwise start the main context */
 
-<INI,KEY>^[\ \t\f\v\r]*\n       { BEGIN(ETC);
-                          ++yylineno;
-                          make_header_end ();
-                          return yylex ();
-                        }
+<INI>.          { BEGIN(ETC);
+                  yyless(0);
+                }
+
+ /* Header keys */
+
+<INI,KEY>^[A-Za-z][-A-Za-z0-9]*:        { BEGIN(VAL);
+                                          make_header_key();
+                                          return yylex();
+                                        }
+
+ /* Header values */
 
 <VAL>.*\n([\ \t\f\v\r]+.+\n)*   { BEGIN(KEY);
                                   yylineno += countlines (yytext);
@@ -382,134 +397,23 @@ EXP             ([Ee][\+\-]?[0-9][0-9]*)?
                                   return yylex ();
                                 }
 
-<ETC>[\ \t\f\v\r]       { }
+ /* An empty line ends the header section */
 
-<ETC>[\n]       { /* Bogus hack! */
-                  ++yylineno;
-#if 0
-                  if (yyerrflag == 3) {
-                      return ';';
-                  }
-#endif
-                }
-
-<ETC>#b[01][01]*        { /* binary integer */
-                  mylval = marlais_make_integer (strtol (yytext+2, NULL, 2));
-                  return (LITERAL);
-                }
-
-<ETC>#o[0-7][0-7]*      { /* octal-integer */
-                  mylval = marlais_make_integer (strtol (yytext+2, NULL, 8));
-                  return (LITERAL);
-                }
-
-<ETC>[+-]?[0-9][0-9]*   { /* decimal integer */
-#ifdef BIG_INTEGERS
-                        if (strlen(yytext) >= 10)
-                                mylval = make_big_integer_str(yytext, 10);
-                        else
-                                mylval = marlais_make_integer (strtol (yytext, NULL, 10));
-#else
-                  mylval = marlais_make_integer (strtol (yytext, NULL, 10));
-#endif
-                  return (LITERAL);
-                }
-
-<ETC>#x[0-9A-Fa-f][0-9A-Fa-f]* { /* hex-integer */
-                            mylval = marlais_make_integer (strtol (yytext+2, NULL, 16));
-                            return (LITERAL);
-                          }
-
-<ETC>[+-]?[0-9][0-9]*\/[0-9][0-9]*      { /* ratio */
-                                  char *ptr;
-                                  long numerator, denominator;
-                                  numerator = strtol (yytext, &ptr, 10);
-                                  denominator = strtol (ptr + 1, NULL, 10);
-                                  mylval = marlais_make_ratio (numerator, denominator);
-                                  return (LITERAL);
+<INI,KEY>^[\ \t\f\v\r]*\n       { BEGIN(ETC);
+                                  ++yylineno;
+                                  make_header_end ();
+                                  return yylex ();
                                 }
 
-<ETC>[+-]?[0-9]*\.[0-9][0-9]*{EXP}      { mylval = marlais_make_dfloat (strtod (yytext, NULL));
-                                          return (LITERAL);
-                                        }
-<ETC>[+-]?[0-9][0-9]*\.[0-9]*{EXP}      { mylval = marlais_make_dfloat (strtod (yytext, NULL));
-                                  return (LITERAL);
-                                }
-<ETC>[+-]?[0-9][0-9]*{EXP}      { mylval = marlais_make_dfloat (strtod (yytext, NULL));
-                                  return (LITERAL);
-                                }
+ /* Ignore whitespace */
 
-<ETC>\'([^\\\']|(\\.))\' { mylval = marlais_lexer_expand_char (yytext);
-                           return (LITERAL);
-                         }
+<ETC>{WHITESPACE}       { }
 
+ /* Ignore line comments */
 
-<ETC>{OPERATOR}         { /* OPERATOR  SYMBOL */
-                          return which_operator(yytext, yyleng);
-                        }
+<ETC>\/\/[^\n]*         { }
 
-<ETC>[\(\)\[\]\{\}\.\,\;\~\?]   { /* return char as token */
-                                  mylval = (Object)0;
-                                  return *yytext;
-                                }
-
-<ETC>=>         { mylval = equal_arrow_symbol;
-                  return (EQUAL_ARROW);
-                }
-
-<ETC>::         { mylval = colon_colon_symbol;
-                  return (COLON_COLON);
-                 }
-
-<ETC>#\(                { mylval = NULL;
-                  return (HASH_PAREN);
-                 }
-
-<ETC>#\[                { mylval = NULL;
-                  return (HASH_BRACKET);
-                 }
-
-<ETC>\?\?               { mylval = NULL;
-                  return (QUESTION_QUESTION);
-                 }
-
-<ETC>\.\.\.             { mylval = NULL;
-                  return (ELLIPSIS);
-                 }
-
-<ETC>#{STRING}  { /* Do some nasty business with yytext */
-                  yytext[yyleng-1] = ':';
-                  mylval = marlais_make_symbol (yytext + 2);
-                  return (SYMBOL);
-                }
-
-<ETC>{WORD}:    {
-                  mylval = marlais_make_symbol (yytext);
-                  if (mydebug) {
-                        printf("yydebug: got symbol [%s]\n",  yytext);
-                        }
-                  return (SYMBOL);
-                 }
-
-<ETC>#[a-zA-Z][a-zA-Z\-]*       { return search_for_poundword (yytext, &mylval);
-                        }
-
-
-<ETC>{WORD}     { int tmp = symbol_or_resword (yytext, &mylval);
-                  if (mydebug && tmp == SYMBOL) {
-                        printf ("yydebug: got symbol [%s]\n", yytext);
-                        }
-                  return tmp;
-                }
-
-<ETC>\\{OPERATOR}       { which_operator (yytext+1, yyleng-1);
-                          return NAME;
-                        }
-
-<INI,KEY,VAL,ETC>.      { process_unrecognized_character (yytext);
-                        }
-
-<ETC>\/\/[^\n]* { }
+ /* Ignore block comments */
 
 <ETC>"/*"       { int ch;
                   loop:
@@ -531,10 +435,150 @@ EXP             ([Ee][\+\-]?[0-9][0-9]*)?
                       }
                 }
 
+ /* Count newlines */
+
+<ETC>[\n]               { ++yylineno; /* Bogus hack! */ }
+
+ /* Binary integers */
+
+<ETC>#b[01][01]*        { mylval = marlais_make_integer (strtol (yytext+2, NULL, 2));
+                          return (LITERAL);
+                        }
+
+ /* Octal integers */
+
+<ETC>#o[0-7][0-7]*      { mylval = marlais_make_integer (strtol (yytext+2, NULL, 8));
+                          return (LITERAL);
+                        }
+
+ /* Decimal integers */
+
+<ETC>[+-]?[0-9][0-9]*   { mylval = marlais_make_integer (strtol (yytext, NULL, 10));
+                          return (LITERAL);
+                        }
+
+ /* Hexadecimal integers */
+
+<ETC>#x[0-9A-Fa-f][0-9A-Fa-f]* { mylval = marlais_make_integer (strtol (yytext+2, NULL, 16));
+                                 return (LITERAL);
+                               }
+
+ /* Ratios */
+
+<ETC>[+-]?[0-9][0-9]*\/[0-9][0-9]*      {
+                                  char *ptr;
+                                  long numerator, denominator;
+                                  numerator = strtol (yytext, &ptr, 10);
+                                  denominator = strtol (ptr + 1, NULL, 10);
+                                  mylval = marlais_make_ratio (numerator, denominator);
+                                  return (LITERAL);
+                                }
+
+ /* Floats */
+
+<ETC>[+-]?[0-9]*\.[0-9][0-9]*{EXP}      { mylval = marlais_make_dfloat (strtod (yytext, NULL));
+                                          return (LITERAL);
+                                        }
+<ETC>[+-]?[0-9][0-9]*\.[0-9]*{EXP}      { mylval = marlais_make_dfloat (strtod (yytext, NULL));
+                                          return (LITERAL);
+                                        }
+<ETC>[+-]?[0-9][0-9]*{EXP}              { mylval = marlais_make_dfloat (strtod (yytext, NULL));
+                                          return (LITERAL);
+                                        }
+
+ /* Characters */
+
+<ETC>\'([^\\\']|(\\.))\' { mylval = marlais_lexer_expand_char (yytext);
+                           return (LITERAL);
+                         }
+
+ /* Strings */
+
 <ETC>{STRING}   { yytext[yyleng-1] = '\0';
                   mylval = marlais_lexer_expand_string (yytext+1);
                   return (STRING);
                 }
+
+ /* Symbols */
+
+<ETC>#{STRING}  { /* Do some nasty business with yytext */
+                  yytext[yyleng-1] = ':';
+                  mylval = marlais_make_symbol (yytext + 2);
+                  return (SYMBOL);
+                }
+
+<ETC>{WORD}:    {
+                  mylval = marlais_make_symbol (yytext);
+                  if (mydebug) {
+                        printf("yydebug: got symbol [%s]\n",  yytext);
+                        }
+                  return (SYMBOL);
+                 }
+
+ /* Operators are treated as specific tokens */
+
+<ETC>{OPERATOR} { return which_operator(yytext, yyleng);
+                }
+
+ /* Escaped operators are treated as names */
+
+<ETC>\\{OPERATOR}       { which_operator (yytext+1, yyleng-1);
+                          return NAME;
+                        }
+
+ /* Words are either reserved words or binding references */
+
+<ETC>{WORD}     { int tmp = symbol_or_resword (yytext, &mylval);
+                  if (mydebug && tmp == SYMBOL) {
+                        printf ("yydebug: got symbol [%s]\n", yytext);
+                        }
+                  return tmp;
+                }
+
+ /* Poundwords serve various syntactic purposes, including various literals */
+
+<ETC>#[a-zA-Z][a-zA-Z\-]*       { return search_for_poundword (yytext, &mylval);
+                                }
+
+ /* Various special tokens */
+
+<ETC>[\(\)\[\]\{\}\.\,\;\~\?]   { /* return char as token */
+                                  mylval = (Object)0;
+                                  return *yytext;
+                                }
+
+<ETC>=>         { mylval = equal_arrow_symbol;
+                  return (EQUAL_ARROW);
+                }
+
+<ETC>::         { mylval = colon_colon_symbol;
+                  return (COLON_COLON);
+                }
+
+<ETC>#\(        { mylval = NULL;
+                  return (HASH_PAREN);
+                }
+
+<ETC>#\[        { mylval = NULL;
+                  return (HASH_BRACKET);
+                }
+
+<ETC>\?\?       { mylval = NULL;
+                  return (QUESTION_QUESTION);
+                }
+
+<ETC>\.\.\.     { mylval = NULL;
+                  return (ELLIPSIS);
+                }
+
+ /* Handle unrecognized characters */
+
+<INI,KEY,VAL,ETC>.      { process_unrecognized_character (yytext);
+                        }
+
+/******************************************************************************/
+/* END OF RULES                                                               */
+/******************************************************************************/
 
 %%
 
