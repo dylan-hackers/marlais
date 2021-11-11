@@ -8,6 +8,11 @@ find_package(PkgConfig REQUIRED)
 
 pkg_check_modules(BDWGC REQUIRED bdw-gc)
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
+    OR CMAKE_CXX_COMPILER_ID STREQUAL "CLang")
+  add_compile_options(-Wall -Wextra -Wno-unused)
+endif ()
+
 add_subdirectory(src)
 add_subdirectory(bin)
 
