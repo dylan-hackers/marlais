@@ -13,6 +13,13 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
   add_compile_options(-Wall -Wextra -Wno-unused)
 endif ()
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
+  option(GCC_ENABLE_BOUNDSCHECK "Enable bounds checking" ON)
+  if (GCC_ENABLE_BOUNDSCHECK)
+    add_compile_options(-fbounds-check)
+  endif ()
+endif ()
+
 add_subdirectory(src)
 add_subdirectory(bin)
 
