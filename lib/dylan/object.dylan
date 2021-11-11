@@ -1,5 +1,12 @@
 module: dylan
 
+//
+// make
+//
+
+define generic make(c :: <class>, #rest args, #key, #all-keys)
+  => (instance :: <object>);
+
 define method make (c :: <class>, #rest args, #key, #all-keys)
   %make(c, args);
 end method make;
@@ -18,7 +25,10 @@ define constant singleton =
 //  This just doesn't look right to me!!!!  jnw.
 //
 
-define method initialize (instance, #key, #all-keys)
+define generic initialize (instance, #rest args, #key, #all-keys)
+  => (objects);
+
+define method initialize (instance, #rest args, #key, #all-keys)
 end method initialize;
 
 define constant identity =

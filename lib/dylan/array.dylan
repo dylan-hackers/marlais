@@ -42,6 +42,9 @@ end method element-setter;
 // dimensions
 //
 
+define generic dimensions (a :: <array>)
+  => (dimensions :: <sequence>);
+
 define method dimensions (a :: <array>)
   %array-dimensions (a);
 end method dimensions;

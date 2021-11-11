@@ -63,8 +63,16 @@ define generic fill! (mutable-collection :: <mutable-collection>,
 
 define generic key-test (c :: <collection>) => value :: <function>;
 
-// iteration protocol
 define generic element (c :: <collection>, key, #rest rest);
+
+define generic element-setter (value, c :: <mutable-collection>, key, #rest rest)
+  => (new-value);
+
+// iteration protocol
+
+define generic forward-iteration-protocol (c :: <collection>)
+  => (limit, next-state, finished-state?, current-key,
+      current-element, current-element-setter, copy-state);
 
 //
 // most general methods for collection gfs.
