@@ -313,7 +313,7 @@ string:
 
 /*              # we ignore this restriction
                 # and allow all escape characters
-escapeCHAR      [\\\'\"abefnrt0]|{hexDIGIT}
+escapeCHAR      [\\\'\"abefnrt0]|{hexDIG}
 */
 
 STRING          \"([^\\\"]|(\\(.|\n)))*\"
@@ -332,11 +332,15 @@ hex-digit:      # we extend this to accept lowercase
                 one of 0 1 2 3 4 5 6 7 8 9 A B C D E F
 */
 
-octDIGIT        [0-7]
-decDIGIT        [0-9]
-hexDIGIT        [0-9a-fA-f]
+binDIG          [01]
+octDIG          [0-7]
+decDIG          [0-9]
+hexDIG          [0-9a-fA-f]
 
-EXP             ([Ee][\+\-]?[0-9][0-9]*)?
+binNUM          [01][01]*
+octNUM          [0-7][0-7]*
+decNUM          [0-9][0-9]*
+hexNUM          [0-9a-fA-f][0-9a-fA-f]*
 
 /*
 exponent:
@@ -447,42 +451,63 @@ WHITESPACE      [\ \t\f\v\r]
 
 <ETC>[\n]               { ++yylineno; /* Bogus hack! */ }
 
- /* Binary integers */
+ /* Integers */
 
-<ETC>#b[01][01]*        { mylval = marlais_make_integer (strtol (yytext+2, NULL, 2));
+ /*
+ binary-integer:
+        #b binary-digit
+        binary-integer binary-digit
+ */
+
+<ETC>#b{binNUM}         { mylval = marlais_make_integer (strtol (yytext+2, NULL, 2));
                           return (LITERAL);
                         }
 
- /* Octal integers */
+ /*
+ octal-integer:
+        #o octal-digit
+        octal-integer octal-digit
+ */
 
-<ETC>#o[0-7][0-7]*      { mylval = marlais_make_integer (strtol (yytext+2, NULL, 8));
+<ETC>#o{octNUM}         { mylval = marlais_make_integer (strtol (yytext+2, NULL, 8));
                           return (LITERAL);
                         }
 
- /* Decimal integers */
+ /*
+ decimal-integer:
+        decimal-digit
+        decimal-integer decimal-digit
+ */
 
-<ETC>[+-]?[0-9][0-9]*   { mylval = marlais_make_integer (strtol (yytext, NULL, 10));
+<ETC>[+-]?{decNUM}      { mylval = marlais_make_integer (strtol (yytext, NULL, 10));
                           return (LITERAL);
                         }
 
- /* Hexadecimal integers */
 
-<ETC>#x[0-9A-Fa-f][0-9A-Fa-f]* { mylval = marlais_make_integer (strtol (yytext+2, NULL, 16));
-                                 return (LITERAL);
-                               }
+ /*
+ hex-integer:
+        #x hex-digit
+        hex-integer hex-digit
+ */
 
- /* Ratios */
+<ETC>#x{hexNUM}         { mylval = marlais_make_integer (strtol (yytext+2, NULL, 16));
+                          return (LITERAL);
+                        }
 
-<ETC>[+-]?[0-9][0-9]*\/[0-9][0-9]*      {
-                                  char *ptr;
-                                  long numerator, denominator;
-                                  numerator = strtol (yytext, &ptr, 10);
-                                  denominator = strtol (ptr + 1, NULL, 10);
-                                  mylval = marlais_make_ratio (numerator, denominator);
-                                  return (LITERAL);
-                                }
+ /*
+ ratio:
+        signopt decimal-integer / decimal-integer
+ */
 
- /* Floats */
+<ETC>[+-]?{decNUM}\/{decNUM}      {
+                        char *ptr;
+                        long numerator, denominator;
+                        numerator = strtol (yytext, &ptr, 10);
+                        denominator = strtol (ptr + 1, NULL, 10);
+                        mylval = marlais_make_ratio (numerator, denominator);
+                        return (LITERAL);
+                        }
+
  /*
  floating-point:
         signopt decimal-integeropt . decimal-integer exponentopt
