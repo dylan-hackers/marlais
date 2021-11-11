@@ -52,7 +52,7 @@ static Object make_string(char *str, size_t len);
 static Object string_element (Object string, Object index, Object default_ob);
 static Object string_element_setter (Object string, Object index, Object val);
 static Object string_size (Object string);
-static Object string_size_setter (Object size, Object string);
+/* static Object string_size_setter (Object size, Object string); */
 static Object string_append2 (Object str1, Object str2);
 static Object string_lessthan (Object str1, Object str2);
 static Object string_equal (Object str1, Object str2);
@@ -66,7 +66,7 @@ static struct primitive string_prims[] =
     {"%string-element", prim_3, string_element},
     {"%string-element-setter", prim_3, string_element_setter},
     {"%string-size", prim_1, string_size},
-    {"%string-size-setter", prim_2, string_size_setter},
+/*  {"%string-size-setter", prim_2, string_size_setter}, */
     {"%string-append2", prim_2, string_append2},
     {"%string<", prim_2, string_lessthan},
     {"%string=", prim_2, string_equal},
@@ -175,6 +175,7 @@ string_size (Object string)
     return (marlais_make_integer (BYTESTRSIZE (string)));
 }
 
+#if 0
 static Object
 string_size_setter (Object size, Object string)
 {
@@ -187,6 +188,7 @@ string_size_setter (Object size, Object string)
     BYTESTRVAL (string)[new_size] = '\0';
     return size;
 }
+#endif
 
 static Object
 string_append2 (Object str1, Object str2)
