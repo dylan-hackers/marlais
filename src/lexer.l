@@ -161,11 +161,11 @@ static struct resword *search_intermediate_word (char *string);
 static void process_unrecognized_character (char *yytext);
 static int which_operator (char *string, int length);
 
-static void make_header_key (void);
-static void make_header_end (void);
-static void make_header_val (void);
-
 static char *get_nonws_symbol (char *text);
+
+static void make_header_key (void);
+static void make_header_val (void);
+static void make_header_end (void);
 
 static int countlines(char *str);
 
@@ -876,18 +876,6 @@ which_operator( char *string, int length)
     abort();
 }
 
-static void
-make_header_key()
-{
-	header_key = marlais_make_symbol (yytext);
-}
-
-static void
-make_header_end()
-{
-
-}
-
 static char *
 get_nonws_symbol (char *text)
 {
@@ -909,6 +897,12 @@ get_nonws_symbol (char *text)
 }
 
 static void
+make_header_key()
+{
+	header_key = marlais_make_symbol (yytext);
+}
+
+static void
 make_header_val()
 {
 	if (header_key == module_keyword) {
@@ -916,6 +910,12 @@ make_header_val()
 		struct module_binding *module = marlais_get_module (symbol);
 		marlais_set_module (module);
 	}
+}
+
+static void
+make_header_end()
+{
+
 }
 
 static int countlines(char *str)
