@@ -17,6 +17,11 @@ GLOBAL Object marlais_standard_input;
 GLOBAL Object marlais_standard_output;
 GLOBAL Object marlais_standard_error;
 
+GLOBAL Object eof_object;
+GLOBAL Object default_object;
+GLOBAL Object unspecified_object;
+GLOBAL Object uninit_slot_object;
+
 /* globals */
 GLOBAL jmp_buf error_return;
 GLOBAL int load_file_context;
@@ -26,6 +31,7 @@ GLOBAL Object default_module;
 GLOBAL Object all_symbol;
 GLOBAL struct module_binding *the_current_module;
 GLOBAL Object ResultValueStack;
+GLOBAL Object open_file_list;
 GLOBAL int trace_bindings;
 GLOBAL int trace_functions;
 GLOBAL int trace_only_user_funs;
@@ -35,10 +41,6 @@ GLOBAL int trace_level;
 GLOBAL Object apply_symbol;
 GLOBAL Object size_keyword;
 GLOBAL Object fill_keyword;
-GLOBAL Object default_object;
-GLOBAL Object eof_object;
-GLOBAL Object unspecified_object;
-GLOBAL Object uninit_slot_object;
 GLOBAL Object key_symbol;
 GLOBAL Object keyword_symbol;
 GLOBAL Object required_symbol;
@@ -286,7 +288,6 @@ GLOBAL Object define_test_symbol;
 GLOBAL Object test_symbol;
 GLOBAL Object x_symbol;
 
-GLOBAL Object open_file_list;
 GLOBAL Object aref_symbol;
 GLOBAL Object print_symbol;
 GLOBAL Object princ_symbol;
