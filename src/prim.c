@@ -3,7 +3,7 @@
 #include <marlais/prim.h>
 
 #include <marlais/alloc.h>
-#include <marlais/bytestring.h>
+#include <marlais/string.h>
 #include <marlais/env.h>
 #include <marlais/list.h>
 #include <marlais/symbol.h>

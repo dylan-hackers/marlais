@@ -32,7 +32,7 @@
 
  */
 
-#include <marlais/bytestring.h>
+#include <marlais/string.h>
 
 #include <marlais/alloc.h>
 #include <marlais/character.h>
@@ -109,7 +109,7 @@ static struct primitive string_prims[] =
 /* Exported functions */
 
 void
-marlais_register_bytestring (void)
+marlais_register_string (void)
 {
     int num = sizeof (string_prims) / sizeof (struct primitive);
     marlais_register_prims (num, string_prims);

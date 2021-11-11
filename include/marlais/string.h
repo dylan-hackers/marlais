@@ -1,6 +1,6 @@
 /*
 
-   bytestring.h
+   string.h
 
    This software is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,13 +31,13 @@
 
  */
 
-#ifndef MARLAIS_BYTESTRING_H
-#define MARLAIS_BYTESTRING_H
+#ifndef MARLAIS_STRING_H
+#define MARLAIS_STRING_H
 
 #include <marlais/common.h>
 
-/* Register bytestring primitives */
-extern void marlais_register_bytestring (void);
+/* Register string primitives */
+extern void marlais_register_string (void);
 
 /* Make a <byte-string> */
 extern Object marlais_make_bytestring (const char *str);

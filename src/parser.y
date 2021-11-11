@@ -51,7 +51,7 @@
 #include <marlais/common.h>
 
 #include <marlais/boolean.h>
-#include <marlais/bytestring.h>
+#include <marlais/string.h>
 #include <marlais/error.h>
 #include <marlais/list.h>
 #include <marlais/number.h>

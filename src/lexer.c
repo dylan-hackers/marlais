@@ -2,7 +2,7 @@
 #include <marlais/lexer.h>
 
 #include <marlais/alloc.h>
-#include <marlais/bytestring.h>
+#include <marlais/string.h>
 #include <marlais/character.h>
 
 #include "parser.gen.h"

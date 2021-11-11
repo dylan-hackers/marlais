@@ -6,7 +6,7 @@
 #include <marlais/apply.h>
 #include <marlais/array.h>
 #include <marlais/boolean.h>
-#include <marlais/bytestring.h>
+#include <marlais/string.h>
 #include <marlais/classprec.h>
 #include <marlais/deque.h>
 #include <marlais/env.h>

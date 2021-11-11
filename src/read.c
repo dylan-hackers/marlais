@@ -6,7 +6,7 @@
 
 #include <marlais/read.h>
 
-#include "bytestring.h"
+#include "string.h"
 #include "character.h"
 #include "dylan_lexer.h"
 #include "dylan.tab.h"

@@ -23,7 +23,6 @@ add_library(marlais_lib
   apply.c
   array.c
   boolean.c
-  bytestring.c
   character.c
   class.c
   classprec.c
@@ -49,6 +48,7 @@ add_library(marlais_lib
   sequence.c
   slot.c
   stream.c
+  string.c
   symbol.c
   syntax.c
   sys.c

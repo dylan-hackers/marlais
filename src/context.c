@@ -208,7 +208,7 @@ marlais_initialize (void)
   marlais_register_number ();
   marlais_register_apply ();
   marlais_register_boolean ();
-  marlais_register_bytestring ();
+  marlais_register_string ();
   marlais_register_vector ();
   marlais_register_error ();
   marlais_register_stream ();
