@@ -1,4 +1,6 @@
 
+option(MARLAIS_ENABLE_WCHAR "Enable wide character support" ON)
+
 # Generate parser
 bison_target(
   PARSER parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.gen.c
@@ -71,13 +73,10 @@ set_target_properties(marlais_lib
 
 # libdl
 target_link_libraries(marlais_lib PUBLIC dl)
-
 # libm
 target_link_libraries(marlais_lib PUBLIC m)
-
 # libreadline
 target_link_libraries(marlais_lib PUBLIC readline)
-
 # libgc
 target_link_libraries(marlais_lib PUBLIC ${BDWGC_LINK_LIBRARIES})
 target_include_directories(marlais_lib PRIVATE ${BDWGC_INCLUDE_DIRS})
