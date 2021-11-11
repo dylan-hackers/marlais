@@ -215,8 +215,6 @@ marlais_syntax_function (Object sym)
     return (NULL);
 }
 
-/* <pcb> a single function to evaluate bodies. uses tail_eval. */
-
 static void
 install_syntax_entry (char *name, syntax_fun fun)
 {
@@ -234,6 +232,8 @@ install_syntax_entry (char *name, syntax_fun fun)
     entry->next = syntax_table[h];
     syntax_table[h] = entry;
 }
+
+/* <pcb> a single function to evaluate bodies. uses tail_eval. */
 
 static Object
 eval_body (Object body, Object null_body_result_value)
