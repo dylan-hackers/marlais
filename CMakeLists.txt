@@ -18,6 +18,12 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
   # Always enable lots of warnings
   add_compile_options(-Wall -Wextra -Wno-unused)
 
+  # Optional link-time optimization
+  option(COMPILER_ENABLE_LTO "Enable link-time optimization" OFF)
+  if (COMPILER_ENABLE_LTO)
+    add_compile_options(-flto)
+  endif ()
+
 endif ()
 
 # Configuration for GNU compilers
@@ -28,6 +34,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
   if (GCC_ENABLE_BOUNDSCHECK)
     add_compile_options(-fbounds-check)
   endif ()
+
 endif ()
 
 # Include subdirectories
