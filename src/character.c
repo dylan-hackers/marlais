@@ -102,12 +102,13 @@ marlais_register_character (void)
 Object
 marlais_make_character (char ch)
 {
+  unsigned char uc = (unsigned char)ch;
   Object obj;
 
 #if MARLAIS_CONFIG_CHARACTER_CACHE > 0
-  if(ch >= 0 && ch < MARLAIS_CONFIG_CHARACTER_CACHE) {
-    if(character_cache[ch] != NULL) {
-      return character_cache[ch];
+  if(uc < MARLAIS_CONFIG_CHARACTER_CACHE) {
+    if(character_cache[uc] != NULL) {
+      return character_cache[uc];
     }
   }
 #endif
@@ -116,8 +117,8 @@ marlais_make_character (char ch)
   CHARVAL (obj) = ch;
 
 #if MARLAIS_CONFIG_CHARACTER_CACHE > 0
-  if(ch >= 0 && ch < MARLAIS_CONFIG_CHARACTER_CACHE) {
-    character_cache[ch] = obj;
+  if(uc < MARLAIS_CONFIG_CHARACTER_CACHE) {
+    character_cache[uc] = obj;
   }
 #endif
 
