@@ -80,6 +80,11 @@ typedef struct {
 #define MARLAIS_FALSE (marlais_false)
 #endif
 
+/* Constructor for booleans */
+static inline Object marlais_make_boolean(bool b) {
+  return b ? MARLAIS_TRUE : MARLAIS_FALSE;
+}
+
 /* List type predicates */
 static inline bool NULLP(Object obj) {
   return EMPTYLISTP(obj);
