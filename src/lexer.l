@@ -638,7 +638,7 @@ marlais_initialize_lexer (void)
 }
 
 void
-marlais_lexer_reset (FILE *new_file)
+marlais_lexer_reset (void)
 {
 	yylineno = 1;
 	BEGIN(INI);
