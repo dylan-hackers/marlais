@@ -55,7 +55,7 @@ static inline Object marlais_make_wchar (wchar_t ch) {
   return MAKE_WCHAR(ch);
 }
 #else
-extern Object marlais_make_wchar (char ch);
+extern Object marlais_make_wchar (wchar_t ch);
 #endif
 #endif
 
