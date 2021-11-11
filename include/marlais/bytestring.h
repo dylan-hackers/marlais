@@ -38,9 +38,10 @@
 
 /* Register bytestring primitives */
 extern void marlais_register_bytestring (void);
-/* Make a <bytestring> */
+
+/* Make a <byte-string> */
 extern Object marlais_make_bytestring (const char *str);
-/* Entrypoint for make(<bytestring>) */
+/* Entrypoint for make(<byte-string>) */
 extern Object marlais_make_bytestring_entrypoint (Object args);
 
 #endif
