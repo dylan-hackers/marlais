@@ -70,6 +70,8 @@ marlais_vector (Object list)
   Object obj, els;
   int size, i;
 
+  /* XXX improve this - count first, allocate, overwrite */
+
   obj = marlais_allocate_object (SimpleObjectVector, sizeof (struct simple_object_vector));
 
   size = 0;
