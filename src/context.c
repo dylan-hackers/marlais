@@ -3,6 +3,9 @@
 
 #include <marlais/marlais.h>
 
+#include <marlais/lexer.h>
+#include <marlais/parser.h>
+
 extern Object binding_stack;
 
 void

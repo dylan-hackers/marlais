@@ -2,6 +2,8 @@
 
 #include <marlais/marlais.h>
 
+#include <marlais/parser.h>
+
 #include <getopt.h>
 #include <stdlib.h>
 #include <stdio.h>
