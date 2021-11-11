@@ -19,8 +19,11 @@ typedef enum {
     Integer, BigInteger, Ratio, SingleFloat, DoubleFloat,
 
     /* collections */
-    EmptyList, Pair, ByteString, SimpleObjectVector,
+    EmptyList, Pair, SimpleObjectVector,
     ObjectTable, Deque, Array,
+
+    /* strings */
+    ByteString, WideString,
 
     /* conditions */
     Condition,
@@ -29,7 +32,7 @@ typedef enum {
     Symbol,
 
     /* characters */
-    Character,
+    Character, WideCharacter,
 
     /* types */
     Class, Instance, Singleton, LimitedIntType, UnionType, SlotDescriptor,

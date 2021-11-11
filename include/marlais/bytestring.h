@@ -44,4 +44,11 @@ extern Object marlais_make_bytestring (const char *str);
 /* Entrypoint for make(<byte-string>) */
 extern Object marlais_make_bytestring_entrypoint (Object args);
 
+#ifdef MARLAIS_ENABLE_WCHAR
+/* Make a <wide-string> */
+extern Object marlais_make_wstring (const wchar_t *str);
+/* Entrypoint for make(<wide-string>) */
+extern Object marlais_make_wstring_entrypoint (Object args);
+#endif
+
 #endif

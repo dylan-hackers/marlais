@@ -89,6 +89,9 @@ marlais_initialize_class (void)
   /* Literal classes */
   boolean_class = make_builtin_class ("<boolean>", object_class);
   character_class = make_builtin_class ("<character>", object_class);
+  byte_character_class = make_builtin_class("<byte-character>", character_class);
+  wide_character_class = make_builtin_class("<wide-character>", character_class);
+  unicode_character_class = make_builtin_class("<unicode-character>", character_class);
 
   /* Symbol classes */
   name_class = make_builtin_class ("<name>", object_class);
@@ -176,6 +179,11 @@ marlais_initialize_class (void)
     make_builtin_class ("<string>", mutable_sequence_class);
   byte_string_class =
     make_builtin_class ("<byte-string>",
+                        listem (string_class,
+                                simple_vector_class,
+                                NULL));
+  wide_string_class =
+    make_builtin_class ("<wide-string>",
                         listem (string_class,
                                 simple_vector_class,
                                 NULL));
@@ -302,6 +310,12 @@ marlais_object_class (Object obj)
     return (pair_class);
   case ByteString:
     return (byte_string_class);
+#ifdef MARLAIS_ENABLE_WCHAR
+  case WideCharacter:
+    return (wide_character_class);
+  case WideString:
+    return (wide_string_class);
+#endif
   case SimpleObjectVector:
     return (simple_object_vector_class);
   case ObjectTable:
@@ -317,7 +331,7 @@ marlais_object_class (Object obj)
   case Name:
     return (name_class);
   case Character:
-    return (character_class);
+    return (byte_character_class);
   case NextMethod:
     return (method_class);
   case Class:
@@ -380,6 +394,8 @@ marlais_make (Object class, Object rest)
     ret = marlais_make_vector_entrypoint (rest);
   } else if ((class == string_class) || (class == byte_string_class)) {
     ret = marlais_make_bytestring_entrypoint (rest);
+  } else if (class == wide_string_class) {
+    ret = marlais_make_wstring_entrypoint (rest);
   } else if (class == generic_function_class) {
     ret = marlais_make_generic_entrypoint (rest);
   } else if ((class == table_class) || (class == object_table_class)) {

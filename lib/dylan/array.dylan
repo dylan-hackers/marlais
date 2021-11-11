@@ -7,6 +7,9 @@ module: dylan
 //   Brent Benson
 //
 
+// XXX move this elsewhere
+define constant <integer-state> = union (<small-integer>, singleton(#f));
+
 //
 // element
 //

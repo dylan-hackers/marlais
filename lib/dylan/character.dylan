@@ -9,35 +9,57 @@ module: dylan
 //
 // \<
 //
+// XXX replace these with a primitive
+//
 
-define sealed method \< (c1 :: <character>, c2 :: <character>)
+define method \< (c1 :: <byte-character>, c2 :: <byte-character>)
   %character->integer(c1) < %character->integer(c2);
+end method \<;
+
+define method \< (c1 :: <wide-character>, c2 :: <wide-character>)
+  %wchar->integer(c1) < %wchar->integer(c2);
 end method \<;
 
 //
 // as
 //
 
-define sealed method as (ic == <small-integer>, ch :: <character>)
+define method as (ic == <integer>, ch :: <byte-character>)
   %character->integer(ch);
 end method as;
 
-define sealed method as (cc == <character>, i :: <small-integer>)
+define method as (cc == <byte-character>, i :: <small-integer>)
   %integer->character(i);
+end method as;
+
+define method as (ic == <integer>, ch :: <wide-character>)
+  %wchar->integer(ch);
+end method as;
+
+define method as (cc == <wide-character>, i :: <small-integer>)
+  %integer->wchar(i);
 end method as;
 
 //
 // as-lowercase
 //
 
-define sealed method as-lowercase(c :: <character>)
+define method as-lowercase(c :: <byte-character>)
   %character-to-lowercase(c);
+end method as-lowercase;
+
+define method as-lowercase(c :: <wide-character>)
+  %wchar-to-lowercase(c);
 end method as-lowercase;
 
 //
 // as-uppercase
 //
 
-define sealed method as-uppercase(c :: <character>)
+define method as-uppercase(c :: <byte-character>)
   %character-to-uppercase(c);
+end method as-uppercase;
+
+define method as-uppercase(c :: <wide-character>)
+  %wchar-to-uppercase(c);
 end method as-uppercase;

@@ -20,14 +20,18 @@ object_type (Object obj)
       return (False);
     case MARLAIS_SUB_EMPTYLIST:
       return (EmptyList);
-    case MARLAIS_SUB_CHARACTER:
-      return (Character);
     case MARLAIS_SUB_EOF:
       return (EndOfFile);
     case MARLAIS_SUB_UNSPECIFIED:
       return (Unspecified);
     case MARLAIS_SUB_UNINITIALIZED:
       return (UninitializedSlotValue);
+    case MARLAIS_SUB_CHARACTER:
+      return (Character);
+#ifdef MARLAIS_ENABLE_WCHAR
+    case MARLAIS_SUB_WCHAR:
+      return (WideCharacter);
+#endif
     default:
       marlais_fatal ("internal error: object with unknown immediate tag");
     }

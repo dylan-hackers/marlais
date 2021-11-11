@@ -48,4 +48,15 @@ static inline Object marlais_make_character (char c) {
 extern Object marlais_make_character (char ch);
 #endif
 
+/* Make a <wide-character> */
+#ifdef MARLAIS_ENABLE_WCHAR
+#ifdef MARLAIS_OBJECT_MODEL_SMALL
+static inline Object marlais_make_wchar (wchar_t ch) {
+  return MAKE_WCHAR(ch);
+}
+#else
+extern Object marlais_make_wchar (char ch);
+#endif
+#endif
+
 #endif

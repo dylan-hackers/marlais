@@ -43,9 +43,16 @@
 
 #include <ctype.h>
 
+#ifdef MARLAIS_ENABLE_WCHAR
+#include <wctype.h>
+#endif
+
 /* Internal function declarations */
 
 static Object make_string(char *str, size_t len);
+#ifdef MARLAIS_ENABLE_WCHAR
+static Object make_wstring(wchar_t *str, size_t len);
+#endif
 
 /* Primitives */
 
@@ -61,6 +68,20 @@ static Object string_as_uppercase (Object string);
 static Object string_as_lowercase_bang (Object string);
 static Object string_as_uppercase_bang (Object string);
 
+#ifdef MARLAIS_ENABLE_WCHAR
+static Object wstring_element (Object string, Object index, Object default_ob);
+static Object wstring_element_setter (Object string, Object index, Object val);
+static Object wstring_size (Object string);
+static Object wstring_size_setter (Object size, Object string);
+static Object wstring_append2 (Object str1, Object str2);
+static Object wstring_lessthan (Object str1, Object str2);
+static Object wstring_equal (Object str1, Object str2);
+static Object wstring_as_lowercase (Object string);
+static Object wstring_as_uppercase (Object string);
+static Object wstring_as_lowercase_bang (Object string);
+static Object wstring_as_uppercase_bang (Object string);
+#endif
+
 static struct primitive string_prims[] =
 {
     {"%string-element", prim_3, string_element},
@@ -74,6 +95,15 @@ static struct primitive string_prims[] =
     {"%string-as-uppercase", prim_1, string_as_uppercase},
     {"%string-as-lowercase!", prim_1, string_as_lowercase_bang},
     {"%string-as-uppercase!", prim_1, string_as_uppercase_bang},
+
+#ifdef MARLAIS_ENABLE_WCHAR
+    {"%wstring-element", prim_3, wstring_element},
+    {"%wstring-element-setter", prim_3, wstring_element_setter},
+    {"%wstring-size", prim_1, wstring_size},
+    {"%wstring<", prim_2, wstring_lessthan},
+    {"%wstring=", prim_2, wstring_equal},
+#endif
+
 };
 
 /* Exported functions */
@@ -127,6 +157,52 @@ marlais_make_bytestring_entrypoint (Object args)
   return (make_string (new, size));
 }
 
+#ifdef MARLAIS_ENABLE_WCHAR
+Object
+marlais_make_wstring (const wchar_t *str)
+{
+    int size;
+    wchar_t *new;
+
+    size = wcslen (str);
+
+    new = MARLAIS_ALLOCATE_WSTRING (size + 1);
+
+    wcsncpy (new, str, size);
+    new[size] = 0;
+
+    return (make_wstring (new, size));
+}
+
+Object
+marlais_make_wstring_entrypoint (Object args)
+{
+  int size, i;
+  Object size_obj, fill_obj;
+  wchar_t fill = ' ';
+  wchar_t *new;
+
+  marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<wide-string>");
+
+  if (fill_obj != MARLAIS_FALSE) {
+    if (!WCHARP (fill_obj)) {
+      marlais_error ("make: value of fill: must be a <wide-character> for <wide-string> class",
+                     fill_obj, NULL);
+    }
+    fill = WCHARVAL (fill_obj);
+  }
+
+  new = MARLAIS_ALLOCATE_WSTRING (size + 1);
+
+  for(i = 0; i < size; i++) {
+    new[i] = fill;
+  }
+  new[size] = 0;
+
+  return (make_wstring (new, size));
+}
+#endif
+
 /* Internal functions */
 
 static Object
@@ -139,6 +215,19 @@ make_string(char *str, size_t len) {
 
   return obj;
 }
+
+#ifdef MARLAIS_ENABLE_WCHAR
+static Object
+make_wstring(wchar_t *str, size_t len) {
+  Object obj;
+
+  obj = marlais_allocate_object (WideString, sizeof (struct wide_string));
+  WIDESTRVAL (obj) = str;
+  WIDESTRSIZE (obj) = len;
+
+  return obj;
+}
+#endif
 
 static Object
 string_element (Object string, Object index, Object default_ob)
@@ -292,3 +381,52 @@ string_as_uppercase_bang (Object string)
 
     return (string);
 }
+
+#ifdef MARLAIS_ENABLE_WCHAR
+
+static Object
+wstring_element (Object string, Object index, Object default_ob)
+{
+    int i;
+
+    i = INTVAL (index);
+    if ((i < 0) || (i >= WIDESTRSIZE (string))) {
+      if (default_ob == default_object) {
+        marlais_error ("element: argument out of range", string, index, NULL);
+      } else {
+        return default_ob;
+      }
+    }
+    return (marlais_make_wchar (WIDESTRVAL (string)[i]));
+}
+
+static Object
+wstring_element_setter (Object string, Object index, Object val)
+{
+    int i;
+
+    i = INTVAL (index);
+    if ((i < 0) || (i >= WIDESTRSIZE (string))) {
+      marlais_error ("element-setter: argument out of range", string, index, NULL);
+    }
+    WIDESTRVAL (string)[i] = WCHARVAL (val);
+    return (unspecified_object);
+}
+
+static Object
+wstring_size (Object string)
+{
+    return (marlais_make_integer (WIDESTRSIZE (string)));
+}
+
+static Object
+wstring_lessthan (Object str1, Object str2) {
+  return marlais_make_boolean(wcscmp (WIDESTRVAL (str1), WIDESTRVAL (str2)) < 0);
+}
+
+static Object
+wstring_equal (Object str1, Object str2) {
+  return marlais_make_boolean(wcscmp (WIDESTRVAL (str1), WIDESTRVAL (str2)) == 0);
+}
+
+#endif

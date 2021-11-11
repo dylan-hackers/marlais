@@ -23,10 +23,11 @@ typedef DyUnsigned MarlaisSub;
 #define MARLAIS_SUB_TRUE          (0x0 << MARLAIS_SUB_SHIFT)
 #define MARLAIS_SUB_FALSE         (0x1 << MARLAIS_SUB_SHIFT)
 #define MARLAIS_SUB_EMPTYLIST     (0x2 << MARLAIS_SUB_SHIFT)
-#define MARLAIS_SUB_CHARACTER     (0x3 << MARLAIS_SUB_SHIFT)
-#define MARLAIS_SUB_EOF           (0x4 << MARLAIS_SUB_SHIFT)
-#define MARLAIS_SUB_UNSPECIFIED   (0x5 << MARLAIS_SUB_SHIFT)
-#define MARLAIS_SUB_UNINITIALIZED (0x6 << MARLAIS_SUB_SHIFT)
+#define MARLAIS_SUB_EOF           (0x3 << MARLAIS_SUB_SHIFT)
+#define MARLAIS_SUB_UNSPECIFIED   (0x4 << MARLAIS_SUB_SHIFT)
+#define MARLAIS_SUB_UNINITIALIZED (0x5 << MARLAIS_SUB_SHIFT)
+#define MARLAIS_SUB_CHARACTER     (0x6 << MARLAIS_SUB_SHIFT)
+#define MARLAIS_SUB_WCHAR         (0x7 << MARLAIS_SUB_SHIFT)
 #define MARLAIS_SUB_MASK          (0xf << MARLAIS_SUB_SHIFT)
 
 /* Shift distances for value fields */
@@ -74,6 +75,11 @@ static inline DyInteger INTVAL(Object obj) {
 static inline DyUnsigned CHARVAL(Object obj) {
   return ((DyUnsigned)IMMEDPART(obj));
 }
+#ifdef MARLAIS_ENABLE_WCHAR
+static inline wchar_t WCHARVAL(Object obj) {
+  return ((wchar_t)IMMEDPART(obj));
+}
+#endif
 
 /* Immediate composition */
 static inline Object MAKE_IMMEDIATE(MarlaisSub sub, DyUnsigned val) {
@@ -82,6 +88,11 @@ static inline Object MAKE_IMMEDIATE(MarlaisSub sub, DyUnsigned val) {
 static inline Object MAKE_CHAR(DyUnsigned ch) {
   return MAKE_IMMEDIATE(MARLAIS_SUB_CHARACTER, ch);
 }
+#ifdef MARLAIS_ENABLE_WCHAR
+static inline Object MAKE_WCHAR(wchar_t ch) {
+  return MAKE_IMMEDIATE(MARLAIS_SUB_WCHAR, ch);
+}
+#endif
 static inline Object MAKE_INT(DyInteger ch) {
   return (Object)(MARLAIS_TAG_INTEGER|(((DyUnsigned)ch) << MARLAIS_INTEGER_SHIFT));
 }
@@ -94,10 +105,11 @@ static inline Object MAKE_INT(DyInteger ch) {
 DEFINE_IMMEDP_PREDICATE(TRUEP, MARLAIS_SUB_TRUE);
 DEFINE_IMMEDP_PREDICATE(FALSEP, MARLAIS_SUB_FALSE);
 DEFINE_IMMEDP_PREDICATE(EMPTYLISTP, MARLAIS_SUB_EMPTYLIST);
-DEFINE_IMMEDP_PREDICATE(CHARP, MARLAIS_SUB_CHARACTER);
 DEFINE_IMMEDP_PREDICATE(EOFP, MARLAIS_SUB_EOF);
 DEFINE_IMMEDP_PREDICATE(UNSPECP, MARLAIS_SUB_UNSPECIFIED);
 DEFINE_IMMEDP_PREDICATE(UNINITSLOTP, MARLAIS_SUB_UNINITIALIZED);
+DEFINE_IMMEDP_PREDICATE(CHARP, MARLAIS_SUB_CHARACTER);
+DEFINE_IMMEDP_PREDICATE(WCHARP, MARLAIS_SUB_WCHAR);
 #undef DEFINE_IMMEDP_PREDICATE
 
 /* Pointer type predicates */

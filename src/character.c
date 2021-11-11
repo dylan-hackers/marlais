@@ -39,6 +39,10 @@
 
 #include <ctype.h>
 
+#ifdef MARLAIS_ENABLE_WCHAR
+#include <wctype.h>
+#endif
+
 /* Internal variables */
 
 #ifndef MARLAIS_OBJECT_MODEL_SMALL
@@ -67,6 +71,17 @@ static Object character_octal_p (Object ch);
 static Object character_lowercase_p (Object ch);
 static Object character_uppercase_p (Object ch);
 
+#ifdef MARLAIS_ENABLE_WCHAR
+static Object integer_to_wchar (Object i);
+static Object wchar_to_integer (Object ch);
+
+static Object wchar_to_lowercase (Object ch);
+static Object wchar_to_uppercase (Object ch);
+
+static Object wchar_lowercase_p (Object ch);
+static Object wchar_uppercase_p (Object ch);
+#endif
+
 static struct primitive char_prims[] =
 {
   {"%integer->character", prim_1, integer_to_character},
@@ -86,6 +101,17 @@ static struct primitive char_prims[] =
   //{"%character-octal?", prim_1, character_octal_p},
   {"%character-lowercase?", prim_1, character_lowercase_p},
   {"%character-uppercase?", prim_1, character_uppercase_p},
+
+#ifdef MARLAIS_ENABLE_WCHAR
+  {"%integer->wchar", prim_1, integer_to_wchar},
+  {"%wchar->integer", prim_1, wchar_to_integer},
+
+  {"%wchar-to-lowercase", prim_1, wchar_to_lowercase},
+  {"%wchar-to-uppercase", prim_1, wchar_to_uppercase},
+
+  {"%wchar-lowercase?", prim_1, wchar_lowercase_p},
+  {"%wchar-uppercase?", prim_1, wchar_uppercase_p},
+#endif
 };
 
 /* Exported functions */
@@ -119,6 +145,36 @@ marlais_make_character (char ch)
 #if MARLAIS_CONFIG_CHARACTER_CACHE > 0
   if(uc < MARLAIS_CONFIG_CHARACTER_CACHE) {
     character_cache[uc] = obj;
+  }
+#endif
+
+  return (obj);
+}
+#endif
+
+
+#ifndef MARLAIS_OBJECT_MODEL_SMALL
+/* small version is inline in marlais/character.h */
+Object
+marlais_make_wchar (wchar_t ch)
+{
+  Object obj;
+
+#if MARLAIS_CONFIG_WCHAR_CACHE > 0
+  unsigned char uc = (unsigned char)ch;
+  if(uc < MARLAIS_CONFIG_WCHAR_CACHE) {
+    if(wchar_cache[uc] != NULL) {
+      return wchar_cache[uc];
+    }
+  }
+#endif
+
+  obj = marlais_allocate_object (WideCharacter, sizeof (struct character));
+  WCHARVAL (obj) = ch;
+
+#if MARLAIS_CONFIG_WCHAR_CACHE > 0
+  if(uc < MARLAIS_CONFIG_WCHAR_CACHE) {
+    wchar_cache[uc] = obj;
   }
 #endif
 
@@ -168,3 +224,49 @@ DEFINE_CTYPE_PREDICATE(hexadecimal,  isxdigit);
 DEFINE_CTYPE_PREDICATE(lowercase,    islower);
 DEFINE_CTYPE_PREDICATE(uppercase,    isupper);
 #undef DEFINE_CTYPE_PREDICATE
+
+
+#ifdef MARLAIS_ENABLE_WCHAR
+
+static Object
+integer_to_wchar (Object i)
+{
+  return (marlais_make_wchar (INTVAL (i)));
+}
+
+static Object
+wchar_to_integer (Object ch)
+{
+  return (marlais_make_integer (WCHARVAL (ch)));
+}
+
+static Object
+wchar_to_lowercase (Object ch)
+{
+  return (marlais_make_character (towlower(WCHARVAL(ch))));
+}
+
+static Object
+wchar_to_uppercase (Object ch)
+{
+  return (marlais_make_character (towupper(WCHARVAL(ch))));
+}
+
+#define DEFINE_WCTYPE_PREDICATE(_NAME,_PRED)		\
+  static Object wchar_ ## _NAME ## _p (Object ch) { \
+    return (marlais_make_boolean(_PRED(CHARVAL(ch))));	\
+  }
+DEFINE_WCTYPE_PREDICATE(alphabetic,   iswalpha);
+DEFINE_WCTYPE_PREDICATE(alphanumeric, iswalnum);
+DEFINE_WCTYPE_PREDICATE(control,      iswcntrl);
+DEFINE_WCTYPE_PREDICATE(graphic,      iswgraph);
+DEFINE_WCTYPE_PREDICATE(printable,    iswprint);
+DEFINE_WCTYPE_PREDICATE(whitespace,   iswspace);
+DEFINE_WCTYPE_PREDICATE(decimal,      iswdigit);
+DEFINE_WCTYPE_PREDICATE(hexadecimal,  iswxdigit);
+//DEFINE_WCTYPE_PREDICATE(octal,      iswodigit); /* XXX not implemented */
+DEFINE_WCTYPE_PREDICATE(lowercase,    iswlower);
+DEFINE_WCTYPE_PREDICATE(uppercase,    iswupper);
+#undef DEFINE_WCTYPE_PREDICATE
+
+#endif /* MARLAIS_ENABLE_WCHAR */

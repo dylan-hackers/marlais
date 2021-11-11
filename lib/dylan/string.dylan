@@ -4,22 +4,29 @@ module: dylan
 // string.dylan
 //
 
-define method element (s :: <string>, i :: <small-integer>,
+
+//
+// Methods on <byte-string>
+//
+
+define method element (s :: <byte-string>, i :: <small-integer>,
 		       #key default = %default-object)
   %string-element(s, i, default);
 end method element;
 
-define method element-setter (c :: <character>,
-			      s :: <string>,
+define method element-setter (c :: <byte-character>,
+			      s :: <byte-string>,
 			      i :: <small-integer>)
   %string-element-setter (s, i, c);
 end method element-setter;
 
-define method size (s :: <string>)
+define method size (s :: <byte-string>)
   %string-size(s);
 end method size;
 
-define method concatenate (s :: <string>, #rest more-strings)
+// XXX type safety on rest argument
+// XXX implement string type conversion
+define method concatenate (s :: <byte-string>, #rest more-strings)
   if (empty? (more-strings))
     s
   else
@@ -28,8 +35,9 @@ define method concatenate (s :: <string>, #rest more-strings)
   end if;
 end method concatenate;
 
-define method as (ic == <small-integer>, s :: <string>)
-  let zero = as(<small-integer>, '0');
+// XXX what is this for?
+define method as (ic == <integer>, s :: <string>)
+  let zero = as(<integer>, '0');
   let total = 0;
   local method accumulate (ch :: <character>)
     total := 10 * total + (as(<small-integer>, ch) - zero);
@@ -38,11 +46,30 @@ define method as (ic == <small-integer>, s :: <string>)
   total
 end method as;
 
+
 //
-// iteration protocol
+// Methods on <wide-string>
 //
 
-define constant <integer-state> = union (<small-integer>, singleton(#f));
+define method element (s :: <wide-string>, i :: <small-integer>,
+		       #key default = %default-object)
+  %wstring-element(s, i, default);
+end method element;
+
+define method element-setter (c :: <wide-character>,
+			      s :: <wide-string>,
+			      i :: <small-integer>)
+  %wstring-element-setter (s, i, c);
+end method element-setter;
+
+define method size (s :: <wide-string>)
+  %wstring-size(s);
+end method size;
+
+
+//
+// Iteration protocol - generic part on <string>
+//
 
 define method current-key (s :: <collection>, state :: <integer-state>)
   state
@@ -60,44 +87,93 @@ define method next-state (s :: <string>, state :: <integer-state>)
   end if;
 end method next-state;
 
-define method current-element (s :: <string>, state :: <integer-state>)
-  %string-element(s, state, %default-object);
-end method current-element;
-
-define method current-element-setter (obj,
-				      s :: <string>,
-				      state :: <integer-state>)
-  %string-element-setter(s, state, obj);
-end method current-element-setter;
-
 define method copy-state (s :: <string>, state :: <integer-state>)
   state;
 end method copy-state;
 
-// comparisons
 
-define method \< (s1 :: <string>, s2 :: <string>)
+//
+// Iteration protocol - part specific to <byte-string>
+//
+
+define method current-element (s :: <byte-string>, state :: <integer-state>)
+  %string-element(s, state, %default-object);
+end method current-element;
+
+define method current-element-setter (obj,
+				      s :: <byte-string>,
+				      state :: <integer-state>)
+  %string-element-setter(s, state, obj);
+end method current-element-setter;
+
+
+//
+// Iteration protocol - part specific to <wide-string>
+//
+
+define method current-element (s :: <wide-string>, state :: <integer-state>)
+  %wstring-element(s, state, %default-object);
+end method current-element;
+
+define method current-element-setter (obj,
+				      s :: <wide-string>,
+				      state :: <integer-state>)
+  %wstring-element-setter(s, state, obj);
+end method current-element-setter;
+
+
+//
+// Comparisons
+//
+
+define method \< (s1 :: <byte-string>, s2 :: <byte-string>)
   %string<(s1, s2);
 end method \<;
 
-define method \= (s1 :: <string>, s2 :: <string>)
+define method \= (s1 :: <byte-string>, s2 :: <byte-string>)
   %string=(s1, s2);
 end method \=;
 
-// case conversion
+define method \< (s1 :: <wide-string>, s2 :: <wide-string>)
+  %wstring<(s1, s2);
+end method \<;
 
-define method as-lowercase(s :: <string>)
+define method \= (s1 :: <wide-string>, s2 :: <wide-string>)
+  %wstring=(s1, s2);
+end method \=;
+
+//
+// Case conversion
+//
+
+define method as-lowercase(s :: <byte-string>)
   %string-as-lowercase(s);
 end method;
 
-define method as-lowercase!(s :: <string>)
+define method as-lowercase!(s :: <byte-string>)
   %string-as-lowercase!(s);
 end method;
 
-define method as-uppercase(s :: <string>)
+define method as-uppercase(s :: <byte-string>)
   %string-as-uppercase(s);
 end method;
 
-define method as-uppercase!(s :: <string>)
+define method as-uppercase!(s :: <byte-string>)
   %string-as-uppercase!(s);
 end method;
+
+// define method as-lowercase(s :: <wide-string>)
+//   %wstring-as-lowercase(s);
+// end method;
+
+// define method as-lowercase!(s :: <wide-string>)
+//   %wstring-as-lowercase!(s);
+// end method;
+
+// define method as-uppercase(s :: <wide-string>)
+//   %wstring-as-uppercase(s);
+// end method;
+
+// define method as-uppercase!(s :: <wide-string>)
+//   %wstring-as-uppercase!(s);
+// end method;

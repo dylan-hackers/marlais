@@ -43,6 +43,11 @@ static void print_array (Object stream, Object array, int escaped);
 static void print_stream (Object out_stream, Object stream);
 static void print_type_name (Object stream, Object class, int escaped);
 
+#ifdef MARLAIS_ENABLE_WCHAR
+static void print_wchar (Object stream, Object c, int escaped);
+static void print_wstring (Object stream, Object c, int escaped);
+#endif
+
 /* Primitives */
 
 static struct primitive print_prims[] =
@@ -107,15 +112,23 @@ marlais_print_object (Object fd, Object obj, int escaped)
   case Pair:
     print_pair (fd, obj, escaped);
     break;
-  case Character:
-    print_character (fd, obj, escaped);
-    break;
   case SimpleObjectVector:
     print_vector (fd, obj, escaped);
+    break;
+  case Character:
+    print_character (fd, obj, escaped);
     break;
   case ByteString:
     print_string (fd, obj, escaped);
     break;
+#ifdef MARLAIS_ENABLE_WCHAR
+  case WideCharacter:
+    print_wchar (fd, obj, escaped);
+    break;
+  case WideString:
+    print_wstring (fd, obj, escaped);
+    break;
+#endif
   case ObjectTable:
     fprintf (fp, "{table}");
       break;
@@ -743,3 +756,35 @@ print_type_name (Object fd, Object obj, int escaped)
     marlais_error ("print_type_name: object is not a type", obj);
   }
 }
+
+#ifdef MARLAIS_ENABLE_WCHAR
+
+static void
+print_wchar (Object fd, Object c, int escaped)
+{
+  wchar_t ch;
+  FILE *fp = print_file_from_fd(fd);
+
+  ch = WCHARVAL (c);
+  if (escaped) {
+    fprintf (fp, "'%lc'", ch);
+  } else {
+    fprintf (fp, "%lc", ch);
+  }
+}
+
+static void
+print_wstring (Object fd, Object str, int escaped)
+{
+  wchar_t *ws;
+  FILE *fp = print_file_from_fd(fd);
+
+  ws = WIDESTRVAL(str);
+  if (escaped) {
+    fprintf (fp, "\"%ls\"", (wchar_t*)ws);
+  } else {
+    fprintf (fp, "%ls", (wchar_t*)ws);
+  }
+}
+
+#endif

@@ -65,6 +65,17 @@ struct byte_string {
 #define BYTESTRSIZE(obj)  (((struct byte_string *)obj)->size)
 #define BYTESTRVAL(obj)   (((struct byte_string *)obj)->val)
 
+#ifdef MARLAIS_ENABLE_WCHAR
+struct wide_string {
+    ObjectHeader header;
+    int size;
+    wchar_t *val;
+};
+
+#define WIDESTRSIZE(obj)  (((struct wide_string *)obj)->size)
+#define WIDESTRVAL(obj)   (((struct wide_string *)obj)->val)
+#endif
+
 struct simple_object_vector {
     ObjectHeader header;
     int size;

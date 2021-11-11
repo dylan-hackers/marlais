@@ -3,6 +3,8 @@
 #ifndef MARLAIS_COMMON_H
 #define MARLAIS_COMMON_H
 
+#include <marlais/config.h>
+
 #include <setjmp.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -12,7 +14,10 @@
 #include <string.h>
 #include <limits.h>
 
-#include <marlais/config.h>
+#ifdef MARLAIS_ENABLE_WCHAR
+#include <wchar.h>
+#endif
+
 #include <marlais/compiler.h>
 #include <marlais/object.h>
 #include <marlais/globals.h>
