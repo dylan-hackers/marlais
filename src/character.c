@@ -51,6 +51,14 @@ static Object character_cache[MARLAIS_CONFIG_CHARACTER_CACHE];
 #endif
 #endif
 
+#ifdef MARLAIS_ENABLE_WCHAR
+#ifndef MARLAIS_OBJECT_MODEL_SMALL
+#if MARLAIS_CONFIG_WCHAR_CACHE > 0
+static Object wchar_cache[MARLAIS_CONFIG_WCHAR_CACHE];
+#endif
+#endif
+#endif
+
 /* Primitives */
 
 static Object integer_to_character (Object i);

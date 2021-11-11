@@ -26,7 +26,10 @@
 /* Cache the first N integers */
 #define MARLAIS_CONFIG_INTEGER_CACHE 1024
 
+/* Enable wide-character support */
 #define MARLAIS_ENABLE_WCHAR
+/* Cache the first N wide characters */
+#define MARLAIS_CONFIG_WCHAR_CACHE 256
 
 #define MAX_STRING_SIZE 10240
 #define MAX_SYMBOL_SIZE 1024
