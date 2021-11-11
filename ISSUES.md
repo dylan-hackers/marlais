@@ -2,6 +2,7 @@
 
 ### Fixes
 
+ * Fix sealed/primary/uninstatiable for builtin classes
  * Fix longjmp value passing
  * Other XXX
 
