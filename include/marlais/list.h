@@ -54,6 +54,7 @@ Object map2 (Object (*fun) (Object, Object), Object l1, Object l2);
 Object list_map1 (Object fun, Object lst);
 Object list_map2 (Object fun, Object l1, Object l2);
 Object append (Object l1, Object l2);
+Object append_bang (Object l1, Object l2);
 int member (Object obj, Object lst);
 Object member_p (Object obj, Object lst, Object test);
 Object listem (Object car,...);

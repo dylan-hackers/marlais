@@ -64,7 +64,6 @@
 
 static void yyerror (char *);
 
-static Object append_bang (Object l1, Object l2);
 static Object nelistem (Object car,...);
 
 extern Object *parse_value_ptr;
@@ -1338,29 +1337,6 @@ void yyerror(char *s)
 	     marlais_make_bytestring (marlais_yytext),
 	     marlais_make_bytestring (line_str),
 	     NULL);
-}
-
-/*
- * append_bang appends l2 to l1 if l1 is nonempty.
- * if l1 is empty, it just returns l2.
- */
-static Object
-append_bang(Object l1, Object l2)
-{
-    Object res = l1;
-
-    if (EMPTYLISTP (l1)) {
-        return l2;
-#if 0
-	fprintf(stderr, "Whoa! append! to empty_list!\n");
-	abort();
-#endif
-    }
-    while (PAIRP (CDR (l1))) {
-	l1 = CDR (l1);
-    }
-    CDR (l1) = l2;
-    return res;
 }
 
 /*

@@ -69,6 +69,7 @@ static struct primitive list_prims[] =
     {"%list-element-setter", prim_3, list_element_setter},
     {"%list-map1", prim_2, list_map1},
     {"%list-append", prim_2, append},
+    {"%list-append!", prim_2, append_bang}, /* not used yet */
     {"%list-member?", prim_3, member_p},
     {"%list-reduce", prim_3, list_reduce},
     {"%list-reduce1", prim_2, list_reduce1},
@@ -294,6 +295,26 @@ append (Object l1, Object l2)
 	return (cons (CAR (l1), append (CDR (l1), l2)));
     }
 }
+
+/*
+ * append_bang appends l2 to l1 if l1 is nonempty.
+ * if l1 is empty, it just returns l2.
+ */
+Object
+append_bang(Object l1, Object l2)
+{
+    Object res = l1;
+
+    if (EMPTYLISTP (l1)) {
+        return (l2);
+    }
+    while (PAIRP (CDR (l1))) {
+        l1 = CDR (l1);
+    }
+    CDR (l1) = l2;
+    return (res);
+}
+
 
 int
 member (Object obj, Object lst)
