@@ -264,9 +264,11 @@ word:
                 leading-alphabetic
                 leading-numeric alphabetic-character leading-alphabetic
                 leading-graphic leading-alphabetic
+                # additional rule by us to allow '$0', '$1', '$2' ...
+                leading-graphic leading-numeric
 */
 
-WORD            {leadALPHA}|({leadNUMERIC}{alphaCHAR}{leadALPHA})|({leadGRAPHIC}{leadALPHA})
+WORD            {leadALPHA}|({leadNUMERIC}{alphaCHAR}{leadALPHA})|({leadGRAPHIC}{leadALPHA})|({leadGRAPHIC}|{leadNUMERIC})
 
 /* Operators
 */
