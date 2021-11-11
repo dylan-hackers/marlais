@@ -39,7 +39,7 @@
 /* Register character primitives */
 extern void marlais_register_character (void);
 
-/* Make a <character> */
+/* Make a <byte-character> */
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
 static inline Object marlais_make_character (char ch) {
   return MAKE_CHAR(ch);
