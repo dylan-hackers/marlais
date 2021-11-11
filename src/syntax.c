@@ -107,7 +107,7 @@ static Object unbinding_begin_eval (Object form);
 
 static char *syntax_operators[] =
 {
-    "and",
+/*  "and", */
     "&",
     "begin",
     "bind",
@@ -129,7 +129,7 @@ static char *syntax_operators[] =
     "for-each",
     "if",
     "method",
-    "or",
+/*  "or", */
     "|",
     "quasiquote",
     "quote",
@@ -147,7 +147,7 @@ static char *syntax_operators[] =
 
 static syntax_fun syntax_functions[] =
 {
-    and_eval,
+ /*    and_eval, */
     and_eval,
     begin_eval,
     bind_eval,
@@ -169,7 +169,7 @@ static syntax_fun syntax_functions[] =
     for_each_eval,
     if_eval,
     method_eval,
-    or_eval,
+/*  or_eval, */
     or_eval,
     quasiquote_eval,
     quote_eval,
