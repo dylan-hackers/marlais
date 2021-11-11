@@ -128,10 +128,10 @@ marlais_register_character (void)
 Object
 marlais_make_character (char ch)
 {
-  unsigned char uc = (unsigned char)ch;
   Object obj;
 
 #if MARLAIS_CONFIG_CHARACTER_CACHE > 0
+  unsigned char uc = (unsigned char)ch;
   if(uc < MARLAIS_CONFIG_CHARACTER_CACHE) {
     if(character_cache[uc] != NULL) {
       return character_cache[uc];
