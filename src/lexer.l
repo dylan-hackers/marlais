@@ -174,15 +174,175 @@ static int countlines(char *str);
 %}
 %pointer
 
-EXP		([Ee][\+\-]?[0-9][0-9]*)?
-anyCHAR		[a-zA-Z0-9\!&\*\<=\>\|\^\$%@_\-\+~\?\/]
-alphaCHAR	[a-zA-Z]
-leadALPHA	[a-zA-Z]{anyCHAR}*
-leadNUMERIC	[0-9]{anyCHAR}*
-leadGRAPHIC	[!&\*<=>\|\^\$%@_]{anyCHAR}*
-OPERATOR	[-~\+\*\/\^=\<\>&\|]|([\<\>=:~]=)|(~==)
-WORD		{leadALPHA}|({leadNUMERIC}[a-zA-Z]{leadALPHA})|([!&\*<=>\|\^\$%@_]{anyCHAR}*{leadALPHA})|(\${anyCHAR}*)
-STRING		\"([^\\\"]|(\\(.|\n)))*\"
+/******************************************************************************
+ * START OF DEFINITIONS                                                       *
+ ******************************************************************************/
+
+/* Names, Symbols and Keywords
+*/
+
+/*
+alphabetic-character:
+                one of a b c d e f g h i j k l m n o p q r s t u v w x y z
+*/
+
+alphaCHAR       [a-zA-Z]
+
+/*
+numeric-character:
+                one of 0 1 2 3 4 5 6 7 8 9
+*/
+
+numericCHAR     [0-9]
+
+/*
+graphic-character:
+                one of ! & * < > | ^ $ % @ _
+*/
+
+graphicCHAR     [\!\&\*\<\>\|\^\$\%\@\_]
+
+/*
+special-character:
+                one of - + ~ ? / =
+*/
+
+specialCHAR     [\-\+\~\?\/\=]
+
+/*
+any-character:
+                alphabetic-character
+                numeric-character
+                graphic-character
+                special-character
+*/
+
+anyCHAR         {alphaCHAR}|{numericCHAR}|{graphicCHAR}|{specialCHAR}
+
+/*
+word-character-not-alphabetic:
+                numeric-character
+                graphic-character
+                special-character
+*/
+
+wordNonALPHA    {numericCHAR}|{graphicCHAR}|{specialCHAR}
+
+/*
+word-character-not-double-alphabetic:
+                alphabetic-character word-character-not-alphabetic
+                numeric-character
+                graphic-character
+                special-character
+*/
+
+wordNonDALPHA   ({alphaCHAR}{wordNonALPHA})|{wordNonALPHA}
+
+/*
+leading-alphabetic:
+                alphabetic-character
+                leading-alphabetic any-character
+*/
+
+leadALPHA       {alphaCHAR}{anyCHAR}*
+
+/*
+leading-numeric:
+                numeric-character
+                leading-numeric word-character-not-double-alphabetic
+*/
+
+leadNUMERIC     {numericCHAR}{wordNonDALPHA}*
+
+/*
+leading-graphic:
+                graphic-character
+                leading-graphic word-character-not-alphabetic
+*/
+leadGRAPHIC     {graphicCHAR}{wordNonALPHA}*
+
+/*
+word:
+                leading-alphabetic
+                leading-numeric alphabetic-character leading-alphabetic
+                leading-graphic leading-alphabetic
+*/
+
+WORD            {leadALPHA}|({leadNUMERIC}{alphaCHAR}{leadALPHA})|({leadGRAPHIC}{leadALPHA})
+
+/* Operators
+*/
+
+/*
+unary-operator:
+                one of - ~
+*/
+
+unaryOPERATOR   [\-\~]
+
+/*
+binary-operator:
+                one of + - * / ^ = == ~= ~== < <= > >= & | :=
+*/
+
+binaryOPERATOR  [\+\-\*\/\^\=\<\>\&\|]|([\<\>=:~]=)|(~==)
+
+/*
+operator:       # this definition is custom
+                unary-operator
+                binary-operator
+*/
+
+OPERATOR        {unaryOPERATOR}|{binaryOPERATOR}
+
+/* Character and String Literals
+*/
+
+/*
+escape-character:
+                one of \ ' " a b e f n r t 0
+                < hex-digits >
+string-character:
+                any printing character (including space) except for " or \
+                \ escape-character
+more-string:
+                string-character more-string
+                "
+string:
+                " more-string
+*/
+
+/*              # we ignore this restriction
+                # and allow all escape characters
+escapeCHAR      [\\\'\"abefnrt0]|{hexDIGIT}
+*/
+
+STRING          \"([^\\\"]|(\\(.|\n)))*\"
+
+/* Numbers
+*/
+
+/*
+binary-digit:
+                one of 0 1
+octal-digit:
+                one of 0 1 2 3 4 5 6 7
+decimal-digit:
+                one of 0 1 2 3 4 5 6 7 8 9
+hex-digit:      # we extend this to accept lowercase
+                one of 0 1 2 3 4 5 6 7 8 9 A B C D E F
+*/
+
+octDIGIT        [0-7]
+decDIGIT        [0-9]
+hexDIGIT        [0-9a-fA-f]
+
+EXP             ([Ee][\+\-]?[0-9][0-9]*)?
+
+/******************************************************************************/
+/* END OF DEFINITIONS                                                         */
+/******************************************************************************/
+
 
 %x INI KEY VAL ETC
 /* start contexts courtesy of Roger Critchlow */
