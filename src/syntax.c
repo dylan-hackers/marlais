@@ -260,23 +260,32 @@ eval_body (Object body, Object null_body_result_value)
 static Object
 and_eval (Object form)
 {
-    Object clauses, ret;
+    Object clauses, val, ret;
 
     clauses = CDR (form);
     while (!EMPTYLISTP (clauses)) {
-      ret = eval (CAR (clauses));
-      if (VALUESP (ret)) {
-        if (PAIRP (CDR (clauses))) {
-          ret = FIRSTVAL (ret);
-        } else {
-          return ret;
-        }
+      /* evaluate one expression */
+      val = ret = eval (CAR (clauses));
+      /* return last value */
+      if (NULLP (CDR (clauses))) {
+        break;
       }
-      if (ret == MARLAIS_FALSE) {
+      /* extract first value */
+      if (VALUESP (ret)) {
+        if(!FIRSTVALP (ret)) {
+          marlais_error("and: expression returned no values\n");
+        }
+        val = FIRSTVAL (ret);
+      }
+      /* return if it is false */
+      if (val == MARLAIS_FALSE) {
         return (MARLAIS_FALSE);
       }
+      /* next expression */
       clauses = CDR (clauses);
     }
+
+    /* return result of last expression */
     return (ret);
 }
 
