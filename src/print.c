@@ -81,7 +81,7 @@ marlais_print_object (Object fd, Object obj, int escaped)
     fprintf (fp, "#()");
     break;
   case Integer:
-    fprintf (fp, MARLAIS_INTEGER_PRI, INTVAL (obj));
+    fprintf (fp, "%"MARLAIS_INTEGER_PRI, INTVAL (obj));
     break;
 #ifdef MARLAIS_ENABLE_BIG_INTEGERS
   case BigInteger:
@@ -89,7 +89,7 @@ marlais_print_object (Object fd, Object obj, int escaped)
     break;
 #endif
   case Ratio:
-    fprintf (fp, MARLAIS_INTEGER_PRI "/" MARLAIS_INTEGER_PRI,
+    fprintf (fp, "%"MARLAIS_INTEGER_PRI "/%" MARLAIS_INTEGER_PRI,
              RATIONUM (obj), RATIODEN (obj));
     break;
   case DoubleFloat:
