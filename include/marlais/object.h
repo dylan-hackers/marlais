@@ -4,7 +4,13 @@
 #define MARLAIS_OBJECT_H
 
 typedef intptr_t  DyInteger;
+#define MARLAIS_INT_MIN (INTPTR_MIN)
+#define MARLAIS_INT_MAX (INTPTR_MAX)
+#define MARLAIS_INT_PRI PRIdPTR
+
 typedef uintptr_t DyUnsigned;
+#define MARLAIS_UINT_MAX (UINTPTR_MAX)
+#define MARLAIS_UINT_PRI PRIuPTR
 
 typedef enum {
     Uninitialized = 0,
@@ -88,7 +94,13 @@ static inline Object marlais_make_boolean(bool b) {
   return b ? MARLAIS_TRUE : MARLAIS_FALSE;
 }
 
-/* List type predicates */
+/* Additional predicates */
+static inline bool ZEROP(Object obj) {
+  return INTEGERP(obj) && (INTVAL(obj) == 0);
+}
+static inline bool UNSIGNEDP(Object obj) {
+  return INTEGERP(obj) && (INTVAL(obj) >= 0);
+}
 static inline bool NULLP(Object obj) {
   return EMPTYLISTP(obj);
 }
