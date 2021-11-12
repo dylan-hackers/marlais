@@ -235,9 +235,9 @@ character_to_uppercase (Object ch)
   return (marlais_make_character (toupper(CHARVAL(ch))));
 }
 
-#define DEFINE_CTYPE_PREDICATE(_NAME,_PRED)		\
+#define DEFINE_CTYPE_PREDICATE(_NAME,_PRED)             \
   static Object character_ ## _NAME ## _p (Object ch) { \
-    return (marlais_make_boolean(_PRED(CHARVAL(ch))));	\
+    return (marlais_make_boolean(_PRED(CHARVAL(ch))));  \
   }
 DEFINE_CTYPE_PREDICATE(alphabetic,   isalpha);
 DEFINE_CTYPE_PREDICATE(alphanumeric, isalnum);
@@ -247,7 +247,7 @@ DEFINE_CTYPE_PREDICATE(printable,    isprint);
 DEFINE_CTYPE_PREDICATE(whitespace,   isspace);
 DEFINE_CTYPE_PREDICATE(decimal,      isdigit);
 DEFINE_CTYPE_PREDICATE(hexadecimal,  isxdigit);
-//DEFINE_CTYPE_PREDICATE(octal,        isdigit); /* XXX wrong */
+//DEFINE_CTYPE_PREDICATE(octal,        isdigit); /* XXX not implemented */
 DEFINE_CTYPE_PREDICATE(lowercase,    islower);
 DEFINE_CTYPE_PREDICATE(uppercase,    isupper);
 #undef DEFINE_CTYPE_PREDICATE
@@ -279,9 +279,9 @@ wchar_to_uppercase (Object ch)
   return (marlais_make_character (towupper(WCHARVAL(ch))));
 }
 
-#define DEFINE_WCTYPE_PREDICATE(_NAME,_PRED)		\
-  static Object wchar_ ## _NAME ## _p (Object ch) { \
-    return (marlais_make_boolean(_PRED(CHARVAL(ch))));	\
+#define DEFINE_WCTYPE_PREDICATE(_NAME,_PRED)            \
+  static Object wchar_ ## _NAME ## _p (Object ch) {     \
+    return (marlais_make_boolean(_PRED(CHARVAL(ch))));  \
   }
 DEFINE_WCTYPE_PREDICATE(alphabetic,   iswalpha);
 DEFINE_WCTYPE_PREDICATE(alphanumeric, iswalnum);
