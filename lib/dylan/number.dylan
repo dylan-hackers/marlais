@@ -11,12 +11,12 @@ module: dylan
 //
 
 //
-// Number predicates
+// Numeric predicates
 //
 
 // odd?
 
-define generic odd? (n :: <number>) => value :: <boolean>;
+define generic odd? (n :: <integer>) => value :: <boolean>;
 
 define method odd? (i :: <small-integer>) => value :: <boolean>;
   %odd?(i);
@@ -28,7 +28,7 @@ end method odd?;
 
 // even?
 
-define generic even? (n :: <number>) => value :: <boolean>;
+define generic even? (n :: <integer>) => value :: <boolean>;
 
 define method even? (i :: <small-integer>) => value :: <boolean>;
   %even?(i);
@@ -40,7 +40,7 @@ end method even?;
 
 // zero?
 
-define generic zero? (n :: <number>) => value :: <boolean>;
+define generic zero? (n :: <object>) => value :: <boolean>;
 
 define method zero? (i :: <small-integer>) => value :: <boolean>;
   %int-zero?(i);
@@ -56,7 +56,7 @@ end method zero?;
 
 // positive?
 
-define generic positive? (r :: <real>) => value :: <boolean>;
+define generic positive? (r :: <object>) => value :: <boolean>;
 
 define method positive? (i :: <small-integer>) => value :: <boolean>;
   %int-positive?(i);
@@ -72,7 +72,7 @@ end method positive?;
 
 // negative?
 
-define generic negative? (r :: <real>) => value :: <boolean>;
+define generic negative? (r :: <object>) => value :: <boolean>;
 
 define method negative? (i :: <small-integer>) => value :: <boolean>;
   %int-negative?(i);
@@ -88,7 +88,7 @@ end method negative?;
 
 // integral?
 
-define method integral? (n :: <number>)
+define method integral? (n :: <object>)
   #f;
 end method integral?;
 
