@@ -113,7 +113,7 @@ DEFINE_IMMEDP_PREDICATE(WCHARP, MARLAIS_SUB_WCHAR);
 #undef DEFINE_IMMEDP_PREDICATE
 
 /* Pointer type predicates */
-#define DEFINE_POINTERP_PREDICATE(_name, _type)                \
+#define DEFINE_POINTERP_PREDICATE(_name, _type)            \
   static inline bool _name(Object obj) {                   \
     return (POINTERP(obj) && (POINTERTYPE(obj) == _type)); \
   }
@@ -123,6 +123,7 @@ DEFINE_POINTERP_PREDICATE(DFLOATP, DoubleFloat);
 DEFINE_POINTERP_PREDICATE(PAIRP, Pair);
 DEFINE_POINTERP_PREDICATE(BYTESTRP, ByteString);
 DEFINE_POINTERP_PREDICATE(SOVP, SimpleObjectVector);
+DEFINE_POINTERP_PREDICATE(RATIOP, Ratio);
 DEFINE_POINTERP_PREDICATE(TEP, TableEntry);
 DEFINE_POINTERP_PREDICATE(TABLEP, ObjectTable);
 DEFINE_POINTERP_PREDICATE(DEP, DequeEntry);
