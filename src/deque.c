@@ -54,6 +54,7 @@ static Object deque_first (Object d, Object default_ob);
 static Object deque_last (Object d, Object default_ob);
 static Object deque_element (Object d, Object i, Object default_ob);
 static Object deque_element_setter (Object d, Object i, Object new);
+/*static Object deque_remove_bang (Object d, Object v, Object test, Object count);*/
 static Object deque_initial_state (Object d);
 static Object deque_next_state (Object d, Object s);
 static Object deque_final_state (Object d);
@@ -73,6 +74,7 @@ static struct primitive deque_prims[] =
   {"%deque-last", prim_2, deque_last},
   {"%deque-element", prim_3, deque_element},
   {"%deque-element-setter", prim_3, deque_element_setter},
+/*{"%deque-remove!", prim_4, deque_remove_bang},*/
   {"%deque-initial-state", prim_1, deque_initial_state},
   {"%deque-next-state", prim_2, deque_next_state},
   {"%deque-final-state", prim_1, deque_final_state},
