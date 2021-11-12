@@ -50,7 +50,6 @@ struct binding {
 #define IS_CONSTANT_BINDING(binding) (binding->props & CONSTANT_BINDING)
 #define IS_EXPORTED_BINDING(binding) (binding->props & EXPORTED_BINDING)
 
-
 struct modules {
     int size;
     struct module_binding **bindings;
