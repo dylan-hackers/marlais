@@ -24,6 +24,11 @@ end method \<;
 // as
 //
 
+// default implementation
+define method as (cc == <character>, ch :: <small-integer>)
+  as(<standard-character>, ch)
+end method as;
+
 define method as (ic == <integer>, ch :: <byte-character>)
   %character->integer(ch);
 end method as;
