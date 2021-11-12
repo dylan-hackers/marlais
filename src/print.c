@@ -92,6 +92,9 @@ marlais_print_object (Object fd, Object obj, int escaped)
     fprintf (fp, "%"MARLAIS_INTEGER_PRI "/%" MARLAIS_INTEGER_PRI,
              RATIONUM (obj), RATIODEN (obj));
     break;
+  case SingleFloat:
+    fprintf (fp, "%f", SFLOATVAL (obj));
+    break;
   case DoubleFloat:
     fprintf (fp, "%f", DFLOATVAL (obj));
     break;
