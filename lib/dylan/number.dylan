@@ -98,10 +98,71 @@ define method integral? (i :: <integer>) => value :: <boolean>;
   #t;
 end method integral?;
 
+//
+// Number comparison
+//
 
+// Base implementation
 
+define method \< (n1 :: <number>, n2 :: <number>)
+  %binary-less-than(n1, n2);
+end method \<;
 
+// Comparison between <double-float> and <integer>
+//
+// XXX reconsider this implementation
 
+define method \= (i :: <integer>, d :: <double-float>)
+  as(<double-float>, i) == d;
+end method \=;
+
+define method \= (d :: <double-float>, i :: <integer>)
+  d == as(<double-float>, i);
+end method \=;
+
+// Comparison on <big-integer>
+
+define method \= (b1 :: <big-integer>, b2 :: <big-integer>)
+  %bigint=(b1, b2);
+end method \=;
+
+define method \< (b1 :: <big-integer>, b2 :: <big-integer>)
+  %bigint<(b1, b2);
+end method \<;
+
+// Comparison between <big-integer> and <small-integer>
+
+define method \= (b :: <big-integer>, i :: <small-integer>)
+  b = as(<big-integer>, i);
+end method \=;
+
+define method \= (i :: <small-integer>, b :: <big-integer>)
+  b = as(<big-integer>, i);
+end method \=;
+
+define method \< (b :: <big-integer>, i :: <small-integer>)
+  %bigint<(b, as(<big-integer>, i));
+end method \<;
+
+define method \< (i :: <small-integer>, b :: <big-integer>)
+  %bigint<(as(<big-integer>, i), b);
+end method \<;
+
+//
+// Methods defined through comparison
+//
+
+define method max (n1 :: <real>, #rest more-reals)
+  reduce (method (x, y) if (x < y) y else x end if; end,
+	  n1,
+	  more-reals);
+end method max;
+
+define method min (n1 :: <real>, #rest more-reals)
+  reduce (method (x, y) if (x < y) x else y end if; end,
+	  n1,
+	  more-reals);
+end method min;
 
 
 
@@ -343,60 +404,6 @@ define method \^ (b :: <small-integer>, e :: <small-integer>) => <big-integer>;
 end method \^;
 
 */
-
-//
-// comparisons
-//
-
-define method \= (i :: <integer>, d :: <double-float>)
-  as(<double-float>, i) == d;
-end method \=;
-
-define method \= (d :: <double-float>, i :: <integer>)
-  d == as(<double-float>, i);
-end method \=;
-
-define method \< (n1 :: <number>, n2 :: <number>)
-  %binary-less-than(n1, n2);
-end method \<;
-
-define method max (n1 :: <real>, #rest more-reals)
-  reduce (method (x, y) if (x < y) y else x end if; end,
-	  n1,
-	  more-reals);
-end method max;
-
-define method min (n1 :: <real>, #rest more-reals)
-  reduce (method (x, y) if (x < y) x else y end if; end,
-	  n1,
-	  more-reals);
-end method min;
-
-// between <big-integer>'s and <small-integer>'s.
-
-define method \= (b1 :: <big-integer>, b2 :: <big-integer>)
-  %bigint=(b1, b2);
-end method \=;
-
-define method \= (b :: <big-integer>, i :: <small-integer>)
-  b = as(<big-integer>, i);
-end method \=;
-
-define method \= (i :: <small-integer>, b :: <big-integer>)
-  b = as(<big-integer>, i);
-end method \=;
-
-define method \< (b1 :: <big-integer>, b2 :: <big-integer>)
-  %bigint<(b1, b2);
-end method \<;
-
-define method \< (b :: <big-integer>, i :: <small-integer>)
-  %bigint<(b, as(<big-integer>, i));
-end method \<;
-
-define method \< (i :: <small-integer>, b :: <big-integer>)
-  %bigint<(as(<big-integer>, i), b);
-end method \<;
 
 //
 // other functions
