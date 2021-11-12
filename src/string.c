@@ -147,7 +147,7 @@ marlais_make_bytestring_entrypoint (Object args)
   char fill = ' ';
   char *new;
 
-  marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<string>");
+  marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<byte-string>");
 
   if (fill_obj != MARLAIS_FALSE) {
     if (!CHARP (fill_obj)) {
