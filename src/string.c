@@ -78,6 +78,8 @@ static Object wstring_lessthan (Object str1, Object str2);
 static Object wstring_equal (Object str1, Object str2);
 static Object wstring_as_lowercase (Object string);
 static Object wstring_as_uppercase (Object string);
+static Object wstring_to_bstring (Object string);
+static Object bstring_to_wstring (Object string);
 #endif
 
 static struct primitive string_prims[] =
@@ -102,6 +104,12 @@ static struct primitive string_prims[] =
     {"%wstring=", prim_2, wstring_equal},
     {"%wstring-as-lowercase", prim_1, wstring_as_lowercase},
     {"%wstring-as-uppercase", prim_1, wstring_as_uppercase},
+#if 0
+    {"%wstring->bstring", prim1, wstring_to_bstring},
+    {"%bstring->wstring", prim1, bstring_to_wstring},
+#endif
+#endif
+
 #endif
 
 };
