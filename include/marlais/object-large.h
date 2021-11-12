@@ -1,7 +1,10 @@
 
 typedef ObjectHeader *Object;
 
-#define MAX_SMALL_INT     (INTPTR_MAX)
+/* Constants for boxed integers */
+#define MARLAIS_INTEGER_MIN (MARLAIS_INT_MIN)
+#define MARLAIS_INTEGER_MAX (MARLAIS_INT_MAX)
+#define MARLAIS_INTEGER_PRI  MARLAIS_INT_PRI
 
 /* All objects are pointers */
 static inline bool POINTERP(Object obj) {
