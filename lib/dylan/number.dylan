@@ -11,8 +11,13 @@ module: dylan
 //
 
 //
-// misc
+// Number predicates
 //
+
+// odd?
+
+define generic odd? (n :: <number>) => value :: <boolean>;
+
 define method odd? (i :: <small-integer>) => value :: <boolean>;
   %odd?(i);
 end method odd?;
@@ -21,6 +26,10 @@ define method odd? (bi :: <big-integer>) => value :: <boolean>;
   %bigint-odd?(bi);
 end method odd?;
 
+// even?
+
+define generic even? (n :: <number>) => value :: <boolean>;
+
 define method even? (i :: <small-integer>) => value :: <boolean>;
   %even?(i);
 end method even?;
@@ -28,6 +37,8 @@ end method even?;
 define method even? (bi :: <big-integer>) => value :: <boolean>;
   %bigint-even?(bi);
 end method even?;
+
+// zero?
 
 define generic zero? (n :: <number>) => value :: <boolean>;
 
@@ -43,6 +54,8 @@ define method zero? (d :: <double-float>) => value :: <boolean>;
   %double-zero?(d);
 end method zero?;
 
+// positive?
+
 define generic positive? (r :: <real>) => value :: <boolean>;
 
 define method positive? (i :: <small-integer>) => value :: <boolean>;
@@ -56,6 +69,8 @@ end method positive?;
 define method positive? (d :: <double-float>) => value :: <boolean>;
   %double-positive?(d);
 end method positive?;
+
+// negative?
 
 define generic negative? (r :: <real>) => value :: <boolean>;
 
@@ -71,6 +86,8 @@ define method negative? (d :: <double-float>) => value :: <boolean>;
   %double-negative?(d);
 end method negative?;
 
+// integral?
+
 define method integral? (n :: <number>)
   #f;
 end method integral?;
@@ -78,6 +95,21 @@ end method integral?;
 define method integral? (i :: <integer>)
   #t;
 end method integral?;
+
+
+
+
+
+
+
+
+// UNSORTED STUFF BELOW
+
+
+
+
+
+
 
 // define method quotient (i1 :: <integer>, i2 :: <integer>)
 //   %quotient?(i1, i2);
