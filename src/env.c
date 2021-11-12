@@ -31,7 +31,6 @@ static struct frame *initialize_namespace (Object owner);
 static void add_module_binding(Object sym, Object val,
 			       int constant, int exported);
 
-static Object concat_prefix (char *prefix_string, Object sym);
 static void fill_imports_table_from_property_set (Object imports_table,
 						  Object imports_set,
 						  Object renames_table);
@@ -370,8 +369,8 @@ marlais_use_module (Object module_name,
                                                 binding->sym,
                                                 MARLAIS_FALSE))
               == MARLAIS_FALSE) {
-            new_sym = prefix_string ? concat_prefix (prefix_string,
-                                                     binding->sym)
+            new_sym = prefix_string ? marlais_make_prefix_symbol
+                                        (prefix_string, binding->sym)
               : binding->sym;
           }
           /*
@@ -759,21 +758,6 @@ show_bindings (Object args)
 
   }
   return unspecified_object;
-}
-
-/* XXX move to symbol.c */
-static Object
-concat_prefix (char *prefix_string, Object sym)
-{
-  char *new_str, *old_str = SYMBOLNAME (sym);
-  int prefix_len = strlen (prefix_string);
-  size_t new_len = prefix_len + strlen(old_str) + 1;
-
-  new_str = MARLAIS_ALLOCATE_STRING(new_len);
-  strcpy (new_str, prefix_string);
-  strcpy (new_str + prefix_len, old_str);
-
-  return marlais_make_name (new_str);
 }
 
 /*
