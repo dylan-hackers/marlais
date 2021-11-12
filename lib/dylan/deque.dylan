@@ -79,7 +79,7 @@ end method element-setter;
 //
 
 define method add! (d :: <deque>, new)
-  %push (d, new);
+  %deque-push (d, new);
 end method add;
 
 //
