@@ -34,6 +34,11 @@ typedef DyUnsigned MarlaisSub;
 #define MARLAIS_INTEGER_SHIFT   (2)
 #define MARLAIS_IMMEDIATE_SHIFT (6)
 
+/* Constants for tagged integers */
+#define MARLAIS_INTEGER_MIN ((INTPTR_MAX + 1) >> MARLAIS_INTEGER_SHIFT)
+#define MARLAIS_INTEGER_MAX (INTPTR_MAX >> MARLAIS_INTEGER_SHIFT)
+#define MARLAIS_INTEGER_PRI MARLAIS_INT_PRI
+
 /* Immediate constants */
 #define TRUEVAL         ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_TRUE))
 #define FALSEVAL        ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_FALSE))

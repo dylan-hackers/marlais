@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
+#include <inttypes.h>
 
 #ifdef MARLAIS_ENABLE_WCHAR
 #include <wchar.h>
