@@ -115,7 +115,7 @@ static struct primitive char_prims[] =
   {"%character-whitespace?", prim_1, character_whitespace_p},
   {"%character-decimal?", prim_1, character_decimal_p},
   {"%character-hexadecimal?", prim_1, character_hexadecimal_p},
-  //{"%character-octal?", prim_1, character_octal_p},
+/*{"%character-octal?", prim_1, character_octal_p},*/
   {"%character-lowercase?", prim_1, character_lowercase_p},
   {"%character-uppercase?", prim_1, character_uppercase_p},
 
@@ -138,6 +138,7 @@ static struct primitive char_prims[] =
   {"%wchar-lowercase?", prim_1, wchar_lowercase_p},
   {"%wchar-uppercase?", prim_1, wchar_uppercase_p},
 #endif
+
 };
 
 /* Exported functions */
