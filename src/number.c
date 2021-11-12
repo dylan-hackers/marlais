@@ -12,6 +12,7 @@
 #include "biginteger.h"
 #endif
 
+#include <float.h>
 #include <math.h>
 
 /* Helper macros */
@@ -166,17 +167,78 @@ static struct primitive number_prims[] =
 void
 marlais_register_number (void)
 {
-    int num;
-
-    num = sizeof (number_prims) / sizeof (struct primitive);
-
+    /* register primitives */
+    int num =  sizeof (number_prims) / sizeof (struct primitive);
     marlais_register_prims (num, number_prims);
 
+    /* byte constants */
+    marlais_add_export (marlais_make_name ("$byte-bits"),
+                        marlais_make_integer (8), 1);
+    marlais_add_export (marlais_make_name ("$byte-size"),
+                        marlais_make_integer (1), 1);
+    marlais_add_export (marlais_make_name ("$minimum-byte"),
+                        marlais_make_integer (0), 1);
+    marlais_add_export (marlais_make_name ("$maximum-byte"),
+                        marlais_make_integer (255), 1);
+
     /* integer constants */
+#if 0
+    /* TODO would like to have this but it must come from the object representation. */
+    marlais_add_export (marlais_make_name ("$integer-bits"),
+                        marlais_make_integer (MARLAIS_INTEGER_WIDTH), 1);
+#endif
+    marlais_add_export (marlais_make_name ("$integer-size"),
+                        marlais_make_integer (sizeof(DyInteger)), 1);
     marlais_add_export (marlais_make_name ("$minimum-integer"),
                         marlais_make_integer (MARLAIS_INTEGER_MIN), 1);
     marlais_add_export (marlais_make_name ("$maximum-integer"),
                         marlais_make_integer (MARLAIS_INTEGER_MAX), 1);
+
+    /* float constants */
+    marlais_add_export (marlais_make_name ("$float-radix"),
+                        marlais_make_integer (FLT_RADIX), 1);
+
+    /* single float */
+    marlais_add_export (marlais_make_name ("$single-float-bits"),
+                        marlais_make_integer (sizeof(float) * 8), 1);
+    marlais_add_export (marlais_make_name ("$single-float-size"),
+                        marlais_make_integer (sizeof(float)), 1);
+#if 0
+    /* TODO glibc on my machine has 0.0 as a value for this!? */
+    marlais_add_export (marlais_make_name ("$single-float-epsilon"),
+                        marlais_make_sfloat (FLT_EPSILON), 1);
+#endif
+    marlais_add_export (marlais_make_name ("$single-float-exponent-bits"),
+                        marlais_make_integer (FLT_DIG), 1);
+    marlais_add_export (marlais_make_name ("$minimum-single-float"),
+                        marlais_make_sfloat (FLT_MIN), 1);
+    marlais_add_export (marlais_make_name ("$maximum-single-float"),
+                        marlais_make_sfloat (FLT_MAX), 1);
+    marlais_add_export (marlais_make_name ("$minimum-single-float-exponent"),
+                        marlais_make_integer (FLT_MIN_EXP), 1);
+    marlais_add_export (marlais_make_name ("$maximum-single-float-exponent"),
+                        marlais_make_integer (FLT_MAX_EXP), 1);
+
+    /* double float */
+    marlais_add_export (marlais_make_name ("$double-float-bits"),
+                        marlais_make_integer (sizeof(double) * 8), 1);
+    marlais_add_export (marlais_make_name ("$double-float-size"),
+                        marlais_make_integer (sizeof(double)), 1);
+#if 0
+    /* TODO glibc on my machine has 0.0 as a value for this!? */
+    marlais_add_export (marlais_make_name ("$double-float-epsilon"),
+                        marlais_make_dfloat (DBL_EPSILON), 1);
+#endif
+    marlais_add_export (marlais_make_name ("$double-float-exponent-bits"),
+                        marlais_make_integer (DBL_DIG), 1);
+    marlais_add_export (marlais_make_name ("$minimum-double-float"),
+                        marlais_make_dfloat (DBL_MIN), 1);
+    marlais_add_export (marlais_make_name ("$maximum-double-float"),
+                        marlais_make_dfloat (DBL_MAX), 1);
+    marlais_add_export (marlais_make_name ("$minimum-double-float-exponent"),
+                        marlais_make_integer (DBL_MIN_EXP), 1);
+    marlais_add_export (marlais_make_name ("$maximum-double-float-exponent"),
+                        marlais_make_integer (DBL_MAX_EXP), 1);
 
 #ifdef MARLAIS_ENABLE_BIG_INTEGERS
     init_big_integer_prims ();
