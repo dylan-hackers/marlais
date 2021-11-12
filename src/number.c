@@ -3,7 +3,9 @@
 #include <marlais/number.h>
 
 #include <marlais/alloc.h>
+#include <marlais/env.h>
 #include <marlais/prim.h>
+#include <marlais/symbol.h>
 #include <marlais/values.h>
 
 #ifdef MARLAIS_ENABLE_BIG_INTEGERS
@@ -169,6 +171,12 @@ marlais_register_number (void)
     num = sizeof (number_prims) / sizeof (struct primitive);
 
     marlais_register_prims (num, number_prims);
+
+    /* integer constants */
+    marlais_add_export (marlais_make_name ("$minimum-integer"),
+                        marlais_make_integer (MARLAIS_INTEGER_MIN), 1);
+    marlais_add_export (marlais_make_name ("$maximum-integer"),
+                        marlais_make_integer (MARLAIS_INTEGER_MAX), 1);
 
 #ifdef MARLAIS_ENABLE_BIG_INTEGERS
     init_big_integer_prims ();
