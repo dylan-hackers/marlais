@@ -13,6 +13,7 @@ typedef void *Object;
 /* Type for handling value tags */
 typedef DyUnsigned MarlaisTag;
 #define MARLAIS_TAG_SHIFT         (0)
+#define MARLAIS_TAG_WIDTH         (2)
 #define MARLAIS_TAG_POINTER       (0x0)
 #define MARLAIS_TAG_IMMEDIATE     (0x1)
 #define MARLAIS_TAG_INTEGER       (0x2)
@@ -21,6 +22,7 @@ typedef DyUnsigned MarlaisTag;
 /* Type for handling value subtags */
 typedef DyUnsigned MarlaisSub;
 #define MARLAIS_SUB_SHIFT         (2)
+#define MARLAIS_SUB_WIDTH         (4)
 #define MARLAIS_SUB_TRUE          (0x0 << MARLAIS_SUB_SHIFT)
 #define MARLAIS_SUB_FALSE         (0x1 << MARLAIS_SUB_SHIFT)
 #define MARLAIS_SUB_EMPTYLIST     (0x2 << MARLAIS_SUB_SHIFT)
@@ -36,9 +38,12 @@ typedef DyUnsigned MarlaisSub;
 #define MARLAIS_IMMEDIATE_SHIFT (6)
 
 /* Constants for tagged integers */
-#define MARLAIS_INTEGER_MIN (MARLAIS_INT_MIN >> MARLAIS_INTEGER_SHIFT)
-#define MARLAIS_INTEGER_MAX (MARLAIS_INT_MAX >> MARLAIS_INTEGER_SHIFT)
-#define MARLAIS_INTEGER_PRI  MARLAIS_INT_PRI
+#define MARLAIS_INTEGER_MIN   (MARLAIS_INT_MIN >> MARLAIS_INTEGER_SHIFT)
+#define MARLAIS_INTEGER_MAX   (MARLAIS_INT_MAX >> MARLAIS_INTEGER_SHIFT)
+#if 0
+#define MARLAIS_INTEGER_WIDTH (MARLAIS_INT_WIDTH - MARLAIS_TAG_WIDTH)
+#endif
+#define MARLAIS_INTEGER_PRI    MARLAIS_INT_PRI
 
 /* Immediate constants */
 #define TRUEVAL         ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_TRUE))

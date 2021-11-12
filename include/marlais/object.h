@@ -4,13 +4,19 @@
 #define MARLAIS_OBJECT_H
 
 typedef intptr_t  DyInteger;
-#define MARLAIS_INT_MIN (INTPTR_MIN)
-#define MARLAIS_INT_MAX (INTPTR_MAX)
-#define MARLAIS_INT_PRI PRIdPTR
+#define MARLAIS_INT_MIN   (INTPTR_MIN)
+#define MARLAIS_INT_MAX   (INTPTR_MAX)
+#if 0
+#define MARLAIS_INT_WIDTH (INTPTR_WIDTH)
+#endif
+#define MARLAIS_INT_PRI   PRIdPTR
 
 typedef uintptr_t DyUnsigned;
-#define MARLAIS_UINT_MAX (UINTPTR_MAX)
-#define MARLAIS_UINT_PRI PRIuPTR
+#define MARLAIS_UINT_MAX   (UINTPTR_MAX)
+#if 0
+#define MARLAIS_UINT_WIDTH (UINTPTR_WIDTH)
+#endif
+#define MARLAIS_UINT_PRI    PRIuPTR
 
 typedef enum {
     Uninitialized = 0,
