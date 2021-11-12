@@ -83,8 +83,14 @@ define method add! (d :: <deque>, new)
 end method add;
 
 //
-// missing: remove!
+// remove!
 //
+
+define method remove! (d :: <deque>, value,
+                       #key test = \==, count)
+ => (sequence2 :: <sequence>);
+  %deque-remove! (d, value, test, count);
+end method remove!;
 
 //
 // forward-iteration-protocol implementation
