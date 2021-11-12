@@ -66,6 +66,24 @@ define method size (s :: <wide-string>)
   %wstring-size(s);
 end method size;
 
+//
+// Methods on <unicode-string>
+//
+
+define method element (s :: <unicode-string>, i :: <small-integer>,
+		       #key default = %default-object)
+  %ustring-element(s, i, default);
+end method element;
+
+define method element-setter (c :: <unicode-character>,
+			      s :: <unicode-string>,
+			      i :: <small-integer>)
+  %ustring-element-setter (s, i, c);
+end method element-setter;
+
+define method size (s :: <unicode-string>)
+  %ustring-size(s);
+end method size;
 
 //
 // Iteration protocol - generic part on <string>
@@ -121,6 +139,20 @@ define method current-element-setter (obj,
   %wstring-element-setter(s, state, obj);
 end method current-element-setter;
 
+//
+// Iteration protocol - part specific to <unicode-string>
+//
+
+define method current-element (s :: <unicode-string>, state :: <integer-state>)
+  %ustring-element(s, state, %default-object);
+end method current-element;
+
+define method current-element-setter (obj,
+				      s :: <unicode-string>,
+				      state :: <integer-state>)
+  %ustring-element-setter(s, state, obj);
+end method current-element-setter;
+
 
 //
 // Comparisons
@@ -140,6 +172,14 @@ end method \<;
 
 define method \= (s1 :: <wide-string>, s2 :: <wide-string>)
   %wstring=(s1, s2);
+end method \=;
+
+define method \< (s1 :: <unicode-string>, s2 :: <unicode-string>)
+  %ustring<(s1, s2);
+end method \<;
+
+define method \= (s1 :: <unicode-string>, s2 :: <unicode-string>)
+  %ustring=(s1, s2);
 end method \=;
 
 //
@@ -177,3 +217,31 @@ end method;
 // define method as-uppercase!(s :: <wide-string>)
 //   %wstring-as-uppercase!(s);
 // end method;
+
+//
+// String type conversion
+//
+
+define method as(cc == <byte-string>, ws :: <wide-string>)
+  %wstring->bstring(ws);
+end method as;
+
+define method as(cc == <byte-string>, us :: <unicode-string>)
+  %ustring->bstring(us);
+end method as;
+
+define method as(cc == <wide-string>, bs :: <byte-string>)
+  %bstring->wstring(bs);
+end method as;
+
+define method as(cc == <wide-string>, us :: <unicode-string>)
+  %ustring->wstring(us);
+end method as;
+
+define method as(cc == <unicode-string>, bs :: <byte-string>)
+  %bstring->ustring(bs);
+end method as;
+
+define method as(cc == <unicode-string>, ws :: <wide-string>)
+  %wstring->ustring(ws);
+end method as;
