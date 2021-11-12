@@ -60,7 +60,11 @@ Stream,
     TableEntry, UninitializedSlotValue, DequeEntry,
     ObjectHandle,
     ForeignPtr,			/* <pcb> */
-    Environment
+    Environment,
+
+    /* GMP numbers */
+    MPFloat, MPRatio, MPInteger,
+
 } ObjectType;
 
 /* Common header of all heap objects */
@@ -86,6 +90,10 @@ typedef struct {
 #endif
 
 #include <marlais/object-heap.h>
+
+#ifdef MARLAIS_ENABLE_GMP
+#include <marlais/object-gmp.h>
+#endif
 
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
 #define MARLAIS_TRUE  (TRUEVAL)
