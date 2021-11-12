@@ -86,6 +86,15 @@ static Object wchar_to_integer (Object ch);
 static Object wchar_to_lowercase (Object ch);
 static Object wchar_to_uppercase (Object ch);
 
+static Object wchar_alphabetic_p (Object ch);
+static Object wchar_alphanumeric_p (Object ch);
+static Object wchar_control_p (Object ch);
+static Object wchar_graphic_p (Object ch);
+static Object wchar_printable_p (Object ch);
+static Object wchar_whitespace_p (Object ch);
+static Object wchar_decimal_p (Object ch);
+static Object wchar_hexadecimal_p (Object ch);
+static Object wchar_octal_p (Object ch);
 static Object wchar_lowercase_p (Object ch);
 static Object wchar_uppercase_p (Object ch);
 #endif
@@ -117,6 +126,15 @@ static struct primitive char_prims[] =
   {"%wchar-to-lowercase", prim_1, wchar_to_lowercase},
   {"%wchar-to-uppercase", prim_1, wchar_to_uppercase},
 
+  {"%wchar-alphabetic?", prim_1, character_alphabetic_p},
+  {"%wchar-alphanumeric?", prim_1, character_alphanumeric_p},
+  {"%wchar-control?", prim_1, wchar_control_p},
+  {"%wchar-graphic?", prim_1, wchar_graphic_p},
+  {"%wchar-printable?", prim_1, wchar_printable_p},
+  {"%wchar-whitespace?", prim_1, wchar_whitespace_p},
+  {"%wchar-decimal?", prim_1, wchar_decimal_p},
+  {"%wchar-hexadecimal?", prim_1, wchar_hexadecimal_p},
+/*{"%wchar-octal?", prim_1, wchar_octal_p},*/
   {"%wchar-lowercase?", prim_1, wchar_lowercase_p},
   {"%wchar-uppercase?", prim_1, wchar_uppercase_p},
 #endif
