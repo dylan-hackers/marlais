@@ -44,7 +44,7 @@ extern void *marlais_allocate_memory (size_t size);
 /* reallocate normal memory */
 extern void *marlais_reallocate_memory (void *old_obj, size_t new_size);
 /* free normal memory */
-extern void *marlais_free_memory (void *obj);
+extern void marlais_free_memory (void *obj);
 /* allocate atomic memory */
 extern void *marlais_allocate_atomic (size_t size);
 /* allocate an object */
