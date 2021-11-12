@@ -110,8 +110,21 @@ static struct primitive string_prims[] =
 #endif
 #endif
 
+#ifdef MARLAIS_ENABLE_UCHAR
+    {"%ustring-element", prim_3, ustring_element},
+    {"%ustring-element-setter", prim_3, ustring_element_setter},
+    {"%ustring-size", prim_1, ustring_size},
+    {"%ustring<", prim_2, ustring_lessthan},
+    {"%ustring=", prim_2, ustring_equal},
+    {"%ustring-as-lowercase", prim_1, wstring_as_lowercase},
+    {"%ustring-as-uppercase", prim_1, wstring_as_uppercase},
+    {"%ustring->bstring", prim1, ustring_to_bstring},
+    {"%bstring->ustring", prim1, bstring_to_ustring},
+#ifdef MARLAIS_ENABLE_WCHAR
+    {"%ustring->wstring", prim1, ustring_to_wstring},
+    {"%wstring->ustring", prim1, wstring_to_ustring},
 #endif
-
+#endif
 };
 
 /* Exported functions */

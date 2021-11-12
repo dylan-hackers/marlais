@@ -59,6 +59,14 @@ static Object wchar_cache[MARLAIS_CONFIG_WCHAR_CACHE];
 #endif
 #endif
 
+#ifdef MARLAIS_ENABLE_UCHAR
+#ifndef MARLAIS_OBJECT_MODEL_SMALL
+#if MARLAIS_CONFIG_UCHAR_CACHE > 0
+static Object uchar_cache[MARLAIS_CONFIG_UCHAR_CACHE];
+#endif
+#endif
+#endif
+
 /* Primitives */
 
 static Object integer_to_character (Object i);
@@ -99,6 +107,26 @@ static Object wchar_lowercase_p (Object ch);
 static Object wchar_uppercase_p (Object ch);
 #endif
 
+#ifdef MARLAIS_ENABLE_UCHAR
+static Object integer_to_uchar (Object i);
+static Object uchar_to_integer (Object ch);
+
+static Object uchar_to_lowercase (Object ch);
+static Object uchar_to_uppercase (Object ch);
+
+static Object uchar_alphabetic_p (Object ch);
+static Object uchar_alphanumeric_p (Object ch);
+static Object uchar_control_p (Object ch);
+static Object uchar_graphic_p (Object ch);
+static Object uchar_printable_p (Object ch);
+static Object uchar_whitespace_p (Object ch);
+static Object uchar_decimal_p (Object ch);
+static Object uchar_hexadecimal_p (Object ch);
+static Object uchar_octal_p (Object ch);
+static Object uchar_lowercase_p (Object ch);
+static Object uchar_uppercase_p (Object ch);
+#endif
+
 static struct primitive char_prims[] =
 {
   {"%integer->character", prim_1, integer_to_character},
@@ -137,6 +165,26 @@ static struct primitive char_prims[] =
 /*{"%wchar-octal?", prim_1, wchar_octal_p},*/
   {"%wchar-lowercase?", prim_1, wchar_lowercase_p},
   {"%wchar-uppercase?", prim_1, wchar_uppercase_p},
+#endif
+
+#ifdef MARLAIS_ENABLE_UCHAR
+  {"%integer->uchar", prim_1, integer_to_uchar},
+  {"%uchar->integer", prim_1, uchar_to_integer},
+
+  {"%uchar-to-lowercase", prim_1, uchar_to_lowercase},
+  {"%uchar-to-uppercase", prim_1, uchar_to_uppercase},
+
+  {"%uchar-alphabetic?", prim_1, uchar_alphabetic_p},
+  {"%uchar-alphanumeric?", prim_1, uchar_alphanumeric_p},
+  {"%uchar-control?", prim_1, uchar_control_p},
+  {"%uchar-graphic?", prim_1, uchar_graphic_p},
+  {"%uchar-printable?", prim_1, uchar_printable_p},
+  {"%uchar-whitespace?", prim_1, uchar_whitespace_p},
+  {"%uchar-decimal?", prim_1, uchar_decimal_p},
+  {"%uchar-hexadecimal?", prim_1, uchar_hexadecimal_p},
+/*{"%uchar-octal?", prim_1, uchar_octal_p},*/
+  {"%uchar-lowercase?", prim_1, uchar_lowercase_p},
+  {"%uchar-uppercase?", prim_1, uchar_uppercase_p},
 #endif
 
 };
