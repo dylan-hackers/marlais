@@ -43,6 +43,7 @@ extern Object marlais_make_symbol (const char *name);
 
 extern Object marlais_make_prefix_symbol (const char *pfx, Object sym);
 extern Object marlais_make_suffix_symbol (Object sym, const char *sfx);
+extern Object marlais_make_parser_symbol (Object sym);
 extern Object marlais_make_setter_symbol (Object sym);
 
 extern Object marlais_symbol_to_string (Object symbol);
@@ -50,6 +51,5 @@ extern Object marlais_string_to_symbol (Object keyword);
 
 extern Object marlais_symbol_to_name (Object symbol);
 extern Object marlais_name_to_symbol (Object keyword);
-
 
 #endif

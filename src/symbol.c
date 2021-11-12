@@ -118,6 +118,12 @@ marlais_make_suffix_symbol (Object sym, const char *sfx)
 }
 
 Object
+marlais_make_parser_symbol (Object sym)
+{
+  return (marlais_make_suffix_symbol (sym, "-parser"));
+}
+
+Object
 marlais_make_setter_symbol (Object sym)
 {
   return (marlais_make_suffix_symbol (sym, "-setter"));
