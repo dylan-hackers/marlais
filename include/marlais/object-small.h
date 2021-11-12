@@ -53,6 +53,9 @@ static inline DyUnsigned SUBPART(Object obj) {
 static inline DyUnsigned INTEGERPART(Object obj) {
   return (((DyUnsigned)obj) >> MARLAIS_INTEGER_SHIFT);
 }
+static inline DyInteger INTVAL(Object obj) {
+  return (((DyInteger)obj) >> MARLAIS_INTEGER_SHIFT);
+}
 static inline DyUnsigned IMMEDPART(Object obj) {
   return (((DyUnsigned)obj) >> MARLAIS_IMMEDIATE_SHIFT);
 }
@@ -69,9 +72,6 @@ static inline bool INTEGERP(Object obj) {
 }
 
 /* Immediate extraction */
-static inline DyInteger INTVAL(Object obj) {
-  return ((DyInteger)INTEGERPART(obj));
-}
 static inline char CHARVAL(Object obj) {
   return ((char)(IMMEDPART(obj) & 0xFF));
 }
