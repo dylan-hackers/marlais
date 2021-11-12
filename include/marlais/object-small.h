@@ -12,6 +12,7 @@ typedef void *Object;
 
 /* Type for handling value tags */
 typedef DyUnsigned MarlaisTag;
+#define MARLAIS_TAG_SHIFT         (0)
 #define MARLAIS_TAG_POINTER       (0x0)
 #define MARLAIS_TAG_IMMEDIATE     (0x1)
 #define MARLAIS_TAG_INTEGER       (0x2)
@@ -19,7 +20,7 @@ typedef DyUnsigned MarlaisTag;
 
 /* Type for handling value subtags */
 typedef DyUnsigned MarlaisSub;
-#define MARLAIS_SUB_SHIFT         2
+#define MARLAIS_SUB_SHIFT         (2)
 #define MARLAIS_SUB_TRUE          (0x0 << MARLAIS_SUB_SHIFT)
 #define MARLAIS_SUB_FALSE         (0x1 << MARLAIS_SUB_SHIFT)
 #define MARLAIS_SUB_EMPTYLIST     (0x2 << MARLAIS_SUB_SHIFT)
