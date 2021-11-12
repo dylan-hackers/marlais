@@ -78,8 +78,6 @@ static Object wstring_lessthan (Object str1, Object str2);
 static Object wstring_equal (Object str1, Object str2);
 static Object wstring_as_lowercase (Object string);
 static Object wstring_as_uppercase (Object string);
-static Object wstring_as_lowercase_bang (Object string);
-static Object wstring_as_uppercase_bang (Object string);
 #endif
 
 static struct primitive string_prims[] =
@@ -102,6 +100,8 @@ static struct primitive string_prims[] =
     {"%wstring-size", prim_1, wstring_size},
     {"%wstring<", prim_2, wstring_lessthan},
     {"%wstring=", prim_2, wstring_equal},
+    {"%wstring-as-lowercase", prim_1, wstring_as_lowercase},
+    {"%wstring-as-uppercase", prim_1, wstring_as_uppercase},
 #endif
 
 };
@@ -427,6 +427,44 @@ wstring_lessthan (Object str1, Object str2) {
 static Object
 wstring_equal (Object str1, Object str2) {
   return marlais_make_boolean(wcscmp (WIDESTRVAL (str1), WIDESTRVAL (str2)) == 0);
+}
+
+/* XXX reimplement using transform */
+static Object
+wstring_as_lowercase (Object string)
+{
+    int len, i;
+    wchar_t *oldstr, *newstr;
+
+    len = WIDESTRSIZE (string);
+    oldstr = WIDESTRVAL (string);
+    newstr = MARLAIS_ALLOCATE_WSTRING (len + 1);
+
+    for(i = 0; i < len; i++) {
+      newstr[i] = towlower (oldstr[i]);
+    }
+    newstr[len] = 0;
+
+    return (make_wstring (newstr, len));
+}
+
+/* XXX reimplement using transform */
+static Object
+wstring_as_uppercase (Object string)
+{
+    int len, i;
+    wchar_t *oldstr, *newstr;
+
+    len = WIDESTRSIZE (string);
+    oldstr = WIDESTRVAL (string);
+    newstr = MARLAIS_ALLOCATE_WSTRING (len + 1);
+
+    for(i = 0; i < len; i++) {
+      newstr[i] = towupper (oldstr[i]);
+    }
+    newstr[len] = 0;
+
+    return (make_wstring (newstr, len));
 }
 
 #endif
