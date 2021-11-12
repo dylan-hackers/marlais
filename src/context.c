@@ -194,6 +194,10 @@ marlais_initialize (void)
 
   binding_stack = cons (marlais_make_integer (0), make_empty_list ());
 
+  /* Define bindings for the standard character and string type */
+  marlais_add_export (marlais_make_name ("<standard-character>"), byte_character_class, 1);
+  marlais_add_export (marlais_make_name ("<standard-string>"), byte_string_class, 1);
+
   /* initialize primitives */
   marlais_register_env ();
   init_list_prims ();
