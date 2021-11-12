@@ -88,11 +88,13 @@ end method negative?;
 
 // integral?
 
-define method integral? (n :: <object>)
+define generic integral? (n :: <object>) => value :: <boolean>;
+
+define method integral? (n :: <object>) => value :: <boolean>;
   #f;
 end method integral?;
 
-define method integral? (i :: <integer>)
+define method integral? (i :: <integer>) => value :: <boolean>;
   #t;
 end method integral?;
 
