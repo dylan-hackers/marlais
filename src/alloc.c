@@ -70,6 +70,12 @@ marlais_reallocate_memory(void *old_obj, size_t new_size)
   return obj;
 }
 
+void
+marlais_free_memory (void *obj)
+{
+  GC_free(obj);
+}
+
 void *
 marlais_allocate_atomic (size_t size)
 {
