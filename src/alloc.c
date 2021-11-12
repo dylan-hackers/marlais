@@ -57,7 +57,7 @@ marlais_allocate_memory (size_t size)
 }
 
 void *
-marlais_reallocate_memory(void *old_obj, size_t new_size)
+marlais_reallocate_memory (void *old_obj, size_t new_size)
 {
   void *obj;
   /* allocate */
