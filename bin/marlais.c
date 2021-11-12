@@ -5,6 +5,7 @@
 #include <marlais/parser.h>
 
 #include <getopt.h>
+#include <locale.h>
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -137,6 +138,8 @@ main (int argc, char *argv[])
   extern int optind;
   struct frame *cache_env;
   int maybe_quit = 0;
+
+  setlocale(LC_ALL, "");
 
   /* initialization */
   marlais_initialize ();
