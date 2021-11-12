@@ -126,8 +126,8 @@ static struct primitive char_prims[] =
   {"%wchar-to-lowercase", prim_1, wchar_to_lowercase},
   {"%wchar-to-uppercase", prim_1, wchar_to_uppercase},
 
-  {"%wchar-alphabetic?", prim_1, character_alphabetic_p},
-  {"%wchar-alphanumeric?", prim_1, character_alphanumeric_p},
+  {"%wchar-alphabetic?", prim_1, wchar_alphabetic_p},
+  {"%wchar-alphanumeric?", prim_1, wchar_alphanumeric_p},
   {"%wchar-control?", prim_1, wchar_control_p},
   {"%wchar-graphic?", prim_1, wchar_graphic_p},
   {"%wchar-printable?", prim_1, wchar_printable_p},
