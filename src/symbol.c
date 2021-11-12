@@ -94,17 +94,33 @@ marlais_make_symbol (const char *name)
 }
 
 Object
+marlais_make_prefix_symbol (const char *pfx, Object sym)
+{
+  char *new, *old = SYMBOLNAME (sym);
+  int pfxlen = strlen (pfx);
+  size_t newlen = pfxlen + strlen(old) + 1;
+  new = MARLAIS_ALLOCATE_STRING(newlen);
+  strcpy (new, pfx);
+  strcpy (new + pfxlen, old);
+  return marlais_make_name (new);
+}
+
+Object
+marlais_make_suffix_symbol (Object sym, const char *sfx)
+{
+  char *new, *old = SYMBOLNAME (sym);
+  int oldlen = strlen (old);
+  size_t newlen = oldlen + strlen(sfx) + 1;
+  new = MARLAIS_ALLOCATE_STRING(newlen);
+  strcpy (new, old);
+  strcpy (new + oldlen, sfx);
+  return marlais_make_name (new);
+}
+
+Object
 marlais_make_setter_symbol (Object sym)
 {
-  size_t namelen;
-  char *name;
-
-  namelen = 1 + strlen(SYMBOLNAME(sym)) + strlen("-setter");
-  name = MARLAIS_ALLOCATE_STRING(namelen);
-  strcpy (name, SYMBOLNAME (sym));
-  strcat (name, "-setter");
-
-  return (marlais_make_name (name));
+  return (marlais_make_suffix_symbol (sym, "-setter"));
 }
 
 Object
