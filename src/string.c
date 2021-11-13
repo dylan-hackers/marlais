@@ -179,6 +179,7 @@ marlais_make_bytestring_entrypoint (Object args)
 }
 
 #ifdef MARLAIS_ENABLE_WCHAR
+
 Object
 marlais_make_wstring (const wchar_t *str)
 {
@@ -222,7 +223,9 @@ marlais_make_wstring_entrypoint (Object args)
 
   return (make_wstring (new, size));
 }
-#endif
+
+#endif /* MARLAIS_ENABLE_WCHAR */
+
 
 /* Internal functions */
 
