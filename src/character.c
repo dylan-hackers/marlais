@@ -247,6 +247,38 @@ marlais_make_wchar (wchar_t ch)
 #endif
 #endif
 
+#ifdef MARLAIS_OBJECT_MODEL_LARGE
+#ifdef MARLAIS_ENABLE_UCHAR
+/* small version is inline in marlais/character.h */
+Object
+marlais_make_uchar (wchar_t ch)
+{
+  Object obj;
+
+#if MARLAIS_CONFIG_UCHAR_CACHE > 0
+  unsigned int uc = (unsigned int)ch;
+  if(uc < MARLAIS_CONFIG_UCHAR_CACHE) {
+    obj = uchar_cache[uc];
+    if(obj != NULL) {
+      return obj;
+    }
+  }
+#endif
+
+  obj = marlais_allocate_object (UnicodeCharacter, sizeof (struct unicode_character));
+  UCHARVAL (obj) = ch;
+
+#if MARLAIS_CONFIG_UCHAR_CACHE > 0
+  if(uc < MARLAIS_CONFIG_UCHAR_CACHE) {
+    uchar_cache[uc] = obj;
+  }
+#endif
+
+  return (obj);
+}
+#endif
+#endif
+
 /* Primitives on <byte-character> */
 
 static Object
@@ -336,3 +368,33 @@ DEFINE_WCTYPE_PREDICATE(uppercase,    iswupper);
 #undef DEFINE_WCTYPE_PREDICATE
 
 #endif /* MARLAIS_ENABLE_WCHAR */
+
+/* Primitives on <unicode-character> */
+
+#ifdef MARLAIS_ENABLE_UCHAR
+
+static Object
+integer_to_uchar (Object i)
+{
+  return (marlais_make_uchar (INTVAL (i)));
+}
+
+static Object
+uchar_to_integer (Object ch)
+{
+  return (marlais_make_integer (WCHARVAL (ch)));
+}
+
+static Object
+uchar_to_lowercase (Object ch)
+{
+  return (marlais_make_uchar (u_tolower(UCHARVAL(ch))));
+}
+
+static Object
+uchar_to_uppercase (Object ch)
+{
+  return (marlais_make_uchar (u_toupper(UCHARVAL(ch))));
+}
+
+#endif

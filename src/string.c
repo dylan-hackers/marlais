@@ -226,6 +226,54 @@ marlais_make_wstring_entrypoint (Object args)
 
 #endif /* MARLAIS_ENABLE_WCHAR */
 
+#ifdef MARLAIS_ENABLE_UCHAR
+
+Object
+marlais_make_ustring (const wchar_t *str)
+{
+    int size;
+    UChar32 *new;
+
+    size = wcslen (str);
+
+    new = MARLAIS_ALLOCATE_USTRING (size + 1);
+
+    // XXX
+    //wcsncpy (new, str, size);
+    //new[size] = 0;
+
+    return (make_ustring (new, size));
+}
+
+Object
+marlais_make_wstring_entrypoint (Object args)
+{
+  int size, i;
+  Object size_obj, fill_obj;
+  UChar32 fill = ' ';
+  UChar32 *new;
+
+  marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<unicode-string>");
+
+  if (fill_obj != MARLAIS_FALSE) {
+    if (!UCHARP (fill_obj)) {
+      marlais_error ("make: value of fill: must be a <unicode-character> for <unicode-string> class",
+                     fill_obj, NULL);
+    }
+    fill = UCHARVAL (fill_obj);
+  }
+
+  new = MARLAIS_ALLOCATE_USTRING (size + 1);
+
+  for(i = 0; i < size; i++) {
+    new[i] = fill;
+  }
+  new[size] = 0;
+
+  return (make_ustring (new, size));
+}
+
+#endif /* MARLAIS_ENABLE_UCHAR */
 
 /* Internal functions */
 

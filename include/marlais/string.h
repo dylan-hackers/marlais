@@ -51,4 +51,11 @@ extern Object marlais_make_wstring (const wchar_t *str);
 extern Object marlais_make_wstring_entrypoint (Object args);
 #endif
 
+#ifdef MARLAIS_ENABLE_UCHAR
+/* Make a <unicode-string> */
+extern Object marlais_make_ustring (const UChar32 *str);
+/* Entrypoint for make(<unicode-string>) */
+extern Object marlais_make_ustring_entrypoint (Object args);
+#endif
+
 #endif
