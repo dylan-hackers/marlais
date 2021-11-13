@@ -42,3 +42,7 @@
 #include <marlais/table.h>
 #include <marlais/values.h>
 #include <marlais/vector.h>
+
+#ifdef MARLAIS_ENABLE_GMP
+#include <marlais/gmp.h>
+#endif

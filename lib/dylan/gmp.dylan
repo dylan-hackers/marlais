@@ -1,6 +1,42 @@
 module: dylan
 
 //
+// Number coercion
+//
+
+// From other numbers and our own types.
+//
+// Our primitives support a range of types.
+
+define method as (c == <mp-float>, n :: <number>)
+  %number->mpf (n);
+end method as;
+
+define method as (c == <mp-ratio>, n :: <number>)
+  %number->mpq (n);
+end method as;
+
+define method as (c == <mp-integer>, n :: <number>)
+  %number->mpz (n);
+end method as;
+
+// From strings.
+//
+// We expect base 10. Only byte string for now.
+
+define method as (c == <mp-float>, s :: <byte-string>)
+  %string->mpf (s, 10);
+end method as;
+
+define method as (c == <mp-ratio>, s :: <byte-string>)
+  %string->mpq (s, 10);
+end method as;
+
+define method as (c == <mp-integer>, s :: <byte-string>)
+  %string->mpz (s, 10);
+end method as;
+
+//
 // Numeric predicates
 //
 
@@ -61,61 +97,107 @@ end method;
 // Among our own types
 
 define method \= (n1 :: <mp-float>, n2 :: <mp-float>)
-  %mpf=(n1, n2);
+  %mpf= (n1, n2);
 end method \=;
 
 define method \< (n1 :: <mp-float>, n2 :: <mp-float>)
-  %mpf<(n1, n2);
+  %mpf< (n1, n2);
 end method \<;
 
 define method \= (n1 :: <mp-ratio>, n2 :: <mp-ratio>)
-  %mpq=(n1, n2);
+  %mpq= (n1, n2);
 end method \=;
 
 define method \< (n1 :: <mp-ratio>, n2 :: <mp-ratio>)
-  %mpq<(n1, n2);
+  %mpq< (n1, n2);
 end method \<;
 
 define method \= (n1 :: <mp-integer>, n2 :: <mp-integer>)
-  %mpz=(n1, n2);
+  %mpz= (n1, n2);
 end method \=;
 
 define method \< (n1 :: <mp-integer>, n2 :: <mp-integer>)
-  %mpz<(n1, n2);
+  %mpz< (n1, n2);
 end method \<;
 
 //
-// Number coercion
+// Numeric operations
 //
 
-// From other numbers and our own types.
-//
-// Our primitives support a range of types.
+// \+
 
-define method as (c == <mp-float>, n :: <number>)
-  %number->mpf(n);
-end method as;
+define method \+ (n1 :: <mp-float>, n2 :: <number>)
+  %mpf-add (n1, n2);
+end method \+;
 
-define method as (c == <mp-ratio>, n :: <number>)
-  %number->mpq(n);
-end method as;
+define method \+ (n1 :: <number>, n2 :: <mp-float>)
+  %mpf-add (n1, n2);
+end method \+;
 
-define method as (c == <mp-integer>, n :: <number>)
-  %number->mpz(n);
-end method as;
+define method \+ (n1 :: <mp-ratio>, n2 :: <number>)
+  %mpq-add (n1, n2);
+end method \+;
 
-// From strings.
-//
-// We expect base 10. Only byte string for now.
+define method \+ (n1 :: <number>, n2 :: <mp-ratio>)
+  %mpq-add (n1, n2);
+end method \+;
 
-define method as (c == <mp-float>, s :: <byte-string>)
-  %string->mpf(n, 10);
-end method as;
+define method \+ (n1 :: <mp-integer>, n2 :: <number>)
+  %mpz-add (n1, n2);
+end method \+;
 
-define method as (c == <mp-ratio>, s :: <byte-string>)
-  %string->mpq(n, 10);
-end method as;
+define method \+ (n1 :: <number>, n2 :: <mp-integer>)
+  %mpz-add (n1, n2);
+end method \+;
 
-define method as (c == <mp-integer>, s :: <byte-string>)
-  %string->mpz(n, 10);
-end method as;
+// \-
+
+define method \- (n1 :: <mp-float>, n2 :: <number>)
+  %mpf-sub (n1, n2);
+end method \-;
+
+define method \- (n1 :: <number>, n2 :: <mp-float>)
+  %mpf-sub (n1, n2);
+end method \-;
+
+define method \- (n1 :: <mp-ratio>, n2 :: <number>)
+  %mpq-sub (n1, n2);
+end method \-;
+
+define method \- (n1 :: <number>, n2 :: <mp-ratio>)
+  %mpq-sub (n1, n2);
+end method \-;
+
+define method \- (n1 :: <mp-integer>, n2 :: <number>)
+  %mpz-sub (n1, n2);
+end method \-;
+
+define method \- (n1 :: <number>, n2 :: <mp-integer>)
+  %mpz-sub (n1, n2);
+end method \-;
+
+// \*
+
+define method \* (n1 :: <mp-float>, n2 :: <number>)
+  %mpf-mul (n1, n2);
+end method \*;
+
+define method \* (n1 :: <number>, n2 :: <mp-float>)
+  %mpf-mul (n1, n2);
+end method \*;
+
+define method \* (n1 :: <mp-ratio>, n2 :: <number>)
+  %mpq-mul (n1, n2);
+end method \*;
+
+define method \* (n1 :: <number>, n2 :: <mp-ratio>)
+  %mpq-mul (n1, n2);
+end method \*;
+
+define method \* (n1 :: <mp-integer>, n2 :: <number>)
+  %mpz-mul (n1, n2);
+end method \*;
+
+define method \* (n1 :: <number>, n2 :: <mp-integer>)
+  %mpz-mul (n1, n2);
+end method \*;

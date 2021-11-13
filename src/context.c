@@ -14,6 +14,11 @@ marlais_initialize (void)
   /* intialize garbage collector */
   marlais_initialize_gc ();
 
+  /* initialize GMP memory management */
+#ifdef MARLAIS_ENABLE_GMP
+  marlais_initialize_gmp ();
+#endif
+
   dylan_symbol = marlais_make_name ("dylan");
   dylan_user_symbol = marlais_make_name ("dylan-user");
 
@@ -222,4 +227,8 @@ marlais_initialize (void)
   marlais_register_deque ();
   marlais_register_array ();
   marlais_register_sys ();
+
+#ifdef MARLAIS_ENABLE_GMP
+  marlais_register_gmp ();
+#endif
 }

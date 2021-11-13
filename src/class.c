@@ -244,6 +244,16 @@ marlais_initialize_class (void)
   foreign_pointer_class =
     make_builtin_class ("<foreign-pointer>", object_class);
 
+  /* GMP numbers */
+#ifdef MARLAIS_ENABLE_GMP
+  mp_float_class = make_builtin_class ("<mp-float>",
+                                       float_class);
+  mp_ratio_class = make_builtin_class ("<mp-ratio>",
+                                       rational_class);
+  mp_integer_class = make_builtin_class ("<mp-integer>",
+                                         integer_class);
+#endif
+
   marlais_make_class_sealed (integer_class);
   marlais_make_class_sealed (ratio_class);
   marlais_make_class_sealed (rational_class);
@@ -374,6 +384,14 @@ marlais_object_class (Object obj)
     return (foreign_pointer_class);
   case UninitializedSlotValue:
     return (object_class);
+#ifdef MARLAIS_ENABLE_GMP
+  case MPFloat:
+    return mp_float_class;
+  case MPRatio:
+    return mp_ratio_class;
+  case MPInteger:
+    return mp_integer_class;
+#endif
   default:
     return marlais_error ("object-class: don't know class of object", obj, NULL);
   }

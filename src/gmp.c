@@ -9,18 +9,6 @@
 
 #include <gmp.h>
 
-/* Internal variables */
-
-/* Symbols for our classes */
-static Object mpf_class_symbol;
-static Object mpq_class_symbol;
-static Object mpz_class_symbol;
-
-/* Our classes */
-static Object mpf_class;
-static Object mpq_class;
-static Object mpz_class;
-
 /* Internal functions */
 
 /* Allocation wrappers for GMP memory management */
@@ -172,16 +160,8 @@ marlais_initialize_gmp (void)
 void
 marlais_register_gmp (void)
 {
-  /* make symbols */
-  mpf_class_symbol = marlais_make_name("<mp-float>");
-  mpq_class_symbol = marlais_make_name("<mp-ratio>");
-  mpz_class_symbol = marlais_make_name("<mp-integer>");
-#if 0
-  /* register classes */
-  mpf_class = make_builtin_class (mpf_class_symbol, float_class);
-  mpq_class = make_builtin_class (mpq_class_symbol, rational_class);
-  mpz_class = make_builtin_class (mpz_class_symbol, integer_class);
-#endif
+  int num = sizeof (gmp_prims) / sizeof (struct primitive);
+  marlais_register_prims (num, gmp_prims);
 }
 
 Object

@@ -197,6 +197,10 @@ GLOBAL Object colon_colon_symbol;
 GLOBAL Object object_handle_class;
 GLOBAL Object foreign_pointer_class;	/* <pcb> */
 
+GLOBAL Object mp_float_class;
+GLOBAL Object mp_ratio_class;
+GLOBAL Object mp_integer_class;
+
 /* reserved word symbols */
 GLOBAL Object above_symbol;
 GLOBAL Object afterwards_symbol;

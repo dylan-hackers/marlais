@@ -225,6 +225,17 @@ marlais_print_object (Object fd, Object obj, int escaped)
     print_env (ENVIRONMENT (obj));
     fprintf (fp, "}");
     break;
+#ifdef MARLAIS_ENABLE_GMP
+  case MPFloat:
+    mpf_out_str(fp, 10, 0, MPFVAL(obj));
+    break;
+  case MPRatio:
+    mpq_out_str(fp, 10, MPQVAL(obj));
+    break;
+  case MPInteger:
+    mpz_out_str(fp, 10, MPZVAL(obj));
+    break;
+#endif
   default:
       marlais_error ("print: unknown object type", NULL);
   }
