@@ -206,10 +206,11 @@ marlais_make_character (char ch)
   Object obj;
 
 #if MARLAIS_CONFIG_CHARACTER_CACHE > 0
-  unsigned char uc = (unsigned char)ch;
+  unsigned int uc = (unsigned int)ch;
   if(uc < MARLAIS_CONFIG_CHARACTER_CACHE) {
-    if(character_cache[uc] != NULL) {
-      return character_cache[uc];
+    obj = character_cache[uc];
+    if(obj != NULL) {
+      return obj;
     }
   }
 #endif
@@ -236,10 +237,11 @@ marlais_make_wchar (wchar_t ch)
   Object obj;
 
 #if MARLAIS_CONFIG_WCHAR_CACHE > 0
-  unsigned char uc = (unsigned char)ch;
+  unsigned int uc = (unsigned int)ch;
   if(uc < MARLAIS_CONFIG_WCHAR_CACHE) {
-    if(wchar_cache[uc] != NULL) {
-      return wchar_cache[uc];
+    obj = wchar_cache[uc];
+    if(obj != NULL) {
+      return obj;
     }
   }
 #endif
