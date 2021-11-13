@@ -31,6 +31,7 @@ typedef DyUnsigned MarlaisSub;
 #define MARLAIS_SUB_UNINITIALIZED (0x5 << MARLAIS_SUB_SHIFT)
 #define MARLAIS_SUB_CHARACTER     (0x6 << MARLAIS_SUB_SHIFT)
 #define MARLAIS_SUB_WCHAR         (0x7 << MARLAIS_SUB_SHIFT)
+#define MARLAIS_SUB_UCHAR         (0x8 << MARLAIS_SUB_SHIFT)
 #define MARLAIS_SUB_MASK          (0xf << MARLAIS_SUB_SHIFT)
 
 /* Shift distances for value fields */
@@ -88,6 +89,11 @@ static inline wchar_t WCHARVAL(Object obj) {
   return ((wchar_t)IMMEDPART(obj));
 }
 #endif
+#ifdef MARLAIS_ENABLE_UCHAR
+static inline UChar32 UCHARVAL(Object obj) {
+  return ((UChar32)IMMEDPART(obj));
+}
+#endif
 
 /* Immediate composition */
 static inline Object MAKE_IMMEDIATE(MarlaisSub sub, DyUnsigned val) {
@@ -99,6 +105,11 @@ static inline Object MAKE_CHAR(char ch) {
 #ifdef MARLAIS_ENABLE_WCHAR
 static inline Object MAKE_WCHAR(wchar_t ch) {
   return MAKE_IMMEDIATE(MARLAIS_SUB_WCHAR, ch);
+}
+#endif
+#ifdef MARLAIS_ENABLE_UCHAR
+static inline Object MAKE_UCHAR(UChar32 ch) {
+  return MAKE_IMMEDIATE(MARLAIS_SUB_UCHAR, ch);
 }
 #endif
 static inline Object MAKE_INT(DyInteger ch) {
@@ -118,6 +129,7 @@ DEFINE_IMMEDP_PREDICATE(UNSPECP, MARLAIS_SUB_UNSPECIFIED);
 DEFINE_IMMEDP_PREDICATE(UNINITSLOTP, MARLAIS_SUB_UNINITIALIZED);
 DEFINE_IMMEDP_PREDICATE(CHARP, MARLAIS_SUB_CHARACTER);
 DEFINE_IMMEDP_PREDICATE(WCHARP, MARLAIS_SUB_WCHAR);
+DEFINE_IMMEDP_PREDICATE(UCHARP, MARLAIS_SUB_UCHAR);
 #undef DEFINE_IMMEDP_PREDICATE
 
 /* Pointer type predicates */

@@ -35,7 +35,7 @@ typedef enum {
     ObjectTable, Deque, Array,
 
     /* strings */
-    ByteString, WideString,
+    ByteString, WideString, UnicodeCharacter,
 
     /* conditions */
     Condition,
@@ -44,7 +44,7 @@ typedef enum {
     Symbol,
 
     /* characters */
-    Character, WideCharacter,
+    Character, WideCharacter, UnicodeString,
 
     /* types */
     Class, Instance, Singleton, LimitedIntType, UnionType, SlotDescriptor,
