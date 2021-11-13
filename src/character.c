@@ -244,7 +244,7 @@ marlais_make_wchar (wchar_t ch)
   }
 #endif
 
-  obj = marlais_allocate_object (WideCharacter, sizeof (struct character));
+  obj = marlais_allocate_object (WideCharacter, sizeof (struct wide_character));
   WCHARVAL (obj) = ch;
 
 #if MARLAIS_CONFIG_WCHAR_CACHE > 0
@@ -318,13 +318,13 @@ wchar_to_integer (Object ch)
 static Object
 wchar_to_lowercase (Object ch)
 {
-  return (marlais_make_character (towlower(WCHARVAL(ch))));
+  return (marlais_make_wchar (towlower(WCHARVAL(ch))));
 }
 
 static Object
 wchar_to_uppercase (Object ch)
 {
-  return (marlais_make_character (towupper(WCHARVAL(ch))));
+  return (marlais_make_wchar (towupper(WCHARVAL(ch))));
 }
 
 #define DEFINE_WCTYPE_PREDICATE(_NAME,_PRED)            \
