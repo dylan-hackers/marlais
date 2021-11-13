@@ -316,6 +316,12 @@ marlais_object_class (Object obj)
   case WideString:
     return (wide_string_class);
 #endif
+#ifdef MARLAIS_ENABLE_UCHAR
+  case UnicodeCharacter:
+    return (unicode_character_class);
+  case UnicodeString:
+    return (unicode_string_class);
+#endif
   case SimpleObjectVector:
     return (simple_object_vector_class);
   case ObjectTable:

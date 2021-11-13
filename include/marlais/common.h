@@ -19,6 +19,11 @@
 #include <wchar.h>
 #endif
 
+#ifdef MARLAIS_ENABLE_UCHAR
+#warning UCHAR
+#include <unicode/uchar.h>
+#endif
+
 #include <marlais/compiler.h>
 #include <marlais/object.h>
 #include <marlais/globals.h>
