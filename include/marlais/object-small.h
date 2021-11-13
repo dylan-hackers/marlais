@@ -40,9 +40,7 @@ typedef DyUnsigned MarlaisSub;
 /* Constants for tagged integers */
 #define MARLAIS_INTEGER_MIN   (MARLAIS_INT_MIN >> MARLAIS_INTEGER_SHIFT)
 #define MARLAIS_INTEGER_MAX   (MARLAIS_INT_MAX >> MARLAIS_INTEGER_SHIFT)
-#if 0
-#define MARLAIS_INTEGER_WIDTH (MARLAIS_INT_WIDTH - MARLAIS_TAG_WIDTH)
-#endif
+#define MARLAIS_INTEGER_WIDTH ((sizeof(DyInteger) * 8) - MARLAIS_TAG_WIDTH)
 #define MARLAIS_INTEGER_PRI    MARLAIS_INT_PRI
 
 /* Immediate constants */

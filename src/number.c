@@ -182,13 +182,10 @@ marlais_register_number (void)
                         marlais_make_integer (255), 1);
 
     /* integer constants */
-#if 0
-    /* TODO would like to have this but it must come from the object representation. */
     marlais_add_export (marlais_make_name ("$integer-bits"),
                         marlais_make_integer (MARLAIS_INTEGER_WIDTH), 1);
-#endif
-    marlais_add_export (marlais_make_name ("$integer-size"),
-                        marlais_make_integer (sizeof(DyInteger)), 1);
+    marlais_add_export (marlais_make_name ("$integer-significant-bits"),
+                        marlais_make_integer (MARLAIS_INTEGER_WIDTH - 1), 1);
     marlais_add_export (marlais_make_name ("$minimum-integer"),
                         marlais_make_integer (MARLAIS_INTEGER_MIN), 1);
     marlais_add_export (marlais_make_name ("$maximum-integer"),
