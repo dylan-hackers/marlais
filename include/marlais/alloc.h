@@ -60,12 +60,6 @@ extern char *marlais_allocate_strdup (const char *str);
 #define MARLAIS_ALLOCATE_STRING(_size) \
   ((char *)marlais_allocate_atomic(_size))
 
-#ifdef MARLAIS_ENABLE_WCHAR
-/* allocate a wchar_t string */
-#define MARLAIS_ALLOCATE_WSTRING(_size) \
-  ((wchar_t *)marlais_allocate_atomic(_size * sizeof(wchar_t)))
-#endif
-
 /* allocate an object with casting */
 #define MARLAIS_ALLOCATE_OBJECT(_type, _repr) \
   ((_repr *)marlais_allocate_object(_type, sizeof(_repr)))
