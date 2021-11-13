@@ -45,36 +45,32 @@
 
 /* Internal variables */
 
-#ifndef MARLAIS_OBJECT_MODEL_SMALL
+#ifdef MARLAIS_OBJECT_MODEL_LARGE
+
 #if MARLAIS_CONFIG_CHARACTER_CACHE > 0
 static Object character_cache[MARLAIS_CONFIG_CHARACTER_CACHE];
 #endif
-#endif
 
 #ifdef MARLAIS_ENABLE_WCHAR
-#ifndef MARLAIS_OBJECT_MODEL_SMALL
 #if MARLAIS_CONFIG_WCHAR_CACHE > 0
 static Object wchar_cache[MARLAIS_CONFIG_WCHAR_CACHE];
 #endif
 #endif
-#endif
 
 #ifdef MARLAIS_ENABLE_UCHAR
-#ifndef MARLAIS_OBJECT_MODEL_SMALL
 #if MARLAIS_CONFIG_UCHAR_CACHE > 0
 static Object uchar_cache[MARLAIS_CONFIG_UCHAR_CACHE];
 #endif
 #endif
-#endif
+
+#endif /* MARLAIS_OBJECT_MODEL_LARGE */
 
 /* Primitives */
 
 static Object integer_to_character (Object i);
 static Object character_to_integer (Object ch);
-
 static Object character_to_lowercase (Object ch);
 static Object character_to_uppercase (Object ch);
-
 static Object character_alphabetic_p (Object ch);
 static Object character_alphanumeric_p (Object ch);
 static Object character_control_p (Object ch);
@@ -90,10 +86,8 @@ static Object character_uppercase_p (Object ch);
 #ifdef MARLAIS_ENABLE_WCHAR
 static Object integer_to_wchar (Object i);
 static Object wchar_to_integer (Object ch);
-
 static Object wchar_to_lowercase (Object ch);
 static Object wchar_to_uppercase (Object ch);
-
 static Object wchar_alphabetic_p (Object ch);
 static Object wchar_alphanumeric_p (Object ch);
 static Object wchar_control_p (Object ch);
@@ -110,10 +104,8 @@ static Object wchar_uppercase_p (Object ch);
 #ifdef MARLAIS_ENABLE_UCHAR
 static Object integer_to_uchar (Object i);
 static Object uchar_to_integer (Object ch);
-
 static Object uchar_to_lowercase (Object ch);
 static Object uchar_to_uppercase (Object ch);
-
 static Object uchar_alphabetic_p (Object ch);
 static Object uchar_alphanumeric_p (Object ch);
 static Object uchar_control_p (Object ch);
@@ -131,10 +123,8 @@ static struct primitive char_prims[] =
 {
   {"%integer->character", prim_1, integer_to_character},
   {"%character->integer", prim_1, character_to_integer},
-
   {"%character-to-lowercase", prim_1, character_to_lowercase},
   {"%character-to-uppercase", prim_1, character_to_uppercase},
-
   {"%character-alphabetic?", prim_1, character_alphabetic_p},
   {"%character-alphanumeric?", prim_1, character_alphanumeric_p},
   {"%character-control?", prim_1, character_control_p},
@@ -150,10 +140,8 @@ static struct primitive char_prims[] =
 #ifdef MARLAIS_ENABLE_WCHAR
   {"%integer->wchar", prim_1, integer_to_wchar},
   {"%wchar->integer", prim_1, wchar_to_integer},
-
   {"%wchar-to-lowercase", prim_1, wchar_to_lowercase},
   {"%wchar-to-uppercase", prim_1, wchar_to_uppercase},
-
   {"%wchar-alphabetic?", prim_1, wchar_alphabetic_p},
   {"%wchar-alphanumeric?", prim_1, wchar_alphanumeric_p},
   {"%wchar-control?", prim_1, wchar_control_p},
@@ -170,10 +158,8 @@ static struct primitive char_prims[] =
 #ifdef MARLAIS_ENABLE_UCHAR
   {"%integer->uchar", prim_1, integer_to_uchar},
   {"%uchar->integer", prim_1, uchar_to_integer},
-
   {"%uchar-to-lowercase", prim_1, uchar_to_lowercase},
   {"%uchar-to-uppercase", prim_1, uchar_to_uppercase},
-
   {"%uchar-alphabetic?", prim_1, uchar_alphabetic_p},
   {"%uchar-alphanumeric?", prim_1, uchar_alphanumeric_p},
   {"%uchar-control?", prim_1, uchar_control_p},
@@ -198,7 +184,7 @@ marlais_register_character (void)
   marlais_register_prims (num, char_prims);
 }
 
-#ifndef MARLAIS_OBJECT_MODEL_SMALL
+#ifdef MARLAIS_OBJECT_MODEL_LARGE
 /* small version is inline in marlais/character.h */
 Object
 marlais_make_character (char ch)
@@ -229,7 +215,8 @@ marlais_make_character (char ch)
 #endif
 
 
-#ifndef MARLAIS_OBJECT_MODEL_SMALL
+#ifdef MARLAIS_OBJECT_MODEL_LARGE
+#ifdef MARLAIS_ENABLE_WCHAR
 /* small version is inline in marlais/character.h */
 Object
 marlais_make_wchar (wchar_t ch)
@@ -258,8 +245,9 @@ marlais_make_wchar (wchar_t ch)
   return (obj);
 }
 #endif
+#endif
 
-/* Internal functions */
+/* Primitives on <byte-character> */
 
 static Object
 integer_to_character (Object i)
@@ -302,6 +290,7 @@ DEFINE_CTYPE_PREDICATE(lowercase,    islower);
 DEFINE_CTYPE_PREDICATE(uppercase,    isupper);
 #undef DEFINE_CTYPE_PREDICATE
 
+/* Primitives on <wide-character> */
 
 #ifdef MARLAIS_ENABLE_WCHAR
 
