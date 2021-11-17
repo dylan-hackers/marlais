@@ -3,6 +3,7 @@
 
 #include <marlais/marlais.h>
 
+#include <marlais/gc.h>
 #include <marlais/lexer.h>
 #include <marlais/parser.h>
 
