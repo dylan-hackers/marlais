@@ -35,13 +35,6 @@
 
 /* Exported functions */
 
-void
-marlais_initialize_gc (void)
-{
-  GC_init ();
-  return;
-}
-
 void *
 marlais_allocate_memory (size_t size)
 {

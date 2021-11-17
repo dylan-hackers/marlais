@@ -36,9 +36,6 @@
 
 #include <marlais/common.h>
 
-/* initialize the garbage collector */
-extern void  marlais_initialize_gc (void);
-
 /* allocate normal memory */
 extern void *marlais_allocate_memory (size_t size);
 /* reallocate normal memory */
