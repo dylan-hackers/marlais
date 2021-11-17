@@ -43,16 +43,19 @@
 
 /* Primitives */
 
-static Object vector_size (Object vec);
-static Object vector_element (Object vec, Object index, Object def);
-static Object vector_element_setter (Object vec, Object index, Object val);
+static Object prim_vector_size (Object vec);
+static Object prim_vector_size_setter (Object vec, Object size);
+static Object prim_vector_element (Object vec, Object index, Object def);
+static Object prim_vector_element_setter (Object vec, Object index, Object val);
 
 static struct primitive vector_prims[] =
 {
-    {"%vector", prim_1, marlais_vector},
-    {"%vector-size", prim_1, vector_size},
-    {"%vector-element", prim_3, vector_element},
-    {"%vector-element-setter", prim_3, vector_element_setter},
+    {"%vector-size", prim_1, prim_vector_size},
+    {"%vector-size-setter", prim_1, prim_vector_size_setter},
+    {"%vector-element", prim_3, prim_vector_element},
+    {"%vector-element-setter", prim_3, prim_vector_element_setter},
+    {"%vector->list", prim_1, marlais_vector_to_list},
+    {"%list->vector", prim_1, marlais_list_to_vector},
 };
 
 /* Exported functions */
@@ -62,34 +65,6 @@ marlais_register_vector (void)
 {
   int num = sizeof (vector_prims) / sizeof (struct primitive);
   marlais_register_prims (num, vector_prims);
-}
-
-Object
-marlais_vector (Object list)
-{
-  Object obj, els;
-  int size, i;
-
-  /* XXX improve this - count first, allocate, overwrite */
-
-  obj = marlais_allocate_object (SimpleObjectVector, sizeof (struct simple_object_vector));
-
-  size = 0;
-  els = list;
-  while (PAIRP (els)) {
-    size++;
-    els = CDR (els);
-  }
-  SOVSIZE (obj) = size;
-  SOVELS (obj) = (Object *) marlais_allocate_memory (size * sizeof (Object));
-
-  els = list;
-  i = 0;
-  while (PAIRP (els)) {
-    SOVELS (obj)[i++] = CAR (els);
-    els = CDR (els);
-  }
-  return (obj);
 }
 
 Object
@@ -117,7 +92,38 @@ marlais_make_vector_entrypoint (Object args)
   Object size_obj, fill_obj;
 
   marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<vector>");
+
+  // XXX check size
+
   return marlais_make_vector (size, fill_obj);
+}
+
+Object
+marlais_list_to_vector (Object list)
+{
+  Object obj, els;
+  int size, i;
+
+  /* XXX improve this - count first, allocate, overwrite */
+
+  obj = marlais_allocate_object (SimpleObjectVector, sizeof (struct simple_object_vector));
+
+  size = 0;
+  els = list;
+  while (PAIRP (els)) {
+    size++;
+    els = CDR (els);
+  }
+  SOVSIZE (obj) = size;
+  SOVELS (obj) = (Object *) marlais_allocate_memory (size * sizeof (Object));
+
+  els = list;
+  i = 0;
+  while (PAIRP (els)) {
+    SOVELS (obj)[i++] = CAR (els);
+    els = CDR (els);
+  }
+  return (obj);
 }
 
 Object
@@ -139,16 +145,22 @@ marlais_vector_to_list (Object vec)
   return (first);
 }
 
-/* Static functions */
+/* Primitives */
 
 static Object
-vector_size (Object vec)
+prim_vector_size (Object vec)
 {
   return (marlais_make_integer (SOVSIZE (vec)));
 }
 
 static Object
-vector_element (Object vec, Object index, Object default_ob)
+prim_vector_size_setter (Object vec, Object size)
+{
+  return NULL;
+}
+
+static Object
+prim_vector_element (Object vec, Object index, Object default_ob)
 {
   int i, size;
 
@@ -165,7 +177,7 @@ vector_element (Object vec, Object index, Object default_ob)
 }
 
 static Object
-vector_element_setter (Object vec, Object index, Object val)
+prim_vector_element_setter (Object vec, Object index, Object val)
 {
   int i, size;
 
