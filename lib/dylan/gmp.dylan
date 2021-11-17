@@ -96,108 +96,89 @@ end method;
 
 // Among our own types
 
-define method \= (n1 :: <mp-float>, n2 :: <mp-float>)
-  %mpf= (n1, n2);
-end method \=;
-
 define method \< (n1 :: <mp-float>, n2 :: <mp-float>)
   %mpf< (n1, n2);
 end method \<;
 
-define method \= (n1 :: <mp-ratio>, n2 :: <mp-ratio>)
-  %mpq= (n1, n2);
+define method \= (n1 :: <mp-float>, n2 :: <mp-float>)
+  %mpf= (n1, n2);
 end method \=;
 
 define method \< (n1 :: <mp-ratio>, n2 :: <mp-ratio>)
   %mpq< (n1, n2);
 end method \<;
 
-define method \= (n1 :: <mp-integer>, n2 :: <mp-integer>)
-  %mpz= (n1, n2);
+define method \= (n1 :: <mp-ratio>, n2 :: <mp-ratio>)
+  %mpq= (n1, n2);
 end method \=;
 
 define method \< (n1 :: <mp-integer>, n2 :: <mp-integer>)
   %mpz< (n1, n2);
 end method \<;
 
+define method \= (n1 :: <mp-integer>, n2 :: <mp-integer>)
+  %mpz= (n1, n2);
+end method \=;
+
 //
-// Numeric operations
+// Binary operations
 //
 
 // \+
 
-define method \+ (n1 :: <mp-float>, n2 :: <number>)
-  %mpf-add (n1, n2);
-end method \+;
-
-define method \+ (n1 :: <number>, n2 :: <mp-float>)
-  %mpf-add (n1, n2);
-end method \+;
-
-define method \+ (n1 :: <mp-ratio>, n2 :: <number>)
-  %mpq-add (n1, n2);
-end method \+;
-
-define method \+ (n1 :: <number>, n2 :: <mp-ratio>)
-  %mpq-add (n1, n2);
-end method \+;
-
-define method \+ (n1 :: <mp-integer>, n2 :: <number>)
-  %mpz-add (n1, n2);
-end method \+;
-
-define method \+ (n1 :: <number>, n2 :: <mp-integer>)
-  %mpz-add (n1, n2);
-end method \+;
-
 // \-
-
-define method \- (n1 :: <mp-float>, n2 :: <number>)
-  %mpf-sub (n1, n2);
-end method \-;
-
-define method \- (n1 :: <number>, n2 :: <mp-float>)
-  %mpf-sub (n1, n2);
-end method \-;
-
-define method \- (n1 :: <mp-ratio>, n2 :: <number>)
-  %mpq-sub (n1, n2);
-end method \-;
-
-define method \- (n1 :: <number>, n2 :: <mp-ratio>)
-  %mpq-sub (n1, n2);
-end method \-;
-
-define method \- (n1 :: <mp-integer>, n2 :: <number>)
-  %mpz-sub (n1, n2);
-end method \-;
-
-define method \- (n1 :: <number>, n2 :: <mp-integer>)
-  %mpz-sub (n1, n2);
-end method \-;
 
 // \*
 
-define method \* (n1 :: <mp-float>, n2 :: <number>)
-  %mpf-mul (n1, n2);
-end method \*;
+//
+// Unary operations
+//
 
-define method \* (n1 :: <number>, n2 :: <mp-float>)
-  %mpf-mul (n1, n2);
-end method \*;
+// On <mp-float>
 
-define method \* (n1 :: <mp-ratio>, n2 :: <number>)
-  %mpq-mul (n1, n2);
-end method \*;
+define method negative (n :: <mp-float>)
+  %mpf-neg(n);
+end method negative;
 
-define method \* (n1 :: <number>, n2 :: <mp-ratio>)
-  %mpq-mul (n1, n2);
-end method \*;
+define method abs (n :: <mp-float>)
+  %mpf-sqrt(n);
+end method abs;
 
-define method \* (n1 :: <mp-integer>, n2 :: <number>)
-  %mpz-mul (n1, n2);
-end method \*;
+define method sqrt (n :: <mp-float>)
+  %mpf-sqrt(n);
+end method sqrt;
 
-define method \* (n1 :: <number>, n2 :: <mp-integer>)
-  %mpz-mul (n1, n2);
-end method \*;
+define method ceiling (n :: <mp-float>)
+  // XXX no remainder
+  %mpf-ceil(n);
+end method ceiling;
+
+define method floor (n :: <mp-float>)
+  // XXX no remainder
+  %mpf-floor(n);
+end method floor;
+
+define method truncate (n :: <mp-float>)
+  // XXX no remainder
+  %mpf-trunc(n);
+end method truncate;
+
+// On <mp-ratio>
+
+define method negative (n :: <mp-ratio>)
+  %mpq-neg(n);
+end method neg;
+
+define method abs (n :: <mp-ratio>)
+  %mpq-abs(n);
+end method abs;
+
+// On <mp-integer>
+
+define method negative (n :: <mp-integer>)
+  %mpz-neg(n);
+end method neg;
+
+define method abs (n :: <mp-integer>)
+  %mpz-abs(n);
+end method abs;
