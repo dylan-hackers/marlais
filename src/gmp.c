@@ -40,12 +40,12 @@ DECLARE_BINARY(mpf, sub);
 DECLARE_BINARY(mpf, mul);
 DECLARE_BINARY(mpf, div);
 DECLARE_BINARY(mpf, pow);
-DECLARE_UNARY(mpf, sqrt);
 DECLARE_UNARY(mpf, neg);
 DECLARE_UNARY(mpf, abs);
 DECLARE_UNARY(mpf, ceil);
 DECLARE_UNARY(mpf, floor);
 DECLARE_UNARY(mpf, trunc);
+DECLARE_UNARY(mpf, sqrt);
 
 /* Primitives that operate on <mp-ratio> */
 static Object prim_string_to_mpq(Object str, Object base);
@@ -90,7 +90,7 @@ static struct primitive gmp_prims[] =
   {"%number->mpf", prim_1, marlais_make_mpf_from_number},
   {"%string->mpf", prim_2, prim_string_to_mpf},
   {"%mpf-precision", prim_1, prim_mpf_precision},
-  {"%mpf-precision_setter", prim_2, prim_mpf_precision_setter},
+  {"%mpf-precision-setter", prim_2, prim_mpf_precision_setter},
   {"%mpf<", prim_2, prim_mpf_lessthan},
   {"%mpf=", prim_2, prim_mpf_equal},
   {"%mpf-set!", prim_2, prim_mpf_set_bang},
@@ -99,12 +99,12 @@ static struct primitive gmp_prims[] =
   {"%mpf-mul", prim_2, prim_mpf_mul},
   {"%mpf-div", prim_2, prim_mpf_div},
   {"%mpf-pow", prim_2, prim_mpf_pow},
-  {"%mpf-sqrt", prim_1, prim_mpf_sqrt},
   {"%mpf-neg", prim_1, prim_mpf_neg},
   {"%mpf-abs", prim_1, prim_mpf_abs},
   {"%mpf-ceil", prim_1, prim_mpf_ceil},
   {"%mpf-floor", prim_1, prim_mpf_floor},
   {"%mpf-trunc", prim_1, prim_mpf_trunc},
+  {"%mpf-sqrt", prim_1, prim_mpf_sqrt},
 
   /* <mp-ratio> */
   {"%number->mpq", prim_1, marlais_make_mpq_from_number},
@@ -112,13 +112,6 @@ static struct primitive gmp_prims[] =
   {"%mpq<", prim_2, prim_mpq_lessthan},
   {"%mpq=", prim_2, prim_mpq_equal},
   {"%mpq-set!", prim_2, prim_mpq_set_bang},
-  {"%mpq-add!", prim_3, prim_mpq_add_bang},
-  {"%mpq-sub!", prim_3, prim_mpq_sub_bang},
-  {"%mpq-mul!", prim_3, prim_mpq_mul_bang},
-  {"%mpq-div!", prim_3, prim_mpq_div_bang},
-  {"%mpq-neg!", prim_2, prim_mpq_neg_bang},
-  {"%mpq-abs!", prim_2, prim_mpq_abs_bang},
-  {"%mpq-inv!", prim_2, prim_mpq_inv_bang},
   {"%mpq-add", prim_2, prim_mpq_add},
   {"%mpq-sub", prim_2, prim_mpq_sub},
   {"%mpq-mul", prim_2, prim_mpq_mul},
@@ -126,6 +119,13 @@ static struct primitive gmp_prims[] =
   {"%mpq-neg", prim_1, prim_mpq_neg},
   {"%mpq-abs", prim_1, prim_mpq_abs},
   {"%mpq-inv", prim_1, prim_mpq_inv},
+  {"%mpq-add!", prim_3, prim_mpq_add_bang},
+  {"%mpq-sub!", prim_3, prim_mpq_sub_bang},
+  {"%mpq-mul!", prim_3, prim_mpq_mul_bang},
+  {"%mpq-div!", prim_3, prim_mpq_div_bang},
+  {"%mpq-neg!", prim_2, prim_mpq_neg_bang},
+  {"%mpq-abs!", prim_2, prim_mpq_abs_bang},
+  {"%mpq-inv!", prim_2, prim_mpq_inv_bang},
 
   /* <mp-integer> */
   {"%number->mpz", prim_1, marlais_make_mpz_from_number},
@@ -144,6 +144,17 @@ static struct primitive gmp_prims[] =
   {"%mpz-tdiv-r", prim_2, prim_mpz_tdiv_r},
   {"%mpz-neg", prim_1, prim_mpz_neg},
   {"%mpz-abs", prim_1, prim_mpz_abs},
+  {"%mpz-add!", prim_3, prim_mpz_add_bang},
+  {"%mpz-sub!", prim_3, prim_mpz_sub_bang},
+  {"%mpz-mul!", prim_3, prim_mpz_mul_bang},
+  {"%mpz-cdiv-q!", prim_3, prim_mpz_cdiv_q_bang},
+  {"%mpz-cdiv-r!", prim_3, prim_mpz_cdiv_r_bang},
+  {"%mpz-fdiv-q!", prim_3, prim_mpz_fdiv_q_bang},
+  {"%mpz-fdiv-r!", prim_3, prim_mpz_fdiv_r_bang},
+  {"%mpz-tdiv-q!", prim_3, prim_mpz_tdiv_q_bang},
+  {"%mpz-tdiv-r!", prim_3, prim_mpz_tdiv_r_bang},
+  {"%mpz-neg!", prim_2, prim_mpz_neg_bang},
+  {"%mpz-abs!", prim_2, prim_mpz_abs_bang},
 };
 
 /* Exported functions */
@@ -578,12 +589,12 @@ DEFINE_BINARY_MPUI_MPUI(mpf, MPFloat, MPFP, MPFVAL, sub);
 DEFINE_BINARY_MP_MPUI_COM(mpf, MPFloat, MPFP, MPFVAL, mul);
 DEFINE_BINARY_MPUI_MPUI(mpf, MPFloat, MPFP, MPFVAL, div);
 DEFINE_BINARY_MP_UI(mpf, MPFloat, MPFP, MPFVAL, pow);
-DEFINE_UNARY_MP(mpf, MPFloat, MPFP, MPFVAL, sqrt);
 DEFINE_UNARY_MP(mpf, MPFloat, MPFP, MPFVAL, neg);
 DEFINE_UNARY_MP(mpf, MPFloat, MPFP, MPFVAL, abs);
 DEFINE_UNARY_MP(mpf, MPFloat, MPFP, MPFVAL, ceil);
 DEFINE_UNARY_MP(mpf, MPFloat, MPFP, MPFVAL, floor);
 DEFINE_UNARY_MP(mpf, MPFloat, MPFP, MPFVAL, trunc);
+DEFINE_UNARY_MP(mpf, MPFloat, MPFP, MPFVAL, sqrt);
 
 DEFINE_COMPARE_MP_MP(mpq, MPRatio, MPQP, MPQVAL);
 DEFINE_BINARY_MP_MP(mpq, MPRatio, MPQP, MPQVAL, add);
