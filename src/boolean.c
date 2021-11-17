@@ -38,13 +38,13 @@
 
 /* Primitives */
 
-static Object boolean_not (Object obj);
-static Object boolean_identical_p (Object obj1, Object obj2, Object rest);
+static Object prim_not (Object obj);
+static Object prim_identical_p (Object obj1, Object obj2, Object rest);
 
 static struct primitive boolean_prims[] =
 {
-  {"%not", prim_1, boolean_not},
-  {"%identical?", prim_2_rest, boolean_identical_p},
+  {"%not", prim_1, prim_not},
+  {"%identical?", prim_2_rest, prim_identical_p},
 };
 
 /* Exported functions */
@@ -69,22 +69,40 @@ bool
 marlais_identical_p (Object obj1, Object obj2)
 {
   if (obj1 == obj2) {
-    return 1;
+    return true;
+  } else if (SFLOATP (obj1) && SFLOATP (obj2)) {
+    return (SFLOATVAL (obj1) == SFLOATVAL (obj2));
+  } else if (DFLOATP (obj1) && DFLOATP (obj2)) {
+    return (DFLOATVAL (obj1) == DFLOATVAL (obj2));
+
+#ifdef MARLAIS_OBJECT_MODEL_LARGE
+
   } else if (INTEGERP (obj1) && INTEGERP (obj2)) {
     return (INTVAL (obj1) == INTVAL (obj2));
   } else if (CHARP (obj1) && CHARP (obj2)) {
     return (CHARVAL (obj1) == CHARVAL (obj2));
-  } else if (DFLOATP (obj1) && DFLOATP (obj2)) {
-    return (DFLOATVAL (obj1) == DFLOATVAL (obj2));
+
+#ifdef MARLAIS_ENABLE_WCHAR
+  } else if (WCHARP (obj1) && WCHARP (obj2)) {
+    return (WCHARVAL (obj1) == WCHARVAL (obj2));
+#endif
+
+#ifdef MARLAIS_ENABLE_UCHAR
+  } else if (UCHARP (obj1) && UCHARP (obj2)) {
+    return (UCHARVAL (obj1) == UCHARVAL (obj2));
+#endif
+
+#endif /* MARLAIS_OBJECT_MODEL_LARGE */
+
   } else {
-    return 0;
+    return false;
   }
 }
 
-/* Internal functions */
+/* Primitives */
 
 static Object
-boolean_not (Object obj)
+prim_not (Object obj)
 {
   if (obj == MARLAIS_FALSE) {
     return (MARLAIS_TRUE);
@@ -94,46 +112,24 @@ boolean_not (Object obj)
 }
 
 static Object
-boolean_identical_p (Object obj1, Object obj2, Object rest)
+prim_identical_p (Object obj1, Object obj2, Object rest)
 {
-  /* succeed quickly in the simple case */
-  if (obj1 == obj2) {
-    if (EMPTYLISTP (rest)) {
-      return (MARLAIS_TRUE);
-    } else {
-      return boolean_identical_p (obj2, CAR (rest), CDR (rest));
-    }
-  } else if (INTEGERP (obj1) && INTEGERP (obj2)) {
-    if (INTVAL (obj1) == INTVAL (obj2)) {
-      if (EMPTYLISTP (rest)) {
-        return (MARLAIS_TRUE);
-      } else {
-        return (boolean_identical_p (obj2, CAR (rest), CDR (rest)));
-      }
-    } else {
-      return (MARLAIS_FALSE);
-    }
-  } else if (CHARP (obj1) && CHARP (obj2)) {
-    if (CHARVAL (obj1) == CHARVAL (obj2)) {
-      if (EMPTYLISTP (rest)) {
-        return (MARLAIS_TRUE);
-      } else {
-        return (boolean_identical_p (obj2, CAR (rest), CDR (rest)));
-      }
-    } else {
-      return (MARLAIS_FALSE);
-    }
-  } else if (DFLOATP (obj1) && DFLOATP (obj2)) {
-    if (DFLOATVAL (obj1) == DFLOATVAL (obj2)) {
-      if (EMPTYLISTP (rest)) {
-        return (MARLAIS_TRUE);
-      } else {
-        return (boolean_identical_p (obj2, CAR (rest), CDR (rest)));
-      }
-    } else {
-      return (MARLAIS_FALSE);
-    }
-  } else {
-    return (MARLAIS_FALSE);
+  /* check fixed arguments first */
+  if(!marlais_identical_p(obj1, obj2)) {
+    return MARLAIS_FALSE;
   }
+
+  /* iterate through the rest */
+  while (!EMPTYLISTP (rest)) {
+    obj1 = obj2;
+    obj2 = CAR(rest);
+    rest = CDR(rest);
+
+    if(!marlais_identical_p(obj1, obj2)) {
+      return MARLAIS_FALSE;
+    }
+  }
+
+  /* if we get here they are all identical */
+  return MARLAIS_TRUE;
 }
