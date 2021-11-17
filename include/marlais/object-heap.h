@@ -76,6 +76,17 @@ struct wide_string {
 #define WIDESTRVAL(obj)   (((struct wide_string *)obj)->val)
 #endif
 
+#ifdef MARLAIS_ENABLE_UCHAR
+struct unicode_string {
+    ObjectHeader header;
+    int size;
+    UChar *val;
+};
+
+#define USTRSIZE(obj)  (((struct unicode_string *)obj)->size)
+#define USTRVAL(obj)   (((struct unicode_string *)obj)->val)
+#endif
+
 struct simple_object_vector {
     ObjectHeader header;
     int size;
