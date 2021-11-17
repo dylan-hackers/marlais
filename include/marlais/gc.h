@@ -3,9 +3,12 @@
 
 #include <marlais/common.h>
 
+/* Register garbage collector primitives */
 extern void marlais_register_gc (void);
 
+/* Perform a full garbage collection */
 extern void marlais_gc_collect (void);
+/* Report on garbage collector state */
 extern void marlais_gc_report (void);
 
-#endif
+#endif /* !MARLAIS_GC_H */

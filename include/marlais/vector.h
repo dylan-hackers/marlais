@@ -53,4 +53,4 @@ extern Object marlais_vector_to_list (Object vec);
 
 #define marlais_vector marlais_list_to_vector
 
-#endif
+#endif /* !MARLAIS_VECTOR_H */

@@ -3,6 +3,7 @@
 
 #include <marlais/common.h>
 
+/* Initialize the marlais runtime */
 extern void marlais_initialize (void);
 
-#endif
+#endif /* !MARLAIS_CONTEXT_H */

@@ -30,4 +30,4 @@
 #include <marlais/boolean.h>
 #include <marlais/type.h>
 
-#endif
+#endif /* MARLAIS_COMMON_H */

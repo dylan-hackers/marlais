@@ -36,6 +36,7 @@
 #include <marlais/common.h>
 #include <marlais/class.h>
 
-Object marlais_compute_class_precedence_list (Object class);
+/* Compute the precedence list for the given class */
+extern Object marlais_compute_class_precedence_list (Object class);
 
-#endif
+#endif /* !MARLAIS_CLASSPREC_H */

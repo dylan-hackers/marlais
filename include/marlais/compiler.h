@@ -16,4 +16,4 @@
 #define MARLAIS_FUN_NONNULL
 #endif
 
-#endif
+#endif /* !MARLAIS_COMPILER_H */

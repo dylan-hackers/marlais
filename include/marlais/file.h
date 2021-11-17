@@ -36,8 +36,11 @@
 
 #include <marlais/common.h>
 
+/* Register file loading primitives */
 extern void marlais_register_file (void);
+/* Load a dylan source file */
 extern Object marlais_load (Object filename);
+/* Close all open load streams */
 extern void marlais_close_open_files (void);
 
-#endif
+#endif /* !MARLAIS_FILE_H */

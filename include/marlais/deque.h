@@ -43,4 +43,4 @@ extern Object marlais_make_deque (void);
 /* Entrypoint for make(<deque>) */
 extern Object marlais_make_deque_entrypoint (Object args);
 
-#endif /* ! DEQUE_H */
+#endif /* !MARLAIS_DEQUE_H */
