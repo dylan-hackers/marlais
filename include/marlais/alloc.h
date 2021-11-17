@@ -53,10 +53,6 @@ extern char *marlais_allocate_strdup (const char *str);
 #define MARLAIS_ALLOCATE_STRUCT(_type) \
   ((_type *)marlais_allocate_memory(sizeof(_type)))
 
-/* allocate a char string */
-#define MARLAIS_ALLOCATE_STRING(_size) \
-  ((char *)marlais_allocate_atomic(_size))
-
 /* allocate an object with casting */
 #define MARLAIS_ALLOCATE_OBJECT(_type, _repr) \
   ((_repr *)marlais_allocate_object(_type, sizeof(_repr)))
