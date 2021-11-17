@@ -20,7 +20,6 @@
 #endif
 
 #ifdef MARLAIS_ENABLE_UCHAR
-#warning UCHAR
 #include <unicode/uchar.h>
 #endif
 
