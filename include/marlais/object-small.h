@@ -21,6 +21,7 @@ typedef DyUnsigned MarlaisTag;
 
 /* Type for handling value subtags */
 typedef DyUnsigned MarlaisSub;
+#define MARLAIS_SUB_COUNT         (16)
 #define MARLAIS_SUB_SHIFT         (2)
 #define MARLAIS_SUB_WIDTH         (4)
 #define MARLAIS_SUB_TRUE          (0x0 << MARLAIS_SUB_SHIFT)
@@ -33,6 +34,18 @@ typedef DyUnsigned MarlaisSub;
 #define MARLAIS_SUB_WCHAR         (0x7 << MARLAIS_SUB_SHIFT)
 #define MARLAIS_SUB_UCHAR         (0x8 << MARLAIS_SUB_SHIFT)
 #define MARLAIS_SUB_MASK          (0xf << MARLAIS_SUB_SHIFT)
+
+/* Types corresponding to subtags (exactly 16 entries) */
+#define MARLAIS_SUB_TYPES {                    \
+    True, False,                               \
+    EmptyList, EndOfFile,                      \
+    UnspecifiedValue, UninitializedSlotValue,  \
+    Character, WideCharacter,                  \
+    UnicodeCharacter, Uninitialized,           \
+    Uninitialized, Uninitialized,              \
+    Uninitialized, Uninitialized,              \
+    Uninitialized, Uninitialized,              \
+  }
 
 /* Shift distances for value fields */
 #define MARLAIS_INTEGER_SHIFT   (2)
