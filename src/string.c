@@ -53,6 +53,9 @@ static Object make_string(char *str, size_t len);
 #ifdef MARLAIS_ENABLE_WCHAR
 static Object make_wstring(wchar_t *str, size_t len);
 #endif
+#ifdef MARLAIS_ENABLE_UCHAR
+static Object make_ustring(UChar *str, size_t len);
+#endif
 
 /* Primitives */
 
@@ -80,6 +83,21 @@ static Object wstring_as_lowercase (Object string);
 static Object wstring_as_uppercase (Object string);
 static Object wstring_to_bstring (Object string);
 static Object bstring_to_wstring (Object string);
+#endif
+
+#ifdef MARLAIS_ENABLE_UCHAR
+static Object ustring_element (Object string, Object index, Object default_ob);
+static Object ustring_element_setter (Object string, Object index, Object val);
+static Object ustring_size (Object string);
+static Object ustring_size_setter (Object size, Object string);
+static Object ustring_append2 (Object str1, Object str2);
+static Object ustring_lessthan (Object str1, Object str2);
+static Object ustring_equal (Object str1, Object str2);
+static Object ustring_as_lowercase (Object string);
+static Object ustring_as_uppercase (Object string);
+static Object ustring_as_titlecase (Object string);
+static Object ustring_to_bstring (Object string);
+static Object ustring_to_wstring (Object string);
 #endif
 
 static struct primitive string_prims[] =
@@ -118,9 +136,9 @@ static struct primitive string_prims[] =
     {"%ustring=", prim_2, ustring_equal},
     {"%ustring-as-lowercase", prim_1, wstring_as_lowercase},
     {"%ustring-as-uppercase", prim_1, wstring_as_uppercase},
+#if 0
     {"%ustring->bstring", prim1, ustring_to_bstring},
     {"%bstring->ustring", prim1, bstring_to_ustring},
-#ifdef MARLAIS_ENABLE_WCHAR
     {"%ustring->wstring", prim1, ustring_to_wstring},
     {"%wstring->ustring", prim1, wstring_to_ustring},
 #endif
@@ -229,12 +247,12 @@ marlais_make_wstring_entrypoint (Object args)
 #ifdef MARLAIS_ENABLE_UCHAR
 
 Object
-marlais_make_ustring (const wchar_t *str)
+marlais_make_ustring (const UChar *str)
 {
     int size;
-    UChar32 *new;
+    UChar *new;
 
-    size = wcslen (str);
+    size = u_strlen (str);
 
     new = MARLAIS_ALLOCATE_USTRING (size + 1);
 
@@ -246,12 +264,12 @@ marlais_make_ustring (const wchar_t *str)
 }
 
 Object
-marlais_make_wstring_entrypoint (Object args)
+marlais_make_ustring_entrypoint (Object args)
 {
   int size, i;
   Object size_obj, fill_obj;
   UChar32 fill = ' ';
-  UChar32 *new;
+  UChar *new;
 
   marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<unicode-string>");
 
@@ -296,6 +314,19 @@ make_wstring(wchar_t *str, size_t len) {
   obj = marlais_allocate_object (WideString, sizeof (struct wide_string));
   WIDESTRVAL (obj) = str;
   WIDESTRSIZE (obj) = len;
+
+  return obj;
+}
+#endif
+
+#ifdef MARLAIS_ENABLE_WCHAR
+static Object
+make_ustring(UChar *str, size_t len) {
+  Object obj;
+
+  obj = marlais_allocate_object (UnicodeString, sizeof (struct unicode_string));
+  USTRVAL (obj) = str;
+  USTRSIZE (obj) = len;
 
   return obj;
 }
@@ -537,6 +568,113 @@ wstring_as_uppercase (Object string)
     newstr[len] = 0;
 
     return (make_wstring (newstr, len));
+}
+
+#endif
+
+
+#ifdef MARLAIS_ENABLE_WCHAR
+
+static Object
+ustring_element (Object string, Object index, Object default_ob)
+{
+    int i;
+
+    i = INTVAL (index);
+    if ((i < 0) || (i >= WIDESTRSIZE (string))) {
+      if (default_ob == default_object) {
+        marlais_error ("element: argument out of range", string, index, NULL);
+      } else {
+        return default_ob;
+      }
+    }
+    return (marlais_make_wchar (WIDESTRVAL (string)[i]));
+}
+
+static Object
+ustring_element_setter (Object string, Object index, Object val)
+{
+    int i;
+
+    i = INTVAL (index);
+    if ((i < 0) || (i >= WIDESTRSIZE (string))) {
+      marlais_error ("element-setter: argument out of range", string, index, NULL);
+    }
+    WIDESTRVAL (string)[i] = WCHARVAL (val);
+    return (unspecified_object);
+}
+
+static Object
+ustring_size (Object string)
+{
+    return (marlais_make_integer (USTRSIZE (string)));
+}
+
+static Object
+ustring_lessthan (Object str1, Object str2) {
+  return marlais_make_boolean(u_strcmp (USTRVAL (str1), USTRVAL (str2)) < 0);
+}
+
+static Object
+ustring_equal (Object str1, Object str2) {
+  return marlais_make_boolean(u_strcmp (USTRVAL (str1), USTRVAL (str2)) == 0);
+}
+
+/* XXX reimplement using transform */
+static Object
+ustring_as_lowercase (Object string)
+{
+    int len, i;
+    UChar *oldstr, *newstr;
+
+    len = USTRSIZE (string);
+    oldstr = USTRVAL (string);
+    newstr = MARLAIS_ALLOCATE_USTRING (len + 1);
+
+    for(i = 0; i < len; i++) {
+      newstr[i] = u_tolower (oldstr[i]);
+    }
+    newstr[len] = 0;
+
+    return (make_ustring (newstr, len));
+}
+
+/* XXX reimplement using transform */
+static Object
+ustring_as_uppercase (Object string)
+{
+    int len, i;
+    UChar *oldstr, *newstr;
+
+    len = USTRSIZE (string);
+    oldstr = USTRVAL (string);
+    newstr = MARLAIS_ALLOCATE_USTRING (len + 1);
+
+    for(i = 0; i < len; i++) {
+      newstr[i] = u_toupper (oldstr[i]);
+    }
+    newstr[len] = 0;
+
+    return (make_ustring (newstr, len));
+}
+
+/* XXX reimplement using transform */
+static Object
+ustring_as_titlecase (Object string)
+{
+    int len, i;
+    UChar *oldstr, *newstr;
+
+    len = USTRSIZE (string);
+    oldstr = USTRVAL (string);
+    newstr = MARLAIS_ALLOCATE_USTRING (len + 1);
+
+    for(i = 0; i < len; i++) {
+      newstr[i] = u_totitle (oldstr[i]);
+    }
+    newstr[len] = 0;
+
+    return (make_ustring (newstr, len));
 }
 
 #endif

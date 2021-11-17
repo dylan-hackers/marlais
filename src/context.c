@@ -19,6 +19,11 @@ marlais_initialize (void)
   marlais_initialize_gmp ();
 #endif
 
+  /* initialize ICU memory management */
+#ifdef MARLAIS_ENABLE_ICU
+  marlais_initialize_icu ();
+#endif
+
   dylan_symbol = marlais_make_name ("dylan");
   dylan_user_symbol = marlais_make_name ("dylan-user");
 

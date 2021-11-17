@@ -62,11 +62,11 @@ extern Object marlais_make_wchar (wchar_t ch);
 /* Make a <unicode-character> */
 #ifdef MARLAIS_ENABLE_UCHAR
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
-static inline Object marlais_make_uchar (uchar32_t ch) {
+static inline Object marlais_make_uchar (UChar32 ch) {
   return MAKE_UCHAR(ch);
 }
 #else
-extern Object marlais_make_uchar (uchar32_t ch);
+extern Object marlais_make_uchar (UChar32 ch);
 #endif
 #endif
 

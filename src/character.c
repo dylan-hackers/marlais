@@ -76,6 +76,7 @@ static Object character_alphanumeric_p (Object ch);
 static Object character_control_p (Object ch);
 static Object character_graphic_p (Object ch);
 static Object character_printable_p (Object ch);
+static Object character_punctuation_p (Object ch);
 static Object character_whitespace_p (Object ch);
 static Object character_decimal_p (Object ch);
 static Object character_hexadecimal_p (Object ch);
@@ -93,6 +94,7 @@ static Object wchar_alphanumeric_p (Object ch);
 static Object wchar_control_p (Object ch);
 static Object wchar_graphic_p (Object ch);
 static Object wchar_printable_p (Object ch);
+static Object wchar_punctuation_p (Object ch);
 static Object wchar_whitespace_p (Object ch);
 static Object wchar_decimal_p (Object ch);
 static Object wchar_hexadecimal_p (Object ch);
@@ -106,17 +108,20 @@ static Object integer_to_uchar (Object i);
 static Object uchar_to_integer (Object ch);
 static Object uchar_to_lowercase (Object ch);
 static Object uchar_to_uppercase (Object ch);
+static Object uchar_to_titlecase (Object ch);
 static Object uchar_alphabetic_p (Object ch);
 static Object uchar_alphanumeric_p (Object ch);
 static Object uchar_control_p (Object ch);
 static Object uchar_graphic_p (Object ch);
 static Object uchar_printable_p (Object ch);
+static Object uchar_punctuation_p (Object ch);
 static Object uchar_whitespace_p (Object ch);
 static Object uchar_decimal_p (Object ch);
 static Object uchar_hexadecimal_p (Object ch);
 static Object uchar_octal_p (Object ch);
 static Object uchar_lowercase_p (Object ch);
 static Object uchar_uppercase_p (Object ch);
+static Object uchar_titlecase_p (Object ch);
 #endif
 
 static struct primitive char_prims[] =
@@ -130,6 +135,7 @@ static struct primitive char_prims[] =
   {"%character-control?", prim_1, character_control_p},
   {"%character-graphic?", prim_1, character_graphic_p},
   {"%character-printable?", prim_1, character_printable_p},
+  {"%character-punctuation?", prim_1, character_punctuation_p},
   {"%character-whitespace?", prim_1, character_whitespace_p},
   {"%character-decimal?", prim_1, character_decimal_p},
   {"%character-hexadecimal?", prim_1, character_hexadecimal_p},
@@ -147,6 +153,7 @@ static struct primitive char_prims[] =
   {"%wchar-control?", prim_1, wchar_control_p},
   {"%wchar-graphic?", prim_1, wchar_graphic_p},
   {"%wchar-printable?", prim_1, wchar_printable_p},
+  {"%wchar-punctuation?", prim_1, wchar_punctuation_p},
   {"%wchar-whitespace?", prim_1, wchar_whitespace_p},
   {"%wchar-decimal?", prim_1, wchar_decimal_p},
   {"%wchar-hexadecimal?", prim_1, wchar_hexadecimal_p},
@@ -160,19 +167,21 @@ static struct primitive char_prims[] =
   {"%uchar->integer", prim_1, uchar_to_integer},
   {"%uchar-to-lowercase", prim_1, uchar_to_lowercase},
   {"%uchar-to-uppercase", prim_1, uchar_to_uppercase},
+  {"%uchar-to-titlecase", prim_1, uchar_to_titlecase},
   {"%uchar-alphabetic?", prim_1, uchar_alphabetic_p},
   {"%uchar-alphanumeric?", prim_1, uchar_alphanumeric_p},
   {"%uchar-control?", prim_1, uchar_control_p},
   {"%uchar-graphic?", prim_1, uchar_graphic_p},
   {"%uchar-printable?", prim_1, uchar_printable_p},
+  {"%uchar-punctuation?", prim_1, uchar_punctuation_p},
   {"%uchar-whitespace?", prim_1, uchar_whitespace_p},
   {"%uchar-decimal?", prim_1, uchar_decimal_p},
   {"%uchar-hexadecimal?", prim_1, uchar_hexadecimal_p},
 /*{"%uchar-octal?", prim_1, uchar_octal_p},*/
   {"%uchar-lowercase?", prim_1, uchar_lowercase_p},
   {"%uchar-uppercase?", prim_1, uchar_uppercase_p},
+  {"%uchar-titlecase?", prim_1, uchar_titlecase_p},
 #endif
-
 };
 
 /* Exported functions */
@@ -314,6 +323,7 @@ DEFINE_CTYPE_PREDICATE(alphanumeric, isalnum);
 DEFINE_CTYPE_PREDICATE(control,      iscntrl);
 DEFINE_CTYPE_PREDICATE(graphic,      isgraph);
 DEFINE_CTYPE_PREDICATE(printable,    isprint);
+DEFINE_CTYPE_PREDICATE(punctuation,  ispunct);
 DEFINE_CTYPE_PREDICATE(whitespace,   isspace);
 DEFINE_CTYPE_PREDICATE(decimal,      isdigit);
 DEFINE_CTYPE_PREDICATE(hexadecimal,  isxdigit);
@@ -352,13 +362,14 @@ wchar_to_uppercase (Object ch)
 
 #define DEFINE_WCTYPE_PREDICATE(_NAME,_PRED)            \
   static Object wchar_ ## _NAME ## _p (Object ch) {     \
-    return (marlais_make_boolean(_PRED(CHARVAL(ch))));  \
+    return (marlais_make_boolean(_PRED(WCHARVAL(ch)))); \
   }
 DEFINE_WCTYPE_PREDICATE(alphabetic,   iswalpha);
 DEFINE_WCTYPE_PREDICATE(alphanumeric, iswalnum);
 DEFINE_WCTYPE_PREDICATE(control,      iswcntrl);
 DEFINE_WCTYPE_PREDICATE(graphic,      iswgraph);
 DEFINE_WCTYPE_PREDICATE(printable,    iswprint);
+DEFINE_WCTYPE_PREDICATE(punctuation,  iswpunct);
 DEFINE_WCTYPE_PREDICATE(whitespace,   iswspace);
 DEFINE_WCTYPE_PREDICATE(decimal,      iswdigit);
 DEFINE_WCTYPE_PREDICATE(hexadecimal,  iswxdigit);
@@ -396,5 +407,30 @@ uchar_to_uppercase (Object ch)
 {
   return (marlais_make_uchar (u_toupper(UCHARVAL(ch))));
 }
+
+static Object
+uchar_to_titlecase (Object ch)
+{
+  return (marlais_make_uchar (u_totitle(UCHARVAL(ch))));
+}
+
+#define DEFINE_UCTYPE_PREDICATE(_NAME,_PRED)            \
+  static Object uchar_ ## _NAME ## _p (Object ch) {     \
+    return (marlais_make_boolean(_PRED(UCHARVAL(ch)))); \
+  }
+DEFINE_UCTYPE_PREDICATE(alphabetic,   u_isalpha);
+DEFINE_UCTYPE_PREDICATE(alphanumeric, u_isalnum);
+DEFINE_UCTYPE_PREDICATE(control,      u_iscntrl);
+DEFINE_UCTYPE_PREDICATE(graphic,      u_isgraph);
+DEFINE_UCTYPE_PREDICATE(printable,    u_isprint);
+DEFINE_UCTYPE_PREDICATE(punctuation,  u_ispunct);
+DEFINE_UCTYPE_PREDICATE(whitespace,   u_isspace);
+DEFINE_UCTYPE_PREDICATE(decimal,      u_isdigit);
+DEFINE_UCTYPE_PREDICATE(hexadecimal,  u_isxdigit);
+//DEFINE_UCTYPE_PREDICATE(octal,      u_isodigit); /* XXX not implemented */
+DEFINE_UCTYPE_PREDICATE(lowercase,    u_islower);
+DEFINE_UCTYPE_PREDICATE(uppercase,    u_isupper);
+DEFINE_UCTYPE_PREDICATE(titlecase,    u_istitle);
+#undef DEFINE_UCTYPE_PREDICATE
 
 #endif
