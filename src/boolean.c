@@ -65,7 +65,7 @@ marlais_register_boolean (void)
   marlais_register_prims (num, boolean_prims);
 }
 
-int
+bool
 marlais_identical_p (Object obj1, Object obj2)
 {
   if (obj1 == obj2) {

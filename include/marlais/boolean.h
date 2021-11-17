@@ -41,6 +41,6 @@ extern void marlais_initialize_boolean (void);
 /* Register boolean primitives */
 extern void marlais_register_boolean (void);
 /* Compare objects by identity */
-extern int marlais_identical_p (Object obj1, Object obj2);
+extern bool marlais_identical_p (Object obj1, Object obj2);
 
 #endif
