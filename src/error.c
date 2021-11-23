@@ -304,8 +304,11 @@ marlais_error (const char *msg,...)
 	  Object symbol;
 	  char symbol_name[12];
 
+          /* is this sequence num a global? */
 	  snprintf (symbol_name, 12, "$%i", sequence_num);
 	  symbol = marlais_make_name (symbol_name);
+          // this is the current module or what?
+          // shouldn't it be the user module?
 	  marlais_add_export (symbol, obj, 1);
 	  fprintf (stdout, " $%i = ", sequence_num);
 	  sequence_num++;
