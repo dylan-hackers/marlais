@@ -149,7 +149,7 @@ marlais_add_local (Object sym, Object val, int constant, struct frame *to_frame)
   binding = MARLAIS_ALLOCATE_STRUCT (struct binding);
   if (PAIRP (sym)) {
     binding->sym = CAR (sym);
-    binding->type = eval (SECOND (sym));
+    binding->type = marlais_eval (SECOND (sym));
   } else {
     binding->sym = sym;
     binding->type = object_class;
@@ -224,7 +224,7 @@ marlais_set_module (struct module_binding *new_module)
   if (eval_stack && eval_stack->next == 0) {
     eval_stack = 0;
   }
-  push_eval_stack (new_module->sym);
+  marlais_push_eval_stack (new_module->sym);
   eval_stack->frame = the_env;
 
   the_current_module = new_module;
@@ -590,7 +590,7 @@ add_module_binding(Object sym, Object val, int constant, int exported)
 
   if (PAIRP (sym)) {
     binding->sym = CAR (sym);
-    binding->type = eval (SECOND (sym));
+    binding->type = marlais_eval (SECOND (sym));
   } else {
     binding->sym = sym;
     binding->type = object_class;
@@ -676,7 +676,7 @@ unwind_to_exit (Object exit_proc)
         body = UNWINDBODY (*(frame->bindings[0]->val));
         the_env = tmp_eval_stack->frame;
         while (!EMPTYLISTP (body)) {
-          eval (CAR (body));
+          marlais_eval (CAR (body));
           body = CDR (body);
         }
       }

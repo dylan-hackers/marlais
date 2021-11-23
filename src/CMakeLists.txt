@@ -1,4 +1,39 @@
 
+
+# Interpreter configuration
+set(MARLAIS_CONFIG_CLASSPREC "LL" CACHE STRING
+  "Class precedence algorithm to use")
+set_property(CACHE MARLAIS_CONFIG_CLASSPREC
+  PROPERTY STRINGS "CLOS;LL")
+
+set(MARLAIS_CONFIG_OBJMODEL "SMALL" CACHE STRING
+  "Object model to use")
+set_property(CACHE MARLAIS_CONFIG_OBJMODEL
+  PROPERTY STRINGS "LARGE;SMALL")
+
+set(MARLAIS_CONFIG_STDSTRING "BYTE" CACHE STRING
+  "Default string and character type")
+set_property(CACHE MARLAIS_CONFIG_STDSTRING
+  PROPERTY STRINGS "BYTE;WIDE;UNICODE")
+
+# GMP support
+option(MARLAIS_ENABLE_GMP "Enable GMP multi-precision numbers" ON)
+if (MARLAIS_ENABLE_GMP)
+  set (MARLAIS_GMP_SOURCES gmp.c)
+endif ()
+
+option(MARLAIS_ENABLE_ICU "Enable ICU unicode string support" ON)
+if (MARLAIS_ENABLE_ICU)
+  #set (MARLAIS_GMP_SOURCES icu.c)
+endif ()
+
+# READLINE support
+option(MARLAIS_ENABLE_READLINE "Enable readline command-line editor" ON)
+
+# ICU unicode support
+option(MARLAIS_ENABLE_UCHAR "Enable unicode character support (uses ICU)" ON)
+
+# Wide character support
 option(MARLAIS_ENABLE_WCHAR "Enable wide character support" ON)
 
 # Generate parser
@@ -35,6 +70,7 @@ add_library(marlais_lib
   foreign.c
   foreign_ptr.c
   function.c
+  gc.c
   globals.c
   lexer.c
   list.c
@@ -59,6 +95,8 @@ add_library(marlais_lib
 
   ${BISON_PARSER_OUTPUTS}
   ${FLEX_LEXER_OUTPUTS}
+
+  ${MARLAIS_GMP_SOURCES}
 )
 
 # actual name
@@ -75,8 +113,20 @@ set_target_properties(marlais_lib
 target_link_libraries(marlais_lib PUBLIC dl)
 # libm
 target_link_libraries(marlais_lib PUBLIC m)
-# libreadline
-target_link_libraries(marlais_lib PUBLIC readline)
 # libgc
 target_link_libraries(marlais_lib PUBLIC ${BDWGC_LINK_LIBRARIES})
 target_include_directories(marlais_lib PRIVATE ${BDWGC_INCLUDE_DIRS})
+
+# libreadline
+if (MARLAIS_ENABLE_READLINE)
+  target_link_libraries(marlais_lib PUBLIC readline)
+endif (MARLAIS_ENABLE_READLINE)
+# libgmp
+if (MARLAIS_ENABLE_GMP)
+  target_link_libraries(marlais_lib PUBLIC gmp)
+endif (MARLAIS_ENABLE_GMP)
+# libicu
+if (MARLAIS_ENABLE_ICU)
+  target_link_libraries (marlais_lib PUBLIC ${ICU_LINK_LIBRARIES})
+  target_include_directories (marlais_lib PUBLIC ${ICU_INCLUDE_DIRS})
+endif (MARLAIS_ENABLE_ICU)

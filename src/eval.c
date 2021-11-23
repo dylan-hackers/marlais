@@ -21,7 +21,7 @@ Object eval_combination (Object obj, int do_apply);
 /* function definitions */
 
 Object
-eval (Object obj)
+marlais_eval (Object obj)
 {
     Object val;
 
@@ -76,7 +76,7 @@ eval (Object obj)
 }
 
 Object
-tail_eval (Object obj)
+marlais_tail_eval (Object obj)
 {
 
 #ifdef MARLAIS_ENABLE_TAIL_CALL_OPTIMIZATION
@@ -95,7 +95,7 @@ tail_eval (Object obj)
     }
 #endif
     /* if it's not a <pair>, then call good old eval. */
-    return eval (obj);
+    return marlais_eval (obj);
 }
 
 /* <pcb> moved apply here to permit safe tail recursion. */
@@ -139,22 +139,22 @@ eval_combination (Object obj, int do_apply)
     if (do_apply) {
 	fun = CAR (obj);
 	args = CDR (obj);
-	push_eval_stack (fun);
+	marlais_push_eval_stack (fun);
 	ret = marlais_apply_internal (fun, args);
-	pop_eval_stack ();
+	marlais_pop_eval_stack ();
     } else {
 	op = CAR (obj);
 	sf = marlais_syntax_function (op);
 	if (sf) {
-	    push_eval_stack (op);
+	    marlais_push_eval_stack (op);
 	    ret = (*sf) (obj);
-	    pop_eval_stack ();
+	    marlais_pop_eval_stack ();
 	} else {
-	    fun = eval (CAR (obj));
-	    push_eval_stack (fun);
-	    args = map (eval, CDR (obj));
+	    fun = marlais_eval (CAR (obj));
+	    marlais_push_eval_stack (fun);
+	    args = map (marlais_eval, CDR (obj));
 	    ret = marlais_apply_internal (fun, args);
-	    pop_eval_stack ();
+	    marlais_pop_eval_stack ();
 	}
     }
 
@@ -176,13 +176,13 @@ eval_combination (Object obj, int do_apply)
 }
 
 void
-pop_eval_stack (void)
+marlais_pop_eval_stack (void)
 {
     eval_stack = eval_stack->next;
 }
 
 void
-push_eval_stack (Object obj)
+marlais_push_eval_stack (Object obj)
 {
     struct eval_stack *tmp =
     (struct eval_stack *) marlais_allocate_memory (sizeof (struct eval_stack));
@@ -194,7 +194,7 @@ push_eval_stack (Object obj)
 }
 
 Object
-print_stack (void)
+marlais_print_stack (void)
 {
     struct eval_stack *entry;
     int i;

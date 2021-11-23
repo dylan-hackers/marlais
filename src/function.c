@@ -422,7 +422,7 @@ parse_function_required_parameters (Object *params, Object *tmp_ptr)
     }
     if (PAIRP (entry)) {
       (*tmp_ptr) = cons (listem (CAR (entry),
-                                 eval (SECOND (entry)),
+                                 marlais_eval (SECOND (entry)),
                                  NULL),
                          make_empty_list ());
     } else {
@@ -479,7 +479,7 @@ gf_rest_return_assign(Object gf_obj, Object params)
 {
   if(params == NULL) return;
   if (PAIRP (CAR (params))) {
-    GFRESTVALUES (gf_obj) = eval (SECOND (CAR (params)));
+    GFRESTVALUES (gf_obj) = marlais_eval (SECOND (CAR (params)));
   } else {
     GFRESTVALUES (gf_obj) = object_class;
   }
@@ -496,7 +496,7 @@ method_rest_return_assign(Object meth_obj, Object params)
 {
   if(params == NULL) return;
   if (PAIRP (CAR (params))) {
-    METHRESTVALUES (meth_obj) = eval (SECOND (CAR (params)));
+    METHRESTVALUES (meth_obj) = marlais_eval (SECOND (CAR (params)));
   } else {
     METHRESTVALUES (meth_obj) = object_class;
   }
@@ -517,7 +517,7 @@ parse_function_return_parameters(Object functor, Object* params,
       break;
     }
     if (PAIRP (entry)) {
-      result_type = eval (SECOND (entry));
+      result_type = marlais_eval (SECOND (entry));
     } else {
       result_type = object_class;
     }

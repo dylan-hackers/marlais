@@ -37,12 +37,6 @@
 #include <marlais/common.h>
 #include <marlais/env.h>
 
-/* Apply arguments to function */
-extern Object marlais_apply (Object fun, Object args);
-
-Object eval (Object obj);
-Object print_stack (void);
-
 struct eval_stack {
     struct eval_stack *next;
     Object context;
@@ -51,10 +45,16 @@ struct eval_stack {
 
 extern struct eval_stack *eval_stack;
 
-void pop_eval_stack (void);
-void push_eval_stack (Object obj);
+/* Apply arguments to function */
+extern Object marlais_apply (Object fun, Object args);
 
-/* <pcb> to support tail recursion. */
-Object tail_eval (Object obj);
+/* Evaluate an expression */
+extern Object marlais_eval (Object obj);
+extern Object marlais_print_stack (void);
+
+extern void marlais_pop_eval_stack (void);
+extern void marlais_push_eval_stack (Object obj);
+
+extern Object marlais_tail_eval (Object obj);
 
 #endif

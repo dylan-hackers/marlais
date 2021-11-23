@@ -65,7 +65,7 @@ load_internal (Object filename)
     close_file (fp);
 
     while (PAIRP (expr_list)) {
-	res = eval (CAR (expr_list));
+	res = marlais_eval (CAR (expr_list));
 	expr_list = CDR (expr_list);
     }
 

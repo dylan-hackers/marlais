@@ -21,8 +21,8 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"
   add_compile_options(-Wall -Wextra -Wno-unused)
 
   # Optional link-time optimization
-  option(COMPILER_ENABLE_LTO "Enable link-time optimization" OFF)
-  if (COMPILER_ENABLE_LTO)
+  option(CC_ENABLE_LTO "Enable link-time optimization" OFF)
+  if (CC_ENABLE_LTO)
     add_compile_options(-flto)
   endif ()
 
@@ -32,8 +32,8 @@ endif ()
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 
   # Optionally enable bounds checking
-  option(GCC_ENABLE_BOUNDSCHECK "Enable bounds checking" OFF)
-  if (GCC_ENABLE_BOUNDSCHECK)
+  option(CC_ENABLE_BOUNDSCHECK "Enable bounds checking" OFF)
+  if (CC_ENABLE_BOUNDSCHECK)
     add_compile_options(-fbounds-check)
   endif ()
 

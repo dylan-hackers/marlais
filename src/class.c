@@ -720,7 +720,7 @@ marlais_make_slot_descriptor_list (Object slots, int do_eval)
                            SECOND (slot), NULL);
           }
           init_seen = 1;
-          init = do_eval ? eval (SECOND (slot)) : SECOND (slot);
+          init = do_eval ? marlais_eval (SECOND (slot)) : SECOND (slot);
           properties |= SLOTDINITFUNCTIONMASK;
         } else if (slotelt == init_keyword_keyword) {
           if (init_keyword) {
@@ -1179,9 +1179,9 @@ eval_slotds (Object slotds)
 
   while (PAIRP (slotds)) {
     slotd = CAR (slotds);
-    SLOTDSLOTTYPE (slotd) = eval (SLOTDSLOTTYPE (slotd));
+    SLOTDSLOTTYPE (slotd) = marlais_eval (SLOTDSLOTTYPE (slotd));
     if (SLOTDDEFERREDTYPE (slotd)) {
-      SLOTDSLOTTYPE (slotd) = marlais_apply_method (eval (SLOTDSLOTTYPE (slotd)),
+      SLOTDSLOTTYPE (slotd) = marlais_apply_method (marlais_eval (SLOTDSLOTTYPE (slotd)),
                                                     make_empty_list (),
                                                     make_empty_list (),
                                                     NULL);

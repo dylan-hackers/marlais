@@ -37,7 +37,7 @@ static struct primitive apply_prims[] =
 {
     {"%apply", prim_2, marlais_apply},
     {"%trace", prim_1, set_trace},
-    {"%eval", prim_1, eval},
+    {"%eval", prim_1, marlais_eval},
 };
 
 /* Exported functions */
@@ -281,7 +281,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
     /* Bind the missing keyword args to default_object */
     while (PAIRP (keys)) {
       marlais_add_local (SECOND (CAR (keys)),
-                   eval (THIRD (CAR (keys))),
+                   marlais_eval (THIRD (CAR (keys))),
                    0,
                    the_env);
       keys = CDR (keys);
@@ -338,11 +338,11 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
                           &CDR (CAR (ResultValueStack)),
                           METHRESTVALUES (meth));
 
-      ret = tail_eval (form);
+      ret = marlais_tail_eval (form);
     } else {
 #endif
 
-      ret = marlais_construct_return_values (eval (form),
+      ret = marlais_construct_return_values (marlais_eval (form),
                                              METHREQVALUES (meth),
                                              METHRESTVALUES (meth));
 #ifdef MARLAIS_ENABLE_TAIL_CALL_OPTIMIZATION

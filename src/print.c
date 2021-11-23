@@ -303,11 +303,11 @@ apply_print (Object fd, Object obj, int escaped)
       stream = standard_error_symbol;
     }
     if (0 == escaped) {
-      marlais_apply (eval (princ_symbol),
-                     listem (eval(stream), obj, NULL));
+      marlais_apply (marlais_eval (princ_symbol),
+                     listem (marlais_eval(stream), obj, NULL));
     } else {
-      marlais_apply (eval (print_symbol),
-                     listem (obj, eval(stream), NULL));
+      marlais_apply (marlais_eval (print_symbol),
+                     listem (obj, marlais_eval(stream), NULL));
     }
   }
 }

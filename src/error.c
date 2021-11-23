@@ -266,7 +266,7 @@ marlais_error (const char *msg,...)
 		   1,
 		   the_env);
       marlais_add_local (print_stack_symbol,
-		   marlais_make_primitive ("print-stack", prim_0, print_stack),
+		   marlais_make_primitive ("print-stack", prim_0, marlais_print_stack),
 		   1,
 		   the_env);
       marlais_add_local (show_bindings_symbol,
@@ -299,7 +299,7 @@ marlais_error (const char *msg,...)
       current_prompt = prompt;
       marlais_parser_prepare_stream (stdin, 0);
       while ((obj = marlais_parse_object ()) && (obj != eof_object)) {
-	obj = eval (obj);
+	obj = marlais_eval (obj);
 	if (obj != unspecified_object) {
 	  Object symbol;
 	  char symbol_name[12];
@@ -316,7 +316,7 @@ marlais_error (const char *msg,...)
 	    fprintf (stdout, "\n");
 	  }
 	} else {
-	  marlais_apply (eval(print_symbol), listem(obj, marlais_standard_output, NULL));
+	  marlais_apply (marlais_eval(print_symbol), listem(obj, marlais_standard_output, NULL));
 	  fprintf (stdout, "\n");
 	}
 	current_prompt = prompt;
@@ -392,7 +392,7 @@ return_value (Object args)
     fprintf (stderr, "return: Requires one argument\n");
   }
   marlais_pop_scope ();
-  pop_eval_stack ();
+  marlais_pop_eval_stack ();
   buf = error_ok_return_pop ();
   longjmp (*buf, (int) (CAR (args)));
 }

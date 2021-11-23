@@ -244,9 +244,9 @@ eval_body (Object body, Object null_body_result_value)
       Object next = CDR (body);
 
       if (EMPTYLISTP (next)) {
-        result = tail_eval (CAR (body));
+        result = marlais_tail_eval (CAR (body));
       } else {
-        result = eval (CAR (body));
+        result = marlais_eval (CAR (body));
       }
       body = next;
     }
@@ -265,7 +265,7 @@ and_eval (Object form)
     clauses = CDR (form);
     while (!EMPTYLISTP (clauses)) {
       /* evaluate one expression */
-      val = ret = eval (CAR (clauses));
+      val = ret = marlais_eval (CAR (clauses));
       /* return last value */
       if (NULLP (CDR (clauses))) {
         break;
@@ -402,9 +402,9 @@ unbinding_begin_eval (Object form)
       Object next_form = CDR (form);
 
       if (EMPTYLISTP (next_form)) {
-        res = tail_eval (CAR (form));
+        res = marlais_tail_eval (CAR (form));
       } else {
-        res = eval (CAR (form));
+        res = marlais_eval (CAR (form));
       }
       form = next_form;
     }
@@ -445,7 +445,7 @@ bind_exit_eval (Object form)
 #if 1
       ret = MARLAIS_FALSE;
       while (!EMPTYLISTP (body)) {
-        ret = eval (CAR (body));
+        ret = marlais_eval (CAR (body));
         body = CDR (body);
       }
 #else
@@ -530,7 +530,7 @@ case_eval (Object form)
   if (EMPTYLISTP (CDR (form))) {
     marlais_error ("malformed case", form, NULL);
   }
-  target_form = eval (CAR (CDR (form)));
+  target_form = marlais_eval (CAR (CDR (form)));
 
   if (EMPTYLISTP (CDR (CDR (form)))) {
     marlais_error ("malformed case", form, NULL);
@@ -546,7 +546,7 @@ case_eval (Object form)
       consequents = CDR (branch);
       ret = MARLAIS_FALSE;
       while (!EMPTYLISTP (consequents)) {
-        ret = eval (CAR (consequents));
+        ret = marlais_eval (CAR (consequents));
         consequents = CDR (consequents);
       }
       return (ret);
@@ -559,7 +559,7 @@ case_eval (Object form)
         consequents = CDR (branch);
         ret = MARLAIS_FALSE;
         while (!EMPTYLISTP (consequents)) {
-          ret = eval (CAR (consequents));
+          ret = marlais_eval (CAR (consequents));
           consequents = CDR (consequents);
         }
         return (ret);
@@ -580,7 +580,7 @@ cond_eval (Object form)
   while (!EMPTYLISTP (clauses)) {
     clause = CAR (clauses);
     test = CAR (clause);
-    ret = eval (test);
+    ret = marlais_eval (test);
     if (VALUESP (ret)) {
       ret = FIRSTVAL (ret);
     }
@@ -634,7 +634,7 @@ bind_variables (Object init_list,
   while (!EMPTYLISTP (CDR (init))) {
     init = CDR (init);
   }
-  val = eval (CAR (init));
+  val = marlais_eval (CAR (init));
   if (VALUESP (val)) {
     value_count = 0;
     while (variables != init) {
@@ -720,7 +720,7 @@ add_variable_binding (Object var,
     if (!PAIRP (CDR (var))) {
       marlais_error ("badly formed variable", var, NULL);
     }
-    type = eval (SECOND (var));
+    type = marlais_eval (SECOND (var));
     if (!marlais_instance_p (type, type_class)) {
       marlais_error ("badly formed variable", var, NULL);
     }
@@ -811,7 +811,7 @@ define_class_eval (Object form)
 
   CLASSNAME (obj) = name;
   marlais_add_export (name, obj, 0);
-  supers = map (eval, CAR (tmp_form));
+  supers = map (marlais_eval, CAR (tmp_form));
   if(EMPTYLISTP(supers)) supers = cons(object_class, make_empty_list());
   slots = marlais_make_slot_descriptor_list (CDR (tmp_form), 1);
   marlais_make_getter_setter_gfs (slots);
@@ -1021,7 +1021,7 @@ dotimes_eval (Object form)
   if (EMPTYLISTP (CDR (clause))) {
     marlais_error ("dotimes: must specifiy an upper bound", form, NULL);
   }
-  intval = eval (CAR (CDR (clause)));
+  intval = marlais_eval (CAR (CDR (clause)));
   if (!INTEGERP (intval)) {
     marlais_error ("dotimes: upper bound must an integer", intval, NULL);
   }
@@ -1037,12 +1037,12 @@ dotimes_eval (Object form)
     marlais_change_binding (var, marlais_make_integer (i));
     body = CDR (CDR (form));
     while (!EMPTYLISTP (body)) {
-      res = eval (CAR (body));
+      res = marlais_eval (CAR (body));
       body = CDR (body);
     }
   }
   if (resform) {
-    res = eval (resform);
+    res = marlais_eval (resform);
   } else {
     res = MARLAIS_FALSE;
   }
@@ -1138,13 +1138,13 @@ for_eval (Object form)
 
     do {
       /* IRM Step 5 */
-      if (eval (test_form) != MARLAIS_FALSE) {
+      if (marlais_eval (test_form) != MARLAIS_FALSE) {
         break;
       }
       /* IRM Step 6 */
       body = CDR (CDR (CDR (form)));
       while (!EMPTYLISTP (body)) {
-        eval (CAR (body));
+        marlais_eval (CAR (body));
         body = CDR (body);
       }
 
@@ -1166,7 +1166,7 @@ for_eval (Object form)
     ret = MARLAIS_FALSE;
   } else {
     while (PAIRP (return_forms)) {
-      ret = eval (CAR (return_forms));
+      ret = marlais_eval (CAR (return_forms));
       return_forms = CDR (return_forms);
     }
   }
@@ -1214,7 +1214,7 @@ get_vars_and_inits (Object var_forms,
       if (list_length (var_form) != 3) {
         marlais_error ("for: Bad variable initialization", var_form, NULL);
       }
-      init = cons (eval (SECOND (var_form)), THIRD (var_form));
+      init = cons (marlais_eval (SECOND (var_form)), THIRD (var_form));
     } else if (var_spec == range_keyword) {
 
       /* Numeric Clause: init is of form
@@ -1233,7 +1233,7 @@ get_vars_and_inits (Object var_forms,
 
       by = marlais_make_integer (1);
       termination = MARLAIS_FALSE;
-      start = eval (CAR (rest));
+      start = marlais_eval (CAR (rest));
       rest = CDR (rest);
       bound = MARLAIS_FALSE;
       if (PAIRP (rest)) {
@@ -1249,7 +1249,7 @@ get_vars_and_inits (Object var_forms,
       }
       if (PAIRP (rest)) {
         if (PAIRP (CDR (rest)) && CAR (rest) == by_symbol) {
-          by = eval (CAR (CDR (rest)));
+          by = marlais_eval (CAR (CDR (rest)));
         } else {
           marlais_error ("for: badly formed numeric clause", var_form, NULL);
         }
@@ -1279,7 +1279,7 @@ get_vars_and_inits (Object var_forms,
       }
       var = get_variable (SECOND (var_form));
       init = listem (make_empty_list (),
-                     eval (THIRD (var_form)),
+                     marlais_eval (THIRD (var_form)),
                      make_empty_list (),
                      NULL);
     }
@@ -1328,7 +1328,7 @@ initialize_collection_inits (Object clause_types,
   while (PAIRP (clause_types)) {
     clause_type = CAR (clause_types);
     if (clause_type == collection_keyword) {
-      protocol = eval (cons (forward_iteration_protocol_symbol,
+      protocol = marlais_eval (cons (forward_iteration_protocol_symbol,
                              cons (cons (quote_symbol,
                                          cons (SECOND (CAR (inits)),
                                                make_empty_list ())),
@@ -1397,27 +1397,27 @@ exhausted_numeric_or_collection_clauses (Object clause_types,
         /* do nothing */
       } else if (termination == to_symbol) {
         if (negative == MARLAIS_TRUE) {
-          if (MARLAIS_TRUE == eval (listem (lesser_symbol,
+          if (MARLAIS_TRUE == marlais_eval (listem (lesser_symbol,
                                             current,
                                             bound,
                                             NULL))) {
             return 1;
           }
-        } else if (MARLAIS_TRUE == eval (listem (greater_symbol,
+        } else if (MARLAIS_TRUE == marlais_eval (listem (greater_symbol,
                                                  current,
                                                  bound,
                                                  NULL))) {
           return 1;
         }
       } else if (termination == above_symbol) {
-        if (MARLAIS_TRUE == eval (listem (lesser_equal_symbol,
+        if (MARLAIS_TRUE == marlais_eval (listem (lesser_equal_symbol,
                                           current,
                                           bound,
                                           NULL))) {
           return 1;
         }
       } else if (termination == below_symbol) {
-        if (MARLAIS_TRUE == eval (listem (greater_equal_symbol,
+        if (MARLAIS_TRUE == marlais_eval (listem (greater_equal_symbol,
                                           current,
                                           bound,
                                           NULL))) {
@@ -1474,12 +1474,12 @@ update_explicit_and_numeric_clauses (Object clause_types,
     new_value = make_empty_list ();
     clause_type = CAR (clause_types);
     if (clause_type == variable_keyword) {
-      new_value = eval (CDR (CAR (inits)));
+      new_value = marlais_eval (CDR (CAR (inits)));
     } else if (clause_type == range_keyword) {
       /* Set new of var generated by range to
        *  (+ var increment)
        */
-      new_value = eval (listem (plus_symbol,
+      new_value = marlais_eval (listem (plus_symbol,
                                 variable_name (CAR (vars)),
                                 SECOND (CAR (inits)),
                                 NULL));
@@ -1567,7 +1567,7 @@ for_each_eval (Object form)
   var_forms = SECOND (form);
   vars = map (car, var_forms);
   collections = map (second, var_forms);
-  collections = map (eval, collections);
+  collections = map (marlais_eval, collections);
   states = list_map1 (init_state_fun, collections);
 
   if (member (MARLAIS_FALSE, states)) {
@@ -1577,10 +1577,10 @@ for_each_eval (Object form)
   marlais_push_scope (CAR (form));
   marlais_add_locals (vars, vals, 0, the_env);
 
-  while (eval (test_form) == MARLAIS_FALSE) {
+  while (marlais_eval (test_form) == MARLAIS_FALSE) {
     body = CDR (CDR (CDR (form)));
     while (!EMPTYLISTP (body)) {
-      eval (CAR (body));
+      marlais_eval (CAR (body));
       body = CDR (body);
     }
     states = list_map2 (next_state_fun, collections, states);
@@ -1628,12 +1628,12 @@ if_eval (Object form)
   if (!EMPTYLISTP (CDR (CDR (CDR (CDR (form)))))) {
     marlais_error ("if: too many arguments", NULL);
   }
-  testval = eval (testval);
+  testval = marlais_eval (testval);
 
   if (testval == MARLAIS_FALSE) {
-    return tail_eval (elseform);
+    return marlais_tail_eval (elseform);
   } else {
-    return tail_eval (thenform);
+    return marlais_tail_eval (thenform);
   }
 }
 
@@ -1659,9 +1659,9 @@ or_eval (Object form)
   clauses = CDR (form);
   while (!EMPTYLISTP (clauses)) {
     if (EMPTYLISTP (CDR (clauses))) {
-      return tail_eval (CAR (clauses));
+      return marlais_tail_eval (CAR (clauses));
     }
-    ret = eval (CAR (clauses));
+    ret = marlais_eval (CAR (clauses));
     if (VALUESP (ret)) {
       if (PAIRP (CDR (clauses))) {
         ret = FIRSTVAL (ret);
@@ -1700,7 +1700,7 @@ qq_help (Object skel)
         if (!EMPTYLISTP (CDR (tail))) {
           marlais_error ("Too many arguments to unquote", NULL);
         }
-        return eval (CAR (tail));
+        return marlais_eval (CAR (tail));
       } else {
         return marlais_error ("missing argument to unquote", NULL);
       }
@@ -1708,7 +1708,7 @@ qq_help (Object skel)
                && CAR (CAR (head)) == unquote_splicing_symbol) {
 
       if (!EMPTYLISTP (CDR (CAR (head)))) {
-        tmp = eval (CAR (CDR (CAR (head))));
+        tmp = marlais_eval (CAR (CDR (CAR (head))));
         CAR (head) = CAR (tmp);
         CDR (head) = CDR (tmp);
         tmp = head;
@@ -1741,12 +1741,12 @@ select_eval (Object form)
   if (EMPTYLISTP (CDR (form))) {
     marlais_error ("malformed select", form, NULL);
   }
-  target_form = eval (CAR (CDR (form)));
+  target_form = marlais_eval (CAR (CDR (form)));
 
   if (EMPTYLISTP (CDR (CDR (form)))) {
     marlais_error ("malformed select", form, NULL);
   }
-  test = eval (CAR (CDR (CDR (form))));
+  test = marlais_eval (CAR (CDR (CDR (form))));
 
   if (EMPTYLISTP (CDR (CDR (CDR (form))))) {
     marlais_error ("malformed select", form, NULL);
@@ -1761,7 +1761,7 @@ select_eval (Object form)
     if ((match_list == MARLAIS_TRUE) || (match_list == else_keyword)) {
       consequents = CDR (branch);
       while (!EMPTYLISTP (consequents)) {
-        ret = eval (CAR (consequents));
+        ret = marlais_eval (CAR (consequents));
         consequents = CDR (consequents);
       }
       return (ret);
@@ -1771,11 +1771,11 @@ select_eval (Object form)
     }
     while (!EMPTYLISTP (match_list)) {
       ret = MARLAIS_FALSE;
-      if (marlais_apply (test, listem (target_form, eval (CAR (match_list)),
+      if (marlais_apply (test, listem (target_form, marlais_eval (CAR (match_list)),
                                        NULL)) != MARLAIS_FALSE) {
         consequents = CDR (branch);
         while (!EMPTYLISTP (consequents)) {
-          ret = eval (CAR (consequents));
+          ret = marlais_eval (CAR (consequents));
           consequents = CDR (consequents);
         }
         return (ret);
@@ -1803,14 +1803,14 @@ set_eval (Object form)
      * (set! (slot obj ...) new-value) should become
      * (slot-setter new-value obj ...)
      */
-    return eval (cons (marlais_make_setter_symbol (CAR (sym)),
+    return marlais_eval (cons (marlais_make_setter_symbol (CAR (sym)),
                        marlais_devalue (cons (THIRD (form), CDR (sym)))));
 
   }
   if (EMPTYLISTP (CDR (CDR (form)))) {
     marlais_error ("set!: missing forms", form, NULL);
   }
-  val = marlais_devalue (eval (THIRD (form)));
+  val = marlais_devalue (marlais_eval (THIRD (form)));
   marlais_modify_value (sym, val);
   return (val);
 }
@@ -1836,7 +1836,7 @@ unless_eval (Object form)
   }
   test = SECOND (form);
   body = CDR (CDR (form));
-  if (eval (test) == MARLAIS_FALSE) {
+  if (marlais_eval (test) == MARLAIS_FALSE) {
     return (eval_body (body, MARLAIS_FALSE));
   }
   return (MARLAIS_FALSE);
@@ -1853,10 +1853,10 @@ until_eval (Object form)
   test = CAR (CDR (form));
   body = CDR (CDR (form));
 
-  while (eval (test) == MARLAIS_FALSE) {
+  while (marlais_eval (test) == MARLAIS_FALSE) {
     forms = body;
     while (!EMPTYLISTP (forms)) {
-      eval (CAR (forms));
+      marlais_eval (CAR (forms));
       forms = CDR (forms);
     }
   }
@@ -1879,7 +1879,7 @@ unwind_protect_eval (Object form)
 
   marlais_add_local (unwind_symbol, unwind, 1, the_env);
 
-  ret = eval (protected);
+  ret = marlais_eval (protected);
 
   marlais_pop_scope ();
   return (ret);
@@ -1896,10 +1896,10 @@ while_eval (Object form)
   test = CAR (CDR (form));
   body = CDR (CDR (form));
 
-  while (eval (test) != MARLAIS_FALSE) {
+  while (marlais_eval (test) != MARLAIS_FALSE) {
     forms = body;
     while (!EMPTYLISTP (forms)) {
-      eval (CAR (forms));
+      marlais_eval (CAR (forms));
       forms = CDR (forms);
     }
   }

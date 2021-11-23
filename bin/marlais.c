@@ -44,8 +44,8 @@ static void print_top_level_constant(Object obj, int bind_p)
     sequence_num++;
   }
 
-  marlais_apply (eval (print_symbol),
-	 listem (obj, eval(standard_output_symbol), NULL));
+  marlais_apply (marlais_eval (print_symbol),
+	 listem (obj, marlais_eval(standard_output_symbol), NULL));
 
   fprintf (stdout, "\n");
 }
@@ -56,7 +56,7 @@ static int read_eval_print(FILE* f, int bind_constant_p)
   Object obj;
 
   if ((obj = marlais_parse_object ()) && (obj != eof_object)) {
-    obj = eval (obj);
+    obj = marlais_eval (obj);
     if(POINTERP(obj) && POINTERTYPE(obj) == Values) {
       vals = VALUESNUM(obj);
     }
@@ -228,7 +228,7 @@ main (int argc, char *argv[])
     load_file_context = 0;
     the_env = cache_env;
     eval_stack = 0;
-    push_eval_stack (marlais_current_module ()->sym);
+    marlais_push_eval_stack (marlais_current_module ()->sym);
     num_debug_contexts = 0;
     prompt = "? ";
     current_prompt = prompt;
