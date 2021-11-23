@@ -29,7 +29,12 @@
 /* Enable wide-character support */
 #define MARLAIS_ENABLE_WCHAR
 /* Cache the first N wide characters */
-#define MARLAIS_CONFIG_WCHAR_CACHE 256
+#define MARLAIS_CONFIG_WCHAR_CACHE 1024
+
+/* Enable wide-character support */
+#define MARLAIS_ENABLE_UCHAR
+/* Enable wide-character support */
+#define MARLAIS_CONFIG_UCHAR_CACHE 1024
 
 #define MAX_STRING_SIZE 10240
 #define MAX_SYMBOL_SIZE 1024
