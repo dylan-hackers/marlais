@@ -43,7 +43,8 @@
 #include <marlais/sequence.h>
 #include <marlais/symbol.h>
 
-/* local function prototypes */
+/* Primitives */
+
 static Object car (Object pair);
 static Object cdr (Object pair);
 static Object first_d (Object pair, Object default_ob);
@@ -81,56 +82,24 @@ static struct primitive list_prims[] =
     {"%list-sort!", prim_2, list_sort_bang},
 };
 
+/* Exported functions */
+
 void
-init_list_prims (void)
+marlais_initialize_list (void)
 {
-    int num;
+#ifdef MARLAIS_OBJECT_MODEL_LARGE
+    marlais_nil = marlais_allocate_object (EmptyList, sizeof (struct empty));
+#else
+    marlais_nil = EMPTYLISTVAL;
+#endif
+}
 
-    num = sizeof (list_prims) / sizeof (struct primitive);
-
+void
+marlais_register_list (void)
+{
+    int num = sizeof (list_prims) / sizeof (struct primitive);
     marlais_register_prims (num, list_prims);
 }
-
-#ifndef MARLAIS_OBJECT_MODEL_SMALL
-
-/*
- * Cheesy global to make make_empty_list run faster
- */
-
-static Object ___empty_list = NULL;
-
-#endif
-
-/*
- * Creates a unique empty_list value for use in constructing lists
- */
-void
-initialize_empty_list ()
-{
-
-#ifndef MARLAIS_OBJECT_MODEL_SMALL
-    Object obj;
-
-    if (___empty_list == NULL) {
-     ___empty_list = marlais_allocate_object (EmptyList, sizeof (struct empty));
-
-    } else {
-	marlais_error ("initialize_empty_list: second attempt at initialization",
-	       NULL);
-    }
-#endif
-}
-
-#ifndef MARLAIS_OBJECT_MODEL_SMALL
-/*
- * Returns the unique empty_list value
- */
-Object
-make_empty_list (void)
-{
-    return ___empty_list;
-}
-#endif
 
 /* This gets called with (make <pair> args)
  * Added to pass conformance tests.
@@ -152,9 +121,9 @@ make_list_driver (Object args)
 
     /* actually fabricate the list */
     if (size == 0) {
-	return (make_empty_list ());
+	return (marlais_make_nil ());
     } else {
-	res = make_empty_list ();
+	res = marlais_make_nil ();
 	while (size) {
 	    res = cons (fill_obj, res);
 	    size--;
@@ -235,7 +204,7 @@ Object
 map (Object (*fun) (Object), Object lst)
 {
     if (EMPTYLISTP (lst)) {
-	return (make_empty_list ());
+	return (marlais_make_nil ());
     } else {
 	return (cons ((*fun) (CAR (lst)), map (fun, CDR (lst))));
     }
@@ -245,7 +214,7 @@ Object
 map2 (Object (*fun) (Object, Object), Object l1, Object l2)
 {
     if (EMPTYLISTP (l1) || EMPTYLISTP (l2)) {
-	return (make_empty_list ());
+	return (marlais_make_nil ());
     } else {
 	return (cons ((*fun) (CAR (l1), CAR (l2)), map2 (fun, CDR (l1), CDR (l2))));
     }
@@ -255,9 +224,9 @@ Object
 list_map1 (Object fun, Object lst)
 {
     if (EMPTYLISTP (lst)) {
-	return (make_empty_list ());
+	return (marlais_make_nil ());
     } else {
-	return (cons (marlais_apply (fun, cons (CAR (lst), make_empty_list ())),
+	return (cons (marlais_apply (fun, cons (CAR (lst), marlais_make_nil ())),
 		      list_map1 (fun, (CDR (lst)))));
     }
 }
@@ -266,7 +235,7 @@ Object
 list_map2 (Object fun, Object l1, Object l2)
 {
     if (EMPTYLISTP (l1) || EMPTYLISTP (l2)) {
-	return (make_empty_list ());
+	return (marlais_make_nil ());
     } else {
 	return (cons (marlais_apply (fun, listem (CAR (l1), CAR (l2),
 					  NULL)),
@@ -353,12 +322,12 @@ listem (Object car,...)
     Object fst, el, acons, cur;
     va_list args;
 
-    fst = cur = acons = cons (car, make_empty_list ());
+    fst = cur = acons = cons (car, marlais_make_nil ());
     va_start (args, car);
     el = va_arg (args, Object);
 
     while (el) {
-	acons = cons (el, make_empty_list ());
+	acons = cons (el, marlais_make_nil ());
 	CDR (cur) = acons;
 	cur = acons;
 	el = va_arg (args, Object);
@@ -400,7 +369,7 @@ list_length (Object lst)
 	len = 1;
 	back_list = lst;
 	fore_list = CDR (lst);
-	CDR (back_list) = make_empty_list ();
+	CDR (back_list) = marlais_make_nil ();
 
 	/* Reverse pointers in the list and see if we end up at the head. */
 	while (PAIRP (fore_list)) {
@@ -501,7 +470,7 @@ list_reverse_bang (Object lst)
 {
     Object cur, next;
 
-    cur = make_empty_list ();
+    cur = marlais_make_nil ();
     while (!EMPTYLISTP (lst)) {
 	next = CDR (lst);
 	CDR (lst) = cur;
@@ -516,7 +485,7 @@ list_reverse (Object lst)
 {
     Object last;
 
-    last = make_empty_list ();
+    last = marlais_make_nil ();
     while (!EMPTYLISTP (lst)) {
 	last = cons (CAR (lst), last);
 	lst = CDR (lst);
@@ -562,12 +531,12 @@ copy_list (Object lst)
 {
     Object result, *tmp_ptr;
 
-    result = make_empty_list ();
+    result = marlais_make_nil ();
     tmp_ptr = &result;
     for (tmp_ptr = &result;
 	 PAIRP (lst);
 	 tmp_ptr = &CDR (*tmp_ptr), lst = CDR (lst)) {
-	*tmp_ptr = cons (CAR (lst), make_empty_list ());
+	*tmp_ptr = cons (CAR (lst), marlais_make_nil ());
     }
     return result;
 }
@@ -583,7 +552,7 @@ add_new_at_end (Object *lst, Object elt)
 	}
 	lst = &CDR (*lst);
     }
-    *lst = cons (elt, make_empty_list ());
+    *lst = cons (elt, marlais_make_nil ());
     return ret;
 }
 

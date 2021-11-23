@@ -35,7 +35,7 @@ marlais_initialize (void)
 
   /* intialize global objects */
   marlais_initialize_boolean ();
-  initialize_empty_list ();
+  marlais_initialize_list ();
   marlais_initialize_stream ();
   empty_string = marlais_make_bytestring ("");
   eof_object = make_eof_object ();
@@ -203,7 +203,7 @@ marlais_initialize (void)
   default_object = cons (MARLAIS_FALSE, MARLAIS_FALSE);
   marlais_add_export (marlais_make_name ("%default-object"), default_object, 1);
 
-  binding_stack = cons (marlais_make_integer (0), make_empty_list ());
+  binding_stack = cons (marlais_make_integer (0), marlais_make_nil ());
 
   /* Define bindings for the standard character and string type */
   marlais_add_export (marlais_make_name ("<standard-character>"), byte_character_class, 1);
@@ -211,7 +211,7 @@ marlais_initialize (void)
 
   /* initialize primitives */
   marlais_register_env ();
-  init_list_prims ();
+  marlais_register_list ();
   marlais_register_symbol ();
   marlais_register_type ();
   marlais_register_class ();

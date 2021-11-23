@@ -12,6 +12,9 @@ GLOBAL Object marlais_true;
 GLOBAL Object marlais_false;
 #endif
 
+/* list */
+GLOBAL Object marlais_nil;
+
 /* streams */
 GLOBAL Object marlais_standard_input;
 GLOBAL Object marlais_standard_output;

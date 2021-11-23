@@ -225,15 +225,15 @@ nonempty_body
 
 
 nonempty_constituents
-	: constituent			{ $$ = cons ($1, make_empty_list()); }
+	: constituent			{ $$ = cons ($1, marlais_make_nil ()); }
 	| constituent ';' constituents	{ $$ = cons ($1, $3); }
 
 constituents
-	:		 		{ $$ = make_empty_list(); }
-	| constituent 			{ $$ = cons ($1, make_empty_list()); }
+	:		 		{ $$ = marlais_make_nil (); }
+	| constituent 			{ $$ = cons ($1, marlais_make_nil ()); }
 	| constituent ';' constituents	{ $$ = cons ($1, $3); }
 /*
-	| local_declaration_block	{ $$ = cons ($1, make_empty_list()); }
+	| local_declaration_block	{ $$ = cons ($1, marlais_make_nil ()); }
 */
 
 
@@ -299,7 +299,7 @@ binary_operand
 keyless_binary_operand
 	: operand			{ $$ = $1; }
 	| unary_operator operand
-		{ $$ = cons ($1, cons ($2, make_empty_list())); }
+		{ $$ = cons ($1, cons ($2, marlais_make_nil ())); }
 
 unary_operator
 	: '-'				{ $$ = negative_symbol; }
@@ -322,7 +322,7 @@ operand	: operand '(' arguments_opt ')'
 		  }
 		}
 	| operand '.' variable_name
-		{ $$ = cons ($3, cons ($1, make_empty_list())); }
+		{ $$ = cons ($3, cons ($1, marlais_make_nil ())); }
 	| leaf				{ $$ = $1; }
 
 unparenthesized_operand
@@ -337,12 +337,12 @@ unparenthesized_operand
 	| unparenthesized_operand '[' arguments ']'
     		{ $$ = cons (element_symbol, cons ($1, $3)); }
 	| unparenthesized_operand '.' variable_name
-		{ $$ = cons ($3, cons ($1, make_empty_list())); }
+		{ $$ = cons ($3, cons ($1, marlais_make_nil ())); }
 	| unparenthesized_leaf		{ $$ = $1; }
 
 arguments
 	: SYMBOL expression		{ $$ = listem ($1, $2, NULL); }
-	| expression		{ $$ = cons ($1, make_empty_list()); }
+	| expression		{ $$ = cons ($1, marlais_make_nil ()); }
 	| SYMBOL expression ',' arguments
 		{ $$ = cons ($1, cons ($2, $4)); }
 	| expression ',' arguments
@@ -372,17 +372,17 @@ strings	: STRING	    { $$ = $1; }
 		{ $$ = cons (concatenate_symbol, cons ($1, $2)); }
 
 component_strings
-	: STRING	{ $$ = cons ($1, make_empty_list()); }
+	: STRING	{ $$ = cons ($1, marlais_make_nil ()); }
 	| STRING component_strings
 		{ $$ = cons ($1, $2); }
 constants
-	: constant			{ $$ = cons ($1, make_empty_list()); }
+	: constant			{ $$ = cons ($1, marlais_make_nil ()); }
 	| constant ',' constants	{ $$ = cons ($1, $3); }
 
 list_constants
 	: constant			{ $$ = listem (pair_symbol,
 						       $1,
-						       make_empty_list(),
+						       marlais_make_nil (),
 						       NULL);
 					}
 	| constant '.' constant		{ $$ = listem (pair_symbol, $1, $3, NULL);
@@ -437,7 +437,7 @@ if_statement
 			{ $$ = cons ($1,
 				     cons ($4,
 					   append_bang (cons ($6,
-							      make_empty_list()),
+							      marlais_make_nil ()),
 							$7))); }
 
 then_body
@@ -445,21 +445,21 @@ then_body
 	| nonempty_body	{ $$ = $1; }
 
 else_parts
-	:		{ $$ = cons(MARLAIS_FALSE, make_empty_list()); }
-	| ELSE		{ $$ = cons (MARLAIS_FALSE, make_empty_list()); }
-	| ELSE nonempty_body	{ $$ = cons ($2, make_empty_list()); }
+	:		{ $$ = cons(MARLAIS_FALSE, marlais_make_nil ()); }
+	| ELSE		{ $$ = cons (MARLAIS_FALSE, marlais_make_nil ()); }
+	| ELSE nonempty_body	{ $$ = cons ($2, marlais_make_nil ()); }
 	| ELSEIF '(' expression ')' body else_parts
 			{ $$ = cons (cons (if_symbol,
 					   cons ($3,
 						 append_bang (cons ($5,
-								    make_empty_list()),
+								    marlais_make_nil ()),
 							      $6))),
-				     make_empty_list()); }
+				     marlais_make_nil ()); }
 
 
 unless_statement
 	: UNLESS '(' expression ')' body END UNLESS_opt
-		{ $$ = cons ($1, cons ($3, cons ($5, make_empty_list()))); }
+		{ $$ = cons ($1, cons ($3, cons ($5, marlais_make_nil ()))); }
 
 
 case_statement
@@ -468,7 +468,7 @@ case_statement
 		{ $$ = cons (cond_symbol, $2); }
 
 case_body
-	: { $$ = make_empty_list(); }
+	: { $$ = marlais_make_nil (); }
 	| case_label
 	  { push_bindings (); }
 	  case_tail SEMICOLON_opt
@@ -476,31 +476,31 @@ case_body
 				  ? cons (cons (unbinding_begin_symbol,
 					        cons (bindings_top (),
 						      CAR ($3))),
-				          make_empty_list())
-				  : make_empty_list()),
+				          marlais_make_nil ())
+				  : marlais_make_nil ()),
 		        CDR ($3));
           }
 
 
 case_tail
-	:	{ $$ = cons (make_empty_list(), make_empty_list()); }
-	| ';'	{ $$ = cons (make_empty_list(), make_empty_list()); }
+	:	{ $$ = cons (marlais_make_nil (), marlais_make_nil ()); }
+	| ';'	{ $$ = cons (marlais_make_nil (), marlais_make_nil ()); }
 	| ';' case_label
 	{ push_bindings (); }
 	case_tail
-	{ $$ = cons (make_empty_list(),
+	{ $$ = cons (marlais_make_nil (),
 		     cons (cons ($2, !EMPTYLISTP (CAR ($4))
 				     ? cons (cons (unbinding_begin_symbol,
 					           cons (bindings_top(),
 							 CAR ($4))),
-				             make_empty_list())
-				     : make_empty_list()),
+				             marlais_make_nil ())
+				     : marlais_make_nil ()),
 		          CDR ($4)));
 	  pop_bindings ();
       }
 
 	| constituent
-	  { $$ = cons (cons ($1, make_empty_list()), make_empty_list()); }
+	  { $$ = cons (cons ($1, marlais_make_nil ()), marlais_make_nil ()); }
 
 	| constituent ';' case_tail
 		{
@@ -508,13 +508,13 @@ case_tail
 		}
 	| constituent ';' case_label { push_bindings(); }
 	   case_tail
-	{ $$ = cons (cons ($1, make_empty_list()),
+	{ $$ = cons (cons ($1, marlais_make_nil ()),
 		     cons ( cons($3, !EMPTYLISTP (CAR ($5))
 				     ? cons (cons (unbinding_begin_symbol,
 						   cons (bindings_top(),
 						         CAR ($5))),
-					     make_empty_list())
-				     : make_empty_list()),
+					     marlais_make_nil ())
+				     : marlais_make_nil ()),
 			   CDR ($5)));
 		  pop_bindings ();
 	      }
@@ -541,7 +541,7 @@ test_opt
 	: 			{ $$ = NULL; }
 	| BY expression		{ $$ = $2; }
 select_body
-	:  { $$ = make_empty_list(); }
+	:  { $$ = marlais_make_nil (); }
 	| select_label
 	  { push_bindings (); }
 	  select_tail SEMICOLON_opt
@@ -549,30 +549,30 @@ select_body
 				  ? cons (cons (unbinding_begin_symbol,
 						cons (bindings_top (),
 						      CAR ($3))),
-				          make_empty_list())
-				  : make_empty_list()),
+				          marlais_make_nil ())
+				  : marlais_make_nil ()),
 		      CDR ($3));
           }
 
 select_tail
-	:	{ $$ = cons (make_empty_list(), make_empty_list()); }
-	| ';'	{ $$ = cons (make_empty_list(), make_empty_list()); }
+	:	{ $$ = cons (marlais_make_nil (), marlais_make_nil ()); }
+	| ';'	{ $$ = cons (marlais_make_nil (), marlais_make_nil ()); }
 	| ';' select_label
 	{ push_bindings (); }
 	select_tail
-	{ $$ = cons (make_empty_list(),
+	{ $$ = cons (marlais_make_nil (),
 		     cons (cons ($2, !EMPTYLISTP (CAR ($4))
 				     ? cons (cons (unbinding_begin_symbol,
 					           cons (bindings_top(),
 							 CAR ($4))),
-				    	     make_empty_list())
-				     : make_empty_list()),
+				    	     marlais_make_nil ())
+				     : marlais_make_nil ()),
 		           CDR ($4)));
 	  pop_bindings ();
       }
 
 	| constituent
-	  { $$ = cons (cons ($1, make_empty_list()), make_empty_list()); }
+	  { $$ = cons (cons ($1, marlais_make_nil ()), marlais_make_nil ()); }
 
 	| constituent ';' select_tail
 		{
@@ -580,13 +580,13 @@ select_tail
 		}
 	| constituent ';' select_label { push_bindings(); }
 	   select_tail
-	{ $$ = cons (cons ($1, make_empty_list()),
+	{ $$ = cons (cons ($1, marlais_make_nil ()),
 		     cons ( cons($3, !EMPTYLISTP (CAR ($5))
 				     ? cons (cons (unbinding_begin_symbol,
 						   cons (bindings_top(),
 						         CAR ($5))),
-					     make_empty_list())
-				     : make_empty_list()),
+					     marlais_make_nil ())
+				     : marlais_make_nil ()),
 			   CDR ($5)));
 		  pop_bindings ();
 	      }
@@ -604,11 +604,11 @@ select_label
 
 while_statement
 	: WHILE '(' expression ')' body END WHILE_opt
-		{ $$ = cons ($1, cons ($3, cons ($5, make_empty_list()))); }
+		{ $$ = cons ($1, cons ($3, cons ($5, marlais_make_nil ()))); }
 
 until_statement
 	: UNTIL '(' expression ')' body END UNTIL_opt
-		{ $$ = cons ($1, cons ($3, cons ($5, make_empty_list()))); }
+		{ $$ = cons ($1, cons ($3, cons ($5, marlais_make_nil ()))); }
 
 for_statement
 	: FOR		{ marlais_lexer_push_intermediate_words ($1); }
@@ -624,19 +624,19 @@ for_statement
 			       NULL);
 		}
 for_clauses
-	: for_clause comma_opt		{ $$ = cons ($1, make_empty_list()); }
+	: for_clause comma_opt		{ $$ = cons ($1, marlais_make_nil ()); }
 	| for_clause ',' for_clauses	{ $$ = cons ($1, $3); }
 
 for_clauses_opt
-	: 			{ $$ = make_empty_list(); }
+	: 			{ $$ = marlais_make_nil (); }
 	| for_clauses		{ $$ = $1; }
 
 for_clause
 	: variable '=' expression THEN expression
-		{ $$ = cons ($1, cons ($3, cons ($5, make_empty_list()))); }
+		{ $$ = cons ($1, cons ($3, cons ($5, marlais_make_nil ()))); }
 	| variable IN expression
 	    { $$ = cons (collection_keyword,
-			 cons ($1, cons ($3, make_empty_list()))); }
+			 cons ($1, cons ($3, marlais_make_nil ()))); }
 	| variable FROM expression bound_opt increment_clause_opt
 		{ $$ = cons (range_keyword,
 			     cons ($1,
@@ -644,34 +644,34 @@ for_clause
 					 append_bang($4, $5)))); }
 
 bound_opt
-	:	{ $$ = make_empty_list(); }
+	:	{ $$ = marlais_make_nil (); }
         | TO expression
-		{ $$ = cons ($1, cons ($2, make_empty_list())); }
+		{ $$ = cons ($1, cons ($2, marlais_make_nil ())); }
 	| ABOVE expression
-		{ $$ = cons ($1, cons ($2, make_empty_list())); }
+		{ $$ = cons ($1, cons ($2, marlais_make_nil ())); }
 	| BELOW expression
-		{ $$ = cons ($1, cons ($2, make_empty_list())); }
+		{ $$ = cons ($1, cons ($2, marlais_make_nil ())); }
 
 increment_clause_opt
-	:	{ $$ = make_empty_list(); }
+	:	{ $$ = marlais_make_nil (); }
 	| BY expression
-		{ $$ = cons ($1, cons ($2, make_empty_list())); }
+		{ $$ = cons ($1, cons ($2, marlais_make_nil ())); }
 
 for_terminator_opt
 	:			{ $$ = cons (MARLAIS_FALSE,
-					     make_empty_list()); }
-	| UNTIL expression	{ $$ = cons ($2, make_empty_list()); }
+					     marlais_make_nil ()); }
+	| UNTIL expression	{ $$ = cons ($2, marlais_make_nil ()); }
 	| WHILE expression	{ $$ = cons (cons (not_symbol,
 					           cons ($2,
-                                                         make_empty_list())),
-                                             make_empty_list()); }
+                                                         marlais_make_nil ())),
+                                             marlais_make_nil ()); }
 	| SYMBOL expression	{ if ($1 == until_keyword) {
-				      $$ =cons ($2, make_empty_list());
+				      $$ =cons ($2, marlais_make_nil ());
 				  } else if ($1 == while_keyword) {
 				      $$ = cons (cons (not_symbol,
 						       cons ($2,
-							     make_empty_list())),
-					         make_empty_list());
+							     marlais_make_nil ())),
+					         marlais_make_nil ());
 				  } else {
 					marlais_error ("Bogus keyword in if",
 						$1,
@@ -680,8 +680,8 @@ for_terminator_opt
 				}
 
 finally_opt
-	:			{ $$ = make_empty_list(); }
-	| FINALLY body		{ $$ = cons ($2, make_empty_list()); }
+	:			{ $$ = marlais_make_nil (); }
+	| FINALLY body		{ $$ = cons ($2, marlais_make_nil ()); }
 
 block_statement
 	: BLOCK		{ marlais_lexer_push_intermediate_words ($1); }
@@ -699,14 +699,14 @@ block_statement
 		END BLOCK_opt
 
 		{ $$ = listem (bind_exit_symbol,
-			       cons ($4, make_empty_list()),
+			       cons ($4, marlais_make_nil ()),
                                nelistem(unwind_protect_symbol,
 					nelistem (bind_symbol,
 					       cons (listem (hash_rest_symbol,
 							       vals_symbol,
 							       $6,
 							       NULL),
-						     make_empty_list()),
+						     marlais_make_nil ()),
 					       $7,
 					       listem (apply_symbol,
 						       $4,
@@ -719,24 +719,24 @@ block_statement
 		}
 
 afterwards_opt
-	:			{ $$ = make_empty_list(); }
+	:			{ $$ = marlais_make_nil (); }
 	| AFTERWARDS body 	{ $$ = $2; }
 
 cleanup_opt
-	: 		{ $$ = make_empty_list(); }
+	: 		{ $$ = marlais_make_nil (); }
 	| CLEANUP body	{ $$ = $2; }
 
 exceptions
-	:	{ $$ = make_empty_list(); }
+	:	{ $$ = marlais_make_nil (); }
 	| exceptions
 	  EXCEPTION '(' exception_args ')' body
 		/* Note that exceptions are consed up from back to front! */
 		{ $$ = cons (listem ($2, $4, $6, NULL), $1); }
 
 exception_args
-	: variable_name		{ $$ = cons ($1, make_empty_list()); }
+	: variable_name		{ $$ = cons ($1, marlais_make_nil ()); }
 	| variable_name COLON_COLON variable_name comma_arguments_opt
-		{ $$ = cons (cons ($1, cons ($3, make_empty_list())), $4); }
+		{ $$ = cons (cons ($1, cons ($3, marlais_make_nil ())), $4); }
 
 IF_opt
 	:
@@ -819,8 +819,8 @@ class_definition
 		{ $$ = cons ($1, cons ($2, $3)); }
 
 slot_specs
-	:				{ $$ = make_empty_list(); }
-	| slot_spec			{ $$ = cons ($1, make_empty_list()); }
+	:				{ $$ = marlais_make_nil (); }
+	| slot_spec			{ $$ = cons ($1, marlais_make_nil ()); }
 	| slot_spec ';' slot_specs	{ $$ = cons ($1, $3); }
 
 slot_spec
@@ -835,13 +835,13 @@ slot_spec
 
 		  slot_type = cons (type_keyword,
 				    cons (CLASSNAME (object_class),
-					  make_empty_list()));
+					  marlais_make_nil ()));
 		  allocation = cons (allocation_keyword,
 				     cons (instance_symbol,
-					   make_empty_list()));
+					   marlais_make_nil ()));
 		  dynamism = cons (dynamism_keyword,
 				   cons (open_symbol,
-					 make_empty_list()));
+					 marlais_make_nil ()));
 		  if (PAIRP ($3)) {
 		      getter_name = CAR ($3);
 		      slot_type_specified = 1;
@@ -888,7 +888,7 @@ slot_spec
 		}
 
 slot_modifiers_opt
-	: 				{ $$ = make_empty_list(); }
+	: 				{ $$ = marlais_make_nil (); }
 	| NAME slot_modifiers_opt 	{ $$ = cons ($1, $2); }
 	| CLASS slot_modifiers_opt	{ $$ = cons ($1, $2); }
 
@@ -932,7 +932,7 @@ module_definition
 		{ $$ = cons ($1, $2); }
 
 module_clauses
-	:	{ $$ = make_empty_list(); }
+	:	{ $$ = marlais_make_nil (); }
 	| module_clause ';' module_clauses
 		{ $$ = cons ($1, $3); }
 
@@ -951,14 +951,14 @@ create_clause
 	: CREATE item_names	{ $$ = cons ($1, $2); }
 
 modifiers
-	: NAME		{ $$ = cons ($1, make_empty_list()); }
+	: NAME		{ $$ = cons ($1, marlais_make_nil ()); }
 	| NAME modifiers 	{ $$ = cons ($1, $2); }
 
 expression_list
 	: '(' expressions_opt ')'	{ $$ = $2; }
 
 expressions
-	: expression			{ $$ = cons ($1, make_empty_list()); }
+	: expression			{ $$ = cons ($1, marlais_make_nil ()); }
 	| expression ',' expressions	{ $$ = cons ( $1, $3); }
 
 /*
@@ -978,7 +978,7 @@ item_modifiers_and_word
 */
 
 item_names
-	: variable_name			{ $$ = cons ($1, make_empty_list()); }
+	: variable_name			{ $$ = cons ($1, marlais_make_nil ()); }
 	| variable_name ',' item_names	{ $$ = cons ($1, $3); }
 
 
@@ -996,33 +996,33 @@ method_body
 #ifdef OPTIMIZE_SPECIALIZERS
 		    symtab_pop ();
 #endif
-		    $$ = cons ($2, cons ($6, make_empty_list()));
+		    $$ = cons ($2, cons ($6, marlais_make_nil ()));
 		}
 	| '(' parameter_list_opt ')' EQUAL_ARROW variable ';' body
 		{ $$ = cons (append_bang ($2,
 					  cons (hash_values_symbol,
-						cons ($5, make_empty_list()))),
-			     cons ($7, make_empty_list())); }
+						cons ($5, marlais_make_nil ()))),
+			     cons ($7, marlais_make_nil ())); }
 
 	| '(' parameter_list_opt ')' EQUAL_ARROW '(' value_list_opt ')' SEMICOLON_opt body
 		{ $$ = cons (append_bang ($2,
 					  cons (hash_values_symbol, $6)),
-			     cons ( $9, make_empty_list())); }
+			     cons ( $9, marlais_make_nil ())); }
 generic_function_body
 	: '(' parameter_list_opt ')'
-		{ $$ = cons ($2, make_empty_list()); }
+		{ $$ = cons ($2, marlais_make_nil ()); }
 	| '(' parameter_list_opt ')' EQUAL_ARROW variable
 		{ $$ = cons (append_bang ($2, cons (hash_values_symbol,
-					      cons ($5, make_empty_list()))),
-			     make_empty_list()); }
+					      cons ($5, marlais_make_nil ()))),
+			     marlais_make_nil ()); }
 	| '(' parameter_list_opt ')' EQUAL_ARROW '(' value_list_opt ')'
 		{ $$ = cons (append_bang ($2, cons (hash_values_symbol, $6)),
-		 	     make_empty_list()); }
+		 	     marlais_make_nil ()); }
 
 parameter_list
-	: parameter		{ $$ = cons ($1, make_empty_list()); }
+	: parameter		{ $$ = cons ($1, marlais_make_nil ()); }
 	| parameter_list ',' parameter
-		{ $$ = append_bang ($1, cons ($3, make_empty_list())); }
+		{ $$ = append_bang ($1, cons ($3, marlais_make_nil ())); }
 	| parameter_list ',' next_rest_key_parameter_list
 			{ $$ = append_bang ($1, $3); }
 	| next_rest_key_parameter_list
@@ -1030,7 +1030,7 @@ parameter_list
 
 next_rest_key_parameter_list
 	: HASH_NEXT variable_name
-		{ $$ = cons ($1, cons ($2, make_empty_list())); }
+		{ $$ = cons ($1, cons ($2, marlais_make_nil ())); }
 	| HASH_NEXT variable_name ',' rest_key_parameter_list
 		{ $$ = cons ($1, cons ($2, $4)); }
 	| rest_key_parameter_list
@@ -1038,34 +1038,34 @@ next_rest_key_parameter_list
 
 rest_key_parameter_list
 	: HASH_REST variable_name
-		{ $$ = cons ($1, cons ($2, make_empty_list())); }
+		{ $$ = cons ($1, cons ($2, marlais_make_nil ())); }
 	| HASH_REST variable_name ',' key_parameter_list
 		{ $$ = cons ($1, cons ($2, $4)); }
 	| key_parameter_list
 		{ $$ = $1; }
 
 key_parameter_list
-	: HASH_KEY	{ $$ = cons ($1, make_empty_list()); }
+	: HASH_KEY	{ $$ = cons ($1, marlais_make_nil ()); }
 	| HASH_KEY ',' HASH_ALL_KEYS
-			{ $$ = cons ($1, cons ($3, make_empty_list())); }
+			{ $$ = cons ($1, cons ($3, marlais_make_nil ())); }
 	| HASH_KEY keyword_parameters
 			{ $$ = cons ($1, $2); }
 	| HASH_ALL_KEYS
-		{ $$ = cons ($1, make_empty_list()); }
+		{ $$ = cons ($1, marlais_make_nil ()); }
 
 parameter
 	: variable_name type_designator_opt
-		{ $$ = ($2 ? cons ($1, cons ($2, make_empty_list()))
+		{ $$ = ($2 ? cons ($1, cons ($2, marlais_make_nil ()))
 			: $1);
 		}
 	| variable_name EQUAL_EQUAL expression
 		{ $$ = cons ($1, cons (cons (singleton_symbol,
-					     cons ($3, make_empty_list())),
-				       make_empty_list())); }
+					     cons ($3, marlais_make_nil ())),
+				       marlais_make_nil ())); }
 
 keyword_parameters
-	: keyword_parameter	{ $$ = cons ($1, make_empty_list()); }
-	| HASH_ALL_KEYS		{ $$ = cons ($1, make_empty_list()); }
+	: keyword_parameter	{ $$ = cons ($1, marlais_make_nil ()); }
+	| HASH_ALL_KEYS		{ $$ = cons ($1, marlais_make_nil ()); }
 	| keyword_parameter ',' keyword_parameters
 			{ $$ = cons ($1, $3); }
 
@@ -1077,13 +1077,13 @@ keyword_parameter
 		  if ($4) {
 		    if ($1) {
 			$$ =cons ($1, cons (variable,
-					    cons($4, make_empty_list())));
+					    cons($4, marlais_make_nil ())));
 		    } else {
 			$$ = cons (variable,
-				   cons ($4, make_empty_list ()));
+				   cons ($4, marlais_make_nil ()));
 		    }
 		  } else {
-		      $$ = cons ($1, cons (variable, make_empty_list()));
+		      $$ = cons ($1, cons (variable, marlais_make_nil ()));
 		  }
 		}
 
@@ -1091,7 +1091,7 @@ keyword_parameter
 		{ Object variable = $2 == NULL? $1
 					      : listem ($1, $2, NULL);
 		  if ($3) {
-		    $$ = cons (variable, cons ($3, make_empty_list()));
+		    $$ = cons (variable, cons ($3, marlais_make_nil ()));
 		} else {
 		    $$ = variable;
 		}
@@ -1110,7 +1110,7 @@ default	:  '=' expression		{ $$ = $2; }
 local_declaration_block
 	: local_declaration ';' body
 		{ $$ = cons (bind_symbol,
-			     cons ($1, cons ($3, make_empty_list()))); }
+			     cons ($1, cons ($3, marlais_make_nil ()))); }
 */
 
 local_declaration
@@ -1124,24 +1124,24 @@ local_declaration
 		    symtab_insert_bindings ($2);
 #endif
 		    $$ = cons (local_bind_symbol,
-			       cons ($2, make_empty_list()));
+			       cons ($2, marlais_make_nil ()));
 		}
 	| LET HANDLER condition '=' handler
-	| LOCAL { methnames = methdefs = make_empty_list(); }
+	| LOCAL { methnames = methdefs = marlais_make_nil (); }
 	  local_methods
 
           {   Object methbindings = cons (append (methnames,
 						  cons (cons (values_symbol,
 							      methdefs),
-							make_empty_list())),
-					  make_empty_list());
+							marlais_make_nil ())),
+					  marlais_make_nil ());
 #ifdef OPTIMIZE_SPECIALIZERS
 	      symtab_insert_bindings (methbindings);
 #endif
 	      bindings_increment ();
 	      $$ = cons (local_bind_rec_symbol,
 			 cons ( methbindings,
-			       make_empty_list()));
+			       marlais_make_nil ()));
 	  }
 
 
@@ -1166,30 +1166,30 @@ local_methods
 
 bindings
 	: variable '=' expression
-		{ $$ = cons (cons ($1, cons ($3, make_empty_list())),
-			     make_empty_list()); }
+		{ $$ = cons (cons ($1, cons ($3, marlais_make_nil ())),
+			     marlais_make_nil ()); }
 	| '(' variable_list ')' '=' expression
-		  { $$ = cons (append_bang ($2, cons ($5, make_empty_list())),
-			     make_empty_list()); }
+		  { $$ = cons (append_bang ($2, cons ($5, marlais_make_nil ())),
+			     marlais_make_nil ()); }
 
 variable_list
-	: variable		{ $$ = cons ($1, make_empty_list()); }
+	: variable		{ $$ = cons ($1, marlais_make_nil ()); }
 	| variable ',' variable_list
 				{ $$ = cons ($1, $3); }
 	| HASH_REST variable_name
-		{ $$ = cons ($1, cons ($2, make_empty_list())); }
+		{ $$ = cons ($1, cons ($2, marlais_make_nil ())); }
 
 
 value_variable_list
-	: variable		{ $$ = cons ($1, make_empty_list()); }
+	: variable		{ $$ = cons ($1, marlais_make_nil ()); }
 	| variable ',' value_variable_list
 				{ $$ = cons ($1, $3); }
 	| HASH_REST variable
-		{ $$ = cons ($1, cons ($2, make_empty_list())); }
+		{ $$ = cons ($1, cons ($2, marlais_make_nil ())); }
 
 variable
 	: variable_name type_designator_opt
-		{ $$ = ($2 ? cons ($1, cons ($2, make_empty_list()))
+		{ $$ = ($2 ? cons ($1, cons ($2, marlais_make_nil ()))
 			: $1); }
 
 variable_name
@@ -1209,7 +1209,7 @@ type	: operand		{ $$ = $1; }
 /* Property Lists */
 
 property_list
-	: property			{ $$ = cons ($1, make_empty_list()); }
+	: property			{ $$ = cons ($1, marlais_make_nil ()); }
 	| property  property_list	{ $$ = cons ($1, $2); }
 
 property
@@ -1220,7 +1220,7 @@ value	: expression			{ $$ = $1; }
 	| '{' property_set_opt '}'	{ $$ = $2; }
 
 property_set
-	: property_set_member		{ $$ = cons ($1, make_empty_list()); }
+	: property_set_member		{ $$ = cons ($1, marlais_make_nil ()); }
 	| property_set_member ',' property_set		{ $$ = cons ($1, $3); }
 
 property_set_member
@@ -1263,20 +1263,20 @@ comma_opt
 	| ','
 
 comma_arguments_opt
-	: 		{ $$ = make_empty_list(); }
+	: 		{ $$ = marlais_make_nil (); }
 	| ',' arguments { $$ = $2; }
 
 arguments_opt
-	:		{ $$ = make_empty_list(); }
+	:		{ $$ = marlais_make_nil (); }
 	| arguments	{ $$ = $1; }
 
 constants_opt
-	:		{ $$ = make_empty_list(); }
+	:		{ $$ = marlais_make_nil (); }
 	| constants	{ $$ = $1; }
 
 list_constants_opt
 	: 				{ $$ = cons (list_symbol,
-						     make_empty_list()); }
+						     marlais_make_nil ()); }
 	| list_constants		{ $$ = $1; }
 
 default_opt
@@ -1294,7 +1294,7 @@ expression_list_opt
 */
 
 expressions_opt
-	:			{ $$ = make_empty_list(); }
+	:			{ $$ = marlais_make_nil (); }
 	| expressions		{ $$ = $1; }
 
 /*
@@ -1304,19 +1304,19 @@ item_list_opt
 */
 
 modifiers_opt
-	:			{ $$ = make_empty_list(); }
+	:			{ $$ = marlais_make_nil (); }
 	| modifiers		{ $$ = $1; }
 
 parameter_list_opt
-	:			{ $$ = make_empty_list(); }
+	:			{ $$ = marlais_make_nil (); }
 	| parameter_list	{ $$ = $1; }
 
 property_list_opt
-	:			{ $$ = make_empty_list(); }
+	:			{ $$ = marlais_make_nil (); }
 	| property_list		{ $$ = $1; }
 
 property_set_opt
-	:			{ $$ = make_empty_list(); }
+	:			{ $$ = marlais_make_nil (); }
 	| property_set		{ $$ = $1; }
 
 type_designator_opt
@@ -1324,7 +1324,7 @@ type_designator_opt
 	| type_designator	{ $$ = $1; }
 
 value_list_opt
-	:			{ $$ = make_empty_list(); }
+	:			{ $$ = marlais_make_nil (); }
 	| value_variable_list		{ $$ = $1; }
 
 %%
@@ -1350,13 +1350,13 @@ nelistem (Object car,...)
 	Object fst, el, acons, cur;
 	va_list args;
 
-	fst = cur = acons = cons (car, make_empty_list ());
+	fst = cur = acons = cons (car, marlais_make_nil ());
 	va_start (args, car);
 	el = va_arg (args, Object);
 
 	while (el) {
 	    if (!EMPTYLISTP (el)) {
-		acons = cons (el, make_empty_list());
+		acons = cons (el, marlais_make_nil ());
 		CDR (cur) = acons;
 		cur = acons;
 	    }
@@ -1406,9 +1406,9 @@ make_setter_expr (Object place, Object value)
 		   cons (local_bind_symbol,
 			 cons(cons(cons(newsym,
 					cons (value,
-					      make_empty_list())),
-				   make_empty_list()),
-			      make_empty_list())),
+					      marlais_make_nil ())),
+				   marlais_make_nil ()),
+			      marlais_make_nil ())),
 		   cons (marlais_make_setter_symbol (FIRST (place)),
 			 cons (newsym, CDR (place))),
 		   newsym,

@@ -36,16 +36,29 @@
 
 #include <marlais/common.h>
 
-#ifndef MARLAIS_OBJECT_MODEL_SMALL
-Object make_empty_list (void);
+/* Initialize list constants */
+extern void marlais_initialize_list (void);
+/* Register list primitives */
+extern void marlais_register_list (void);
+
+/* Entrypoint for make(<pair>) */
+extern Object make_pair_driver (Object args);
+/* Entrypoint for make(<list>) */
+extern Object make_list_driver (Object args);
+
+#ifdef MARLAIS_OBJECT_MODEL_LARGE
+/* Returns the empty list */
+static inline Object marlais_make_nil (void) {
+  assert(marlais_mil); // TODO remove
+  return marlais_nil;
+}
 #else
-#define make_empty_list() EMPTYLISTVAL
+/* Returns the empty list */
+static inline Object marlais_make_nil (void) {
+  return EMPTYLISTVAL;
+}
 #endif
 
-void init_list_prims (void);
-void initialize_empty_list (void);
-Object make_pair_driver (Object args);
-Object make_list_driver (Object args);
 Object cons (Object car, Object cdr);
 Object second (Object lst);
 Object third (Object lst);

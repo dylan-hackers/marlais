@@ -88,7 +88,7 @@ infix_decode_token (int yychar, FILE * fp)
     return (yylval);
   case HASH_BRACKET:
     {
-      Object new_list = make_empty_list ();
+      Object new_list = marlais_make_nil ();
       Object *new_list_ptr = &new_list;
 
       do {
@@ -98,7 +98,7 @@ infix_decode_token (int yychar, FILE * fp)
           return new_list;
 
         *new_list_ptr = cons (infix_decode_token (yychar, fp),
-                              make_empty_list ());
+                              marlais_make_nil ());
         new_list_ptr = &CDR (*new_list_ptr);
 
         if ((yychar = yylex ()) < 0)
@@ -112,7 +112,7 @@ infix_decode_token (int yychar, FILE * fp)
     } /* case HASH_BRACKET */
   case HASH_PAREN:
     {
-      Object new_list = make_empty_list ();
+      Object new_list = marlais_make_nil ();
       Object *new_list_ptr = &new_list;
 
       do {
@@ -122,7 +122,7 @@ infix_decode_token (int yychar, FILE * fp)
           return new_list;
 
         *new_list_ptr = cons (infix_decode_token (yychar, fp),
-                              make_empty_list ());
+                              marlais_make_nil ());
         new_list_ptr = &CDR (*new_list_ptr);
 
         if ((yychar = yylex ()) < 0)

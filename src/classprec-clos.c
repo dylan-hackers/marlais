@@ -58,9 +58,9 @@ static Object find_minimal_elements (Object slist);
 
 #define MAKE_PNODE(class) \
   (cons (class, \
-         cons (make_empty_list(),               \
-               (cons (make_empty_list(),                \
-                      make_empty_list())))))
+         cons (marlais_make_nil (),               \
+               (cons (marlais_make_nil (),                \
+                      marlais_make_nil ())))))
 
 #define PNODE_CLASS(pnode)        (CAR (pnode))
 #define PNODE_SUCCESSORS(pnode)   (CAR (CDR (pnode)))
@@ -76,7 +76,7 @@ marlais_compute_class_precedence_list (Object class)
   Object precedence_list_rev;
   Object a_set;
 
-  slist = make_empty_list ();
+  slist = marlais_make_nil ();
 
   /* Prepare list S */
   construct_slist (&slist, class);
@@ -97,8 +97,8 @@ marlais_compute_class_precedence_list (Object class)
 
   */
 
-  precedence_list_rev = make_empty_list ();
-  minimal_element_set = cons (CAR (slist), make_empty_list ());
+  precedence_list_rev = marlais_make_nil ();
+  minimal_element_set = cons (CAR (slist), marlais_make_nil ());
   while (PAIRP (minimal_element_set)) {
 
 #if EBUG
@@ -234,7 +234,7 @@ construct_slist (Object *sptr, Object class)
     tmp_sptr = &CDR (*tmp_sptr);
   }
   if (EMPTYLISTP (*tmp_sptr)) {
-    *tmp_sptr = cons (MAKE_PNODE (class), make_empty_list ());
+    *tmp_sptr = cons (MAKE_PNODE (class), marlais_make_nil ());
   }
   for (sclist = CLASSSUPERS (class);
        PAIRP (sclist);
@@ -276,7 +276,7 @@ decorate_slist_with_precedence (Object slist, Object class)
 {
   Object q, p;
 
-  for (q = cons (class, make_empty_list ()), p = CLASSSUPERS (class);
+  for (q = cons (class, marlais_make_nil ()), p = CLASSSUPERS (class);
        PAIRP (p);
        q = p, p = CDR (p)) {
     record_precedence (slist, CAR (q), CAR (p));
@@ -371,7 +371,7 @@ direct_superclassp (Object super, Object sub)
 static Object
 find_minimal_elements (Object slist)
 {
-  Object mins = make_empty_list ();
+  Object mins = marlais_make_nil ();
 
   while (PAIRP (slist)) {
     if (EMPTYLISTP (PNODE_PREDECESSORS (CAR (slist)))) {

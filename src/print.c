@@ -458,7 +458,7 @@ print_virtual_slot_values (Object fd, Object instance, Object slotds,
     marlais_print_object (fd, SLOTDGETTER (slotd), escaped);
     fprintf (fp, " = ");
     apply_print (fd, apply_internal (SLOTDGETTER (slotd),
-                                     cons (instance, make_empty_list ())),
+                                     cons (instance, marlais_make_nil ())),
                  escaped);
   }
 }

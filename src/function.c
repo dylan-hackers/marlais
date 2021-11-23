@@ -141,7 +141,7 @@ marlais_make_generic (Object name, Object params, Object methods)
 
 #ifdef MARLAIS_ENABLE_METHOD_CACHING
   GFCACHE (obj) = marlais_make_table (50); /* Maybe make 50 a define? */
-  GFACTIVENM (obj) = make_empty_list ();
+  GFACTIVENM (obj) = marlais_make_nil ();
 #endif
 
   return (obj);
@@ -173,7 +173,7 @@ marlais_make_method (Object name, Object params, Object body, struct frame *env,
     if (!gf) {
       gf = marlais_make_generic (name,
 				  create_generic_parameters (params),
-				  make_empty_list ());
+				  marlais_make_nil ());
       marlais_add_export (name, gf, 0);
     }
     marlais_add_method (gf, obj);
@@ -201,7 +201,7 @@ marlais_add_method (Object generic, Object method)
   next_meth_list = GFACTIVENM (generic);
   while (PAIRP (next_meth_list)) {
     NMREST (CAR (next_meth_list)) = cons (MARLAIS_FALSE,
-                                          make_empty_list ());
+                                          marlais_make_nil ());
     next_meth_list = CDR (next_meth_list);
   }
 #endif
@@ -281,7 +281,7 @@ marlais_applicable_method_p (Object argfun, Object sample_args, int strict_check
     marlais_fatal ("applicable-method?: first argument must be a generic function or method");
   }
   if (METHODP (argfun)) {
-    funs = cons (argfun, make_empty_list ());
+    funs = cons (argfun, marlais_make_nil ());
   } else {
     strict_check = 0;
     funs = GFMETHODS (argfun);
@@ -359,7 +359,7 @@ marlais_sorted_applicable_methods (Object fun, Object sample_args)
   Object methods, app_methods, method;
 
   methods = GFMETHODS (fun);
-  app_methods = make_empty_list ();
+  app_methods = marlais_make_nil ();
   while (!EMPTYLISTP (methods)) {
     method = CAR (methods);
     if (marlais_applicable_method_p (method, sample_args, 0) != MARLAIS_FALSE) {
@@ -412,7 +412,7 @@ parse_function_required_parameters (Object *params, Object *tmp_ptr)
 {
   Object entry;
 
-  *tmp_ptr = make_empty_list ();
+  *tmp_ptr = marlais_make_nil ();
 
   while (PAIRP (*params)) { /* CONTAINS BREAK! */
     entry = CAR (*params);
@@ -424,10 +424,10 @@ parse_function_required_parameters (Object *params, Object *tmp_ptr)
       (*tmp_ptr) = cons (listem (CAR (entry),
                                  marlais_eval (SECOND (entry)),
                                  NULL),
-                         make_empty_list ());
+                         marlais_make_nil ());
     } else {
       *tmp_ptr = cons (listem (entry, object_class, NULL),
-                       make_empty_list ());
+                       marlais_make_nil ());
     }
     tmp_ptr = &CDR (*tmp_ptr);
     *params = CDR (*params);
@@ -509,7 +509,7 @@ parse_function_return_parameters(Object functor, Object* params,
   Object entry, result_type;
 
   *params = CDR (*params);
-  *tmp_ptr = make_empty_list ();
+  *tmp_ptr = marlais_make_nil ();
 
   while (PAIRP (*params)) { /* CONTAINS BREAK! */
     entry = CAR (*params);
@@ -522,7 +522,7 @@ parse_function_return_parameters(Object functor, Object* params,
       result_type = object_class;
     }
 
-    (*tmp_ptr) = cons (result_type, make_empty_list ());
+    (*tmp_ptr) = cons (result_type, marlais_make_nil ());
     tmp_ptr = &CDR (*tmp_ptr);
     *params = CDR (*params);
   }
@@ -536,7 +536,7 @@ parse_function_key_parameters(Object functor, Object* params,
 {
   Object entry;
 
-  *get_params_fn (functor) = make_empty_list ();
+  *get_params_fn (functor) = marlais_make_nil ();
   if (PAIRP (*params) && CAR (*params) == key_symbol) {
     bit_mask_fn(functor, 0);
     *params = CDR (*params);
@@ -645,7 +645,7 @@ parse_generic_function_parameters (Object gf_obj, Object params)
     parse_function_return_parameters(gf_obj, &params, tmp_ptr);
     parse_function_rest_parameter(gf_obj, &params, gf_rest_return_assign);
   } else { /* no values specified */
-    GFREQVALUES (gf_obj) = make_empty_list ();
+    GFREQVALUES (gf_obj) = marlais_make_nil ();
     GFRESTVALUES (gf_obj) = object_class;
   }
 
@@ -687,7 +687,7 @@ parse_method_parameters (Object meth_obj, Object params)
     parse_function_return_parameters(meth_obj, &params, tmp_ptr);
     parse_function_rest_parameter(meth_obj, &params,method_rest_return_assign);
   } else {
-    METHREQVALUES (meth_obj) = make_empty_list ();
+    METHREQVALUES (meth_obj) = marlais_make_nil ();
     METHRESTVALUES (meth_obj) = object_class;
   }
 
@@ -712,7 +712,7 @@ create_generic_parameters (Object params)
 {
   Object entry, gf_params;
 
-  gf_params = make_empty_list ();
+  gf_params = marlais_make_nil ();
 
   /* first get required params */
   while (PAIRP (params)) { /* CONTAINS BREAK! */
@@ -793,11 +793,11 @@ generic_function_make (Object arglist)
   } else {
     GFPROPS (obj) |= GFALLKEYSMASK;
   }
-  GFMETHODS (obj) = make_empty_list ();
+  GFMETHODS (obj) = marlais_make_nil ();
 
 #ifdef MARLAIS_ENABLE_METHOD_CACHING
   GFCACHE (obj) = marlais_make_table (50); /* XXX Make 50 a define? */
-  GFACTIVENM (obj) = make_empty_list ();
+  GFACTIVENM (obj) = marlais_make_nil ();
 #endif
 
   return (obj);
@@ -864,10 +864,10 @@ make_specializers_from_params (Object params)
 {
   Object specs, *tmp_ptr;
 
-  for (specs = make_empty_list (), tmp_ptr = &specs;
+  for (specs = marlais_make_nil (), tmp_ptr = &specs;
        PAIRP (params);
        tmp_ptr = &CDR (*tmp_ptr), params = CDR (params)) {
-    *tmp_ptr = cons (SECOND (CAR (params)), make_empty_list ());
+    *tmp_ptr = cons (SECOND (CAR (params)), marlais_make_nil ());
   }
 
   return (specs);
@@ -953,7 +953,7 @@ marlais_recalc_next_methods (Object fun, Object meth, Object sample_args)
 
   current_method_added = 0;
   methods = GFMETHODS (fun);
-  app_methods = make_empty_list ();
+  app_methods = marlais_make_nil ();
 
   /* add all applicable methods */
   while (!EMPTYLISTP (methods)) {
@@ -968,7 +968,7 @@ marlais_recalc_next_methods (Object fun, Object meth, Object sample_args)
     methods = CDR (methods);
   }
   if (EMPTYLISTP (app_methods)) {
-    return (make_empty_list ());
+    return (marlais_make_nil ());
   }
   /* add current method if not there (could have been deleted? */
   if (!current_method_added) {
@@ -1002,9 +1002,9 @@ build_sorted_handles (Object methods, Object current_group)
   /* end case */
   if (EMPTYLISTP (methods)) {
     if (EMPTYLISTP (current_group)) {
-      return (make_empty_list ());
+      return (marlais_make_nil ());
     } else {
-      return (cons (current_group, make_empty_list ()));
+      return (cons (current_group, marlais_make_nil ()));
     }
   }
   /* add to current group or build new group into list */
@@ -1018,7 +1018,7 @@ build_sorted_handles (Object methods, Object current_group)
     return (cons (current_group,
                   build_sorted_handles (CDR (methods),
                                         cons (METHHANDLE (CAR (methods)),
-                                              make_empty_list ()))));
+                                              marlais_make_nil ()))));
   }
 }
 
@@ -1033,7 +1033,7 @@ broad_class (Object obj)
   } else if (LIMINTP (obj)) {
     return (integer_class);
   } else if (UNIONP (obj)) {
-    class_list = make_empty_list ();
+    class_list = marlais_make_nil ();
     union_types = UNIONLIST (obj);
     while (!EMPTYLISTP (union_types)) {
       class_list = cons (broad_class (CAR (union_types)), class_list);
@@ -1082,7 +1082,7 @@ make_class_list (Object args, int count)
 /* recursively build list of classes to match possible methods */
 {
   if (EMPTYLISTP (args) || !count) {
-    return (make_empty_list ());
+    return (marlais_make_nil ());
   }
   return (cons (marlais_object_class (CAR (args)), make_class_list (CDR (args), count - 1)));
 }
@@ -1098,7 +1098,7 @@ marlais_sorted_possible_method_handles (Object fun, Object sample_args)
   class_list = make_class_list (sample_args,
                                 INTVAL (FIRSTVAL (function_arguments (fun))));
   methods = GFMETHODS (fun);
-  maybe_methods = make_empty_list ();
+  maybe_methods = marlais_make_nil ();
   while (!EMPTYLISTP (methods)) {
     method = CAR (methods);
     if (possible_method (method, class_list)) {
@@ -1111,7 +1111,7 @@ marlais_sorted_possible_method_handles (Object fun, Object sample_args)
   }
   sorted_methods = sort_methods (maybe_methods, sample_args);
 
-  sorted_handles = build_sorted_handles (sorted_methods, make_empty_list ());
+  sorted_handles = build_sorted_handles (sorted_methods, marlais_make_nil ());
   return (sorted_handles);
 }
 
@@ -1132,7 +1132,7 @@ split_sorted_methods (Object methods, Object sample_args)
     if (specializer_compare (marlais_function_specializers (CAR (*prev_ptr)),
                              marlais_function_specializers (CAR (next))) == 0) {
       next = *prev_ptr;
-      *prev_ptr = make_empty_list ();
+      *prev_ptr = marlais_make_nil ();
       break;
     }
   }

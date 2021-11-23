@@ -52,13 +52,13 @@ marlais_register_apply (void)
   marlais_register_prims (num, apply_prims);
 
   user_keyword = marlais_make_symbol ("user:");
-  ResultValueStack = make_empty_list ();
+  ResultValueStack = marlais_make_nil ();
 }
 
 Object
 marlais_default_result_value (void)
 {
-  return cons (make_empty_list (), object_class);
+  return cons (marlais_make_nil (), object_class);
 }
 
 Object
@@ -93,7 +93,7 @@ marlais_apply_internal (Object fun, Object args)
     ret = marlais_apply_prim (fun, args);
     break;
   case Method:
-    ret = marlais_apply_method (fun, args, make_empty_list (), NULL);
+    ret = marlais_apply_method (fun, args, marlais_make_nil (), NULL);
     break;
   case GenericFunction:
     ret = apply_generic (fun, args);
@@ -232,7 +232,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
   if (PAIRP (METHKEYPARAMS (meth))) {
     /* copy keys */
     keys = copy_list (METHKEYPARAMS (meth));
-    dup_list = make_empty_list (); /* For duplicate keywords */
+    dup_list = marlais_make_nil (); /* For duplicate keywords */
 
     /* Bind each of the keyword args that is present. */
     while (!EMPTYLISTP (args)) {
@@ -405,9 +405,9 @@ narrow_value_types (Object *values_list_ptr,
     while (!EMPTYLISTP (new_values_list)) {
       if (marlais_subtype_p (CAR (new_values_list), *rest_type)) {
         *values_list_ptr = cons (CAR (new_values_list),
-                                 make_empty_list ());
+                                 marlais_make_nil ());
       } else {
-        *values_list_ptr = cons (*rest_type, make_empty_list ());
+        *values_list_ptr = cons (*rest_type, marlais_make_nil ());
       }
       values_list_ptr = &CDR (*values_list_ptr);
       new_values_list = CDR (new_values_list);
@@ -568,14 +568,14 @@ build_rest_methods (Object cache_tail, Object args)
   Object method_found, method_group;
 
   if (EMPTYLISTP (cache_tail)) {
-    return (make_empty_list ());
+    return (marlais_make_nil ());
   }
   /* possible ambiguous point - put recalc signal here */
   method_found = 0;
   method_group = CAR (cache_tail);
   while (!EMPTYLISTP (method_group)) {
     if (method_found) {
-      return make_empty_list ();
+      return marlais_make_nil ();
     }
     method_found = HDLOBJ (CAR (method_group));
     /* Drew - check the next line.  I think you forgot to cdr down
@@ -585,7 +585,7 @@ build_rest_methods (Object cache_tail, Object args)
     method_group = CDR (method_group);
   }
   if (!method_found) {
-    return cons (MARLAIS_FALSE, make_empty_list ());
+    return cons (MARLAIS_FALSE, marlais_make_nil ());
   } else {
     return cons (method_found, build_rest_methods (CDR (cache_tail), args));
   }

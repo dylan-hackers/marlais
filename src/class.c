@@ -76,7 +76,7 @@ static Object merge_class_lists (Object left, Object right);
 void
 marlais_initialize_class (void)
 {
-  object_class = make_builtin_class ("<object>", make_empty_list ());
+  object_class = make_builtin_class ("<object>", marlais_make_nil ());
 
   /* fix up the binding for object_class so that it is correct */
   {
@@ -410,7 +410,7 @@ marlais_make (Object class, Object rest)
   if (class == pair_class) {
     ret = make_pair_driver (rest);
   } else if (class == empty_list_class) {
-    ret = make_empty_list ();
+    ret = marlais_make_nil ();
   } else if (class == list_class) {
     ret = make_list_driver (rest);
   } else if ((class == vector_class) ||
@@ -460,7 +460,7 @@ marlais_direct_superclasses (Object class)
   if (!SEALEDP (class)) {
     return CLASSSUPERS (class);
   } else {
-    return make_empty_list ();
+    return marlais_make_nil ();
   }
 }
 
@@ -468,7 +468,7 @@ Object
 marlais_all_superclasses (Object class)
 {
   if (SEALEDP (class)) {
-    return make_empty_list ();
+    return marlais_make_nil ();
   } else {
     return CLASSPRECLIST (class);
   }
@@ -498,7 +498,7 @@ marlais_make_class (Object obj,
   /* allow a single value for supers, make it into a list
    */
   if (!LISTP (supers)) {
-    CLASSSUPERS (obj) = cons (supers, make_empty_list ());
+    CLASSSUPERS (obj) = cons (supers, marlais_make_nil ());
   } else {
     CLASSSUPERS (obj) = supers;
   }
@@ -509,12 +509,12 @@ marlais_make_class (Object obj,
 
   /* first find slot descriptors for this class */
 
-  CLASSINSLOTDS (obj) = make_empty_list ();
-  CLASSSLOTDS (obj) = make_empty_list ();
-  CLASSCSLOTDS (obj) = make_empty_list ();
-  CLASSESSLOTDS (obj) = make_empty_list ();
-  CLASSCONSTSLOTDS (obj) = make_empty_list ();
-  CLASSVSLOTDS (obj) = make_empty_list ();
+  CLASSINSLOTDS (obj) = marlais_make_nil ();
+  CLASSSLOTDS (obj) = marlais_make_nil ();
+  CLASSCSLOTDS (obj) = marlais_make_nil ();
+  CLASSESSLOTDS (obj) = marlais_make_nil ();
+  CLASSCONSTSLOTDS (obj) = marlais_make_nil ();
+  CLASSVSLOTDS (obj) = marlais_make_nil ();
 
   /* Process superclasses.  This includes:
    *  1. add the slots of the superclasses
@@ -543,7 +543,7 @@ marlais_make_class (Object obj,
 
   allsuperclasses = list_reverse (CDR (CLASSPRECLIST (obj)));
 
-  sg_names = make_empty_list ();
+  sg_names = marlais_make_nil ();
   while (!EMPTYLISTP (allsuperclasses)) {
     /* check for sealed superclass */
     if (SEALEDP (CAR (allsuperclasses))) {
@@ -559,7 +559,7 @@ marlais_make_class (Object obj,
     add_slot_descriptor_names (CLASSVSLOTDS (super), &sg_names);
     allsuperclasses = CDR (allsuperclasses);
   }
-  CLASSSUBS (obj) = make_empty_list ();
+  CLASSSUBS (obj) = marlais_make_nil ();
 
   for (tmp = slot_descriptors; PAIRP (tmp); tmp = CDR (tmp)) {
     slot = CAR (tmp);
@@ -593,7 +593,7 @@ marlais_make_class (Object obj,
   INSTSLOTS (CLASSCSLOTS (obj)) =
     (Object *) (VALUESELS (initialize_slots (append (CLASSCSLOTDS (obj),
                                                      CLASSESSLOTDS (obj)),
-                                             make_empty_list ()))[0]);
+                                             marlais_make_nil ()))[0]);
 
   return (obj);
 }
@@ -632,7 +632,7 @@ marlais_make_slot_descriptor_list (Object slots, int do_eval)
   Object slotelt;
   Object dynamism;
 
-  descriptors = make_empty_list ();
+  descriptors = marlais_make_nil ();
   desc_ptr = &descriptors;
   while (PAIRP (slots)) {
     slot = CAR (slots);
@@ -779,7 +779,7 @@ marlais_make_slot_descriptor_list (Object slots, int do_eval)
       cons (marlais_make_slot_descriptor (properties, getter, setter, type,
                                           init, init_keyword, allocation,
                                           dynamism),
-            make_empty_list ());
+            marlais_make_nil ());
     desc_ptr = &CDR (*desc_ptr);
 
     slots = CDR (slots);
@@ -805,7 +805,7 @@ marlais_make_getter_setter_gfs (Object slotds)
                                          hash_rest_symbol,
                                          x_symbol,
                                          NULL),
-                                 make_empty_list ());
+                                 marlais_make_nil ());
         marlais_add_export (getter, SLOTDGETTER (CAR (slotds)), 1);
       } else if (!GFUNP (marlais_symbol_value (getter))) {
         marlais_error ("Getter symbol not bound to a generic function",
@@ -839,7 +839,7 @@ marlais_make_getter_setter_gfs (Object slotds)
                                            hash_rest_symbol,
                                            x_symbol,
                                            NULL),
-                                   make_empty_list ());
+                                   marlais_make_nil ());
           marlais_add_export (setter,
                                  SLOTDSETTER (CAR (slotds)),
                                  1);
@@ -890,7 +890,7 @@ make_class_entrypoint (Object args)
   Object obj;
 
   supers_obj = object_class;
-  slots_obj = make_empty_list ();
+  slots_obj = marlais_make_nil ();
   debug_obj = NULL;
   abstract_obj = MARLAIS_FALSE;
 
@@ -945,7 +945,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
   Object slotd, init_slotds, tmp_slotds;
   Object *slots;
   Object default_initializers, initializer, *def_ptr;
-  Object extra_initializers = make_empty_list ();
+  Object extra_initializers = marlais_make_nil ();
   Object extra;
 
   /* create defaulted initialization arguments */
@@ -984,7 +984,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
     init_slotds = copy_list (slot_descriptors);
   }
 
-  default_initializers = make_empty_list ();
+  default_initializers = marlais_make_nil ();
   def_ptr = &default_initializers;
 
   /*
@@ -1122,7 +1122,7 @@ pair_list_reverse (Object lst)
 {
   Object result;
 
-  result = make_empty_list ();
+  result = marlais_make_nil ();
   while (PAIRP (lst) && PAIRP (CDR (lst))) {
     result = cons (CAR (lst), cons (SECOND (lst), result));
     lst = CDR (CDR (lst));
@@ -1182,8 +1182,8 @@ eval_slotds (Object slotds)
     SLOTDSLOTTYPE (slotd) = marlais_eval (SLOTDSLOTTYPE (slotd));
     if (SLOTDDEFERREDTYPE (slotd)) {
       SLOTDSLOTTYPE (slotd) = marlais_apply_method (marlais_eval (SLOTDSLOTTYPE (slotd)),
-                                                    make_empty_list (),
-                                                    make_empty_list (),
+                                                    marlais_make_nil (),
+                                                    marlais_make_nil (),
                                                     NULL);
     }
     slotds = CDR (slotds);
@@ -1212,7 +1212,7 @@ make_builtin_class (char *name, Object supers)
   CLASSNAME (obj) = marlais_make_name (name);
   CLASSPROPS (obj) &= ~CLASSSLOTSUNINIT;
   marlais_add_export (CLASSNAME (obj), obj, 1);
-  return marlais_make_class (obj, supers, make_empty_list (), MARLAIS_FALSE, NULL);
+  return marlais_make_class (obj, supers, marlais_make_nil (), MARLAIS_FALSE, NULL);
 }
 
 static void
@@ -1267,7 +1267,7 @@ make_getter_method (Object slot, Object class, int slot_num)
     marlais_error ("Bad slot allocation ", allocation, NULL);
   }
   if (allocation == constant_symbol) {
-    body = cons (SLOTDINIT (slot), make_empty_list ());
+    body = cons (SLOTDINIT (slot), marlais_make_nil ());
   } else {
     body = listem (listem (slot_val_sym,
                            slot_location,
@@ -1350,8 +1350,8 @@ merge_sorted_precedence_lists (Object class, Object supers)
     new_list = CLASSSORTEDPRECS (CAR (supers));
     supers = CDR (supers);
   } else {
-    new_list = make_empty_list ();
-    supers = make_empty_list ();
+    new_list = marlais_make_nil ();
+    supers = marlais_make_nil ();
   }
 
   while (!EMPTYLISTP (supers)) {
@@ -1359,7 +1359,7 @@ merge_sorted_precedence_lists (Object class, Object supers)
                                   CLASSSORTEDPRECS (CAR (supers)));
     supers = CDR (supers);
   }
-  return merge_class_lists (new_list, cons (class, make_empty_list ()));
+  return merge_class_lists (new_list, cons (class, marlais_make_nil ()));
 }
 
 static Object
@@ -1372,16 +1372,16 @@ merge_class_lists (Object left, Object right)
 
   while (!EMPTYLISTP (left) && !EMPTYLISTP (right)) {
     if (CLASSINDEX (CAR (left)) < CLASSINDEX (CAR (right))) {
-      *new_list_ptr = cons (CAR (left), make_empty_list ());
+      *new_list_ptr = cons (CAR (left), marlais_make_nil ());
       left = CDR (left);
       new_list_ptr = &CDR (*new_list_ptr);
     } else if (CLASSINDEX (CAR (left)) == CLASSINDEX (CAR (right))) {
-      *new_list_ptr = cons (CAR (left), make_empty_list ());
+      *new_list_ptr = cons (CAR (left), marlais_make_nil ());
       left = CDR (left);
       right = CDR (right);
       new_list_ptr = &CDR (*new_list_ptr);
     } else {
-      *new_list_ptr = cons (CAR (right), make_empty_list ());
+      *new_list_ptr = cons (CAR (right), marlais_make_nil ());
       right = CDR (right);
       new_list_ptr = &CDR (*new_list_ptr);
     }

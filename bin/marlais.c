@@ -144,7 +144,7 @@ main (int argc, char *argv[])
 
   /* initialization */
   marlais_initialize ();
-  open_file_list = make_empty_list ();
+  open_file_list = marlais_make_nil ();
   parse_args(argc, argv);
 
   /* error catch for initialization code */
@@ -168,9 +168,9 @@ main (int argc, char *argv[])
 
   marlais_use_module (dylan_symbol,
 	      all_symbol,
-	      make_empty_list (),
+	      marlais_make_nil (),
 	      empty_string,
-	      make_empty_list (),
+	      marlais_make_nil (),
 	      all_symbol);
 
 #ifdef DO_NOT_LOAD_COMMON_DYLAN_SPEC

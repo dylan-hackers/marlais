@@ -642,10 +642,10 @@ bind_variables (Object init_list,
       if (variable == hash_rest_symbol) {
         variable = SECOND (variables);
         last = NULL;
-        first = make_empty_list ();
+        first = marlais_make_nil ();
         /* bind rest values */
         for (i = value_count; i < VALUESNUM (val); ++i) {
-          new = cons (VALUESELS (val)[i], make_empty_list ());
+          new = cons (VALUESELS (val)[i], marlais_make_nil ());
           if (last) {
             CDR (last) = new;
           } else {
@@ -684,7 +684,7 @@ bind_variables (Object init_list,
     /* init is not a values object */
     if (CAR (variables) == hash_rest_symbol) {
       add_variable_binding (SECOND (variables),
-                            cons (val, make_empty_list ()),
+                            cons (val, marlais_make_nil ()),
                             top_level,
                             constant,
                             to_frame);
@@ -812,7 +812,7 @@ define_class_eval (Object form)
   CLASSNAME (obj) = name;
   marlais_add_export (name, obj, 0);
   supers = map (marlais_eval, CAR (tmp_form));
-  if(EMPTYLISTP(supers)) supers = cons(object_class, make_empty_list());
+  if(EMPTYLISTP(supers)) supers = cons(object_class, marlais_make_nil ());
   slots = marlais_make_slot_descriptor_list (CDR (tmp_form), 1);
   marlais_make_getter_setter_gfs (slots);
   class = marlais_make_class (obj, supers, slots,
@@ -869,7 +869,7 @@ define_generic_function_eval (Object form)
   Object name, params, gf;
 
   check_function_syntax(form, &name, &params, "define-generic-function");
-  gf = marlais_make_generic (name, params, make_empty_list ());
+  gf = marlais_make_generic (name, params, marlais_make_nil ());
   marlais_add_export (name, gf, 0);
   return (unspecified_object);
 }
@@ -915,10 +915,10 @@ define_module_eval (Object form)
       if (PAIRP (clause)) {
         if (CAR (clause) == use_symbol) {
           Object imports = all_symbol;
-          Object exclusions = make_empty_list ();
+          Object exclusions = marlais_make_nil ();
           Object prefix = empty_string;
-          Object renames = make_empty_list ();
-          Object exports = make_empty_list ();
+          Object renames = marlais_make_nil ();
+          Object exports = marlais_make_nil ();
 
           int imports_specified = 0;
           int exclusions_specified = 0;
@@ -1116,7 +1116,7 @@ for_eval (Object form)
 
   /* IRM Pg. 33 Step 1 */
 
-  clause_types = vars = inits = make_empty_list ();
+  clause_types = vars = inits = marlais_make_nil ();
 
   get_vars_and_inits (var_forms, &clause_types, &vars, &inits);
 
@@ -1278,14 +1278,14 @@ get_vars_and_inits (Object var_forms,
         marlais_error ("for: Bad collection clause specification", var_form, NULL);
       }
       var = get_variable (SECOND (var_form));
-      init = listem (make_empty_list (),
+      init = listem (marlais_make_nil (),
                      marlais_eval (THIRD (var_form)),
-                     make_empty_list (),
+                     marlais_make_nil (),
                      NULL);
     }
-    *clause_types_ptr = cons (clause_type, make_empty_list ());
-    *vars_ptr = cons (var, make_empty_list ());
-    *inits_ptr = cons (init, make_empty_list ());
+    *clause_types_ptr = cons (clause_type, marlais_make_nil ());
+    *vars_ptr = cons (var, marlais_make_nil ());
+    *inits_ptr = cons (init, marlais_make_nil ());
 
     clause_types_ptr = &CDR (*clause_types_ptr);
     vars_ptr = &CDR (*vars_ptr);
@@ -1331,8 +1331,8 @@ initialize_collection_inits (Object clause_types,
       protocol = marlais_eval (cons (forward_iteration_protocol_symbol,
                              cons (cons (quote_symbol,
                                          cons (SECOND (CAR (inits)),
-                                               make_empty_list ())),
-                                   make_empty_list ())));
+                                               marlais_make_nil ())),
+                                   marlais_make_nil ())));
       CAR (CAR (inits)) = protocol;
       THIRD (CAR (inits)) = VALUESELS (protocol)[0];
     }
@@ -1371,13 +1371,13 @@ exhausted_numeric_or_collection_clauses (Object clause_types,
         THIRD (CAR (inits)) = marlais_apply (VALUESELS (protocol)[2],
                                              cons (SECOND (CAR (inits)),
                                                    cons (THIRD (CAR (inits)),
-                                                         make_empty_list ())));
+                                                         marlais_make_nil ())));
       }
       if (MARLAIS_TRUE == marlais_apply (VALUESELS (protocol)[3],
                                          cons (SECOND (CAR (inits)),
                                                cons (THIRD (CAR (inits)),
                                                      cons (VALUESELS (protocol)[1],
-                                                           make_empty_list ()))))) {
+                                                           marlais_make_nil ()))))) {
         return 1;
       }
     } else if (clause_type == range_keyword) {
@@ -1449,7 +1449,7 @@ initialize_collection_variables (Object clause_types,
                    marlais_apply (VALUESELS (protocol)[5],
                                   cons (SECOND (CAR (inits)),
                                         cons (THIRD (CAR (inits)),
-                                              make_empty_list ()))),
+                                              marlais_make_nil ()))),
                    0,
                    the_env);
     }
@@ -1471,7 +1471,7 @@ update_explicit_and_numeric_clauses (Object clause_types,
   new_values_ptr = &new_values;
 
   while (PAIRP (clause_types)) {
-    new_value = make_empty_list ();
+    new_value = marlais_make_nil ();
     clause_type = CAR (clause_types);
     if (clause_type == variable_keyword) {
       new_value = marlais_eval (CDR (CAR (inits)));
@@ -1486,7 +1486,7 @@ update_explicit_and_numeric_clauses (Object clause_types,
 
       FIRST (CAR (inits)) = new_value;
     }
-    *new_values_ptr = cons (new_value, make_empty_list ());
+    *new_values_ptr = cons (new_value, marlais_make_nil ());
 
     new_values_ptr = &CDR (*new_values_ptr);
     clause_types = CDR (clause_types);
@@ -1522,7 +1522,7 @@ update_collection_variables (Object clause_types,
                     marlais_apply (VALUESELS (protocol)[5],
                                    cons (SECOND (CAR (inits)),
                                          cons (THIRD (CAR (inits)),
-                                               make_empty_list ()))));
+                                               marlais_make_nil ()))));
     }
     clause_types = CDR (clause_types);
     vars = CDR (vars);

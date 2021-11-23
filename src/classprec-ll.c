@@ -262,7 +262,7 @@ step (int class_index, int *subs, prec_graph graph)
     subs[vec[i]] = subs[vec[i]] - 1;
   }
 
-  /* l_list = cons (graph.class_vec[class_index], make_empty_list()); */
+  /* l_list = cons (graph.class_vec[class_index], marlais_make_nil ()); */
 
   this_l_list.size = 1;
   this_l_list.vec = (int *) marlais_allocate_memory (sizeof (int));
@@ -329,7 +329,7 @@ l_list_to_class_list (l_list this_l_list, prec_graph graph)
 
   for (i = 0; i < this_l_list.size; i++) {
     *list_ptr = cons (graph.class_vec[this_l_list.vec[i]],
-                      make_empty_list ());
+                      marlais_make_nil ());
     list_ptr = &CDR (*list_ptr);
   }
   return new_list;

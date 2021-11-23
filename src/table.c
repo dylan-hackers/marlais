@@ -215,7 +215,7 @@ table_element_handle (Object table, Object key, Object *default_val)
 
   while (entry) {
     if (marlais_apply (equal_fun,
-                       cons (TEKEY (entry), cons (key, make_empty_list ())))
+                       cons (TEKEY (entry), cons (key, marlais_make_nil ())))
         != MARLAIS_FALSE) {
       return &(TEVALUE (entry));
     }
@@ -305,7 +305,7 @@ equal_hash (Object key)
     if (!hashfun) {
       marlais_error ("no =hash method defined for key class", key, NULL);
     }
-    return (marlais_apply (hashfun, cons (key, make_empty_list ())));
+    return (marlais_apply (hashfun, cons (key, marlais_make_nil ())));
   } else {
     if (INTEGERP (key)) {
       return (key);
