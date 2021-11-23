@@ -582,11 +582,6 @@ WHITESPACE      [\ \t\f\v\r]
 
  /* Various special tokens */
 
-<ETC>[\(\)\[\]\{\}\.\,\;\~\?]   { /* return char as token */
-                                  mylval = (Object)0;
-                                  return *yytext;
-                                }
-
 <ETC>=>         { mylval = equal_arrow_symbol;
                   return (EQUAL_ARROW);
                 }
@@ -610,6 +605,11 @@ WHITESPACE      [\ \t\f\v\r]
 <ETC>\.\.\.     { mylval = NULL;
                   return (ELLIPSIS);
                 }
+
+<ETC>[\(\)\[\]\{\}\.\,\;\~\?]   { /* return char as token */
+                                  mylval = (Object)0;
+                                  return *yytext;
+                                }
 
  /* Handle unrecognized characters */
 
