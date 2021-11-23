@@ -3,6 +3,8 @@
 
 #include <marlais/common.h>
 
+/* Initialize the garbage collector */
+extern void marlais_initialize_gc (void);
 /* Register garbage collector primitives */
 extern void marlais_register_gc (void);
 
