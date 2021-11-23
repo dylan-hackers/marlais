@@ -18,6 +18,9 @@
  * Add support for big integers
  * Improve performance of number->string conversion
  * Move parser to own directory
+ * Primitive for member?
+ * Primitive for list(#rest members)
+ * Empty <values> constant
 
 ### Research
 
