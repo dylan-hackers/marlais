@@ -38,11 +38,12 @@
 
 #include <marlais/common.h>
 
+/* Common argument decoder for make(<sequence>) */
 extern void marlais_make_sequence_entry
     (Object args,
-	 int* size,
-	 Object* size_obj,
-	 Object* fill_obj,
-	 const char* type);
+     int* size,
+     Object* size_obj,
+     Object* fill_obj,
+     const char* type);
 
 #endif

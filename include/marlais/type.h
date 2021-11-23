@@ -3,7 +3,7 @@
 
 #include <marlais/common.h>
 
-/* Register type primitives*/
+/* Register type primitives */
 extern void marlais_register_type (void);
 
 /* Instance check */
@@ -13,9 +13,11 @@ extern int marlais_subtype_p (Object class1, Object class2);
 /* Same-class check */
 extern int marlais_same_class_p (Object class1, Object class2);
 
-/* Type creation */
+/* Make a <limited-integer> */
 extern Object marlais_make_limited_integer (Object args);
+/* Make a <singleton>  */
 extern Object marlais_make_singleton (Object val);
+/* Make a <type-union> */
 extern Object marlais_make_union (Object typelist);
 
 #endif
