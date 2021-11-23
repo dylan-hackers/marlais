@@ -38,8 +38,6 @@
 
 #define DEFAULT_TABLE_SIZE 101
 
-extern Object equal_symbol;
-
 /* Register table primitives */
 extern void marlais_register_table (void);
 /* Make a new table of given size */
