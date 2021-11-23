@@ -408,11 +408,11 @@ marlais_make (Object class, Object rest)
   }
   /* special case the builtin classes */
   if (class == pair_class) {
-    ret = make_pair_driver (rest);
+    ret = marlais_make_pair_entrypoint (rest);
   } else if (class == empty_list_class) {
     ret = marlais_make_nil ();
   } else if (class == list_class) {
-    ret = make_list_driver (rest);
+    ret = marlais_make_list_entrypoint (rest);
   } else if ((class == vector_class) ||
              (class == simple_object_vector_class)) {
     ret = marlais_make_vector_entrypoint (rest);

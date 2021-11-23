@@ -101,18 +101,14 @@ marlais_register_list (void)
     marlais_register_prims (num, list_prims);
 }
 
-/* This gets called with (make <pair> args)
- * Added to pass conformance tests.
- */
 Object
-make_pair_driver (Object args)
+marlais_make_pair_entrypoint (Object args)
 {
     return cons (MARLAIS_FALSE, MARLAIS_FALSE);	/* who knows ?? */
 }
 
-/* This gets called with (make <list> args) */
 Object
-make_list_driver (Object args)
+marlais_make_list_entrypoint (Object args)
 {
     int size;
     Object size_obj, fill_obj, res;

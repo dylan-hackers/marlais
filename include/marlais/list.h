@@ -42,9 +42,9 @@ extern void marlais_initialize_list (void);
 extern void marlais_register_list (void);
 
 /* Entrypoint for make(<pair>) */
-extern Object make_pair_driver (Object args);
+extern Object marlais_make_pair_entrypoint (Object args);
 /* Entrypoint for make(<list>) */
-extern Object make_list_driver (Object args);
+extern Object marlais_make_list_entrypoint (Object args);
 
 #ifdef MARLAIS_OBJECT_MODEL_LARGE
 /* Returns the empty list */
