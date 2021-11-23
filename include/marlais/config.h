@@ -4,6 +4,8 @@
 /* Enable readline support */
 #define MARLAIS_ENABLE_READLINE
 
+#define MARLAIS_ENABLE_GMP
+
 /* Enable big integer support */
 #undef MARLAIS_ENABLE_BIG_INTEGERS
 /* Enable method caching */
