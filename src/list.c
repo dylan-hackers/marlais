@@ -104,7 +104,7 @@ marlais_register_list (void)
 Object
 marlais_make_pair_entrypoint (Object args)
 {
-    return cons (MARLAIS_FALSE, MARLAIS_FALSE);	/* who knows ?? */
+    return cons (MARLAIS_FALSE, MARLAIS_FALSE); /* who knows ?? */
 }
 
 Object
@@ -117,14 +117,14 @@ marlais_make_list_entrypoint (Object args)
 
     /* actually fabricate the list */
     if (size == 0) {
-	return (marlais_make_nil ());
+        return (marlais_make_nil ());
     } else {
-	res = marlais_make_nil ();
-	while (size) {
-	    res = cons (fill_obj, res);
-	    size--;
-	}
-	return (res);
+        res = marlais_make_nil ();
+        while (size) {
+            res = cons (fill_obj, res);
+            size--;
+        }
+        return (res);
     }
 }
 
@@ -151,16 +151,16 @@ cdr (Object lst)
 }
 
 static Object nth(Object lst, Object default_ob, const char* where,
-		  int test, Object (*fn)(Object))
+                  int test, Object (*fn)(Object))
 {
     if (test) {
-	return (*fn)(lst);
+        return (*fn)(lst);
     } else if (default_ob == default_object) {
-	char err_msg[80];
-	sprintf(err_msg, "list has no %s element", where);
-	return marlais_error (err_msg, lst, NULL);
+        char err_msg[80];
+        sprintf(err_msg, "list has no %s element", where);
+        return marlais_error (err_msg, lst, NULL);
     } else {
-	return default_ob;
+        return default_ob;
     }
 }
 
@@ -192,17 +192,17 @@ static Object
 third_d (Object lst, Object default_ob)
 {
   return nth(lst, default_ob, "third",
-	     PAIRP (lst) && PAIRP (CDR (lst)) && PAIRP (CDR (CDR (lst))),
-	     third);
+             PAIRP (lst) && PAIRP (CDR (lst)) && PAIRP (CDR (CDR (lst))),
+             third);
 }
 
 Object
 map (Object (*fun) (Object), Object lst)
 {
     if (EMPTYLISTP (lst)) {
-	return (marlais_make_nil ());
+        return (marlais_make_nil ());
     } else {
-	return (cons ((*fun) (CAR (lst)), map (fun, CDR (lst))));
+        return (cons ((*fun) (CAR (lst)), map (fun, CDR (lst))));
     }
 }
 
@@ -210,9 +210,9 @@ Object
 map2 (Object (*fun) (Object, Object), Object l1, Object l2)
 {
     if (EMPTYLISTP (l1) || EMPTYLISTP (l2)) {
-	return (marlais_make_nil ());
+        return (marlais_make_nil ());
     } else {
-	return (cons ((*fun) (CAR (l1), CAR (l2)), map2 (fun, CDR (l1), CDR (l2))));
+        return (cons ((*fun) (CAR (l1), CAR (l2)), map2 (fun, CDR (l1), CDR (l2))));
     }
 }
 
@@ -220,10 +220,10 @@ Object
 list_map1 (Object fun, Object lst)
 {
     if (EMPTYLISTP (lst)) {
-	return (marlais_make_nil ());
+        return (marlais_make_nil ());
     } else {
-	return (cons (marlais_apply (fun, cons (CAR (lst), marlais_make_nil ())),
-		      list_map1 (fun, (CDR (lst)))));
+        return (cons (marlais_apply (fun, cons (CAR (lst), marlais_make_nil ())),
+                      list_map1 (fun, (CDR (lst)))));
     }
 }
 
@@ -231,11 +231,11 @@ Object
 list_map2 (Object fun, Object l1, Object l2)
 {
     if (EMPTYLISTP (l1) || EMPTYLISTP (l2)) {
-	return (marlais_make_nil ());
+        return (marlais_make_nil ());
     } else {
-	return (cons (marlais_apply (fun, listem (CAR (l1), CAR (l2),
-					  NULL)),
-		      list_map2 (fun, CDR (l1), CDR (l2))));
+        return (cons (marlais_apply (fun, listem (CAR (l1), CAR (l2),
+                                                  NULL)),
+                      list_map2 (fun, CDR (l1), CDR (l2))));
     }
 }
 
@@ -245,9 +245,9 @@ list_length_int (Object lst)
     int len = list_length (lst);
 
     if (len < 0) {
-	return MARLAIS_FALSE;
+        return MARLAIS_FALSE;
     } else {
-	return marlais_make_integer (len);
+        return marlais_make_integer (len);
     }
 }
 
@@ -255,9 +255,9 @@ Object
 append (Object l1, Object l2)
 {
     if (EMPTYLISTP (l1)) {
-	return (l2);
+        return (l2);
     } else {
-	return (cons (CAR (l1), append (CDR (l1), l2)));
+        return (cons (CAR (l1), append (CDR (l1), l2)));
     }
 }
 
@@ -285,10 +285,10 @@ int
 member (Object obj, Object lst)
 {
     while (PAIRP (lst)) {
-	if (obj == CAR (lst)) {
-	    return 1;
-	}
-	lst = CDR (lst);
+        if (obj == CAR (lst)) {
+            return 1;
+        }
+        lst = CDR (lst);
     }
     return 0;
 }
@@ -298,16 +298,16 @@ member_p (Object obj, Object lst, Object test)
 {
     Object l = lst;
     while (!EMPTYLISTP (l)) {
-	if (test != MARLAIS_FALSE) {
-	    if (marlais_apply (test, listem (obj, CAR (l), NULL)) != MARLAIS_FALSE) {
-		return (MARLAIS_TRUE);
-	    }
-	} else {
-	    if (marlais_identical_p (obj, CAR (l))) {
-		return (MARLAIS_TRUE);
-	    }
-	}
-	l = CDR (l);
+        if (test != MARLAIS_FALSE) {
+            if (marlais_apply (test, listem (obj, CAR (l), NULL)) != MARLAIS_FALSE) {
+                return (MARLAIS_TRUE);
+            }
+        } else {
+            if (marlais_identical_p (obj, CAR (l))) {
+                return (MARLAIS_TRUE);
+            }
+        }
+        l = CDR (l);
     }
     return (MARLAIS_FALSE);
 }
@@ -323,10 +323,10 @@ listem (Object car,...)
     el = va_arg (args, Object);
 
     while (el) {
-	acons = cons (el, marlais_make_nil ());
-	CDR (cur) = acons;
-	cur = acons;
-	el = va_arg (args, Object);
+        acons = cons (el, marlais_make_nil ());
+        CDR (cur) = acons;
+        cur = acons;
+        el = va_arg (args, Object);
     }
     va_end (args);
     return (fst);
@@ -339,8 +339,8 @@ list_reduce (Object fun, Object init, Object lst)
 
     val = init;
     while (!EMPTYLISTP (lst)) {
-	val = marlais_apply (fun, listem (val, CAR (lst), NULL));
-	lst = CDR (lst);
+        val = marlais_apply (fun, listem (val, CAR (lst), NULL));
+        lst = CDR (lst);
     }
     return (val);
 }
@@ -358,37 +358,37 @@ list_length (Object lst)
     Object fore_list, back_list, next;
 
     if (EMPTYLISTP (lst)) {
-	return 0;
+        return 0;
     } else if (CDR (lst) == lst) {
-	return -1;
+        return -1;
     } else {
-	len = 1;
-	back_list = lst;
-	fore_list = CDR (lst);
-	CDR (back_list) = marlais_make_nil ();
+        len = 1;
+        back_list = lst;
+        fore_list = CDR (lst);
+        CDR (back_list) = marlais_make_nil ();
 
-	/* Reverse pointers in the list and see if we end up at the head. */
-	while (PAIRP (fore_list)) {
-	    next = CDR (fore_list);
-	    CDR (fore_list) = back_list;
-	    back_list = fore_list;
-	    fore_list = next;
-	    len++;
-	}
-	if ((back_list == lst) && (PAIRP (CDR (back_list)))) {
-	    /* We ended up at the head and had at least 2 elements,
-	     *  thus there must be a cycle.
+        /* Reverse pointers in the list and see if we end up at the head. */
+        while (PAIRP (fore_list)) {
+            next = CDR (fore_list);
+            CDR (fore_list) = back_list;
+            back_list = fore_list;
+            fore_list = next;
+            len++;
+        }
+        if ((back_list == lst) && (PAIRP (CDR (back_list)))) {
+            /* We ended up at the head and had at least 2 elements,
+             *  thus there must be a cycle.
 	     */
-	    len = -1;
-	}
-	/* Reverse the pointers again to repair the list. */
-	while (PAIRP (back_list)) {
-	    next = CDR (back_list);
-	    CDR (back_list) = fore_list;
-	    fore_list = back_list;
-	    back_list = next;
-	}
-	return len;
+          len = -1;
+        }
+        /* Reverse the pointers again to repair the list. */
+        while (PAIRP (back_list)) {
+            next = CDR (back_list);
+            CDR (back_list) = fore_list;
+            fore_list = back_list;
+            back_list = next;
+        }
+        return len;
     }
 }
 
@@ -415,22 +415,22 @@ list_element (Object pair, Object index, Object default_ob)
     i = INTVAL (index);
     lst = pair;
     if (EMPTYLISTP (lst)) {
-	if (default_ob == default_object) {
-	    marlais_error ("element: no such element", index, pair, NULL);
-	} else {
-	    return default_ob;
-	}
+        if (default_ob == default_object) {
+            marlais_error ("element: no such element", index, pair, NULL);
+        } else {
+            return default_ob;
+        }
     }
     while (i) {
-	i--;
-	lst = CDR (lst);
-	if (EMPTYLISTP (lst)) {
-	    if (default_ob == default_object) {
-		marlais_error ("element: no such element", index, pair, NULL);
-	    } else {
-		return default_ob;
-	    }
-	}
+        i--;
+        lst = CDR (lst);
+        if (EMPTYLISTP (lst)) {
+            if (default_ob == default_object) {
+                marlais_error ("element: no such element", index, pair, NULL);
+            } else {
+                return default_ob;
+            }
+        }
     }
     return (CAR (lst));
 }
@@ -445,20 +445,20 @@ list_element_setter (Object pair, Object index, Object obj)
     el = INTVAL (index);
     lst = pair;
     if (EMPTYLISTP (lst)) {
-	return marlais_error ("element-setter: list is empty", NULL);
+        return marlais_error ("element-setter: list is empty", NULL);
     }
     while (!EMPTYLISTP (lst)) {
-	if (i == el) {
-	    CAR (lst) = obj;
-	    return (obj);
-	}
-	i++;
-	lst = CDR (lst);
+        if (i == el) {
+            CAR (lst) = obj;
+            return (obj);
+        }
+        i++;
+        lst = CDR (lst);
     }
     return marlais_error ("element-setter: index too large for list",
-		  pair,
-		  index,
-		  NULL);
+                          pair,
+                          index,
+                          NULL);
 }
 
 Object
@@ -468,10 +468,10 @@ list_reverse_bang (Object lst)
 
     cur = marlais_make_nil ();
     while (!EMPTYLISTP (lst)) {
-	next = CDR (lst);
-	CDR (lst) = cur;
-	cur = lst;
-	lst = next;
+        next = CDR (lst);
+        CDR (lst) = cur;
+        cur = lst;
+        lst = next;
     }
     return (cur);
 }
@@ -483,8 +483,8 @@ list_reverse (Object lst)
 
     last = marlais_make_nil ();
     while (!EMPTYLISTP (lst)) {
-	last = cons (CAR (lst), last);
-	lst = CDR (lst);
+        last = cons (CAR (lst), last);
+        lst = CDR (lst);
     }
     return (last);
 }
@@ -495,15 +495,15 @@ list_last (Object lst, Object default_ob)
     Object last;
 
     if (EMPTYLISTP (lst)) {
-	if (default_ob == default_object) {
-	    marlais_error ("attempt to get last of empty list", NULL);
-	} else {
-	    return default_ob;
-	}
+        if (default_ob == default_object) {
+            marlais_error ("attempt to get last of empty list", NULL);
+        } else {
+            return default_ob;
+        }
     }
     while (!EMPTYLISTP (lst)) {
-	last = CAR (lst);
-	lst = CDR (lst);
+        last = CAR (lst);
+        lst = CDR (lst);
     }
     return (last);
 }
@@ -512,13 +512,13 @@ int
 list_equal (Object l1, Object l2)
 {
     if (marlais_identical_p (l1, l2)) {
-	return (1);
+        return (1);
     }
     if (PAIRP (l1) && PAIRP (l2)) {
-	return (list_equal (CAR (l1), CAR (l2)) &&
-		list_equal (CDR (l1), CDR (l2)));
+        return (list_equal (CAR (l1), CAR (l2)) &&
+                list_equal (CDR (l1), CDR (l2)));
     } else {
-	return (0);
+        return (0);
     }
 }
 
@@ -530,9 +530,9 @@ copy_list (Object lst)
     result = marlais_make_nil ();
     tmp_ptr = &result;
     for (tmp_ptr = &result;
-	 PAIRP (lst);
-	 tmp_ptr = &CDR (*tmp_ptr), lst = CDR (lst)) {
-	*tmp_ptr = cons (CAR (lst), marlais_make_nil ());
+         PAIRP (lst);
+         tmp_ptr = &CDR (*tmp_ptr), lst = CDR (lst)) {
+        *tmp_ptr = cons (CAR (lst), marlais_make_nil ());
     }
     return result;
 }
@@ -543,10 +543,10 @@ add_new_at_end (Object *lst, Object elt)
     Object ret = *lst;
 
     while (PAIRP (*lst)) {
-	if (CAR (*lst) == elt) {
-	    return ret;
-	}
-	lst = &CDR (*lst);
+        if (CAR (*lst) == elt) {
+            return ret;
+        }
+        lst = &CDR (*lst);
     }
     *lst = cons (elt, marlais_make_nil ());
     return ret;
