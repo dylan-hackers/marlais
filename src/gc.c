@@ -1,6 +1,8 @@
 
 #include <marlais/gc.h>
 
+#include <marlais/prim.h>
+
 #include <gc.h>
 
 #define W PRIuPTR
@@ -9,6 +11,17 @@
 
 static void marlais_gc_on_event (GC_EventType event);
 static void marlais_gc_on_resize (GC_word new_size);
+
+/* Primitives */
+
+static Object prim_gc_collect (void);
+static Object prim_gc_report (void);
+
+static struct primitive gc_prims[] =
+{
+    {"%gc-collect", prim_0, prim_gc_collect},
+    {"%gc-report",  prim_0, prim_gc_report},
+};
 
 /* Exported functions */
 
@@ -24,6 +37,8 @@ marlais_initialize_gc (void)
 void
 marlais_register_gc (void)
 {
+  int num = sizeof (gc_prims) / sizeof (struct primitive);
+  marlais_register_prims (num, gc_prims);
 }
 
 void
@@ -123,4 +138,18 @@ marlais_gc_on_resize (GC_word new_size)
 {
   fprintf(stderr, "gc: heap resized to %"W" bytes\n", new_size);
   fflush(stderr);
+}
+
+/* Primitives */
+
+static Object prim_gc_collect (void)
+{
+  marlais_gc_collect();
+  return unspecified_object;
+}
+
+static Object prim_gc_report (void)
+{
+  marlais_gc_report();
+  return unspecified_object;
 }
