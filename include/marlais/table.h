@@ -36,8 +36,6 @@
 
 #include <marlais/common.h>
 
-#define DEFAULT_TABLE_SIZE 101
-
 /* Register table primitives */
 extern void marlais_register_table (void);
 /* Make a new table of given size */
