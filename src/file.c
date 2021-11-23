@@ -114,6 +114,7 @@ open_file (Object filename)
     marlais_error ("load: argument must be a filename", filename, NULL);
   }
   str = BYTESTRVAL (filename);
+  fprintf(stderr, "Loading %s...\n", str);
   fp = fopen (str, "r");
   if (!fp) {
     {
