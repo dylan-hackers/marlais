@@ -122,4 +122,5 @@ static void
 marlais_gc_on_resize (GC_word new_size)
 {
   fprintf(stderr, "gc: heap resized to %"W" bytes\n", new_size);
+  fflush(stderr);
 }
