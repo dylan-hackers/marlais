@@ -58,7 +58,7 @@ static Object list_last (Object lst, Object default_ob);
 
 static struct primitive list_prims[] =
 {
-    {"%pair", prim_2, cons},
+    {"%pair", prim_2, marlais_cons},
     {"%head", prim_1, car},
     {"%tail", prim_1, cdr},
     {"%first", prim_2, first_d},
@@ -104,7 +104,7 @@ marlais_register_list (void)
 Object
 marlais_make_pair_entrypoint (Object args)
 {
-    return cons (MARLAIS_FALSE, MARLAIS_FALSE); /* who knows ?? */
+    return marlais_cons (MARLAIS_FALSE, MARLAIS_FALSE); /* who knows ?? */
 }
 
 Object
@@ -121,7 +121,7 @@ marlais_make_list_entrypoint (Object args)
     } else {
         res = marlais_make_nil ();
         while (size) {
-            res = cons (fill_obj, res);
+            res = marlais_cons (fill_obj, res);
             size--;
         }
         return (res);
@@ -129,7 +129,7 @@ marlais_make_list_entrypoint (Object args)
 }
 
 Object
-cons (Object car, Object cdr)
+marlais_cons (Object car, Object cdr)
 {
     Object obj = marlais_allocate_object (Pair, sizeof (struct pair));
 
@@ -202,7 +202,7 @@ map (Object (*fun) (Object), Object lst)
     if (EMPTYLISTP (lst)) {
         return (marlais_make_nil ());
     } else {
-        return (cons ((*fun) (CAR (lst)), map (fun, CDR (lst))));
+        return (marlais_cons ((*fun) (CAR (lst)), map (fun, CDR (lst))));
     }
 }
 
@@ -212,7 +212,7 @@ map2 (Object (*fun) (Object, Object), Object l1, Object l2)
     if (EMPTYLISTP (l1) || EMPTYLISTP (l2)) {
         return (marlais_make_nil ());
     } else {
-        return (cons ((*fun) (CAR (l1), CAR (l2)), map2 (fun, CDR (l1), CDR (l2))));
+        return (marlais_cons ((*fun) (CAR (l1), CAR (l2)), map2 (fun, CDR (l1), CDR (l2))));
     }
 }
 
@@ -222,7 +222,7 @@ list_map1 (Object fun, Object lst)
     if (EMPTYLISTP (lst)) {
         return (marlais_make_nil ());
     } else {
-        return (cons (marlais_apply (fun, cons (CAR (lst), marlais_make_nil ())),
+        return (marlais_cons (marlais_apply (fun, marlais_cons (CAR (lst), marlais_make_nil ())),
                       list_map1 (fun, (CDR (lst)))));
     }
 }
@@ -233,7 +233,7 @@ list_map2 (Object fun, Object l1, Object l2)
     if (EMPTYLISTP (l1) || EMPTYLISTP (l2)) {
         return (marlais_make_nil ());
     } else {
-        return (cons (marlais_apply (fun, listem (CAR (l1), CAR (l2),
+        return (marlais_cons (marlais_apply (fun, listem (CAR (l1), CAR (l2),
                                                   NULL)),
                       list_map2 (fun, CDR (l1), CDR (l2))));
     }
@@ -257,7 +257,7 @@ append (Object l1, Object l2)
     if (EMPTYLISTP (l1)) {
         return (l2);
     } else {
-        return (cons (CAR (l1), append (CDR (l1), l2)));
+        return (marlais_cons (CAR (l1), append (CDR (l1), l2)));
     }
 }
 
@@ -318,12 +318,12 @@ listem (Object car,...)
     Object fst, el, acons, cur;
     va_list args;
 
-    fst = cur = acons = cons (car, marlais_make_nil ());
+    fst = cur = acons = marlais_cons (car, marlais_make_nil ());
     va_start (args, car);
     el = va_arg (args, Object);
 
     while (el) {
-        acons = cons (el, marlais_make_nil ());
+        acons = marlais_cons (el, marlais_make_nil ());
         CDR (cur) = acons;
         cur = acons;
         el = va_arg (args, Object);
@@ -483,7 +483,7 @@ list_reverse (Object lst)
 
     last = marlais_make_nil ();
     while (!EMPTYLISTP (lst)) {
-        last = cons (CAR (lst), last);
+        last = marlais_cons (CAR (lst), last);
         lst = CDR (lst);
     }
     return (last);
@@ -532,7 +532,7 @@ copy_list (Object lst)
     for (tmp_ptr = &result;
          PAIRP (lst);
          tmp_ptr = &CDR (*tmp_ptr), lst = CDR (lst)) {
-        *tmp_ptr = cons (CAR (lst), marlais_make_nil ());
+        *tmp_ptr = marlais_cons (CAR (lst), marlais_make_nil ());
     }
     return result;
 }
@@ -548,7 +548,7 @@ add_new_at_end (Object *lst, Object elt)
         }
         lst = &CDR (*lst);
     }
-    *lst = cons (elt, marlais_make_nil ());
+    *lst = marlais_cons (elt, marlais_make_nil ());
     return ret;
 }
 

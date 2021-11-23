@@ -103,7 +103,7 @@ marlais_tail_eval (Object obj)
 Object
 marlais_apply (Object fun, Object args)
 {
-    return eval_combination (cons (fun, args), 1);
+    return eval_combination (marlais_cons (fun, args), 1);
 }
 
 Object
@@ -120,7 +120,7 @@ eval_combination (Object obj, int do_apply)
     Object tail_required_values;
     Object tail_rest_values;
 
-    ResultValueStack = cons (marlais_default_result_value (), ResultValueStack);
+    ResultValueStack = marlais_cons (marlais_default_result_value (), ResultValueStack);
 
     old_env = the_env;
     old_stack = eval_stack;

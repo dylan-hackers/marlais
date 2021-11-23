@@ -336,7 +336,7 @@ marlais_error (const char *msg,...)
   signal_value = marlais_symbol_value (signal_symbol);
   if (signal_value) {
     marlais_apply (signal_value,
-	   cons (marlais_make (simple_error_class, marlais_make_nil ()),
+	   marlais_cons (marlais_make (simple_error_class, marlais_make_nil ()),
 		 marlais_make_nil ()));
   } else {
     longjmp (error_return, 1);

@@ -200,10 +200,10 @@ marlais_initialize (void)
                          1);
 
   /* make default object */
-  default_object = cons (MARLAIS_FALSE, MARLAIS_FALSE);
+  default_object = marlais_cons (MARLAIS_FALSE, MARLAIS_FALSE);
   marlais_add_export (marlais_make_name ("%default-object"), default_object, 1);
 
-  binding_stack = cons (marlais_make_integer (0), marlais_make_nil ());
+  binding_stack = marlais_cons (marlais_make_integer (0), marlais_make_nil ());
 
   /* Define bindings for the standard character and string type */
   marlais_add_export (marlais_make_name ("<standard-character>"), byte_character_class, 1);

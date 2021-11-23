@@ -435,7 +435,7 @@ marlais_make (Object class, Object rest)
   }
   initialize_fun = marlais_symbol_value (initialize_symbol);
   if (initialize_fun) {
-    marlais_apply (initialize_fun, cons (ret, rest));
+    marlais_apply (initialize_fun, marlais_cons (ret, rest));
   } else {
     marlais_warning ("make: no `initialize' generic function", class, NULL);
   }
@@ -498,7 +498,7 @@ marlais_make_class (Object obj,
   /* allow a single value for supers, make it into a list
    */
   if (!LISTP (supers)) {
-    CLASSSUPERS (obj) = cons (supers, marlais_make_nil ());
+    CLASSSUPERS (obj) = marlais_cons (supers, marlais_make_nil ());
   } else {
     CLASSSUPERS (obj) = supers;
   }
@@ -523,11 +523,11 @@ marlais_make_class (Object obj,
 
   if (!LISTP (supers)) {
     /* only one superclass */
-    CLASSSUBS (supers) = cons (obj, CLASSSUBS (supers));
+    CLASSSUBS (supers) = marlais_cons (obj, CLASSSUBS (supers));
   } else {
     while (PAIRP (supers)) {
       super = CAR (supers);
-      CLASSSUBS (super) = cons (obj, CLASSSUBS (super));
+      CLASSSUBS (super) = marlais_cons (obj, CLASSSUBS (super));
       supers = CDR (supers);
     }
   }
@@ -776,7 +776,7 @@ marlais_make_slot_descriptor_list (Object slots, int do_eval)
       }
     }
     *desc_ptr =
-      cons (marlais_make_slot_descriptor (properties, getter, setter, type,
+      marlais_cons (marlais_make_slot_descriptor (properties, getter, setter, type,
                                           init, init_keyword, allocation,
                                           dynamism),
             marlais_make_nil ());
@@ -1074,11 +1074,11 @@ append_one_slot_descriptor (Object sd, Object **new_sd_list_insert_ptr,
   if (member_2 (SLOTDGETTER (sd), SLOTDSETTER (sd), *sg_names_ptr)) {
     marlais_error ("slot getter or setter appears in superclass", sd, NULL);
   }
-  *sg_names_ptr = cons (SLOTDGETTER (sd), *sg_names_ptr);
+  *sg_names_ptr = marlais_cons (SLOTDGETTER (sd), *sg_names_ptr);
   if (SLOTDSETTER (sd)) {
-    *sg_names_ptr = cons (SLOTDSETTER (sd), *sg_names_ptr);
+    *sg_names_ptr = marlais_cons (SLOTDSETTER (sd), *sg_names_ptr);
   }
-  **new_sd_list_insert_ptr = cons (sd, **new_sd_list_insert_ptr);
+  **new_sd_list_insert_ptr = marlais_cons (sd, **new_sd_list_insert_ptr);
   *new_sd_list_insert_ptr = &CDR (**new_sd_list_insert_ptr);
 }
 
@@ -1124,7 +1124,7 @@ pair_list_reverse (Object lst)
 
   result = marlais_make_nil ();
   while (PAIRP (lst) && PAIRP (CDR (lst))) {
-    result = cons (CAR (lst), cons (SECOND (lst), result));
+    result = marlais_cons (CAR (lst), marlais_cons (SECOND (lst), result));
     lst = CDR (CDR (lst));
   }
   return result;
@@ -1267,7 +1267,7 @@ make_getter_method (Object slot, Object class, int slot_num)
     marlais_error ("Bad slot allocation ", allocation, NULL);
   }
   if (allocation == constant_symbol) {
-    body = cons (SLOTDINIT (slot), marlais_make_nil ());
+    body = marlais_cons (SLOTDINIT (slot), marlais_make_nil ());
   } else {
     body = listem (listem (slot_val_sym,
                            slot_location,
@@ -1359,7 +1359,7 @@ merge_sorted_precedence_lists (Object class, Object supers)
                                   CLASSSORTEDPRECS (CAR (supers)));
     supers = CDR (supers);
   }
-  return merge_class_lists (new_list, cons (class, marlais_make_nil ()));
+  return merge_class_lists (new_list, marlais_cons (class, marlais_make_nil ()));
 }
 
 static Object
@@ -1372,16 +1372,16 @@ merge_class_lists (Object left, Object right)
 
   while (!EMPTYLISTP (left) && !EMPTYLISTP (right)) {
     if (CLASSINDEX (CAR (left)) < CLASSINDEX (CAR (right))) {
-      *new_list_ptr = cons (CAR (left), marlais_make_nil ());
+      *new_list_ptr = marlais_cons (CAR (left), marlais_make_nil ());
       left = CDR (left);
       new_list_ptr = &CDR (*new_list_ptr);
     } else if (CLASSINDEX (CAR (left)) == CLASSINDEX (CAR (right))) {
-      *new_list_ptr = cons (CAR (left), marlais_make_nil ());
+      *new_list_ptr = marlais_cons (CAR (left), marlais_make_nil ());
       left = CDR (left);
       right = CDR (right);
       new_list_ptr = &CDR (*new_list_ptr);
     } else {
-      *new_list_ptr = cons (CAR (right), marlais_make_nil ());
+      *new_list_ptr = marlais_cons (CAR (right), marlais_make_nil ());
       right = CDR (right);
       new_list_ptr = &CDR (*new_list_ptr);
     }

@@ -58,7 +58,7 @@ load_internal (Object filename)
     expr_list_ptr = &expr_list;
     marlais_parser_prepare_stream (fp, 0);
     while ((obj = marlais_parse_object ()) && (obj != eof_object)) {
-	*expr_list_ptr = cons (obj, marlais_make_nil ());
+	*expr_list_ptr = marlais_cons (obj, marlais_make_nil ());
 	expr_list_ptr = &CDR (*expr_list_ptr);
     }
 
@@ -131,7 +131,7 @@ open_file (Object filename)
       }
     }
   }
-  open_file_list = cons (marlais_make_foreign_ptr (fp), open_file_list);
+  open_file_list = marlais_cons (marlais_make_foreign_ptr (fp), open_file_list);
   return fp;
 }
 

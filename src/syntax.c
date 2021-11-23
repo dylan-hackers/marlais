@@ -645,7 +645,7 @@ bind_variables (Object init_list,
         first = marlais_make_nil ();
         /* bind rest values */
         for (i = value_count; i < VALUESNUM (val); ++i) {
-          new = cons (VALUESELS (val)[i], marlais_make_nil ());
+          new = marlais_cons (VALUESELS (val)[i], marlais_make_nil ());
           if (last) {
             CDR (last) = new;
           } else {
@@ -684,7 +684,7 @@ bind_variables (Object init_list,
     /* init is not a values object */
     if (CAR (variables) == hash_rest_symbol) {
       add_variable_binding (SECOND (variables),
-                            cons (val, marlais_make_nil ()),
+                            marlais_cons (val, marlais_make_nil ()),
                             top_level,
                             constant,
                             to_frame);
@@ -812,7 +812,7 @@ define_class_eval (Object form)
   CLASSNAME (obj) = name;
   marlais_add_export (name, obj, 0);
   supers = map (marlais_eval, CAR (tmp_form));
-  if(EMPTYLISTP(supers)) supers = cons(object_class, marlais_make_nil ());
+  if(EMPTYLISTP(supers)) supers = marlais_cons (object_class, marlais_make_nil ());
   slots = marlais_make_slot_descriptor_list (CDR (tmp_form), 1);
   marlais_make_getter_setter_gfs (slots);
   class = marlais_make_class (obj, supers, slots,
@@ -1214,7 +1214,7 @@ get_vars_and_inits (Object var_forms,
       if (list_length (var_form) != 3) {
         marlais_error ("for: Bad variable initialization", var_form, NULL);
       }
-      init = cons (marlais_eval (SECOND (var_form)), THIRD (var_form));
+      init = marlais_cons (marlais_eval (SECOND (var_form)), THIRD (var_form));
     } else if (var_spec == range_keyword) {
 
       /* Numeric Clause: init is of form
@@ -1283,9 +1283,9 @@ get_vars_and_inits (Object var_forms,
                      marlais_make_nil (),
                      NULL);
     }
-    *clause_types_ptr = cons (clause_type, marlais_make_nil ());
-    *vars_ptr = cons (var, marlais_make_nil ());
-    *inits_ptr = cons (init, marlais_make_nil ());
+    *clause_types_ptr = marlais_cons (clause_type, marlais_make_nil ());
+    *vars_ptr = marlais_cons (var, marlais_make_nil ());
+    *inits_ptr = marlais_cons (init, marlais_make_nil ());
 
     clause_types_ptr = &CDR (*clause_types_ptr);
     vars_ptr = &CDR (*vars_ptr);
@@ -1328,9 +1328,9 @@ initialize_collection_inits (Object clause_types,
   while (PAIRP (clause_types)) {
     clause_type = CAR (clause_types);
     if (clause_type == collection_keyword) {
-      protocol = marlais_eval (cons (forward_iteration_protocol_symbol,
-                             cons (cons (quote_symbol,
-                                         cons (SECOND (CAR (inits)),
+      protocol = marlais_eval (marlais_cons (forward_iteration_protocol_symbol,
+                             marlais_cons (marlais_cons (quote_symbol,
+                                         marlais_cons (SECOND (CAR (inits)),
                                                marlais_make_nil ())),
                                    marlais_make_nil ())));
       CAR (CAR (inits)) = protocol;
@@ -1369,14 +1369,14 @@ exhausted_numeric_or_collection_clauses (Object clause_types,
       if (!init_call) {
         /* Bump to the next state to see if it exists */
         THIRD (CAR (inits)) = marlais_apply (VALUESELS (protocol)[2],
-                                             cons (SECOND (CAR (inits)),
-                                                   cons (THIRD (CAR (inits)),
+                                             marlais_cons (SECOND (CAR (inits)),
+                                                   marlais_cons (THIRD (CAR (inits)),
                                                          marlais_make_nil ())));
       }
       if (MARLAIS_TRUE == marlais_apply (VALUESELS (protocol)[3],
-                                         cons (SECOND (CAR (inits)),
-                                               cons (THIRD (CAR (inits)),
-                                                     cons (VALUESELS (protocol)[1],
+                                         marlais_cons (SECOND (CAR (inits)),
+                                               marlais_cons (THIRD (CAR (inits)),
+                                                     marlais_cons (VALUESELS (protocol)[1],
                                                            marlais_make_nil ()))))) {
         return 1;
       }
@@ -1447,8 +1447,8 @@ initialize_collection_variables (Object clause_types,
       /* (set! var (current-element collection state)) */
       marlais_add_local (CAR (vars),
                    marlais_apply (VALUESELS (protocol)[5],
-                                  cons (SECOND (CAR (inits)),
-                                        cons (THIRD (CAR (inits)),
+                                  marlais_cons (SECOND (CAR (inits)),
+                                        marlais_cons (THIRD (CAR (inits)),
                                               marlais_make_nil ()))),
                    0,
                    the_env);
@@ -1486,7 +1486,7 @@ update_explicit_and_numeric_clauses (Object clause_types,
 
       FIRST (CAR (inits)) = new_value;
     }
-    *new_values_ptr = cons (new_value, marlais_make_nil ());
+    *new_values_ptr = marlais_cons (new_value, marlais_make_nil ());
 
     new_values_ptr = &CDR (*new_values_ptr);
     clause_types = CDR (clause_types);
@@ -1520,8 +1520,8 @@ update_collection_variables (Object clause_types,
       /* (set! var (current-element collection state)) */
       marlais_modify_value (CAR (vars),
                     marlais_apply (VALUESELS (protocol)[5],
-                                   cons (SECOND (CAR (inits)),
-                                         cons (THIRD (CAR (inits)),
+                                   marlais_cons (SECOND (CAR (inits)),
+                                         marlais_cons (THIRD (CAR (inits)),
                                                marlais_make_nil ()))));
     }
     clause_types = CDR (clause_types);
@@ -1721,7 +1721,7 @@ qq_help (Object skel)
         return marlais_error ("missing argument to unquote_splicing", NULL);
       }
     } else {
-      return cons (qq_help (CAR (head)), qq_help (tail));
+      return marlais_cons (qq_help (CAR (head)), qq_help (tail));
     }
   }
 }
@@ -1803,8 +1803,8 @@ set_eval (Object form)
      * (set! (slot obj ...) new-value) should become
      * (slot-setter new-value obj ...)
      */
-    return marlais_eval (cons (marlais_make_setter_symbol (CAR (sym)),
-                       marlais_devalue (cons (THIRD (form), CDR (sym)))));
+    return marlais_eval (marlais_cons (marlais_make_setter_symbol (CAR (sym)),
+                       marlais_devalue (marlais_cons (THIRD (form), CDR (sym)))));
 
   }
   if (EMPTYLISTP (CDR (CDR (form)))) {

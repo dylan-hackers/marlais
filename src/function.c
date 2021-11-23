@@ -200,7 +200,7 @@ marlais_add_method (Object generic, Object method)
   /* invalidate next methods when new method added. */
   next_meth_list = GFACTIVENM (generic);
   while (PAIRP (next_meth_list)) {
-    NMREST (CAR (next_meth_list)) = cons (MARLAIS_FALSE,
+    NMREST (CAR (next_meth_list)) = marlais_cons (MARLAIS_FALSE,
                                           marlais_make_nil ());
     next_meth_list = CDR (next_meth_list);
   }
@@ -227,17 +227,17 @@ marlais_add_method (Object generic, Object method)
 #endif
 
       if (!last) {
-        GFMETHODS (generic) = cons (method, CDR (methods));
+        GFMETHODS (generic) = marlais_cons (method, CDR (methods));
         return (marlais_construct_values (2, method, old_method));
       } else {
-        CDR (last) = cons (method, CDR (methods));
+        CDR (last) = marlais_cons (method, CDR (methods));
         return (marlais_construct_values (2, method, old_method));
       }
     }
     last = methods;
     methods = CDR (methods);
   }
-  GFMETHODS (generic) = cons (method, GFMETHODS (generic));
+  GFMETHODS (generic) = marlais_cons (method, GFMETHODS (generic));
 
 #ifdef MARLAIS_ENABLE_METHOD_CACHING
   /* Invalidate the method cache */
@@ -281,7 +281,7 @@ marlais_applicable_method_p (Object argfun, Object sample_args, int strict_check
     marlais_fatal ("applicable-method?: first argument must be a generic function or method");
   }
   if (METHODP (argfun)) {
-    funs = cons (argfun, marlais_make_nil ());
+    funs = marlais_cons (argfun, marlais_make_nil ());
   } else {
     strict_check = 0;
     funs = GFMETHODS (argfun);
@@ -363,7 +363,7 @@ marlais_sorted_applicable_methods (Object fun, Object sample_args)
   while (!EMPTYLISTP (methods)) {
     method = CAR (methods);
     if (marlais_applicable_method_p (method, sample_args, 0) != MARLAIS_FALSE) {
-      app_methods = cons (method, app_methods);
+      app_methods = marlais_cons (method, app_methods);
     }
     methods = CDR (methods);
   }
@@ -398,7 +398,7 @@ keyword_list_insert (Object *list, Object key_binding)
       return;
     }
   }
-  *tmp_ptr = cons (key_binding, *tmp_ptr);
+  *tmp_ptr = marlais_cons (key_binding, *tmp_ptr);
 }
 
 static int
@@ -421,12 +421,12 @@ parse_function_required_parameters (Object *params, Object *tmp_ptr)
       break;
     }
     if (PAIRP (entry)) {
-      (*tmp_ptr) = cons (listem (CAR (entry),
+      (*tmp_ptr) = marlais_cons (listem (CAR (entry),
                                  marlais_eval (SECOND (entry)),
                                  NULL),
                          marlais_make_nil ());
     } else {
-      *tmp_ptr = cons (listem (entry, object_class, NULL),
+      *tmp_ptr = marlais_cons (listem (entry, object_class, NULL),
                        marlais_make_nil ());
     }
     tmp_ptr = &CDR (*tmp_ptr);
@@ -522,7 +522,7 @@ parse_function_return_parameters(Object functor, Object* params,
       result_type = object_class;
     }
 
-    (*tmp_ptr) = cons (result_type, marlais_make_nil ());
+    (*tmp_ptr) = marlais_cons (result_type, marlais_make_nil ());
     tmp_ptr = &CDR (*tmp_ptr);
     *params = CDR (*params);
   }
@@ -867,7 +867,7 @@ make_specializers_from_params (Object params)
   for (specs = marlais_make_nil (), tmp_ptr = &specs;
        PAIRP (params);
        tmp_ptr = &CDR (*tmp_ptr), params = CDR (params)) {
-    *tmp_ptr = cons (SECOND (CAR (params)), marlais_make_nil ());
+    *tmp_ptr = marlais_cons (SECOND (CAR (params)), marlais_make_nil ());
   }
 
   return (specs);
@@ -963,7 +963,7 @@ marlais_recalc_next_methods (Object fun, Object meth, Object sample_args)
         current_method_added = 1;
         /* detect add of current method */
       }
-      app_methods = cons (method, app_methods);
+      app_methods = marlais_cons (method, app_methods);
     }
     methods = CDR (methods);
   }
@@ -972,7 +972,7 @@ marlais_recalc_next_methods (Object fun, Object meth, Object sample_args)
   }
   /* add current method if not there (could have been deleted? */
   if (!current_method_added) {
-    app_methods = cons (meth, app_methods);
+    app_methods = marlais_cons (meth, app_methods);
   }
   sorted_methods = FIRSTVAL (split_sorted_methods (app_methods, sample_args));
 
@@ -1004,7 +1004,7 @@ build_sorted_handles (Object methods, Object current_group)
     if (EMPTYLISTP (current_group)) {
       return (marlais_make_nil ());
     } else {
-      return (cons (current_group, marlais_make_nil ()));
+      return (marlais_cons (current_group, marlais_make_nil ()));
     }
   }
   /* add to current group or build new group into list */
@@ -1012,12 +1012,12 @@ build_sorted_handles (Object methods, Object current_group)
       specializer_compare (marlais_function_specializers (HDLOBJ (CAR (current_group))),
                            marlais_function_specializers (CAR (methods))) == 0) {
     return (build_sorted_handles (CDR (methods),
-                                  cons (METHHANDLE (CAR (methods)),
+                                  marlais_cons (METHHANDLE (CAR (methods)),
                                         current_group)));
   } else {
-    return (cons (current_group,
+    return (marlais_cons (current_group,
                   build_sorted_handles (CDR (methods),
-                                        cons (METHHANDLE (CAR (methods)),
+                                        marlais_cons (METHHANDLE (CAR (methods)),
                                               marlais_make_nil ()))));
   }
 }
@@ -1036,7 +1036,7 @@ broad_class (Object obj)
     class_list = marlais_make_nil ();
     union_types = UNIONLIST (obj);
     while (!EMPTYLISTP (union_types)) {
-      class_list = cons (broad_class (CAR (union_types)), class_list);
+      class_list = marlais_cons (broad_class (CAR (union_types)), class_list);
       union_types = CDR (union_types);
     }
     return (marlais_make_union (class_list));
@@ -1084,7 +1084,7 @@ make_class_list (Object args, int count)
   if (EMPTYLISTP (args) || !count) {
     return (marlais_make_nil ());
   }
-  return (cons (marlais_object_class (CAR (args)), make_class_list (CDR (args), count - 1)));
+  return (marlais_cons (marlais_object_class (CAR (args)), make_class_list (CDR (args), count - 1)));
 }
 
 Object
@@ -1102,7 +1102,7 @@ marlais_sorted_possible_method_handles (Object fun, Object sample_args)
   while (!EMPTYLISTP (methods)) {
     method = CAR (methods);
     if (possible_method (method, class_list)) {
-      maybe_methods = cons (method, maybe_methods);
+      maybe_methods = marlais_cons (method, maybe_methods);
     }
     methods = CDR (methods);
   }

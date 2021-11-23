@@ -166,10 +166,10 @@ marlais_make_union (Object typelist)
   for (ptr = typelist; PAIRP (ptr); ptr = CDR (ptr)) {
     if (UNIONP (CAR (ptr))) {
       for (qtr = UNIONLIST (CAR (ptr)); PAIRP (qtr); qtr = CDR (qtr)) {
-        union_types = cons (CAR (qtr), union_types);
+        union_types = marlais_cons (CAR (qtr), union_types);
       }
     } else {
-      union_types = cons (CAR (ptr), union_types);
+      union_types = marlais_cons (CAR (ptr), union_types);
     }
   }
   UNIONLIST (obj) = union_types;

@@ -57,9 +57,9 @@ static Object find_minimal_elements (Object slist);
 /* Internal macros */
 
 #define MAKE_PNODE(class) \
-  (cons (class, \
-         cons (marlais_make_nil (),               \
-               (cons (marlais_make_nil (),                \
+  (marlais_cons (class, \
+         marlais_cons (marlais_make_nil (),               \
+               (marlais_cons (marlais_make_nil (),                \
                       marlais_make_nil ())))))
 
 #define PNODE_CLASS(pnode)        (CAR (pnode))
@@ -98,7 +98,7 @@ marlais_compute_class_precedence_list (Object class)
   */
 
   precedence_list_rev = marlais_make_nil ();
-  minimal_element_set = cons (CAR (slist), marlais_make_nil ());
+  minimal_element_set = marlais_cons (CAR (slist), marlais_make_nil ());
   while (PAIRP (minimal_element_set)) {
 
 #if EBUG
@@ -122,7 +122,7 @@ marlais_compute_class_precedence_list (Object class)
        */
       node = CAR (minimal_element_set);
       remove_predecessor_arcs (node);
-      precedence_list_rev = cons (PNODE_CLASS (node),
+      precedence_list_rev = marlais_cons (PNODE_CLASS (node),
                                   precedence_list_rev);
       remove_node_from_slist (&slist, node);
       minimal_element_set = find_minimal_elements (slist);
@@ -153,7 +153,7 @@ marlais_compute_class_precedence_list (Object class)
            */
           node = CAR (*candidate_list_ptr);
           remove_predecessor_arcs (node);
-          precedence_list_rev = cons (PNODE_CLASS (node),
+          precedence_list_rev = marlais_cons (PNODE_CLASS (node),
                                       precedence_list_rev);
           remove_node_from_slist (&slist, node);
           *candidate_list_ptr = CDR (*candidate_list_ptr);
@@ -234,7 +234,7 @@ construct_slist (Object *sptr, Object class)
     tmp_sptr = &CDR (*tmp_sptr);
   }
   if (EMPTYLISTP (*tmp_sptr)) {
-    *tmp_sptr = cons (MAKE_PNODE (class), marlais_make_nil ());
+    *tmp_sptr = marlais_cons (MAKE_PNODE (class), marlais_make_nil ());
   }
   for (sclist = CLASSSUPERS (class);
        PAIRP (sclist);
@@ -254,7 +254,7 @@ insert_succeeds_arc (Object succ_node, Object pred_node)
 {
   add_new_at_end (&PNODE_PREDECESSORS (succ_node), pred_node);
 /*
-  PNODE_PREDECESSORS (succ_node) = cons (pred_node,
+  PNODE_PREDECESSORS (succ_node) = marlais_cons (pred_node,
   PNODE_PREDECESSORS (succ_node));
  */
 }
@@ -276,7 +276,7 @@ decorate_slist_with_precedence (Object slist, Object class)
 {
   Object q, p;
 
-  for (q = cons (class, marlais_make_nil ()), p = CLASSSUPERS (class);
+  for (q = marlais_cons (class, marlais_make_nil ()), p = CLASSSUPERS (class);
        PAIRP (p);
        q = p, p = CDR (p)) {
     record_precedence (slist, CAR (q), CAR (p));
@@ -375,7 +375,7 @@ find_minimal_elements (Object slist)
 
   while (PAIRP (slist)) {
     if (EMPTYLISTP (PNODE_PREDECESSORS (CAR (slist)))) {
-      mins = cons (CAR (slist), mins);
+      mins = marlais_cons (CAR (slist), mins);
     }
     slist = CDR (slist);
   }

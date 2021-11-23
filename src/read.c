@@ -97,7 +97,7 @@ infix_decode_token (int yychar, FILE * fp)
         if (yychar == ']')
           return new_list;
 
-        *new_list_ptr = cons (infix_decode_token (yychar, fp),
+        *new_list_ptr = marlais_cons (infix_decode_token (yychar, fp),
                               marlais_make_nil ());
         new_list_ptr = &CDR (*new_list_ptr);
 
@@ -121,7 +121,7 @@ infix_decode_token (int yychar, FILE * fp)
         if (yychar == ')')
           return new_list;
 
-        *new_list_ptr = cons (infix_decode_token (yychar, fp),
+        *new_list_ptr = marlais_cons (infix_decode_token (yychar, fp),
                               marlais_make_nil ());
         new_list_ptr = &CDR (*new_list_ptr);
 

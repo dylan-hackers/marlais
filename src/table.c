@@ -82,7 +82,7 @@ marlais_register_table (void)
 {
   int num = sizeof (table_prims) / sizeof (struct primitive);
   marlais_register_prims (num, table_prims);
-  table_default = cons (MARLAIS_FALSE, MARLAIS_FALSE);
+  table_default = marlais_cons (MARLAIS_FALSE, MARLAIS_FALSE);
 }
 
 Object
@@ -215,7 +215,7 @@ table_element_handle (Object table, Object key, Object *default_val)
 
   while (entry) {
     if (marlais_apply (equal_fun,
-                       cons (TEKEY (entry), cons (key, marlais_make_nil ())))
+                       marlais_cons (TEKEY (entry), marlais_cons (key, marlais_make_nil ())))
         != MARLAIS_FALSE) {
       return &(TEVALUE (entry));
     }
@@ -305,7 +305,7 @@ equal_hash (Object key)
     if (!hashfun) {
       marlais_error ("no =hash method defined for key class", key, NULL);
     }
-    return (marlais_apply (hashfun, cons (key, marlais_make_nil ())));
+    return (marlais_apply (hashfun, marlais_cons (key, marlais_make_nil ())));
   } else {
     if (INTEGERP (key)) {
       return (key);

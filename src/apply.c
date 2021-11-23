@@ -58,7 +58,7 @@ marlais_register_apply (void)
 Object
 marlais_default_result_value (void)
 {
-  return cons (marlais_make_nil (), object_class);
+  return marlais_cons (marlais_make_nil (), object_class);
 }
 
 Object
@@ -186,7 +186,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
 #ifdef MARLAIS_ENABLE_METHOD_CACHING
       /* push next method on active list */
       GFACTIVENM (generic_apply) =
-        cons (next_method, GFACTIVENM (generic_apply));
+        marlais_cons (next_method, GFACTIVENM (generic_apply));
 #endif
 
       /* make constant binding for next method */
@@ -273,7 +273,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
         }
       } else {
         marlais_add_local (SECOND (CAR (*tmp_ptr)), val, 0, the_env);
-        dup_list = cons (keyword, dup_list);
+        dup_list = marlais_cons (keyword, dup_list);
         *tmp_ptr = CDR (*tmp_ptr);
       }
       args = CDR (CDR (args));
@@ -404,10 +404,10 @@ narrow_value_types (Object *values_list_ptr,
      */
     while (!EMPTYLISTP (new_values_list)) {
       if (marlais_subtype_p (CAR (new_values_list), *rest_type)) {
-        *values_list_ptr = cons (CAR (new_values_list),
+        *values_list_ptr = marlais_cons (CAR (new_values_list),
                                  marlais_make_nil ());
       } else {
-        *values_list_ptr = cons (*rest_type, marlais_make_nil ());
+        *values_list_ptr = marlais_cons (*rest_type, marlais_make_nil ());
       }
       values_list_ptr = &CDR (*values_list_ptr);
       new_values_list = CDR (new_values_list);
@@ -449,7 +449,7 @@ marlais_construct_return_values (Object ret,
    * <pcb> could at least wrap it in a stack variable to avoid an alloc.
    */
 
-  ResultValueStack = cons (marlais_default_result_value (), ResultValueStack);
+  ResultValueStack = marlais_cons (marlais_default_result_value (), ResultValueStack);
 
   if (!ret) {
     /*
@@ -585,9 +585,9 @@ build_rest_methods (Object cache_tail, Object args)
     method_group = CDR (method_group);
   }
   if (!method_found) {
-    return cons (MARLAIS_FALSE, marlais_make_nil ());
+    return marlais_cons (MARLAIS_FALSE, marlais_make_nil ());
   } else {
-    return cons (method_found, build_rest_methods (CDR (cache_tail), args));
+    return marlais_cons (method_found, build_rest_methods (CDR (cache_tail), args));
   }
 }
 #endif
