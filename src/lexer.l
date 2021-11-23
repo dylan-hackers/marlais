@@ -91,32 +91,31 @@ struct intermediate_word_struct {
     int num_words;
     struct resword *reswords;
     struct intermediate_word_struct *next;
-}
-*intermediate_words;
+} *intermediate_words;
 
 #define NUM_IF_INTERMEDIATE_WORDS       2
 struct resword if_intermediate_word_table [NUM_IF_INTERMEDIATE_WORDS] =
 {
-        {"else", ELSE, &else_symbol},
-        {"elseif", ELSEIF, &elseif_symbol},
+    {"else", ELSE, &else_symbol},
+    {"elseif", ELSEIF, &elseif_symbol},
 };
 
 #define NUM_SELECT_INTERMEDIATE_WORDS   1
 struct resword select_intermediate_word_table [NUM_SELECT_INTERMEDIATE_WORDS] =
 {
-        {"by", BY, &by_symbol},
+    {"by", BY, &by_symbol},
 };
 
 #define NUM_CLASS_INTERMEDIATE_WORDS    1
 struct resword class_intermediate_word_table [NUM_CLASS_INTERMEDIATE_WORDS] =
 {
-        {"slot", SLOT, &slot_symbol},
+    {"slot", SLOT, &slot_symbol},
 };
 
 #define NUM_FOR_INTERMEDIATE_WORDS      1
 struct resword for_intermediate_word_table [NUM_FOR_INTERMEDIATE_WORDS] =
 {
-        {"finally", FINALLY, &finally_symbol},
+    {"finally", FINALLY, &finally_symbol},
 };
 
 #define NUM_FOR_CLAUSE_WORDS            7
@@ -134,17 +133,17 @@ struct resword for_clause_word_table [NUM_FOR_CLAUSE_WORDS] =
 #define NUM_BLOCK_INTERMEDIATE_WORDS    3
 struct resword block_intermediate_word_table [NUM_BLOCK_INTERMEDIATE_WORDS] =
 {
-        {"afterwards", AFTERWARDS, &afterwards_symbol},
-        {"cleanup", CLEANUP, &cleanup_symbol},
-        {"exception", EXCEPTION, &exception_symbol},
+    {"afterwards", AFTERWARDS, &afterwards_symbol},
+    {"cleanup", CLEANUP, &cleanup_symbol},
+    {"exception", EXCEPTION, &exception_symbol},
 };
 
 #define NUM_MODULE_INTERMEDIATE_WORDS   3
 struct resword module_intermediate_word_table [NUM_MODULE_INTERMEDIATE_WORDS] =
 {
-        {"use", USE, &use_symbol},
-        {"export", EXPORT, &export_symbol},
-        {"create", CREATE, &create_symbol},
+    {"use", USE, &use_symbol},
+    {"export", EXPORT, &export_symbol},
+    {"create", CREATE, &create_symbol},
 };
 
 /* Internal function declarations */
