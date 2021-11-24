@@ -194,24 +194,21 @@ marlais_initialize (void)
   /* initialize builtin classes */
   marlais_initialize_class ();
 
-  /* Make the unspecified value available */
+  /* export core constants */
   marlais_add_export (marlais_make_name ("%unspecified"),
-                         marlais_unspecified,
-                         1);
-
-  /* Make the uninitialized value available */
+                      marlais_unspecified,
+                      1);
   marlais_add_export (marlais_make_name ("%uninitialized-slot-value"),
-                         marlais_uninitialized,
-                         1);
-
-  /* Make the default object available */
+                      marlais_uninitialized,
+                      1);
   marlais_add_export (marlais_make_name ("%default-object"),
-                         marlais_default,
-						 1);
+                      marlais_default,
+                      1);
 
+  /* initialize the binding stack */
   binding_stack = marlais_cons (marlais_make_integer (0), marlais_make_nil ());
 
-  /* Define bindings for the standard character and string type */
+  /* define default string and character types */
   marlais_add_export (marlais_make_name ("<standard-character>"), byte_character_class, 1);
   marlais_add_export (marlais_make_name ("<standard-string>"), byte_string_class, 1);
 
