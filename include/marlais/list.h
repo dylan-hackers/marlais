@@ -44,7 +44,7 @@ extern void marlais_register_list (void);
 #ifdef MARLAIS_OBJECT_MODEL_LARGE
 /* Returns the empty list */
 static inline Object marlais_make_nil (void) {
-  assert(marlais_mil); // TODO remove
+  assert(marlais_nil); // TODO remove
   return marlais_nil;
 }
 #else
