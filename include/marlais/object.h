@@ -132,40 +132,6 @@ static inline bool LISTP(Object obj) {
 
 Object make_handle (Object an_object);
 
-/* important objects */
-extern Object key_symbol, hash_rest_symbol, next_symbol;
-extern Object quote_symbol;
-extern Object getter_keyword, setter_keyword, else_keyword;
-extern Object type_keyword, init_value_keyword, init_function_keyword;
-extern Object init_keyword_keyword, required_init_keyword_keyword, allocation_keyword;
-extern Object unwind_symbol, next_method_symbol, initialize_symbol;
-extern Object equal_hash_symbol;
-extern Object quasiquote_symbol, unquote_symbol, unquote_splicing_symbol;
-
-/* builtin classes */
-extern Object object_class;
-extern Object name_class;
-extern Object boolean_class;
-extern Object number_class, real_class, integer_class, ratio_class;
-extern Object single_float_class, double_float_class;
-extern Object collection_class, sequence_class, mutable_sequence_class;
-extern Object mutable_collection_class;
-extern Object list_class, empty_list_class, pair_class, string_class;
-extern Object byte_string_class, vector_class, simple_object_vector_class;
-extern Object stretchy_vector_class;
-extern Object explicit_key_collection_class, mutable_explicit_key_collection_class;
-extern Object table_class, deque_class, array_class;
-extern Object condition_class;
-extern Object symbol_class;
-extern Object character_class;
-extern Object function_class, primitive_class, generic_function_class,
-  method_class;
-extern Object class_class, table_entry_class, deque_entry_class;
-
-#ifdef NO_COMMON_DYLAN_SPEC
-stream_class,
-#endif
-
 /* convenience macro functions */
 #define FIRST(obj)      (CAR(obj))
 #define SECOND(obj)     (CAR(CDR(obj)))
