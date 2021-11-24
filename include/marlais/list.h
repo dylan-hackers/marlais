@@ -59,6 +59,7 @@ static inline Object marlais_make_nil (void) {
 }
 #endif
 
+/* Make a <list> from varargs */
 extern Object marlais_make_list (Object car,...);
 
 /* Copy a <list> */
