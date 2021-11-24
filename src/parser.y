@@ -215,7 +215,7 @@ nonempty_body
 	   if (INTVAL (bindings_top ()) > 0) {
 	       $$ = marlais_cons (unbinding_begin_symbol,
 			 marlais_cons (bindings_top(), $2));
-	   } else if (list_length ($2) > 1) {
+	   } else if (marlais_list_length ($2) > 1) {
 	       $$ = marlais_cons (begin_symbol, $2);
 	   } else {
 	       $$ = FIRST ($2);
@@ -315,7 +315,7 @@ operand	: operand '(' arguments_opt ')'
 #endif
 	  }
 	| operand '[' arguments_opt ']'	/* array ref!!! */
-    		{ if (list_length ($3) == 1) {
+    		{ if (marlais_list_length ($3) == 1) {
 			$$ = marlais_cons (element_symbol, marlais_cons ($1, $3));
 		  } else {
 			$$ = marlais_cons (aref_symbol, marlais_cons ($1, $3));

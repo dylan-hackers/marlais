@@ -458,7 +458,7 @@ marlais_user_set_module (Object args)
 {
   Object module_name;
 
-  if (list_length (args) != 1) {
+  if (marlais_list_length (args) != 1) {
     return marlais_error ("set-module: requires a single argument", NULL);
   } else {
     module_name = CAR (args);
@@ -716,7 +716,7 @@ show_bindings (Object args)
   struct binding **bindings, *binding;
   int frame_number;
 
-  if (list_length (args) != 1 || !INTEGERP (CAR (args))) {
+  if (marlais_list_length (args) != 1 || !INTEGERP (CAR (args))) {
     marlais_error ("show_bindings: requires a single <integer> argument", NULL);
   }
   frame_number = INTVAL (CAR (args));

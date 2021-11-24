@@ -391,7 +391,7 @@ return_value (Object args)
 {
   jmp_buf *buf;
 
-  if (list_length (args) != 1) {
+  if (marlais_list_length (args) != 1) {
     fprintf (stderr, "return: Requires one argument\n");
   }
   marlais_pop_scope ();

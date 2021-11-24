@@ -735,7 +735,7 @@ print_array (Object fd, Object array, int escaped)
   els = ARRELS (array);
 
   cur_el = 0;
-  fprintf (fp, "#%da", list_length (dims));
+  fprintf (fp, "#%da", marlais_list_length (dims));
   print_array_help (fd, dims, els, escaped);
 }
 

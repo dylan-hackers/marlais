@@ -528,7 +528,7 @@ get_specializers (Object gen, Object args)
   Object result, tmp;
 
   tmp = args;
-  length = list_length (marlais_function_specializers (gen));
+  length = marlais_list_length (marlais_function_specializers (gen));
   result = marlais_make_vector (length, NULL);
   for (i = 0; i < length; i++) {
     if (EMPTYLISTP (tmp)) {
@@ -656,7 +656,7 @@ apply_exit (Object exit_proc, Object args)
 {
   if (unwind_to_exit (exit_proc)) {
     /* XXX casts are wrong and must be fixed */
-    switch (list_length (args)) {
+    switch (marlais_list_length (args)) {
     case 0:
       longjmp (*EXITRET (exit_proc), (int) (unspecified_object));
     case 1:

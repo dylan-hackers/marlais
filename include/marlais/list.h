@@ -65,6 +65,8 @@ extern Object marlais_cons (Object car, Object cdr);
 extern Object marlais_car (Object lst);
 extern Object marlais_cdr (Object lst);
 
+extern int marlais_list_length (Object lst);
+
 extern Object marlais_second (Object lst);
 extern Object marlais_third (Object lst);
 
@@ -82,8 +84,6 @@ extern bool marlais_member_test_p (Object obj, Object lst, Object test);
 
 Object listem (Object car,...);
 
-Object list_length_int (Object lst);
-int list_length (Object lst);
 int list_equal (Object l1, Object l2);
 
 Object list_reverse (Object lst);

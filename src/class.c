@@ -504,7 +504,7 @@ marlais_make_class (Object obj,
   }
   CLASSSORTEDPRECS (obj) =
     merge_sorted_precedence_lists (obj, CLASSSUPERS (obj));
-  CLASSNUMPRECS (obj) = list_length (CLASSSORTEDPRECS (obj));
+  CLASSNUMPRECS (obj) = marlais_list_length (CLASSSORTEDPRECS (obj));
   CLASSPRECLIST (obj) = marlais_compute_class_precedence_list (obj);
 
   /* first find slot descriptors for this class */
@@ -1013,7 +1013,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
    * Create a vector of slot values (slots)
    * from the list of modified slot descriptors (init_slotds)
    */
-  slots = (Object *) marlais_allocate_memory (list_length (init_slotds) *
+  slots = (Object *) marlais_allocate_memory (marlais_list_length (init_slotds) *
                                               sizeof (Object));
 
   tmp_slotds = init_slotds;

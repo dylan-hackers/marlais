@@ -50,6 +50,7 @@ static Object second_d (Object pair, Object default_ob);
 static Object third_d (Object pair, Object default_ob);
 static Object set_car (Object pair, Object val);
 static Object set_cdr (Object pair, Object val);
+static Object list_length (Object lst);
 static Object list_element (Object pair, Object index, Object default_ob);
 static Object list_element_setter (Object pair, Object index, Object obj);
 static Object list_member_p (Object obj, Object lst, Object test);
@@ -67,6 +68,7 @@ static struct primitive list_prims[] =
     {"%third", prim_2, third_d},
     {"%head-setter", prim_2, set_car},
     {"%tail-setter", prim_2, set_cdr},
+    {"%list-length", prim_1, list_length},
     {"%list-element", prim_3, list_element},
     {"%list-element-setter", prim_3, list_element_setter},
     {"%list-map1", prim_2, marlais_map_apply1},
@@ -75,7 +77,6 @@ static struct primitive list_prims[] =
     {"%list-member?", prim_3, list_member_p},
     {"%list-reduce", prim_3, list_reduce},
     {"%list-reduce1", prim_2, list_reduce1},
-    {"%list-length", prim_1, list_length_int},
     {"%list-reverse!", prim_1, list_reverse_bang},
     {"%list-reverse", prim_1, list_reverse},
     {"%list-last", prim_2, list_last},
@@ -149,6 +150,59 @@ Object
 marlais_cdr (Object lst)
 {
     return (EMPTYLISTP (lst) ? lst : CDR (lst));
+}
+
+int
+marlais_list_length (Object lst)
+{
+    int len;
+    Object fore_list, back_list, next;
+
+    if (EMPTYLISTP (lst)) {
+        return 0;
+    } else if (CDR (lst) == lst) {
+        return -1;
+    } else {
+        len = 1;
+        back_list = lst;
+        fore_list = CDR (lst);
+        CDR (back_list) = marlais_make_nil ();
+
+        /* Reverse pointers in the list and see if we end up at the head. */
+        while (PAIRP (fore_list)) {
+            next = CDR (fore_list);
+            CDR (fore_list) = back_list;
+            back_list = fore_list;
+            fore_list = next;
+            len++;
+        }
+        if ((back_list == lst) && (PAIRP (CDR (back_list)))) {
+            /* We ended up at the head and had at least 2 elements,
+             *  thus there must be a cycle.
+	     */
+          len = -1;
+        }
+        /* Reverse the pointers again to repair the list. */
+        while (PAIRP (back_list)) {
+            next = CDR (back_list);
+            CDR (back_list) = fore_list;
+            fore_list = back_list;
+            back_list = next;
+        }
+        return len;
+    }
+}
+
+static Object
+list_length (Object lst)
+{
+    int len = marlais_list_length (lst);
+
+    if (len < 0) {
+        return MARLAIS_FALSE;
+    } else {
+        return marlais_make_integer (len);
+    }
 }
 
 Object
@@ -241,18 +295,6 @@ marlais_map_apply2 (Object fun, Object l1, Object l2)
         return (marlais_cons (marlais_apply (fun, listem (CAR (l1), CAR (l2),
                                                   NULL)),
                       marlais_map_apply2 (fun, CDR (l1), CDR (l2))));
-    }
-}
-
-Object
-list_length_int (Object lst)
-{
-    int len = list_length (lst);
-
-    if (len < 0) {
-        return MARLAIS_FALSE;
-    } else {
-        return marlais_make_integer (len);
     }
 }
 
@@ -360,47 +402,6 @@ static Object
 list_reduce1 (Object fun, Object lst)
 {
     return list_reduce(fun, CAR(lst), CDR(lst));
-}
-
-int
-list_length (Object lst)
-{
-    int len;
-    Object fore_list, back_list, next;
-
-    if (EMPTYLISTP (lst)) {
-        return 0;
-    } else if (CDR (lst) == lst) {
-        return -1;
-    } else {
-        len = 1;
-        back_list = lst;
-        fore_list = CDR (lst);
-        CDR (back_list) = marlais_make_nil ();
-
-        /* Reverse pointers in the list and see if we end up at the head. */
-        while (PAIRP (fore_list)) {
-            next = CDR (fore_list);
-            CDR (fore_list) = back_list;
-            back_list = fore_list;
-            fore_list = next;
-            len++;
-        }
-        if ((back_list == lst) && (PAIRP (CDR (back_list)))) {
-            /* We ended up at the head and had at least 2 elements,
-             *  thus there must be a cycle.
-	     */
-          len = -1;
-        }
-        /* Reverse the pointers again to repair the list. */
-        while (PAIRP (back_list)) {
-            next = CDR (back_list);
-            CDR (back_list) = fore_list;
-            fore_list = back_list;
-            back_list = next;
-        }
-        return len;
-    }
 }
 
 static Object

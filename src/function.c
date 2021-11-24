@@ -299,7 +299,7 @@ marlais_applicable_method_p (Object argfun, Object sample_args, int strict_check
 
     /* Are there more sample args than required args? */
     num_required = INTVAL (FIRSTVAL (args));
-    if (list_length (sample_args) < num_required) {
+    if (marlais_list_length (sample_args) < num_required) {
       return (MARLAIS_FALSE);
     }
     /* Do the types of the required args match the
@@ -554,7 +554,7 @@ parse_function_key_parameters(Object functor, Object* params,
                                      MARLAIS_FALSE,
                                      NULL));
       } else if (PAIRP (entry) && is_param_name (CAR (entry)) &&
-                 list_length (entry) == 2) {
+                 marlais_list_length (entry) == 2) {
         keyword_list_insert (get_params_fn (functor),
                              listem (param_name_to_keyword (CAR (entry)),
                                      CAR (entry),
@@ -604,7 +604,7 @@ do_gf_key(Object gf_obj, int all_p)
 static void
 xform_method_key_param(Object meth_obj, Object entry)
 {
-  int entry_length = list_length (entry);
+  int entry_length = marlais_list_length (entry);
 
   if (entry_length == 3) {
     /* key: key-name value */
@@ -622,7 +622,7 @@ xform_method_key_param(Object meth_obj, Object entry)
 static void
 xform_gf_key_param(Object gf_obj, Object entry)
 {
-  if(list_length (entry) == 3) {
+  if(marlais_list_length (entry) == 3) {
     keyword_list_insert (&GFKEYPARAMS (gf_obj), entry);
   }
 }
@@ -918,7 +918,7 @@ function_arguments (Object fun)
   default:
     marlais_fatal ("function-arguments: bad argument");
   }
-  return (marlais_construct_values (3, list_length_int (params), has_rest, keywords));
+  return (marlais_construct_values (3, marlais_make_integer(marlais_list_length (params)), has_rest, keywords));
 }
 
 static int
@@ -1059,7 +1059,7 @@ possible_method (Object meth, Object class_list)
   /* Are there more sample args than required args?
    */
   num_required = INTVAL (FIRSTVAL (args));
-  if (list_length (class_list) < num_required) {
+  if (marlais_list_length (class_list) < num_required) {
     return (0);
   }
   /* Are the classes of the required args supertypes of the

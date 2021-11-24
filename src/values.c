@@ -64,7 +64,7 @@ marlais_make_values (Object vals)
   } else {
     obj = marlais_allocate_object (Values, sizeof (struct values));
 
-    VALUESNUM (obj) = list_length (vals);
+    VALUESNUM (obj) = marlais_list_length (vals);
     VALUESELS (obj) = (Object *)
       marlais_allocate_memory (VALUESNUM (obj) * sizeof (Object));
 

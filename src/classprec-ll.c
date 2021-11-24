@@ -116,7 +116,7 @@ build_l_graph (Object class,
     }
   }
   graph.class_vec = class_vec;
-  graph.succ_size = list_length (direct_superclasses);
+  graph.succ_size = marlais_list_length (direct_superclasses);
   graph.succ_vec = (int *) marlais_allocate_memory (num_classes * graph.succ_size
                                                     * sizeof (int));
 

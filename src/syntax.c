@@ -391,7 +391,7 @@ unbinding_begin_eval (Object form)
     int i;
     Object res;
 
-    if (list_length (form) < 2) {
+    if (marlais_list_length (form) < 2) {
       marlais_error ("Bad unbinding-begin form", form, NULL);
     }
     i = INTVAL (SECOND (form));
@@ -906,7 +906,7 @@ define_module_eval (Object form)
   struct module_binding *the_module;
 
   /* Bogus for now */
-  if (PAIRP (form) && list_length (form) >= 2 && NAMEP (SECOND (form))) {
+  if (PAIRP (form) && marlais_list_length (form) >= 2 && NAMEP (SECOND (form))) {
     the_module = marlais_new_module (SECOND (form));
     clauses = CDR (CDR (form));
 
@@ -927,7 +927,7 @@ define_module_eval (Object form)
           int exports_specified = 0;
           struct module_binding *old_module;
 
-          if (list_length (clause) >= 2) {
+          if (marlais_list_length (clause) >= 2) {
             module_name = SECOND (clause);
             clause = CDR (CDR (clause));
             while (PAIRP (clause)) {
@@ -1177,7 +1177,7 @@ for_eval (Object form)
 static Object
 get_variable (Object var_spec)
 {
-  if ((PAIRP (var_spec) && (list_length (var_spec) != 2)) &&
+  if ((PAIRP (var_spec) && (marlais_list_length (var_spec) != 2)) &&
       (!NAMEP (var_spec))) {
     marlais_error ("Bad variable specification", var_spec, NULL);
   }
@@ -1211,7 +1211,7 @@ get_vars_and_inits (Object var_forms,
 
       clause_type = variable_keyword;
       var = get_variable (var_spec);
-      if (list_length (var_form) != 3) {
+      if (marlais_list_length (var_form) != 3) {
         marlais_error ("for: Bad variable initialization", var_form, NULL);
       }
       init = marlais_cons (marlais_eval (SECOND (var_form)), THIRD (var_form));
@@ -1225,7 +1225,7 @@ get_vars_and_inits (Object var_forms,
        */
 
       clause_type = range_keyword;
-      if (list_length (var_form) < 3) {
+      if (marlais_list_length (var_form) < 3) {
         marlais_error ("for: Bad numeric clause specification", var_form, NULL);
       }
       var = get_variable (SECOND (var_form));
@@ -1274,7 +1274,7 @@ get_vars_and_inits (Object var_forms,
        */
 
       clause_type = collection_keyword;
-      if (list_length (var_form) != 3) {
+      if (marlais_list_length (var_form) != 3) {
         marlais_error ("for: Bad collection clause specification", var_form, NULL);
       }
       var = get_variable (SECOND (var_form));
@@ -1818,7 +1818,7 @@ set_eval (Object form)
 static Object
 set_module_eval (Object form)
 {
-  if (PAIRP (form) && list_length (form) == 2 && SYMBOLP (SECOND (form))) {
+  if (PAIRP (form) && marlais_list_length (form) == 2 && SYMBOLP (SECOND (form))) {
     return marlais_user_set_module (marlais_devalue (CDR (form)));
   } else {
     marlais_error ("set_module: argument list not a single symbol", form, NULL);
