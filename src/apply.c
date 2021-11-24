@@ -261,7 +261,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
         }
       }
       if (EMPTYLISTP (*tmp_ptr)) {
-        if (member (keyword, dup_list)) {
+        if (marlais_member_p (keyword, dup_list)) {
           marlais_warning ("Duplicate keyword value ignored",
                            keyword,
                            val,

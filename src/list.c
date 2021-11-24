@@ -52,6 +52,7 @@ static Object set_car (Object pair, Object val);
 static Object set_cdr (Object pair, Object val);
 static Object list_element (Object pair, Object index, Object default_ob);
 static Object list_element_setter (Object pair, Object index, Object obj);
+static Object list_member_p (Object obj, Object lst, Object test);
 static Object list_reduce (Object fun, Object init, Object lst);
 static Object list_reduce1 (Object fun, Object lst);
 static Object list_last (Object lst, Object default_ob);
@@ -71,7 +72,7 @@ static struct primitive list_prims[] =
     {"%list-map1", prim_2, marlais_map_apply1},
     {"%list-append", prim_2, marlais_append},
     {"%list-append!", prim_2, marlais_append_bang}, /* not used yet */
-    {"%list-member?", prim_3, member_p},
+    {"%list-member?", prim_3, list_member_p},
     {"%list-reduce", prim_3, list_reduce},
     {"%list-reduce1", prim_2, list_reduce1},
     {"%list-length", prim_1, list_length_int},
@@ -285,20 +286,20 @@ marlais_append_bang(Object l1, Object l2)
 }
 
 
-int
-member (Object obj, Object lst)
+bool
+marlais_member_p (Object obj, Object lst)
 {
     while (PAIRP (lst)) {
         if (obj == CAR (lst)) {
-            return 1;
+            return true;
         }
         lst = CDR (lst);
     }
-    return 0;
+    return false;
 }
 
-Object
-member_p (Object obj, Object lst, Object test)
+bool
+marlais_member_test_p (Object obj, Object lst, Object test)
 {
     Object l = lst;
     while (!EMPTYLISTP (l)) {
@@ -314,6 +315,12 @@ member_p (Object obj, Object lst, Object test)
         l = CDR (l);
     }
     return (MARLAIS_FALSE);
+}
+
+static Object
+list_member_p (Object obj, Object lst, Object test)
+{
+  return marlais_make_boolean (marlais_member_test_p (obj, lst, test));
 }
 
 Object

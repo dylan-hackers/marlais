@@ -77,8 +77,9 @@ extern Object marlais_map_apply2 (Object fun, Object l1, Object l2);
 extern Object marlais_append (Object l1, Object l2);
 extern Object marlais_append_bang (Object l1, Object l2);
 
-int member (Object obj, Object lst);
-Object member_p (Object obj, Object lst, Object test);
+extern bool marlais_member_p (Object obj, Object lst);
+extern bool marlais_member_test_p (Object obj, Object lst, Object test);
+
 Object listem (Object car,...);
 
 Object list_length_int (Object lst);

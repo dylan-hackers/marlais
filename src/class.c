@@ -1037,7 +1037,7 @@ add_slot_descriptor_names (Object sd_list, Object *sg_names_ptr)
         marlais_error ("slot getter or setter appears in superclass", sd, NULL);
       }
     } else {
-      if (member (SLOTDGETTER (sd), *sg_names_ptr))
+      if (marlais_member_p (SLOTDGETTER (sd), *sg_names_ptr))
         marlais_error ("slot getter appears in superclass", sd, NULL);
     }
   }

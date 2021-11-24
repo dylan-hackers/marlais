@@ -1570,7 +1570,7 @@ for_each_eval (Object form)
   collections = marlais_map1 (marlais_eval, collections);
   states = marlais_map_apply1 (init_state_fun, collections);
 
-  if (member (MARLAIS_FALSE, states)) {
+  if (marlais_member_p (MARLAIS_FALSE, states)) {
     return (MARLAIS_FALSE);
   }
   vals = marlais_map_apply2 (cur_el_fun, collections, states);
@@ -1584,7 +1584,7 @@ for_each_eval (Object form)
       body = CDR (body);
     }
     states = marlais_map_apply2 (next_state_fun, collections, states);
-    if (member (MARLAIS_FALSE, states)) {
+    if (marlais_member_p (MARLAIS_FALSE, states)) {
       marlais_pop_scope ();
       return (MARLAIS_FALSE);
     }
