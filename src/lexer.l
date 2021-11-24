@@ -377,7 +377,7 @@ WHITESPACE      [\ \t\f\v\r]
 
  /* Emit EOF token on end-of-file in any state */
 
-<INITIAL,INI,KEY,VAL,ETC><<EOF>>        { mylval = eof_object;
+<INITIAL,INI,KEY,VAL,ETC><<EOF>>        { mylval = marlais_eof;
                                           return EOF_TOKEN;
                                         }
 

@@ -57,7 +57,7 @@ load_internal (Object filename)
 
     expr_list_ptr = &expr_list;
     marlais_parser_prepare_stream (fp, 0);
-    while ((obj = marlais_parse_object ()) && (obj != eof_object)) {
+    while ((obj = marlais_parse_object ()) && (obj != marlais_eof)) {
 	*expr_list_ptr = marlais_cons (obj, marlais_make_nil ());
 	expr_list_ptr = &CDR (*expr_list_ptr);
     }

@@ -38,7 +38,7 @@
 #include <marlais/prim.h>
 
 Object
-make_eof_object (void)
+marlais_make_eof (void)
 {
 #ifndef MARLAIS_OBJECT_MODEL_SMALL
   Object obj = marlais_allocate_object (EndOfFile, sizeof (struct empty));

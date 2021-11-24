@@ -6,24 +6,21 @@
 #error globaldefs.h should not be included directly
 #endif
 
-/* boolean */
+/* constants */
 #ifndef MARLAIS_OBJECT_MODEL_SMALL
 GLOBAL Object marlais_true;
 GLOBAL Object marlais_false;
 #endif
-
-/* list */
 GLOBAL Object marlais_nil;
+GLOBAL Object marlais_eof;
+GLOBAL Object default_object;
+GLOBAL Object unspecified_object;
+GLOBAL Object uninit_slot_object;
 
 /* streams */
 GLOBAL Object marlais_standard_input;
 GLOBAL Object marlais_standard_output;
 GLOBAL Object marlais_standard_error;
-
-GLOBAL Object eof_object;
-GLOBAL Object default_object;
-GLOBAL Object unspecified_object;
-GLOBAL Object uninit_slot_object;
 
 /* globals */
 GLOBAL jmp_buf error_return;

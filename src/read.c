@@ -80,7 +80,7 @@ infix_decode_token (int yychar, FILE * fp)
 {
   switch (yychar) {
   case EOF_TOKEN:
-    return (eof_object);
+    return (marlais_eof);
   case LITERAL:
   case STRING:
   case HASH_T:
@@ -172,7 +172,7 @@ read_char (Object stream)
   }
   ch = getc (fp);
   if (ch == EOF) {
-    return (eof_object);
+    return (marlais_eof);
   } else {
     return (marlais_make_character (ch));
   }

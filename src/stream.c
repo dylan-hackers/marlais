@@ -44,7 +44,7 @@ marlais_register_stream (void)
 static Object
 stream_eof_object_p (Object obj)
 {
-  if (obj == eof_object) {
+  if (obj == marlais_eof) {
     return MARLAIS_TRUE;
   } else {
     return MARLAIS_FALSE;

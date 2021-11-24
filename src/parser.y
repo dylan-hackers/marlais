@@ -189,7 +189,7 @@ evaluable_constituent
 		{ *parse_value_ptr = $1; YYACCEPT; }
 */
 
-	| EOF_TOKEN	{ *parse_value_ptr = eof_object; YYACCEPT; }
+	| EOF_TOKEN	{ *parse_value_ptr = marlais_eof; YYACCEPT; }
 
 	| error ';'
 		{ yyerrok;
@@ -198,7 +198,7 @@ evaluable_constituent
 		}
 	| error EOF_TOKEN
 		{ yyerrok;
-		  *parse_value_ptr = eof_object;
+		  *parse_value_ptr = marlais_eof;
 		  YYACCEPT;
 		}
 

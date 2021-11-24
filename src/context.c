@@ -38,7 +38,7 @@ marlais_initialize (void)
   marlais_initialize_list ();
   marlais_initialize_stream ();
   empty_string = marlais_make_bytestring ("");
-  eof_object = make_eof_object ();
+  marlais_eof = make_eof_object ();
   unspecified_object = make_unspecified_object ();
 
   /* initialize symbols */
