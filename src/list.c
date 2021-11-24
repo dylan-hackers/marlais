@@ -77,8 +77,8 @@ static struct primitive list_prims[] =
     {"%list-member?", prim_3, list_member_p},
     {"%list-reduce", prim_3, list_reduce},
     {"%list-reduce1", prim_2, list_reduce1},
-    {"%list-reverse!", prim_1, list_reverse_bang},
-    {"%list-reverse", prim_1, list_reverse},
+    {"%list-reverse", prim_1, marlais_list_reverse},
+    {"%list-reverse!", prim_1, marlais_list_reverse_bang},
     {"%list-last", prim_2, list_last},
     {"%list-sort", prim_2, list_sort},
     {"%list-sort!", prim_2, list_sort_bang},
@@ -327,7 +327,7 @@ marlais_append_bang(Object l1, Object l2)
 }
 
 Object
-list_reverse (Object lst)
+marlais_list_reverse (Object lst)
 {
     Object last;
 
@@ -340,7 +340,7 @@ list_reverse (Object lst)
 }
 
 Object
-list_reverse_bang (Object lst)
+marlais_list_reverse_bang (Object lst)
 {
     Object cur, next;
 

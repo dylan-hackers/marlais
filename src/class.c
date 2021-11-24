@@ -541,7 +541,7 @@ marlais_make_class (Object obj,
   co_tmp_ptr = &CLASSCONSTSLOTDS (obj);
   vi_tmp_ptr = &CLASSVSLOTDS (obj);
 
-  allsuperclasses = list_reverse (CDR (CLASSPRECLIST (obj)));
+  allsuperclasses = marlais_list_reverse (CDR (CLASSPRECLIST (obj)));
 
   sg_names = marlais_make_nil ();
   while (!EMPTYLISTP (allsuperclasses)) {

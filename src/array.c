@@ -154,8 +154,8 @@ array_index (Object arr, Object indices, Object default_ob)
   int ind_val;
   unsigned int index_stride = 1;
 
-  dims = list_reverse (ARRDIMS (arr));
-  inds = list_reverse (indices);
+  dims = marlais_list_reverse (ARRDIMS (arr));
+  inds = marlais_list_reverse (indices);
   offset = 0;
 
   while (!EMPTYLISTP (dims) && !EMPTYLISTP (inds)) {
