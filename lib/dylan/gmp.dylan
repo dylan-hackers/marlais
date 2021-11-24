@@ -43,51 +43,51 @@ end method as;
 // <mp-float>
 
 define method zero? (n :: <mp-float>) => value :: <boolean>;
-  %mpf-zero?(mpz);
+  %mpf-zero?(n);
 end method;
 
 define method positive? (n :: <mp-float>) => value :: <boolean>;
-  %mpf-positive?(mpz);
+  %mpf-positive?(n);
 end method;
 
 define method negative? (n :: <mp-float>) => value :: <boolean>;
-  %mpf-negative?(mpz);
+  %mpf-negative?(n);
 end method;
 
 // <mp-ratio>
 
 define method zero? (n :: <mp-ratio>) => value :: <boolean>;
-  %mpq-zero?(mpz);
+  %mpq-zero?(n);
 end method;
 
 define method positive? (n :: <mp-ratio>) => value :: <boolean>;
-  %mpq-positive?(mpz);
+  %mpq-positive?(n);
 end method;
 
 define method negative? (n :: <mp-ratio>) => value :: <boolean>;
-  %mpq-negative?(mpz);
+  %mpq-negative?(n);
 end method;
 
 // <mp-integer>
 
 define method odd? (n :: <mp-integer>) => value :: <boolean>;
-  %mpz-odd?(mpz);
+  %mpz-odd?(n);
 end method;
 
 define method even? (n :: <mp-integer>) => value :: <boolean>;
-  %mpz-even?(mpz);
+  %mpz-even?(n);
 end method;
 
 define method zero? (n :: <mp-integer>) => value :: <boolean>;
-  %mpz-zero?(mpz);
+  %mpz-zero?(n);
 end method;
 
 define method positive? (n :: <mp-integer>) => value :: <boolean>;
-  %mpz-positive?(mpz);
+  %mpz-positive?(n);
 end method;
 
 define method negative? (n :: <mp-integer>) => value :: <boolean>;
-  %mpz-negative?(mpz);
+  %mpz-negative?(n);
 end method;
 
 //

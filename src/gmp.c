@@ -25,6 +25,8 @@ static void  gmp_gc_free (void *obj, size_t old_size);
 #define DECLARE_BINARY(_mtype, _name)                               \
   static Object prim_ ## _mtype ## _ ## _name (Object a, Object b); \
   static Object prim_ ## _mtype ## _ ## _name ## _bang (Object res, Object a, Object b);
+#define DECLARE_PREDICATE(_mtype, _name)                        \
+  static Object prim_ ## _mtype ## _ ## _name ## _p (Object a);
 #define DECLARE_COMPARE(_mtype)                                     \
   static Object prim_ ## _mtype ## _lessthan (Object a, Object b);  \
   static Object prim_ ## _mtype ## _equal (Object a, Object b);
@@ -35,6 +37,9 @@ static Object prim_mpf_precision(Object obj);
 static Object prim_mpf_precision_setter(Object obj, Object value);
 static Object prim_mpf_set_bang(Object obj, Object value);
 DECLARE_COMPARE(mpf);
+DECLARE_PREDICATE(mpf, zero);
+DECLARE_PREDICATE(mpf, positive);
+DECLARE_PREDICATE(mpf, negative);
 DECLARE_BINARY(mpf, add);
 DECLARE_BINARY(mpf, sub);
 DECLARE_BINARY(mpf, mul);
@@ -51,6 +56,9 @@ DECLARE_UNARY(mpf, sqrt);
 static Object prim_string_to_mpq(Object str, Object base);
 static Object prim_mpq_set_bang(Object obj, Object value);
 DECLARE_COMPARE(mpq);
+DECLARE_PREDICATE(mpq, zero);
+DECLARE_PREDICATE(mpq, positive);
+DECLARE_PREDICATE(mpq, negative);
 DECLARE_BINARY(mpq, add);
 DECLARE_BINARY(mpq, sub);
 DECLARE_BINARY(mpq, mul);
@@ -63,6 +71,11 @@ DECLARE_UNARY(mpq, inv);
 static Object prim_string_to_mpz(Object str, Object base);
 static Object prim_mpz_set_bang(Object obj, Object value);
 DECLARE_COMPARE(mpz);
+DECLARE_PREDICATE(mpz, zero);
+DECLARE_PREDICATE(mpz, positive);
+DECLARE_PREDICATE(mpz, negative);
+DECLARE_PREDICATE(mpz, odd);
+DECLARE_PREDICATE(mpz, even);
 DECLARE_BINARY(mpz, add);
 DECLARE_BINARY(mpz, sub);
 DECLARE_BINARY(mpz, mul);
@@ -81,6 +94,7 @@ DECLARE_UNARY(mpz, abs);
 /* We no longer need the declaration macros */
 #undef DECLARE_UNARY
 #undef DECLARE_BINARY
+#undef DECLARE_PREDICATE
 #undef DECLARE_COMPARE
 
 /* Our table of primitives */
@@ -93,6 +107,9 @@ static struct primitive gmp_prims[] =
   {"%mpf-precision-setter", prim_2, prim_mpf_precision_setter},
   {"%mpf<", prim_2, prim_mpf_lessthan},
   {"%mpf=", prim_2, prim_mpf_equal},
+  {"%mpf-zero?", prim_1, prim_mpf_zero_p},
+  {"%mpf-positive?", prim_1, prim_mpf_positive_p},
+  {"%mpf-negative?", prim_1, prim_mpf_negative_p},
   {"%mpf-set!", prim_2, prim_mpf_set_bang},
   {"%mpf-add", prim_2, prim_mpf_add},
   {"%mpf-sub", prim_2, prim_mpf_sub},
@@ -111,6 +128,9 @@ static struct primitive gmp_prims[] =
   {"%string->mpq", prim_2, prim_string_to_mpq},
   {"%mpq<", prim_2, prim_mpq_lessthan},
   {"%mpq=", prim_2, prim_mpq_equal},
+  {"%mpq-zero?", prim_1, prim_mpq_zero_p},
+  {"%mpq-positive?", prim_1, prim_mpq_positive_p},
+  {"%mpq-negative?", prim_1, prim_mpq_negative_p},
   {"%mpq-set!", prim_2, prim_mpq_set_bang},
   {"%mpq-add", prim_2, prim_mpq_add},
   {"%mpq-sub", prim_2, prim_mpq_sub},
@@ -132,6 +152,11 @@ static struct primitive gmp_prims[] =
   {"%string->mpz", prim_2, prim_string_to_mpz},
   {"%mpz<", prim_2, prim_mpz_lessthan},
   {"%mpz=", prim_2, prim_mpz_equal},
+  {"%mpz-zero?", prim_1, prim_mpz_zero_p},
+  {"%mpz-positive?", prim_1, prim_mpz_positive_p},
+  {"%mpz-negative?", prim_1, prim_mpz_negative_p},
+  {"%mpz-odd?", prim_1, prim_mpz_odd_p},
+  {"%mpz-even?", prim_1, prim_mpz_even_p},
   {"%mpz-set!", prim_2, prim_mpz_set_bang},
   {"%mpz-add", prim_2, prim_mpz_add},
   {"%mpz-sub", prim_2, prim_mpz_sub},
@@ -596,6 +621,24 @@ DEFINE_UNARY_MP(mpf, MPFloat, MPFP, MPFVAL, floor);
 DEFINE_UNARY_MP(mpf, MPFloat, MPFP, MPFVAL, trunc);
 DEFINE_UNARY_MP(mpf, MPFloat, MPFP, MPFVAL, sqrt);
 
+static Object
+prim_mpf_zero_p (Object a)
+{
+  return marlais_make_boolean(mpf_sgn(MPFVAL(a)) == 0);
+}
+
+static Object
+prim_mpf_positive_p (Object a)
+{
+  return marlais_make_boolean(mpf_sgn(MPFVAL(a)) > 0);
+}
+
+static Object
+prim_mpf_negative_p (Object a)
+{
+  return marlais_make_boolean(mpf_sgn(MPFVAL(a)) < 0);
+}
+
 DEFINE_COMPARE_MP_MP(mpq, MPRatio, MPQP, MPQVAL);
 DEFINE_BINARY_MP_MP(mpq, MPRatio, MPQP, MPQVAL, add);
 DEFINE_BINARY_MP_MP(mpq, MPRatio, MPQP, MPQVAL, sub);
@@ -604,6 +647,24 @@ DEFINE_BINARY_MP_MP(mpq, MPRatio, MPQP, MPQVAL, div);
 DEFINE_UNARY_MP(mpq, MPRatio, MPQP, MPQVAL, neg);
 DEFINE_UNARY_MP(mpq, MPRatio, MPQP, MPQVAL, abs);
 DEFINE_UNARY_MP(mpq, MPRatio, MPQP, MPQVAL, inv);
+
+static Object
+prim_mpq_zero_p (Object a)
+{
+  return marlais_make_boolean(mpq_sgn(MPQVAL(a)) == 0);
+}
+
+static Object
+prim_mpq_positive_p (Object a)
+{
+  return marlais_make_boolean(mpq_sgn(MPQVAL(a)) > 0);
+}
+
+static Object
+prim_mpq_negative_p (Object a)
+{
+  return marlais_make_boolean(mpq_sgn(MPQVAL(a)) < 0);
+}
 
 DEFINE_COMPARE_MP_MP(mpz, MPInteger, MPZP, MPZVAL);
 DEFINE_BINARY_MP_MPUI_COM(mpz, MPInteger, MPZP, MPZVAL, add);
@@ -617,3 +678,33 @@ DEFINE_BINARY_MP_MPUI(mpz, MPInteger, MPZP, MPZVAL, tdiv_q);
 DEFINE_BINARY_MP_MPUI(mpz, MPInteger, MPZP, MPZVAL, tdiv_r);
 DEFINE_UNARY_MP(mpz, MPInteger, MPZP, MPZVAL, neg);
 DEFINE_UNARY_MP(mpz, MPInteger, MPZP, MPZVAL, abs);
+
+static Object
+prim_mpz_zero_p (Object a)
+{
+  return marlais_make_boolean(mpz_sgn(MPZVAL(a)) == 0);
+}
+
+static Object
+prim_mpz_positive_p (Object a)
+{
+  return marlais_make_boolean(mpz_sgn(MPZVAL(a)) > 0);
+}
+
+static Object
+prim_mpz_negative_p (Object a)
+{
+  return marlais_make_boolean(mpz_sgn(MPZVAL(a)) < 0);
+}
+
+static Object
+prim_mpz_even_p (Object a)
+{
+  return marlais_make_boolean(mpz_even_p(MPZVAL(a)));
+}
+
+static Object
+prim_mpz_odd_p (Object a)
+{
+  return marlais_make_boolean(mpz_odd_p(MPZVAL(a)));
+}
