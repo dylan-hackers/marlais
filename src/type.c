@@ -29,7 +29,7 @@ marlais_register_type (void)
   marlais_register_prims (num, type_prims);
 }
 
-int
+bool
 marlais_instance_p (Object obj, Object type)
 {
   Object objtype;
@@ -67,7 +67,7 @@ marlais_instance_p (Object obj, Object type)
   }
 }
 
-int
+bool
 marlais_subtype_p (Object type1, Object type2)
 {
   Object supers;
@@ -125,7 +125,7 @@ marlais_subtype_p (Object type1, Object type2)
   }
 }
 
-int
+bool
 marlais_same_class_p (Object class1, Object class2)
 {
   if (class1 == class2) {
