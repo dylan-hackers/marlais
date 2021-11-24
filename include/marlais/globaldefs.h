@@ -286,7 +286,6 @@ GLOBAL Object export_symbol;
 GLOBAL Object create_symbol;
 GLOBAL Object define_module_symbol;
 GLOBAL Object module_keyword;
-GLOBAL Object empty_string_symbol;
 GLOBAL Object import_keyword;
 GLOBAL Object exclude_keyword;
 GLOBAL Object prefix_keyword;
