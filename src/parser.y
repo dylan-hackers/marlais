@@ -252,41 +252,41 @@ expression
 /*	| unparenthesized_operand COLON_EQUAL expression */
 	| expression COLON_EQUAL expression
            { if (NAMEP ( $1)) {
-		 $$ = listem (set_bang_symbol, $1, $3, NULL);
+		 $$ = marlais_make_list (set_bang_symbol, $1, $3, NULL);
 	     } else {
 		 $$ = make_setter_expr ($1, $3);
 	     }
 	   }
 	| expression '&' expression
-		{ $$ = listem ($2, $1, $3, NULL); }
+		{ $$ = marlais_make_list ($2, $1, $3, NULL); }
 	| expression '|' expression
-		{ $$ = listem ($2, $1, $3, NULL); }
+		{ $$ = marlais_make_list ($2, $1, $3, NULL); }
 	| expression GREATER_EQUAL expression
-		{ $$ = listem ($2, $1, $3, NULL); }
+		{ $$ = marlais_make_list ($2, $1, $3, NULL); }
 	| expression LESSER_EQUAL expression
-		{ $$ = listem ($2, $1, $3, NULL); }
+		{ $$ = marlais_make_list ($2, $1, $3, NULL); }
 	| expression '<' expression
-		{ $$ = listem ($2, $1, $3, NULL); }
+		{ $$ = marlais_make_list ($2, $1, $3, NULL); }
 	| expression '>' expression
-		{ $$ = listem ($2, $1, $3, NULL); }
+		{ $$ = marlais_make_list ($2, $1, $3, NULL); }
 	| expression NOT_EQUAL expression
-		{ $$ = listem ($2, $1, $3, NULL); }
+		{ $$ = marlais_make_list ($2, $1, $3, NULL); }
 	| expression NOT_EQUAL_EQUAL expression
-		{ $$ = listem ($2, $1, $3, NULL); }
+		{ $$ = marlais_make_list ($2, $1, $3, NULL); }
 	| expression EQUAL_EQUAL expression
-		{ $$ = listem ($2, $1, $3, NULL); }
+		{ $$ = marlais_make_list ($2, $1, $3, NULL); }
 	| expression '=' expression
-		{ $$ = listem ($2, $1, $3, NULL); }
+		{ $$ = marlais_make_list ($2, $1, $3, NULL); }
 	| expression '-' expression
-		{ $$ = listem ($2, $1, $3, NULL); }
+		{ $$ = marlais_make_list ($2, $1, $3, NULL); }
 	| expression '+' expression
-		{ $$ = listem ($2, $1, $3, NULL); }
+		{ $$ = marlais_make_list ($2, $1, $3, NULL); }
 	| expression '/' expression
-		{ $$ = listem ($2, $1, $3, NULL); }
+		{ $$ = marlais_make_list ($2, $1, $3, NULL); }
 	| expression '*' expression
-		{ $$ = listem ($2, $1, $3, NULL); }
+		{ $$ = marlais_make_list ($2, $1, $3, NULL); }
 	| expression '^' expression
-		{ $$ = listem ($2, $1, $3, NULL); }
+		{ $$ = marlais_make_list ($2, $1, $3, NULL); }
 /*
 	| error { yyerrok; }
 */
@@ -341,7 +341,7 @@ unparenthesized_operand
 	| unparenthesized_leaf		{ $$ = $1; }
 
 arguments
-	: SYMBOL expression		{ $$ = listem ($1, $2, NULL); }
+	: SYMBOL expression		{ $$ = marlais_make_list ($1, $2, NULL); }
 	| expression		{ $$ = marlais_cons ($1, marlais_make_nil ()); }
 	| SYMBOL expression ',' arguments
 		{ $$ = marlais_cons ($1, marlais_cons ($2, $4)); }
@@ -380,14 +380,14 @@ constants
 	| constant ',' constants	{ $$ = marlais_cons ($1, $3); }
 
 list_constants
-	: constant			{ $$ = listem (pair_symbol,
+	: constant			{ $$ = marlais_make_list (pair_symbol,
 						       $1,
 						       marlais_make_nil (),
 						       NULL);
 					}
-	| constant '.' constant		{ $$ = listem (pair_symbol, $1, $3, NULL);
+	| constant '.' constant		{ $$ = marlais_make_list (pair_symbol, $1, $3, NULL);
 					}
-	| constant ',' list_constants	{ $$ = listem (pair_symbol, $1, $3, NULL);
+	| constant ',' list_constants	{ $$ = marlais_make_list (pair_symbol, $1, $3, NULL);
 					}
 
 constant
@@ -617,7 +617,7 @@ for_statement
 			{ marlais_lexer_pop_intermediate_words (); }
 		')' body
 		 finally_opt END { marlais_lexer_pop_intermediate_words (); } FOR_opt
-		{ $$ = listem (for_symbol,
+		{ $$ = marlais_make_list (for_symbol,
 			       $4,
 			       marlais_append_bang ($5, $9),
 			       $8,
@@ -698,17 +698,17 @@ block_statement
 			}
 		END BLOCK_opt
 
-		{ $$ = listem (bind_exit_symbol,
+		{ $$ = marlais_make_list (bind_exit_symbol,
 			       marlais_cons ($4, marlais_make_nil ()),
                                nelistem(unwind_protect_symbol,
 					nelistem (bind_symbol,
-					       marlais_cons (listem (hash_rest_symbol,
+					       marlais_cons (marlais_make_list (hash_rest_symbol,
 							       vals_symbol,
 							       $6,
 							       NULL),
 						     marlais_make_nil ()),
 					       $7,
-					       listem (apply_symbol,
+					       marlais_make_list (apply_symbol,
 						       $4,
 						       vals_symbol,
 						       NULL),
@@ -731,7 +731,7 @@ exceptions
 	| exceptions
 	  EXCEPTION '(' exception_args ')' body
 		/* Note that exceptions are consed up from back to front! */
-		{ $$ = marlais_cons (listem ($2, $4, $6, NULL), $1); }
+		{ $$ = marlais_cons (marlais_make_list ($2, $4, $6, NULL), $1); }
 
 exception_args
 	: variable_name		{ $$ = marlais_cons ($1, marlais_make_nil ()); }
@@ -1073,7 +1073,7 @@ keyword_parameters
 keyword_parameter
 	: SYMBOL variable_name type_designator_opt default_opt
 		{ Object variable = $3 == NULL? $2
-                                              : listem ($2, $3, NULL);
+                                              : marlais_make_list ($2, $3, NULL);
 		  if ($4) {
 		    if ($1) {
 			$$ =marlais_cons ($1, marlais_cons (variable,
@@ -1089,7 +1089,7 @@ keyword_parameter
 
 	| variable_name type_designator_opt default_opt
 		{ Object variable = $2 == NULL? $1
-					      : listem ($1, $2, NULL);
+					      : marlais_make_list ($1, $2, NULL);
 		  if ($3) {
 		    $$ = marlais_cons (variable, marlais_cons ($3, marlais_make_nil ()));
 		} else {
@@ -1401,7 +1401,7 @@ make_setter_expr (Object place, Object value)
 	      place, NULL);
     }
     newsym = gensym(1);
-    return listem (unbinding_begin_symbol,
+    return marlais_make_list (unbinding_begin_symbol,
 		   marlais_make_integer (1),
 		   marlais_cons (local_bind_symbol,
 			 marlais_cons (marlais_cons (marlais_cons (newsym,

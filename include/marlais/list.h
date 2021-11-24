@@ -59,6 +59,8 @@ static inline Object marlais_make_nil (void) {
 }
 #endif
 
+extern Object marlais_make_list (Object car,...);
+
 /* Make a <pair> */
 extern Object marlais_cons (Object car, Object cdr);
 
@@ -81,8 +83,6 @@ extern Object marlais_append_bang (Object l1, Object l2);
 
 extern bool marlais_member_p (Object obj, Object lst);
 extern bool marlais_member_test_p (Object obj, Object lst, Object test);
-
-Object listem (Object car,...);
 
 int list_equal (Object l1, Object l2);
 

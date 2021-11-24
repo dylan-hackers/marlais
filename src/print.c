@@ -304,10 +304,10 @@ apply_print (Object fd, Object obj, int escaped)
     }
     if (0 == escaped) {
       marlais_apply (marlais_eval (princ_symbol),
-                     listem (marlais_eval(stream), obj, NULL));
+                     marlais_make_list (marlais_eval(stream), obj, NULL));
     } else {
       marlais_apply (marlais_eval (print_symbol),
-                     listem (obj, marlais_eval(stream), NULL));
+                     marlais_make_list (obj, marlais_eval(stream), NULL));
     }
   }
 }

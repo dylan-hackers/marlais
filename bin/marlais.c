@@ -45,7 +45,7 @@ static void print_top_level_constant(Object obj, int bind_p)
   }
 
   marlais_apply (marlais_eval (print_symbol),
-	 listem (obj, marlais_eval(standard_output_symbol), NULL));
+	 marlais_make_list (obj, marlais_eval(standard_output_symbol), NULL));
 
   fprintf (stdout, "\n");
 }

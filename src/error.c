@@ -319,7 +319,7 @@ marlais_error (const char *msg,...)
 	    fprintf (stdout, "\n");
 	  }
 	} else {
-	  marlais_apply (marlais_eval(print_symbol), listem(obj, marlais_standard_output, NULL));
+	  marlais_apply (marlais_eval(print_symbol), marlais_make_list(obj, marlais_standard_output, NULL));
 	  fprintf (stdout, "\n");
 	}
 	current_prompt = prompt;

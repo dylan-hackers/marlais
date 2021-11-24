@@ -421,12 +421,12 @@ parse_function_required_parameters (Object *params, Object *tmp_ptr)
       break;
     }
     if (PAIRP (entry)) {
-      (*tmp_ptr) = marlais_cons (listem (CAR (entry),
+      (*tmp_ptr) = marlais_cons (marlais_make_list (CAR (entry),
                                  marlais_eval (SECOND (entry)),
                                  NULL),
                          marlais_make_nil ());
     } else {
-      *tmp_ptr = marlais_cons (listem (entry, object_class, NULL),
+      *tmp_ptr = marlais_cons (marlais_make_list (entry, object_class, NULL),
                        marlais_make_nil ());
     }
     tmp_ptr = &CDR (*tmp_ptr);
@@ -549,14 +549,14 @@ parse_function_key_parameters(Object functor, Object* params,
       /* get a keyword-parameter pair */
       if (NAMEP (entry)) {
         keyword_list_insert (get_params_fn (functor),
-                             listem (param_name_to_keyword (entry),
+                             marlais_make_list (param_name_to_keyword (entry),
                                      entry,
                                      MARLAIS_FALSE,
                                      NULL));
       } else if (PAIRP (entry) && is_param_name (CAR (entry)) &&
                  marlais_list_length (entry) == 2) {
         keyword_list_insert (get_params_fn (functor),
-                             listem (param_name_to_keyword (CAR (entry)),
+                             marlais_make_list (param_name_to_keyword (CAR (entry)),
                                      CAR (entry),
                                      SECOND (entry),
                                      NULL));
@@ -612,7 +612,7 @@ xform_method_key_param(Object meth_obj, Object entry)
   } else if (entry_length == 2) {
     /* key: key-name */
     keyword_list_insert (&METHKEYPARAMS (meth_obj),
-                         listem (CAR (entry),
+                         marlais_make_list (CAR (entry),
                                  SECOND (entry),
                                  MARLAIS_FALSE,
                                  NULL));
@@ -734,14 +734,14 @@ create_generic_parameters (Object params)
     if (PAIRP (entry)) {
       entry = CAR (entry);
     }
-    gf_params = marlais_append (gf_params, listem (entry, NULL));
+    gf_params = marlais_append (gf_params, marlais_make_list (entry, NULL));
 
     params = CDR (params);
   }
 
   /* next add generic rest parameter */
-  gf_params = marlais_append (gf_params, listem (hash_rest_symbol, NULL));
-  gf_params = marlais_append (gf_params, listem (x_symbol, NULL));
+  gf_params = marlais_append (gf_params, marlais_make_list (hash_rest_symbol, NULL));
+  gf_params = marlais_append (gf_params, marlais_make_list (x_symbol, NULL));
 
   /* I believe that all other parts of the generic function parameters
   ** should be the same as the initial method's
@@ -773,7 +773,7 @@ generic_function_make (Object arglist)
                      CAR (ptr),
                      NULL);
     } else {
-      CAR (ptr) = listem (unspecified_object, CAR (ptr), NULL);
+      CAR (ptr) = marlais_make_list (unspecified_object, CAR (ptr), NULL);
     }
   }
 

@@ -104,6 +104,26 @@ marlais_register_list (void)
 }
 
 Object
+marlais_make_list (Object car,...)
+{
+    Object fst, el, acons, cur;
+    va_list args;
+
+    fst = cur = acons = marlais_cons (car, marlais_make_nil ());
+    va_start (args, car);
+    el = va_arg (args, Object);
+
+    while (el) {
+        acons = marlais_cons (el, marlais_make_nil ());
+        CDR (cur) = acons;
+        cur = acons;
+        el = va_arg (args, Object);
+    }
+    va_end (args);
+    return (fst);
+}
+
+Object
 marlais_make_pair_entrypoint (Object args)
 {
     return marlais_cons (MARLAIS_FALSE, MARLAIS_FALSE); /* who knows ?? */
@@ -292,7 +312,7 @@ marlais_map_apply2 (Object fun, Object l1, Object l2)
     if (EMPTYLISTP (l1) || EMPTYLISTP (l2)) {
         return (marlais_make_nil ());
     } else {
-        return (marlais_cons (marlais_apply (fun, listem (CAR (l1), CAR (l2),
+        return (marlais_cons (marlais_apply (fun, marlais_make_list (CAR (l1), CAR (l2),
                                                   NULL)),
                       marlais_map_apply2 (fun, CDR (l1), CDR (l2))));
     }
@@ -346,7 +366,7 @@ marlais_member_test_p (Object obj, Object lst, Object test)
     Object l = lst;
     while (!EMPTYLISTP (l)) {
         if (test != MARLAIS_FALSE) {
-            if (marlais_apply (test, listem (obj, CAR (l), NULL)) != MARLAIS_FALSE) {
+            if (marlais_apply (test, marlais_make_list (obj, CAR (l), NULL)) != MARLAIS_FALSE) {
                 return true;
             }
         } else {
@@ -365,26 +385,6 @@ list_member_p (Object obj, Object lst, Object test)
   return marlais_make_boolean (marlais_member_test_p (obj, lst, test));
 }
 
-Object
-listem (Object car,...)
-{
-    Object fst, el, acons, cur;
-    va_list args;
-
-    fst = cur = acons = marlais_cons (car, marlais_make_nil ());
-    va_start (args, car);
-    el = va_arg (args, Object);
-
-    while (el) {
-        acons = marlais_cons (el, marlais_make_nil ());
-        CDR (cur) = acons;
-        cur = acons;
-        el = va_arg (args, Object);
-    }
-    va_end (args);
-    return (fst);
-}
-
 static Object
 list_reduce (Object fun, Object init, Object lst)
 {
@@ -392,7 +392,7 @@ list_reduce (Object fun, Object init, Object lst)
 
     val = init;
     while (!EMPTYLISTP (lst)) {
-        val = marlais_apply (fun, listem (val, CAR (lst), NULL));
+        val = marlais_apply (fun, marlais_make_list (val, CAR (lst), NULL));
         lst = CDR (lst);
     }
     return (val);

@@ -124,12 +124,12 @@ marlais_initialize_class (void)
     make_builtin_class ("<sequence>", collection_class);
   mutable_explicit_key_collection_class =
     make_builtin_class ("<mutable-explicit-key-collection>",
-                        listem (explicit_key_collection_class,
+                        marlais_make_list (explicit_key_collection_class,
                                 mutable_collection_class,
                                 NULL));
   mutable_sequence_class =
     make_builtin_class ("<mutable-sequence>",
-                        listem (mutable_collection_class,
+                        marlais_make_list (mutable_collection_class,
                                 sequence_class,
                                 NULL));
 
@@ -148,14 +148,14 @@ marlais_initialize_class (void)
   /* Deque classes */
   deque_class =
     make_builtin_class ("<deque>",
-                        listem (mutable_sequence_class,
+                        marlais_make_list (mutable_sequence_class,
                                 stretchy_collection_class,
                                 NULL));
 
   /* Table classes */
   table_class =
     make_builtin_class ("<table>",
-                        listem (mutable_explicit_key_collection_class,
+                        marlais_make_list (mutable_explicit_key_collection_class,
                                 stretchy_collection_class,
                                 NULL));
   object_table_class =
@@ -168,7 +168,7 @@ marlais_initialize_class (void)
     make_builtin_class ("<simple-vector>", vector_class);
   stretchy_vector_class =
     make_builtin_class("<stretchy-vector>",
-                       listem(vector_class,
+                       marlais_make_list (vector_class,
                               stretchy_collection_class,
                               NULL));
   simple_object_vector_class =
@@ -179,17 +179,17 @@ marlais_initialize_class (void)
     make_builtin_class ("<string>", mutable_sequence_class);
   byte_string_class =
     make_builtin_class ("<byte-string>",
-                        listem (string_class,
+                        marlais_make_list (string_class,
                                 simple_vector_class,
                                 NULL));
   wide_string_class =
     make_builtin_class ("<wide-string>",
-                        listem (string_class,
+                        marlais_make_list (string_class,
                                 simple_vector_class,
                                 NULL));
   unicode_string_class =
     make_builtin_class ("<unicode-string>",
-                        listem (string_class,
+                        marlais_make_list (string_class,
                                 simple_vector_class,
                                 NULL));
 
@@ -801,7 +801,7 @@ marlais_make_getter_setter_gfs (Object slotds)
       if (NULL == marlais_symbol_value (getter)) {
         SLOTDGETTER (CAR (slotds)) =
           marlais_make_generic (getter,
-                                 listem (x_symbol,
+                                 marlais_make_list (x_symbol,
                                          hash_rest_symbol,
                                          x_symbol,
                                          NULL),
@@ -834,7 +834,7 @@ marlais_make_getter_setter_gfs (Object slotds)
         if (NULL == marlais_symbol_value (setter)) {
           SLOTDSETTER (CAR (slotds)) =
             marlais_make_generic (setter,
-                                   listem (x_symbol,
+                                   marlais_make_list (x_symbol,
                                            x_symbol,
                                            hash_rest_symbol,
                                            x_symbol,
@@ -998,7 +998,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
     slotd = CAR (tmp_slotds);
     if (SLOTDINITKEYWORD (slotd)) {
       if (SLOTDINIT (slotd) != uninit_slot_object) {
-        *def_ptr = listem (SLOTDINITKEYWORD (slotd),
+        *def_ptr = marlais_make_list (SLOTDINITKEYWORD (slotd),
                            SLOTDINIT (slotd),
                            NULL);
         def_ptr = &CDR (CDR (*def_ptr));
@@ -1019,7 +1019,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
   tmp_slotds = init_slotds;
   for (i = 0; PAIRP (tmp_slotds); tmp_slotds = CDR (tmp_slotds), i++) {
     slotd = CAR (tmp_slotds);
-    slots[i] = listem (marlais_slot_init_value (slotd), SLOTDSLOTTYPE (slotd), NULL);
+    slots[i] = marlais_make_list (marlais_slot_init_value (slotd), SLOTDSLOTTYPE (slotd), NULL);
   }
   return marlais_construct_values (2, slots, marlais_append (default_initializers,
                                                      extra_initializers));
@@ -1113,7 +1113,7 @@ replace_slotd_init (Object init_slotds, Object keyword, Object init)
  *  Return the list containing the keyword and initial value to
  *  signify this fact.
  */
-  return listem (keyword, init, NULL);
+  return marlais_make_list (keyword, init, NULL);
 }
 
 /* XXX eliminate */
@@ -1250,17 +1250,17 @@ make_getter_method (Object slot, Object class, int slot_num)
   if (CLASSNAME (class)) {
     class_location = CLASSNAME (class);
   } else {
-    class_location = listem (quote_symbol, class, NULL);
+    class_location = marlais_make_list (quote_symbol, class, NULL);
   }
-  params = listem (listem (obj_sym, class_location, NULL), NULL);
+  params = marlais_make_list (marlais_make_list (obj_sym, class_location, NULL), NULL);
 
   allocation = SLOTDALLOCATION (slot);
   if (allocation == instance_symbol) {
     slot_location = obj_sym;
   } else if (allocation == class_symbol ||
              allocation == each_subclass_symbol) {
-    slot_location = listem (class_slots_symbol,
-                            listem (quote_symbol, class, NULL), NULL);
+    slot_location = marlais_make_list (class_slots_symbol,
+                            marlais_make_list (quote_symbol, class, NULL), NULL);
   } else if (allocation == virtual_symbol) {
     return SLOTDGETTER (slot);
   } else if (allocation != constant_symbol) {
@@ -1269,7 +1269,7 @@ make_getter_method (Object slot, Object class, int slot_num)
   if (allocation == constant_symbol) {
     body = marlais_cons (SLOTDINIT (slot), marlais_make_nil ());
   } else {
-    body = listem (listem (slot_val_sym,
+    body = marlais_make_list (marlais_make_list (slot_val_sym,
                            slot_location,
                            marlais_make_integer (slot_num),
                            NULL),
@@ -1302,22 +1302,22 @@ make_setter_method (Object slot, Object class, int slot_num)
   if (CLASSNAME (class)) {
     class_location = CLASSNAME (class);
   } else {
-    class_location = listem (quote_symbol, class, NULL);
+    class_location = marlais_make_list (quote_symbol, class, NULL);
   }
-  params = listem (listem (val_sym,
-                           listem (quote_symbol,
+  params = marlais_make_list (marlais_make_list (val_sym,
+                           marlais_make_list (quote_symbol,
                                    SLOTDSLOTTYPE (slot),
                                    NULL),
                            NULL),
-                   listem (obj_sym, class_location, NULL),
+                   marlais_make_list (obj_sym, class_location, NULL),
                    NULL);
   allocation = SLOTDALLOCATION (slot);
   if (allocation == instance_symbol) {
     slot_location = obj_sym;
   } else if (allocation == class_symbol ||
              allocation == each_subclass_symbol) {
-    slot_location = listem (class_slots_symbol,
-                            listem (quote_symbol, class, NULL),
+    slot_location = marlais_make_list (class_slots_symbol,
+                            marlais_make_list (quote_symbol, class, NULL),
                             NULL);
   } else if (allocation == constant_symbol) {
     marlais_error ("BUG - attempt to allocate setter for constant slot",
@@ -1327,7 +1327,7 @@ make_setter_method (Object slot, Object class, int slot_num)
   } else {
     marlais_error ("Bad slot allocation ", allocation, NULL);
   }
-  body = listem (listem (set_slot_value_sym,
+  body = marlais_make_list (marlais_make_list (set_slot_value_sym,
                          slot_location,
                          marlais_make_integer (slot_num),
                          val_sym,
