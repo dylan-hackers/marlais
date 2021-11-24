@@ -15,10 +15,11 @@ struct eval_stack *eval_stack = 0;
 jmp_buf *the_eval_context = NULL;
 static Object the_eval_obj = NULL;
 
-/* local function prototypes */
+/* Internal function declarations */
+
 Object eval_combination (Object obj, int do_apply);
 
-/* function definitions */
+/* Exported functions */
 
 Object
 marlais_eval (Object obj)
@@ -60,17 +61,17 @@ marlais_tail_eval (Object obj)
 
 #ifdef MARLAIS_ENABLE_TAIL_CALL_OPTIMIZATION
     if (trace_functions) {
-	marlais_warning ("in tail eval context, parent context",
-		 eval_stack->context,
-		 eval_stack->next->context,
-		 0);
+        marlais_warning ("in tail eval context, parent context",
+                         eval_stack->context,
+                         eval_stack->next->context,
+                         0);
     }
     if (PAIRP (obj)) {
-	the_eval_obj = obj;
-	if (the_eval_context == NULL) {
-	    marlais_error ("tail_eval called without a prior eval in progress.", NULL);
-	}
-	longjmp (*the_eval_context, 1);
+        the_eval_obj = obj;
+        if (the_eval_context == NULL) {
+            marlais_error ("tail_eval called without a prior eval in progress.", NULL);
+        }
+        longjmp (*the_eval_context, 1);
     }
 #endif
     /* if it's not a <pair>, then call good old eval. */
@@ -108,33 +109,33 @@ eval_combination (Object obj, int do_apply)
     old_context = the_eval_context;
     the_eval_context = &this_context;
     if (setjmp (this_context) != 0) {
-	obj = the_eval_obj;
+        obj = the_eval_obj;
 
-	eval_stack = old_stack;	/* restore the state of the "eval" stack. */
+        eval_stack = old_stack; /* restore the state of the "eval" stack. */
 
-	is_tail_call = 1;	/* a tail call occurred. */
-	do_apply = 0;		/* tail_eval called from apply. */
+        is_tail_call = 1;       /* a tail call occurred. */
+        do_apply = 0;           /* tail_eval called from apply. */
     }
     if (do_apply) {
-	fun = CAR (obj);
-	args = CDR (obj);
-	marlais_push_eval_stack (fun);
-	ret = marlais_apply_internal (fun, args);
-	marlais_pop_eval_stack ();
+        fun = CAR (obj);
+        args = CDR (obj);
+        marlais_push_eval_stack (fun);
+        ret = marlais_apply_internal (fun, args);
+        marlais_pop_eval_stack ();
     } else {
-	op = CAR (obj);
-	sf = marlais_syntax_function (op);
-	if (sf) {
-	    marlais_push_eval_stack (op);
-	    ret = (*sf) (obj);
-	    marlais_pop_eval_stack ();
-	} else {
-	    fun = marlais_eval (CAR (obj));
-	    marlais_push_eval_stack (fun);
-	    args = marlais_map1 (marlais_eval, CDR (obj));
-	    ret = marlais_apply_internal (fun, args);
-	    marlais_pop_eval_stack ();
-	}
+        op = CAR (obj);
+        sf = marlais_syntax_function (op);
+        if (sf) {
+            marlais_push_eval_stack (op);
+            ret = (*sf) (obj);
+            marlais_pop_eval_stack ();
+        } else {
+            fun = marlais_eval (CAR (obj));
+            marlais_push_eval_stack (fun);
+            args = marlais_map1 (marlais_eval, CDR (obj));
+            ret = marlais_apply_internal (fun, args);
+            marlais_pop_eval_stack ();
+        }
     }
 
     /* restore previous frame's context. */
@@ -142,15 +143,15 @@ eval_combination (Object obj, int do_apply)
 
     /* here we restore the environment since is not restored via tail calls. */
     if (is_tail_call)
-	the_env = old_env;
+        the_env = old_env;
 
     tail_required_values = CAR (CAR (ResultValueStack));
     tail_rest_values = CDR (CAR (ResultValueStack));
     ResultValueStack = CDR (ResultValueStack);
 
     ret = marlais_construct_return_values (ret,
-					   tail_required_values,
-					   tail_rest_values);
+                                           tail_required_values,
+                                           tail_rest_values);
     return ret;
 }
 
@@ -179,11 +180,11 @@ marlais_print_stack (void)
     int i;
 
     for (i = 0, entry = eval_stack->next;
-	 entry != NULL;
-	 entry = entry->next, i++) {
-	fprintf (stderr, "#%d ", i);
-	marlais_print_object (marlais_standard_error, entry->context, 1);
-	fprintf (stderr, "\n");
+         entry != NULL;
+         entry = entry->next, i++) {
+        fprintf (stderr, "#%d ", i);
+        marlais_print_object (marlais_standard_error, entry->context, 1);
+        fprintf (stderr, "\n");
     }
     return MARLAIS_UNSPECIFIED;
 }
