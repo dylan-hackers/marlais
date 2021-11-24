@@ -228,20 +228,6 @@ marlais_list_length (Object lst)
     }
 }
 
-int
-list_equal (Object l1, Object l2)
-{
-    if (marlais_identical_p (l1, l2)) {
-        return (1);
-    }
-    if (PAIRP (l1) && PAIRP (l2)) {
-        return (list_equal (CAR (l1), CAR (l2)) &&
-                list_equal (CDR (l1), CDR (l2)));
-    } else {
-        return (0);
-    }
-}
-
 Object
 marlais_second (Object lst)
 {

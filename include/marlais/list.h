@@ -73,8 +73,6 @@ extern Object marlais_cdr (Object lst);
 
 extern int marlais_list_length (Object lst);
 
-int list_equal (Object l1, Object l2);
-
 extern Object marlais_second (Object lst);
 extern Object marlais_third (Object lst);
 
