@@ -290,7 +290,7 @@ bool
 marlais_member_p (Object obj, Object lst)
 {
     while (PAIRP (lst)) {
-        if (obj == CAR (lst)) {
+        if (marlais_identical_p (obj, CAR (lst))) {
             return true;
         }
         lst = CDR (lst);
