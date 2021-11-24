@@ -152,7 +152,7 @@ eval_combination (Object obj, int do_apply)
 	} else {
 	    fun = marlais_eval (CAR (obj));
 	    marlais_push_eval_stack (fun);
-	    args = map (marlais_eval, CDR (obj));
+	    args = marlais_map1 (marlais_eval, CDR (obj));
 	    ret = marlais_apply_internal (fun, args);
 	    marlais_pop_eval_stack ();
 	}

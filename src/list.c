@@ -66,7 +66,8 @@ static struct primitive list_prims[] =
     {"%tail-setter", prim_2, set_cdr},
     {"%list-element", prim_3, list_element},
     {"%list-element-setter", prim_3, list_element_setter},
-    {"%list-map1", prim_2, list_map1},
+
+    {"%list-map1", prim_2, marlais_map_apply1},
     {"%list-append", prim_2, append},
     {"%list-append!", prim_2, append_bang}, /* not used yet */
     {"%list-member?", prim_3, member_p},
@@ -199,45 +200,45 @@ third_d (Object lst, Object default_ob)
 }
 
 Object
-map (Object (*fun) (Object), Object lst)
+marlais_map1 (Object (*fun) (Object), Object lst)
 {
     if (EMPTYLISTP (lst)) {
         return (marlais_make_nil ());
     } else {
-        return (marlais_cons ((*fun) (CAR (lst)), map (fun, CDR (lst))));
+        return (marlais_cons ((*fun) (CAR (lst)), marlais_map1 (fun, CDR (lst))));
     }
 }
 
 Object
-map2 (Object (*fun) (Object, Object), Object l1, Object l2)
+marlais_map2 (Object (*fun) (Object, Object), Object l1, Object l2)
 {
     if (EMPTYLISTP (l1) || EMPTYLISTP (l2)) {
         return (marlais_make_nil ());
     } else {
-        return (marlais_cons ((*fun) (CAR (l1), CAR (l2)), map2 (fun, CDR (l1), CDR (l2))));
+        return (marlais_cons ((*fun) (CAR (l1), CAR (l2)), marlais_map2 (fun, CDR (l1), CDR (l2))));
     }
 }
 
 Object
-list_map1 (Object fun, Object lst)
+marlais_map_apply1 (Object fun, Object lst)
 {
     if (EMPTYLISTP (lst)) {
         return (marlais_make_nil ());
     } else {
         return (marlais_cons (marlais_apply (fun, marlais_cons (CAR (lst), marlais_make_nil ())),
-                      list_map1 (fun, (CDR (lst)))));
+                      marlais_map_apply1 (fun, (CDR (lst)))));
     }
 }
 
 Object
-list_map2 (Object fun, Object l1, Object l2)
+marlais_map_apply2 (Object fun, Object l1, Object l2)
 {
     if (EMPTYLISTP (l1) || EMPTYLISTP (l2)) {
         return (marlais_make_nil ());
     } else {
         return (marlais_cons (marlais_apply (fun, listem (CAR (l1), CAR (l2),
                                                   NULL)),
-                      list_map2 (fun, CDR (l1), CDR (l2))));
+                      marlais_map_apply2 (fun, CDR (l1), CDR (l2))));
     }
 }
 

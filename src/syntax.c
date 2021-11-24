@@ -811,7 +811,7 @@ define_class_eval (Object form)
 
   CLASSNAME (obj) = name;
   marlais_add_export (name, obj, 0);
-  supers = map (marlais_eval, CAR (tmp_form));
+  supers = marlais_map1 (marlais_eval, CAR (tmp_form));
   if(EMPTYLISTP(supers)) supers = marlais_cons (object_class, marlais_make_nil ());
   slots = marlais_make_slot_descriptor_list (CDR (tmp_form), 1);
   marlais_make_getter_setter_gfs (slots);
@@ -1565,15 +1565,15 @@ for_each_eval (Object form)
   return_forms = CDR (THIRD (form));
 
   var_forms = SECOND (form);
-  vars = map (car, var_forms);
-  collections = map (second, var_forms);
-  collections = map (marlais_eval, collections);
-  states = list_map1 (init_state_fun, collections);
+  vars = marlais_map1 (car, var_forms);
+  collections = marlais_map1 (marlais_second, var_forms);
+  collections = marlais_map1 (marlais_eval, collections);
+  states = marlais_map_apply1 (init_state_fun, collections);
 
   if (member (MARLAIS_FALSE, states)) {
     return (MARLAIS_FALSE);
   }
-  vals = list_map2 (cur_el_fun, collections, states);
+  vals = marlais_map_apply2 (cur_el_fun, collections, states);
   marlais_push_scope (CAR (form));
   marlais_add_locals (vars, vals, 0, the_env);
 
@@ -1583,12 +1583,12 @@ for_each_eval (Object form)
       marlais_eval (CAR (body));
       body = CDR (body);
     }
-    states = list_map2 (next_state_fun, collections, states);
+    states = marlais_map_apply2 (next_state_fun, collections, states);
     if (member (MARLAIS_FALSE, states)) {
       marlais_pop_scope ();
       return (MARLAIS_FALSE);
     }
-    vals = list_map2 (cur_el_fun, collections, states);
+    vals = marlais_map_apply2 (cur_el_fun, collections, states);
 
     /* modify bindings */
     temp_vars = vars;

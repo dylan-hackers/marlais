@@ -68,10 +68,12 @@ extern Object marlais_cdr (Object lst);
 extern Object marlais_second (Object lst);
 extern Object marlais_third (Object lst);
 
-Object map (Object (*fun) (Object), Object lst);
-Object map2 (Object (*fun) (Object, Object), Object l1, Object l2);
-Object list_map1 (Object fun, Object lst);
-Object list_map2 (Object fun, Object l1, Object l2);
+extern Object marlais_map1 (Object (*fun) (Object), Object lst);
+extern Object marlais_map2 (Object (*fun) (Object, Object), Object l1, Object l2);
+
+extern Object marlais_map_apply1 (Object fun, Object lst);
+extern Object marlais_map_apply2 (Object fun, Object l1, Object l2);
+
 Object append (Object l1, Object l2);
 Object append_bang (Object l1, Object l2);
 int member (Object obj, Object lst);
