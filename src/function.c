@@ -734,20 +734,20 @@ create_generic_parameters (Object params)
     if (PAIRP (entry)) {
       entry = CAR (entry);
     }
-    gf_params = append (gf_params, listem (entry, NULL));
+    gf_params = marlais_append (gf_params, listem (entry, NULL));
 
     params = CDR (params);
   }
 
   /* next add generic rest parameter */
-  gf_params = append (gf_params, listem (hash_rest_symbol, NULL));
-  gf_params = append (gf_params, listem (x_symbol, NULL));
+  gf_params = marlais_append (gf_params, listem (hash_rest_symbol, NULL));
+  gf_params = marlais_append (gf_params, listem (x_symbol, NULL));
 
   /* I believe that all other parts of the generic function parameters
   ** should be the same as the initial method's
   */
   if (PAIRP (params)) {
-    gf_params = append (gf_params, params);
+    gf_params = marlais_append (gf_params, params);
   }
   return (gf_params);
 }

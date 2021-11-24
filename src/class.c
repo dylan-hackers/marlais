@@ -591,7 +591,7 @@ marlais_make_class (Object obj,
    * print_class_slot_values (print.c) to work correctly.
    */
   INSTSLOTS (CLASSCSLOTS (obj)) =
-    (Object *) (VALUESELS (initialize_slots (append (CLASSCSLOTDS (obj),
+    (Object *) (VALUESELS (initialize_slots (marlais_append (CLASSCSLOTDS (obj),
                                                      CLASSESSLOTDS (obj)),
                                              marlais_make_nil ()))[0]);
 
@@ -875,7 +875,7 @@ make_instance (Object class, Object *initializers)
 
   INSTCLASS (obj) = class;
   initialize_slotds (class);
-  ret = initialize_slots (append (CLASSINSLOTDS (class), CLASSSLOTDS (class)),
+  ret = initialize_slots (marlais_append (CLASSINSLOTDS (class), CLASSSLOTDS (class)),
                           *initializers);
   INSTSLOTS (obj) = (Object *) (VALUESELS (ret)[0]);
   *initializers = VALUESELS (ret)[1];
@@ -969,7 +969,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
                                     initializer,
                                     SECOND (initializers));
         if (extra != NULL) {
-          extra_initializers = append (extra, extra_initializers);
+          extra_initializers = marlais_append (extra, extra_initializers);
         }
       } else {
         /* Should check for class or subclass initializer and
@@ -1021,7 +1021,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
     slotd = CAR (tmp_slotds);
     slots[i] = listem (marlais_slot_init_value (slotd), SLOTDSLOTTYPE (slotd), NULL);
   }
-  return marlais_construct_values (2, slots, append (default_initializers,
+  return marlais_construct_values (2, slots, marlais_append (default_initializers,
                                                      extra_initializers));
 }
 
@@ -1156,12 +1156,12 @@ initialize_slotds (Object class)
 
   the_env = CLASSENV (class);
   eval_slotds (CLASSSLOTDS (class));
-  make_getters_setters (class, append (CLASSINSLOTDS (class),
+  make_getters_setters (class, marlais_append (CLASSINSLOTDS (class),
                                        CLASSSLOTDS (class)));
 
   eval_slotds (CLASSESSLOTDS (class));
   eval_slotds (CLASSCSLOTDS (class));
-  make_getters_setters (class, append (CLASSCSLOTDS (class),
+  make_getters_setters (class, marlais_append (CLASSCSLOTDS (class),
                                        CLASSESSLOTDS (class)));
 
   make_getters_setters (class, CLASSCONSTSLOTDS (class));

@@ -436,7 +436,7 @@ if_statement
 		END IF_opt
 			{ $$ = marlais_cons ($1,
 				     marlais_cons ($4,
-					   append_bang (marlais_cons ($6,
+					   marlais_append_bang (marlais_cons ($6,
 							      marlais_make_nil ()),
 							$7))); }
 
@@ -451,7 +451,7 @@ else_parts
 	| ELSEIF '(' expression ')' body else_parts
 			{ $$ = marlais_cons (marlais_cons (if_symbol,
 					   marlais_cons ($3,
-						 append_bang (marlais_cons ($5,
+						 marlais_append_bang (marlais_cons ($5,
 								    marlais_make_nil ()),
 							      $6))),
 				     marlais_make_nil ()); }
@@ -619,7 +619,7 @@ for_statement
 		 finally_opt END { marlais_lexer_pop_intermediate_words (); } FOR_opt
 		{ $$ = listem (for_symbol,
 			       $4,
-			       append_bang($5, $9),
+			       marlais_append_bang ($5, $9),
 			       $8,
 			       NULL);
 		}
@@ -641,7 +641,7 @@ for_clause
 		{ $$ = marlais_cons (range_keyword,
 			     marlais_cons ($1,
 				   marlais_cons ($3,
-					 append_bang($4, $5)))); }
+					 marlais_append_bang ($4, $5)))); }
 
 bound_opt
 	:	{ $$ = marlais_make_nil (); }
@@ -877,13 +877,13 @@ slot_spec
 		  }
 		  $$ = marlais_cons (getter_name, $4);
 		  if (slot_type_specified) {
-		      append_bang ($$, slot_type);
+		      marlais_append_bang ($$, slot_type);
 		  }
 		  if (allocation_specified) {
-		      append_bang ($$, allocation);
+		      marlais_append_bang ($$, allocation);
 		  }
 		  if (dynamism_specified) {
-		      append_bang ($$, dynamism);
+		      marlais_append_bang ($$, dynamism);
 		  }
 		}
 
@@ -999,32 +999,32 @@ method_body
 		    $$ = marlais_cons ($2, marlais_cons ($6, marlais_make_nil ()));
 		}
 	| '(' parameter_list_opt ')' EQUAL_ARROW variable ';' body
-		{ $$ = marlais_cons (append_bang ($2,
+		{ $$ = marlais_cons (marlais_append_bang ($2,
 					  marlais_cons (hash_values_symbol,
 						marlais_cons ($5, marlais_make_nil ()))),
 			     marlais_cons ($7, marlais_make_nil ())); }
 
 	| '(' parameter_list_opt ')' EQUAL_ARROW '(' value_list_opt ')' SEMICOLON_opt body
-		{ $$ = marlais_cons (append_bang ($2,
+		{ $$ = marlais_cons (marlais_append_bang ($2,
 					  marlais_cons (hash_values_symbol, $6)),
 			     marlais_cons ( $9, marlais_make_nil ())); }
 generic_function_body
 	: '(' parameter_list_opt ')'
 		{ $$ = marlais_cons ($2, marlais_make_nil ()); }
 	| '(' parameter_list_opt ')' EQUAL_ARROW variable
-		{ $$ = marlais_cons (append_bang ($2, marlais_cons (hash_values_symbol,
+		{ $$ = marlais_cons (marlais_append_bang ($2, marlais_cons (hash_values_symbol,
 					      marlais_cons ($5, marlais_make_nil ()))),
 			     marlais_make_nil ()); }
 	| '(' parameter_list_opt ')' EQUAL_ARROW '(' value_list_opt ')'
-		{ $$ = marlais_cons (append_bang ($2, marlais_cons (hash_values_symbol, $6)),
+		{ $$ = marlais_cons (marlais_append_bang ($2, marlais_cons (hash_values_symbol, $6)),
 		 	     marlais_make_nil ()); }
 
 parameter_list
 	: parameter		{ $$ = marlais_cons ($1, marlais_make_nil ()); }
 	| parameter_list ',' parameter
-		{ $$ = append_bang ($1, marlais_cons ($3, marlais_make_nil ())); }
+		{ $$ = marlais_append_bang ($1, marlais_cons ($3, marlais_make_nil ())); }
 	| parameter_list ',' next_rest_key_parameter_list
-			{ $$ = append_bang ($1, $3); }
+			{ $$ = marlais_append_bang ($1, $3); }
 	| next_rest_key_parameter_list
 			{ $$ = $1; }
 
@@ -1130,7 +1130,7 @@ local_declaration
 	| LOCAL { methnames = methdefs = marlais_make_nil (); }
 	  local_methods
 
-          {   Object methbindings = marlais_cons (append (methnames,
+          {   Object methbindings = marlais_cons (marlais_append (methnames,
 						  marlais_cons (marlais_cons (values_symbol,
 							      methdefs),
 							marlais_make_nil ())),
@@ -1169,7 +1169,7 @@ bindings
 		{ $$ = marlais_cons (marlais_cons ($1, marlais_cons ($3, marlais_make_nil ())),
 			     marlais_make_nil ()); }
 	| '(' variable_list ')' '=' expression
-		  { $$ = marlais_cons (append_bang ($2, marlais_cons ($5, marlais_make_nil ())),
+		  { $$ = marlais_cons (marlais_append_bang ($2, marlais_cons ($5, marlais_make_nil ())),
 			     marlais_make_nil ()); }
 
 variable_list

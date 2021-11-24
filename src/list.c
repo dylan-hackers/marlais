@@ -68,10 +68,9 @@ static struct primitive list_prims[] =
     {"%tail-setter", prim_2, set_cdr},
     {"%list-element", prim_3, list_element},
     {"%list-element-setter", prim_3, list_element_setter},
-
     {"%list-map1", prim_2, marlais_map_apply1},
-    {"%list-append", prim_2, append},
-    {"%list-append!", prim_2, append_bang}, /* not used yet */
+    {"%list-append", prim_2, marlais_append},
+    {"%list-append!", prim_2, marlais_append_bang}, /* not used yet */
     {"%list-member?", prim_3, member_p},
     {"%list-reduce", prim_3, list_reduce},
     {"%list-reduce1", prim_2, list_reduce1},
@@ -257,21 +256,21 @@ list_length_int (Object lst)
 }
 
 Object
-append (Object l1, Object l2)
+marlais_append (Object l1, Object l2)
 {
     if (EMPTYLISTP (l1)) {
         return (l2);
     } else {
-        return (marlais_cons (CAR (l1), append (CDR (l1), l2)));
+        return (marlais_cons (CAR (l1), marlais_append (CDR (l1), l2)));
     }
 }
 
 /*
- * append_bang appends l2 to l1 if l1 is nonempty.
+ * marlais_append_bang appends l2 to l1 if l1 is nonempty.
  * if l1 is empty, it just returns l2.
  */
 Object
-append_bang(Object l1, Object l2)
+marlais_append_bang(Object l1, Object l2)
 {
     Object res = l1;
 

@@ -471,7 +471,7 @@ print_class_slot_values (Object fd, Object class, int escaped, int first)
   Object supers;
 
   print_slot_values (fd, CLASSCSLOTS (class),
-                     (first ? append (CLASSCSLOTDS (class),
+                     (first ? marlais_append (CLASSCSLOTDS (class),
                                       CLASSESSLOTDS (class))
                       : CLASSCSLOTDS (class)),
                      escaped);
