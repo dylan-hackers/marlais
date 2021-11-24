@@ -532,18 +532,3 @@ list_last (Object lst, Object default_ob)
     }
     return (last);
 }
-
-Object
-add_new_at_end (Object *lst, Object elt)
-{
-    Object ret = *lst;
-
-    while (PAIRP (*lst)) {
-        if (CAR (*lst) == elt) {
-            return ret;
-        }
-        lst = &CDR (*lst);
-    }
-    *lst = marlais_cons (elt, marlais_make_nil ());
-    return ret;
-}

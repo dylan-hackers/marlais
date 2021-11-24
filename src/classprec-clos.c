@@ -243,6 +243,21 @@ construct_slist (Object *sptr, Object class)
   }
 }
 
+static Object
+add_new_at_end (Object *lst, Object elt)
+{
+    Object ret = *lst;
+
+    while (PAIRP (*lst)) {
+        if (CAR (*lst) == elt) {
+            return ret;
+        }
+        lst = &CDR (*lst);
+    }
+    *lst = marlais_cons (elt, marlais_make_nil ());
+    return ret;
+}
+
 static void
 insert_precedes_arc (Object pred_node, Object succ_node)
 {
