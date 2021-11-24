@@ -297,7 +297,7 @@ marlais_error (const char *msg,...)
       }
       prompt = prompt_buf;
       current_prompt = prompt;
-      marlais_parser_prepare_stream (stdin, 0);
+      marlais_parser_prepare_string("", 0);
       while ((obj = marlais_parse_object ()) && (obj != MARLAIS_EOF)) {
 	obj = marlais_eval (obj);
 	if (obj != MARLAIS_UNSPECIFIED) {
