@@ -961,7 +961,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
   initializers = pair_list_reverse (initializers);
 
   if (PAIRP (initializers)) {
-    init_slotds = copy_list (slot_descriptors);
+    init_slotds = marlais_copy_list (slot_descriptors);
     while (!EMPTYLISTP (initializers)) {
       initializer = CAR (initializers);
       if (SYMBOLP (initializer) && !EMPTYLISTP (CDR (initializers))) {
@@ -981,7 +981,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
       initializers = CDR (CDR (initializers));
     }
   } else {
-    init_slotds = copy_list (slot_descriptors);
+    init_slotds = marlais_copy_list (slot_descriptors);
   }
 
   default_initializers = marlais_make_nil ();

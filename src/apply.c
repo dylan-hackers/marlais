@@ -231,7 +231,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
   }
   if (PAIRP (METHKEYPARAMS (meth))) {
     /* copy keys */
-    keys = copy_list (METHKEYPARAMS (meth));
+    keys = marlais_copy_list (METHKEYPARAMS (meth));
     dup_list = marlais_make_nil (); /* For duplicate keywords */
 
     /* Bind each of the keyword args that is present. */

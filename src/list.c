@@ -124,6 +124,21 @@ marlais_make_list (Object car,...)
 }
 
 Object
+marlais_copy_list (Object lst)
+{
+    Object result, *tmp_ptr;
+
+    result = marlais_make_nil ();
+    tmp_ptr = &result;
+    for (tmp_ptr = &result;
+         PAIRP (lst);
+         tmp_ptr = &CDR (*tmp_ptr), lst = CDR (lst)) {
+        *tmp_ptr = marlais_cons (CAR (lst), marlais_make_nil ());
+    }
+    return result;
+}
+
+Object
 marlais_make_pair_entrypoint (Object args)
 {
     return marlais_cons (MARLAIS_FALSE, MARLAIS_FALSE); /* who knows ?? */
@@ -532,21 +547,6 @@ list_equal (Object l1, Object l2)
     } else {
         return (0);
     }
-}
-
-Object
-copy_list (Object lst)
-{
-    Object result, *tmp_ptr;
-
-    result = marlais_make_nil ();
-    tmp_ptr = &result;
-    for (tmp_ptr = &result;
-         PAIRP (lst);
-         tmp_ptr = &CDR (*tmp_ptr), lst = CDR (lst)) {
-        *tmp_ptr = marlais_cons (CAR (lst), marlais_make_nil ());
-    }
-    return result;
 }
 
 Object

@@ -61,6 +61,9 @@ static inline Object marlais_make_nil (void) {
 
 extern Object marlais_make_list (Object car,...);
 
+/* Copy a <list> */
+extern Object marlais_copy_list (Object lst);
+
 /* Make a <pair> */
 extern Object marlais_cons (Object car, Object cdr);
 
@@ -88,7 +91,6 @@ int list_equal (Object l1, Object l2);
 
 Object list_reverse (Object lst);
 Object list_reverse_bang (Object lst);
-Object copy_list (Object lst);
 
 Object add_new_at_end (Object *lst, Object elt);
 Object list_sort (Object lst, Object test);
