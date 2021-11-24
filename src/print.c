@@ -193,7 +193,7 @@ marlais_print_object (Object fd, Object obj, int escaped)
   case Values:
     print_values (fd, obj, escaped);
     break;
-  case Unspecified:
+  case UnspecifiedValue:
     break;
   case Exit:
     fprintf (fp, "{exit procedure}");
@@ -204,8 +204,8 @@ marlais_print_object (Object fd, Object obj, int escaped)
   case TableEntry:
     fprintf (fp, "{table entry}");
     break;
-  case UninitializedSlotValue:
-    fprintf (fp, "{uninitialized slot value}");
+  case UninitializedValue:
+    fprintf (fp, "{uninitialized value}");
     break;
   case DequeEntry:
     fprintf (fp, "{deque entry ");

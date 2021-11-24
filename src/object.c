@@ -23,9 +23,9 @@ object_type (Object obj)
     case MARLAIS_SUB_EOF:
       return (EndOfFile);
     case MARLAIS_SUB_UNSPECIFIED:
-      return (Unspecified);
+      return (UnspecifiedValue);
     case MARLAIS_SUB_UNINITIALIZED:
-      return (UninitializedSlotValue);
+      return (UninitializedValue);
     case MARLAIS_SUB_CHARACTER:
       return (Character);
 #ifdef MARLAIS_ENABLE_WCHAR

@@ -368,7 +368,7 @@ marlais_object_class (Object obj)
     return (exit_function_class);
   case Unwind:
     return (unwind_protect_function_class);
-  case Unspecified:
+  case UnspecifiedValue:
     return (object_class);
   case EndOfFile:
     return (object_class);
@@ -382,7 +382,7 @@ marlais_object_class (Object obj)
     return (object_handle_class);
   case ForeignPtr:
     return (foreign_pointer_class);
-  case UninitializedSlotValue:
+  case UninitializedValue:
     return (object_class);
 #ifdef MARLAIS_ENABLE_GMP
   case MPFloat:

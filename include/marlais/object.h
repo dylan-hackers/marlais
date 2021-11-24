@@ -21,49 +21,51 @@ typedef uintptr_t DyUnsigned;
 typedef enum {
     Uninitialized = 0,
 
-    /* names */
-    Name,
+    /* core constants */
+    True, False, EmptyList, EndOfFile, UnspecifiedValue, UninitializedValue,
 
-    /* booleans */
-    True, False,
+    /* characters */
+    Character, WideCharacter, UnicodeString,
 
     /* numbers */
     Integer, BigInteger, Ratio, SingleFloat, DoubleFloat,
 
     /* collections */
-    EmptyList, Pair, SimpleObjectVector,
-    ObjectTable, Deque, Array,
+    Pair, Array, Deque, SimpleObjectVector, ObjectTable,
+    DequeEntry, TableEntry,
 
     /* strings */
     ByteString, WideString, UnicodeCharacter,
 
     /* conditions */
-    Condition,
+    Condition, Exit, Unwind,
 
     /* symbols */
-    Symbol,
-
-    /* characters */
-    Character, WideCharacter, UnicodeString,
+    Symbol, Name,
 
     /* types */
-    Class, Instance, Singleton, LimitedIntType, UnionType, SlotDescriptor,
+    Class, Singleton, LimitedIntType, UnionType, SlotDescriptor,
 
     /* functions */
     Primitive, GenericFunction, Method, Function, NextMethod,
 
-    /* misc */
-    EndOfFile, Values, Unspecified, Exit, Unwind,
-#ifdef NO_COMMON_DYLAN_SPEC
-Stream,
-#endif
-    TableEntry, UninitializedSlotValue, DequeEntry,
-    ObjectHandle,
-    ForeignPtr,			/* <pcb> */
-    Environment,
+    /* multiple values */
+    Values,
+
+    /* instances */
+    Instance,
 
     /* GMP numbers */
     MPFloat, MPRatio, MPInteger,
+
+    /* miscelaneous */
+    ObjectHandle,
+    ForeignPtr,
+    Environment,
+
+#ifdef NO_COMMON_DYLAN_SPEC
+    Stream,
+#endif
 
 } ObjectType;
 
