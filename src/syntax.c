@@ -433,7 +433,7 @@ bind_exit_eval (Object form)
     if (!NAMEP (sym)) {
       marlais_error ("bind-exit: bad exit procedure name", sym, NULL);
     }
-    exit_obj = make_exit (sym);
+    exit_obj = marlais_make_exit (sym);
 
     marlais_push_scope (CAR (form));
     marlais_add_local (sym, exit_obj, 1, the_env);
@@ -1873,7 +1873,7 @@ unwind_protect_eval (Object form)
   }
   protected = SECOND (form);
   cleanups = CDR (CDR (form));
-  unwind = make_unwind (cleanups);
+  unwind = marlais_make_unwind (cleanups);
 
   marlais_push_scope (CAR (form));
 

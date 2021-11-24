@@ -40,7 +40,7 @@
 /* jump buffer must be filled in by
    calling routine. */
 Object
-make_exit (Object sym)
+marlais_make_exit (Object sym)
 {
   Object obj = marlais_allocate_object (Exit, sizeof (struct exitproc));
   EXITSYM (obj) = sym;
@@ -49,7 +49,7 @@ make_exit (Object sym)
 }
 
 Object
-make_unwind (Object body)
+marlais_make_unwind (Object body)
 {
   Object obj = marlais_allocate_object (Unwind, sizeof (struct unwind));
   UNWINDBODY (obj) = body;

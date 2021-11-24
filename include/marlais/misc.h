@@ -37,7 +37,7 @@
 
 #include <marlais/common.h>
 
-Object make_exit (Object sym);
-Object make_unwind (Object body);
+Object marlais_make_exit (Object sym);
+Object marlais_make_unwind (Object body);
 
 #endif
