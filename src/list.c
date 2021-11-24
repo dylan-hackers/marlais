@@ -52,6 +52,8 @@ static Object set_car (Object pair, Object val);
 static Object set_cdr (Object pair, Object val);
 static Object list_element (Object pair, Object index, Object default_ob);
 static Object list_element_setter (Object pair, Object index, Object obj);
+static Object list_reduce (Object fun, Object init, Object lst);
+static Object list_reduce1 (Object fun, Object lst);
 static Object list_last (Object lst, Object default_ob);
 
 static struct primitive list_prims[] =
@@ -335,7 +337,7 @@ listem (Object car,...)
     return (fst);
 }
 
-Object
+static Object
 list_reduce (Object fun, Object init, Object lst)
 {
     Object val;
@@ -348,7 +350,7 @@ list_reduce (Object fun, Object init, Object lst)
     return (val);
 }
 
-Object
+static Object
 list_reduce1 (Object fun, Object lst)
 {
     return list_reduce(fun, CAR(lst), CDR(lst));

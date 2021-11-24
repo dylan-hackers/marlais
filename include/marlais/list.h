@@ -79,8 +79,7 @@ Object append_bang (Object l1, Object l2);
 int member (Object obj, Object lst);
 Object member_p (Object obj, Object lst, Object test);
 Object listem (Object car,...);
-Object list_reduce (Object fun, Object init, Object lst);
-Object list_reduce1 (Object fun, Object lst);
+
 Object list_length_int (Object lst);
 int list_length (Object lst);
 int list_equal (Object l1, Object l2);
