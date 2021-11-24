@@ -92,7 +92,5 @@ extern bool marlais_member_p (Object obj, Object lst);
 extern bool marlais_member_test_p (Object obj, Object lst, Object test);
 
 Object add_new_at_end (Object *lst, Object elt);
-Object list_sort (Object lst, Object test);
-Object list_sort_bang (Object lst, Object test);
 
 #endif

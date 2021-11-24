@@ -80,8 +80,6 @@ static struct primitive list_prims[] =
     {"%list-reverse", prim_1, marlais_list_reverse},
     {"%list-reverse!", prim_1, marlais_list_reverse_bang},
     {"%list-last", prim_2, list_last},
-    {"%list-sort", prim_2, list_sort},
-    {"%list-sort!", prim_2, list_sort_bang},
 };
 
 /* Exported functions */
@@ -548,25 +546,4 @@ add_new_at_end (Object *lst, Object elt)
     }
     *lst = marlais_cons (elt, marlais_make_nil ());
     return ret;
-}
-
-
-/* Can't use qsort in sorting as use of test function will call
- * marlais_function_specializers, which applies qsort, leading to all sorts
- * or horrid consequences, as Unix qsort is not multi-thread or
- * hierarchically nestable (even though it could be!
- */
-
-Object
-list_sort (Object lst, Object test)
-{
-    /* Fill this in! */
-    return NULL;
-}
-
-Object
-list_sort_bang (Object lst, Object test)
-{
-    /* Fill this in! */
-    return NULL;
 }
