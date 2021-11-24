@@ -55,6 +55,9 @@ static int read_eval_print(FILE* f, int bind_constant_p)
   int x, vals;
   Object obj;
 
+  /* <pcb> needs to be cleared after loading file */
+  marlais_parser_prepare_string("", debug);
+
   if ((obj = marlais_parse_object ()) && (obj != MARLAIS_EOF)) {
     obj = marlais_eval (obj);
     if(POINTERP(obj) && POINTERTYPE(obj) == Values) {
@@ -208,8 +211,6 @@ main (int argc, char *argv[])
   printf("Marlais %s\n", VERSION);
 
   load_file_context = 0;
-  /* <pcb> needs to be cleared after loading file */
-  marlais_parser_prepare_string("", debug);
 
   cache_env = the_env;
   current_prompt = prompt;
