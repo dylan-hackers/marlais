@@ -73,6 +73,8 @@ extern Object marlais_cdr (Object lst);
 
 extern int marlais_list_length (Object lst);
 
+int list_equal (Object l1, Object l2);
+
 extern Object marlais_second (Object lst);
 extern Object marlais_third (Object lst);
 
@@ -85,13 +87,11 @@ extern Object marlais_map_apply2 (Object fun, Object l1, Object l2);
 extern Object marlais_append (Object l1, Object l2);
 extern Object marlais_append_bang (Object l1, Object l2);
 
-extern bool marlais_member_p (Object obj, Object lst);
-extern bool marlais_member_test_p (Object obj, Object lst, Object test);
-
-int list_equal (Object l1, Object l2);
-
 Object list_reverse (Object lst);
 Object list_reverse_bang (Object lst);
+
+extern bool marlais_member_p (Object obj, Object lst);
+extern bool marlais_member_test_p (Object obj, Object lst, Object test);
 
 Object add_new_at_end (Object *lst, Object elt);
 Object list_sort (Object lst, Object test);

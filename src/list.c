@@ -228,15 +228,17 @@ marlais_list_length (Object lst)
     }
 }
 
-static Object
-list_length (Object lst)
+int
+list_equal (Object l1, Object l2)
 {
-    int len = marlais_list_length (lst);
-
-    if (len < 0) {
-        return MARLAIS_FALSE;
+    if (marlais_identical_p (l1, l2)) {
+        return (1);
+    }
+    if (PAIRP (l1) && PAIRP (l2)) {
+        return (list_equal (CAR (l1), CAR (l2)) &&
+                list_equal (CDR (l1), CDR (l2)));
     } else {
-        return marlais_make_integer (len);
+        return (0);
     }
 }
 
@@ -250,44 +252,6 @@ Object
 marlais_third (Object lst)
 {
     return THIRD (lst);
-}
-
-static Object nth(Object lst, Object default_ob, const char* where,
-                  int test, Object (*fn)(Object))
-{
-    if (test) {
-        return (*fn)(lst);
-    } else if (default_ob == default_object) {
-        char err_msg[80];
-        sprintf(err_msg, "list has no %s element", where);
-        return marlais_error (err_msg, lst, NULL);
-    } else {
-        return default_ob;
-    }
-}
-
-static Object
-first_d (Object lst, Object default_ob)
-{
-  return nth(lst, default_ob, "first",
-             PAIRP(lst),
-             marlais_car);
-}
-
-static Object
-second_d (Object lst, Object default_ob)
-{
-  return nth(lst, default_ob, "second",
-             PAIRP(lst) && PAIRP(CDR(lst)),
-             marlais_second);
-}
-
-static Object
-third_d (Object lst, Object default_ob)
-{
-  return nth(lst, default_ob, "third",
-             PAIRP (lst) && PAIRP (CDR (lst)) && PAIRP (CDR (CDR (lst))),
-             marlais_third);
 }
 
 Object
@@ -362,6 +326,33 @@ marlais_append_bang(Object l1, Object l2)
     return (res);
 }
 
+Object
+list_reverse (Object lst)
+{
+    Object last;
+
+    last = marlais_make_nil ();
+    while (!EMPTYLISTP (lst)) {
+        last = marlais_cons (CAR (lst), last);
+        lst = CDR (lst);
+    }
+    return (last);
+}
+
+Object
+list_reverse_bang (Object lst)
+{
+    Object cur, next;
+
+    cur = marlais_make_nil ();
+    while (!EMPTYLISTP (lst)) {
+        next = CDR (lst);
+        CDR (lst) = cur;
+        cur = lst;
+        lst = next;
+    }
+    return (cur);
+}
 
 bool
 marlais_member_p (Object obj, Object lst)
@@ -392,6 +383,45 @@ marlais_member_test_p (Object obj, Object lst, Object test)
         l = CDR (l);
     }
     return false;
+}
+
+
+static Object nth(Object lst, Object default_ob, const char* where,
+                  int test, Object (*fn)(Object))
+{
+    if (test) {
+        return (*fn)(lst);
+    } else if (default_ob == default_object) {
+        char err_msg[80];
+        sprintf(err_msg, "list has no %s element", where);
+        return marlais_error (err_msg, lst, NULL);
+    } else {
+        return default_ob;
+    }
+}
+
+static Object
+first_d (Object lst, Object default_ob)
+{
+  return nth(lst, default_ob, "first",
+             PAIRP(lst),
+             marlais_car);
+}
+
+static Object
+second_d (Object lst, Object default_ob)
+{
+  return nth(lst, default_ob, "second",
+             PAIRP(lst) && PAIRP(CDR(lst)),
+             marlais_second);
+}
+
+static Object
+third_d (Object lst, Object default_ob)
+{
+  return nth(lst, default_ob, "third",
+             PAIRP (lst) && PAIRP (CDR (lst)) && PAIRP (CDR (CDR (lst))),
+             marlais_third);
 }
 
 static Object
@@ -431,6 +461,18 @@ set_cdr (Object pair, Object val)
 {
     CDR (pair) = val;
     return (val);
+}
+
+static Object
+list_length (Object lst)
+{
+    int len = marlais_list_length (lst);
+
+    if (len < 0) {
+        return MARLAIS_FALSE;
+    } else {
+        return marlais_make_integer (len);
+    }
 }
 
 static Object
@@ -488,34 +530,6 @@ list_element_setter (Object pair, Object index, Object obj)
                           NULL);
 }
 
-Object
-list_reverse_bang (Object lst)
-{
-    Object cur, next;
-
-    cur = marlais_make_nil ();
-    while (!EMPTYLISTP (lst)) {
-        next = CDR (lst);
-        CDR (lst) = cur;
-        cur = lst;
-        lst = next;
-    }
-    return (cur);
-}
-
-Object
-list_reverse (Object lst)
-{
-    Object last;
-
-    last = marlais_make_nil ();
-    while (!EMPTYLISTP (lst)) {
-        last = marlais_cons (CAR (lst), last);
-        lst = CDR (lst);
-    }
-    return (last);
-}
-
 static Object
 list_last (Object lst, Object default_ob)
 {
@@ -533,20 +547,6 @@ list_last (Object lst, Object default_ob)
         lst = CDR (lst);
     }
     return (last);
-}
-
-int
-list_equal (Object l1, Object l2)
-{
-    if (marlais_identical_p (l1, l2)) {
-        return (1);
-    }
-    if (PAIRP (l1) && PAIRP (l2)) {
-        return (list_equal (CAR (l1), CAR (l2)) &&
-                list_equal (CDR (l1), CDR (l2)));
-    } else {
-        return (0);
-    }
 }
 
 Object
