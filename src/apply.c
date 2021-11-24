@@ -154,7 +154,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
       printf ("\n");
     }
   }
-  ret = unspecified_object;
+  ret = marlais_unspecified;
   params = METHREQPARAMS (meth);
   body = METHBODY (meth);
 
@@ -658,7 +658,7 @@ apply_exit (Object exit_proc, Object args)
     /* XXX casts are wrong and must be fixed */
     switch (marlais_list_length (args)) {
     case 0:
-      longjmp (*EXITRET (exit_proc), (int) (unspecified_object));
+      longjmp (*EXITRET (exit_proc), (int) (marlais_unspecified));
     case 1:
       longjmp (*EXITRET (exit_proc), (int) FIRST (args));
     default:

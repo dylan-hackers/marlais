@@ -245,14 +245,14 @@ Object
 marlais_print_obj (Object fd, Object obj)
 {
   marlais_print_object (fd, obj, 1);
-  return (unspecified_object);
+  return (marlais_unspecified);
 }
 
 Object
 marlais_print_obj_escaped (Object fd, Object obj)
 {
   marlais_print_object (fd, obj, 0);
-  return (unspecified_object);
+  return (marlais_unspecified);
 }
 
 Object
@@ -260,7 +260,7 @@ marlais_print_out (Object obj)
 {
   apply_print (marlais_standard_output, obj, 1);
   fflush (stdout);
-  return (unspecified_object);
+  return (marlais_unspecified);
 }
 
 Object
@@ -268,7 +268,7 @@ marlais_print_out_escaped (Object obj)
 {
   apply_print (marlais_standard_output, obj, 0);
   fflush (stdout);
-  return (unspecified_object);
+  return (marlais_unspecified);
 }
 
 Object
@@ -276,7 +276,7 @@ marlais_print_err (Object obj)
 {
   apply_print (marlais_standard_error, obj, 1);
   fflush (stderr);
-  return (unspecified_object);
+  return (marlais_unspecified);
 }
 
 Object
@@ -284,7 +284,7 @@ marlais_print_err_escaped (Object obj)
 {
   apply_print (marlais_standard_error, obj, 0);
   fflush (stderr);
-  return (unspecified_object);
+  return (marlais_unspecified);
 }
 
 /* Static functions */
@@ -521,7 +521,7 @@ print_param (Object fd, Object param, int escaped)
   FILE *fp = print_file_from_fd(fd);
 
   if (SECOND (param) != object_class
-      /* || CAR (param) == unspecified_object */
+      /* || CAR (param) == marlais_unspecified */
       ) {
     marlais_print_object (fd, CAR (param), escaped);
     fprintf (fp, " :: ");
@@ -679,7 +679,7 @@ print_slot_descriptor (Object fd, Object slotd, int escaped)
     }
     marlais_print_object (fd, SLOTDSLOTTYPE (slotd), escaped);
   }
-  if (SLOTDINIT (slotd) != uninit_slot_object) {
+  if (SLOTDINIT (slotd) != marlais_uninitialized) {
     if (SLOTDINITFUNCTION (slotd)) {
       fprintf (fp, " init-function: ");
     } else {

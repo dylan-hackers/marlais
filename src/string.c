@@ -339,7 +339,7 @@ string_element (Object string, Object index, Object default_ob)
 
     i = INTVAL (index);
     if ((i < 0) || (i >= BYTESTRSIZE (string))) {
-      if (default_ob == default_object) {
+      if (default_ob == marlais_default) {
         marlais_error ("element: argument out of range", string, index, NULL);
       } else {
         return default_ob;
@@ -358,7 +358,7 @@ string_element_setter (Object string, Object index, Object val)
       marlais_error ("element-setter: argument out of range", string, index, NULL);
     }
     BYTESTRVAL (string)[i] = CHARVAL (val);
-    return (unspecified_object);
+    return (marlais_unspecified);
 }
 
 static Object
@@ -494,7 +494,7 @@ wstring_element (Object string, Object index, Object default_ob)
 
     i = INTVAL (index);
     if ((i < 0) || (i >= WIDESTRSIZE (string))) {
-      if (default_ob == default_object) {
+      if (default_ob == marlais_default) {
         marlais_error ("element: argument out of range", string, index, NULL);
       } else {
         return default_ob;
@@ -513,7 +513,7 @@ wstring_element_setter (Object string, Object index, Object val)
       marlais_error ("element-setter: argument out of range", string, index, NULL);
     }
     WIDESTRVAL (string)[i] = WCHARVAL (val);
-    return (unspecified_object);
+    return (marlais_unspecified);
 }
 
 static Object
@@ -582,7 +582,7 @@ ustring_element (Object string, Object index, Object default_ob)
 
     i = INTVAL (index);
     if ((i < 0) || (i >= WIDESTRSIZE (string))) {
-      if (default_ob == default_object) {
+      if (default_ob == marlais_default) {
         marlais_error ("element: argument out of range", string, index, NULL);
       } else {
         return default_ob;
@@ -601,7 +601,7 @@ ustring_element_setter (Object string, Object index, Object val)
       marlais_error ("element-setter: argument out of range", string, index, NULL);
     }
     WIDESTRVAL (string)[i] = WCHARVAL (val);
-    return (unspecified_object);
+    return (marlais_unspecified);
 }
 
 static Object

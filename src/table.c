@@ -141,7 +141,7 @@ marlais_table_element_setter (Object table, Object key, Object val)
     entry = make_table_entry (h, key, val, TABLETABLE (table)[h]);
     TABLETABLE (table)[h] = entry;
   }
-  return (unspecified_object);
+  return (marlais_unspecified);
 }
 
 Object *
@@ -180,7 +180,7 @@ marlais_table_element_setter_by_vector (Object table, Object key, Object val)
     entry = make_table_entry (h, key, val, TABLETABLE (table)[h]);
     TABLETABLE (table)[h] = entry;
   }
-  return (unspecified_object);
+  return (marlais_unspecified);
 }
 
 /* local functions */
@@ -221,7 +221,7 @@ table_element_handle (Object table, Object key, Object *default_val)
     }
     entry = TENEXT (entry);
   }
-  if (*default_val != default_object) {
+  if (*default_val != marlais_default) {
     return default_val;
   } else {
     return marlais_error ("element: no element matching key", key, NULL);
@@ -289,7 +289,7 @@ static Object
 table_current_element_setter (Object table, Object state, Object value)
 {
   TEVALUE (state) = value;
-  return (unspecified_object);
+  return (marlais_unspecified);
 }
 
 static Object

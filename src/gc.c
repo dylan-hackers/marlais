@@ -145,11 +145,11 @@ marlais_gc_on_resize (GC_word new_size)
 static Object prim_gc_collect (void)
 {
   marlais_gc_collect();
-  return unspecified_object;
+  return marlais_unspecified;
 }
 
 static Object prim_gc_report (void)
 {
   marlais_gc_report();
-  return unspecified_object;
+  return marlais_unspecified;
 }

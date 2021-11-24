@@ -33,13 +33,19 @@ marlais_initialize (void)
   all_symbol = marlais_make_name ("all");
   (marlais_current_module ())->exported_bindings = all_symbol;
 
-  /* intialize global objects */
+  /* intialize core constants */
   marlais_initialize_boolean ();
   marlais_initialize_list ();
+  marlais_eof = marlais_make_eof ();
+  marlais_default = marlais_cons (MARLAIS_FALSE, MARLAIS_FALSE);
+  marlais_unspecified = marlais_make_unspecified ();
+  marlais_uninitialized = marlais_make_uninitialized ();
+
+  /* initialize additional constants */
+  marlais_empty_string = marlais_make_bytestring ("");
+
+  /* initialize the initial streams */
   marlais_initialize_stream ();
-  empty_string = marlais_make_bytestring ("");
-  marlais_eof = make_eof_object ();
-  unspecified_object = make_unspecified_object ();
 
   /* initialize symbols */
   equal_symbol = marlais_make_name ("=");
@@ -57,7 +63,6 @@ marlais_initialize (void)
   next_method_symbol = marlais_make_name ("next-method");
   initialize_symbol = marlais_make_name ("initialize");
   equal_hash_symbol = marlais_make_name ("=hash");
-  uninit_slot_object = make_uninit_slot ();
   standard_input_symbol = marlais_make_name ("*standard-input*");
   standard_output_symbol = marlais_make_name ("*standard-output*");
   standard_error_symbol = marlais_make_name ("*standard-error*");
@@ -189,19 +194,20 @@ marlais_initialize (void)
   /* initialize builtin classes */
   marlais_initialize_class ();
 
-  /* make the unspecified object available */
+  /* Make the unspecified value available */
   marlais_add_export (marlais_make_name ("%unspecified"),
-                         unspecified_object,
+                         marlais_unspecified,
                          1);
 
-  /* make the uninitialize slot value available */
+  /* Make the uninitialized value available */
   marlais_add_export (marlais_make_name ("%uninitialized-slot-value"),
-                         uninit_slot_object,
+                         marlais_uninitialized,
                          1);
 
-  /* make default object */
-  default_object = marlais_cons (MARLAIS_FALSE, MARLAIS_FALSE);
-  marlais_add_export (marlais_make_name ("%default-object"), default_object, 1);
+  /* Make the default object available */
+  marlais_add_export (marlais_make_name ("%default-object"),
+                         marlais_default,
+						 1);
 
   binding_stack = marlais_cons (marlais_make_integer (0), marlais_make_nil ());
 

@@ -6,16 +6,19 @@
 #error globaldefs.h should not be included directly
 #endif
 
-/* constants */
+/* core constants */
 #ifndef MARLAIS_OBJECT_MODEL_SMALL
 GLOBAL Object marlais_true;
 GLOBAL Object marlais_false;
 #endif
 GLOBAL Object marlais_nil;
 GLOBAL Object marlais_eof;
-GLOBAL Object default_object;
-GLOBAL Object unspecified_object;
-GLOBAL Object uninit_slot_object;
+GLOBAL Object marlais_default;
+GLOBAL Object marlais_unspecified;
+GLOBAL Object marlais_uninitialized;
+
+/* other constants */
+GLOBAL Object marlais_empty_string;
 
 /* streams */
 GLOBAL Object marlais_standard_input;
@@ -290,7 +293,6 @@ GLOBAL Object rename_keyword;
 GLOBAL Object export_keyword;
 GLOBAL Object dylan_symbol;
 GLOBAL Object dylan_user_symbol;
-GLOBAL Object empty_string;
 GLOBAL Object define_test_symbol;
 GLOBAL Object test_symbol;
 GLOBAL Object x_symbol;

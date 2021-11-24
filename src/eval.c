@@ -55,7 +55,7 @@ marlais_eval (Object obj)
     case ForeignPtr:		/* <pcb> */
 	return (obj);
     case Values:
-	if (obj == unspecified_object) {
+	if (obj == marlais_unspecified) {
 	    return obj;
 	} else {
 	    return marlais_error ("Trying to eval a values object (this is a bug)",
@@ -206,5 +206,5 @@ marlais_print_stack (void)
 	marlais_print_object (marlais_standard_error, entry->context, 1);
 	fprintf (stderr, "\n");
     }
-    return unspecified_object;
+    return marlais_unspecified;
 }

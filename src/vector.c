@@ -167,7 +167,7 @@ prim_vector_element (Object vec, Object index, Object default_ob)
   i = INTVAL (index);
   size = SOVSIZE (vec);
   if ((i < 0) || (i >= size)) {
-    if (default_ob == default_object) {
+    if (default_ob == marlais_default) {
       marlais_error ("element: index out of range", vec, index, NULL);
     } else {
       return default_ob;

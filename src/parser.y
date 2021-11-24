@@ -171,7 +171,7 @@ dylan_program
 */
 
 evaluable_constituent
-	: ';'	{ *parse_value_ptr = unspecified_object; YYACCEPT; }
+	: ';'	{ *parse_value_ptr = marlais_unspecified; YYACCEPT; }
 
 	| defining_form	';'
 		{ *parse_value_ptr = $1; YYACCEPT; }
@@ -180,7 +180,7 @@ evaluable_constituent
 		{ *parse_value_ptr = $1; YYACCEPT; }
 
 	| local_declaration
-		{ *parse_value_ptr = unspecified_object;
+		{ *parse_value_ptr = marlais_unspecified;
 		  marlais_warning("local binding outside of block ignored", NULL);
 		  YYACCEPT;
 	        }
@@ -193,7 +193,7 @@ evaluable_constituent
 
 	| error ';'
 		{ yyerrok;
-		  *parse_value_ptr = unspecified_object;
+		  *parse_value_ptr = marlais_unspecified;
 		  YYACCEPT;
 		}
 	| error EOF_TOKEN
@@ -203,7 +203,7 @@ evaluable_constituent
 		}
 
 body
-	:		{ $$ = unspecified_object; }
+	:		{ $$ = marlais_unspecified; }
 	| nonempty_body	{ $$ = $1; }
 
 nonempty_body
@@ -242,7 +242,7 @@ constituent
 	| local_declaration	{ $$ = $1; }
 	| expression		{ $$ = $1; }
 /*
-	| error	';'		{ yyerrok; $$ = unspecified_object; }
+	| error	';'		{ yyerrok; $$ = marlais_unspecified; }
  */
 
 /* Expressions */

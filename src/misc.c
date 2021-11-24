@@ -49,7 +49,7 @@ marlais_make_eof (void)
 }
 
 Object
-make_unspecified_object (void)
+marlais_make_unspecified (void)
 {
   Object obj = marlais_allocate_object (Values, sizeof (struct values));
 
@@ -60,7 +60,7 @@ make_unspecified_object (void)
 }
 
 Object
-make_uninit_slot (void)
+marlais_make_uninitialized (void)
 {
 #ifndef MARLAIS_OBJECT_MODEL_SMALL
   Object obj = marlais_allocate_object (UninitializedSlotValue, sizeof (struct empty));

@@ -173,7 +173,7 @@ array_index (Object arr, Object indices, Object default_ob)
     dim_val = INTVAL (dim);
     ind_val = INTVAL (ind);
     if ((ind_val < 0) || (ind_val >= dim_val)) {
-      if (default_ob == default_object) {
+      if (default_ob == marlais_default) {
         marlais_error ("element: array indices out of range", indices,
                        ARRDIMS (arr), NULL);
       } else {
@@ -213,8 +213,8 @@ array_ref (Object arr, Object indices, Object default_ob)
 static Object
 array_ref_setter (Object arr, Object indices, Object new_val)
 {
-  ARRELS (arr)[array_index (arr, indices, default_object)] = new_val;
-  return (unspecified_object);
+  ARRELS (arr)[array_index (arr, indices, marlais_default)] = new_val;
+  return (marlais_unspecified);
 }
 
 static Object
@@ -223,7 +223,7 @@ array_element (Object arr, Object index, Object default_ob)
   int ind_val = INTVAL (index);
 
   if ((ind_val < 0) || (ind_val >= ARRSIZE (arr))) {
-    if (default_ob == default_object) {
+    if (default_ob == marlais_default) {
       return marlais_error ("element: array index out of range", index,
                             ARRDIMS (arr), NULL);
     } else {
@@ -244,7 +244,7 @@ array_element_setter (Object arr, Object index, Object new_val)
                    ARRDIMS (arr), NULL);
   }
   ARRELS (arr)[ind_val] = new_val;
-  return (unspecified_object);
+  return (marlais_unspecified);
 }
 
 static Object
@@ -290,5 +290,5 @@ array_current_element (Object arr, Object state)
 static Object
 array_row_major_index (Object arr, Object indices)
 {
-  return marlais_make_integer (array_index (arr, indices, default_object));
+  return marlais_make_integer (array_index (arr, indices, marlais_default));
 }

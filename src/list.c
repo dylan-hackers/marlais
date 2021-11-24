@@ -375,7 +375,7 @@ static Object nth(Object lst, Object default_ob, const char* where,
 {
     if (test) {
         return (*fn)(lst);
-    } else if (default_ob == default_object) {
+    } else if (default_ob == marlais_default) {
         char err_msg[80];
         sprintf(err_msg, "list has no %s element", where);
         return marlais_error (err_msg, lst, NULL);
@@ -468,7 +468,7 @@ list_element (Object pair, Object index, Object default_ob)
     i = INTVAL (index);
     lst = pair;
     if (EMPTYLISTP (lst)) {
-        if (default_ob == default_object) {
+        if (default_ob == marlais_default) {
             marlais_error ("element: no such element", index, pair, NULL);
         } else {
             return default_ob;
@@ -478,7 +478,7 @@ list_element (Object pair, Object index, Object default_ob)
         i--;
         lst = CDR (lst);
         if (EMPTYLISTP (lst)) {
-            if (default_ob == default_object) {
+            if (default_ob == marlais_default) {
                 marlais_error ("element: no such element", index, pair, NULL);
             } else {
                 return default_ob;
@@ -520,7 +520,7 @@ list_last (Object lst, Object default_ob)
     Object last;
 
     if (EMPTYLISTP (lst)) {
-        if (default_ob == default_object) {
+        if (default_ob == marlais_default) {
             marlais_error ("attempt to get last of empty list", NULL);
         } else {
             return default_ob;

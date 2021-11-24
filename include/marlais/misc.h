@@ -37,9 +37,10 @@
 
 #include <marlais/common.h>
 
-Object make_eof_object (void);
-Object make_unspecified_object (void);
-Object make_uninit_slot (void);
+Object marlais_make_eof (void);
+Object marlais_make_unspecified (void);
+Object marlais_make_uninitialized (void);
+
 Object make_exit (Object sym);
 Object make_unwind (Object body);
 

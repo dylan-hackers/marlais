@@ -292,7 +292,7 @@ and_eval (Object form)
 static Object
 begin_eval (Object form)
 {
-    return eval_body (CDR (form), unspecified_object);
+    return eval_body (CDR (form), marlais_unspecified);
 }
 
 static Object
@@ -326,7 +326,7 @@ bind_eval (Object form)
       the_env = binding_env;
     }
 
-    result = eval_body (body, unspecified_object);
+    result = eval_body (body, marlais_unspecified);
 
     /* restore the environment to its initial state. */
     the_env = initial_env;
@@ -359,7 +359,7 @@ local_bind_eval (Object form)
     }
 
     the_env = binding_env;
-    return unspecified_object;
+    return marlais_unspecified;
 }
 
 static Object
@@ -379,7 +379,7 @@ local_bind_rec_eval (Object form)
       bindings = CDR (bindings);
     }
 
-    return unspecified_object;
+    return marlais_unspecified;
 }
 
 /*
@@ -396,7 +396,7 @@ unbinding_begin_eval (Object form)
     }
     i = INTVAL (SECOND (form));
 
-    res = unspecified_object;
+    res = marlais_unspecified;
     form = CDR (CDR (form));
     while (PAIRP (form)) {
       Object next_form = CDR (form);
@@ -500,7 +500,7 @@ bind_methods_eval (Object form)
     specs = CDR (specs);
   }
 
-  ret = eval_body (body, unspecified_object);
+  ret = eval_body (body, marlais_unspecified);
   marlais_pop_scope ();
   return (ret);
 }
@@ -607,14 +607,14 @@ static Object
 define_eval (Object form)
 {
   define_eval_helper(form, 1, 0);
-  return unspecified_object;
+  return marlais_unspecified;
 }
 
 static Object
 define_constant_eval (Object form)
 {
   define_eval_helper(form, 1, 1);
-  return unspecified_object;
+  return marlais_unspecified;
 }
 
 static void
@@ -871,7 +871,7 @@ define_generic_function_eval (Object form)
   check_function_syntax(form, &name, &params, "define-generic-function");
   gf = marlais_make_generic (name, params, marlais_make_nil ());
   marlais_add_export (name, gf, 0);
-  return (unspecified_object);
+  return (marlais_unspecified);
 }
 
 static Object
@@ -916,7 +916,7 @@ define_module_eval (Object form)
         if (CAR (clause) == use_symbol) {
           Object imports = all_symbol;
           Object exclusions = marlais_make_nil ();
-          Object prefix = empty_string;
+          Object prefix = marlais_empty_string;
           Object renames = marlais_make_nil ();
           Object exports = marlais_make_nil ();
 
@@ -998,7 +998,7 @@ define_module_eval (Object form)
   } else {
     marlais_error ("define-module: Bad argument list", form, NULL);
   }
-  return unspecified_object;
+  return marlais_unspecified;
 }
 
 static Object
@@ -1823,7 +1823,7 @@ set_module_eval (Object form)
   } else {
     marlais_error ("set_module: argument list not a single symbol", form, NULL);
   }
-  return unspecified_object;
+  return marlais_unspecified;
 }
 
 static Object

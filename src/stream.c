@@ -56,7 +56,7 @@ stream_write(Object fd_obj, Object str)
 {
   int fd = INTVAL(fd_obj);
   write(fd, BYTESTRVAL(str), BYTESTRSIZE(str));
-  return unspecified_object;
+  return marlais_unspecified;
 }
 
 Object
@@ -66,5 +66,5 @@ stream_close (Object fd_obj)
   if(fd > 2) { /* ignore closing input/output/error */
     close (fd);
   }
-  return unspecified_object;
+  return marlais_unspecified;
 }

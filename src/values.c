@@ -60,7 +60,7 @@ marlais_make_values (Object vals)
   int i;
 
   if (EMPTYLISTP (vals)) {
-    return unspecified_object;
+    return marlais_unspecified;
   } else {
     obj = marlais_allocate_object (Values, sizeof (struct values));
 

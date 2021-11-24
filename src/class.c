@@ -640,7 +640,7 @@ marlais_make_slot_descriptor_list (Object slots, int do_eval)
     getter = NULL;
     setter = NULL;
     type = CLASSNAME (object_class);
-    init = uninit_slot_object;
+    init = marlais_uninitialized;
     init_keyword = NULL;
     allocation = instance_symbol;
     dynamism = open_symbol;
@@ -770,7 +770,7 @@ marlais_make_slot_descriptor_list (Object slots, int do_eval)
       }
     }
     if (properties & SLOTDKEYREQMASK) {
-      if (init != uninit_slot_object) {
+      if (init != marlais_uninitialized) {
         marlais_error ("required-init-keyword should not have initial value",
                        CAR (slots), NULL);
       }
@@ -910,7 +910,7 @@ make_class_entrypoint (Object args)
   }
   if (!debug_obj) {
     marlais_warning ("make <class> no debug-name specified", NULL);
-    debug_obj = empty_string;
+    debug_obj = marlais_empty_string;
   } else if (!BYTESTRP (debug_obj)) {
     marlais_error ("make <class> debug-name: must be a string", NULL);
   }
@@ -997,7 +997,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
        tmp_slotds = CDR (tmp_slotds)) {
     slotd = CAR (tmp_slotds);
     if (SLOTDINITKEYWORD (slotd)) {
-      if (SLOTDINIT (slotd) != uninit_slot_object) {
+      if (SLOTDINIT (slotd) != marlais_uninitialized) {
         *def_ptr = marlais_make_list (SLOTDINITKEYWORD (slotd),
                            SLOTDINIT (slotd),
                            NULL);

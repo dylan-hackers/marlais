@@ -34,7 +34,7 @@ static void print_top_level_constant(Object obj, int bind_p)
   Object symbol;
   char symbol_name[12];
 
-  if (obj == unspecified_object) return;
+  if (obj == marlais_unspecified) return;
 
   if(bind_p) {
     snprintf (symbol_name, 12, "$%i", sequence_num);
@@ -169,7 +169,7 @@ main (int argc, char *argv[])
   marlais_use_module (dylan_symbol,
 	      all_symbol,
 	      marlais_make_nil (),
-	      empty_string,
+	      marlais_empty_string,
 	      marlais_make_nil (),
 	      all_symbol);
 

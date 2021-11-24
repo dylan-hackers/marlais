@@ -773,13 +773,13 @@ generic_function_make (Object arglist)
                      CAR (ptr),
                      NULL);
     } else {
-      CAR (ptr) = marlais_make_list (unspecified_object, CAR (ptr), NULL);
+      CAR (ptr) = marlais_make_list (marlais_unspecified, CAR (ptr), NULL);
     }
   }
 
   obj = marlais_allocate_object (GenericFunction, sizeof (struct generic_function));
 
-  GFNAME (obj) = unspecified_object;
+  GFNAME (obj) = marlais_unspecified;
   GFREQPARAMS (obj) = required;
 
   if (rest != MARLAIS_FALSE) {

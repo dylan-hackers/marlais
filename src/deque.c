@@ -208,7 +208,7 @@ static Object
 deque_first (Object d, Object default_ob)
 {
   if (EMPTYLISTP (DEQUEFIRST (d))) {
-    if (default_ob == default_object) {
+    if (default_ob == marlais_default) {
       marlais_error ("first: empty <deque>", d, NULL);
     } else {
       return default_ob;
@@ -221,7 +221,7 @@ static Object
 deque_last (Object d, Object default_ob)
 {
   if (EMPTYLISTP (DEQUELAST (d))) {
-    if (default_ob == default_object) {
+    if (default_ob == marlais_default) {
       marlais_error ("last: empty <deque>", d, NULL);
     } else {
       return default_ob;
@@ -242,7 +242,7 @@ deque_element (Object d, Object index, Object default_ob)
     i--;
     el = DENEXT (el);
     if (EMPTYLISTP (el)) {
-      if (default_ob == default_object) {
+      if (default_ob == marlais_default) {
         marlais_error ("element: out of range", index, d, NULL);
       } else {
         return default_ob;
@@ -271,7 +271,7 @@ deque_element_setter (Object d, Object index, Object new)
     }
   }
   DEVALUE (el) = new;
-  return (unspecified_object);
+  return (marlais_unspecified);
 }
 
 static Object

@@ -325,7 +325,7 @@ marlais_use_module (Object module_name,
     exports_table = marlais_make_table (DEFAULT_TABLE_SIZE);
     fill_table_from_property_set (exports_table, exports);
   }
-  if (prefix == empty_string) {
+  if (prefix == marlais_empty_string) { /* is this check correct? */
     prefix_string = 0;
   } else {
     prefix_string = BYTESTRVAL (prefix);
@@ -450,7 +450,7 @@ marlais_use_module (Object module_name,
   } else {
     marlais_error ("use: argument should be a symbol", module_name, NULL);
   }
-  return unspecified_object;
+  return marlais_unspecified;
 }
 
 Object
@@ -704,7 +704,7 @@ print_env (struct frame *env)
     marlais_print_object(marlais_standard_error, frame->owner, 1);
     fprintf (stderr, "\n");
   }
-  return unspecified_object;
+  return marlais_unspecified;
 }
 
 Object
@@ -757,7 +757,7 @@ show_bindings (Object args)
     }
 
   }
-  return unspecified_object;
+  return marlais_unspecified;
 }
 
 /*
