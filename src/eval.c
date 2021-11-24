@@ -26,7 +26,7 @@ marlais_eval (Object obj)
     Object val;
 
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
-    if (INTEGERP (obj) || IMMEDP (obj)) {
+    if (!POINTERP (obj)) {
         return (obj);
     }
 #endif
@@ -37,24 +37,6 @@ marlais_eval (Object obj)
     switch (object_type (obj))
 #endif
     {
-    case True:
-    case False:
-    case Integer:
-#ifdef MARLAIS_ENABLE_BIG_INTEGERS
-    case BigInteger:
-#endif
-    case Ratio:
-    case SingleFloat:
-    case DoubleFloat:
-    case ByteString:
-    case SimpleObjectVector:
-    case Symbol:
-    case Character:
-    case EndOfFile:
-    case EmptyList:
-    case ForeignPtr:
-    case UnspecifiedValue:
-        return (obj);
     case Values:
         return marlais_error ("Trying to eval a values object (this is a bug)",
                               obj,
@@ -68,7 +50,7 @@ marlais_eval (Object obj)
     case Pair:
         return (eval_combination (obj, 0));
     default:
-        return marlais_error ("eval: do not know how to eval object", obj, NULL);
+        return (obj);
     }
 }
 
