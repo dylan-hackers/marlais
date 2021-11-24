@@ -51,8 +51,8 @@ marlais_eval (Object obj)
     case Symbol:
     case Character:
     case EndOfFile:
-    case EmptyList:		/* is this right? */
-    case ForeignPtr:		/* <pcb> */
+    case EmptyList:
+    case ForeignPtr:
     case UnspecifiedValue:
         return (obj);
     case Values:
