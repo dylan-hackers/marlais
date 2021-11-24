@@ -45,8 +45,6 @@
 
 /* Primitives */
 
-static Object car (Object pair);
-static Object cdr (Object pair);
 static Object first_d (Object pair, Object default_ob);
 static Object second_d (Object pair, Object default_ob);
 static Object third_d (Object pair, Object default_ob);
@@ -59,8 +57,8 @@ static Object list_last (Object lst, Object default_ob);
 static struct primitive list_prims[] =
 {
     {"%pair", prim_2, marlais_cons},
-    {"%head", prim_1, car},
-    {"%tail", prim_1, cdr},
+    {"%head", prim_1, marlais_car},
+    {"%tail", prim_1, marlais_cdr},
     {"%first", prim_2, first_d},
     {"%second", prim_2, second_d},
     {"%third", prim_2, third_d},
@@ -138,16 +136,28 @@ marlais_cons (Object car, Object cdr)
     return (obj);
 }
 
-static Object
-car (Object lst)
+Object
+marlais_car (Object lst)
 {
     return (EMPTYLISTP (lst) ? lst : CAR (lst));
 }
 
-static Object
-cdr (Object lst)
+Object
+marlais_cdr (Object lst)
 {
     return (EMPTYLISTP (lst) ? lst : CDR (lst));
+}
+
+Object
+marlais_second (Object lst)
+{
+    return SECOND (lst);
+}
+
+Object
+marlais_third (Object lst)
+{
+    return THIRD (lst);
 }
 
 static Object nth(Object lst, Object default_ob, const char* where,
@@ -167,25 +177,17 @@ static Object nth(Object lst, Object default_ob, const char* where,
 static Object
 first_d (Object lst, Object default_ob)
 {
-  return nth(lst, default_ob, "first", PAIRP(lst), car);
-}
-
-Object
-second (Object lst)
-{
-    return SECOND (lst);
+  return nth(lst, default_ob, "first",
+             PAIRP(lst),
+             marlais_car);
 }
 
 static Object
 second_d (Object lst, Object default_ob)
 {
-  return nth(lst, default_ob, "second", PAIRP(lst) && PAIRP(CDR(lst)), second);
-}
-
-Object
-third (Object lst)
-{
-    return THIRD (lst);
+  return nth(lst, default_ob, "second",
+             PAIRP(lst) && PAIRP(CDR(lst)),
+             marlais_second);
 }
 
 static Object
@@ -193,7 +195,7 @@ third_d (Object lst, Object default_ob)
 {
   return nth(lst, default_ob, "third",
              PAIRP (lst) && PAIRP (CDR (lst)) && PAIRP (CDR (CDR (lst))),
-             third);
+             marlais_third);
 }
 
 Object

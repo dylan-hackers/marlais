@@ -62,8 +62,12 @@ static inline Object marlais_make_nil (void) {
 /* Make a <pair> */
 extern Object marlais_cons (Object car, Object cdr);
 
-Object second (Object lst);
-Object third (Object lst);
+extern Object marlais_car (Object lst);
+extern Object marlais_cdr (Object lst);
+
+extern Object marlais_second (Object lst);
+extern Object marlais_third (Object lst);
+
 Object map (Object (*fun) (Object), Object lst);
 Object map2 (Object (*fun) (Object, Object), Object l1, Object l2);
 Object list_map1 (Object fun, Object lst);
