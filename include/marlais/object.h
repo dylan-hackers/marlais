@@ -97,6 +97,8 @@ typedef struct {
 #include <marlais/object-gmp.h>
 #endif
 
+#include <marlais/globals.h>
+
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
 #define MARLAIS_TRUE  (TRUEVAL)
 #define MARLAIS_FALSE (FALSEVAL)
@@ -110,7 +112,7 @@ typedef struct {
 #define MARLAIS_NIL (marlais_nil)
 #define MARLAIS_EOF  (marlais_eof)
 #define MARLAIS_UNSPECIFIED (marlais_unspecified)
-#define MARLAIS_UNINITALIZED (marlais_uninitialized)
+#define MARLAIS_UNINITIALIZED (marlais_uninitialized)
 #endif
 
 /* Constructor for booleans */

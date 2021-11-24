@@ -39,7 +39,7 @@ typedef DyUnsigned MarlaisSub;
 #define MARLAIS_SUB_TYPES {                    \
     True, False,                               \
     EmptyList, EndOfFile,                      \
-    UnspecifiedValue, UninitializedSlotValue,  \
+    UnspecifiedValue, UninitializedValue,      \
     Character, WideCharacter,                  \
     UnicodeCharacter, Uninitialized,           \
     Uninitialized, Uninitialized,              \
