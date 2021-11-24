@@ -31,8 +31,8 @@ marlais_initialize (void)
   marlais_false = marlais_allocate_object (False, sizeof (struct empty));
   marlais_nil = marlais_allocate_object (EmptyList, sizeof (struct empty));
   marlais_eof = marlais_allocate_object (EndOfFile, sizeof (struct empty));
-  marlais_unspecified = marlais_allocate_object (Unspecified, sizeof (struct empty));
-  marlais_uninitialized = marlais_allocate_object (UninitializedSlotValue, sizeof (struct empty));
+  marlais_unspecified = marlais_allocate_object (UnspecifiedValue, sizeof (struct empty));
+  marlais_uninitialized = marlais_allocate_object (UninitializedValue, sizeof (struct empty));
 #endif
 
   /* initialize additional constants */
