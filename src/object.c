@@ -12,6 +12,8 @@ object_type (Object obj)
 {
   if (POINTERP (obj)) {
     return (POINTERTYPE (obj));
+  } else if (INTEGERP (obj)) {
+    return (Integer);
   } else if (IMMEDP (obj)) {
     switch (SUBPART (obj)) {
     case MARLAIS_SUB_TRUE:
@@ -33,10 +35,8 @@ object_type (Object obj)
       return (WideCharacter);
 #endif
     default:
-      marlais_fatal ("internal error: object with unknown immediate tag");
+      break;
     }
-  } else {
-    return (Integer);
   }
   return (Uninitialized);
 }
