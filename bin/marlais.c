@@ -34,7 +34,7 @@ static void print_top_level_constant(Object obj, int bind_p)
   Object symbol;
   char symbol_name[12];
 
-  if (obj == marlais_unspecified) return;
+  if (obj == MARLAIS_UNSPECIFIED) return;
 
   if(bind_p) {
     snprintf (symbol_name, 12, "$%i", sequence_num);
@@ -55,7 +55,7 @@ static int read_eval_print(FILE* f, int bind_constant_p)
   int x, vals;
   Object obj;
 
-  if ((obj = marlais_parse_object ()) && (obj != marlais_eof)) {
+  if ((obj = marlais_parse_object ()) && (obj != MARLAIS_EOF)) {
     obj = marlais_eval (obj);
     if(POINTERP(obj) && POINTERTYPE(obj) == Values) {
       vals = VALUESNUM(obj);
@@ -144,7 +144,7 @@ main (int argc, char *argv[])
 
   /* initialization */
   marlais_initialize ();
-  open_file_list = marlais_make_nil ();
+  open_file_list = MARLAIS_NIL;
   parse_args(argc, argv);
 
   /* error catch for initialization code */
@@ -168,9 +168,9 @@ main (int argc, char *argv[])
 
   marlais_use_module (dylan_symbol,
 	      all_symbol,
-	      marlais_make_nil (),
+	      MARLAIS_NIL,
 	      marlais_empty_string,
-	      marlais_make_nil (),
+	      MARLAIS_NIL,
 	      all_symbol);
 
 #ifdef DO_NOT_LOAD_COMMON_DYLAN_SPEC

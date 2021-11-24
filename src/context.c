@@ -25,6 +25,21 @@ marlais_initialize (void)
   marlais_initialize_icu ();
 #endif
 
+  /* intialize core constants */
+#ifdef MARLAIS_OBJECT_MODEL_LARGE
+  marlais_true = marlais_allocate_object (True, sizeof (struct empty));
+  marlais_false = marlais_allocate_object (False, sizeof (struct empty));
+  marlais_nil = marlais_allocate_object (EmptyList, sizeof (struct empty));
+  marlais_eof = marlais_allocate_object (EndOfFile, sizeof (struct empty));
+  marlais_unspecified = marlais_allocate_object (Unspecified, sizeof (struct empty));
+  marlais_uninitialized = marlais_allocate_object (UninitializedSlotValue, sizeof (struct empty));
+#endif
+
+  /* initialize additional constants */
+  marlais_default = marlais_cons (MARLAIS_FALSE, MARLAIS_FALSE);
+  marlais_empty_string = marlais_make_bytestring ("");
+
+  /* initialize the dylan module */
   dylan_symbol = marlais_make_name ("dylan");
   dylan_user_symbol = marlais_make_name ("dylan-user");
 
@@ -32,17 +47,6 @@ marlais_initialize (void)
 
   all_symbol = marlais_make_name ("all");
   (marlais_current_module ())->exported_bindings = all_symbol;
-
-  /* intialize core constants */
-  marlais_initialize_boolean ();
-  marlais_initialize_list ();
-  marlais_eof = marlais_make_eof ();
-  marlais_default = marlais_cons (MARLAIS_FALSE, MARLAIS_FALSE);
-  marlais_unspecified = marlais_make_unspecified ();
-  marlais_uninitialized = marlais_make_uninitialized ();
-
-  /* initialize additional constants */
-  marlais_empty_string = marlais_make_bytestring ("");
 
   /* initialize the initial streams */
   marlais_initialize_stream ();
@@ -196,17 +200,17 @@ marlais_initialize (void)
 
   /* export core constants */
   marlais_add_export (marlais_make_name ("%unspecified"),
-                      marlais_unspecified,
+                      MARLAIS_UNSPECIFIED,
                       1);
   marlais_add_export (marlais_make_name ("%uninitialized-slot-value"),
-                      marlais_uninitialized,
+                      MARLAIS_UNINITIALIZED,
                       1);
   marlais_add_export (marlais_make_name ("%default-object"),
                       marlais_default,
                       1);
 
   /* initialize the binding stack */
-  binding_stack = marlais_cons (marlais_make_integer (0), marlais_make_nil ());
+  binding_stack = marlais_cons (marlais_make_integer (0), MARLAIS_NIL);
 
   /* define default string and character types */
   marlais_add_export (marlais_make_name ("<standard-character>"), byte_character_class, 1);

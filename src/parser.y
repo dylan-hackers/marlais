@@ -171,7 +171,7 @@ dylan_program
 */
 
 evaluable_constituent
-	: ';'	{ *parse_value_ptr = marlais_unspecified; YYACCEPT; }
+	: ';'	{ *parse_value_ptr = MARLAIS_UNSPECIFIED; YYACCEPT; }
 
 	| defining_form	';'
 		{ *parse_value_ptr = $1; YYACCEPT; }
@@ -180,7 +180,7 @@ evaluable_constituent
 		{ *parse_value_ptr = $1; YYACCEPT; }
 
 	| local_declaration
-		{ *parse_value_ptr = marlais_unspecified;
+		{ *parse_value_ptr = MARLAIS_UNSPECIFIED;
 		  marlais_warning("local binding outside of block ignored", NULL);
 		  YYACCEPT;
 	        }
@@ -189,21 +189,21 @@ evaluable_constituent
 		{ *parse_value_ptr = $1; YYACCEPT; }
 */
 
-	| EOF_TOKEN	{ *parse_value_ptr = marlais_eof; YYACCEPT; }
+	| EOF_TOKEN	{ *parse_value_ptr = MARLAIS_EOF; YYACCEPT; }
 
 	| error ';'
 		{ yyerrok;
-		  *parse_value_ptr = marlais_unspecified;
+		  *parse_value_ptr = MARLAIS_UNSPECIFIED;
 		  YYACCEPT;
 		}
 	| error EOF_TOKEN
 		{ yyerrok;
-		  *parse_value_ptr = marlais_eof;
+		  *parse_value_ptr = MARLAIS_EOF;
 		  YYACCEPT;
 		}
 
 body
-	:		{ $$ = marlais_unspecified; }
+	:		{ $$ = MARLAIS_UNSPECIFIED; }
 	| nonempty_body	{ $$ = $1; }
 
 nonempty_body
@@ -225,15 +225,15 @@ nonempty_body
 
 
 nonempty_constituents
-	: constituent			{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+	: constituent			{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 	| constituent ';' constituents	{ $$ = marlais_cons ($1, $3); }
 
 constituents
-	:		 		{ $$ = marlais_make_nil (); }
-	| constituent 			{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+	:		 		{ $$ = MARLAIS_NIL; }
+	| constituent 			{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 	| constituent ';' constituents	{ $$ = marlais_cons ($1, $3); }
 /*
-	| local_declaration_block	{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+	| local_declaration_block	{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 */
 
 
@@ -242,7 +242,7 @@ constituent
 	| local_declaration	{ $$ = $1; }
 	| expression		{ $$ = $1; }
 /*
-	| error	';'		{ yyerrok; $$ = marlais_unspecified; }
+	| error	';'		{ yyerrok; $$ = MARLAIS_UNSPECIFIED; }
  */
 
 /* Expressions */
@@ -299,7 +299,7 @@ binary_operand
 keyless_binary_operand
 	: operand			{ $$ = $1; }
 	| unary_operator operand
-		{ $$ = marlais_cons ($1, marlais_cons ($2, marlais_make_nil ())); }
+		{ $$ = marlais_cons ($1, marlais_cons ($2, MARLAIS_NIL)); }
 
 unary_operator
 	: '-'				{ $$ = negative_symbol; }
@@ -322,7 +322,7 @@ operand	: operand '(' arguments_opt ')'
 		  }
 		}
 	| operand '.' variable_name
-		{ $$ = marlais_cons ($3, marlais_cons ($1, marlais_make_nil ())); }
+		{ $$ = marlais_cons ($3, marlais_cons ($1, MARLAIS_NIL)); }
 	| leaf				{ $$ = $1; }
 
 unparenthesized_operand
@@ -337,12 +337,12 @@ unparenthesized_operand
 	| unparenthesized_operand '[' arguments ']'
     		{ $$ = marlais_cons (element_symbol, marlais_cons ($1, $3)); }
 	| unparenthesized_operand '.' variable_name
-		{ $$ = marlais_cons ($3, marlais_cons ($1, marlais_make_nil ())); }
+		{ $$ = marlais_cons ($3, marlais_cons ($1, MARLAIS_NIL)); }
 	| unparenthesized_leaf		{ $$ = $1; }
 
 arguments
 	: SYMBOL expression		{ $$ = marlais_make_list ($1, $2, NULL); }
-	| expression		{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+	| expression		{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 	| SYMBOL expression ',' arguments
 		{ $$ = marlais_cons ($1, marlais_cons ($2, $4)); }
 	| expression ',' arguments
@@ -372,17 +372,17 @@ strings	: STRING	    { $$ = $1; }
 		{ $$ = marlais_cons (concatenate_symbol, marlais_cons ($1, $2)); }
 
 component_strings
-	: STRING	{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+	: STRING	{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 	| STRING component_strings
 		{ $$ = marlais_cons ($1, $2); }
 constants
-	: constant			{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+	: constant			{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 	| constant ',' constants	{ $$ = marlais_cons ($1, $3); }
 
 list_constants
 	: constant			{ $$ = marlais_make_list (pair_symbol,
 						       $1,
-						       marlais_make_nil (),
+						       MARLAIS_NIL,
 						       NULL);
 					}
 	| constant '.' constant		{ $$ = marlais_make_list (pair_symbol, $1, $3, NULL);
@@ -437,7 +437,7 @@ if_statement
 			{ $$ = marlais_cons ($1,
 				     marlais_cons ($4,
 					   marlais_append_bang (marlais_cons ($6,
-							      marlais_make_nil ()),
+							      MARLAIS_NIL),
 							$7))); }
 
 then_body
@@ -445,21 +445,21 @@ then_body
 	| nonempty_body	{ $$ = $1; }
 
 else_parts
-	:		{ $$ = marlais_cons (MARLAIS_FALSE, marlais_make_nil ()); }
-	| ELSE		{ $$ = marlais_cons (MARLAIS_FALSE, marlais_make_nil ()); }
-	| ELSE nonempty_body	{ $$ = marlais_cons ($2, marlais_make_nil ()); }
+	:		{ $$ = marlais_cons (MARLAIS_FALSE, MARLAIS_NIL); }
+	| ELSE		{ $$ = marlais_cons (MARLAIS_FALSE, MARLAIS_NIL); }
+	| ELSE nonempty_body	{ $$ = marlais_cons ($2, MARLAIS_NIL); }
 	| ELSEIF '(' expression ')' body else_parts
 			{ $$ = marlais_cons (marlais_cons (if_symbol,
 					   marlais_cons ($3,
 						 marlais_append_bang (marlais_cons ($5,
-								    marlais_make_nil ()),
+								    MARLAIS_NIL),
 							      $6))),
-				     marlais_make_nil ()); }
+				     MARLAIS_NIL); }
 
 
 unless_statement
 	: UNLESS '(' expression ')' body END UNLESS_opt
-		{ $$ = marlais_cons ($1, marlais_cons ($3, marlais_cons ($5, marlais_make_nil ()))); }
+		{ $$ = marlais_cons ($1, marlais_cons ($3, marlais_cons ($5, MARLAIS_NIL))); }
 
 
 case_statement
@@ -468,7 +468,7 @@ case_statement
 		{ $$ = marlais_cons (cond_symbol, $2); }
 
 case_body
-	: { $$ = marlais_make_nil (); }
+	: { $$ = MARLAIS_NIL; }
 	| case_label
 	  { push_bindings (); }
 	  case_tail SEMICOLON_opt
@@ -476,31 +476,31 @@ case_body
 				  ? marlais_cons (marlais_cons (unbinding_begin_symbol,
 					        marlais_cons (bindings_top (),
 						      CAR ($3))),
-				          marlais_make_nil ())
-				  : marlais_make_nil ()),
+				          MARLAIS_NIL)
+				  : MARLAIS_NIL),
 		        CDR ($3));
           }
 
 
 case_tail
-	:	{ $$ = marlais_cons (marlais_make_nil (), marlais_make_nil ()); }
-	| ';'	{ $$ = marlais_cons (marlais_make_nil (), marlais_make_nil ()); }
+	:	{ $$ = marlais_cons (MARLAIS_NIL, MARLAIS_NIL); }
+	| ';'	{ $$ = marlais_cons (MARLAIS_NIL, MARLAIS_NIL); }
 	| ';' case_label
 	{ push_bindings (); }
 	case_tail
-	{ $$ = marlais_cons (marlais_make_nil (),
+	{ $$ = marlais_cons (MARLAIS_NIL,
 		     marlais_cons (marlais_cons ($2, !EMPTYLISTP (CAR ($4))
 				     ? marlais_cons (marlais_cons (unbinding_begin_symbol,
 					           marlais_cons (bindings_top(),
 							 CAR ($4))),
-				             marlais_make_nil ())
-				     : marlais_make_nil ()),
+				             MARLAIS_NIL)
+				     : MARLAIS_NIL),
 		          CDR ($4)));
 	  pop_bindings ();
       }
 
 	| constituent
-	  { $$ = marlais_cons (marlais_cons ($1, marlais_make_nil ()), marlais_make_nil ()); }
+	  { $$ = marlais_cons (marlais_cons ($1, MARLAIS_NIL), MARLAIS_NIL); }
 
 	| constituent ';' case_tail
 		{
@@ -508,13 +508,13 @@ case_tail
 		}
 	| constituent ';' case_label { push_bindings(); }
 	   case_tail
-	{ $$ = marlais_cons (marlais_cons ($1, marlais_make_nil ()),
+	{ $$ = marlais_cons (marlais_cons ($1, MARLAIS_NIL),
 		     marlais_cons ( marlais_cons ($3, !EMPTYLISTP (CAR ($5))
 				     ? marlais_cons (marlais_cons (unbinding_begin_symbol,
 						   marlais_cons (bindings_top(),
 						         CAR ($5))),
-					     marlais_make_nil ())
-				     : marlais_make_nil ()),
+					     MARLAIS_NIL)
+				     : MARLAIS_NIL),
 			   CDR ($5)));
 		  pop_bindings ();
 	      }
@@ -541,7 +541,7 @@ test_opt
 	: 			{ $$ = NULL; }
 	| BY expression		{ $$ = $2; }
 select_body
-	:  { $$ = marlais_make_nil (); }
+	:  { $$ = MARLAIS_NIL; }
 	| select_label
 	  { push_bindings (); }
 	  select_tail SEMICOLON_opt
@@ -549,30 +549,30 @@ select_body
 				  ? marlais_cons (marlais_cons (unbinding_begin_symbol,
 						marlais_cons (bindings_top (),
 						      CAR ($3))),
-				          marlais_make_nil ())
-				  : marlais_make_nil ()),
+				          MARLAIS_NIL)
+				  : MARLAIS_NIL),
 		      CDR ($3));
           }
 
 select_tail
-	:	{ $$ = marlais_cons (marlais_make_nil (), marlais_make_nil ()); }
-	| ';'	{ $$ = marlais_cons (marlais_make_nil (), marlais_make_nil ()); }
+	:	{ $$ = marlais_cons (MARLAIS_NIL, MARLAIS_NIL); }
+	| ';'	{ $$ = marlais_cons (MARLAIS_NIL, MARLAIS_NIL); }
 	| ';' select_label
 	{ push_bindings (); }
 	select_tail
-	{ $$ = marlais_cons (marlais_make_nil (),
+	{ $$ = marlais_cons (MARLAIS_NIL,
 		     marlais_cons (marlais_cons ($2, !EMPTYLISTP (CAR ($4))
 				     ? marlais_cons (marlais_cons (unbinding_begin_symbol,
 					           marlais_cons (bindings_top(),
 							 CAR ($4))),
-				    	     marlais_make_nil ())
-				     : marlais_make_nil ()),
+				    	     MARLAIS_NIL)
+				     : MARLAIS_NIL),
 		           CDR ($4)));
 	  pop_bindings ();
       }
 
 	| constituent
-	  { $$ = marlais_cons (marlais_cons ($1, marlais_make_nil ()), marlais_make_nil ()); }
+	  { $$ = marlais_cons (marlais_cons ($1, MARLAIS_NIL), MARLAIS_NIL); }
 
 	| constituent ';' select_tail
 		{
@@ -580,13 +580,13 @@ select_tail
 		}
 	| constituent ';' select_label { push_bindings(); }
 	   select_tail
-	{ $$ = marlais_cons (marlais_cons ($1, marlais_make_nil ()),
+	{ $$ = marlais_cons (marlais_cons ($1, MARLAIS_NIL),
 		     marlais_cons ( marlais_cons ($3, !EMPTYLISTP (CAR ($5))
 				     ? marlais_cons (marlais_cons (unbinding_begin_symbol,
 						   marlais_cons (bindings_top(),
 						         CAR ($5))),
-					     marlais_make_nil ())
-				     : marlais_make_nil ()),
+					     MARLAIS_NIL)
+				     : MARLAIS_NIL),
 			   CDR ($5)));
 		  pop_bindings ();
 	      }
@@ -604,11 +604,11 @@ select_label
 
 while_statement
 	: WHILE '(' expression ')' body END WHILE_opt
-		{ $$ = marlais_cons ($1, marlais_cons ($3, marlais_cons ($5, marlais_make_nil ()))); }
+		{ $$ = marlais_cons ($1, marlais_cons ($3, marlais_cons ($5, MARLAIS_NIL))); }
 
 until_statement
 	: UNTIL '(' expression ')' body END UNTIL_opt
-		{ $$ = marlais_cons ($1, marlais_cons ($3, marlais_cons ($5, marlais_make_nil ()))); }
+		{ $$ = marlais_cons ($1, marlais_cons ($3, marlais_cons ($5, MARLAIS_NIL))); }
 
 for_statement
 	: FOR		{ marlais_lexer_push_intermediate_words ($1); }
@@ -624,19 +624,19 @@ for_statement
 			       NULL);
 		}
 for_clauses
-	: for_clause comma_opt		{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+	: for_clause comma_opt		{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 	| for_clause ',' for_clauses	{ $$ = marlais_cons ($1, $3); }
 
 for_clauses_opt
-	: 			{ $$ = marlais_make_nil (); }
+	: 			{ $$ = MARLAIS_NIL; }
 	| for_clauses		{ $$ = $1; }
 
 for_clause
 	: variable '=' expression THEN expression
-		{ $$ = marlais_cons ($1, marlais_cons ($3, marlais_cons ($5, marlais_make_nil ()))); }
+		{ $$ = marlais_cons ($1, marlais_cons ($3, marlais_cons ($5, MARLAIS_NIL))); }
 	| variable IN expression
 	    { $$ = marlais_cons (collection_keyword,
-			 marlais_cons ($1, marlais_cons ($3, marlais_make_nil ()))); }
+			 marlais_cons ($1, marlais_cons ($3, MARLAIS_NIL))); }
 	| variable FROM expression bound_opt increment_clause_opt
 		{ $$ = marlais_cons (range_keyword,
 			     marlais_cons ($1,
@@ -644,34 +644,34 @@ for_clause
 					 marlais_append_bang ($4, $5)))); }
 
 bound_opt
-	:	{ $$ = marlais_make_nil (); }
+	:	{ $$ = MARLAIS_NIL; }
         | TO expression
-		{ $$ = marlais_cons ($1, marlais_cons ($2, marlais_make_nil ())); }
+		{ $$ = marlais_cons ($1, marlais_cons ($2, MARLAIS_NIL)); }
 	| ABOVE expression
-		{ $$ = marlais_cons ($1, marlais_cons ($2, marlais_make_nil ())); }
+		{ $$ = marlais_cons ($1, marlais_cons ($2, MARLAIS_NIL)); }
 	| BELOW expression
-		{ $$ = marlais_cons ($1, marlais_cons ($2, marlais_make_nil ())); }
+		{ $$ = marlais_cons ($1, marlais_cons ($2, MARLAIS_NIL)); }
 
 increment_clause_opt
-	:	{ $$ = marlais_make_nil (); }
+	:	{ $$ = MARLAIS_NIL; }
 	| BY expression
-		{ $$ = marlais_cons ($1, marlais_cons ($2, marlais_make_nil ())); }
+		{ $$ = marlais_cons ($1, marlais_cons ($2, MARLAIS_NIL)); }
 
 for_terminator_opt
 	:			{ $$ = marlais_cons (MARLAIS_FALSE,
-					     marlais_make_nil ()); }
-	| UNTIL expression	{ $$ = marlais_cons ($2, marlais_make_nil ()); }
+					     MARLAIS_NIL); }
+	| UNTIL expression	{ $$ = marlais_cons ($2, MARLAIS_NIL); }
 	| WHILE expression	{ $$ = marlais_cons (marlais_cons (not_symbol,
 					           marlais_cons ($2,
-                                                         marlais_make_nil ())),
-                                             marlais_make_nil ()); }
+                                                         MARLAIS_NIL)),
+                                             MARLAIS_NIL); }
 	| SYMBOL expression	{ if ($1 == until_keyword) {
-				      $$ =marlais_cons ($2, marlais_make_nil ());
+				      $$ =marlais_cons ($2, MARLAIS_NIL);
 				  } else if ($1 == while_keyword) {
 				      $$ = marlais_cons (marlais_cons (not_symbol,
 						       marlais_cons ($2,
-							     marlais_make_nil ())),
-					         marlais_make_nil ());
+							     MARLAIS_NIL)),
+					         MARLAIS_NIL);
 				  } else {
 					marlais_error ("Bogus keyword in if",
 						$1,
@@ -680,8 +680,8 @@ for_terminator_opt
 				}
 
 finally_opt
-	:			{ $$ = marlais_make_nil (); }
-	| FINALLY body		{ $$ = marlais_cons ($2, marlais_make_nil ()); }
+	:			{ $$ = MARLAIS_NIL; }
+	| FINALLY body		{ $$ = marlais_cons ($2, MARLAIS_NIL); }
 
 block_statement
 	: BLOCK		{ marlais_lexer_push_intermediate_words ($1); }
@@ -699,14 +699,14 @@ block_statement
 		END BLOCK_opt
 
 		{ $$ = marlais_make_list (bind_exit_symbol,
-			       marlais_cons ($4, marlais_make_nil ()),
+			       marlais_cons ($4, MARLAIS_NIL),
                                nelistem(unwind_protect_symbol,
 					nelistem (bind_symbol,
 					       marlais_cons (marlais_make_list (hash_rest_symbol,
 							       vals_symbol,
 							       $6,
 							       NULL),
-						     marlais_make_nil ()),
+						     MARLAIS_NIL),
 					       $7,
 					       marlais_make_list (apply_symbol,
 						       $4,
@@ -719,24 +719,24 @@ block_statement
 		}
 
 afterwards_opt
-	:			{ $$ = marlais_make_nil (); }
+	:			{ $$ = MARLAIS_NIL; }
 	| AFTERWARDS body 	{ $$ = $2; }
 
 cleanup_opt
-	: 		{ $$ = marlais_make_nil (); }
+	: 		{ $$ = MARLAIS_NIL; }
 	| CLEANUP body	{ $$ = $2; }
 
 exceptions
-	:	{ $$ = marlais_make_nil (); }
+	:	{ $$ = MARLAIS_NIL; }
 	| exceptions
 	  EXCEPTION '(' exception_args ')' body
 		/* Note that exceptions are consed up from back to front! */
 		{ $$ = marlais_cons (marlais_make_list ($2, $4, $6, NULL), $1); }
 
 exception_args
-	: variable_name		{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+	: variable_name		{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 	| variable_name COLON_COLON variable_name comma_arguments_opt
-		{ $$ = marlais_cons (marlais_cons ($1, marlais_cons ($3, marlais_make_nil ())), $4); }
+		{ $$ = marlais_cons (marlais_cons ($1, marlais_cons ($3, MARLAIS_NIL)), $4); }
 
 IF_opt
 	:
@@ -819,8 +819,8 @@ class_definition
 		{ $$ = marlais_cons ($1, marlais_cons ($2, $3)); }
 
 slot_specs
-	:				{ $$ = marlais_make_nil (); }
-	| slot_spec			{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+	:				{ $$ = MARLAIS_NIL; }
+	| slot_spec			{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 	| slot_spec ';' slot_specs	{ $$ = marlais_cons ($1, $3); }
 
 slot_spec
@@ -835,13 +835,13 @@ slot_spec
 
 		  slot_type = marlais_cons (type_keyword,
 				    marlais_cons (CLASSNAME (object_class),
-					  marlais_make_nil ()));
+					  MARLAIS_NIL));
 		  allocation = marlais_cons (allocation_keyword,
 				     marlais_cons (instance_symbol,
-					   marlais_make_nil ()));
+					   MARLAIS_NIL));
 		  dynamism = marlais_cons (dynamism_keyword,
 				   marlais_cons (open_symbol,
-					 marlais_make_nil ()));
+					 MARLAIS_NIL));
 		  if (PAIRP ($3)) {
 		      getter_name = CAR ($3);
 		      slot_type_specified = 1;
@@ -888,7 +888,7 @@ slot_spec
 		}
 
 slot_modifiers_opt
-	: 				{ $$ = marlais_make_nil (); }
+	: 				{ $$ = MARLAIS_NIL; }
 	| NAME slot_modifiers_opt 	{ $$ = marlais_cons ($1, $2); }
 	| CLASS slot_modifiers_opt	{ $$ = marlais_cons ($1, $2); }
 
@@ -932,7 +932,7 @@ module_definition
 		{ $$ = marlais_cons ($1, $2); }
 
 module_clauses
-	:	{ $$ = marlais_make_nil (); }
+	:	{ $$ = MARLAIS_NIL; }
 	| module_clause ';' module_clauses
 		{ $$ = marlais_cons ($1, $3); }
 
@@ -951,14 +951,14 @@ create_clause
 	: CREATE item_names	{ $$ = marlais_cons ($1, $2); }
 
 modifiers
-	: NAME		{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+	: NAME		{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 	| NAME modifiers 	{ $$ = marlais_cons ($1, $2); }
 
 expression_list
 	: '(' expressions_opt ')'	{ $$ = $2; }
 
 expressions
-	: expression			{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+	: expression			{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 	| expression ',' expressions	{ $$ = marlais_cons ( $1, $3); }
 
 /*
@@ -978,7 +978,7 @@ item_modifiers_and_word
 */
 
 item_names
-	: variable_name			{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+	: variable_name			{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 	| variable_name ',' item_names	{ $$ = marlais_cons ($1, $3); }
 
 
@@ -996,33 +996,33 @@ method_body
 #ifdef OPTIMIZE_SPECIALIZERS
 		    symtab_pop ();
 #endif
-		    $$ = marlais_cons ($2, marlais_cons ($6, marlais_make_nil ()));
+		    $$ = marlais_cons ($2, marlais_cons ($6, MARLAIS_NIL));
 		}
 	| '(' parameter_list_opt ')' EQUAL_ARROW variable ';' body
 		{ $$ = marlais_cons (marlais_append_bang ($2,
 					  marlais_cons (hash_values_symbol,
-						marlais_cons ($5, marlais_make_nil ()))),
-			     marlais_cons ($7, marlais_make_nil ())); }
+						marlais_cons ($5, MARLAIS_NIL))),
+			     marlais_cons ($7, MARLAIS_NIL)); }
 
 	| '(' parameter_list_opt ')' EQUAL_ARROW '(' value_list_opt ')' SEMICOLON_opt body
 		{ $$ = marlais_cons (marlais_append_bang ($2,
 					  marlais_cons (hash_values_symbol, $6)),
-			     marlais_cons ( $9, marlais_make_nil ())); }
+			     marlais_cons ( $9, MARLAIS_NIL)); }
 generic_function_body
 	: '(' parameter_list_opt ')'
-		{ $$ = marlais_cons ($2, marlais_make_nil ()); }
+		{ $$ = marlais_cons ($2, MARLAIS_NIL); }
 	| '(' parameter_list_opt ')' EQUAL_ARROW variable
 		{ $$ = marlais_cons (marlais_append_bang ($2, marlais_cons (hash_values_symbol,
-					      marlais_cons ($5, marlais_make_nil ()))),
-			     marlais_make_nil ()); }
+					      marlais_cons ($5, MARLAIS_NIL))),
+			     MARLAIS_NIL); }
 	| '(' parameter_list_opt ')' EQUAL_ARROW '(' value_list_opt ')'
 		{ $$ = marlais_cons (marlais_append_bang ($2, marlais_cons (hash_values_symbol, $6)),
-		 	     marlais_make_nil ()); }
+		 	     MARLAIS_NIL); }
 
 parameter_list
-	: parameter		{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+	: parameter		{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 	| parameter_list ',' parameter
-		{ $$ = marlais_append_bang ($1, marlais_cons ($3, marlais_make_nil ())); }
+		{ $$ = marlais_append_bang ($1, marlais_cons ($3, MARLAIS_NIL)); }
 	| parameter_list ',' next_rest_key_parameter_list
 			{ $$ = marlais_append_bang ($1, $3); }
 	| next_rest_key_parameter_list
@@ -1030,7 +1030,7 @@ parameter_list
 
 next_rest_key_parameter_list
 	: HASH_NEXT variable_name
-		{ $$ = marlais_cons ($1, marlais_cons ($2, marlais_make_nil ())); }
+		{ $$ = marlais_cons ($1, marlais_cons ($2, MARLAIS_NIL)); }
 	| HASH_NEXT variable_name ',' rest_key_parameter_list
 		{ $$ = marlais_cons ($1, marlais_cons ($2, $4)); }
 	| rest_key_parameter_list
@@ -1038,34 +1038,34 @@ next_rest_key_parameter_list
 
 rest_key_parameter_list
 	: HASH_REST variable_name
-		{ $$ = marlais_cons ($1, marlais_cons ($2, marlais_make_nil ())); }
+		{ $$ = marlais_cons ($1, marlais_cons ($2, MARLAIS_NIL)); }
 	| HASH_REST variable_name ',' key_parameter_list
 		{ $$ = marlais_cons ($1, marlais_cons ($2, $4)); }
 	| key_parameter_list
 		{ $$ = $1; }
 
 key_parameter_list
-	: HASH_KEY	{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+	: HASH_KEY	{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 	| HASH_KEY ',' HASH_ALL_KEYS
-			{ $$ = marlais_cons ($1, marlais_cons ($3, marlais_make_nil ())); }
+			{ $$ = marlais_cons ($1, marlais_cons ($3, MARLAIS_NIL)); }
 	| HASH_KEY keyword_parameters
 			{ $$ = marlais_cons ($1, $2); }
 	| HASH_ALL_KEYS
-		{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+		{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 
 parameter
 	: variable_name type_designator_opt
-		{ $$ = ($2 ? marlais_cons ($1, marlais_cons ($2, marlais_make_nil ()))
+		{ $$ = ($2 ? marlais_cons ($1, marlais_cons ($2, MARLAIS_NIL))
 			: $1);
 		}
 	| variable_name EQUAL_EQUAL expression
 		{ $$ = marlais_cons ($1, marlais_cons (marlais_cons (singleton_symbol,
-					     marlais_cons ($3, marlais_make_nil ())),
-				       marlais_make_nil ())); }
+					     marlais_cons ($3, MARLAIS_NIL)),
+				       MARLAIS_NIL)); }
 
 keyword_parameters
-	: keyword_parameter	{ $$ = marlais_cons ($1, marlais_make_nil ()); }
-	| HASH_ALL_KEYS		{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+	: keyword_parameter	{ $$ = marlais_cons ($1, MARLAIS_NIL); }
+	| HASH_ALL_KEYS		{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 	| keyword_parameter ',' keyword_parameters
 			{ $$ = marlais_cons ($1, $3); }
 
@@ -1077,13 +1077,13 @@ keyword_parameter
 		  if ($4) {
 		    if ($1) {
 			$$ =marlais_cons ($1, marlais_cons (variable,
-					    marlais_cons ($4, marlais_make_nil ())));
+					    marlais_cons ($4, MARLAIS_NIL)));
 		    } else {
 			$$ = marlais_cons (variable,
-				   marlais_cons ($4, marlais_make_nil ()));
+				   marlais_cons ($4, MARLAIS_NIL));
 		    }
 		  } else {
-		      $$ = marlais_cons ($1, marlais_cons (variable, marlais_make_nil ()));
+		      $$ = marlais_cons ($1, marlais_cons (variable, MARLAIS_NIL));
 		  }
 		}
 
@@ -1091,7 +1091,7 @@ keyword_parameter
 		{ Object variable = $2 == NULL? $1
 					      : marlais_make_list ($1, $2, NULL);
 		  if ($3) {
-		    $$ = marlais_cons (variable, marlais_cons ($3, marlais_make_nil ()));
+		    $$ = marlais_cons (variable, marlais_cons ($3, MARLAIS_NIL));
 		} else {
 		    $$ = variable;
 		}
@@ -1110,7 +1110,7 @@ default	:  '=' expression		{ $$ = $2; }
 local_declaration_block
 	: local_declaration ';' body
 		{ $$ = marlais_cons (bind_symbol,
-			     marlais_cons ($1, marlais_cons ($3, marlais_make_nil ()))); }
+			     marlais_cons ($1, marlais_cons ($3, MARLAIS_NIL))); }
 */
 
 local_declaration
@@ -1124,24 +1124,24 @@ local_declaration
 		    symtab_insert_bindings ($2);
 #endif
 		    $$ = marlais_cons (local_bind_symbol,
-			       marlais_cons ($2, marlais_make_nil ()));
+			       marlais_cons ($2, MARLAIS_NIL));
 		}
 	| LET HANDLER condition '=' handler
-	| LOCAL { methnames = methdefs = marlais_make_nil (); }
+	| LOCAL { methnames = methdefs = MARLAIS_NIL; }
 	  local_methods
 
           {   Object methbindings = marlais_cons (marlais_append (methnames,
 						  marlais_cons (marlais_cons (values_symbol,
 							      methdefs),
-							marlais_make_nil ())),
-					  marlais_make_nil ());
+							MARLAIS_NIL)),
+					  MARLAIS_NIL);
 #ifdef OPTIMIZE_SPECIALIZERS
 	      symtab_insert_bindings (methbindings);
 #endif
 	      bindings_increment ();
 	      $$ = marlais_cons (local_bind_rec_symbol,
 			 marlais_cons ( methbindings,
-			       marlais_make_nil ()));
+			       MARLAIS_NIL));
 	  }
 
 
@@ -1166,30 +1166,30 @@ local_methods
 
 bindings
 	: variable '=' expression
-		{ $$ = marlais_cons (marlais_cons ($1, marlais_cons ($3, marlais_make_nil ())),
-			     marlais_make_nil ()); }
+		{ $$ = marlais_cons (marlais_cons ($1, marlais_cons ($3, MARLAIS_NIL)),
+			     MARLAIS_NIL); }
 	| '(' variable_list ')' '=' expression
-		  { $$ = marlais_cons (marlais_append_bang ($2, marlais_cons ($5, marlais_make_nil ())),
-			     marlais_make_nil ()); }
+		  { $$ = marlais_cons (marlais_append_bang ($2, marlais_cons ($5, MARLAIS_NIL)),
+			     MARLAIS_NIL); }
 
 variable_list
-	: variable		{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+	: variable		{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 	| variable ',' variable_list
 				{ $$ = marlais_cons ($1, $3); }
 	| HASH_REST variable_name
-		{ $$ = marlais_cons ($1, marlais_cons ($2, marlais_make_nil ())); }
+		{ $$ = marlais_cons ($1, marlais_cons ($2, MARLAIS_NIL)); }
 
 
 value_variable_list
-	: variable		{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+	: variable		{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 	| variable ',' value_variable_list
 				{ $$ = marlais_cons ($1, $3); }
 	| HASH_REST variable
-		{ $$ = marlais_cons ($1, marlais_cons ($2, marlais_make_nil ())); }
+		{ $$ = marlais_cons ($1, marlais_cons ($2, MARLAIS_NIL)); }
 
 variable
 	: variable_name type_designator_opt
-		{ $$ = ($2 ? marlais_cons ($1, marlais_cons ($2, marlais_make_nil ()))
+		{ $$ = ($2 ? marlais_cons ($1, marlais_cons ($2, MARLAIS_NIL))
 			: $1); }
 
 variable_name
@@ -1209,7 +1209,7 @@ type	: operand		{ $$ = $1; }
 /* Property Lists */
 
 property_list
-	: property			{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+	: property			{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 	| property  property_list	{ $$ = marlais_cons ($1, $2); }
 
 property
@@ -1220,7 +1220,7 @@ value	: expression			{ $$ = $1; }
 	| '{' property_set_opt '}'	{ $$ = $2; }
 
 property_set
-	: property_set_member		{ $$ = marlais_cons ($1, marlais_make_nil ()); }
+	: property_set_member		{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 	| property_set_member ',' property_set		{ $$ = marlais_cons ($1, $3); }
 
 property_set_member
@@ -1263,20 +1263,20 @@ comma_opt
 	| ','
 
 comma_arguments_opt
-	: 		{ $$ = marlais_make_nil (); }
+	: 		{ $$ = MARLAIS_NIL; }
 	| ',' arguments { $$ = $2; }
 
 arguments_opt
-	:		{ $$ = marlais_make_nil (); }
+	:		{ $$ = MARLAIS_NIL; }
 	| arguments	{ $$ = $1; }
 
 constants_opt
-	:		{ $$ = marlais_make_nil (); }
+	:		{ $$ = MARLAIS_NIL; }
 	| constants	{ $$ = $1; }
 
 list_constants_opt
 	: 				{ $$ = marlais_cons (list_symbol,
-						     marlais_make_nil ()); }
+						     MARLAIS_NIL); }
 	| list_constants		{ $$ = $1; }
 
 default_opt
@@ -1294,7 +1294,7 @@ expression_list_opt
 */
 
 expressions_opt
-	:			{ $$ = marlais_make_nil (); }
+	:			{ $$ = MARLAIS_NIL; }
 	| expressions		{ $$ = $1; }
 
 /*
@@ -1304,19 +1304,19 @@ item_list_opt
 */
 
 modifiers_opt
-	:			{ $$ = marlais_make_nil (); }
+	:			{ $$ = MARLAIS_NIL; }
 	| modifiers		{ $$ = $1; }
 
 parameter_list_opt
-	:			{ $$ = marlais_make_nil (); }
+	:			{ $$ = MARLAIS_NIL; }
 	| parameter_list	{ $$ = $1; }
 
 property_list_opt
-	:			{ $$ = marlais_make_nil (); }
+	:			{ $$ = MARLAIS_NIL; }
 	| property_list		{ $$ = $1; }
 
 property_set_opt
-	:			{ $$ = marlais_make_nil (); }
+	:			{ $$ = MARLAIS_NIL; }
 	| property_set		{ $$ = $1; }
 
 type_designator_opt
@@ -1324,7 +1324,7 @@ type_designator_opt
 	| type_designator	{ $$ = $1; }
 
 value_list_opt
-	:			{ $$ = marlais_make_nil (); }
+	:			{ $$ = MARLAIS_NIL; }
 	| value_variable_list		{ $$ = $1; }
 
 %%
@@ -1350,13 +1350,13 @@ nelistem (Object car,...)
 	Object fst, el, acons, cur;
 	va_list args;
 
-	fst = cur = acons = marlais_cons (car, marlais_make_nil ());
+	fst = cur = acons = marlais_cons (car, MARLAIS_NIL);
 	va_start (args, car);
 	el = va_arg (args, Object);
 
 	while (el) {
 	    if (!EMPTYLISTP (el)) {
-		acons = marlais_cons (el, marlais_make_nil ());
+		acons = marlais_cons (el, MARLAIS_NIL);
 		CDR (cur) = acons;
 		cur = acons;
 	    }
@@ -1406,9 +1406,9 @@ make_setter_expr (Object place, Object value)
 		   marlais_cons (local_bind_symbol,
 			 marlais_cons (marlais_cons (marlais_cons (newsym,
 					marlais_cons (value,
-					      marlais_make_nil ())),
-				   marlais_make_nil ()),
-			      marlais_make_nil ())),
+					      MARLAIS_NIL)),
+				   MARLAIS_NIL),
+			      MARLAIS_NIL)),
 		   marlais_cons (marlais_make_setter_symbol (FIRST (place)),
 			 marlais_cons (newsym, CDR (place))),
 		   newsym,

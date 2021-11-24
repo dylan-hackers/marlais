@@ -218,7 +218,7 @@ static Object
 dylan_warning (Object msg_str, Object rest)
 {
   print_dylan_error_helper("warning", msg_str, rest);
-  return marlais_unspecified;
+  return MARLAIS_UNSPECIFIED;
 }
 
 void
@@ -298,9 +298,9 @@ marlais_error (const char *msg,...)
       prompt = prompt_buf;
       current_prompt = prompt;
       marlais_parser_prepare_stream (stdin, 0);
-      while ((obj = marlais_parse_object ()) && (obj != marlais_eof)) {
+      while ((obj = marlais_parse_object ()) && (obj != MARLAIS_EOF)) {
 	obj = marlais_eval (obj);
-	if (obj != marlais_unspecified) {
+	if (obj != MARLAIS_UNSPECIFIED) {
 	  Object symbol;
 	  char symbol_name[12];
 
@@ -336,8 +336,8 @@ marlais_error (const char *msg,...)
   signal_value = marlais_symbol_value (signal_symbol);
   if (signal_value) {
     marlais_apply (signal_value,
-	   marlais_cons (marlais_make (simple_error_class, marlais_make_nil ()),
-		 marlais_make_nil ()));
+	   marlais_cons (marlais_make (simple_error_class, MARLAIS_NIL),
+		 MARLAIS_NIL));
   } else {
     longjmp (error_return, 1);
   }
@@ -377,7 +377,7 @@ marlais_warning (const char *msg,...)
     }
   }
   fprintf (stderr, ".\n");
-  return marlais_unspecified;
+  return MARLAIS_UNSPECIFIED;
 }
 
 static void
@@ -420,7 +420,7 @@ help_function (void)
   fprintf (stderr, "    help() => ()         // print this message\n");
   fprintf (stderr, "    fail() => ()         "
 	   "// or ^D returns to the read-eval-print loop\n");
-  return marlais_unspecified;
+  return MARLAIS_UNSPECIFIED;
 }
 
 static jmp_buf

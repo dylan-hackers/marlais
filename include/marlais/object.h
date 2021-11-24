@@ -98,9 +98,17 @@ typedef struct {
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
 #define MARLAIS_TRUE  (TRUEVAL)
 #define MARLAIS_FALSE (FALSEVAL)
+#define MARLAIS_NIL (EMPTYLISTVAL)
+#define MARLAIS_EOF (EOFVAL)
+#define MARLAIS_UNSPECIFIED (UNSPECVAL)
+#define MARLAIS_UNINITIALIZED (UNINITVAL)
 #else
 #define MARLAIS_TRUE  (marlais_true)
 #define MARLAIS_FALSE (marlais_false)
+#define MARLAIS_NIL (marlais_nil)
+#define MARLAIS_EOF  (marlais_eof)
+#define MARLAIS_UNSPECIFIED (marlais_unspecified)
+#define MARLAIS_UNINITALIZED (marlais_uninitialized)
 #endif
 
 /* Constructor for booleans */

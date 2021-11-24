@@ -132,9 +132,9 @@ marlais_vector_to_list (Object vec)
   int i;
   Object first, cur, acons;
 
-  cur = marlais_make_nil ();
+  cur = MARLAIS_NIL;
   for (i = 0; i < SOVSIZE (vec); ++i) {
-    acons = marlais_cons (SOVELS (vec)[i], marlais_make_nil ());
+    acons = marlais_cons (SOVELS (vec)[i], MARLAIS_NIL);
     if (!EMPTYLISTP (cur)) {
       CDR (cur) = acons;
     } else {

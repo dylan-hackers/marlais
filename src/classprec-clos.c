@@ -58,9 +58,9 @@ static Object find_minimal_elements (Object slist);
 
 #define MAKE_PNODE(class) \
   (marlais_cons (class, \
-         marlais_cons (marlais_make_nil (),               \
-               (marlais_cons (marlais_make_nil (),                \
-                      marlais_make_nil ())))))
+         marlais_cons (MARLAIS_NIL,               \
+               (marlais_cons (MARLAIS_NIL,                \
+                      MARLAIS_NIL)))))
 
 #define PNODE_CLASS(pnode)        (CAR (pnode))
 #define PNODE_SUCCESSORS(pnode)   (CAR (CDR (pnode)))
@@ -76,7 +76,7 @@ marlais_compute_class_precedence_list (Object class)
   Object precedence_list_rev;
   Object a_set;
 
-  slist = marlais_make_nil ();
+  slist = MARLAIS_NIL;
 
   /* Prepare list S */
   construct_slist (&slist, class);
@@ -97,8 +97,8 @@ marlais_compute_class_precedence_list (Object class)
 
   */
 
-  precedence_list_rev = marlais_make_nil ();
-  minimal_element_set = marlais_cons (CAR (slist), marlais_make_nil ());
+  precedence_list_rev = MARLAIS_NIL;
+  minimal_element_set = marlais_cons (CAR (slist), MARLAIS_NIL);
   while (PAIRP (minimal_element_set)) {
 
 #if EBUG
@@ -234,7 +234,7 @@ construct_slist (Object *sptr, Object class)
     tmp_sptr = &CDR (*tmp_sptr);
   }
   if (EMPTYLISTP (*tmp_sptr)) {
-    *tmp_sptr = marlais_cons (MAKE_PNODE (class), marlais_make_nil ());
+    *tmp_sptr = marlais_cons (MAKE_PNODE (class), MARLAIS_NIL);
   }
   for (sclist = CLASSSUPERS (class);
        PAIRP (sclist);
@@ -254,7 +254,7 @@ add_new_at_end (Object *lst, Object elt)
         }
         lst = &CDR (*lst);
     }
-    *lst = marlais_cons (elt, marlais_make_nil ());
+    *lst = marlais_cons (elt, MARLAIS_NIL);
     return ret;
 }
 
@@ -291,7 +291,7 @@ decorate_slist_with_precedence (Object slist, Object class)
 {
   Object q, p;
 
-  for (q = marlais_cons (class, marlais_make_nil ()), p = CLASSSUPERS (class);
+  for (q = marlais_cons (class, MARLAIS_NIL), p = CLASSSUPERS (class);
        PAIRP (p);
        q = p, p = CDR (p)) {
     record_precedence (slist, CAR (q), CAR (p));
@@ -386,7 +386,7 @@ direct_superclassp (Object super, Object sub)
 static Object
 find_minimal_elements (Object slist)
 {
-  Object mins = marlais_make_nil ();
+  Object mins = MARLAIS_NIL;
 
   while (PAIRP (slist)) {
     if (EMPTYLISTP (PNODE_PREDECESSORS (CAR (slist)))) {

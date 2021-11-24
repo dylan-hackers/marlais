@@ -97,8 +97,8 @@ marlais_make_deque (void)
 {
   Object obj = marlais_allocate_object (Deque, sizeof (struct deque));
 
-  DEQUEFIRST (obj) = marlais_make_nil ();
-  DEQUELAST (obj) = marlais_make_nil ();
+  DEQUEFIRST (obj) = MARLAIS_NIL;
+  DEQUELAST (obj) = MARLAIS_NIL;
   return (obj);
 }
 
@@ -113,17 +113,17 @@ marlais_make_deque_entrypoint (Object args)
   deq = marlais_make_deque ();
   /* actually fabricate the list representing the deque */
   if (size--) {
-    first = last = deque_make_entry (marlais_make_nil (), fill_obj,
-                                     marlais_make_nil ());
+    first = last = deque_make_entry (MARLAIS_NIL, fill_obj,
+                                     MARLAIS_NIL);
     DEQUEFIRST (deq) = first;
     while (size--) {
       DENEXT (last) = deque_make_entry (last, fill_obj, NULL);
       last = DENEXT (last);
     }
-    DENEXT (last) = marlais_make_nil ();
+    DENEXT (last) = MARLAIS_NIL;
     DEQUELAST (deq) = last;
   } else {
-    DEQUEFIRST (deq) = DEQUELAST (deq) = DENEXT (deq) = marlais_make_nil ();
+    DEQUEFIRST (deq) = DEQUELAST (deq) = DENEXT (deq) = MARLAIS_NIL;
   }
   return (deq);
 }
@@ -144,7 +144,7 @@ deque_make_entry (Object prev, Object value, Object next)
 static Object
 deque_push (Object d, Object new)
 {
-  Object new_entry = deque_make_entry(marlais_make_nil (), new, DEQUEFIRST (d));
+  Object new_entry = deque_make_entry(MARLAIS_NIL, new, DEQUEFIRST (d));
   if (EMPTYLISTP (DEQUEFIRST (d))) {
     DEQUEFIRST (d) = DEQUELAST (d) = new_entry;
   } else {
@@ -165,7 +165,7 @@ deque_pop (Object d)
   ret = DEVALUE (DEQUEFIRST (d));
   DEQUEFIRST (d) = DENEXT (DEQUEFIRST (d));
   if (!EMPTYLISTP (DEQUEFIRST (d))) {
-    DEPREV (DEQUEFIRST (d)) = marlais_make_nil ();
+    DEPREV (DEQUEFIRST (d)) = MARLAIS_NIL;
   }
   return (ret);
 }
@@ -173,7 +173,7 @@ deque_pop (Object d)
 static Object
 deque_push_last (Object d, Object new)
 {
-  Object new_entry = deque_make_entry (DEQUELAST (d), new, marlais_make_nil ());
+  Object new_entry = deque_make_entry (DEQUELAST (d), new, MARLAIS_NIL);
   if (EMPTYLISTP (DEQUEFIRST (d))) {
     DEQUEFIRST (d) = DEQUELAST (d) = new_entry;
   } else {
@@ -194,11 +194,11 @@ deque_pop_last (Object d)
   }
   res = DEVALUE (DEQUELAST (d));
   if (DEQUEFIRST (d) == DEQUELAST (d)) {
-    DEQUEFIRST (d) = DEQUELAST (d) = marlais_make_nil ();
+    DEQUEFIRST (d) = DEQUELAST (d) = MARLAIS_NIL;
   } else {
     DEQUELAST (d) = DEPREV (DEQUELAST (d));
     if (!EMPTYLISTP (DEQUELAST (d))) {
-      DENEXT (DEQUELAST (d)) = marlais_make_nil ();
+      DENEXT (DEQUELAST (d)) = MARLAIS_NIL;
     }
   }
   return (res);
@@ -271,7 +271,7 @@ deque_element_setter (Object d, Object index, Object new)
     }
   }
   DEVALUE (el) = new;
-  return (marlais_unspecified);
+  return (MARLAIS_UNSPECIFIED);
 }
 
 static Object

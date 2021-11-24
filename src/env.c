@@ -450,7 +450,7 @@ marlais_use_module (Object module_name,
   } else {
     marlais_error ("use: argument should be a symbol", module_name, NULL);
   }
-  return marlais_unspecified;
+  return MARLAIS_UNSPECIFIED;
 }
 
 Object
@@ -704,7 +704,7 @@ print_env (struct frame *env)
     marlais_print_object(marlais_standard_error, frame->owner, 1);
     fprintf (stderr, "\n");
   }
-  return marlais_unspecified;
+  return MARLAIS_UNSPECIFIED;
 }
 
 Object
@@ -757,7 +757,7 @@ show_bindings (Object args)
     }
 
   }
-  return marlais_unspecified;
+  return MARLAIS_UNSPECIFIED;
 }
 
 /*

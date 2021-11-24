@@ -36,8 +36,6 @@
 
 #include <marlais/common.h>
 
-/* Initialize boolean globals */
-extern void marlais_initialize_boolean (void);
 /* Register boolean primitives */
 extern void marlais_register_boolean (void);
 /* Compare objects by identity */

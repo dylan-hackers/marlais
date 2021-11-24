@@ -40,7 +40,7 @@ load_internal (Object filename)
     FILE *fp;
     Object obj, res;
     struct module_binding *old_module;
-    Object expr_list = marlais_make_nil ();
+    Object expr_list = MARLAIS_NIL;
     Object *expr_list_ptr;
     int old_load_file_context;
 
@@ -57,8 +57,8 @@ load_internal (Object filename)
 
     expr_list_ptr = &expr_list;
     marlais_parser_prepare_stream (fp, 0);
-    while ((obj = marlais_parse_object ()) && (obj != marlais_eof)) {
-	*expr_list_ptr = marlais_cons (obj, marlais_make_nil ());
+    while ((obj = marlais_parse_object ()) && (obj != MARLAIS_EOF)) {
+	*expr_list_ptr = marlais_cons (obj, MARLAIS_NIL);
 	expr_list_ptr = &CDR (*expr_list_ptr);
     }
 

@@ -141,7 +141,7 @@ marlais_table_element_setter (Object table, Object key, Object val)
     entry = make_table_entry (h, key, val, TABLETABLE (table)[h]);
     TABLETABLE (table)[h] = entry;
   }
-  return (marlais_unspecified);
+  return (MARLAIS_UNSPECIFIED);
 }
 
 Object *
@@ -180,7 +180,7 @@ marlais_table_element_setter_by_vector (Object table, Object key, Object val)
     entry = make_table_entry (h, key, val, TABLETABLE (table)[h]);
     TABLETABLE (table)[h] = entry;
   }
-  return (marlais_unspecified);
+  return (MARLAIS_UNSPECIFIED);
 }
 
 /* local functions */
@@ -215,7 +215,7 @@ table_element_handle (Object table, Object key, Object *default_val)
 
   while (entry) {
     if (marlais_apply (equal_fun,
-                       marlais_cons (TEKEY (entry), marlais_cons (key, marlais_make_nil ())))
+                       marlais_cons (TEKEY (entry), marlais_cons (key, MARLAIS_NIL)))
         != MARLAIS_FALSE) {
       return &(TEVALUE (entry));
     }
@@ -289,7 +289,7 @@ static Object
 table_current_element_setter (Object table, Object state, Object value)
 {
   TEVALUE (state) = value;
-  return (marlais_unspecified);
+  return (MARLAIS_UNSPECIFIED);
 }
 
 static Object
@@ -305,7 +305,7 @@ equal_hash (Object key)
     if (!hashfun) {
       marlais_error ("no =hash method defined for key class", key, NULL);
     }
-    return (marlais_apply (hashfun, marlais_cons (key, marlais_make_nil ())));
+    return (marlais_apply (hashfun, marlais_cons (key, MARLAIS_NIL)));
   } else {
     if (INTEGERP (key)) {
       return (key);

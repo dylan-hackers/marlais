@@ -7,17 +7,17 @@
 #endif
 
 /* core constants */
-#ifndef MARLAIS_OBJECT_MODEL_SMALL
+#ifdef MARLAIS_OBJECT_MODEL_LARGE
 GLOBAL Object marlais_true;
 GLOBAL Object marlais_false;
-#endif
 GLOBAL Object marlais_nil;
 GLOBAL Object marlais_eof;
-GLOBAL Object marlais_default;
 GLOBAL Object marlais_unspecified;
 GLOBAL Object marlais_uninitialized;
+#endif
 
-/* other constants */
+/* additional constants */
+GLOBAL Object marlais_default;
 GLOBAL Object marlais_empty_string;
 
 /* streams */

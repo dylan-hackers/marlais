@@ -44,7 +44,7 @@ marlais_register_stream (void)
 static Object
 stream_eof_object_p (Object obj)
 {
-  if (obj == marlais_eof) {
+  if (obj == MARLAIS_EOF) {
     return MARLAIS_TRUE;
   } else {
     return MARLAIS_FALSE;
@@ -56,7 +56,7 @@ stream_write(Object fd_obj, Object str)
 {
   int fd = INTVAL(fd_obj);
   write(fd, BYTESTRVAL(str), BYTESTRSIZE(str));
-  return marlais_unspecified;
+  return MARLAIS_UNSPECIFIED;
 }
 
 Object
@@ -66,5 +66,5 @@ stream_close (Object fd_obj)
   if(fd > 2) { /* ignore closing input/output/error */
     close (fd);
   }
-  return marlais_unspecified;
+  return MARLAIS_UNSPECIFIED;
 }

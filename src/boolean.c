@@ -50,15 +50,6 @@ static struct primitive boolean_prims[] =
 /* Exported functions */
 
 void
-marlais_initialize_boolean (void)
-{
-#ifdef MARLAIS_OBJECT_MODEL_LARGE
-  marlais_true = marlais_allocate_object (True, sizeof (struct empty));
-  marlais_false = marlais_allocate_object (False, sizeof (struct empty));
-#endif
-}
-
-void
 marlais_register_boolean (void)
 {
   int num = sizeof (boolean_prims) / sizeof (struct primitive);

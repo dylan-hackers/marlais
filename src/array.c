@@ -214,7 +214,7 @@ static Object
 array_ref_setter (Object arr, Object indices, Object new_val)
 {
   ARRELS (arr)[array_index (arr, indices, marlais_default)] = new_val;
-  return (marlais_unspecified);
+  return (MARLAIS_UNSPECIFIED);
 }
 
 static Object
@@ -244,7 +244,7 @@ array_element_setter (Object arr, Object index, Object new_val)
                    ARRDIMS (arr), NULL);
   }
   ARRELS (arr)[ind_val] = new_val;
-  return (marlais_unspecified);
+  return (MARLAIS_UNSPECIFIED);
 }
 
 static Object

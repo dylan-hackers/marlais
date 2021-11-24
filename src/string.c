@@ -358,7 +358,7 @@ string_element_setter (Object string, Object index, Object val)
       marlais_error ("element-setter: argument out of range", string, index, NULL);
     }
     BYTESTRVAL (string)[i] = CHARVAL (val);
-    return (marlais_unspecified);
+    return (MARLAIS_UNSPECIFIED);
 }
 
 static Object
@@ -513,7 +513,7 @@ wstring_element_setter (Object string, Object index, Object val)
       marlais_error ("element-setter: argument out of range", string, index, NULL);
     }
     WIDESTRVAL (string)[i] = WCHARVAL (val);
-    return (marlais_unspecified);
+    return (MARLAIS_UNSPECIFIED);
 }
 
 static Object
@@ -601,7 +601,7 @@ ustring_element_setter (Object string, Object index, Object val)
       marlais_error ("element-setter: argument out of range", string, index, NULL);
     }
     WIDESTRVAL (string)[i] = WCHARVAL (val);
-    return (marlais_unspecified);
+    return (MARLAIS_UNSPECIFIED);
 }
 
 static Object

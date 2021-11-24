@@ -89,7 +89,7 @@ load_foreign (Object name)
     return (marlais_make_integer ((DyInteger) handle));
 #endif
 
-    return marlais_unspecified;
+    return MARLAIS_UNSPECIFIED;
 }
 
 #endif

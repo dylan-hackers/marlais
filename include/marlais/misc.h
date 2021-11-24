@@ -37,10 +37,6 @@
 
 #include <marlais/common.h>
 
-Object marlais_make_eof (void);
-Object marlais_make_unspecified (void);
-Object marlais_make_uninitialized (void);
-
 Object make_exit (Object sym);
 Object make_unwind (Object body);
 

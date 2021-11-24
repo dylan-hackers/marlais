@@ -37,39 +37,6 @@
 #include <marlais/alloc.h>
 #include <marlais/prim.h>
 
-Object
-marlais_make_eof (void)
-{
-#ifndef MARLAIS_OBJECT_MODEL_SMALL
-  Object obj = marlais_allocate_object (EndOfFile, sizeof (struct empty));
-  return (obj);
-#else
-  return (EOFVAL);
-#endif
-}
-
-Object
-marlais_make_unspecified (void)
-{
-  Object obj = marlais_allocate_object (Values, sizeof (struct values));
-
-  VALUESNUM (obj) = 0;
-  VALUESELS (obj) = NULL;
-
-  return obj;
-}
-
-Object
-marlais_make_uninitialized (void)
-{
-#ifndef MARLAIS_OBJECT_MODEL_SMALL
-  Object obj = marlais_allocate_object (UninitializedSlotValue, sizeof (struct empty));
-  return (obj);
-#else
-  return (UNINITVAL);
-#endif
-}
-
 /* jump buffer must be filled in by
    calling routine. */
 Object

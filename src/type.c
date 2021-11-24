@@ -161,7 +161,7 @@ marlais_make_union (Object typelist)
 
   obj = marlais_allocate_object (UnionType, sizeof (struct union_type));
 
-  union_types = marlais_make_nil ();
+  union_types = MARLAIS_NIL;
 
   for (ptr = typelist; PAIRP (ptr); ptr = CDR (ptr)) {
     if (UNIONP (CAR (ptr))) {

@@ -36,23 +36,8 @@
 
 #include <marlais/common.h>
 
-/* Initialize list constants */
-extern void marlais_initialize_list (void);
 /* Register list primitives */
 extern void marlais_register_list (void);
-
-#ifdef MARLAIS_OBJECT_MODEL_LARGE
-/* Returns the empty list */
-static inline Object marlais_make_nil (void) {
-  assert(marlais_nil); // TODO remove
-  return marlais_nil;
-}
-#else
-/* Returns the empty list */
-static inline Object marlais_make_nil (void) {
-  return EMPTYLISTVAL;
-}
-#endif
 
 /* Make a <list> from varargs */
 extern Object marlais_make_list (Object car,...);

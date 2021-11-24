@@ -80,7 +80,7 @@ infix_decode_token (int yychar, FILE * fp)
 {
   switch (yychar) {
   case EOF_TOKEN:
-    return (marlais_eof);
+    return (MARLAIS_EOF);
   case LITERAL:
   case STRING:
   case HASH_T:
@@ -88,7 +88,7 @@ infix_decode_token (int yychar, FILE * fp)
     return (yylval);
   case HASH_BRACKET:
     {
-      Object new_list = marlais_make_nil ();
+      Object new_list = MARLAIS_NIL;
       Object *new_list_ptr = &new_list;
 
       do {
@@ -98,7 +98,7 @@ infix_decode_token (int yychar, FILE * fp)
           return new_list;
 
         *new_list_ptr = marlais_cons (infix_decode_token (yychar, fp),
-                              marlais_make_nil ());
+                              MARLAIS_NIL);
         new_list_ptr = &CDR (*new_list_ptr);
 
         if ((yychar = yylex ()) < 0)
@@ -112,7 +112,7 @@ infix_decode_token (int yychar, FILE * fp)
     } /* case HASH_BRACKET */
   case HASH_PAREN:
     {
-      Object new_list = marlais_make_nil ();
+      Object new_list = MARLAIS_NIL;
       Object *new_list_ptr = &new_list;
 
       do {
@@ -122,7 +122,7 @@ infix_decode_token (int yychar, FILE * fp)
           return new_list;
 
         *new_list_ptr = marlais_cons (infix_decode_token (yychar, fp),
-                              marlais_make_nil ());
+                              MARLAIS_NIL);
         new_list_ptr = &CDR (*new_list_ptr);
 
         if ((yychar = yylex ()) < 0)
@@ -172,7 +172,7 @@ read_char (Object stream)
   }
   ch = getc (fp);
   if (ch == EOF) {
-    return (marlais_eof);
+    return (MARLAIS_EOF);
   } else {
     return (marlais_make_character (ch));
   }

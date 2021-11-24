@@ -89,7 +89,7 @@ marlais_slot_init_value (Object slotd)
 {
   if (SLOTDINITFUNCTION (slotd)) {
     return marlais_eval (marlais_cons (marlais_make_list (quote_symbol, SLOTDINIT (slotd), NULL),
-                       marlais_make_nil ()));
+                       MARLAIS_NIL));
   } else {
     return SLOTDINIT (slotd);
   }

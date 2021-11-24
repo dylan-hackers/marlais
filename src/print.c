@@ -245,14 +245,14 @@ Object
 marlais_print_obj (Object fd, Object obj)
 {
   marlais_print_object (fd, obj, 1);
-  return (marlais_unspecified);
+  return (MARLAIS_UNSPECIFIED);
 }
 
 Object
 marlais_print_obj_escaped (Object fd, Object obj)
 {
   marlais_print_object (fd, obj, 0);
-  return (marlais_unspecified);
+  return (MARLAIS_UNSPECIFIED);
 }
 
 Object
@@ -260,7 +260,7 @@ marlais_print_out (Object obj)
 {
   apply_print (marlais_standard_output, obj, 1);
   fflush (stdout);
-  return (marlais_unspecified);
+  return (MARLAIS_UNSPECIFIED);
 }
 
 Object
@@ -268,7 +268,7 @@ marlais_print_out_escaped (Object obj)
 {
   apply_print (marlais_standard_output, obj, 0);
   fflush (stdout);
-  return (marlais_unspecified);
+  return (MARLAIS_UNSPECIFIED);
 }
 
 Object
@@ -276,7 +276,7 @@ marlais_print_err (Object obj)
 {
   apply_print (marlais_standard_error, obj, 1);
   fflush (stderr);
-  return (marlais_unspecified);
+  return (MARLAIS_UNSPECIFIED);
 }
 
 Object
@@ -284,7 +284,7 @@ marlais_print_err_escaped (Object obj)
 {
   apply_print (marlais_standard_error, obj, 0);
   fflush (stderr);
-  return (marlais_unspecified);
+  return (MARLAIS_UNSPECIFIED);
 }
 
 /* Static functions */
@@ -458,7 +458,7 @@ print_virtual_slot_values (Object fd, Object instance, Object slotds,
     marlais_print_object (fd, SLOTDGETTER (slotd), escaped);
     fprintf (fp, " = ");
     apply_print (fd, apply_internal (SLOTDGETTER (slotd),
-                                     marlais_cons (instance, marlais_make_nil ())),
+                                     marlais_cons (instance, MARLAIS_NIL)),
                  escaped);
   }
 }
@@ -521,7 +521,7 @@ print_param (Object fd, Object param, int escaped)
   FILE *fp = print_file_from_fd(fd);
 
   if (SECOND (param) != object_class
-      /* || CAR (param) == marlais_unspecified */
+      /* || CAR (param) == MARLAIS_UNSPECIFIED */
       ) {
     marlais_print_object (fd, CAR (param), escaped);
     fprintf (fp, " :: ");
@@ -679,7 +679,7 @@ print_slot_descriptor (Object fd, Object slotd, int escaped)
     }
     marlais_print_object (fd, SLOTDSLOTTYPE (slotd), escaped);
   }
-  if (SLOTDINIT (slotd) != marlais_uninitialized) {
+  if (SLOTDINIT (slotd) != MARLAIS_UNINITIALIZED) {
     if (SLOTDINITFUNCTION (slotd)) {
       fprintf (fp, " init-function: ");
     } else {

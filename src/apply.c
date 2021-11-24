@@ -52,13 +52,13 @@ marlais_register_apply (void)
   marlais_register_prims (num, apply_prims);
 
   user_keyword = marlais_make_symbol ("user:");
-  ResultValueStack = marlais_make_nil ();
+  ResultValueStack = MARLAIS_NIL;
 }
 
 Object
 marlais_default_result_value (void)
 {
-  return marlais_cons (marlais_make_nil (), object_class);
+  return marlais_cons (MARLAIS_NIL, object_class);
 }
 
 Object
@@ -93,7 +93,7 @@ marlais_apply_internal (Object fun, Object args)
     ret = marlais_apply_prim (fun, args);
     break;
   case Method:
-    ret = marlais_apply_method (fun, args, marlais_make_nil (), NULL);
+    ret = marlais_apply_method (fun, args, MARLAIS_NIL, NULL);
     break;
   case GenericFunction:
     ret = apply_generic (fun, args);
@@ -154,7 +154,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
       printf ("\n");
     }
   }
-  ret = marlais_unspecified;
+  ret = MARLAIS_UNSPECIFIED;
   params = METHREQPARAMS (meth);
   body = METHBODY (meth);
 
@@ -232,7 +232,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
   if (PAIRP (METHKEYPARAMS (meth))) {
     /* copy keys */
     keys = marlais_copy_list (METHKEYPARAMS (meth));
-    dup_list = marlais_make_nil (); /* For duplicate keywords */
+    dup_list = MARLAIS_NIL; /* For duplicate keywords */
 
     /* Bind each of the keyword args that is present. */
     while (!EMPTYLISTP (args)) {
@@ -405,9 +405,9 @@ narrow_value_types (Object *values_list_ptr,
     while (!EMPTYLISTP (new_values_list)) {
       if (marlais_subtype_p (CAR (new_values_list), *rest_type)) {
         *values_list_ptr = marlais_cons (CAR (new_values_list),
-                                 marlais_make_nil ());
+                                 MARLAIS_NIL);
       } else {
-        *values_list_ptr = marlais_cons (*rest_type, marlais_make_nil ());
+        *values_list_ptr = marlais_cons (*rest_type, MARLAIS_NIL);
       }
       values_list_ptr = &CDR (*values_list_ptr);
       new_values_list = CDR (new_values_list);
@@ -568,14 +568,14 @@ build_rest_methods (Object cache_tail, Object args)
   Object method_found, method_group;
 
   if (EMPTYLISTP (cache_tail)) {
-    return (marlais_make_nil ());
+    return (MARLAIS_NIL);
   }
   /* possible ambiguous point - put recalc signal here */
   method_found = 0;
   method_group = CAR (cache_tail);
   while (!EMPTYLISTP (method_group)) {
     if (method_found) {
-      return marlais_make_nil ();
+      return MARLAIS_NIL;
     }
     method_found = HDLOBJ (CAR (method_group));
     /* Drew - check the next line.  I think you forgot to cdr down
@@ -585,7 +585,7 @@ build_rest_methods (Object cache_tail, Object args)
     method_group = CDR (method_group);
   }
   if (!method_found) {
-    return marlais_cons (MARLAIS_FALSE, marlais_make_nil ());
+    return marlais_cons (MARLAIS_FALSE, MARLAIS_NIL);
   } else {
     return marlais_cons (method_found, build_rest_methods (CDR (cache_tail), args));
   }
@@ -658,7 +658,7 @@ apply_exit (Object exit_proc, Object args)
     /* XXX casts are wrong and must be fixed */
     switch (marlais_list_length (args)) {
     case 0:
-      longjmp (*EXITRET (exit_proc), (int) (marlais_unspecified));
+      longjmp (*EXITRET (exit_proc), (int) (MARLAIS_UNSPECIFIED));
     case 1:
       longjmp (*EXITRET (exit_proc), (int) FIRST (args));
     default:

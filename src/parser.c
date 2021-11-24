@@ -81,6 +81,6 @@ marlais_parse_object (void)
     return parse_value;
   } else {
     marlais_warning ("Parser failed in inexplicable way", parse_value, NULL);
-    return marlais_eof;
+    return MARLAIS_EOF;
   }
 }
