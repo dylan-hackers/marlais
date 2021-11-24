@@ -49,8 +49,8 @@ extern Object marlais_slot_allocation (Object slot);
 extern Object marlais_slot_value (Object instance, Object name);
 extern Object marlais_set_slot_value (Object instance, Object name, Object val);
 extern Object marlais_make_slot_descriptor (unsigned char properties, Object getter,
-					    Object setter, Object type, Object init,
-					    Object init_keyword, Object allocation,
-					    Object dynamism);
+                                            Object setter, Object type, Object init,
+                                            Object init_keyword, Object allocation,
+                                            Object dynamism);
 
 #endif
