@@ -27,7 +27,7 @@ marlais_eval (Object obj)
 
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
     if (INTEGERP (obj) || IMMEDP (obj)) {
-	return (obj);
+        return (obj);
     }
 #endif
 
@@ -60,15 +60,15 @@ marlais_eval (Object obj)
                               obj,
                               NULL);
     case Name:
-	val = marlais_symbol_value (obj);
-	if (!val) {
-	    return marlais_error ("unbound variable", obj, NULL);
-	}
-	return (val);
+        val = marlais_symbol_value (obj);
+        if (!val) {
+            return marlais_error ("unbound variable", obj, NULL);
+        }
+        return (val);
     case Pair:
-	return (eval_combination (obj, 0));
+        return (eval_combination (obj, 0));
     default:
-	return marlais_error ("eval: do not know how to eval object", obj, NULL);
+        return marlais_error ("eval: do not know how to eval object", obj, NULL);
     }
 }
 
