@@ -139,6 +139,16 @@ marlais_copy_list (Object lst)
 }
 
 Object
+marlais_cons (Object car, Object cdr)
+{
+    Object obj = marlais_allocate_object (Pair, sizeof (struct pair));
+
+    CAR (obj) = car;
+    CDR (obj) = cdr;
+    return (obj);
+}
+
+Object
 marlais_make_pair_entrypoint (Object args)
 {
     return marlais_cons (MARLAIS_FALSE, MARLAIS_FALSE); /* who knows ?? */
@@ -163,16 +173,6 @@ marlais_make_list_entrypoint (Object args)
         }
         return (res);
     }
-}
-
-Object
-marlais_cons (Object car, Object cdr)
-{
-    Object obj = marlais_allocate_object (Pair, sizeof (struct pair));
-
-    CAR (obj) = car;
-    CDR (obj) = cdr;
-    return (obj);
 }
 
 Object

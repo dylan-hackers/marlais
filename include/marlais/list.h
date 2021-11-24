@@ -41,11 +41,6 @@ extern void marlais_initialize_list (void);
 /* Register list primitives */
 extern void marlais_register_list (void);
 
-/* Entrypoint for make(<pair>) */
-extern Object marlais_make_pair_entrypoint (Object args);
-/* Entrypoint for make(<list>) */
-extern Object marlais_make_list_entrypoint (Object args);
-
 #ifdef MARLAIS_OBJECT_MODEL_LARGE
 /* Returns the empty list */
 static inline Object marlais_make_nil (void) {
@@ -67,6 +62,11 @@ extern Object marlais_copy_list (Object lst);
 
 /* Make a <pair> */
 extern Object marlais_cons (Object car, Object cdr);
+
+/* Entrypoint for make(<pair>) */
+extern Object marlais_make_pair_entrypoint (Object args);
+/* Entrypoint for make(<list>) */
+extern Object marlais_make_list_entrypoint (Object args);
 
 extern Object marlais_car (Object lst);
 extern Object marlais_cdr (Object lst);
