@@ -17,9 +17,16 @@ static Object the_eval_obj = NULL;
 
 /* Internal function declarations */
 
-Object eval_combination (Object obj, int do_apply);
+static Object eval_combination (Object obj, int do_apply);
 
 /* Exported functions */
+
+/* <pcb> moved apply here to permit safe tail recursion. */
+Object
+marlais_apply (Object fun, Object args)
+{
+    return eval_combination (marlais_cons (fun, args), 1);
+}
 
 Object
 marlais_eval (Object obj)
@@ -78,15 +85,43 @@ marlais_tail_eval (Object obj)
     return marlais_eval (obj);
 }
 
-/* <pcb> moved apply here to permit safe tail recursion. */
-
-Object
-marlais_apply (Object fun, Object args)
+void
+marlais_pop_eval_stack (void)
 {
-    return eval_combination (marlais_cons (fun, args), 1);
+    eval_stack = eval_stack->next;
+}
+
+void
+marlais_push_eval_stack (Object obj)
+{
+    struct eval_stack *tmp =
+    (struct eval_stack *) marlais_allocate_memory (sizeof (struct eval_stack));
+
+    tmp->next = eval_stack;
+    tmp->context = obj;
+    tmp->frame = the_env;
+    eval_stack = tmp;
 }
 
 Object
+marlais_print_stack (void)
+{
+    struct eval_stack *entry;
+    int i;
+
+    for (i = 0, entry = eval_stack->next;
+         entry != NULL;
+         entry = entry->next, i++) {
+        fprintf (stderr, "#%d ", i);
+        marlais_print_object (marlais_standard_error, entry->context, 1);
+        fprintf (stderr, "\n");
+    }
+    return MARLAIS_UNSPECIFIED;
+}
+
+/* Internal functions */
+
+static Object
 eval_combination (Object obj, int do_apply)
 {
     Object op;
@@ -153,38 +188,4 @@ eval_combination (Object obj, int do_apply)
                                            tail_required_values,
                                            tail_rest_values);
     return ret;
-}
-
-void
-marlais_pop_eval_stack (void)
-{
-    eval_stack = eval_stack->next;
-}
-
-void
-marlais_push_eval_stack (Object obj)
-{
-    struct eval_stack *tmp =
-    (struct eval_stack *) marlais_allocate_memory (sizeof (struct eval_stack));
-
-    tmp->next = eval_stack;
-    tmp->context = obj;
-    tmp->frame = the_env;
-    eval_stack = tmp;
-}
-
-Object
-marlais_print_stack (void)
-{
-    struct eval_stack *entry;
-    int i;
-
-    for (i = 0, entry = eval_stack->next;
-         entry != NULL;
-         entry = entry->next, i++) {
-        fprintf (stderr, "#%d ", i);
-        marlais_print_object (marlais_standard_error, entry->context, 1);
-        fprintf (stderr, "\n");
-    }
-    return MARLAIS_UNSPECIFIED;
 }

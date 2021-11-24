@@ -50,11 +50,11 @@ extern Object marlais_apply (Object fun, Object args);
 
 /* Evaluate an expression */
 extern Object marlais_eval (Object obj);
-extern Object marlais_print_stack (void);
+
+extern Object marlais_tail_eval (Object obj);
 
 extern void marlais_pop_eval_stack (void);
 extern void marlais_push_eval_stack (Object obj);
-
-extern Object marlais_tail_eval (Object obj);
+extern Object marlais_print_stack (void);
 
 #endif
