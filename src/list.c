@@ -305,16 +305,16 @@ marlais_member_test_p (Object obj, Object lst, Object test)
     while (!EMPTYLISTP (l)) {
         if (test != MARLAIS_FALSE) {
             if (marlais_apply (test, listem (obj, CAR (l), NULL)) != MARLAIS_FALSE) {
-                return (MARLAIS_TRUE);
+                return true;
             }
         } else {
             if (marlais_identical_p (obj, CAR (l))) {
-                return (MARLAIS_TRUE);
+                return true;
             }
         }
         l = CDR (l);
     }
-    return (MARLAIS_FALSE);
+    return false;
 }
 
 static Object
