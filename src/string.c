@@ -394,8 +394,8 @@ string_append2 (Object str1, Object str2)
 
     newstr = MARLAIS_ALLOCATE_STRING (newlen + 1);
 
-    strncpy (newstr, str1, len1);
-    strncpy (newstr + len1, str2, len2);
+    strncpy (newstr, BYTESTRVAL(str1), len1);
+    strncpy (newstr + len1, BYTESTRVAL(str2), len2);
     newstr[newlen] = 0;
 
     return (make_string (newstr, newlen));
