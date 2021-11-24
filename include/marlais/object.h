@@ -125,8 +125,6 @@ static inline bool LISTP(Object obj) {
 Object make_handle (Object an_object);
 
 /* important objects */
-extern Object true_object, false_object;
-extern Object eof_object, unspecified_object, uninit_slot_object;
 extern Object key_symbol, hash_rest_symbol, next_symbol;
 extern Object quote_symbol;
 extern Object getter_keyword, setter_keyword, else_keyword;
