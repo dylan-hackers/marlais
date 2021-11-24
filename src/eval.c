@@ -53,15 +53,12 @@ marlais_eval (Object obj)
     case EndOfFile:
     case EmptyList:		/* is this right? */
     case ForeignPtr:		/* <pcb> */
-	return (obj);
+    case UnspecifiedValue:
+        return (obj);
     case Values:
-	if (obj == MARLAIS_UNSPECIFIED) {
-	    return obj;
-	} else {
-	    return marlais_error ("Trying to eval a values object (this is a bug)",
-			  obj,
-			  NULL);
-	}
+        return marlais_error ("Trying to eval a values object (this is a bug)",
+                              obj,
+                              NULL);
     case Name:
 	val = marlais_symbol_value (obj);
 	if (!val) {
