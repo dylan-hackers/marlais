@@ -184,6 +184,8 @@ marlais_register_number (void)
     /* integer constants */
     marlais_add_export (marlais_make_name ("$integer-bits"),
                         marlais_make_integer (MARLAIS_INTEGER_WIDTH), 1);
+    marlais_add_export (marlais_make_name ("$integer-size"),
+                        marlais_make_integer (sizeof(DyInteger)), 1);
     marlais_add_export (marlais_make_name ("$integer-significant-bits"),
                         marlais_make_integer (MARLAIS_INTEGER_WIDTH - 1), 1);
     marlais_add_export (marlais_make_name ("$minimum-integer"),
