@@ -11,7 +11,7 @@ find_package(FLEX REQUIRED)
 # Check for the BDWgarbage collector
 pkg_check_modules(BDWGC REQUIRED bdw-gc)
 # Check for the ICU unicode library
-pkg_check_modules(ICU REQUIRED icu-uc)
+pkg_check_modules(ICU REQUIRED icu-uc icu-io)
 
 # Configuration for CLang and GNU compilers
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU"

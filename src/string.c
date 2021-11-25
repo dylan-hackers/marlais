@@ -97,7 +97,9 @@ static Object ustring_as_lowercase (Object string);
 static Object ustring_as_uppercase (Object string);
 static Object ustring_as_titlecase (Object string);
 static Object ustring_to_bstring (Object string);
+static Object bstring_to_ustring (Object string);
 static Object ustring_to_wstring (Object string);
+static Object wstring_to_ustring (Object string);
 #endif
 
 static struct primitive string_prims[] =
@@ -122,10 +124,8 @@ static struct primitive string_prims[] =
     {"%wstring=", prim_2, wstring_equal},
     {"%wstring-as-lowercase", prim_1, wstring_as_lowercase},
     {"%wstring-as-uppercase", prim_1, wstring_as_uppercase},
-#if 0
-    {"%wstring->bstring", prim1, wstring_to_bstring},
-    {"%bstring->wstring", prim1, bstring_to_wstring},
-#endif
+    {"%wstring->bstring", prim_1, wstring_to_bstring},
+    {"%bstring->wstring", prim_1, bstring_to_wstring},
 #endif
 
 #ifdef MARLAIS_ENABLE_UCHAR
@@ -136,12 +136,10 @@ static struct primitive string_prims[] =
     {"%ustring=", prim_2, ustring_equal},
     {"%ustring-as-lowercase", prim_1, wstring_as_lowercase},
     {"%ustring-as-uppercase", prim_1, wstring_as_uppercase},
-#if 0
-    {"%ustring->bstring", prim1, ustring_to_bstring},
-    {"%bstring->ustring", prim1, bstring_to_ustring},
-    {"%ustring->wstring", prim1, ustring_to_wstring},
-    {"%wstring->ustring", prim1, wstring_to_ustring},
-#endif
+    {"%ustring->bstring", prim_1, ustring_to_bstring},
+    {"%bstring->ustring", prim_1, bstring_to_ustring},
+    {"%ustring->wstring", prim_1, ustring_to_wstring},
+    {"%wstring->ustring", prim_1, wstring_to_ustring},
 #endif
 };
 
@@ -256,9 +254,8 @@ marlais_make_ustring (const UChar *str)
 
     new = MARLAIS_ALLOCATE_USTRING (size + 1);
 
-    // XXX
-    //wcsncpy (new, str, size);
-    //new[size] = 0;
+    u_strncpy (new, str, size);
+    new[size] = 0;
 
     return (make_ustring (new, size));
 }
@@ -319,7 +316,7 @@ make_wstring(wchar_t *str, size_t len) {
 }
 #endif
 
-#ifdef MARLAIS_ENABLE_WCHAR
+#ifdef MARLAIS_ENABLE_UCHAR
 static Object
 make_ustring(UChar *str, size_t len) {
   Object obj;
@@ -570,10 +567,39 @@ wstring_as_uppercase (Object string)
     return (make_wstring (newstr, len));
 }
 
+
+static Object wstring_to_bstring (Object string)
+{
+  size_t len, chk;
+  char *newstr;
+
+  len = wcstombs(NULL, WIDESTRVAL (string), 0);
+  assert (len >= 0);
+  newstr = MARLAIS_ALLOCATE_STRING (len + 1);
+  chk = wcstombs(newstr, WIDESTRVAL (string), len);
+  assert (chk == len);
+  newstr[chk] = 0;
+  return make_string(newstr, chk);
+}
+
+static Object bstring_to_wstring (Object string)
+{
+  size_t len, chk;
+  wchar_t *newstr;
+
+  len = mbstowcs(NULL, BYTESTRVAL (string), 0);
+  assert (len >= 0);
+  newstr = MARLAIS_ALLOCATE_WSTRING (len + 1);
+  chk = mbstowcs(newstr, BYTESTRVAL (string), len);
+  assert (chk == len);
+  newstr[chk] = 0;
+  return make_wstring(newstr, chk);
+}
+
 #endif
 
 
-#ifdef MARLAIS_ENABLE_WCHAR
+#ifdef MARLAIS_ENABLE_UCHAR
 
 static Object
 ustring_element (Object string, Object index, Object default_ob)
@@ -675,6 +701,82 @@ ustring_as_titlecase (Object string)
     newstr[len] = 0;
 
     return (make_ustring (newstr, len));
+}
+
+static Object ustring_to_bstring (Object string)
+{
+  UErrorCode ue;
+  int32_t len, chk;
+  char *newstr;
+
+  ue = U_ZERO_ERROR;
+  u_strToUTF8(NULL, 0, &len, USTRVAL (string), USTRSIZE (string), &ue);
+  assert (U_SUCCESS(ue) || ue == U_BUFFER_OVERFLOW_ERROR);
+  assert (len >= 0);
+  newstr = MARLAIS_ALLOCATE_STRING (len + 1);
+  ue = U_ZERO_ERROR;
+  u_strToUTF8(newstr, len, &chk, USTRVAL (string), USTRSIZE (string), &ue);
+  assert (U_SUCCESS(ue));
+  assert (chk == len);
+  newstr[chk] = 0;
+  return (make_string (newstr, chk));
+}
+
+static Object bstring_to_ustring (Object string)
+{
+  UErrorCode ue;
+  int32_t len, chk;
+  UChar *newstr;
+
+  ue = U_ZERO_ERROR;
+  u_strFromUTF8(NULL, 0, &len, BYTESTRVAL (string), BYTESTRSIZE (string), &ue);
+  assert (U_SUCCESS(ue) || ue == U_BUFFER_OVERFLOW_ERROR);
+  assert (len >= 0);
+  newstr = MARLAIS_ALLOCATE_USTRING (len + 1);
+  ue = U_ZERO_ERROR;
+  u_strFromUTF8(newstr, len, &chk, BYTESTRVAL (string), BYTESTRSIZE (string), &ue);
+  assert (U_SUCCESS(ue));
+  assert (chk == len);
+  newstr[chk] = 0;
+  return (make_ustring (newstr, chk));
+}
+
+static Object ustring_to_wstring (Object string)
+{
+  UErrorCode ue;
+  int32_t len, chk;
+  wchar_t *newstr;
+
+  ue = U_ZERO_ERROR;
+  u_strToWCS(NULL, 0, &len, USTRVAL (string), USTRSIZE (string), &ue);
+  assert (U_SUCCESS(ue) || ue == U_BUFFER_OVERFLOW_ERROR);
+  assert (len >= 0);
+  newstr = MARLAIS_ALLOCATE_WSTRING (len + 1);
+  ue = U_ZERO_ERROR;
+  u_strToWCS(newstr, len, &chk, USTRVAL (string), USTRSIZE (string), &ue);
+  assert (U_SUCCESS(ue));
+  assert (chk == len);
+  newstr[chk] = 0;
+  return (make_wstring (newstr, chk));
+}
+
+static Object wstring_to_ustring (Object string)
+{
+  UErrorCode ue;
+  int32_t len, chk;
+  UChar *newstr;
+
+  ue = U_ZERO_ERROR;
+  u_strFromWCS(NULL, 0, &len, WIDESTRVAL (string), WIDESTRSIZE (string), &ue);
+  assert (U_SUCCESS(ue) || ue == U_BUFFER_OVERFLOW_ERROR);
+  assert (len >= 0);
+  newstr = MARLAIS_ALLOCATE_USTRING (len + 1);
+  ue = U_ZERO_ERROR;
+  u_strFromWCS(newstr, len, &chk, WIDESTRVAL (string), WIDESTRSIZE (string), &ue);
+  assert (U_SUCCESS(ue));
+  assert (chk == len);
+  newstr[chk] = 0;
+  return (make_ustring (newstr, chk));
 }
 
 #endif

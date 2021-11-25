@@ -20,6 +20,10 @@
 #include <string.h>
 #include <ctype.h>
 
+#ifdef MARLAIS_ENABLE_UCHAR
+#include <unicode/ustdio.h>
+#endif
+
 /* Static variables */
 
 static int DebugPrint = 0;
@@ -69,6 +73,9 @@ void
 marlais_print_object (Object fd, Object obj, int escaped)
 {
   FILE* fp = print_file_from_fd(fd);
+#ifdef MARLAIS_ENABLE_UCHAR
+  UFILE *ufp;
+#endif
 
   switch (object_type (obj)) {
   case True:
@@ -129,6 +136,18 @@ marlais_print_object (Object fd, Object obj, int escaped)
     break;
   case WideString:
     print_wstring (fd, obj, escaped);
+    break;
+#endif
+#ifdef MARLAIS_ENABLE_UCHAR
+  case UnicodeCharacter:
+    ufp = u_finit(fp, NULL, NULL);
+    u_fputc (WCHARVAL(obj), ufp);
+    u_fclose (ufp);
+    break;
+  case UnicodeString:
+    ufp = u_finit(fp, NULL, NULL);
+    u_fputs (WIDESTRVAL(obj), ufp);
+    u_fclose (ufp);
     break;
 #endif
   case ObjectTable:
