@@ -188,6 +188,7 @@ GLOBAL Object table_entry_class;
 GLOBAL Object deque_entry_class;
 GLOBAL Object limited_int_class;
 GLOBAL Object singleton_class;
+GLOBAL Object subclass_class;
 GLOBAL Object union_class;
 GLOBAL Object type_class;
 GLOBAL Object limited_type_class;

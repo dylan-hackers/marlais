@@ -224,6 +224,7 @@ marlais_initialize_class (void)
   /* Type classes */
   type_class = make_builtin_class ("<type>", object_class);
   singleton_class = make_builtin_class ("<singleton>", type_class);
+  subclass_class = make_builtin_class ("<subclass>", type_class);
   union_class = make_builtin_class ("<union>", type_class);
   class_class = make_builtin_class ("<class>", type_class);
   limited_type_class = make_builtin_class ("<limited-type>", type_class);

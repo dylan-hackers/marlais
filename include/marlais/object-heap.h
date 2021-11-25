@@ -271,6 +271,13 @@ struct singleton {
 
 #define SINGLEVAL(obj)    (((struct singleton *)obj)->val)
 
+struct subclass {
+    ObjectHeader header;
+    Object val;
+};
+
+#define SUBCLASSVAL(obj)    (((struct subclass *)obj)->val)
+
 struct limited_int_type {
     ObjectHeader header;
     unsigned char properties;

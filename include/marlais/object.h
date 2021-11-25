@@ -44,7 +44,7 @@ typedef enum {
     Symbol, Name,
 
     /* types */
-    Class, Singleton, LimitedIntType, UnionType, SlotDescriptor,
+    Class, Singleton, Subclass, LimitedIntType, UnionType, SlotDescriptor,
 
     /* functions */
     Primitive, GenericFunction, Method, Function, NextMethod,

@@ -17,6 +17,8 @@ extern bool marlais_same_class_p (Object class1, Object class2);
 extern Object marlais_make_limited_integer (Object args);
 /* Make a <singleton>  */
 extern Object marlais_make_singleton (Object val);
+/* Make a <subclass>  */
+extern Object marlais_make_subclass (Object cls);
 /* Make a <type-union> */
 extern Object marlais_make_union (Object typelist);
 

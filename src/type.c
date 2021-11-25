@@ -151,6 +151,15 @@ marlais_make_singleton (Object val)
   return (obj);
 }
 
+Object
+marlais_make_subclass (Object val)
+{
+  Object obj;
+  obj = marlais_allocate_object (Subclass, sizeof (struct subclass));
+  SUBCLASSVAL (obj) = val;
+  return (obj);
+}
+
 /*
  * Incredibly speculative!
  */
