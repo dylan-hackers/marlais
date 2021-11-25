@@ -240,6 +240,7 @@ marlais_initialize (void)
   marlais_register_deque ();
   marlais_register_array ();
   marlais_register_sys ();
+  marlais_register_gc ();
 
 #ifdef MARLAIS_ENABLE_GMP
   marlais_register_gmp ();
