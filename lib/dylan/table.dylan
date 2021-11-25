@@ -48,20 +48,20 @@ define method initial-state (t :: <object-table>)
   %table-initial-state (t);
 end method initial-state;
 
-define method next-state (t :: <object-table>, te :: <table-entry>)
+define method next-state (t :: <object-table>, te :: <object-table-entry>)
   %table-next-state (t, te);
 end method next-state;
 
-define method current-element (t :: <object-table>, te :: <table-entry>)
+define method current-element (t :: <object-table>, te :: <object-table-entry>)
   %table-current-element (t, te);
 end method current-element;
 
-define method current-key (t :: <object-table>, te :: <table-entry>)
+define method current-key (t :: <object-table>, te :: <object-table-entry>)
   %table-current-key (t, te);
 end method current-key;
 
 define method current-element-setter (value,
 				      t :: <object-table>,
-				      te :: <table-entry>)
+				      te :: <object-table-entry>)
   %table-current-element-setter (t, te,  value);
 end method current-element-setter;

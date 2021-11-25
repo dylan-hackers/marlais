@@ -95,7 +95,7 @@ marlais_make_array_entrypoint (Object args)
     } else if (FIRST (args) == fill_keyword) {
       fill_obj = SECOND (args);
     } else {
-      marlais_error ("make: unsupported keyword for <array> class",
+      marlais_error ("make: unsupported keyword for <object-array> class",
                      FIRST (args), NULL);
     }
     args = CDR (CDR (args));
@@ -106,7 +106,7 @@ marlais_make_array_entrypoint (Object args)
                      dim_obj, NULL);
     }
   } else {
-    marlais_error ("make: dimensions: must be specified for <array>", args, NULL);
+    marlais_error ("make: dimensions: must be specified for <object-array>", args, NULL);
   }
   if (!fill_obj) {
     fill_obj = MARLAIS_FALSE;
@@ -124,7 +124,7 @@ array_make (Object dims, Object fill)
   Object obj, dl, val;
   unsigned int size, i;
 
-  obj = marlais_allocate_object (Array, sizeof (struct array));
+  obj = marlais_allocate_object (ObjectArray, sizeof (struct array));
 
   ARRDIMS (obj) = dims;
   dl = dims;

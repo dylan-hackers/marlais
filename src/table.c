@@ -188,7 +188,7 @@ marlais_table_element_setter_by_vector (Object table, Object key, Object val)
 static Object
 make_table_entry (int row, Object key, Object value, Object next)
 {
-  Object obj = marlais_allocate_object (TableEntry, sizeof (struct table_entry));
+  Object obj = marlais_allocate_object (ObjectTableEntry, sizeof (struct table_entry));
 
   TEROW (obj) = row;
   TEKEY (obj) = key;

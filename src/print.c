@@ -153,10 +153,10 @@ marlais_print_object (Object fd, Object obj, int escaped)
   case ObjectTable:
     fprintf (fp, "{table}");
       break;
-  case Deque:
+  case ObjectDeque:
     fprintf (fp, "{deque}");
     break;
-  case Array:
+  case ObjectArray:
     print_array (fd, obj, escaped);
     break;
   case Primitive:
@@ -220,13 +220,13 @@ marlais_print_object (Object fd, Object obj, int escaped)
   case Unwind:
     fprintf (fp, "{unwind protect}");
     break;
-  case TableEntry:
+  case ObjectTableEntry:
     fprintf (fp, "{table entry}");
     break;
   case UninitializedValue:
     fprintf (fp, "{uninitialized value}");
     break;
-  case DequeEntry:
+  case ObjectDequeEntry:
     fprintf (fp, "{deque entry ");
     marlais_print_object (fd, DEVALUE (obj), escaped);
     fprintf (fp, "}");

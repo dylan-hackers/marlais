@@ -31,8 +31,11 @@ typedef enum {
     Integer, BigInteger, Ratio, SingleFloat, DoubleFloat,
 
     /* collections */
-    Pair, Array, Deque, SimpleObjectVector, ObjectTable,
-    DequeEntry, TableEntry,
+    Pair,
+    SimpleObjectVector,
+    ObjectArray,
+    ObjectDeque, ObjectDequeEntry,
+    ObjectTable, ObjectTableEntry,
 
     /* strings */
     ByteString, WideString, UnicodeCharacter,

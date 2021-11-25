@@ -95,7 +95,7 @@ marlais_register_deque (void)
 Object
 marlais_make_deque (void)
 {
-  Object obj = marlais_allocate_object (Deque, sizeof (struct deque));
+  Object obj = marlais_allocate_object (ObjectDeque, sizeof (struct deque));
 
   DEQUEFIRST (obj) = MARLAIS_NIL;
   DEQUELAST (obj) = MARLAIS_NIL;
@@ -108,7 +108,7 @@ marlais_make_deque_entrypoint (Object args)
   int size;
   Object size_obj, fill_obj, first, last, deq;
 
-  marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<deque>");
+  marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<object-deque>");
 
   deq = marlais_make_deque ();
   /* actually fabricate the list representing the deque */
@@ -133,7 +133,7 @@ marlais_make_deque_entrypoint (Object args)
 static Object
 deque_make_entry (Object prev, Object value, Object next)
 {
-  Object obj = marlais_allocate_object (DequeEntry, sizeof (struct deque_entry));
+  Object obj = marlais_allocate_object (ObjectDequeEntry, sizeof (struct deque_entry));
 
   DEPREV (obj) = prev;
   DEVALUE (obj) = value;

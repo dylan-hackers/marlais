@@ -222,21 +222,33 @@ marlais_initialize_class (void)
   /* Array classes */
   array_class =
     make_builtin_class ("<array>",
-                        MARLAIS_CLASS_DEFAULT, // TODO should be abstract
+                        MARLAIS_CLASS_ABSTRACT,
                         mutable_sequence_class);
+  object_array_class =
+    make_builtin_class ("<object-array>",
+                        MARLAIS_CLASS_SEALED,
+                        array_class);
 
   /* Deque classes */
   deque_class =
     make_builtin_class ("<deque>",
-                        MARLAIS_CLASS_DEFAULT, // TODO should be abstract primary
+                        MARLAIS_CLASS_ABSTRACT|MARLAIS_CLASS_PRIMARY,
                         marlais_make_list (mutable_sequence_class,
                                            stretchy_collection_class,
                                            NULL));
+  object_table_class =
+    make_builtin_class ("<object-deque>",
+                        MARLAIS_CLASS_SEALED,
+                        deque_class);
+  object_deque_entry_class =
+    make_builtin_class ("<object-deque-entry>",
+                        MARLAIS_CLASS_SEALED,
+                        object_class);
 
   /* Table classes */
   table_class =
     make_builtin_class ("<table>",
-                        MARLAIS_CLASS_DEFAULT, // TODO should be abstract primary
+                        MARLAIS_CLASS_ABSTRACT|MARLAIS_CLASS_PRIMARY,
                         marlais_make_list (mutable_explicit_key_collection_class,
                                            stretchy_collection_class,
                                            NULL));
@@ -244,6 +256,10 @@ marlais_initialize_class (void)
     make_builtin_class ("<object-table>",
                         MARLAIS_CLASS_SEALED,
                         table_class);
+  object_table_entry_class =
+    make_builtin_class ("<object-table-entry>",
+                        MARLAIS_CLASS_SEALED,
+                        object_class);
 
   /* Vector classes */
   vector_class =
@@ -391,16 +407,6 @@ marlais_initialize_class (void)
                         MARLAIS_CLASS_SEALED,
                         limited_type_class);
 
-  /* Marlais collection internals */
-  table_entry_class =
-    make_builtin_class ("<table-entry>",
-                        MARLAIS_CLASS_SEALED,
-                        object_class);
-  deque_entry_class =
-    make_builtin_class ("<deque-entry>",
-                        MARLAIS_CLASS_SEALED,
-                        object_class);
-
   class_slots_class =
     make_builtin_class ("<class-slots-class>",
                         MARLAIS_CLASS_SEALED,
@@ -482,10 +488,10 @@ marlais_object_class (Object obj)
     return (simple_object_vector_class);
   case ObjectTable:
     return (object_table_class);
-  case Deque:
-    return (deque_class);
-  case Array:
-    return (array_class);
+  case ObjectDeque:
+    return (object_deque_class);
+  case ObjectArray:
+    return (object_array_class);
   case Condition:
     return (condition_class);
   case Symbol:
@@ -518,10 +524,10 @@ marlais_object_class (Object obj)
     return (object_class);
   case EndOfFile:
     return (object_class);
-  case TableEntry:
-    return (table_entry_class);
-  case DequeEntry:
-    return (deque_entry_class);
+  case ObjectTableEntry:
+    return (object_table_entry_class);
+  case ObjectDequeEntry:
+    return (object_deque_entry_class);
   case Singleton:
     return (singleton_class);
   case ObjectHandle:
@@ -570,9 +576,9 @@ marlais_make (Object class, Object rest)
     ret = marlais_make_generic_entrypoint (rest);
   } else if ((class == table_class) || (class == object_table_class)) {
     ret = marlais_make_table_entrypoint (rest);
-  } else if (class == deque_class) {
+  } else if ((class == deque_class) || class == object_deque_class) {
     ret = marlais_make_deque_entrypoint (rest);
-  } else if (class == array_class) {
+  } else if ((class == array_class) || class == object_array_class) {
     ret = marlais_make_array_entrypoint (rest);
   } else if (class == class_class) {
     ret = make_class_entrypoint (rest);
