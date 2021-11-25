@@ -21,6 +21,11 @@ define constant singleton =
     %singleton (o);
   end method;
 
+define constant type-union =
+  method (#rest types)
+    apply(%union-type, types);
+  end method;
+
 //
 //  This just doesn't look right to me!!!!  jnw.
 //
@@ -88,12 +93,6 @@ define constant slot-initialized? =
 define method limited (int == <integer>, #rest args, #key min, max)
   %limited-integer(args);
 end method limited;
-
-define generic union (o1, o2, #rest args);
-
-define method union (t1 :: <type>, t2 :: <type>)
-  %union-type(list(t1, t2));
-end method union;
 
 
 define method as (c :: <class>, obj :: <object>)

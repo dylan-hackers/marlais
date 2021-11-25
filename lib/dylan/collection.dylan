@@ -483,9 +483,9 @@ define generic choose-by (predicate :: <function>,
 define generic intersection (sequence1 :: <sequence>,
 			     sequence2 :: <sequence>,
 			     #key test) => new-sequence :: <sequence>;
-//define generic union (sequence1 :: <sequence>,
-//		      sequence2 :: <sequence>,
-//		      #key test) => new-sequence :: <sequence>;
+define generic union (sequence1 :: <sequence>,
+		      sequence2 :: <sequence>,
+		      #key test) => new-sequence :: <sequence>;
 define generic remove-duplicates (sequence :: <sequence>,
 				  #key test) => new-sequence :: <sequence>;
 define generic remove-duplicates! (sequence1 :: <sequence>,

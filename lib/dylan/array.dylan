@@ -8,7 +8,7 @@ module: dylan
 //
 
 // XXX move this elsewhere
-define constant <integer-state> = union (<small-integer>, singleton(#f));
+define constant <integer-state> = type-union (<small-integer>, singleton(#f));
 
 //
 // element

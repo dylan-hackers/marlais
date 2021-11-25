@@ -66,7 +66,3 @@ end method always;
 define method eval(obj)
   %eval (obj);
 end method eval;
-
-define method type-union(#rest types)
-  apply(%union-type, types);
-end method type-union;
