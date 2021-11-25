@@ -77,14 +77,6 @@ define method type-for-copy (o :: <object>) => value :: <class>;
   o.object-class
 end method type-for-copy;
 
-//
-// Seal is no longer in the DIRM, but Marlais still provides it.
-//
-
-define method seal (c :: <class>)
-  %seal(c);
-end method seal;
-
 define constant slot-initialized? =
   method (obj, slot)
      slot(obj) ~== %uninitialized-slot-value;

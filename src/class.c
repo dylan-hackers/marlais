@@ -38,8 +38,6 @@ static struct primitive class_prims[] =
     {"%direct-superclasses", prim_1, marlais_direct_superclasses},
     {"%direct-subclasses", prim_1, marlais_direct_subclasses},
     {"%all-superclasses", prim_1, marlais_all_superclasses},
-
-    {"%seal", prim_1, marlais_make_class_sealed},
 };
 
 /* Internal function prototypes */
