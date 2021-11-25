@@ -39,6 +39,8 @@ GLOBAL int trace_bindings;
 GLOBAL int trace_functions;
 GLOBAL int trace_only_user_funs;
 GLOBAL int trace_level;
+GLOBAL int num_debug_contexts;
+GLOBAL int NoDebug;
 
 /* important objects */
 GLOBAL Object apply_symbol;

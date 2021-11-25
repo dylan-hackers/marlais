@@ -45,7 +45,4 @@ extern Object marlais_error (const char *msg, ...);
 /* Signal a warning */
 extern Object marlais_warning (const char *msg, ...);
 
-extern int num_debug_contexts;
-extern int NoDebug;
-
 #endif

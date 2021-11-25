@@ -116,8 +116,6 @@ struct jmp_buf_stack *error_ok_return = 0;
 
 static jmp_buf *error_ok_return_pop (void);
 static jmp_buf *error_ok_return_push (void);
-int num_debug_contexts;
-int NoDebug;
 
 static void signal_handler (int sig);
 static Object my_print_env (void);
