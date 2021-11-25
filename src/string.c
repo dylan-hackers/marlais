@@ -62,7 +62,6 @@ static Object make_ustring(UChar *str, size_t len);
 static Object string_element (Object string, Object index, Object default_ob);
 static Object string_element_setter (Object string, Object index, Object val);
 static Object string_size (Object string);
-/* static Object string_size_setter (Object size, Object string); */
 static Object string_append2 (Object str1, Object str2);
 static Object string_lessthan (Object str1, Object str2);
 static Object string_equal (Object str1, Object str2);
@@ -75,7 +74,6 @@ static Object string_as_uppercase_bang (Object string);
 static Object wstring_element (Object string, Object index, Object default_ob);
 static Object wstring_element_setter (Object string, Object index, Object val);
 static Object wstring_size (Object string);
-static Object wstring_size_setter (Object size, Object string);
 static Object wstring_append2 (Object str1, Object str2);
 static Object wstring_lessthan (Object str1, Object str2);
 static Object wstring_equal (Object str1, Object str2);
@@ -89,7 +87,6 @@ static Object bstring_to_wstring (Object string);
 static Object ustring_element (Object string, Object index, Object default_ob);
 static Object ustring_element_setter (Object string, Object index, Object val);
 static Object ustring_size (Object string);
-static Object ustring_size_setter (Object size, Object string);
 static Object ustring_append2 (Object str1, Object str2);
 static Object ustring_lessthan (Object str1, Object str2);
 static Object ustring_equal (Object str1, Object str2);
@@ -107,7 +104,6 @@ static struct primitive string_prims[] =
     {"%string-element", prim_3, string_element},
     {"%string-element-setter", prim_3, string_element_setter},
     {"%string-size", prim_1, string_size},
-/*  {"%string-size-setter", prim_2, string_size_setter}, */
     {"%string-append2", prim_2, string_append2},
     {"%string<", prim_2, string_lessthan},
     {"%string=", prim_2, string_equal},
@@ -363,21 +359,6 @@ string_size (Object string)
 {
     return (marlais_make_integer (BYTESTRSIZE (string)));
 }
-
-#if 0
-static Object
-string_size_setter (Object size, Object string)
-{
-    int new_size = INTVAL (size);
-
-    if ((new_size < 0) || (new_size >= BYTESTRSIZE (string))) {
-      marlais_error ("size-setter: new size out of range", new_size, string, NULL);
-    }
-    BYTESTRSIZE (string) = new_size;
-    BYTESTRVAL (string)[new_size] = '\0';
-    return size;
-}
-#endif
 
 static Object
 string_append2 (Object str1, Object str2)
