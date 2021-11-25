@@ -211,14 +211,18 @@ struct slot_descriptor {
 #define SLOTDDYNAMISM(obj)     (((struct slot_descriptor *)obj)->dynamism)
 
 enum {
+      /* class is defined by the interpreter */
+      MARLAIS_CLASS_BUILTIN = 1,
       /* class is abstract */
-      MARLAIS_CLASS_ABSTRACT = 1,
+      MARLAIS_CLASS_ABSTRACT = 2,
       /* class is primary */
-      MARLAIS_CLASS_PRIMARY = 2,
+      MARLAIS_CLASS_PRIMARY = 4,
       /* class is sealed */
-      MARLAIS_CLASS_SEALED  = 4,
-      /* class slots uninitialized */
-      MARLAIS_CLASS_UNINITIALIZED = 8,
+      MARLAIS_CLASS_SEALED  = 8,
+      /* class slots are uninitialized */
+      MARLAIS_CLASS_UNINITIALIZED = 16,
+      /* by default a class is none of those things */
+      MARLAIS_CLASS_DEFAULT = 0
 };
 
 struct clas {
@@ -257,7 +261,6 @@ struct clas {
 #define CLASSSORTEDPRECS(obj) (((struct clas *)obj)->sorted_prec_list)
 #define CLASSNUMPRECS(obj) (((struct clas *)obj)->num_precs)
 #define CLASSPROPS(obj)   (((struct clas *)obj)->properties)
-#define INSTANTIABLE(obj) (CLASSP (obj) && (!(CLASSPROPS (obj) & MARLAIS_CLASS_ABSTRACT)))
 #define ABSTRACTP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_ABSTRACT))
 #define PRIMARYP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_PRIMARY))
 #define SEALEDP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_SEALED))

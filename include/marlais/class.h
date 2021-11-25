@@ -29,12 +29,9 @@ extern Object marlais_make (Object class, Object rest);
 extern Object marlais_make_class (Object class_object,
                                   Object supers,
                                   Object slot_descriptors,
-                                  Object abstract_p,
+                                  int flags,
                                   char *debug_name);
 extern Object marlais_make_slot_descriptor_list (Object slots, int do_eval);
 extern void marlais_make_getter_setter_gfs (Object slotds);
-extern void marlais_make_class_primary (Object class);
-extern Object marlais_make_class_sealed (Object class);
-extern void marlais_make_class_uninstantiable (Object class);
 
 #endif

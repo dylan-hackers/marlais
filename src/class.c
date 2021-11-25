@@ -46,7 +46,7 @@ static Object make_instance (Object class, Object *initializers);
 static Object make_class_entrypoint (Object args);
 static Object initialize_slots (Object descriptors, Object initializers);
 static int member_2 (Object obj1, Object obj2, Object obj_list);
-static Object make_builtin_class (char *name, Object superclasses);
+static Object make_builtin_class (char *name, int flags, Object superclasses);
 static void add_slot_descriptor_names (Object sd_list, Object *sg_names_ptr);
 static void append_slot_descriptors (Object sd_list,
                                      Object **new_sd_list_insert_ptr,
@@ -74,7 +74,11 @@ static Object merge_class_lists (Object left, Object right);
 void
 marlais_initialize_class (void)
 {
-  object_class = make_builtin_class ("<object>", MARLAIS_NIL);
+  /* Define the root of all things */
+  object_class =
+    make_builtin_class ("<object>",
+                        MARLAIS_CLASS_ABSTRACT,
+                        MARLAIS_NIL);
 
   /* fix up the binding for object_class so that it is correct */
   {
@@ -85,67 +89,145 @@ marlais_initialize_class (void)
   }
 
   /* Literal classes */
-  boolean_class = make_builtin_class ("<boolean>", object_class);
-  character_class = make_builtin_class ("<character>", object_class);
-  byte_character_class = make_builtin_class("<byte-character>", character_class);
-  wide_character_class = make_builtin_class("<wide-character>", character_class);
-  unicode_character_class = make_builtin_class("<unicode-character>", character_class);
+  boolean_class =
+    make_builtin_class ("<boolean>",
+                        MARLAIS_CLASS_SEALED,
+                        object_class);
+  character_class =
+    make_builtin_class ("<character>",
+                        MARLAIS_CLASS_SEALED,
+                        object_class);
+  byte_character_class =
+    make_builtin_class ("<byte-character>",
+                        MARLAIS_CLASS_SEALED,
+                        character_class);
+  wide_character_class =
+    make_builtin_class ("<wide-character>",
+                        MARLAIS_CLASS_SEALED,
+                        character_class);
+  unicode_character_class =
+    make_builtin_class ("<unicode-character>",
+                        MARLAIS_CLASS_SEALED,
+                        character_class);
 
   /* Symbol classes */
-  name_class = make_builtin_class ("<name>", object_class);
-  symbol_class = make_builtin_class ("<symbol>", object_class);
+  name_class =
+    make_builtin_class ("<name>",
+                        MARLAIS_CLASS_SEALED,
+                        object_class);
+  symbol_class =
+    make_builtin_class ("<symbol>",
+                        MARLAIS_CLASS_SEALED,
+                        object_class);
 
   /* Numeric classes */
-  number_class = make_builtin_class ("<number>", object_class);
-  complex_class = make_builtin_class ("<complex>", number_class);
-  real_class = make_builtin_class ("<real>", complex_class);
-  rational_class = make_builtin_class ("<rational>", real_class);
-  integer_class = make_builtin_class ("<integer>", rational_class);
-  small_integer_class = make_builtin_class ("<small-integer>", integer_class);
-  big_integer_class = make_builtin_class ("<big-integer>", integer_class);
-  ratio_class = make_builtin_class ("<ratio>", rational_class);
-  float_class = make_builtin_class ("<float>", real_class);
-  single_float_class = make_builtin_class ("<single-float>", float_class);
-  double_float_class = make_builtin_class ("<double-float>", float_class);
-  extended_float_class = make_builtin_class ("<extended-float>", float_class);
+  number_class =
+    make_builtin_class ("<number>",
+                        MARLAIS_CLASS_ABSTRACT,
+                        object_class);
+  complex_class =
+    make_builtin_class ("<complex>",
+                        MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
+                        number_class);
+  real_class =
+    make_builtin_class ("<real>",
+                        MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
+                        complex_class);
+  rational_class =
+    make_builtin_class ("<rational>",
+                        MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
+                        real_class);
+  integer_class =
+    make_builtin_class ("<integer>",
+                        MARLAIS_CLASS_SEALED,
+                        rational_class);
+  small_integer_class =
+    make_builtin_class ("<small-integer>",
+                        MARLAIS_CLASS_SEALED,
+                        integer_class);
+  big_integer_class =
+    make_builtin_class ("<big-integer>",
+                        MARLAIS_CLASS_SEALED,
+                        integer_class);
+  ratio_class =
+    make_builtin_class ("<ratio>",
+                        MARLAIS_CLASS_SEALED,
+                        rational_class);
+  float_class =
+    make_builtin_class ("<float>",
+                        MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
+                        real_class);
+  single_float_class =
+    make_builtin_class ("<single-float>",
+                        MARLAIS_CLASS_SEALED,
+                        float_class);
+  double_float_class =
+    make_builtin_class ("<double-float>",
+                        MARLAIS_CLASS_SEALED,
+                        float_class);
+  extended_float_class =
+    make_builtin_class ("<extended-float>",
+                        MARLAIS_CLASS_SEALED,
+                        float_class);
 
   /* Collection base classes */
   collection_class =
-    make_builtin_class ("<collection>", object_class);
+    make_builtin_class ("<collection>",
+                        MARLAIS_CLASS_ABSTRACT,
+                        object_class);
   explicit_key_collection_class =
-    make_builtin_class ("<explicit-key-collection>", collection_class);
+    make_builtin_class ("<explicit-key-collection>",
+                        MARLAIS_CLASS_ABSTRACT,
+                        collection_class);
   stretchy_collection_class =
-    make_builtin_class ("<stretchy-collection>", collection_class);
+    make_builtin_class ("<stretchy-collection>",
+                        MARLAIS_CLASS_ABSTRACT,
+                        collection_class);
   mutable_collection_class =
-    make_builtin_class ("<mutable-collection>", collection_class);
+    make_builtin_class ("<mutable-collection>",
+                        MARLAIS_CLASS_ABSTRACT,
+                        collection_class);
   sequence_class =
-    make_builtin_class ("<sequence>", collection_class);
+    make_builtin_class ("<sequence>",
+                        MARLAIS_CLASS_ABSTRACT,
+                        collection_class);
   mutable_explicit_key_collection_class =
     make_builtin_class ("<mutable-explicit-key-collection>",
+                        MARLAIS_CLASS_ABSTRACT,
                         marlais_make_list (explicit_key_collection_class,
                                            mutable_collection_class,
                                            NULL));
   mutable_sequence_class =
     make_builtin_class ("<mutable-sequence>",
+                        MARLAIS_CLASS_ABSTRACT,
                         marlais_make_list (mutable_collection_class,
                                            sequence_class,
                                            NULL));
 
   /* List classes */
   list_class =
-    make_builtin_class ("<list>", mutable_sequence_class);
+    make_builtin_class ("<list>",
+                        MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
+                        mutable_sequence_class);
   empty_list_class =
-    make_builtin_class ("<empty-list>", list_class);
+    make_builtin_class ("<empty-list>",
+                        MARLAIS_CLASS_SEALED,
+                        list_class);
   pair_class =
-    make_builtin_class ("<pair>", list_class);
+    make_builtin_class ("<pair>",
+                        MARLAIS_CLASS_SEALED,
+                        list_class);
 
   /* Array classes */
   array_class =
-    make_builtin_class ("<array>", mutable_sequence_class);
+    make_builtin_class ("<array>",
+                        MARLAIS_CLASS_DEFAULT, // TODO should be abstract
+                        mutable_sequence_class);
 
   /* Deque classes */
   deque_class =
     make_builtin_class ("<deque>",
+                        MARLAIS_CLASS_DEFAULT, // TODO should be abstract primary
                         marlais_make_list (mutable_sequence_class,
                                            stretchy_collection_class,
                                            NULL));
@@ -153,140 +235,204 @@ marlais_initialize_class (void)
   /* Table classes */
   table_class =
     make_builtin_class ("<table>",
+                        MARLAIS_CLASS_DEFAULT, // TODO should be abstract primary
                         marlais_make_list (mutable_explicit_key_collection_class,
                                            stretchy_collection_class,
                                            NULL));
   object_table_class =
-    make_builtin_class ("<object-table>", table_class);
+    make_builtin_class ("<object-table>",
+                        MARLAIS_CLASS_SEALED,
+                        table_class);
 
   /* Vector classes */
   vector_class =
-    make_builtin_class ("<vector>", array_class);
+    make_builtin_class ("<vector>",
+                        MARLAIS_CLASS_ABSTRACT,
+                        array_class);
   simple_vector_class =
-    make_builtin_class ("<simple-vector>", vector_class);
+    make_builtin_class ("<simple-vector>",
+                        MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
+                        vector_class);
   stretchy_vector_class =
     make_builtin_class ("<stretchy-vector>",
+                        MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
                         marlais_make_list (vector_class,
                                            stretchy_collection_class,
                                            NULL));
   simple_object_vector_class =
-    make_builtin_class ("<simple-object-vector>", simple_vector_class);
+    make_builtin_class ("<simple-object-vector>",
+                        MARLAIS_CLASS_SEALED,
+                        simple_vector_class);
 
   /* String classes */
   string_class =
-    make_builtin_class ("<string>", mutable_sequence_class);
+    make_builtin_class ("<string>",
+                        MARLAIS_CLASS_ABSTRACT,
+                        mutable_sequence_class);
   byte_string_class =
     make_builtin_class ("<byte-string>",
+                        MARLAIS_CLASS_SEALED,
                         marlais_make_list (string_class,
                                            simple_vector_class,
                                            NULL));
   wide_string_class =
     make_builtin_class ("<wide-string>",
+                        MARLAIS_CLASS_SEALED,
                         marlais_make_list (string_class,
                                            simple_vector_class,
                                            NULL));
   unicode_string_class =
     make_builtin_class ("<unicode-string>",
+                        MARLAIS_CLASS_SEALED,
                         marlais_make_list (string_class,
                                            simple_vector_class,
                                            NULL));
 
   /* Condition classes */
-  condition_class = make_builtin_class ("<condition>", object_class);
-  serious_condition_class = make_builtin_class ("<serious-condition>",
-                                                condition_class);
-  warning_class = make_builtin_class ("<warning>", condition_class);
-  simple_warning_class = make_builtin_class ("<simple-warning>",
-                                             warning_class);
-  restart_class = make_builtin_class ("<restart>", condition_class);
-  simple_restart_class = make_builtin_class ("<simple-restart>",
-                                             restart_class);
-  abort_class = make_builtin_class ("<abort>", restart_class);
-  error_class = make_builtin_class ("<error>", condition_class);
-  simple_error_class = make_builtin_class ("<simple-error>",
-                                           error_class);
-  type_error_class = make_builtin_class ("<type-error>",
-                                         error_class);
+  condition_class =
+    make_builtin_class ("<condition>",
+                        MARLAIS_CLASS_ABSTRACT,
+                        object_class);
+  serious_condition_class =
+    make_builtin_class ("<serious-condition>",
+                        MARLAIS_CLASS_ABSTRACT,
+                        condition_class);
+  warning_class =
+    make_builtin_class ("<warning>",
+                        MARLAIS_CLASS_ABSTRACT,
+                        condition_class);
+  restart_class =
+    make_builtin_class ("<restart>",
+                        MARLAIS_CLASS_ABSTRACT,
+                        condition_class);
+  error_class =
+    make_builtin_class ("<error>",
+                        MARLAIS_CLASS_ABSTRACT,
+                        condition_class);
+  simple_warning_class =
+    make_builtin_class ("<simple-warning>",
+                        MARLAIS_CLASS_SEALED,
+                        warning_class);
+  simple_restart_class =
+    make_builtin_class ("<simple-restart>",
+                        MARLAIS_CLASS_SEALED,
+                        restart_class);
+  abort_class =
+    make_builtin_class ("<abort>",
+                        MARLAIS_CLASS_SEALED,
+                        restart_class);
+  simple_error_class =
+    make_builtin_class ("<simple-error>",
+                        MARLAIS_CLASS_SEALED,
+                        error_class);
+  type_error_class =
+    make_builtin_class ("<type-error>",
+                        MARLAIS_CLASS_SEALED,
+                        error_class);
   sealed_object_error_class =
-    make_builtin_class ("<sealed-object-error>", error_class);
+    make_builtin_class ("<sealed-object-error>",
+                        MARLAIS_CLASS_SEALED,
+                        error_class);
 
   /* Function classes */
-  function_class = make_builtin_class ("<function>", object_class);
-  primitive_class = make_builtin_class ("<primitive>", function_class);
+  function_class =
+    make_builtin_class ("<function>",
+                        MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
+                        object_class);
+  primitive_class =
+    make_builtin_class ("<primitive>",
+                        MARLAIS_CLASS_SEALED,
+                        function_class);
   generic_function_class =
-    make_builtin_class ("<generic-function>", function_class);
-  method_class = make_builtin_class ("<method>", function_class);
+    make_builtin_class ("<generic-function>",
+                        MARLAIS_CLASS_SEALED,
+                        function_class);
+  method_class =
+    make_builtin_class ("<method>",
+                        MARLAIS_CLASS_SEALED,
+                        function_class);
   exit_function_class =
-    make_builtin_class ("<exit-function>", function_class);
+    make_builtin_class ("<exit-function>",
+                        MARLAIS_CLASS_SEALED,
+                        function_class);
   unwind_protect_function_class =
-    make_builtin_class ("<unwind-protect-function>", function_class);
+    make_builtin_class ("<unwind-protect-function>",
+                        MARLAIS_CLASS_SEALED,
+                        function_class);
 
   /* Type classes */
-  type_class = make_builtin_class ("<type>", object_class);
-  singleton_class = make_builtin_class ("<singleton>", type_class);
-  subclass_class = make_builtin_class ("<subclass>", type_class);
-  union_class = make_builtin_class ("<union>", type_class);
-  class_class = make_builtin_class ("<class>", type_class);
-  limited_type_class = make_builtin_class ("<limited-type>", type_class);
-  limited_integer_class = make_builtin_class ("<limited-integer>", limited_type_class);
+  type_class =
+    make_builtin_class ("<type>",
+                        MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
+                        object_class);
+  class_class =
+    make_builtin_class ("<class>",
+                        MARLAIS_CLASS_SEALED,
+                        type_class);
+  singleton_class =
+    make_builtin_class ("<singleton>",
+                        MARLAIS_CLASS_SEALED,
+                        type_class);
+  subclass_class =
+    make_builtin_class ("<subclass>",
+                        MARLAIS_CLASS_SEALED,
+                        type_class);
+  union_class =
+    make_builtin_class ("<union>",
+                        MARLAIS_CLASS_SEALED,
+                        type_class);
+  limited_type_class =
+    make_builtin_class ("<limited-type>",
+                        MARLAIS_CLASS_SEALED,
+                        type_class);
+  limited_integer_class =
+    make_builtin_class ("<limited-integer>",
+                        MARLAIS_CLASS_SEALED,
+                        limited_type_class);
 
   /* Marlais collection internals */
-  table_entry_class = make_builtin_class ("<table-entry>", object_class);
-  deque_entry_class = make_builtin_class ("<deque-entry>", object_class);
+  table_entry_class =
+    make_builtin_class ("<table-entry>",
+                        MARLAIS_CLASS_SEALED,
+                        object_class);
+  deque_entry_class =
+    make_builtin_class ("<deque-entry>",
+                        MARLAIS_CLASS_SEALED,
+                        object_class);
 
   class_slots_class =
-    make_builtin_class ("<class-slots-class>", object_class);
+    make_builtin_class ("<class-slots-class>",
+                        MARLAIS_CLASS_SEALED,
+                        object_class);
 
   object_handle_class =
-    make_builtin_class ("<object-handle>", object_class);
+    make_builtin_class ("<object-handle>",
+                        MARLAIS_CLASS_SEALED,
+                        object_class);
 
   foreign_pointer_class =
-    make_builtin_class ("<foreign-pointer>", object_class);
+    make_builtin_class ("<foreign-pointer>",
+                        MARLAIS_CLASS_SEALED,
+                        object_class);
 
   /* GMP numbers */
 #ifdef MARLAIS_ENABLE_GMP
-  mp_float_class = make_builtin_class ("<mp-float>",
-                                       float_class);
-  mp_ratio_class = make_builtin_class ("<mp-ratio>",
-                                       rational_class);
-  mp_integer_class = make_builtin_class ("<mp-integer>",
-                                         integer_class);
+  mp_float_class =
+    make_builtin_class ("<mp-float>",
+                        MARLAIS_CLASS_SEALED,
+                        float_class);
+  mp_ratio_class =
+    make_builtin_class ("<mp-ratio>",
+                        MARLAIS_CLASS_SEALED,
+                        rational_class);
+  mp_integer_class =
+    make_builtin_class ("<mp-integer>",
+                        MARLAIS_CLASS_SEALED,
+                        integer_class);
 #endif
 
-  marlais_make_class_sealed (integer_class);
-  marlais_make_class_sealed (ratio_class);
-  marlais_make_class_sealed (rational_class);
-  marlais_make_class_sealed (single_float_class);
-  marlais_make_class_sealed (double_float_class);
-  marlais_make_class_sealed (float_class);
-  marlais_make_class_sealed (real_class);
-  marlais_make_class_sealed (empty_list_class);
-  marlais_make_class_sealed (pair_class);
-  marlais_make_class_sealed (list_class);
-  marlais_make_class_sealed (byte_string_class);
-  marlais_make_class_sealed (unicode_string_class);
-  marlais_make_class_sealed (simple_object_vector_class);
 
-  /* here, need to make things like sequence_class uninstantiable */
 
-  marlais_make_class_uninstantiable (object_class);
-
-  marlais_make_class_uninstantiable (collection_class);
-  marlais_make_class_uninstantiable (explicit_key_collection_class);
-  marlais_make_class_uninstantiable (stretchy_collection_class);
-  marlais_make_class_uninstantiable (mutable_collection_class);
-  marlais_make_class_uninstantiable (sequence_class);
-  marlais_make_class_uninstantiable (mutable_explicit_key_collection_class);
-  marlais_make_class_uninstantiable (mutable_sequence_class);
-
-  marlais_make_class_uninstantiable (number_class);
-  marlais_make_class_uninstantiable (complex_class);
-
-  marlais_make_class_uninstantiable (condition_class);
-  marlais_make_class_uninstantiable (serious_condition_class);
-  marlais_make_class_uninstantiable (warning_class);
-  marlais_make_class_uninstantiable (restart_class);
-  marlais_make_class_uninstantiable (error_class);
 }
 
 void
@@ -401,8 +547,8 @@ marlais_make (Object class, Object rest)
 {
   Object ret, initialize_fun;
 
-  if (!INSTANTIABLE (class)) {
-    marlais_error ("make: class uninstantiable", class, NULL);
+  if (ABSTRACTP (class)) {
+    marlais_error ("make: class is abstract", class, NULL);
     return MARLAIS_FALSE;
   }
   /* special case the builtin classes */
@@ -477,7 +623,7 @@ Object
 marlais_make_class (Object obj,
                     Object supers,
                     Object slot_descriptors,
-                    Object abstract_p,
+                    int flags,
                     char *debug_name)
 {
   Object allsuperclasses, super;
@@ -492,7 +638,7 @@ marlais_make_class (Object obj,
 
   CLASSINDEX (obj) = NEWCLASSINDEX;
   CLASSENV (obj) = the_env;
-  if(abstract_p != MARLAIS_FALSE) CLASSPROPS (obj) |= MARLAIS_CLASS_ABSTRACT;
+  CLASSPROPS (obj) = flags;
 
   /* allow a single value for supers, make it into a list
    */
@@ -595,26 +741,6 @@ marlais_make_class (Object obj,
                                              MARLAIS_NIL))[0]);
 
   return (obj);
-}
-
-void
-marlais_make_class_primary (Object class)
-{
-  /* Need to add some semantics here.  Requires field in class object rep. */
-  CLASSPROPS (class) |= MARLAIS_CLASS_PRIMARY;
-}
-
-Object
-marlais_make_class_sealed (Object class)
-{
-  CLASSPROPS (class) |= MARLAIS_CLASS_SEALED;
-  return class;
-}
-
-void
-marlais_make_class_uninstantiable (Object class)
-{
-  CLASSPROPS (class) |= MARLAIS_CLASS_ABSTRACT;
 }
 
 Object
@@ -886,6 +1012,7 @@ make_instance (Object class, Object *initializers)
 static Object
 make_class_entrypoint (Object args)
 {
+  int flags = MARLAIS_CLASS_DEFAULT;
   Object supers_obj, slots_obj, debug_obj, abstract_obj;
   Object obj;
 
@@ -920,8 +1047,11 @@ make_class_entrypoint (Object args)
   obj = marlais_allocate_object (Class, sizeof (struct clas));
 
   CLASSNAME (obj) = marlais_make_name (BYTESTRVAL (debug_obj));
-  CLASSPROPS (obj) |= MARLAIS_CLASS_UNINITIALIZED;
-  return marlais_make_class (obj, supers_obj, slots_obj, abstract_obj, BYTESTRVAL(debug_obj));
+  flags |= MARLAIS_CLASS_UNINITIALIZED;
+  if (abstract_obj != MARLAIS_FALSE) {
+    flags |= MARLAIS_CLASS_ABSTRACT;
+  }
+  return marlais_make_class (obj, supers_obj, slots_obj, flags, BYTESTRVAL(debug_obj));
 }
 
 /*
@@ -1203,16 +1333,16 @@ member_2 (Object obj1, Object obj2, Object obj_list)
 }
 
 static Object
-make_builtin_class (char *name, Object supers)
+make_builtin_class (char *name, int flags, Object supers)
 {
   Object obj;
 
   obj = marlais_allocate_object (Class, sizeof (struct clas));
 
   CLASSNAME (obj) = marlais_make_name (name);
-  CLASSPROPS (obj) &= ~MARLAIS_CLASS_UNINITIALIZED;
+  marlais_make_class (obj, supers, MARLAIS_NIL, flags, NULL);
   marlais_add_export (CLASSNAME (obj), obj, 1);
-  return marlais_make_class (obj, supers, MARLAIS_NIL, MARLAIS_FALSE, NULL);
+  return obj;
 }
 
 static void

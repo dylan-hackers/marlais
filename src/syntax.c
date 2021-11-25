@@ -757,6 +757,7 @@ define_class_eval (Object form)
   int abstract_class = 0, abstract_concrete_seen = 0;
   int open_class = 0, open_sealed_seen = 0;
   int primary_class = 0, primary_free_seen = 0;
+  int flags = MARLAIS_CLASS_DEFAULT;
 
   if (EMPTYLISTP (CDR (tmp_form))) {
     marlais_error ("malfored define-class (no arguments)", form, NULL);
@@ -815,28 +816,24 @@ define_class_eval (Object form)
   if(EMPTYLISTP(supers)) supers = marlais_cons (object_class, MARLAIS_NIL);
   slots = marlais_make_slot_descriptor_list (CDR (tmp_form), 1);
   marlais_make_getter_setter_gfs (slots);
-  class = marlais_make_class (obj, supers, slots,
-                              (abstract_class ? MARLAIS_TRUE : MARLAIS_FALSE), NULL);
 
-  /* TODO kludge to put these here.  Better to add a param to make_class. */
-  CLASSPROPS (class) |= MARLAIS_CLASS_UNINITIALIZED;
+  /* we have uninitialized class slots */
+  flags |= MARLAIS_CLASS_UNINITIALIZED;
 
-  /*
-    if (abstract_class) {
-    marlais_make_class_uninstantiable (class);
-    }
-  */
+  /* collect class properties */
+  if (abstract_class) {
+    flags |= MARLAIS_CLASS_ABSTRACT;
+  }
   if (!open_class) {
-    /*
-     * Need to address sealed vs. open classes with library additions.
-     */
-    /*
-      marlais_make_class_sealed (class);
-    */
+    flags |= MARLAIS_CLASS_SEALED;
   }
   if (primary_class) {
-    marlais_make_class_primary (class);
+    flags |= MARLAIS_CLASS_PRIMARY;
   }
+
+  /* create the class */
+  class = marlais_make_class (obj, supers, slots, flags, NULL);
+
   return (name);
 }
 
