@@ -690,11 +690,12 @@ marlais_make_class (Object obj,
 
   sg_names = MARLAIS_NIL;
   while (!EMPTYLISTP (allsuperclasses)) {
+    /* TODO reintroduce sealing once libraries/modules are ready */
     /* check for sealed superclass */
-    if (SEALEDP (CAR (allsuperclasses))) {
-      marlais_error ("Cannot create subclass of sealed class",
-                     CAR (allsuperclasses), NULL);
-    }
+    //if (SEALEDP (CAR (allsuperclasses))) {
+    //marlais_error ("Cannot create subclass of sealed class",
+    //CAR (allsuperclasses), NULL);
+    //}
     super = CAR (allsuperclasses);
     append_slot_descriptors (CLASSSLOTDS (super), &i_tmp_ptr, &sg_names);
     append_slot_descriptors (CLASSESSLOTDS (super), &es_tmp_ptr,
