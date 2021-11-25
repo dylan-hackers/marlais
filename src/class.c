@@ -554,10 +554,6 @@ marlais_make (Object class, Object rest)
 {
   Object ret, initialize_fun;
 
-  if (ABSTRACTP (class)) {
-    marlais_error ("make: class is abstract", class, NULL);
-    return MARLAIS_FALSE;
-  }
   /* special case the builtin classes */
   if (class == pair_class) {
     ret = marlais_make_pair_entrypoint (rest);
@@ -583,6 +579,10 @@ marlais_make (Object class, Object rest)
   } else if (class == class_class) {
     ret = make_class_entrypoint (rest);
   } else {
+    if (ABSTRACTP (class)) {
+      marlais_error ("make: class is abstract", class, NULL);
+      return MARLAIS_FALSE;
+    }
     ret = make_instance (class, &rest);
   }
   initialize_fun = marlais_symbol_value (initialize_symbol);
