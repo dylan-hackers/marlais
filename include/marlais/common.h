@@ -5,6 +5,7 @@
 
 #include <marlais/config.h>
 
+#include <assert.h>
 #include <setjmp.h>
 #include <stdarg.h>
 #include <stdbool.h>
