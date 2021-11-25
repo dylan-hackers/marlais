@@ -100,7 +100,7 @@ DECLARE_UNARY(mpz, abs);
 /* Our table of primitives */
 static struct primitive gmp_prims[] =
 {
-  /* <mp-float> */
+ /* <mp-float> */
   {"%number->mpf", prim_1, marlais_make_mpf_from_number},
   {"%string->mpf", prim_2, prim_string_to_mpf},
   {"%mpf-precision", prim_1, prim_mpf_precision},
