@@ -3,33 +3,34 @@ struct empty {
     ObjectHeader header;
 };
 
-#ifdef MARLAIS_OBJECT_MODEL_LARGE
+#if defined(MARLAIS_OBJECT_MODEL_LARGE)
 struct integer {
     ObjectHeader header;
     DyInteger val;
 };
-
 #define INTVAL(obj)       (((struct integer *)obj)->val)
+
 struct character {
     ObjectHeader header;
     char val;
 };
-
 #define CHARVAL(obj)       (((struct character *)obj)->val)
-#ifdef MARLAIS_ENABLE_WCHAR
+#endif
+
+#if defined(MARLAIS_OBJECT_MODEL_LARGE) && defined(MARLAIS_ENABLE_WCHAR)
 struct wide_character {
     ObjectHeader header;
     wchar_t val;
 };
 #define WCHARVAL(obj)       (((struct wide_character *)obj)->val)
 #endif
-#ifdef MARLAIS_ENABLE_UCHAR
+
+#if defined(MARLAIS_OBJECT_MODEL_LARGE) && defined(MARLAIS_ENABLE_UCHAR)
 struct unicode_character {
     ObjectHeader header;
     UChar32 val;
 };
 #define UCHARVAL(obj)       (((struct unicode_character *)obj)->val)
-#endif
 #endif
 
 struct big_integer {
