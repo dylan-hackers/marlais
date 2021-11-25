@@ -466,7 +466,6 @@ typedef struct mp_integer mpz_obj;
       marlais_error("%s: Wrong argument", "%" #_mt "-" #_op);           \
     }                                                                   \
     /* operate */                                                       \
-    _mt ## _init (_mg(res));                                            \
     _mt ## _ ## _op (_mg(res), _mg(a));                                 \
     /* return */                                                        \
     return res;                                                         \
@@ -475,6 +474,8 @@ typedef struct mp_integer mpz_obj;
     Object res;                                                         \
     /* allocate */                                                      \
     res = marlais_allocate_object(_dt, sizeof(_mt ## _obj));            \
+    /* initialize */                                                    \
+    _mt ## _init (_mg(res));                                            \
     /* operate and return */                                            \
     return prim_ ## _mt ## _ ## _op ## _bang (res, a);                  \
   }
@@ -489,7 +490,6 @@ typedef struct mp_integer mpz_obj;
       marlais_error("%s: Wrong second argument", "%" #_mt "-" #_op);    \
     }                                                                   \
     /* operate */                                                       \
-    _mt ## _init (_mg(res));                                            \
     _mt ## _ ## _op (_mg(res), _mg(a), _mg(b));                         \
     /* return */                                                        \
     return res;                                                         \
@@ -498,6 +498,8 @@ typedef struct mp_integer mpz_obj;
     Object res;                                                         \
     /* allocate */                                                      \
     res = marlais_allocate_object(_dt, sizeof(_mt ## _obj));            \
+    /* initialize */                                                    \
+    _mt ## _init (_mg(res));                                            \
     /* operate and return */                                            \
     return prim_ ## _mt ## _ ## _op ## _bang (res, a, b);               \
   }
@@ -512,7 +514,6 @@ typedef struct mp_integer mpz_obj;
       marlais_error("%s: Wrong second argument", "%" #_mt "-" #_op);    \
     }                                                                   \
     /* operate */                                                       \
-    _mt ## _init (_mg(res));                                            \
     _mt ## _ ## _op ## _ui (_mg(res), _mg(a), INTVAL(b));               \
     /* return */                                                        \
     return res;                                                         \
@@ -521,6 +522,8 @@ typedef struct mp_integer mpz_obj;
     Object res;                                                         \
     /* allocate */                                                      \
     res = marlais_allocate_object(_dt, sizeof(_mt ## _obj));            \
+    /* initialize */                                                    \
+    _mt ## _init (_mg(res));                                            \
     /* operate and return */                                            \
     return prim_ ## _mt ## _ ## _op ## _bang (res, a, b);               \
   }
@@ -539,7 +542,6 @@ typedef struct mp_integer mpz_obj;
       marlais_error("%s: Wrong arguments", "%" #_mt "-" #_op);          \
     }                                                                   \
     /* operate */                                                       \
-    _mt ## _init (_mg(res));                                            \
     if (_mp(i)) {                                                       \
       _mt ## _ ## _op (_mg(res), _mg(m), _mg(i));                       \
     } else if (UNSIGNEDP(i)) {                                          \
@@ -554,6 +556,8 @@ typedef struct mp_integer mpz_obj;
     Object res, m, i;                                                   \
     /* allocate */                                                      \
     res = marlais_allocate_object(_dt, sizeof(_mt ## _obj));            \
+    /* initialize */                                                    \
+    _mt ## _init (_mg(res));                                            \
     /* operate and return */                                            \
     return prim_ ## _mt ## _ ## _op ## _bang (res, a, b);               \
   }
@@ -565,7 +569,6 @@ typedef struct mp_integer mpz_obj;
       marlais_error("%s: Wrong first argument", "%" #_mt "-" #_op);     \
     }                                                                   \
     /* operate */                                                       \
-    _mt ## _init (_mg(res));                                            \
     if (_mp(b)) {                                                       \
       _mt ## _ ## _op (_mg(res), _mg(a), _mg(b));                       \
     } else if (UNSIGNEDP(b)) {                                          \
@@ -580,6 +583,8 @@ typedef struct mp_integer mpz_obj;
     Object res;                                                         \
     /* allocate */                                                      \
     res = marlais_allocate_object(_dt, sizeof(_mt ## _obj));            \
+    /* initialize */                                                    \
+    _mt ## _init (_mg(res));                                            \
     /* operate and return */                                            \
     return prim_ ## _mt ## _ ## _op ## _bang (res, a, b);               \
   }
@@ -587,7 +592,6 @@ typedef struct mp_integer mpz_obj;
 #define DEFINE_BINARY_MPUI_MPUI(_mt, _dt, _mp, _mg, _op)                \
   static Object prim_ ## _mt ## _ ## _op ## _bang (Object res, Object a, Object b) { \
     /* operate */                                                       \
-    _mt ## _init (_mg(res));                                            \
     if (_mp(a) && _mp(b)) {                                             \
       _mt ## _ ## _op (_mg(res), _mg(a), _mg(b));                       \
     } else if (_mp(a)) {                                                \
@@ -604,6 +608,8 @@ typedef struct mp_integer mpz_obj;
     Object res;                                                         \
     /* allocate */                                                      \
     res = marlais_allocate_object(_dt, sizeof(_mt ## _obj));            \
+    /* initialize */                                                    \
+    _mt ## _init (_mg(res));                                            \
     /* operate and return */                                            \
     return prim_ ## _mt ## _ ## _op ## _bang (res, a, b);               \
   }
