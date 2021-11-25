@@ -15,12 +15,20 @@ static void marlais_gc_on_resize (GC_word new_size);
 /* Primitives */
 
 static Object prim_gc_collect (void);
+static Object prim_gc_disable (void);
+static Object prim_gc_enable (void);
+static Object prim_gc_enabled_p (void);
+static Object prim_gc_expand (Object amount);
 static Object prim_gc_report (void);
 
 static struct primitive gc_prims[] =
 {
-    {"%gc-collect", prim_0, prim_gc_collect},
-    {"%gc-report",  prim_0, prim_gc_report},
+    {"%gc-collect",  prim_0, prim_gc_collect},
+    {"%gc-disable",  prim_0, prim_gc_disable},
+    {"%gc-enable",   prim_0, prim_gc_enable},
+    {"%gc-enabled?", prim_0, prim_gc_enabled_p},
+    {"%gc-expand",   prim_1, prim_gc_expand},
+    {"%gc-report",   prim_0, prim_gc_report},
 };
 
 /* Exported functions */
@@ -145,6 +153,32 @@ marlais_gc_on_resize (GC_word new_size)
 static Object prim_gc_collect (void)
 {
   marlais_gc_collect();
+  return MARLAIS_UNSPECIFIED;
+}
+
+static Object prim_gc_disable (void)
+{
+  GC_disable();
+  return MARLAIS_UNSPECIFIED;
+}
+
+static Object prim_gc_enable (void)
+{
+  GC_enable();
+  return MARLAIS_UNSPECIFIED;
+}
+
+static Object prim_gc_enabled_p (void)
+{
+  return marlais_make_boolean(!GC_is_disabled());
+}
+
+static Object prim_gc_expand (Object amount)
+{
+  if(!UNSIGNEDP (amount)) {
+    marlais_error("%gc-expand: amount must be an unsigned integer\n");
+  }
+  GC_expand_hp(INTVAL(amount));
   return MARLAIS_UNSPECIFIED;
 }
 
