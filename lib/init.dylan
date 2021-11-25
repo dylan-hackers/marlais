@@ -16,6 +16,8 @@ load("dylan/comparison.dylan");
 load("dylan/function.dylan");
 load("dylan/functional.dylan");
 
+load("dylan/type.dylan");
+
 // Data types
 
 load("dylan/character.dylan");
