@@ -123,13 +123,13 @@ marlais_initialize_class (void)
   mutable_explicit_key_collection_class =
     make_builtin_class ("<mutable-explicit-key-collection>",
                         marlais_make_list (explicit_key_collection_class,
-                                mutable_collection_class,
-                                NULL));
+                                           mutable_collection_class,
+                                           NULL));
   mutable_sequence_class =
     make_builtin_class ("<mutable-sequence>",
                         marlais_make_list (mutable_collection_class,
-                                sequence_class,
-                                NULL));
+                                           sequence_class,
+                                           NULL));
 
   /* List classes */
   list_class =
@@ -147,15 +147,15 @@ marlais_initialize_class (void)
   deque_class =
     make_builtin_class ("<deque>",
                         marlais_make_list (mutable_sequence_class,
-                                stretchy_collection_class,
-                                NULL));
+                                           stretchy_collection_class,
+                                           NULL));
 
   /* Table classes */
   table_class =
     make_builtin_class ("<table>",
                         marlais_make_list (mutable_explicit_key_collection_class,
-                                stretchy_collection_class,
-                                NULL));
+                                           stretchy_collection_class,
+                                           NULL));
   object_table_class =
     make_builtin_class ("<object-table>", table_class);
 
@@ -165,10 +165,10 @@ marlais_initialize_class (void)
   simple_vector_class =
     make_builtin_class ("<simple-vector>", vector_class);
   stretchy_vector_class =
-    make_builtin_class("<stretchy-vector>",
-                       marlais_make_list (vector_class,
-                              stretchy_collection_class,
-                              NULL));
+    make_builtin_class ("<stretchy-vector>",
+                        marlais_make_list (vector_class,
+                                           stretchy_collection_class,
+                                           NULL));
   simple_object_vector_class =
     make_builtin_class ("<simple-object-vector>", simple_vector_class);
 
@@ -178,18 +178,18 @@ marlais_initialize_class (void)
   byte_string_class =
     make_builtin_class ("<byte-string>",
                         marlais_make_list (string_class,
-                                simple_vector_class,
-                                NULL));
+                                           simple_vector_class,
+                                           NULL));
   wide_string_class =
     make_builtin_class ("<wide-string>",
                         marlais_make_list (string_class,
-                                simple_vector_class,
-                                NULL));
+                                           simple_vector_class,
+                                           NULL));
   unicode_string_class =
     make_builtin_class ("<unicode-string>",
                         marlais_make_list (string_class,
-                                simple_vector_class,
-                                NULL));
+                                           simple_vector_class,
+                                           NULL));
 
   /* Condition classes */
   condition_class = make_builtin_class ("<condition>", object_class);
