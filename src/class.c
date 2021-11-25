@@ -140,7 +140,7 @@ marlais_initialize_class (void)
                         real_class);
   integer_class =
     make_builtin_class ("<integer>",
-                        MARLAIS_CLASS_SEALED,
+                        MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
                         rational_class);
   small_integer_class =
     make_builtin_class ("<small-integer>",
