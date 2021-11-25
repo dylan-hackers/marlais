@@ -70,7 +70,7 @@ marlais_register_icu (void)
 
   /* unicode constants */
   marlais_add_export (marlais_make_name ("$unicode-version"),
-                      marlais_make_byte_string (U_UNICODE_VERSION),
+                      marlais_make_bytestring (U_UNICODE_VERSION),
                       1);
   marlais_add_export (marlais_make_name ("$minimum-unicode-codepoint"),
                       marlais_make_integer (UCHAR_MIN_VALUE),
