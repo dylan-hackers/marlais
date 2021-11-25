@@ -191,6 +191,13 @@ marlais_register_character (void)
 {
   int num = sizeof (char_prims) / sizeof (struct primitive);
   marlais_register_prims (num, char_prims);
+
+  marlais_add_export (marlais_make_name ("$minimum-unicode-codepoint"),
+                      marlais_make_integer (UCHAR_MIN_VALUE),
+                      1);
+  marlais_add_export (marlais_make_name ("$maximum-unicode-codepoint"),
+                      marlais_make_integer (UCHAR_MAX_VALUE),
+                      1);
 }
 
 #ifdef MARLAIS_OBJECT_MODEL_LARGE
