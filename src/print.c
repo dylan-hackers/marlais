@@ -141,12 +141,12 @@ marlais_print_object (Object fd, Object obj, int escaped)
 #ifdef MARLAIS_ENABLE_UCHAR
   case UnicodeCharacter:
     ufp = u_finit(fp, NULL, NULL);
-    u_fputc (WCHARVAL(obj), ufp);
+    u_fputc (UCHARVAL(obj), ufp);
     u_fclose (ufp);
     break;
   case UnicodeString:
     ufp = u_finit(fp, NULL, NULL);
-    u_fputs (WIDESTRVAL(obj), ufp);
+    u_fputs (USTRVAL(obj), ufp);
     u_fclose (ufp);
     break;
 #endif
