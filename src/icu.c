@@ -69,7 +69,7 @@ marlais_register_icu (void)
   marlais_register_prims (num, icu_prims);
 
   marlais_add_export (marlais_make_name ("$minimum-unicode-codepoint"),
-                      marlais_make_integer (0),
+                      marlais_make_integer (UCHAR_MIN_VALUE),
                       1);
   marlais_add_export (marlais_make_name ("$maximum-unicode-codepoint"),
                       marlais_make_integer (UCHAR_MAX_VALUE),
