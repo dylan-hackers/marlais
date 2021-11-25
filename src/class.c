@@ -492,7 +492,7 @@ marlais_make_class (Object obj,
 
   CLASSINDEX (obj) = NEWCLASSINDEX;
   CLASSENV (obj) = the_env;
-  if(abstract_p == MARLAIS_FALSE) CLASSPROPS (obj) |= MARLAIS_CLASS_INSTANTIABLE;
+  if(abstract_p != MARLAIS_FALSE) CLASSPROPS (obj) |= MARLAIS_CLASS_ABSTRACT;
 
   /* allow a single value for supers, make it into a list
    */
@@ -601,6 +601,7 @@ void
 marlais_make_class_primary (Object class)
 {
   /* Need to add some semantics here.  Requires field in class object rep. */
+  CLASSPROPS (class) |= MARLAIS_CLASS_PRIMARY;
 }
 
 Object
@@ -613,7 +614,7 @@ marlais_make_class_sealed (Object class)
 void
 marlais_make_class_uninstantiable (Object class)
 {
-  CLASSPROPS (class) &= ~MARLAIS_CLASS_INSTANTIABLE;
+  CLASSPROPS (class) |= MARLAIS_CLASS_ABSTRACT;
 }
 
 Object
