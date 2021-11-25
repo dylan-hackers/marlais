@@ -588,14 +588,14 @@ ustring_element (Object string, Object index, Object default_ob)
     int i;
 
     i = INTVAL (index);
-    if ((i < 0) || (i >= WIDESTRSIZE (string))) {
+    if ((i < 0) || (i >= USTRSIZE (string))) {
       if (default_ob == marlais_default) {
         marlais_error ("element: argument out of range", string, index, NULL);
       } else {
         return default_ob;
       }
     }
-    return (marlais_make_wchar (WIDESTRVAL (string)[i]));
+    return (marlais_make_uchar (USTRVAL (string)[i]));
 }
 
 static Object
@@ -604,10 +604,10 @@ ustring_element_setter (Object string, Object index, Object val)
     int i;
 
     i = INTVAL (index);
-    if ((i < 0) || (i >= WIDESTRSIZE (string))) {
+    if ((i < 0) || (i >= USTRSIZE (string))) {
       marlais_error ("element-setter: argument out of range", string, index, NULL);
     }
-    WIDESTRVAL (string)[i] = WCHARVAL (val);
+    USTRVAL (string)[i] = UCHARVAL (val);
     return (MARLAIS_UNSPECIFIED);
 }
 

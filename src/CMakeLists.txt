@@ -24,7 +24,7 @@ endif ()
 
 option(MARLAIS_ENABLE_ICU "Enable ICU unicode string support" ON)
 if (MARLAIS_ENABLE_ICU)
-  #set (MARLAIS_GMP_SOURCES icu.c)
+  set (MARLAIS_ICU_SOURCES icu.c)
 endif ()
 
 # READLINE support
@@ -97,6 +97,7 @@ add_library(marlais_lib
   ${FLEX_LEXER_OUTPUTS}
 
   ${MARLAIS_GMP_SOURCES}
+  ${MARLAIS_ICU_SOURCES}
 )
 
 # actual name

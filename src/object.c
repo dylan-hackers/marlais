@@ -34,6 +34,10 @@ object_type (Object obj)
     case MARLAIS_SUB_WCHAR:
       return (WideCharacter);
 #endif
+#ifdef MARLAIS_ENABLE_UCHAR
+    case MARLAIS_SUB_UCHAR:
+      return (UnicodeCharacter);
+#endif
     default:
       break;
     }

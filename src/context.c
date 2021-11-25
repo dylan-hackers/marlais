@@ -4,6 +4,7 @@
 #include <marlais/marlais.h>
 
 #include <marlais/gc.h>
+#include <marlais/icu.h>
 #include <marlais/lexer.h>
 #include <marlais/parser.h>
 
@@ -21,7 +22,7 @@ marlais_initialize (void)
 #endif
 
   /* initialize ICU memory management */
-#ifdef MARLAIS_ENABLE_ICU
+#ifdef MARLAIS_ENABLE_UCHAR
   marlais_initialize_icu ();
 #endif
 
@@ -244,5 +245,8 @@ marlais_initialize (void)
 
 #ifdef MARLAIS_ENABLE_GMP
   marlais_register_gmp ();
+#endif
+#ifdef MARLAIS_ENABLE_UCHAR
+  marlais_register_icu ();
 #endif
 }
