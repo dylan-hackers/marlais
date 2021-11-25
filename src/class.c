@@ -80,7 +80,8 @@ marlais_initialize_class (void)
                         MARLAIS_CLASS_ABSTRACT,
                         MARLAIS_NIL);
 
-  /* fix up the binding for object_class so that it is correct */
+  /* Fix up the binding type for <object> */
+  /* TODO shouldn't this be <class> ? */
   {
     struct binding *binding;
 
