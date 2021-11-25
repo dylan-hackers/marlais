@@ -492,7 +492,7 @@ marlais_make_class (Object obj,
 
   CLASSINDEX (obj) = NEWCLASSINDEX;
   CLASSENV (obj) = the_env;
-  if(abstract_p == MARLAIS_FALSE) CLASSPROPS (obj) |= CLASSINSTANTIABLE;
+  if(abstract_p == MARLAIS_FALSE) CLASSPROPS (obj) |= MARLAIS_CLASS_INSTANTIABLE;
 
   /* allow a single value for supers, make it into a list
    */
@@ -606,14 +606,14 @@ marlais_make_class_primary (Object class)
 Object
 marlais_make_class_sealed (Object class)
 {
-  CLASSPROPS (class) |= CLASSSEAL;
+  CLASSPROPS (class) |= MARLAIS_CLASS_SEALED;
   return class;
 }
 
 void
 marlais_make_class_uninstantiable (Object class)
 {
-  CLASSPROPS (class) &= ~CLASSINSTANTIABLE;
+  CLASSPROPS (class) &= ~MARLAIS_CLASS_INSTANTIABLE;
 }
 
 Object
@@ -919,7 +919,7 @@ make_class_entrypoint (Object args)
   obj = marlais_allocate_object (Class, sizeof (struct clas));
 
   CLASSNAME (obj) = marlais_make_name (BYTESTRVAL (debug_obj));
-  CLASSPROPS (obj) |= CLASSSLOTSUNINIT;
+  CLASSPROPS (obj) |= MARLAIS_CLASS_UNINITIALIZED;
   return marlais_make_class (obj, supers_obj, slots_obj, abstract_obj, BYTESTRVAL(debug_obj));
 }
 
@@ -1167,7 +1167,7 @@ initialize_slotds (Object class)
 
   eval_slotds (CLASSVSLOTDS (class));
   make_getters_setters (class, CLASSVSLOTDS (class));
-  CLASSPROPS (class) &= ~CLASSSLOTSUNINIT;
+  CLASSPROPS (class) &= ~MARLAIS_CLASS_UNINITIALIZED;
   the_env = old_env;
 }
 
@@ -1209,7 +1209,7 @@ make_builtin_class (char *name, Object supers)
   obj = marlais_allocate_object (Class, sizeof (struct clas));
 
   CLASSNAME (obj) = marlais_make_name (name);
-  CLASSPROPS (obj) &= ~CLASSSLOTSUNINIT;
+  CLASSPROPS (obj) &= ~MARLAIS_CLASS_UNINITIALIZED;
   marlais_add_export (CLASSNAME (obj), obj, 1);
   return marlais_make_class (obj, supers, MARLAIS_NIL, MARLAIS_FALSE, NULL);
 }

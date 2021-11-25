@@ -818,8 +818,8 @@ define_class_eval (Object form)
   class = marlais_make_class (obj, supers, slots,
                               (abstract_class ? MARLAIS_TRUE : MARLAIS_FALSE), NULL);
 
-  /* kludge to put these here.  Better to add a param to make_class. */
-  CLASSPROPS (class) |= CLASSSLOTSUNINIT;
+  /* TODO kludge to put these here.  Better to add a param to make_class. */
+  CLASSPROPS (class) |= MARLAIS_CLASS_UNINITIALIZED;
 
   /*
     if (abstract_class) {

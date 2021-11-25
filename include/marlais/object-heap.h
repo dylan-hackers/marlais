@@ -210,6 +210,17 @@ struct slot_descriptor {
 #define SLOTDALLOCATION(obj)   (((struct slot_descriptor *)obj)->allocation)
 #define SLOTDDYNAMISM(obj)     (((struct slot_descriptor *)obj)->dynamism)
 
+enum {
+      /* class is instantiable */
+      MARLAIS_CLASS_INSTANTIABLE = 1,
+      /* class is primary */
+      MARLAIS_CLASS_PRIMARY = 2,
+      /* class is sealed */
+      MARLAIS_CLASS_SEALED  = 4,
+      /* class slots uninitialized */
+      MARLAIS_CLASS_UNINITIALIZED = 8,
+};
+
 struct clas {
     ObjectHeader header;
     Object name;
@@ -246,12 +257,10 @@ struct clas {
 #define CLASSSORTEDPRECS(obj) (((struct clas *)obj)->sorted_prec_list)
 #define CLASSNUMPRECS(obj) (((struct clas *)obj)->num_precs)
 #define CLASSPROPS(obj)   (((struct clas *)obj)->properties)
-#define CLASSSEAL         0x01
-#define SEALEDP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & CLASSSEAL))
-#define CLASSINSTANTIABLE 0x02
-#define INSTANTIABLE(obj) (CLASSP (obj) && (CLASSPROPS (obj) & CLASSINSTANTIABLE))
-#define CLASSSLOTSUNINIT   0x04
-#define CLASSUNINITIALIZED(obj)  (CLASSP (obj) && (CLASSPROPS (obj) & CLASSSLOTSUNINIT))
+#define INSTANTIABLE(obj) (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_INSTANTIABLE))
+#define PRIMARYP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_PRIMARY))
+#define SEALEDP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_SEALED))
+#define CLASSUNINITIALIZED(obj)  (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_UNINITIALIZED))
 #define CLASSENV(obj)     (((struct clas *)obj)->creation_env)
 #define CLASSINDEX(obj)     (((struct clas *)obj)->ordinal_index)
 
