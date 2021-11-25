@@ -260,3 +260,7 @@ end method uppercase?;
 define method titlecase? (c :: <unicode-character>)
   %uchar-titlecase?(c);
 end method uppercase?;
+
+define method titlecase? (c :: <character>)
+  %uchar-titlecase?(as(<unicode-character>, c));
+end method uppercase?;
