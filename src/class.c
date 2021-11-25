@@ -176,20 +176,22 @@ marlais_initialize_class (void)
     make_builtin_class ("<collection>",
                         MARLAIS_CLASS_ABSTRACT,
                         object_class);
-  explicit_key_collection_class =
-    make_builtin_class ("<explicit-key-collection>",
-                        MARLAIS_CLASS_ABSTRACT,
-                        collection_class);
-  stretchy_collection_class =
-    make_builtin_class ("<stretchy-collection>",
+  sequence_class =
+    make_builtin_class ("<sequence>",
                         MARLAIS_CLASS_ABSTRACT,
                         collection_class);
   mutable_collection_class =
     make_builtin_class ("<mutable-collection>",
                         MARLAIS_CLASS_ABSTRACT,
                         collection_class);
-  sequence_class =
-    make_builtin_class ("<sequence>",
+  mutable_sequence_class =
+    make_builtin_class ("<mutable-sequence>",
+                        MARLAIS_CLASS_ABSTRACT,
+                        marlais_make_list (mutable_collection_class,
+                                           sequence_class,
+                                           NULL));
+  explicit_key_collection_class =
+    make_builtin_class ("<explicit-key-collection>",
                         MARLAIS_CLASS_ABSTRACT,
                         collection_class);
   mutable_explicit_key_collection_class =
@@ -198,12 +200,10 @@ marlais_initialize_class (void)
                         marlais_make_list (explicit_key_collection_class,
                                            mutable_collection_class,
                                            NULL));
-  mutable_sequence_class =
-    make_builtin_class ("<mutable-sequence>",
+  stretchy_collection_class =
+    make_builtin_class ("<stretchy-collection>",
                         MARLAIS_CLASS_ABSTRACT,
-                        marlais_make_list (mutable_collection_class,
-                                           sequence_class,
-                                           NULL));
+                        collection_class);
 
   /* List classes */
   list_class =
