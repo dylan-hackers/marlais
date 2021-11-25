@@ -4,7 +4,6 @@ module: dylan
 // string.dylan
 //
 
-
 //
 // Methods on <byte-string>
 //
@@ -24,15 +23,22 @@ define method size (s :: <byte-string>)
   %string-size(s);
 end method size;
 
-// XXX type safety on rest argument
-// XXX implement string type conversion
-define method concatenate (s :: <byte-string>, #rest more-strings)
+define method concatenate-as (c == <byte-string>, s :: <byte-string>, #rest more-strings)
   if (empty? (more-strings))
     s
   else
-    apply (concatenate, pair (%string-append2(s, more-strings.head),
-			      more-strings.tail));
+    let n = as(<byte-string>, more-strings.head);
+    let p = %string-append2(s, n);
+    apply (concatenate-as, c, p, more-strings.tail);
   end if;
+end method concatenate-as;
+
+define method concatenate-as (c == <byte-string>, s :: <string>, #rest more-strings)
+  apply(concatenate-as, c, as(<byte-string>, s), more-strings);
+end method concatenate-as;
+
+define method concatenate (s :: <byte-string>, #rest more-strings)
+  apply (concatenate-as, <byte-string>, s, more-strings);
 end method concatenate;
 
 // XXX what is this for?
@@ -45,7 +51,6 @@ define method as (ic == <integer>, s :: <string>)
   do(accumulate, s);
   total
 end method as;
-
 
 //
 // Methods on <wide-string>
@@ -66,6 +71,24 @@ define method size (s :: <wide-string>)
   %wstring-size(s);
 end method size;
 
+define method concatenate-as (c == <wide-string>, s :: <wide-string>, #rest more-strings)
+  if (empty? (more-strings))
+    s
+  else
+    let n = as(<wide-string>, more-strings.head);
+    let p = %wstring-append2(s, n);
+    apply (concatenate-as, c, p, more-strings.tail);
+  end if;
+end method concatenate-as;
+
+define method concatenate-as (c == <wide-string>, s :: <string>, #rest more-strings)
+  apply(concatenate-as, c, as(<wide-string>, s), more-strings);
+end method concatenate-as;
+
+define method concatenate (s :: <wide-string>, #rest more-strings)
+  apply (concatenate-as, <wide-string>, s, more-strings);
+end method concatenate;
+
 //
 // Methods on <unicode-string>
 //
@@ -84,6 +107,24 @@ end method element-setter;
 define method size (s :: <unicode-string>)
   %ustring-size(s);
 end method size;
+
+define method concatenate-as (c == <unicode-string>, s :: <unicode-string>, #rest more-strings)
+  if (empty? (more-strings))
+    s
+  else
+    let n = as(<unicode-string>, more-strings.head);
+    let p = %ustring-append2(s, n);
+    apply (concatenate-as, c, p, more-strings.tail);
+  end if;
+end method concatenate-as;
+
+define method concatenate-as (c == <unicode-string>, s :: <string>, #rest more-strings)
+  apply(concatenate-as, c, as(<unicode-string>, s), more-strings);
+end method concatenate-as;
+
+define method concatenate (s :: <unicode-string>, #rest more-strings)
+  apply (concatenate-as, <unicode-string>, s, more-strings);
+end method concatenate;
 
 //
 // Iteration protocol - generic part on <string>

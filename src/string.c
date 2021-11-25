@@ -62,9 +62,9 @@ static Object make_ustring(UChar *str, size_t len);
 static Object string_element (Object string, Object index, Object default_ob);
 static Object string_element_setter (Object string, Object index, Object val);
 static Object string_size (Object string);
-static Object string_append2 (Object str1, Object str2);
 static Object string_lessthan (Object str1, Object str2);
 static Object string_equal (Object str1, Object str2);
+static Object string_append2 (Object str1, Object str2);
 static Object string_as_lowercase (Object string);
 static Object string_as_uppercase (Object string);
 static Object string_as_lowercase_bang (Object string);
@@ -74,9 +74,9 @@ static Object string_as_uppercase_bang (Object string);
 static Object wstring_element (Object string, Object index, Object default_ob);
 static Object wstring_element_setter (Object string, Object index, Object val);
 static Object wstring_size (Object string);
-static Object wstring_append2 (Object str1, Object str2);
 static Object wstring_lessthan (Object str1, Object str2);
 static Object wstring_equal (Object str1, Object str2);
+static Object wstring_append2 (Object str1, Object str2);
 static Object wstring_as_lowercase (Object string);
 static Object wstring_as_uppercase (Object string);
 static Object wstring_to_bstring (Object string);
@@ -87,9 +87,9 @@ static Object bstring_to_wstring (Object string);
 static Object ustring_element (Object string, Object index, Object default_ob);
 static Object ustring_element_setter (Object string, Object index, Object val);
 static Object ustring_size (Object string);
-static Object ustring_append2 (Object str1, Object str2);
 static Object ustring_lessthan (Object str1, Object str2);
 static Object ustring_equal (Object str1, Object str2);
+static Object ustring_append2 (Object str1, Object str2);
 static Object ustring_as_lowercase (Object string);
 static Object ustring_as_uppercase (Object string);
 static Object ustring_as_titlecase (Object string);
@@ -104,9 +104,9 @@ static struct primitive string_prims[] =
     {"%string-element", prim_3, string_element},
     {"%string-element-setter", prim_3, string_element_setter},
     {"%string-size", prim_1, string_size},
-    {"%string-append2", prim_2, string_append2},
     {"%string<", prim_2, string_lessthan},
     {"%string=", prim_2, string_equal},
+    {"%string-append2", prim_2, string_append2},
     {"%string-as-lowercase", prim_1, string_as_lowercase},
     {"%string-as-uppercase", prim_1, string_as_uppercase},
     {"%string-as-lowercase!", prim_1, string_as_lowercase_bang},
@@ -118,6 +118,7 @@ static struct primitive string_prims[] =
     {"%wstring-size", prim_1, wstring_size},
     {"%wstring<", prim_2, wstring_lessthan},
     {"%wstring=", prim_2, wstring_equal},
+    {"%wstring-append2", prim_2, wstring_append2},
     {"%wstring-as-lowercase", prim_1, wstring_as_lowercase},
     {"%wstring-as-uppercase", prim_1, wstring_as_uppercase},
     {"%wstring->bstring", prim_1, wstring_to_bstring},
@@ -130,6 +131,7 @@ static struct primitive string_prims[] =
     {"%ustring-size", prim_1, ustring_size},
     {"%ustring<", prim_2, ustring_lessthan},
     {"%ustring=", prim_2, ustring_equal},
+    {"%ustring-append2", prim_2, ustring_append2},
     {"%ustring-as-lowercase", prim_1, wstring_as_lowercase},
     {"%ustring-as-uppercase", prim_1, wstring_as_uppercase},
     {"%ustring->bstring", prim_1, ustring_to_bstring},
@@ -361,6 +363,20 @@ string_size (Object string)
 }
 
 static Object
+string_lessthan (Object str1, Object str2)
+{
+    return (strcmp (BYTESTRVAL (str1), BYTESTRVAL (str2)) < 0) ?
+      MARLAIS_TRUE : MARLAIS_FALSE;
+}
+
+static Object
+string_equal (Object str1, Object str2)
+{
+    return (strcmp (BYTESTRVAL (str1), BYTESTRVAL (str2)) == 0) ?
+      MARLAIS_TRUE : MARLAIS_FALSE;
+}
+
+static Object
 string_append2 (Object str1, Object str2)
 {
     int len1, len2, newlen;
@@ -377,20 +393,6 @@ string_append2 (Object str1, Object str2)
     newstr[newlen] = 0;
 
     return (make_string (newstr, newlen));
-}
-
-static Object
-string_lessthan (Object str1, Object str2)
-{
-    return (strcmp (BYTESTRVAL (str1), BYTESTRVAL (str2)) < 0) ?
-      MARLAIS_TRUE : MARLAIS_FALSE;
-}
-
-static Object
-string_equal (Object str1, Object str2)
-{
-    return (strcmp (BYTESTRVAL (str1), BYTESTRVAL (str2)) == 0) ?
-      MARLAIS_TRUE : MARLAIS_FALSE;
 }
 
 static Object
@@ -510,6 +512,25 @@ wstring_equal (Object str1, Object str2) {
   return marlais_make_boolean(wcscmp (WIDESTRVAL (str1), WIDESTRVAL (str2)) == 0);
 }
 
+static Object
+wstring_append2 (Object str1, Object str2)
+{
+    int len1, len2, newlen;
+    wchar_t *newstr;
+
+    len1 = WIDESTRSIZE (str1);
+    len2 = WIDESTRSIZE (str2);
+    newlen = len1 + len2;
+
+    newstr = MARLAIS_ALLOCATE_WSTRING (newlen + 1);
+
+    wcsncpy (newstr, WIDESTRVAL(str1), len1);
+    wcsncpy (newstr + len1, WIDESTRVAL(str2), len2);
+    newstr[newlen] = 0;
+
+    return (make_wstring (newstr, newlen));
+}
+
 /* XXX reimplement using transform */
 static Object
 wstring_as_lowercase (Object string)
@@ -547,7 +568,6 @@ wstring_as_uppercase (Object string)
 
     return (make_wstring (newstr, len));
 }
-
 
 static Object wstring_to_bstring (Object string)
 {
@@ -625,6 +645,25 @@ ustring_lessthan (Object str1, Object str2) {
 static Object
 ustring_equal (Object str1, Object str2) {
   return marlais_make_boolean(u_strcmp (USTRVAL (str1), USTRVAL (str2)) == 0);
+}
+
+static Object
+ustring_append2 (Object str1, Object str2)
+{
+    int len1, len2, newlen;
+    UChar *newstr;
+
+    len1 = USTRSIZE (str1);
+    len2 = USTRSIZE (str2);
+    newlen = len1 + len2;
+
+    newstr = MARLAIS_ALLOCATE_USTRING (newlen + 1);
+
+    u_strncpy (newstr, USTRVAL(str1), len1);
+    u_strncpy (newstr + len1, USTRVAL(str2), len2);
+    newstr[newlen] = 0;
+
+    return (make_ustring (newstr, newlen));
 }
 
 /* XXX reimplement using transform */
