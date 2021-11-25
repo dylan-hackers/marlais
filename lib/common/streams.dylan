@@ -26,7 +26,7 @@ define method stream-position-setter(index, ps :: <positionable-stream>)
   end if;
 end method stream-position-setter;
 
-define method adjust-stream-position(ps :: <positionable-stream>, 
+define method adjust-stream-position(ps :: <positionable-stream>,
 	delta :: <integer>, #key from = #"current")
   ps.pos := select(from)
     current: => ps.pos + delta;
@@ -39,7 +39,7 @@ define method stream-size(ps :: <positionable-stream>) => (s :: <integer>)
   ps.stream-contents.size;
 end method stream-size;
 
-define generic stream-contents(ps :: <positionable-stream>, 
+define generic stream-contents(ps :: <positionable-stream>,
 				#key clear-contents?);
 
 //------------------------BUFFERED-STREAM-------------------------------
@@ -60,10 +60,10 @@ define class <byte-string-stream> (<string-stream>) end;
 define class <unicode-string-stream> (<string-stream>) end;
 
 define method stream-contents(ss :: <sequence-stream>, #key clear-contents?)
-  let ans = 
-    if(clear-contents?) 
-      let temp = copy-sequence(ss.contents); 
-      ss.contents := make(type-for-copy(ss.contents)); 
+  let ans =
+    if(clear-contents?)
+      let temp = copy-sequence(ss.contents);
+      ss.contents := make(type-for-copy(ss.contents));
       temp;
     else
       ss.contents;
@@ -98,19 +98,19 @@ define method type-for-sequence-stream(seq :: <unicode-string>)
   <unicode-string-stream>;
 end method type-for-sequence-stream;
 
-define method make(ss == <sequence-stream>, 
+define method make(ss == <sequence-stream>,
  #key contents, direction = #"input", start, end: stop)
-  make(type-for-sequence-stream(contents), 
+  make(type-for-sequence-stream(contents),
 	contents: contents, direction: direction, start: start, end: stop);
 end method make;
 
-define method make(ss == <string-stream>, 
+define method make(ss == <string-stream>,
  #key contents, direction = #"input", start, end: stop)
-  make(type-for-sequence-stream(contents), 
+  make(type-for-sequence-stream(contents),
 	contents: contents, direction: direction, start: start, end: stop);
 end method make;
 
-define method initialize(ss :: <sequence-stream>, 
+define method initialize(ss :: <sequence-stream>,
   #key contents: cnt, direction: dir = #"input", start: beg = 0, end: stp)
   ss.contents := cnt;
   ss.direction := dir;
@@ -149,7 +149,7 @@ define method grow-stream(s :: <fixed-sequence-stream>,
   if(elt ~== $unspecified) s.contents[s.stream-position] := elt; end if;
 end method grow-stream;
 
-define method grow-stream(s :: <stretchy-sequence-stream>, 
+define method grow-stream(s :: <stretchy-sequence-stream>,
 	#key by = 1, elt = $unspecified)
   if(elt ~== $unspecified) do-grow(s.contents, elt); end if;
 end method grow-stream;
@@ -170,7 +170,7 @@ define method write(s :: <sequence-stream>, seq :: <sequence>,
   for(x in seq) write-element(s, x) end;
 end method write;
 
-define method reader(s :: <sequence-stream>, n :: <integer>, 
+define method reader(s :: <sequence-stream>, n :: <integer>,
 		     name :: <string>, copy-fn :: <function>, do-on-end)
   check-direction(s, #"input", name);
   let pos = s.stream-position;
@@ -187,17 +187,16 @@ define method reader(s :: <sequence-stream>, n :: <integer>,
   end if;
 end method reader;
 
-define method read(s :: <sequence-stream>, n :: <integer>, 
+define method read(s :: <sequence-stream>, n :: <integer>,
 	#key on-end-of-stream = $unspecified)
-  reader(s, n, "read", 
-	 method(seq, start, stop) 
+  reader(s, n, "read",
+	 method(seq, start, stop)
 	  copy-sequence(seq, start: start, end: stop)
 	 end, on-end-of-stream);
 end method read;
 
-define method read-element(s :: <sequence-stream>, 
+define method read-element(s :: <sequence-stream>,
 			   #key on-end-of-stream = $unspecified)
   reader(s, 1, "read-element", method(seq, start, stop) seq[start] end,
 	 on-end-of-stream);
 end method read-element;
-
