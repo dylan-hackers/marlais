@@ -243,21 +243,21 @@ define method as-uppercase!(s :: <byte-string>)
   %string-as-uppercase!(s);
 end method;
 
-// define method as-lowercase(s :: <wide-string>)
-//   %wstring-as-lowercase(s);
-// end method;
+define method as-lowercase(s :: <wide-string>)
+  %wstring-as-lowercase(s);
+end method;
 
-// define method as-lowercase!(s :: <wide-string>)
-//   %wstring-as-lowercase!(s);
-// end method;
+define method as-lowercase!(s :: <wide-string>)
+  %wstring-as-lowercase!(s);
+end method;
 
-// define method as-uppercase(s :: <wide-string>)
-//   %wstring-as-uppercase(s);
-// end method;
+define method as-uppercase(s :: <wide-string>)
+  %wstring-as-uppercase(s);
+end method;
 
-// define method as-uppercase!(s :: <wide-string>)
-//   %wstring-as-uppercase!(s);
-// end method;
+define method as-uppercase!(s :: <wide-string>)
+  %wstring-as-uppercase!(s);
+end method;
 
 //
 // String type conversion
