@@ -237,11 +237,11 @@ marlais_make_limited_integer (Object args)
 static Object
 instance_p (Object obj, Object type)
 {
-  return (marlais_instance_p (obj, type) ? MARLAIS_TRUE : MARLAIS_FALSE);
+  return marlais_make_boolean (marlais_instance_p (obj, type));
 }
 
 static Object
 subtype_p (Object type1, Object type2)
 {
-  return (marlais_subtype_p (type1, type2) ? MARLAIS_TRUE : MARLAIS_FALSE);
+  return marlais_make_boolean (marlais_subtype_p (type1, type2));
 }
