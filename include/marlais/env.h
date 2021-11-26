@@ -113,6 +113,7 @@ extern struct binding *marlais_symbol_binding_top_level (Object sym);
 
 
 
+/* TODO namespace */
 void fill_table_from_property_set (Object the_table, Object the_set);
 Object print_env (struct frame *env);
 Object show_bindings (Object args);
