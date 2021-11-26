@@ -47,9 +47,6 @@ marlais_instance_p (Object obj, Object type)
     } else {
       return 0;
     }
-  } else if (LIMINTP (obj)) {
-    /* not sure on this one.  jnw */
-    return marlais_subtype_p (type_class, type);
   } else if (UNIONP (type)) {
     Object ptr;
 
