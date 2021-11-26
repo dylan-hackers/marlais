@@ -43,19 +43,19 @@ marlais_instance_p (Object obj, Object type)
          INTVAL (obj) >= LIMINTMIN (type)) &&
         ((!LIMINTHASMAX (type)) ||
          INTVAL (obj) <= LIMINTMAX (type))) {
-      return 1;
+      return true;
     } else {
-      return 0;
+      return false;
     }
   } else if (UNIONP (type)) {
     Object ptr;
 
     for (ptr = UNIONLIST (type); PAIRP (ptr); ptr = CDR (ptr)) {
       if (marlais_instance_p (obj, (CAR (ptr)))) {
-        return 1;
+        return true;
       }
     }
-    return 0;
+    return false;
   } else if (SUBCLASSP (type)) {
     if (CLASSP (obj)) {
       return marlais_subtype_p (obj, SUBCLASSVAL (type));
@@ -63,6 +63,7 @@ marlais_instance_p (Object obj, Object type)
       return false;
     }
   }
+
   objtype = marlais_object_class (obj);
   if (objtype == type) {
     return 1;
