@@ -530,6 +530,8 @@ marlais_object_class (Object obj)
     return (object_deque_entry_class);
   case Singleton:
     return (singleton_class);
+  case Subclass:
+    return (subclass_class);
   case ObjectHandle:
     return (object_handle_class);
   case ForeignPtr:

@@ -21,6 +21,11 @@ define constant singleton =
     %singleton (o);
   end method;
 
+define constant subclass =
+  method (c :: <class>) => <subclass>;
+    %subclass (c);
+  end method;
+
 define constant type-union =
   method (#rest types)
     apply(%union-type, types);

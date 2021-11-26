@@ -17,6 +17,7 @@ static struct primitive type_prims[] =
     {"%subtype?", prim_2, subtype_p},
     {"%limited-integer", prim_1, marlais_make_limited_integer},
     {"%singleton", prim_1, marlais_make_singleton},
+    {"%subclass", prim_1, marlais_make_subclass},
     {"%union-type", prim_1, marlais_make_union},
 };
 
@@ -58,6 +59,12 @@ marlais_instance_p (Object obj, Object type)
       }
     }
     return 0;
+  } else if (SUBCLASSP (type)) {
+    if (CLASSP (obj)) {
+      return marlais_subtype_p (obj, SUBCLASSVAL (type));
+    } else {
+      return false;
+    }
   }
   objtype = marlais_object_class (obj);
   if (objtype == type) {
@@ -110,6 +117,12 @@ marlais_subtype_p (Object type1, Object type2)
       }
     }
     return 0;
+  } else if (SUBCLASSP (type1)) {
+    if (SUBCLASSP (type2)) {
+      return marlais_subtype_p (SUBCLASSVAL (type1), SUBCLASSVAL (type2));
+    } else {
+      return marlais_subtype_p (class_class, type2);
+    }
   } else {
     supers = CLASSSUPERS (type1);
     if (!supers) {
