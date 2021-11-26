@@ -6,6 +6,7 @@
 #include <marlais/apply.h>
 #include <marlais/array.h>
 #include <marlais/boolean.h>
+#include <marlais/bytevector.h>
 #include <marlais/string.h>
 #include <marlais/classprec.h>
 #include <marlais/deque.h>
@@ -281,6 +282,12 @@ marlais_initialize_class (void)
                         MARLAIS_CLASS_SEALED,
                         simple_vector_class);
 
+  /* Byte vectors */
+  byte_vector_class =
+    make_builtin_class ("<byte-vector>",
+                        MARLAIS_CLASS_SEALED,
+                        simple_vector_class);
+
   /* String classes */
   string_class =
     make_builtin_class ("<string>",
@@ -482,6 +489,8 @@ marlais_object_class (Object obj)
   case UnicodeString:
     return (unicode_string_class);
 #endif
+  case ByteVector:
+    return (byte_vector_class);
   case SimpleObjectVector:
     return (simple_object_vector_class);
   case ObjectTable:
@@ -561,6 +570,8 @@ marlais_make (Object class, Object rest)
     ret = MARLAIS_NIL;
   } else if (class == list_class) {
     ret = marlais_make_list_entrypoint (rest);
+  } else if (class == byte_vector_class) {
+    ret = marlais_make_bytevector_entrypoint (rest);
   } else if ((class == vector_class) ||
              (class == simple_object_vector_class)) {
     ret = marlais_make_vector_entrypoint (rest);

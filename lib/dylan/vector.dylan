@@ -16,38 +16,50 @@ define method vector (#rest els)
 end method vector;
 
 //
-// element
+// Generic methods
 //
 
-define method element (v :: <vector>, i :: <small-integer>,
+define method dimensions (v :: <simple-object-vector>)
+  list (size (v));
+end method dimensions;
+
+//
+// Methods on <byte-vector>
+//
+
+define method element (v :: <byte-vector>, i :: <small-integer>,
+		       #key default = %default-object)
+ => (value :: <byte>);
+  %bytevector-element (v, i, default);
+end method element;
+
+define method element-setter (obj :: <byte>, v :: <byte-vector>, i :: <small-integer>)
+ => (value :: <byte>);
+  %bytevector-element-setter (v, i, obj);
+end method element-setter;
+
+define method size (v :: <byte-vector>)
+  %bytevector-size (v);
+end method size;
+
+//
+// Methods on <simple-object-vector>
+//
+
+define method element (v :: <simple-object-vector>, i :: <small-integer>,
 		       #key default = %default-object)
   %vector-element (v, i, default);
 end method element;
 
-//
-// element-setter
-//
-
-define method element-setter (obj, v :: <vector>, i :: <small-integer>)
+define method element-setter (obj, v :: <simple-object-vector>, i :: <small-integer>)
   %vector-element-setter (v, i, obj);
 end method element-setter;
 
-//
-// size
-//
-
-define method size (v :: <vector>)
+define method size (v :: <simple-object-vector>)
   %vector-size (v);
 end method size;
 
 //
-// dimensions
-//
-
-define method dimensions (v :: <vector>)
-  list (%vector-size (v));
-end method dimensions;
-
 //
 // forward-iteration-protocol implementation
 //

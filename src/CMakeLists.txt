@@ -58,6 +58,7 @@ add_library(marlais_lib
   apply.c
   array.c
   boolean.c
+  bytevector.c
   character.c
   class.c
   classprec.c

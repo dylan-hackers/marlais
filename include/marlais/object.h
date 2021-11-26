@@ -32,6 +32,7 @@ typedef enum {
 
     /* collections */
     Pair,
+    ByteVector,
     SimpleObjectVector,
     ObjectArray,
     ObjectDeque, ObjectDequeEntry,

@@ -152,6 +152,7 @@ GLOBAL Object vector_class;
 GLOBAL Object simple_vector_class;
 GLOBAL Object stretchy_vector_class;
 GLOBAL Object simple_object_vector_class;
+GLOBAL Object byte_vector_class;
 GLOBAL Object explicit_key_collection_class;
 GLOBAL Object mutable_explicit_key_collection_class;
 GLOBAL Object stretchy_collection_class;

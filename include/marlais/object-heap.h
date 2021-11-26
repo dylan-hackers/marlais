@@ -101,6 +101,15 @@ struct unicode_string {
 #define USTRVAL(obj)   (((struct unicode_string *)obj)->val)
 #endif
 
+struct byte_vector {
+    ObjectHeader header;
+    int size;
+    uint8_t *els;
+};
+
+#define BYTEVSIZE(obj)      (((struct byte_vector *)obj)->size)
+#define BYTEVELS(obj)       (((struct byte_vector *)obj)->els)
+
 struct simple_object_vector {
     ObjectHeader header;
     int size;

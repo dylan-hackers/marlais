@@ -36,6 +36,7 @@ static void apply_print (Object fd, Object obj, int escaped);
 static void print_pair (Object stream, Object pair, int escaped);
 static void print_character (Object stream, Object c, int escaped);
 static void print_vector (Object stream, Object vec, int escaped);
+static void print_byte_vector (Object stream, Object vec, int escaped);
 static void print_values (Object stream, Object vals, int escaped);
 static void print_string (Object stream, Object str, int escaped);
 static void print_instance (Object stream, Object inst, int escaped);
@@ -128,6 +129,9 @@ marlais_print_object (Object fd, Object obj, int escaped)
     break;
   case SimpleObjectVector:
     print_vector (fd, obj, escaped);
+    break;
+  case ByteVector:
+    print_byte_vector (fd, obj, escaped);
     break;
   case Character:
     print_character (fd, obj, escaped);
@@ -413,6 +417,22 @@ print_vector (Object fd, Object vec, int escaped)
   for (i = 0; i < SOVSIZE (vec); ++i) {
     apply_print (fd, SOVELS (vec)[i], escaped);
     if (i < (SOVSIZE (vec) - 1)) {
+      fprintf (fp, ", ");
+    }
+  }
+  fprintf (fp, "]");
+}
+
+static void
+print_byte_vector (Object fd, Object vec, int escaped)
+{
+  int i;
+  FILE *fp = print_file_from_fd(fd);
+
+  fprintf (fp, "#[");
+  for (i = 0; i < BYTEVSIZE (vec); ++i) {
+    apply_print (fd, BYTEVELS (vec)[i], escaped);
+    if (i < (BYTEVSIZE (vec) - 1)) {
       fprintf (fp, ", ");
     }
   }
