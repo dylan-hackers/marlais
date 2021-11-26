@@ -22,6 +22,11 @@ end method concatenate-as;
 // Methods on <byte-string>
 //
 
+define method element-type (s :: <byte-string>)
+ => (type :: <type>);
+  <byte-character>
+end method;
+
 define method element (s :: <byte-string>, i :: <small-integer>,
 		       #key default = %default-object)
   %string-element(s, i, default);
@@ -62,6 +67,11 @@ end method as;
 // Methods on <wide-string>
 //
 
+define method element-type (s :: <wide-string>)
+ => (type :: <type>);
+  <wide-character>
+end method;
+
 define method element (s :: <wide-string>, i :: <small-integer>,
 		       #key default = %default-object)
   %wstring-element(s, i, default);
@@ -90,6 +100,11 @@ end method concatenate-as;
 //
 // Methods on <unicode-string>
 //
+
+define method element-type (s :: <unicode-string>)
+ => (type :: <type>);
+  <unicode-character>
+end method;
 
 define method element (s :: <unicode-string>, i :: <small-integer>,
 		       #key default = %default-object)

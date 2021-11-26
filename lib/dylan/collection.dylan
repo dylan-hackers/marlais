@@ -63,6 +63,9 @@ define generic fill! (mutable-collection :: <mutable-collection>,
 
 define generic key-test (c :: <collection>) => value :: <function>;
 
+define generic element-type (collection :: <collection>)
+  => (type :: <type>);
+
 define generic element (c :: <collection>, key, #rest rest);
 
 define generic element-setter (value, c :: <mutable-collection>, key, #rest rest)
@@ -106,6 +109,11 @@ define method empty? (c :: <collection>)
     #t;
   end if;
 end method empty?;
+
+define method element-type (collection :: <collection>)
+ => (type :: <type>);
+  <object>
+end method;
 
 // map1 and map2 aren't part of the spec, but are included here
 // for bootstrapping purposes.
