@@ -194,6 +194,13 @@ marlais_register_character (void)
   int num = sizeof (char_prims) / sizeof (struct primitive);
   marlais_register_prims (num, char_prims);
 
+  marlais_add_export (marlais_make_name ("$minimum-wide-codepoint"),
+                      marlais_make_integer (WCHAR_MIN),
+                      1);
+  marlais_add_export (marlais_make_name ("$maximum-wide-codepoint"),
+                      marlais_make_integer (WCHAR_MAX),
+                      1);
+
   marlais_add_export (marlais_make_name ("$minimum-unicode-codepoint"),
                       marlais_make_integer (UCHAR_MIN_VALUE),
                       1);
