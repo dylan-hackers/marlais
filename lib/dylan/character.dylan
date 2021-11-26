@@ -13,6 +13,31 @@ module: dylan
 //       in character.c.
 
 //
+// Codepoint types
+//
+
+// We expect that codepoints always fit in small integers
+define constant <codepoint> = <small-integer>;
+
+// Byte codepoints are always the same
+define constant <byte-codepoint> =
+  limited (<integer>,
+           min: $minimum-byte,
+           max: $maximum-byte);
+
+// Wide codepoints depend on the system
+define constant <wide-codepoint> =
+  limited (<integer>,
+           min: $minimum-wide-codepoint,
+           max: $maximum-wide-codepoint);
+
+// Unicode codepoints depend on the specification
+define constant <unicode-codepoint> =
+  limited (<integer>,
+           min: $minimum-unicode-codepoint,
+           max: $maximum-unicode-codepoint);
+
+//
 // Character comparison
 //
 // XXX replace these with primitives
