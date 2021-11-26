@@ -132,26 +132,6 @@ define method concatenate-as (c == <unicode-string>, s :: <unicode-string>, #res
 end method concatenate-as;
 
 //
-// Iteration protocol - generic part on <string>
-//
-
-define method initial-state (s :: <string>)
-  if (size(s) = 0) #f; else 0; end if;
-end method initial-state;
-
-define method next-state (s :: <string>, state :: <integer-state>)
-  if (state < s.size - 1)
-    state + 1;
-  else
-    #f;
-  end if;
-end method next-state;
-
-define method copy-state (s :: <string>, state :: <integer-state>)
-  state;
-end method copy-state;
-
-//
 // Iteration protocol - part specific to <byte-string>
 //
 
