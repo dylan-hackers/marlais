@@ -40,8 +40,6 @@ define constant <unicode-codepoint> =
 //
 // Character comparison
 //
-// XXX replace these with primitives
-//
 
 define method \< (c1 :: <byte-character>, c2 :: <byte-character>)
   %character->integer(c1) < %character->integer(c2);
@@ -59,7 +57,8 @@ end method \<;
 // Character coercion
 //
 
-// default implementation
+// Between characters and integers
+
 define method as (cc == <character>, ch :: <small-integer>)
   as(<standard-character>, ch)
 end method as;
@@ -87,6 +86,10 @@ end method as;
 define method as (cc == <unicode-character>, i :: <small-integer>)
   %integer->uchar(i);
 end method as;
+
+//
+// Case conversion
+//
 
 // as-lowercase
 
