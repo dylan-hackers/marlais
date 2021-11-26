@@ -135,10 +135,6 @@ end method concatenate-as;
 // Iteration protocol - generic part on <string>
 //
 
-define method current-key (s :: <collection>, state :: <integer-state>)
-  state
-end method current-key;
-
 define method initial-state (s :: <string>)
   if (size(s) = 0) #f; else 0; end if;
 end method initial-state;

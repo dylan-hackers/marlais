@@ -27,6 +27,7 @@ load("dylan/character.dylan");
 
 // Collections
 load("dylan/collection.dylan");
+load("dylan/iteration.dylan");
 load("dylan/list.dylan");
 load("dylan/array.dylan");
 load("dylan/vector.dylan");
