@@ -19,7 +19,7 @@ end method vector;
 // Generic methods
 //
 
-define method dimensions (v :: <simple-object-vector>)
+define method dimensions (v :: <vector>)
   list (size (v));
 end method dimensions;
 
