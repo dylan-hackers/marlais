@@ -53,15 +53,15 @@ define method concatenate-as (c == <byte-string>, s :: <byte-string>, #rest more
 end method concatenate-as;
 
 // XXX what is this for?
-define method as (ic == <integer>, s :: <string>)
-  let zero = as(<integer>, '0');
-  let total = 0;
-  local method accumulate (ch :: <character>)
-    total := 10 * total + (as(<small-integer>, ch) - zero);
-  end method;
-  do(accumulate, s);
-  total
-end method as;
+//define method as (ic == <integer>, s :: <string>)
+//  let zero = as(<integer>, '0');
+//  let total = 0;
+//  local method accumulate (ch :: <character>)
+//    total := 10 * total + (as(<small-integer>, ch) - zero);
+//  end method;
+//  do(accumulate, s);
+//  total
+//end method as;
 
 //
 // Methods on <wide-string>
