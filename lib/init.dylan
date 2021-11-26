@@ -22,8 +22,8 @@ load("dylan/type.dylan");
 
 // Data types
 
-load("dylan/character.dylan");
 load("dylan/number.dylan");
+load("dylan/character.dylan");
 
 // Collections
 load("dylan/collection.dylan");
