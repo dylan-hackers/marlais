@@ -1,8 +1,16 @@
 module: dylan
 
+//
+// Boolean singletons
+//
+
 define constant <true> = singleton (#t);
 
 define constant <false> = singleton (#f);
+
+//
+// Convenience types
+//
 
 define method false-or (type :: <type>)
  => (false-or-type :: <type>);
