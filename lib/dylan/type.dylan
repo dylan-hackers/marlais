@@ -4,7 +4,7 @@ define constant <true> = singleton (#t);
 
 define constant <false> = singleton (#f);
 
-define method false-or (type :: <type>)
- => (false-or-type :: <type>);
+define method false-or (t :: <type>)
+ => (fot :: <type>);
   type-union (type, <false>);
 end method;
