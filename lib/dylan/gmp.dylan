@@ -22,18 +22,18 @@ end method as;
 
 // From strings.
 //
-// We expect base 10. Only byte string for now.
+// We expect base 10. Use simple string coercion.
 
-define method as (c == <mp-float>, s :: <byte-string>)
-  %string->mpf (s, 10);
+define method as (c == <mp-float>, s :: <string>)
+  %string->mpf (as (<byte-string>, s), 10);
 end method as;
 
-define method as (c == <mp-ratio>, s :: <byte-string>)
-  %string->mpq (s, 10);
+define method as (c == <mp-ratio>, s :: <string>)
+  %string->mpq (as (<byte-string>, s), 10);
 end method as;
 
-define method as (c == <mp-integer>, s :: <byte-string>)
-  %string->mpz (s, 10);
+define method as (c == <mp-integer>, s :: <string>)
+  %string->mpz (as (<byte-string>, s), 10);
 end method as;
 
 //
@@ -124,11 +124,106 @@ end method \=;
 // Binary operations
 //
 
-// \+
+// \+ on <mp-float>
 
-// \-
+define method \+ (i1 :: <mp-float>, i2 :: <mp-float>)
+  %mpf-add (i1, i2);
+end method \+;
 
-// \*
+define method \+ (i1 :: <mp-float>, o2 :: <number>)
+  %mpf-add (i1, o2);
+end method \+;
+
+define method \+ (o1 :: <number>, i2 :: <mp-float>)
+  %mpf-add (i2, o1);
+end method \+;
+
+// \+ on <mp-integer>
+
+define method \+ (i1 :: <mp-integer>, i2 :: <mp-integer>)
+  %mpz-add (i1, i2);
+end method \+;
+
+define method \+ (i1 :: <mp-integer>, o2 :: <integer>)
+  %mpz-add (i1, o2);
+end method \+;
+
+define method \+ (o1 :: <integer>, i2 :: <mp-integer>)
+  %mpz-add (i2, o1);
+end method \+;
+
+// \+ on <mp-ratio>
+
+define method \+ (i1 :: <mp-ratio>, i2 :: <mp-ratio>)
+  %mpq-add (i1, i2);
+end method \+;
+
+// \- on <mp-float>
+
+define method \- (i1 :: <mp-float>, i2 :: <mp-float>)
+  %mpf-sub (i1, i2);
+end method \-;
+
+define method \- (i1 :: <mp-float>, o2 :: <number>)
+  %mpf-sub (i1, o2);
+end method \-;
+
+define method \- (o1 :: <number>, i2 :: <mp-float>)
+  %mpf-sub (o1, i2);
+end method \-;
+
+// \- on <mp-integer>
+
+define method \- (i1 :: <mp-integer>, i2 :: <mp-integer>)
+  %mpz-sub (i1, i2);
+end method \-;
+
+define method \- (i1 :: <mp-integer>, o2 :: <integer>)
+  %mpz-sub (i1, o2);
+end method \-;
+
+define method \- (o1 :: <integer>, i2 :: <mp-integer>)
+  %mpz-sub (o1, i2);
+end method \-;
+
+// \- on <mp-ratio>
+define method \- (i1 :: <mp-ratio>, i2 :: <mp-ratio>)
+  %mpq-sub (i1, i2);
+end method \-;
+
+// \* on <mp-float>
+
+define method \* (i1 :: <mp-float>, i2 :: <mp-float>)
+  %mpf-mul (i1, i2);
+end method \*;
+
+define method \* (i1 :: <mp-float>, o2 :: <number>)
+  %mpf-mul (i1, o2);
+end method \*;
+
+define method \* (o1 :: <number>, i2 :: <mp-float>)
+  %mpf-mul (i2, o1);
+end method \*;
+
+// \* on <mp-float>
+
+define method \* (i1 :: <mp-integer>, i2 :: <mp-integer>)
+  %mpz-mul (i1, i2);
+end method \*;
+
+define method \* (i1 :: <mp-integer>, o2 :: <integer>)
+  %mpz-mul (i1, o2);
+end method \*;
+
+define method \* (o1 :: <integer>, i2 :: <mp-integer>)
+  %mpz-mul (i2, o1);
+end method \*;
+
+// \* on <mp-ratio>
+
+define method \* (i1 :: <mp-ratio>, i2 :: <mp-ratio>)
+  %mpq-mul (i1, i2);
+end method \*;
 
 //
 // Unary operations
@@ -141,7 +236,7 @@ define method negative (n :: <mp-float>)
 end method negative;
 
 define method abs (n :: <mp-float>)
-  %mpf-sqrt(n);
+  %mpf-abs(n);
 end method abs;
 
 define method sqrt (n :: <mp-float>)
