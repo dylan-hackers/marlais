@@ -20,9 +20,9 @@ end method pair;
 
 // NOTE This is important and must be loaded early.
 //      It might be better implemented as a primitive.
-define method list (#rest els)
-  els
-end method list;
+//define method list (#rest els)
+//  els
+//end method list;
 
 //
 // type-for-copy

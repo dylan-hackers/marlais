@@ -50,6 +50,7 @@ static Object prim_vector_element_setter (Object vec, Object index, Object val);
 
 static struct primitive vector_prims[] =
 {
+    {"vector", prim_0_rest, marlais_list_to_vector},
     {"%vector-size", prim_1, prim_vector_size},
     {"%vector-size-setter", prim_1, prim_vector_size_setter},
     {"%vector-element", prim_3, prim_vector_element},

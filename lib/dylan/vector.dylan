@@ -11,9 +11,9 @@ module: dylan
 // vector
 //
 
-define method vector (#rest els)
-  %vector (els);
-end method vector;
+//define method vector (#rest els)
+//  %list->vector (els);
+//end method vector;
 
 //
 // Generic methods
