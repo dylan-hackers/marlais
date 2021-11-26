@@ -1,7 +1,25 @@
 module: dylan
 
 //
-// make
+// Every object is the instance of a class
+//
+
+define constant object-class =
+  method (o :: <object>) => <class>;
+      %object-class (o);
+  end method;
+
+//
+// Every object has an identity of its own
+//
+
+define constant identity =
+  method (x :: <object>)
+    x;
+  end method;
+
+//
+// Base implementation of make and initialize
 //
 
 define generic make(c :: <class>, #rest args, #key, #all-keys)
@@ -11,10 +29,42 @@ define method make (c :: <class>, #rest args, #key, #all-keys)
   %make(c, args);
 end method make;
 
+define generic initialize (instance, #rest args, #key, #all-keys)
+  => (objects);
+
+define method initialize (instance, #rest args, #key, #all-keys)
+end method initialize;
+
+// define method =hash (obj)
+//   %=hash(obj);
+// end method =hash;
+
+//
+// Slot initialization
+//
+
+define constant slot-initialized? =
+  method (obj, slot)
+     slot(obj) ~== %uninitialized-slot-value;
+  end method;
+
+//
+// Type predicates
+//
+
 define constant instance? =
   method (obj, typ :: <type>)
     %instance?(obj, typ);
   end method;
+
+define constant subtype? =
+  method (t1 :: <type>, t2 :: <type>)
+    %subtype?(t1, t2);
+  end method;
+
+//
+// Type creation
+//
 
 define constant singleton =
   method (o :: <object>) => <singleton>;
@@ -31,38 +81,17 @@ define constant type-union =
     %union-type (types);
   end method;
 
-//
-//  This just doesn't look right to me!!!!  jnw.
-//
+define generic limited (c :: <class>, #rest keys, #key, #all-keys)
+  => (type :: <type>);
 
-define generic initialize (instance, #rest args, #key, #all-keys)
-  => (objects);
-
-define method initialize (instance, #rest args, #key, #all-keys)
-end method initialize;
-
-define constant identity =
-  method (x :: <object>)
-    x;
-  end method;
-
-// define method =hash (obj)
-//   %=hash(obj);
-// end method =hash;
+define method limited (int == <integer>, #rest args, #key min, max)
+ => (limited-type :: <limited-integer>);
+  %limited-integer(args);
+end method;
 
 //
-// classes
+// Class information
 //
-
-define constant subtype? =
-  method (t1 :: <type>, t2 :: <type>)
-    %subtype?(t1, t2);
-  end method;
-
-define constant object-class =
-  method (o :: <object>) => <class>;
-      %object-class (o);
-  end method;
 
 define constant all-superclasses =
   method (c :: <class>)
@@ -79,26 +108,32 @@ define constant direct-subclasses =
     %direct-subclasses(c);
   end method;
 
-define method shallow-copy (o :: <object>) => new-object :: <object>;
+//
+// Copying
+//
+
+define generic shallow-copy (o :: <object>)
+  => (new-object :: <object>);
+
+define generic type-for-copy (o :: <object>)
+  => (type :: <class>);
+
+define method shallow-copy (o :: <object>)
+ => (new-object :: <object>);
   o;
 end method shallow-copy;
 
-define method type-for-copy (o :: <object>) => value :: <class>;
+define method type-for-copy (o :: <object>)
+ => (type :: <class>);
   o.object-class
 end method type-for-copy;
 
-define constant slot-initialized? =
-  method (obj, slot)
-     slot(obj) ~== %uninitialized-slot-value;
-  end method;
+//
+// Coercion
+//
 
-
-// limited <integer>
-
-define method limited (int == <integer>, #rest args, #key min, max)
-  %limited-integer(args);
-end method limited;
-
+define generic as (c :: <class>, obj :: <object>)
+  => (object :: <object>);
 
 define method as (c :: <class>, obj :: <object>)
   if (object-class(obj) = c)
