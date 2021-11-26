@@ -8,15 +8,7 @@ module: dylan
 //
 
 //
-// vector
-//
-
-//define method vector (#rest els)
-//  %list->vector (els);
-//end method vector;
-
-//
-// Generic methods
+// Methods on <vector>
 //
 
 define method dimensions (v :: <vector>)
@@ -24,43 +16,7 @@ define method dimensions (v :: <vector>)
 end method dimensions;
 
 //
-// Methods on <byte-vector>
-//
-
-define method element (v :: <byte-vector>, i :: <small-integer>,
-		       #key default = %default-object)
- => (value :: <byte>);
-  %bytevector-element (v, i, default);
-end method element;
-
-define method element-setter (obj :: <byte>, v :: <byte-vector>, i :: <small-integer>)
- => (value :: <byte>);
-  %bytevector-element-setter (v, i, obj);
-end method element-setter;
-
-define method size (v :: <byte-vector>)
-  %bytevector-size (v);
-end method size;
-
-//
-// Methods on <simple-object-vector>
-//
-
-define method element (v :: <simple-object-vector>, i :: <small-integer>,
-		       #key default = %default-object)
-  %vector-element (v, i, default);
-end method element;
-
-define method element-setter (obj, v :: <simple-object-vector>, i :: <small-integer>)
-  %vector-element-setter (v, i, obj);
-end method element-setter;
-
-define method size (v :: <simple-object-vector>)
-  %vector-size (v);
-end method size;
-
-//
-// Generic iteration protocol
+// Iteration on <vector>
 //
 
 define method initial-state (v :: <vector>)
@@ -91,12 +47,70 @@ define method previous-state (v :: <vector>, state :: <integer-state>)
   end if;
 end method previous-state;
 
-define method current-element (v :: <vector>, state :: <integer-state>)
+//
+// Methods on <byte-vector>
+//
+
+define method size (v :: <byte-vector>)
+  %bytevector-size (v);
+end method size;
+
+define method element-type (v :: <byte-vector>)
+  <byte>
+end method element-type;
+
+define method element (v :: <byte-vector>, i :: <small-integer>,
+		       #key default = %default-object)
+ => (value :: <byte>);
+  %bytevector-element (v, i, default);
+end method element;
+
+define method element-setter (obj :: <byte>, v :: <byte-vector>, i :: <small-integer>)
+ => (value :: <byte>);
+  %bytevector-element-setter (v, i, obj);
+end method element-setter;
+
+//
+// Iteration on <byte-vector>
+//
+
+define method current-element (v :: <byte-vector>, state :: <integer-state>)
+  %bytevector-element (v, state, %default-object);
+end method current-element;
+
+define method current-element-setter (obj,
+				      v :: <byte-vector>,
+				      state :: <integer-state>)
+  %bytevector-element-setter (v, state, obj);
+end method current-element-setter;
+
+//
+// Methods on <simple-object-vector>
+//
+
+define method size (v :: <simple-object-vector>)
+  %vector-size (v);
+end method size;
+
+define method element (v :: <simple-object-vector>, i :: <small-integer>,
+		       #key default = %default-object)
+  %vector-element (v, i, default);
+end method element;
+
+define method element-setter (obj, v :: <simple-object-vector>, i :: <small-integer>)
+  %vector-element-setter (v, i, obj);
+end method element-setter;
+
+//
+// Iteration on <simple-object-vector>
+//
+
+define method current-element (v :: <simple-object-vector>, state :: <integer-state>)
   %vector-element (v, state, %default-object);
 end method current-element;
 
 define method current-element-setter (obj,
-				      v :: <vector>,
+				      v :: <simple-object-vector>,
 				      state :: <integer-state>)
   %vector-element-setter (v, state, obj);
 end method current-element-setter;
