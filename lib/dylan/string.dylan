@@ -5,6 +5,20 @@ module: dylan
 //
 
 //
+// Generic methods
+//
+
+define method concatenate (s :: <string>, #rest more-strings)
+ => (cs :: <string>);
+  apply(concatenate-as, object-class(s), s, more-strings);
+end method concatenate;
+
+define method concatenate-as (c :: subclass(<string>), s :: <string>, #rest more-strings)
+ => (cs :: <string>);
+  apply(concatenate-as, c, as(c, s), more-strings);
+end method concatenate-as;
+
+//
 // Methods on <byte-string>
 //
 
@@ -32,14 +46,6 @@ define method concatenate-as (c == <byte-string>, s :: <byte-string>, #rest more
     apply (concatenate-as, c, p, more-strings.tail);
   end if;
 end method concatenate-as;
-
-define method concatenate-as (c == <byte-string>, s :: <string>, #rest more-strings)
-  apply(concatenate-as, c, as(<byte-string>, s), more-strings);
-end method concatenate-as;
-
-define method concatenate (s :: <byte-string>, #rest more-strings)
-  apply (concatenate-as, <byte-string>, s, more-strings);
-end method concatenate;
 
 // XXX what is this for?
 define method as (ic == <integer>, s :: <string>)
@@ -81,14 +87,6 @@ define method concatenate-as (c == <wide-string>, s :: <wide-string>, #rest more
   end if;
 end method concatenate-as;
 
-define method concatenate-as (c == <wide-string>, s :: <string>, #rest more-strings)
-  apply(concatenate-as, c, as(<wide-string>, s), more-strings);
-end method concatenate-as;
-
-define method concatenate (s :: <wide-string>, #rest more-strings)
-  apply (concatenate-as, <wide-string>, s, more-strings);
-end method concatenate;
-
 //
 // Methods on <unicode-string>
 //
@@ -117,14 +115,6 @@ define method concatenate-as (c == <unicode-string>, s :: <unicode-string>, #res
     apply (concatenate-as, c, p, more-strings.tail);
   end if;
 end method concatenate-as;
-
-define method concatenate-as (c == <unicode-string>, s :: <string>, #rest more-strings)
-  apply(concatenate-as, c, as(<unicode-string>, s), more-strings);
-end method concatenate-as;
-
-define method concatenate (s :: <unicode-string>, #rest more-strings)
-  apply (concatenate-as, <unicode-string>, s, more-strings);
-end method concatenate;
 
 //
 // Iteration protocol - generic part on <string>
