@@ -11,6 +11,13 @@ module: dylan
 //
 
 //
+// The <byte> type
+//
+
+define constant <byte> =
+  limited(<integer>, min: $minimum-byte, max: $maximum-byte);
+
+//
 // Numeric predicates
 //
 
