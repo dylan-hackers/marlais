@@ -99,10 +99,6 @@ define method type-for-copy (c :: <mutable-collection>)
   object-class(c);
 end method type-for-copy;
 
-define method type-for-copy (p :: <byte-string>)
-  <byte-string>;
-end method type-for-copy;
-
 define method empty? (c :: <collection>)
   if (initial-state(c))
     #f;
