@@ -28,7 +28,7 @@ define constant subclass =
 
 define constant type-union =
   method (#rest types)
-    apply(%union-type, types);
+    %union-type (types);
   end method;
 
 //
