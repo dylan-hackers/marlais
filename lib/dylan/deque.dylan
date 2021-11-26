@@ -8,6 +8,20 @@ module: dylan
 //
 
 //
+// empty?
+//
+
+// This method required because the general empty? method assumes that
+// the final state is #f.
+define method empty?(d :: <deque>)
+  if (%deque-initial-state (d))
+    #f
+  else
+    #t
+  end
+end method empty?;
+
+//
 // push
 //
 
@@ -177,15 +191,5 @@ define method forward-iteration-protocol (d :: <deque>)
 	  current-element-setter,
 	  copy-state);
 end method forward-iteration-protocol;
-
-// This method required because the general empty? method assumes that
-// the final state is #f.
-define method empty?(d :: <deque>)
-  if (%deque-initial-state (d))
-    #f
-  else
-    #t
-  end
-end method empty?;
 
 // end deque.dyl
