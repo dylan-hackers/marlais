@@ -1030,6 +1030,8 @@ broad_class (Object obj)
 
   if (SINGLETONP (obj)) {
     return (marlais_object_class (SINGLEVAL (obj)));
+  } else if (SUBCLASSP (obj)) {
+    return (class_class);
   } else if (LIMINTP (obj)) {
     return (integer_class);
   } else if (UNIONP (obj)) {
