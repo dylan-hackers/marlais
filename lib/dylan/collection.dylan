@@ -72,8 +72,16 @@ define generic element-setter (value, c :: <mutable-collection>, key, #rest rest
   => (new-value);
 
 //
-// most general methods for collection gfs.
+// Basic properties
 //
+
+// By default collections have element type <object>
+define method element-type (collection :: <collection>)
+ => (type :: <type>);
+  <object>
+end method;
+
+// Size can be determined by iteration as last resort
 define method size (c :: <collection>)
   let the-size = 0;
   for (value in c)
@@ -82,6 +90,19 @@ define method size (c :: <collection>)
     the-size;
   end for;
 end method size;
+
+// Emptyness can be determined by iteration as last resort
+define method empty? (c :: <collection>)
+  if (initial-state(c))
+    #f;
+  else
+    #t;
+  end if;
+end method empty?;
+
+//
+// Copying
+//
 
 define method shallow-copy (c :: <collection>)
   let new-collection = make (type-for-copy (c), size: c.size);
@@ -95,19 +116,6 @@ end method shallow-copy;
 define method type-for-copy (c :: <mutable-collection>)
   object-class(c);
 end method type-for-copy;
-
-define method empty? (c :: <collection>)
-  if (initial-state(c))
-    #f;
-  else
-    #t;
-  end if;
-end method empty?;
-
-define method element-type (collection :: <collection>)
- => (type :: <type>);
-  <object>
-end method;
 
 // map1 and map2 aren't part of the spec, but are included here
 // for bootstrapping purposes.
