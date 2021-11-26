@@ -7,13 +7,20 @@ copyright: (c) 2001, LGPL, Douglas M. Auclair (see "copyright" file)
 
 //------------------------SEQUENCE-STREAMS-------------------------------
 
-define abstract class <sequence-stream> (<positionable-stream>)
+//
+// Base class for sequence streams
+//
+
+define abstract class <sequence-stream> (<basic-stream>, <positionable-stream>)
   slot pos, init-value: 0;
   slot contents, required-init-keyword: contents:;
-  slot direction, init-keyword: direction:;
   slot start, init-keyword: start:;
   slot stop, init-keyword: end:;
 end class <sequence-stream>;
+
+//
+// Subclasses for various sequence types
+//
 
 define class <fixed-sequence-stream> (<sequence-stream>) end;
 define class <stretchy-sequence-stream> (<sequence-stream>) end;
@@ -22,47 +29,9 @@ define class <byte-string-stream> (<string-stream>) end;
 define class <wide-string-stream> (<string-stream>) end;
 define class <unicode-string-stream> (<string-stream>) end;
 
-define generic stream-contents(ps :: <sequence-stream>,
-				#key clear-contents?);
-
-define method stream-contents(ss :: <sequence-stream>, #key clear-contents?)
-  let ans =
-    if(clear-contents?)
-      let temp = copy-sequence(ss.contents);
-      ss.contents := make(type-for-copy(ss.contents));
-      temp;
-    else
-      ss.contents;
-    end;
-  ans;
-end method stream-contents;
-
-define method stream-size(ps :: <positionable-stream>) => (s :: <integer>)
-  ps.stream-contents.size;
-end method stream-size;
-
-define method stream-position(ps :: <sequence-stream>)
-  ps.pos;
-end method stream-position;
-
-define method stream-position-setter(index, ps :: <sequence-stream>)
-  if(index == #"start")
-    ps.pos := 0;
-  elseif(index == #"end")
-    ps.pos := ps.stream-contents.stream-size - 1;
-  else
-    ps.pos := index;
-  end if;
-end method stream-position-setter;
-
-define method adjust-stream-position(ps :: <sequence-stream>,
-	delta :: <integer>, #key from = #"current")
-  ps.pos := select(from)
-    current: => ps.pos + delta;
-    start: => delta;
-    end: => ps.stream-contents.stream-size + delta;
-  end;
-end method adjust-stream-position;
+//
+// Stream class selection
+//
 
 define generic type-for-sequence-stream(seq :: <sequence>)
  => (ans :: <class>);
@@ -96,6 +65,10 @@ define method type-for-sequence-stream(seq :: <unicode-string>)
   <unicode-string-stream>;
 end method type-for-sequence-stream;
 
+//
+// Construction
+//
+
 define method make(ss == <sequence-stream>,
  #key contents, direction = #"input", start, end: stop)
   make(type-for-sequence-stream(contents),
@@ -116,11 +89,73 @@ define method initialize(ss :: <sequence-stream>,
   ss.stop := if(stp) stp else cnt.size end;
 end method initialize;
 
-//------------------------READ/WRITE-------------------------------
+//
+// Content
+//
+
+define generic stream-contents(ps :: <sequence-stream>,
+				#key clear-contents?);
+
+define method stream-contents(ss :: <sequence-stream>, #key clear-contents?)
+  let ans =
+    if(clear-contents?)
+      let temp = copy-sequence(ss.contents);
+      ss.contents := make(type-for-copy(ss.contents));
+      temp;
+    else
+      ss.contents;
+    end;
+  ans;
+end method stream-contents;
+
+define method stream-element-type (ss :: <sequence-stream>)
+ => (type :: <type>);
+  ss.contents.element-type
+end method;
+
+define method stream-sequence-type (ss :: <sequence-stream>)
+ => (type :: <type>);
+  ss.contents.object-class
+end method;
+
+define method stream-size(ss :: <sequence-stream>) => (s :: <integer>)
+  ss.stream-contents.size;
+end method stream-size;
+
+//
+// Positioning
+//
+
+define method stream-position(ps :: <sequence-stream>)
+  ps.pos;
+end method stream-position;
+
+define method stream-position-setter(index :: <stream-position>, ps :: <sequence-stream>)
+  if(index == #"start")
+    ps.pos := 0;
+  elseif(index == #"end")
+    ps.pos := ps.stream-contents.stream-size - 1;
+  else
+    ps.pos := index;
+  end if;
+end method stream-position-setter;
+
+define method adjust-stream-position(ps :: <sequence-stream>,
+	delta :: <integer>, #key from = #"current")
+  ps.pos := select(from)
+    current: => ps.pos + delta;
+    start: => delta;
+    end: => ps.stream-contents.stream-size + delta;
+  end;
+end method adjust-stream-position;
+
+//
+// Reading and writing
+//
 
 define method check-direction(s :: <stream>, way :: <symbol>, fn :: <string>)
-  unless(s.direction == #"input-output" | way == s.direction)
-    error("Read/write error", s, s.direction, fn);
+  unless(s.stream-direction == #"input-output" | way == s.stream-direction)
+    error("Read/write error", s, s.stream-direction, fn);
   end unless;
 end method check-direction;
 
