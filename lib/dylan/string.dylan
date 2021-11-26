@@ -10,12 +10,12 @@ module: dylan
 
 define method concatenate (s :: <string>, #rest more-strings)
  => (cs :: <string>);
-  apply(concatenate-as, object-class(s), s, more-strings);
+  apply (concatenate-as, object-class(s), s, more-strings);
 end method concatenate;
 
 define method concatenate-as (c :: subclass(<string>), s :: <string>, #rest more-strings)
  => (cs :: <string>);
-  apply(concatenate-as, c, as(c, s), more-strings);
+  apply (concatenate-as, c, as(c, s), more-strings);
 end method concatenate-as;
 
 //
@@ -155,7 +155,6 @@ define method copy-state (s :: <string>, state :: <integer-state>)
   state;
 end method copy-state;
 
-
 //
 // Iteration protocol - part specific to <byte-string>
 //
@@ -169,7 +168,6 @@ define method current-element-setter (obj,
 				      state :: <integer-state>)
   %string-element-setter(s, state, obj);
 end method current-element-setter;
-
 
 //
 // Iteration protocol - part specific to <wide-string>
@@ -198,7 +196,6 @@ define method current-element-setter (obj,
 				      state :: <integer-state>)
   %ustring-element-setter(s, state, obj);
 end method current-element-setter;
-
 
 //
 // Comparisons
