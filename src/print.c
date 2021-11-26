@@ -49,7 +49,12 @@ static void print_type_name (Object stream, Object class, int escaped);
 
 #ifdef MARLAIS_ENABLE_WCHAR
 static void print_wchar (Object stream, Object c, int escaped);
-static void print_wstring (Object stream, Object c, int escaped);
+static void print_wstring (Object stream, Object s, int escaped);
+#endif
+
+#ifdef MARLAIS_ENABLE_UCHAR
+static void print_uchar (Object stream, Object c, int escaped);
+static void print_ustring (Object stream, Object s, int escaped);
 #endif
 
 /* Primitives */
@@ -140,14 +145,10 @@ marlais_print_object (Object fd, Object obj, int escaped)
 #endif
 #ifdef MARLAIS_ENABLE_UCHAR
   case UnicodeCharacter:
-    ufp = u_finit(fp, NULL, NULL);
-    u_fputc (UCHARVAL(obj), ufp);
-    u_fclose (ufp);
+    print_uchar (fd, obj, escaped);
     break;
   case UnicodeString:
-    ufp = u_finit(fp, NULL, NULL);
-    u_fputs (USTRVAL(obj), ufp);
-    u_fclose (ufp);
+    print_ustring (fd, obj, escaped);
     break;
 #endif
   case ObjectTable:
@@ -797,6 +798,7 @@ print_wchar (Object fd, Object c, int escaped)
   wchar_t ch;
   FILE *fp = print_file_from_fd(fd);
 
+  // TODO actual escaping
   ch = WCHARVAL (c);
   if (escaped) {
     fprintf (fp, "'%lc'", ch);
@@ -811,12 +813,53 @@ print_wstring (Object fd, Object str, int escaped)
   wchar_t *ws;
   FILE *fp = print_file_from_fd(fd);
 
+  // TODO actual escaping
   ws = WIDESTRVAL(str);
   if (escaped) {
     fprintf (fp, "\"%ls\"", (wchar_t*)ws);
   } else {
     fprintf (fp, "%ls", (wchar_t*)ws);
   }
+}
+
+#endif
+
+#ifdef MARLAIS_ENABLE_UCHAR
+
+static void
+print_uchar (Object fd, Object c, int escaped)
+{
+  UChar32 uc;
+  UFILE *ufp;
+  FILE *fp = print_file_from_fd(fd);
+
+  // TODO actual escaping / utf32 safety
+  uc = UCHARVAL (c);
+  ufp = u_finit(fp, NULL, NULL);
+  if (escaped) {
+    u_fprintf (ufp, "'%C'", (UChar)uc);
+  } else {
+    u_fprintf (ufp, "%C", (UChar)uc);
+  }
+  u_fclose (ufp);
+}
+
+static void
+print_ustring (Object fd, Object s, int escaped)
+{
+  UChar *us;
+  UFILE *ufp;
+  FILE *fp = print_file_from_fd(fd);
+
+  // TODO actual escaping
+  us = USTRVAL(s);
+  ufp = u_finit(fp, NULL, NULL);
+  if (escaped) {
+    u_fprintf (ufp, "\"%S\"", us);
+  } else {
+    u_fprintf (ufp, "%S", us);
+  }
+  u_fclose (ufp);
 }
 
 #endif
