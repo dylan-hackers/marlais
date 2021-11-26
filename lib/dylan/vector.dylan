@@ -100,7 +100,3 @@ define method current-element-setter (obj,
 				      state :: <integer-state>)
   %vector-element-setter (v, state, obj);
 end method current-element-setter;
-
-define method copy-state (v :: <vector>, state :: <integer-state>)
-  state;
-end method copy-state;
