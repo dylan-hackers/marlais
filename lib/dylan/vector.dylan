@@ -60,8 +60,7 @@ define method size (v :: <simple-object-vector>)
 end method size;
 
 //
-//
-// forward-iteration-protocol implementation
+// Generic iteration protocol
 //
 
 define method initial-state (v :: <vector>)
@@ -72,6 +71,10 @@ define method initial-state (v :: <vector>)
   end if;
 end method initial-state;
 
+define method final-state (v :: <vector>)
+  v.size - 1;
+end method final-state;
+
 define method next-state (v :: <vector>, state :: <integer-state>)
   if (state < v.size - 1)
     state + 1;
@@ -79,6 +82,14 @@ define method next-state (v :: <vector>, state :: <integer-state>)
     #f;
   end if;
 end method next-state;
+
+define method previous-state (v :: <vector>, state :: <integer-state>)
+  if (state <= 0)
+    #f;
+  else
+    state - 1;
+  end if;
+end method previous-state;
 
 define method current-element (v :: <vector>, state :: <integer-state>)
   %vector-element (v, state, %default-object);
@@ -93,15 +104,3 @@ end method current-element-setter;
 define method copy-state (v :: <vector>, state :: <integer-state>)
   state;
 end method copy-state;
-
-define method previous-state (v :: <vector>, state :: <integer-state>)
-  if (state <= 0)
-    #f;
-  else
-    state - 1;
-  end if;
-end method previous-state;
-
-define method final-state (v :: <vector>)
-  v.size - 1;
-end method final-state;
