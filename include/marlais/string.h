@@ -43,13 +43,13 @@
 #ifdef MARLAIS_ENABLE_WCHAR
 /* allocate a wchar_t string */
 #define MARLAIS_ALLOCATE_WSTRING(_size) \
-  ((wchar_t *)marlais_allocate_atomic(_size * sizeof(wchar_t)))
+  ((wchar_t *)marlais_allocate_atomic((_size) * sizeof(wchar_t)))
 #endif
 
 #ifdef MARLAIS_ENABLE_UCHAR
 /* allocate a UChar string */
 #define MARLAIS_ALLOCATE_USTRING(_size) \
-  ((UChar *)marlais_allocate_atomic(_size * sizeof(UChar)))
+  ((UChar *)marlais_allocate_atomic((_size) * sizeof(UChar)))
 #endif
 
 /* Register string primitives */
