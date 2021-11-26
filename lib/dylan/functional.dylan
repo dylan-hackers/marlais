@@ -19,7 +19,7 @@ define method complement (func :: <function>)
   end method;
 end method complement;
 
-define method disjoin ( predicate :: <function>,
+define method disjoin (predicate :: <function>,
 		       #rest more-predicates)
   method (#rest args)
     if (empty? (predicates))
