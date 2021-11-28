@@ -35,7 +35,7 @@ define method conjoin (predicate :: <function>,
 		       #rest more-predicates)
   method (#rest args)
     if (empty? (more-predicates))
-      apply (predciate, args)
+      apply (predicate, args)
     else
       apply (predicate, args)
 	& apply (apply (conjoin, more-predicates), args);
