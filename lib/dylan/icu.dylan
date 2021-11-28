@@ -5,12 +5,12 @@ define generic character-name (c :: <character>)
 
 define method character-name (c :: <character>)
  => (name :: <string>);
-  %icu-char-name(as(<unicode-character>, c));
+  %uchar-name(as(<unicode-character>, c));
 end function;
 
 define method character-name (c :: <unicode-character>)
  => (name :: <string>);
-  %icu-char-name(c);
+  %uchar-name(c);
 end function;
 
 define generic unicode-block (c :: <character>)
@@ -18,10 +18,10 @@ define generic unicode-block (c :: <character>)
 
 define method unicode-block (c :: <character>)
  => (blk :: <integer>);
-  %icu-char-block(as(<unicode-character>, c));
+  %uchar-block(as(<unicode-character>, c));
 end function;
 
 define method unicode-block (c :: <unicode-character>)
  => (blk :: <integer>);
-  %icu-char-block(c);
+  %uchar-block(c);
 end function;

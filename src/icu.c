@@ -19,13 +19,13 @@ static void  icu_gc_free (void *context, void *obj);
 
 /* Primitives */
 
-static Object prim_char_block (Object chr);
-static Object prim_char_name (Object chr);
+static Object uchar_block (Object chr);
+static Object uchar_name (Object chr);
 
 static struct primitive icu_prims[] =
 {
- {"%icu-char-block", prim_1, prim_char_block},
- {"%icu-char-name",  prim_1, prim_char_name},
+ {"%uchar-block", prim_1, uchar_block},
+ {"%uchar-name",  prim_1, uchar_name},
 };
 
 /* Exported functions */
@@ -99,12 +99,12 @@ static void icu_gc_free (void *context, void *obj)
 
 /* Primitives */
 
-static Object prim_char_block (Object chr)
+static Object uchar_block (Object chr)
 {
   return marlais_make_integer (ublock_getCode (UCHARVAL (chr)));
 }
 
-static Object prim_char_name (Object chr)
+static Object uchar_name (Object chr)
 {
   UErrorCode ue;
   int32_t len;
