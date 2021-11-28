@@ -15,6 +15,7 @@
 #include <marlais/alloc.h>
 #include <marlais/apply.h>
 #include <marlais/array.h>
+#include <marlais/bytevector.h>
 #include <marlais/character.h>
 #include <marlais/class.h>
 #include <marlais/classprec.h>
