@@ -575,8 +575,10 @@ marlais_make (Object class, Object rest)
   } else if ((class == vector_class) ||
              (class == simple_object_vector_class)) {
     ret = marlais_make_vector_entrypoint (rest);
-  } else if ((class == string_class) || (class == byte_string_class)) {
+  } else if (class == string_class) {
     /* TODO default string type */
+    ret = marlais_make_bytestring_entrypoint (rest);
+  } else if (class == byte_string_class) {
     ret = marlais_make_bytestring_entrypoint (rest);
   } else if (class == wide_string_class) {
     ret = marlais_make_wstring_entrypoint (rest);
