@@ -1,9 +1,10 @@
 module: dylan
 
 //
-// list.dyl - list operations
+// list.dylan
 //
-// Brent Benson
+// Authors:
+//   Brent Benson
 //
 
 //

@@ -3,6 +3,8 @@ module: dylan
 //
 // string.dylan
 //
+// Authors:
+//
 
 //
 // Generic methods

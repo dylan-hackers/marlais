@@ -1,13 +1,10 @@
 module: dylan
 
 //
-// collections
+// collections.dylan
 //
-
-//
-// collection.dyl - portable collection functions
-//
-// Brent Benson
+// Authors:
+//   Brent Benson
 //
 
 //

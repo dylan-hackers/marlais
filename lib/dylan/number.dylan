@@ -1,13 +1,10 @@
 module: dylan
 
 //
-// numbers
+// numbers.dylan
 //
-
-//
-// number.dyl - generic functions on numbers
-//
-// Brent Benson
+// Authors:
+//   Brent Benson
 //
 
 //

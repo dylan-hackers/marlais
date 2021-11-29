@@ -1,6 +1,10 @@
 module: dylan
 
-// functionals
+//
+// functional.dylan
+//
+// Authors:
+//
 
 define method compose(function :: <function>, #rest more-functions)
   if (empty?(more-functions))

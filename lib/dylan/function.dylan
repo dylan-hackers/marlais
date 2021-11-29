@@ -1,5 +1,11 @@
 module: dylan
 
+//
+// function.dylan
+//
+// Authors:
+//
+
 define method generic-function-methods (gf :: <generic-function>)
   %generic-function-methods(gf);
 end method generic-function-methods;

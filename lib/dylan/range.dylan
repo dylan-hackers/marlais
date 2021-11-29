@@ -3,6 +3,8 @@ module: dylan
 //
 // range.dylan
 //
+// Authors:
+//
 
 define class <range> (<sequence>)
   slot from,    init-value:  0, init-keyword: from:;

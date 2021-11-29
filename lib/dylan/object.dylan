@@ -1,6 +1,12 @@
 module: dylan
 
 //
+// object.dylan
+//
+// Authors:
+//
+
+//
 // Every object is the instance of a class
 //
 

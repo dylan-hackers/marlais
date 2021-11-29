@@ -1,5 +1,11 @@
 module: dylan
 
+//
+// error.dylan
+//
+// Authors:
+//
+
 define method error (msg :: <string>, #rest args)
   %apply(%error, %pair(msg, args));
 end method error;

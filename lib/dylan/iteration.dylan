@@ -1,6 +1,12 @@
 module: dylan
 
 //
+// iteration.dylan
+//
+// Authors:
+//
+
+//
 // Iteration protocol generics
 //
 

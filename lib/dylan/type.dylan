@@ -1,6 +1,13 @@
 module: dylan
 
 //
+// type.dylan
+//
+// Authors:
+//   Ingo Albrecht
+//
+
+//
 // Boolean singletons
 //
 

@@ -1,7 +1,7 @@
 module: dylan
 
 //
-// deque.dyl
+// deque.dylan
 //
 // Authors:
 //   Brent Benson

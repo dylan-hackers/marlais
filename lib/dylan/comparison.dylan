@@ -1,7 +1,9 @@
 module: dylan
 
 //
-// comparisons.
+// comparison.dylan
+//
+// Authors:
 //
 
 define constant \~ = method(a) %not(a) end;
