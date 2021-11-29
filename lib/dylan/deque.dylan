@@ -69,7 +69,7 @@ define method last (d :: <deque>, #key default = %default-object)
   %deque-last (d, default)
 end method last;
 
-// should add specific (define-method last-setter ((d <deque>) new-value) ...)
+// TODO mising first-setter and last-setter? check the spec.
 
 //
 // element
@@ -107,7 +107,7 @@ define method remove! (d :: <deque>, value,
 end method remove!;
 
 //
-// forward-iteration-protocol implementation
+// iteration-protocol implementation
 //
 
 define method initial-state (d :: <deque>)
