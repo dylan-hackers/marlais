@@ -12,8 +12,9 @@ module: dylan
 //
 
 define generic size (collection :: <collection>)
- => integer-or-false :: <object>;
-define generic empty? (collection :: <collection>) => is-empty :: <boolean>;
+  => integer-or-false :: <object>;
+define generic empty? (collection :: <collection>)
+  => is-empty :: <boolean>;
 define generic do (procedure :: <function>,
 		   collection :: <collection>,
 		   #rest more-collections) => false :: <boolean>;
