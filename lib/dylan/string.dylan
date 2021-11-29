@@ -24,6 +24,10 @@ end method concatenate-as;
 // Methods on <byte-string>
 //
 
+define method size (s :: <byte-string>)
+  %string-size(s);
+end method size;
+
 define method element-type (s :: <byte-string>)
  => (type :: <type>);
   <byte-character>
@@ -39,10 +43,6 @@ define method element-setter (c :: <byte-character>,
 			      i :: <small-integer>)
   %string-element-setter (s, i, c);
 end method element-setter;
-
-define method size (s :: <byte-string>)
-  %string-size(s);
-end method size;
 
 define method concatenate-as (c == <byte-string>, s :: <byte-string>, #rest more-strings)
   if (empty? (more-strings))
@@ -69,6 +69,10 @@ end method concatenate-as;
 // Methods on <wide-string>
 //
 
+define method size (s :: <wide-string>)
+  %wstring-size(s);
+end method size;
+
 define method element-type (s :: <wide-string>)
  => (type :: <type>);
   <wide-character>
@@ -85,10 +89,6 @@ define method element-setter (c :: <wide-character>,
   %wstring-element-setter (s, i, c);
 end method element-setter;
 
-define method size (s :: <wide-string>)
-  %wstring-size(s);
-end method size;
-
 define method concatenate-as (c == <wide-string>, s :: <wide-string>, #rest more-strings)
   if (empty? (more-strings))
     s
@@ -102,6 +102,10 @@ end method concatenate-as;
 //
 // Methods on <unicode-string>
 //
+
+define method size (s :: <unicode-string>)
+  %ustring-size(s);
+end method size;
 
 define method element-type (s :: <unicode-string>)
  => (type :: <type>);
@@ -118,10 +122,6 @@ define method element-setter (c :: <unicode-character>,
 			      i :: <small-integer>)
   %ustring-element-setter (s, i, c);
 end method element-setter;
-
-define method size (s :: <unicode-string>)
-  %ustring-size(s);
-end method size;
 
 define method concatenate-as (c == <unicode-string>, s :: <unicode-string>, #rest more-strings)
   if (empty? (more-strings))
