@@ -61,7 +61,7 @@ static Object list_last (Object lst, Object default_ob);
 static struct primitive list_prims[] =
 {
     {"list", prim_0_rest, marlais_copy_list},
-    {"%pair", prim_2, marlais_cons},
+    {"pair", prim_2, marlais_cons},
     {"%head", prim_1, marlais_car},
     {"%tail", prim_1, marlais_cdr},
     {"%first", prim_2, first_d},

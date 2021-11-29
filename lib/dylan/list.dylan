@@ -8,14 +8,6 @@ module: dylan
 //
 
 //
-// pair
-//
-
-define method pair (car, cdr)
-  %pair(car, cdr);
-end method pair;
-
-//
 // type-for-copy
 //
 

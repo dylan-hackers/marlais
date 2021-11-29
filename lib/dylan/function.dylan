@@ -33,11 +33,11 @@ define method function-arguments (f :: <function>)
 end method function-arguments;
 
 define method applicable-method? (m :: <function>, #rest args)
-  %apply(%applicable-method?, %pair(m, args));
+  %apply(%applicable-method?, pair(m, args));
 end method applicable-method?;
 
 define method sorted-applicable-methods (gf :: <generic-function>, #rest args)
-  %apply(%sorted-applicable-methods, %pair(gf, args));
+  %apply(%sorted-applicable-methods, pair(gf, args));
 end method sorted-applicable-methods;
 
 define method find-method (gf :: <generic-function>, #rest sample-args)
