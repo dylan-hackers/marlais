@@ -12,7 +12,7 @@
 
 
 #ifndef INIT_FILE
-#define INIT_FILE "init.dylan"
+#define INIT_FILE "dylan/init.dylan"
 #endif
 
 #ifndef VERSION
