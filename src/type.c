@@ -62,6 +62,8 @@ marlais_instance_p (Object obj, Object type)
     } else {
       return false;
     }
+  } else if (type == object_class) {
+    return true;
   }
 
   objtype = marlais_object_class (obj);
