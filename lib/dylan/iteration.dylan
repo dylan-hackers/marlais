@@ -46,7 +46,7 @@ define generic current-element-setter (element :: <object>, c :: <collection>, s
   => (element :: <object>);
 
 //
-// Default implementation for limits
+// Default implementations
 //
 
 define method forward-limit (c :: <collection>)
@@ -57,16 +57,28 @@ define method backward-limit (c :: <collection>)
   #f
 end method next-state;
 
-define method finished-state? (c :: <collection>, state, limit)
+define method finished-state? (c :: <collection>, state :: <object>, limit :: <object>)
   => (finished? :: <boolean>);
   state == limit;
 end method finished-state?;
 
-define method current-key (s :: <collection>, state)
+define method current-key (s :: <collection>, state :: <object>)
+ => (key :: <object>);
   state
 end method current-key;
 
-define method copy-state (s :: <collection>, state)
+define method current-element (c :: <collection>, state :: <object>)
+ => (element :: <object>);
+  element(c, state);
+end method current-element;
+
+define method current-element-setter (element :: <object>, c :: <collection>, state :: <object>)
+ => (element :: <object>);
+  element(element, c, state);
+end method current-element;
+
+define method copy-state (s :: <collection>, state :: <object>)
+ => (copy :: <object>);
   state
 end method copy-state;
 
@@ -89,14 +101,6 @@ end method next-state;
 define method previous-state (c :: <collection>, state)
   error ("Don't know how to find next state", c);
 end method next-state;
-
-define method current-element (c :: <collection>, state)
-  error("Don't know how to find current element", c);
-end method current-element;
-
-define method current-element-setter (e,  c :: <collection>, state)
-  error ("Don't know how to set current element", c);
-end method current-element-setter;
 
 //
 // New method chooses the best specific method for the specified
