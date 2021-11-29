@@ -431,7 +431,7 @@ print_byte_vector (Object fd, Object vec, int escaped)
 
   fprintf (fp, "#[");
   for (i = 0; i < BYTEVSIZE (vec); ++i) {
-    apply_print (fd, BYTEVELS (vec)[i], escaped);
+    apply_print (fd, marlais_make_integer(BYTEVELS (vec)[i]), escaped);
     if (i < (BYTEVSIZE (vec) - 1)) {
       fprintf (fp, ", ");
     }
