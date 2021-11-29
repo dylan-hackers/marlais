@@ -318,7 +318,7 @@ end method copy-state;
 define method forward-iteration-protocol (l :: <list>)
 
   let initial-state = initial-state (l);
-  let limit = %forward-collection-limit (l);
+  let limit = forward-limit (l);
   let next-state = method (l :: <list>, s :: <list>)
 		     case
 		       empty?(s) => #f;

@@ -155,7 +155,7 @@ end method copy-state;
 define method forward-iteration-protocol (d :: <deque>)
 
   let initial-state = initial-state (d);
-  let limit = %forward-collection-limit (d);
+  let limit = forward-limit (d);
   let next-state = method (d :: <deque>, state :: <pair>)
 		     state.head := %deque-next-state (d, state.head);
 		     state.tail := state.tail + 1;
