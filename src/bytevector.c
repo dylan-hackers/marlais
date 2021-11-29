@@ -55,7 +55,13 @@ marlais_make_bytevector_entrypoint (Object args)
 
   marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<byte-vector>");
 
-  // XXX check size and fill
+  // TODO errors
+  if(fill_obj == MARLAIS_FALSE || !UNSIGNEDP(fill_obj)) {
+    fill_obj = marlais_make_integer(0);
+  }
+  if(size_obj == NULL || !UNSIGNEDP(size_obj)) {
+    size_obj = marlais_make_integer(0);
+  }
 
   return marlais_make_bytevector (INTVAL(size_obj), INTVAL(fill_obj));
 }
