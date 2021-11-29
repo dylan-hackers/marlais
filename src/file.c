@@ -9,6 +9,7 @@
 #include <marlais/list.h>
 #include <marlais/parser.h>
 #include <marlais/prim.h>
+#include <marlais/print.h>
 #include <marlais/read.h>
 
 #include "lexer.gen.h"
