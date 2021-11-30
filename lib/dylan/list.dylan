@@ -192,11 +192,11 @@ end method reverse!;
 
 define method sort(a :: <list>, #key test = \<, stable = #f)
   as(<list>, sort!(as(<vector>, a), test: test, stable: stable))
-end method sort; // <list>
+end method sort;
 
 define method sort!(a :: <list>, #key test = \<, stable = #f)
   sort(a, test: test, stable: stable)
-end method sort!; // <list>
+end method sort!;
 
 define method first-setter (obj, l :: <list>)
   %head-setter (l, obj);
