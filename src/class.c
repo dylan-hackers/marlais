@@ -28,6 +28,10 @@ static Object class_slots_class;
 /* primitives */
 
 static Object class_debug_name (Object class);
+static Object class_abstract_p (Object class);
+static Object class_primary_p (Object class);
+static Object class_sealed_p (Object class);
+static Object class_builtin_p (Object class);
 
 static struct primitive class_prims[] =
 {
@@ -36,6 +40,13 @@ static struct primitive class_prims[] =
     {"%make", prim_2, marlais_make},
 
     {"%class-debug-name", prim_1, class_debug_name},
+
+    {"%class-abstract?", prim_1, class_abstract_p},
+    {"%class-primary?", prim_1, class_primary_p},
+    {"%class-sealed?", prim_1, class_sealed_p},
+
+    {"%class-builtin?", prim_1, class_builtin_p},
+
     {"%direct-superclasses", prim_1, marlais_direct_superclasses},
     {"%direct-subclasses", prim_1, marlais_direct_subclasses},
     {"%all-superclasses", prim_1, marlais_all_superclasses},
@@ -601,7 +612,7 @@ marlais_make (Object class, Object rest)
   } else if (class == class_class) {
     ret = make_class_entrypoint (rest);
   } else {
-    if (ABSTRACTP (class)) {
+    if (CLASSABSTRACTP (class)) {
       marlais_error ("make: class is abstract", class, NULL);
       return MARLAIS_FALSE;
     }
@@ -622,6 +633,38 @@ class_debug_name (Object class)
   return CLASSNAME (class);
 }
 
+static Object
+class_abstract_p (Object class)
+{
+  return marlais_make_boolean (CLASSABSTRACTP (class));
+}
+
+static Object
+class_primary_p (Object class)
+{
+  return marlais_make_boolean (CLASSPRIMARYP (class));
+}
+
+static Object
+class_sealed_p (Object class)
+{
+  return marlais_make_boolean (CLASSSEALEDP (class));
+}
+
+static Object
+class_builtin_p (Object class)
+{
+  return marlais_make_boolean (CLASSBUILTINP (class));
+}
+
+#if 0
+static Object
+class_defined_p (Object class)
+{
+  return marlais_make_boolean (CLASSDEFINEDP (class));
+}
+#endif
+
 Object
 marlais_direct_subclasses (Object class)
 {
@@ -631,7 +674,7 @@ marlais_direct_subclasses (Object class)
 Object
 marlais_direct_superclasses (Object class)
 {
-  if (!SEALEDP (class)) {
+  if (!CLASSSEALEDP (class)) {
     return CLASSSUPERS (class);
   } else {
     return MARLAIS_NIL;
@@ -641,7 +684,7 @@ marlais_direct_superclasses (Object class)
 Object
 marlais_all_superclasses (Object class)
 {
-  if (SEALEDP (class)) {
+  if (CLASSSEALEDP (class)) {
     return MARLAIS_NIL;
   } else {
     return CLASSPRECLIST (class);
