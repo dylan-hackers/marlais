@@ -419,11 +419,13 @@ marlais_initialize_class (void)
                         MARLAIS_CLASS_SEALED,
                         object_class);
 
+  /* Object handles */
   object_handle_class =
     make_builtin_class ("<object-handle>",
                         MARLAIS_CLASS_SEALED,
                         object_class);
 
+  /* Foreign objects */
   foreign_pointer_class =
     make_builtin_class ("<foreign-pointer>",
                         MARLAIS_CLASS_SEALED,
