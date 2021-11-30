@@ -39,11 +39,13 @@
 /* Primitives */
 
 static Object prim_not (Object obj);
+static Object prim_identity (Object obj);
 static Object prim_identical_p (Object obj1, Object obj2, Object rest);
 
 static struct primitive boolean_prims[] =
 {
   {"%not", prim_1, prim_not},
+  {"%identity", prim_1, prim_identity},
   {"%identical?", prim_2_rest, prim_identical_p},
 };
 
@@ -100,6 +102,12 @@ prim_not (Object obj)
   } else {
     return (MARLAIS_FALSE);
   }
+}
+
+static Object
+prim_identity (Object obj)
+{
+  return obj;
 }
 
 static Object

@@ -7,15 +7,6 @@ module: dylan
 //
 
 //
-// Every object has an identity of its own
-//
-
-define constant identity =
-  method (x :: <object>)
-    x;
-  end method;
-
-//
 // Base implementation of make and initialize
 //
 
