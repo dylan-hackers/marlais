@@ -52,7 +52,6 @@ static struct primitive vector_prims[] =
 {
     {"vector", prim_0_rest, marlais_list_to_vector},
     {"%vector-size", prim_1, prim_vector_size},
-    {"%vector-size-setter", prim_1, prim_vector_size_setter},
     {"%vector-element", prim_3, prim_vector_element},
     {"%vector-element-setter", prim_3, prim_vector_element_setter},
     {"%vector->list", prim_1, marlais_vector_to_list},
@@ -152,12 +151,6 @@ static Object
 prim_vector_size (Object vec)
 {
   return (marlais_make_integer (SOVSIZE (vec)));
-}
-
-static Object
-prim_vector_size_setter (Object vec, Object size)
-{
-  return NULL;
 }
 
 static Object
