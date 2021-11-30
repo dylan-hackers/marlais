@@ -81,6 +81,26 @@ end method;
 // Class information
 //
 
+define constant class-abstract? =
+  method (c :: <class>)
+    %class-abstract?(c);
+  end method;
+
+define constant class-primary? =
+  method (c :: <class>)
+    %class-primary?(c);
+  end method;
+
+define constant class-sealed? =
+  method (c :: <class>)
+    %class-sealed?(c);
+  end method;
+
+define constant class-builtin? =
+  method (c :: <class>)
+    %class-sealed?(c);
+  end method;
+
 define constant all-superclasses =
   method (c :: <class>)
     %all-superclasses(c);
