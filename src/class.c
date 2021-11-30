@@ -407,7 +407,7 @@ marlais_initialize_class (void)
                         type_class);
   limited_type_class =
     make_builtin_class ("<limited-type>",
-                        MARLAIS_CLASS_SEALED,
+                        MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
                         type_class);
   limited_integer_class =
     make_builtin_class ("<limited-integer>",
