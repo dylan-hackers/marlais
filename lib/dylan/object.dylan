@@ -7,15 +7,6 @@ module: dylan
 //
 
 //
-// Every object is the instance of a class
-//
-
-define constant object-class =
-  method (o :: <object>) => <class>;
-      %object-class (o);
-  end method;
-
-//
 // Every object has an identity of its own
 //
 

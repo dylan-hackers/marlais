@@ -31,7 +31,7 @@ static Object class_debug_name (Object class);
 
 static struct primitive class_prims[] =
 {
-    {"%object-class", prim_1, marlais_object_class},
+    {"object-class", prim_1, marlais_object_class},
 
     {"%make", prim_2, marlais_make},
 
