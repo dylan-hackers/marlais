@@ -49,7 +49,7 @@
 
 /* Internal function declarations */
 
-static Object make_string(char *str, size_t len);
+static Object make_bstring(char *str, size_t len);
 #ifdef MARLAIS_ENABLE_WCHAR
 static Object make_wstring(wchar_t *str, size_t len);
 #endif
@@ -59,16 +59,16 @@ static Object make_ustring(UChar *str, size_t len);
 
 /* Primitives */
 
-static Object string_element (Object string, Object index, Object default_ob);
-static Object string_element_setter (Object string, Object index, Object val);
-static Object string_size (Object string);
-static Object string_lessthan (Object str1, Object str2);
-static Object string_equal (Object str1, Object str2);
-static Object string_append2 (Object str1, Object str2);
-static Object string_as_lowercase (Object string);
-static Object string_as_uppercase (Object string);
-static Object string_as_lowercase_bang (Object string);
-static Object string_as_uppercase_bang (Object string);
+static Object bstring_element (Object string, Object index, Object default_ob);
+static Object bstring_element_setter (Object string, Object index, Object val);
+static Object bstring_size (Object string);
+static Object bstring_lessthan (Object str1, Object str2);
+static Object bstring_equal (Object str1, Object str2);
+static Object bstring_append2 (Object str1, Object str2);
+static Object bstring_as_lowercase (Object string);
+static Object bstring_as_uppercase (Object string);
+static Object bstring_as_lowercase_bang (Object string);
+static Object bstring_as_uppercase_bang (Object string);
 
 #ifdef MARLAIS_ENABLE_WCHAR
 static Object wstring_element (Object string, Object index, Object default_ob);
@@ -101,16 +101,16 @@ static Object wstring_to_ustring (Object string);
 
 static struct primitive string_prims[] =
 {
-    {"%string-element", prim_3, string_element},
-    {"%string-element-setter", prim_3, string_element_setter},
-    {"%string-size", prim_1, string_size},
-    {"%string<", prim_2, string_lessthan},
-    {"%string=", prim_2, string_equal},
-    {"%string-append2", prim_2, string_append2},
-    {"%string-as-lowercase", prim_1, string_as_lowercase},
-    {"%string-as-uppercase", prim_1, string_as_uppercase},
-    {"%string-as-lowercase!", prim_1, string_as_lowercase_bang},
-    {"%string-as-uppercase!", prim_1, string_as_uppercase_bang},
+    {"%string-element", prim_3, bstring_element},
+    {"%string-element-setter", prim_3, bstring_element_setter},
+    {"%string-size", prim_1, bstring_size},
+    {"%string<", prim_2, bstring_lessthan},
+    {"%string=", prim_2, bstring_equal},
+    {"%string-append2", prim_2, bstring_append2},
+    {"%string-as-lowercase", prim_1, bstring_as_lowercase},
+    {"%string-as-uppercase", prim_1, bstring_as_uppercase},
+    {"%string-as-lowercase!", prim_1, bstring_as_lowercase_bang},
+    {"%string-as-uppercase!", prim_1, bstring_as_uppercase_bang},
 
 #ifdef MARLAIS_ENABLE_WCHAR
     {"%wstring-element", prim_3, wstring_element},
@@ -163,7 +163,7 @@ marlais_make_bytestring (const char *str)
     strncpy (new, str, size);
     new[size] = 0;
 
-    return (make_string (new, size));
+    return (make_bstring (new, size));
 }
 
 Object
@@ -189,7 +189,7 @@ marlais_make_bytestring_entrypoint (Object args)
   memset (new, fill, size);
   new[size] = 0;
 
-  return (make_string (new, size));
+  return (make_bstring (new, size));
 }
 
 #ifdef MARLAIS_ENABLE_WCHAR
@@ -291,7 +291,7 @@ marlais_make_ustring_entrypoint (Object args)
 /* Internal functions */
 
 static Object
-make_string(char *str, size_t len) {
+make_bstring(char *str, size_t len) {
   Object obj;
 
   obj = marlais_allocate_object (ByteString, sizeof (struct byte_string));
@@ -328,7 +328,7 @@ make_ustring(UChar *str, size_t len) {
 #endif
 
 static Object
-string_element (Object string, Object index, Object default_ob)
+bstring_element (Object string, Object index, Object default_ob)
 {
     int i;
 
@@ -344,7 +344,7 @@ string_element (Object string, Object index, Object default_ob)
 }
 
 static Object
-string_element_setter (Object string, Object index, Object val)
+bstring_element_setter (Object string, Object index, Object val)
 {
     int i;
 
@@ -357,27 +357,27 @@ string_element_setter (Object string, Object index, Object val)
 }
 
 static Object
-string_size (Object string)
+bstring_size (Object string)
 {
     return (marlais_make_integer (BYTESTRSIZE (string)));
 }
 
 static Object
-string_lessthan (Object str1, Object str2)
+bstring_lessthan (Object str1, Object str2)
 {
     return (strcmp (BYTESTRVAL (str1), BYTESTRVAL (str2)) < 0) ?
       MARLAIS_TRUE : MARLAIS_FALSE;
 }
 
 static Object
-string_equal (Object str1, Object str2)
+bstring_equal (Object str1, Object str2)
 {
     return (strcmp (BYTESTRVAL (str1), BYTESTRVAL (str2)) == 0) ?
       MARLAIS_TRUE : MARLAIS_FALSE;
 }
 
 static Object
-string_append2 (Object str1, Object str2)
+bstring_append2 (Object str1, Object str2)
 {
     int len1, len2, newlen;
     char *newstr;
@@ -392,11 +392,11 @@ string_append2 (Object str1, Object str2)
     strncpy (newstr + len1, BYTESTRVAL(str2), len2);
     newstr[newlen] = 0;
 
-    return (make_string (newstr, newlen));
+    return (make_bstring (newstr, newlen));
 }
 
 static Object
-string_as_lowercase (Object string)
+bstring_as_lowercase (Object string)
 {
     int len, i;
     char *oldstr, *newstr;
@@ -410,11 +410,11 @@ string_as_lowercase (Object string)
     }
     newstr[len] = 0;
 
-    return (make_string (newstr, len));
+    return (make_bstring (newstr, len));
 }
 
 static Object
-string_as_uppercase (Object string)
+bstring_as_uppercase (Object string)
 {
     int len, i;
     char *oldstr, *newstr;
@@ -428,11 +428,11 @@ string_as_uppercase (Object string)
     }
     newstr[len] = 0;
 
-    return (make_string (newstr, len));
+    return (make_bstring (newstr, len));
 }
 
 static Object
-string_as_lowercase_bang (Object string)
+bstring_as_lowercase_bang (Object string)
 {
     int len, i;
     char *str;
@@ -449,7 +449,7 @@ string_as_lowercase_bang (Object string)
 }
 
 static Object
-string_as_uppercase_bang (Object string)
+bstring_as_uppercase_bang (Object string)
 {
     int len, i;
     char *str;
@@ -581,7 +581,7 @@ static Object wstring_to_bstring (Object string)
   chk = wcstombs(newstr, WIDESTRVAL (string), len + 1);
   assert (chk == len);
   newstr[chk] = 0;
-  return make_string(newstr, chk);
+  return make_bstring(newstr, chk);
 }
 
 static Object bstring_to_wstring (Object string)
@@ -741,7 +741,7 @@ static Object ustring_to_bstring (Object string)
   assert (U_SUCCESS(ue));
   assert (chk == len);
   newstr[chk] = 0;
-  return (make_string (newstr, chk));
+  return (make_bstring (newstr, chk));
 }
 
 static Object bstring_to_ustring (Object string)
