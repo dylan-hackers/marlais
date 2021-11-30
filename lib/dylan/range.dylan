@@ -188,5 +188,3 @@ end method next-state;
 define method current-element (r :: <range>, state)
   r[state];
 end method current-element;
-
-// end range

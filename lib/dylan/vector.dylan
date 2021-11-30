@@ -8,7 +8,7 @@ module: dylan
 //
 
 //
-// Methods on <vector>
+// Generic methods on <vector>
 //
 
 define method dimensions (v :: <vector>)
@@ -16,7 +16,7 @@ define method dimensions (v :: <vector>)
 end method dimensions;
 
 //
-// Iteration on <vector>
+// Generic iteration on <vector>
 //
 
 define method initial-state (v :: <vector>)
