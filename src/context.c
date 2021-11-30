@@ -236,7 +236,6 @@ marlais_initialize (void)
   marlais_register_vector ();
   marlais_register_error ();
   marlais_register_stream ();
-  marlais_register_read ();
   marlais_register_table ();
   marlais_register_character ();
   marlais_register_deque ();

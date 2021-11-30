@@ -67,10 +67,6 @@ typedef enum {
     ForeignPtr,
     Environment,
 
-#ifdef NO_COMMON_DYLAN_SPEC
-    Stream,
-#endif
-
     StdioHandle,
 
 } ObjectType;

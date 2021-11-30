@@ -81,7 +81,6 @@ add_library(marlais_lib
   parser.c
   prim.c
   print.c
-  read.c
   sequence.c
   slot.c
   stdio.c

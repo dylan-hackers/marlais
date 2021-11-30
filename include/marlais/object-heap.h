@@ -443,22 +443,6 @@ struct unwind {
 
 #define UNWINDBODY(obj)   (((struct unwind *)obj)->body)
 
-#ifdef NO_COMMON_DYLAN_SPEC
-enum streamtype {
-    Input, Output
-};
-struct stream {
-    ObjectHeader header;
-    enum streamtype stream_type;
-    FILE *fp;
-};
-
-#define STREAMSTYPE(obj)   (((struct stream *)obj)->stream_type)
-#define STREAMFP(obj)      (((struct stream *)obj)->fp)
-#define INPUTSTREAMP(obj)  (STREAMP(obj) && (STREAMSTYPE(obj) == Input))
-#define OUTPUTSTREAMP(obj) (STREAMP(obj) && (STREAMSTYPE(obj) == Output))
-#endif
-
 struct foreign_ptr {
     ObjectHeader header;
     void *ptr;
