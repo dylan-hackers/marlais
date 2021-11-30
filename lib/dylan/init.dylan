@@ -12,18 +12,14 @@ copyright: (c) 2001, Marlais Hackers, LGPL (see "COPYRIGHT" file)
 %gc-expand(2621440);
 
 // Basics
-
 load("dylan/error.dylan");
 load("dylan/object.dylan");
-load("dylan/comparison.dylan");
 load("dylan/function.dylan");
-load("dylan/functional.dylan");
-load("dylan/type.dylan");
-
-// Data types
-
+load("dylan/comparison.dylan");
 load("dylan/number.dylan");
 load("dylan/character.dylan");
+load("dylan/type.dylan");
+load("dylan/functional.dylan");
 
 // Collections
 load("dylan/collection.dylan");
@@ -36,6 +32,7 @@ load("dylan/deque.dylan");
 load("dylan/table.dylan");
 load("dylan/range.dylan");
 
+// Extensions
 load("dylan/gmp.dylan");
 load("dylan/icu.dylan");
 
