@@ -429,6 +429,12 @@ marlais_initialize_class (void)
                         MARLAIS_CLASS_SEALED,
                         object_class);
 
+  /* Resource handles */
+  stdio_handle_class =
+    make_builtin_class ("<stdio-handle>",
+                        MARLAIS_CLASS_SEALED,
+                        object_class);
+
   /* GMP numbers */
 #ifdef MARLAIS_ENABLE_GMP
   mp_float_class =

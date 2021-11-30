@@ -59,6 +59,10 @@ marlais_apply_prim (Object prim, Object args)
     return (*fun) (FIRST (args), SECOND (args));
   case prim_3:
     return (*fun) (FIRST (args), SECOND (args), THIRD (args));
+  case prim_4:
+    return (*fun) (FIRST (args), SECOND (args), THIRD (args), FOURTH (args));
+  case prim_5:
+    return (*fun) (FIRST (args), SECOND (args), THIRD (args), FOURTH (args), FIFTH (args));
   case prim_0_1:
     switch (marlais_list_length (args)) {
     case 0:

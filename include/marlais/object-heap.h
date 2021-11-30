@@ -325,7 +325,7 @@ enum primtype {
     /* prim_n: n required  */
     /* prim_n_m: n requied, m optional */
     /* prim_n_rest: n required, rest args */
-    prim_0, prim_1, prim_2, prim_3,
+    prim_0, prim_1, prim_2, prim_3, prim_4, prim_5,
     prim_0_1, prim_0_2, prim_0_3,
     prim_1_1, prim_1_2, prim_2_1,
     prim_0_rest, prim_1_rest, prim_2_rest
@@ -479,3 +479,12 @@ struct object_handle {
 };
 
 #define HDLOBJ(obj)      (((struct object_handle *)obj)->the_object)
+
+struct stdio_handle {
+  ObjectHeader header;
+  bool owned;
+  FILE *file;
+};
+
+#define STDIOOWNEDP(obj) (((struct stdio_handle *)obj)->owned)
+#define STDIOFILE(obj) (((struct stdio_handle *)obj)->file)

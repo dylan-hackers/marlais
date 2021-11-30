@@ -84,6 +84,7 @@ add_library(marlais_lib
   read.c
   sequence.c
   slot.c
+  stdio.c
   stream.c
   string.c
   symbol.c

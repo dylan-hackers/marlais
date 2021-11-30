@@ -71,6 +71,8 @@ typedef enum {
     Stream,
 #endif
 
+    StdioHandle,
+
 } ObjectType;
 
 /* Common header of all heap objects */
