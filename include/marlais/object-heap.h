@@ -227,16 +227,20 @@ struct slot_descriptor {
 #define SLOTDDYNAMISM(obj)     (((struct slot_descriptor *)obj)->dynamism)
 
 enum {
-      /* class is defined by the interpreter */
-      MARLAIS_CLASS_BUILTIN = 1,
       /* class is abstract */
-      MARLAIS_CLASS_ABSTRACT = 2,
+      MARLAIS_CLASS_ABSTRACT = (1<<1),
       /* class is primary */
-      MARLAIS_CLASS_PRIMARY = 4,
+      MARLAIS_CLASS_PRIMARY = (1<<2),
       /* class is sealed */
-      MARLAIS_CLASS_SEALED  = 8,
+      MARLAIS_CLASS_SEALED = (1<<3),
+      /* class was defined by the interpreter */
+      MARLAIS_CLASS_BUILTIN = (1<<4),
+      /* class was defined at toplevel */
+      MARLAIS_CLASS_DEFINED = (1<<5),
       /* class slots are uninitialized */
-      MARLAIS_CLASS_UNINITIALIZED = 16,
+      MARLAIS_CLASS_UNINITIALIZED = (1<<6),
+      /* instances of this class are immediate values */
+      MARLAIS_CLASS_IMMEDIATE = (1<<7),
       /* by default a class is none of those things */
       MARLAIS_CLASS_DEFAULT = 0
 };
@@ -278,6 +282,8 @@ struct clas {
 #define CLASSNUMPRECS(obj) (((struct clas *)obj)->num_precs)
 #define CLASSPROPS(obj)   (((struct clas *)obj)->properties)
 #define CLASSABSTRACTP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_ABSTRACT))
+#define CLASSDEFINEDP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_DEFINED))
+#define CLASSIMMEDIATE(obj)     (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_IMMEDIATE))
 #define CLASSPRIMARYP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_PRIMARY))
 #define CLASSSEALEDP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_SEALED))
 #define CLASSBUILTINP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_BUILTIN))
