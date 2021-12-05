@@ -26,10 +26,6 @@ define method odd? (i :: <small-integer>) => value :: <boolean>;
   %odd?(i);
 end method odd?;
 
-define method odd? (bi :: <big-integer>) => value :: <boolean>;
-  %bigint-odd?(bi);
-end method odd?;
-
 // even?
 
 define generic even? (n :: <integer>) => value :: <boolean>;
@@ -38,20 +34,12 @@ define method even? (i :: <small-integer>) => value :: <boolean>;
   %even?(i);
 end method even?;
 
-define method even? (bi :: <big-integer>) => value :: <boolean>;
-  %bigint-even?(bi);
-end method even?;
-
 // zero?
 
 define generic zero? (n :: <object>) => value :: <boolean>;
 
 define method zero? (i :: <small-integer>) => value :: <boolean>;
   %int-zero?(i);
-end method zero?;
-
-define method zero? (bi :: <big-integer>) => value :: <boolean>;
-  %bigint-zero?(bi);
 end method zero?;
 
 define method zero? (d :: <double-float>) => value :: <boolean>;
@@ -66,10 +54,6 @@ define method positive? (i :: <small-integer>) => value :: <boolean>;
   %int-positive?(i);
 end method positive?;
 
-define method positive? (bi :: <big-integer>) => value :: <boolean>;
-  %bigint-positive?(bi);
-end method positive?;
-
 define method positive? (d :: <double-float>) => value :: <boolean>;
   %double-positive?(d);
 end method positive?;
@@ -80,10 +64,6 @@ define generic negative? (r :: <object>) => value :: <boolean>;
 
 define method negative? (i :: <small-integer>) => value :: <boolean>;
   %int-negative?(i);
-end method negavite?;
-
-define method negative? (bi :: <big-integer>) => value :: <boolean>;
-  %bigint-negative?(bi);
 end method negavite?;
 
 define method negative? (d :: <double-float>) => value :: <boolean>;
@@ -123,34 +103,6 @@ end method \=;
 define method \= (d :: <double-float>, i :: <integer>)
   d == as(<double-float>, i);
 end method \=;
-
-// Comparison on <big-integer>
-
-define method \= (b1 :: <big-integer>, b2 :: <big-integer>)
-  %bigint=(b1, b2);
-end method \=;
-
-define method \< (b1 :: <big-integer>, b2 :: <big-integer>)
-  %bigint<(b1, b2);
-end method \<;
-
-// Comparison between <big-integer> and <small-integer>
-
-define method \= (b :: <big-integer>, i :: <small-integer>)
-  b = as(<big-integer>, i);
-end method \=;
-
-define method \= (i :: <small-integer>, b :: <big-integer>)
-  b = as(<big-integer>, i);
-end method \=;
-
-define method \< (b :: <big-integer>, i :: <small-integer>)
-  %bigint<(b, as(<big-integer>, i));
-end method \<;
-
-define method \< (i :: <small-integer>, b :: <big-integer>)
-  %bigint<(as(<big-integer>, i), b);
-end method \<;
 
 //
 // Methods defined through comparison
@@ -192,40 +144,6 @@ end method as;
 
 define method as (i-class == <small-integer>, df :: <double-float>)
   %double-to-int(df);
-end method as;
-
-//
-// <big-integer> coercions
-//
-
-// <small-integer> <-> <big-integer>
-
-define method as (i-class == <small-integer>, bi :: <big-integer>)
-  %bigint->int(bi);
-end method as;
-
-define method as (bi-class == <big-integer>, i :: <small-integer>)
-  %int->bigint(i);
-end method as;
-
-// <double-float> <-> & <big-integer>
-
-define method as (bi-class == <big-integer>, df :: <double-float>)
-  %double->bigint(df);
-end method as;
-
-define method as (df-class == <double-float>, bi :: <big-integer>)
-  %bigint->double(bi);
-end method as;
-
-// <character> <-> & <big-integer>
-
-define method as (ch-class == <character>, bi :: <big-integer>)
-  %integer->character(%bigint->int(bi));
-end method as;
-
-define method as (bi-class == <big-integer>, ch :: <character>)
-  %int->bigint(%character->integer(ch));
 end method as;
 
 //
@@ -342,74 +260,6 @@ define method \/ (d1 :: <double-float>, i2 :: <integer>)
 end method \/;
 
 //
-// (op <big-integer> <big-integer>) & friends.
-//
-
-define method \+ (b1 :: <big-integer>, b2 :: <big-integer>)
-  %binary-bigint+ (b1, b2);
-end method \+;
-
-define method \+ (b :: <big-integer>, i :: <small-integer>)
-  %binary-bigint+ (b, as(<big-integer>, i));
-end method \+;
-
-define method \+ (i :: <small-integer>, b :: <big-integer>)
-  %binary-bigint+ (as(<big-integer>, i), b);
-end method \+;
-
-define method \- (b1 :: <big-integer>, b2 :: <big-integer>)
-  %binary-bigint- (b1, b2);
-end method \-;
-
-define method \- (b :: <big-integer>, i :: <small-integer>)
-  %binary-bigint- (b, as(<big-integer>, i));
-end method \-;
-
-define method \- (i :: <small-integer>, b :: <big-integer>)
-  %binary-bigint- (as(<big-integer>, i), b);
-end method \-;
-
-define method \* (b1 ::<big-integer>, b2 :: <big-integer>)
-  %binary-bigint* (b1, b2);
-end method \*;
-
-define method \* (b :: <big-integer>, i :: <small-integer>)
-  %binary-bigint* (b, as(<big-integer>, i));
-end method \*;
-
-define method \* (i :: <small-integer>, b :: <big-integer>)
-  %binary-bigint* (as(<big-integer>, i), b);
-end method \*;
-
-define method \/ (b :: <big-integer>, i :: <small-integer>)
-   %binary-bigint/ (b, as(<big-integer>, i));
-end method \/;
-
-define method negative (b :: <big-integer>) => <big-integer>;
-  %bigint-negative (b);
-end method negative;
-
-define method \^ (b :: <big-integer>, e :: <big-integer>) => <big-integer>;
-      %bigint-pow(b, e);
-end method \^;
-
-define method \^ (b :: <big-integer>, e :: <small-integer>) => <big-integer>;
-      %bigint-pow(b, as(<big-integer>, e));
-end method \^;
-
-define method \^ (b :: <small-integer>, e :: <big-integer>) => <big-integer>;
-      %bigint-pow(as(<big-integer>, b), e);
-end method \^;
-
-/* Leave this out if <big-integer> is not implemented
-
-define method \^ (b :: <small-integer>, e :: <small-integer>) => <big-integer>;
-      %bigint-pow(as(<big-integer>, b), as(<big-integer>, e));
-end method \^;
-
-*/
-
-//
 // other functions
 //
 
@@ -417,10 +267,6 @@ define generic abs (n :: <number>) => value :: <number>;
 
 define method abs (i :: <small-integer>)
   %int-abs(i);
-end method abs;
-
-define method abs (bi :: <big-integer>)
-  %bigint-abs(bi);
 end method abs;
 
 define method abs (d :: <double-float>)
@@ -546,19 +392,6 @@ define method \^ (base :: <number>, exponent :: <integer>)
   end if;
 end method \^;
 
-// <pcb> add <big-integer> cases again.
-define method modulo (b1 :: <big-integer>, b2 :: <big-integer>)
-  %bigint-mod (b1, b2);
-end method modulo;
-
-define method modulo (b :: <big-integer>, i :: <small-integer>)
-      %bigint-mod (b, as (<big-integer>, i));
-end method modulo;
-
-define method modulo (i :: <small-integer>, g :: <big-integer>)
-      %bigint-mod (as (<big-integer>, i), b);
-end method modulo;
-
 define method floor/ (n1 :: <real>, n2 :: <real>)
  => (quotient :: <integer>, remainder :: <double-float>);
   %floor/ (as (<double-float>, n1), as (<double-float>, n2));
@@ -590,10 +423,6 @@ end method truncate/;
 
 define method sqrt (i :: <small-integer>)
   %int-sqrt(i);
-end method sqrt;
-
-define method sqrt (bi :: <big-integer>)
-  %bigint-sqrt(bi);
 end method sqrt;
 
 define method sqrt (d :: <double-float>)

@@ -12,10 +12,6 @@
 #include <marlais/slot.h>
 #include <marlais/stream.h>
 
-#ifdef MARLAIS_ENABLE_BIG_INTEGERS
-#include "biginteger.h"
-#endif
-
 #include <stdio.h>
 #include <string.h>
 #include <ctype.h>
@@ -96,11 +92,6 @@ marlais_print_object (Object fd, Object obj, int escaped)
   case Integer:
     fprintf (fp, "%"MARLAIS_INTEGER_PRI, INTVAL (obj));
     break;
-#ifdef MARLAIS_ENABLE_BIG_INTEGERS
-  case BigInteger:
-    print_big_integer (fp, obj);
-    break;
-#endif
   case Ratio:
     fprintf (fp, "%"MARLAIS_INTEGER_PRI "/%" MARLAIS_INTEGER_PRI,
              RATIONUM (obj), RATIODEN (obj));

@@ -168,10 +168,6 @@ marlais_initialize_class (void)
     make_builtin_class ("<small-integer>",
                         MAYBE_IMMEDIATE|MARLAIS_CLASS_SEALED,
                         integer_class);
-  big_integer_class =
-    make_builtin_class ("<big-integer>",
-                        MARLAIS_CLASS_SEALED,
-                        integer_class);
   ratio_class =
     make_builtin_class ("<ratio>",
                         MARLAIS_CLASS_SEALED,

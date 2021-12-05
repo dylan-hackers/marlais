@@ -8,10 +8,6 @@
 #include <marlais/symbol.h>
 #include <marlais/values.h>
 
-#ifdef MARLAIS_ENABLE_BIG_INTEGERS
-#include "biginteger.h"
-#endif
-
 #include <float.h>
 #include <math.h>
 
@@ -115,10 +111,6 @@ marlais_register_number (void)
                         marlais_make_integer (MARLAIS_INTEGER_MIN), 1);
     marlais_add_export (marlais_make_name ("$maximum-integer"),
                         marlais_make_integer (MARLAIS_INTEGER_MAX), 1);
-
-#ifdef MARLAIS_ENABLE_BIG_INTEGERS
-    init_big_integer_prims ();
-#endif
 }
 
 #ifndef MARLAIS_OBJECT_MODEL_SMALL
