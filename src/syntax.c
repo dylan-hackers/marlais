@@ -817,6 +817,9 @@ define_class_eval (Object form)
   slots = marlais_make_slot_descriptor_list (CDR (tmp_form), 1);
   marlais_make_getter_setter_gfs (slots);
 
+  /* flag the class as defined */
+  flags |= MARLAIS_CLASS_DEFINED;
+
   /* we have uninitialized class slots */
   flags |= MARLAIS_CLASS_UNINITIALIZED;
 
