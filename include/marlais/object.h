@@ -28,7 +28,7 @@ typedef enum {
     Character, WideCharacter, UnicodeString,
 
     /* numbers */
-    Integer, BigInteger, Ratio, SingleFloat, DoubleFloat,
+    Integer, BigInteger, Ratio, SingleFloat, DoubleFloat, ExtendedFloat,
 
     /* collections */
     Pair,

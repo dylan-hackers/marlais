@@ -62,6 +62,13 @@ struct double_float {
 
 #define DFLOATVAL(obj)    (((struct double_float *)obj)->val)
 
+struct extended_float {
+    ObjectHeader header;
+    long double val;
+};
+
+#define EFLOATVAL(obj)    (((struct double_float *)obj)->val)
+
 struct pair {
     ObjectHeader header;
     Object car, cdr;

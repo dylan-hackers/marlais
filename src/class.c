@@ -490,6 +490,8 @@ marlais_object_class (Object obj)
     return (single_float_class);
   case DoubleFloat:
     return (double_float_class);
+  case ExtendedFloat:
+    return (extended_float_class);
   case EmptyList:
     return (empty_list_class);
   case Pair:

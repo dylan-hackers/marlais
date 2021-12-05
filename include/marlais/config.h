@@ -8,6 +8,8 @@
 
 /* Enable big integer support */
 #undef MARLAIS_ENABLE_BIG_INTEGERS
+/* Enable extended float support*/
+#define MARLAIS_ENABLE_EXTENDED_FLOAT
 /* Enable method caching */
 #define MARLAIS_ENABLE_METHOD_CACHING
 /* Enable tail call optimization */

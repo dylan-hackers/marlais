@@ -55,6 +55,12 @@ static Object sfloat_one;
 static Object dfloat_zero;
 static Object dfloat_one;
 
+#ifdef MARLAIS_ENABLE_EXTENDED_FLOAT
+/* Cache for <extended-float> */
+static Object efloat_zero;
+static Object efloat_one;
+#endif
+
 /* Primitives */
 
 static Object prim_odd_p (Object n);
@@ -346,6 +352,31 @@ marlais_make_dfloat (double d)
 
     return (obj);
 }
+
+#ifdef MARLAIS_ENABLE_EXTENDED_FLOAT
+Object
+marlais_make_efloat (long double e)
+{
+    Object obj;
+
+    if(e == 0.0 && efloat_zero) {
+      return efloat_zero;
+    } else if (e == 1.0 && efloat_one) {
+      return efloat_one;
+    }
+
+    obj = marlais_allocate_object (ExtendedFloat, sizeof (struct extended_float));
+    EFLOATVAL (obj) = e;
+
+    if(e == 0.0) {
+      efloat_zero = obj;
+    } else if (e == 1.0) {
+      efloat_one = obj;
+    }
+
+    return (obj);
+}
+#endif
 
 /* Static functions */
 
