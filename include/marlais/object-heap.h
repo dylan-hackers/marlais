@@ -283,7 +283,7 @@ struct clas {
 #define CLASSPROPS(obj)   (((struct clas *)obj)->properties)
 #define CLASSABSTRACTP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_ABSTRACT))
 #define CLASSDEFINEDP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_DEFINED))
-#define CLASSIMMEDIATE(obj)     (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_IMMEDIATE))
+#define CLASSIMMEDIATEP(obj)    (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_IMMEDIATE))
 #define CLASSPRIMARYP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_PRIMARY))
 #define CLASSSEALEDP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_SEALED))
 #define CLASSBUILTINP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_BUILTIN))
