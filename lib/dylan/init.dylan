@@ -33,6 +33,7 @@ load("dylan/table.dylan");
 load("dylan/range.dylan");
 
 // Extensions
+load("dylan/synchro.dylan");
 load("dylan/gmp.dylan");
 load("dylan/icu.dylan");
 
