@@ -101,26 +101,32 @@ marlais_initialize_class (void)
     binding->type = object_class;
   }
 
+#ifdef MARLAIS_OBJECT_MODEL_SMALL
+#define MAYBE_IMMEDIATE MARLAIS_CLASS_IMMEDIATE
+#else
+#define MAYBE_IMMEDIATE (0)
+#endif
+
   /* Literal classes */
   boolean_class =
     make_builtin_class ("<boolean>",
-                        MARLAIS_CLASS_SEALED,
+                        MAYBE_IMMEDIATE|MARLAIS_CLASS_SEALED,
                         object_class);
   character_class =
     make_builtin_class ("<character>",
-                        MARLAIS_CLASS_SEALED,
+                        MAYBE_IMMEDIATE|MARLAIS_CLASS_SEALED,
                         object_class);
   byte_character_class =
     make_builtin_class ("<byte-character>",
-                        MARLAIS_CLASS_SEALED,
+                        MAYBE_IMMEDIATE|MARLAIS_CLASS_SEALED,
                         character_class);
   wide_character_class =
     make_builtin_class ("<wide-character>",
-                        MARLAIS_CLASS_SEALED,
+                        MAYBE_IMMEDIATE|MARLAIS_CLASS_SEALED,
                         character_class);
   unicode_character_class =
     make_builtin_class ("<unicode-character>",
-                        MARLAIS_CLASS_SEALED,
+                        MAYBE_IMMEDIATE|MARLAIS_CLASS_SEALED,
                         character_class);
 
   /* Symbol classes */
@@ -156,7 +162,7 @@ marlais_initialize_class (void)
                         rational_class);
   small_integer_class =
     make_builtin_class ("<small-integer>",
-                        MARLAIS_CLASS_SEALED,
+                        MAYBE_IMMEDIATE|MARLAIS_CLASS_SEALED,
                         integer_class);
   big_integer_class =
     make_builtin_class ("<big-integer>",
@@ -224,7 +230,7 @@ marlais_initialize_class (void)
                         mutable_sequence_class);
   empty_list_class =
     make_builtin_class ("<empty-list>",
-                        MARLAIS_CLASS_SEALED,
+                        MAYBE_IMMEDIATE|MARLAIS_CLASS_SEALED,
                         list_class);
   pair_class =
     make_builtin_class ("<pair>",
