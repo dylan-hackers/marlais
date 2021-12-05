@@ -1,23 +1,23 @@
 
 #include <gmp.h>
 
-struct mp_float {
+struct big_float {
   ObjectHeader header;
   mpf_t mpf;
 };
 
-#define MPFVAL(obj) (((struct mp_float *)obj)->mpf)
+#define MPFVAL(obj) (((struct big_float *)obj)->mpf)
 
-struct mp_ratio {
+struct big_ratio {
   ObjectHeader header;
   mpq_t mpq;
 };
 
-#define MPQVAL(obj) (((struct mp_ratio *)obj)->mpq)
+#define MPQVAL(obj) (((struct big_ratio *)obj)->mpq)
 
-struct mp_integer {
+struct big_integer {
   ObjectHeader header;
   mpz_t mpz;
 };
 
-#define MPZVAL(obj) (((struct mp_integer *)obj)->mpz)
+#define MPZVAL(obj) (((struct big_integer *)obj)->mpz)

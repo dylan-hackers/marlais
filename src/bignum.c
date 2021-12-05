@@ -205,7 +205,7 @@ marlais_make_mpf_from_number(Object value)
 {
   Object res;
 
-  res = marlais_allocate_object(MPFloat, sizeof(struct mp_float));
+  res = marlais_allocate_object(BigFloat, sizeof(struct big_float));
 
 #if 0
   /* Simple version using separate init and set */
@@ -249,7 +249,7 @@ marlais_make_mpf_from_string(const char *str, int base)
 {
   Object res;
 
-  res = marlais_allocate_object(MPFloat, sizeof(struct mp_float));
+  res = marlais_allocate_object(BigFloat, sizeof(struct big_float));
 
   mpf_init (MPFVAL(res));
   mpf_set_str(MPFVAL(res), str, base);
@@ -262,7 +262,7 @@ marlais_make_mpq_from_number(Object value)
 {
   Object res;
 
-  res = marlais_allocate_object(MPRatio, sizeof(struct mp_ratio));
+  res = marlais_allocate_object(BigRatio, sizeof(struct big_ratio));
 
   mpq_init (MPQVAL(res));
   prim_mpq_set_bang(res, value);
@@ -275,7 +275,7 @@ marlais_make_mpq_from_string(const char *str, int base)
 {
   Object res;
 
-  res = marlais_allocate_object(MPRatio, sizeof(struct mp_ratio));
+  res = marlais_allocate_object(BigRatio, sizeof(struct big_ratio));
 
   mpq_init (MPQVAL(res));
   mpq_set_str(MPQVAL(res), str, base);
@@ -288,7 +288,7 @@ marlais_make_mpz_from_number(Object value)
 {
   Object res;
 
-  res = marlais_allocate_object(MPInteger, sizeof(struct mp_integer));
+  res = marlais_allocate_object(BigInteger, sizeof(struct big_integer));
 
   mpz_init (MPZVAL(res));
   prim_mpz_set_bang(res, value);
@@ -301,7 +301,7 @@ marlais_make_mpz_from_string(const char *str, int base)
 {
   Object res;
 
-  res = marlais_allocate_object(MPInteger, sizeof(struct mp_integer));
+  res = marlais_allocate_object(BigInteger, sizeof(struct big_integer));
 
   mpz_init (MPZVAL(res));
   mpz_set_str(MPZVAL(res), str, base);
@@ -431,9 +431,9 @@ prim_mpz_set_bang(Object obj, Object value)
   return value;
 }
 
-typedef struct mp_float   mpf_obj;
-typedef struct mp_ratio   mpq_obj;
-typedef struct mp_integer mpz_obj;
+typedef struct big_float   mpf_obj;
+typedef struct big_ratio   mpq_obj;
+typedef struct big_integer mpz_obj;
 
 #define DEFINE_COMPARE_MP_MP(_mt, _dt, _mp, _mg)                        \
   static Object prim_ ## _mt ## _lessthan (Object a, Object b) {        \
@@ -614,18 +614,18 @@ typedef struct mp_integer mpz_obj;
     return prim_ ## _mt ## _ ## _op ## _bang (res, a, b);               \
   }
 
-DEFINE_COMPARE_MP_MP(mpf, MPFloat, MPFP, MPFVAL);
-DEFINE_BINARY_MP_MPUI_COM(mpf, MPFloat, MPFP, MPFVAL, add);
-DEFINE_BINARY_MPUI_MPUI(mpf, MPFloat, MPFP, MPFVAL, sub);
-DEFINE_BINARY_MP_MPUI_COM(mpf, MPFloat, MPFP, MPFVAL, mul);
-DEFINE_BINARY_MPUI_MPUI(mpf, MPFloat, MPFP, MPFVAL, div);
-DEFINE_BINARY_MP_UI(mpf, MPFloat, MPFP, MPFVAL, pow);
-DEFINE_UNARY_MP(mpf, MPFloat, MPFP, MPFVAL, neg);
-DEFINE_UNARY_MP(mpf, MPFloat, MPFP, MPFVAL, abs);
-DEFINE_UNARY_MP(mpf, MPFloat, MPFP, MPFVAL, ceil);
-DEFINE_UNARY_MP(mpf, MPFloat, MPFP, MPFVAL, floor);
-DEFINE_UNARY_MP(mpf, MPFloat, MPFP, MPFVAL, trunc);
-DEFINE_UNARY_MP(mpf, MPFloat, MPFP, MPFVAL, sqrt);
+DEFINE_COMPARE_MP_MP(mpf, BigFloat, MPFP, MPFVAL);
+DEFINE_BINARY_MP_MPUI_COM(mpf, BigFloat, MPFP, MPFVAL, add);
+DEFINE_BINARY_MPUI_MPUI(mpf, BigFloat, MPFP, MPFVAL, sub);
+DEFINE_BINARY_MP_MPUI_COM(mpf, BigFloat, MPFP, MPFVAL, mul);
+DEFINE_BINARY_MPUI_MPUI(mpf, BigFloat, MPFP, MPFVAL, div);
+DEFINE_BINARY_MP_UI(mpf, BigFloat, MPFP, MPFVAL, pow);
+DEFINE_UNARY_MP(mpf, BigFloat, MPFP, MPFVAL, neg);
+DEFINE_UNARY_MP(mpf, BigFloat, MPFP, MPFVAL, abs);
+DEFINE_UNARY_MP(mpf, BigFloat, MPFP, MPFVAL, ceil);
+DEFINE_UNARY_MP(mpf, BigFloat, MPFP, MPFVAL, floor);
+DEFINE_UNARY_MP(mpf, BigFloat, MPFP, MPFVAL, trunc);
+DEFINE_UNARY_MP(mpf, BigFloat, MPFP, MPFVAL, sqrt);
 
 static Object
 prim_mpf_zero_p (Object a)
@@ -645,14 +645,14 @@ prim_mpf_negative_p (Object a)
   return marlais_make_boolean(mpf_sgn(MPFVAL(a)) < 0);
 }
 
-DEFINE_COMPARE_MP_MP(mpq, MPRatio, MPQP, MPQVAL);
-DEFINE_BINARY_MP_MP(mpq, MPRatio, MPQP, MPQVAL, add);
-DEFINE_BINARY_MP_MP(mpq, MPRatio, MPQP, MPQVAL, sub);
-DEFINE_BINARY_MP_MP(mpq, MPRatio, MPQP, MPQVAL, mul);
-DEFINE_BINARY_MP_MP(mpq, MPRatio, MPQP, MPQVAL, div);
-DEFINE_UNARY_MP(mpq, MPRatio, MPQP, MPQVAL, neg);
-DEFINE_UNARY_MP(mpq, MPRatio, MPQP, MPQVAL, abs);
-DEFINE_UNARY_MP(mpq, MPRatio, MPQP, MPQVAL, inv);
+DEFINE_COMPARE_MP_MP(mpq, BigRatio, MPQP, MPQVAL);
+DEFINE_BINARY_MP_MP(mpq, BigRatio, MPQP, MPQVAL, add);
+DEFINE_BINARY_MP_MP(mpq, BigRatio, MPQP, MPQVAL, sub);
+DEFINE_BINARY_MP_MP(mpq, BigRatio, MPQP, MPQVAL, mul);
+DEFINE_BINARY_MP_MP(mpq, BigRatio, MPQP, MPQVAL, div);
+DEFINE_UNARY_MP(mpq, BigRatio, MPQP, MPQVAL, neg);
+DEFINE_UNARY_MP(mpq, BigRatio, MPQP, MPQVAL, abs);
+DEFINE_UNARY_MP(mpq, BigRatio, MPQP, MPQVAL, inv);
 
 static Object
 prim_mpq_zero_p (Object a)
@@ -672,18 +672,18 @@ prim_mpq_negative_p (Object a)
   return marlais_make_boolean(mpq_sgn(MPQVAL(a)) < 0);
 }
 
-DEFINE_COMPARE_MP_MP(mpz, MPInteger, MPZP, MPZVAL);
-DEFINE_BINARY_MP_MPUI_COM(mpz, MPInteger, MPZP, MPZVAL, add);
-DEFINE_BINARY_MPUI_MPUI(mpz, MPInteger, MPZP, MPZVAL, sub);
-DEFINE_BINARY_MP_MPUI_COM(mpz, MPInteger, MPZP, MPZVAL, mul);
-DEFINE_BINARY_MP_MPUI(mpz, MPInteger, MPZP, MPZVAL, cdiv_q);
-DEFINE_BINARY_MP_MPUI(mpz, MPInteger, MPZP, MPZVAL, cdiv_r);
-DEFINE_BINARY_MP_MPUI(mpz, MPInteger, MPZP, MPZVAL, fdiv_q);
-DEFINE_BINARY_MP_MPUI(mpz, MPInteger, MPZP, MPZVAL, fdiv_r);
-DEFINE_BINARY_MP_MPUI(mpz, MPInteger, MPZP, MPZVAL, tdiv_q);
-DEFINE_BINARY_MP_MPUI(mpz, MPInteger, MPZP, MPZVAL, tdiv_r);
-DEFINE_UNARY_MP(mpz, MPInteger, MPZP, MPZVAL, neg);
-DEFINE_UNARY_MP(mpz, MPInteger, MPZP, MPZVAL, abs);
+DEFINE_COMPARE_MP_MP(mpz, BigInteger, MPZP, MPZVAL);
+DEFINE_BINARY_MP_MPUI_COM(mpz, BigInteger, MPZP, MPZVAL, add);
+DEFINE_BINARY_MPUI_MPUI(mpz, BigInteger, MPZP, MPZVAL, sub);
+DEFINE_BINARY_MP_MPUI_COM(mpz, BigInteger, MPZP, MPZVAL, mul);
+DEFINE_BINARY_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, cdiv_q);
+DEFINE_BINARY_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, cdiv_r);
+DEFINE_BINARY_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, fdiv_q);
+DEFINE_BINARY_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, fdiv_r);
+DEFINE_BINARY_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, tdiv_q);
+DEFINE_BINARY_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, tdiv_r);
+DEFINE_UNARY_MP(mpz, BigInteger, MPZP, MPZVAL, neg);
+DEFINE_UNARY_MP(mpz, BigInteger, MPZP, MPZVAL, abs);
 
 static Object
 prim_mpz_zero_p (Object a)

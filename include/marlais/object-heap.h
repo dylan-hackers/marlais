@@ -33,13 +33,6 @@ struct unicode_character {
 #define UCHARVAL(obj)       (((struct unicode_character *)obj)->val)
 #endif
 
-struct big_integer {
-    ObjectHeader header;
-    void *val;
-};
-
-#define BIGINTVAL(obj)    (((struct big_integer *)obj)->val)
-
 struct ratio {
     ObjectHeader header;
     DyInteger numerator, denominator;

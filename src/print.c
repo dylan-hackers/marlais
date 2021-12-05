@@ -241,13 +241,13 @@ marlais_print_object (Object fd, Object obj, int escaped)
     fprintf (fp, "}");
     break;
 #ifdef MARLAIS_ENABLE_GMP
-  case MPFloat:
+  case BigFloat:
     mpf_out_str(fp, 10, 0, MPFVAL(obj));
     break;
-  case MPRatio:
+  case BigRatio:
     mpq_out_str(fp, 10, MPQVAL(obj));
     break;
-  case MPInteger:
+  case BigInteger:
     mpz_out_str(fp, 10, MPZVAL(obj));
     break;
 #endif

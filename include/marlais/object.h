@@ -28,7 +28,7 @@ typedef enum {
     Character, WideCharacter, UnicodeString,
 
     /* numbers */
-    Integer, BigInteger, Ratio, SingleFloat, DoubleFloat, ExtendedFloat,
+    Integer, Ratio, SingleFloat, DoubleFloat, ExtendedFloat,
 
     /* collections */
     Pair,
@@ -60,7 +60,7 @@ typedef enum {
     Instance,
 
     /* GMP numbers */
-    MPFloat, MPRatio, MPInteger,
+    BigFloat, BigRatio, BigInteger,
 
     /* miscelaneous */
     ObjectHandle,

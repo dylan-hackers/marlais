@@ -456,16 +456,16 @@ marlais_initialize_class (void)
 
   /* GMP numbers */
 #ifdef MARLAIS_ENABLE_GMP
-  mp_float_class =
-    make_builtin_class ("<mp-float>",
+  big_float_class =
+    make_builtin_class ("<big-float>",
                         MARLAIS_CLASS_SEALED,
                         float_class);
-  mp_ratio_class =
-    make_builtin_class ("<mp-ratio>",
+  big_ratio_class =
+    make_builtin_class ("<big-ratio>",
                         MARLAIS_CLASS_SEALED,
                         rational_class);
-  mp_integer_class =
-    make_builtin_class ("<mp-integer>",
+  big_integer_class =
+    make_builtin_class ("<big-integer>",
                         MARLAIS_CLASS_SEALED,
                         integer_class);
 #endif
@@ -488,8 +488,6 @@ marlais_object_class (Object obj)
   switch (object_type (obj)) {
   case Integer:
     return (small_integer_class);
-  case BigInteger:
-    return (big_integer_class);
   case True:
   case False:
     return (boolean_class);
@@ -576,12 +574,12 @@ marlais_object_class (Object obj)
   case UninitializedValue:
     return (object_class);
 #ifdef MARLAIS_ENABLE_GMP
-  case MPFloat:
-    return mp_float_class;
-  case MPRatio:
-    return mp_ratio_class;
-  case MPInteger:
-    return mp_integer_class;
+  case BigFloat:
+    return big_float_class;
+  case BigRatio:
+    return big_ratio_class;
+  case BigInteger:
+    return big_integer_class;
 #endif
   default:
     return marlais_error ("object-class: don't know class of object", obj, NULL);

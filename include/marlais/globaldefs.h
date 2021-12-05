@@ -133,7 +133,6 @@ GLOBAL Object real_class;
 GLOBAL Object rational_class;
 GLOBAL Object integer_class;
 GLOBAL Object small_integer_class;
-GLOBAL Object big_integer_class;
 GLOBAL Object ratio_class;
 GLOBAL Object float_class;
 GLOBAL Object single_float_class;
@@ -206,10 +205,9 @@ GLOBAL Object colon_colon_symbol;
 GLOBAL Object object_handle_class;
 GLOBAL Object foreign_pointer_class;	/* <pcb> */
 GLOBAL Object stdio_handle_class;
-
-GLOBAL Object mp_float_class;
-GLOBAL Object mp_ratio_class;
-GLOBAL Object mp_integer_class;
+GLOBAL Object big_float_class;
+GLOBAL Object big_ratio_class;
+GLOBAL Object big_integer_class;
 
 /* reserved word symbols */
 GLOBAL Object above_symbol;
