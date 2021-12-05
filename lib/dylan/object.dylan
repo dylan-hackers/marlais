@@ -98,7 +98,7 @@ define constant class-sealed? =
 
 define constant class-builtin? =
   method (c :: <class>)
-    %class-sealed?(c);
+    %class-builtin?(c);
   end method;
 
 define constant all-superclasses =
