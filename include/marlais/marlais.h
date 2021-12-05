@@ -45,5 +45,10 @@
 #include <marlais/vector.h>
 
 #ifdef MARLAIS_ENABLE_GMP
-#include <marlais/gmp.h>
+#include <marlais/bignum.h>
 #endif
+
+#ifdef MARLAIS_ENABLE_ICU
+#include <marlais/unicode.h>
+#endif
+

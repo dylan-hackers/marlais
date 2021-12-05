@@ -4,9 +4,9 @@
 #include <marlais/marlais.h>
 
 #include <marlais/gc.h>
-#include <marlais/icu.h>
 #include <marlais/lexer.h>
 #include <marlais/parser.h>
+#include <marlais/unicode.h>
 
 extern Object binding_stack;
 

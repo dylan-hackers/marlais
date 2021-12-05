@@ -1,5 +1,5 @@
 
-#include <marlais/gmp.h>
+#include <marlais/bignum.h>
 
 #include <marlais/alloc.h>
 #include <marlais/env.h>

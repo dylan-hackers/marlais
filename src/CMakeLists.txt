@@ -19,12 +19,12 @@ set_property(CACHE MARLAIS_CONFIG_STDSTRING
 # GMP support
 option(MARLAIS_ENABLE_GMP "Enable GMP multi-precision numbers" ON)
 if (MARLAIS_ENABLE_GMP)
-  set (MARLAIS_GMP_SOURCES gmp.c)
+  set (MARLAIS_GMP_SOURCES bignum.c)
 endif ()
 
 option(MARLAIS_ENABLE_ICU "Enable ICU unicode string support" ON)
 if (MARLAIS_ENABLE_ICU)
-  set (MARLAIS_ICU_SOURCES icu.c)
+  set (MARLAIS_ICU_SOURCES unicode.c)
 endif ()
 
 # READLINE support

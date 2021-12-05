@@ -1,5 +1,5 @@
 
-#include <marlais/icu.h>
+#include <marlais/unicode.h>
 
 #include <marlais/alloc.h>
 #include <marlais/env.h>

@@ -34,7 +34,7 @@ load("dylan/range.dylan");
 
 // Extensions
 load("dylan/synchro.dylan");
-load("dylan/gmp.dylan");
-load("dylan/icu.dylan");
+load("dylan/bignum.dylan");
+load("dylan/unicode.dylan");
 
 %gc-enable();
