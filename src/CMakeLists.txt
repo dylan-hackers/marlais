@@ -68,6 +68,7 @@ add_library(marlais_lib
   error.c
   eval.c
   file.c
+  float.c
   foreign.c
   foreign_ptr.c
   function.c
