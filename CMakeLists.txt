@@ -32,7 +32,7 @@ endif ()
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 
   # Optionally enable bounds checking
-  option(CC_ENABLE_BOUNDSCHECK "Enable bounds checking" OFF)
+  option(CC_ENABLE_BOUNDSCHECK "Enable bounds checking" ON)
   if (CC_ENABLE_BOUNDSCHECK)
     add_compile_options(-fbounds-check)
   endif ()
