@@ -32,6 +32,8 @@ static Object class_abstract_p (Object class);
 static Object class_primary_p (Object class);
 static Object class_sealed_p (Object class);
 static Object class_builtin_p (Object class);
+static Object class_defined_p (Object class);
+static Object class_immediate_p (Object class);
 
 static struct primitive class_prims[] =
 {
@@ -46,6 +48,8 @@ static struct primitive class_prims[] =
     {"%class-sealed?", prim_1, class_sealed_p},
 
     {"%class-builtin?", prim_1, class_builtin_p},
+    {"%class-defined?", prim_1, class_defined_p},
+    {"%class-immediate?", prim_1, class_immediate_p},
 
     {"%direct-superclasses", prim_1, marlais_direct_superclasses},
     {"%direct-subclasses", prim_1, marlais_direct_subclasses},
@@ -470,6 +474,9 @@ marlais_initialize_class (void)
                         integer_class);
 #endif
 
+  /* clean up our macros */
+#undef MAYBE_IMMEDIATE
+
 }
 
 void
@@ -665,13 +672,17 @@ class_builtin_p (Object class)
   return marlais_make_boolean (CLASSBUILTINP (class));
 }
 
-#if 0
 static Object
 class_defined_p (Object class)
 {
   return marlais_make_boolean (CLASSDEFINEDP (class));
 }
-#endif
+
+static Object
+class_immediate_p (Object class)
+{
+  return marlais_make_boolean (CLASSIMMEDIATEP (class));
+}
 
 Object
 marlais_direct_subclasses (Object class)

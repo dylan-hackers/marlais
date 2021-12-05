@@ -101,6 +101,16 @@ define constant class-builtin? =
     %class-builtin?(c);
   end method;
 
+define constant class-defined? =
+  method (c :: <class>)
+    %class-defined?(c);
+  end method;
+
+define constant class-immediate? =
+  method (c :: <class>)
+    %class-immediate?(c);
+  end method;
+
 define constant all-superclasses =
   method (c :: <class>)
     %all-superclasses(c);
