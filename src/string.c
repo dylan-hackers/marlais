@@ -160,7 +160,7 @@ marlais_make_bytestring (const char *str)
 
     new = MARLAIS_ALLOCATE_STRING (size + 1);
 
-    strncpy (new, str, size);
+    strncpy (new, str, size + 1);
     new[size] = 0;
 
     return (make_bstring (new, size));
