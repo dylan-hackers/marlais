@@ -508,7 +508,7 @@ list_element_setter (Object pair, Object index, Object obj)
 static Object
 list_last (Object lst, Object default_ob)
 {
-    Object last;
+    Object last = MARLAIS_UNSPECIFIED;
 
     if (EMPTYLISTP (lst)) {
         if (default_ob == marlais_default) {
