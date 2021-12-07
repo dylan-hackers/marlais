@@ -130,7 +130,7 @@ Object
 marlais_vector_to_list (Object vec)
 {
   int i;
-  Object first, cur, acons;
+  Object first = MARLAIS_NIL, cur, acons;
 
   cur = MARLAIS_NIL;
   for (i = 0; i < SOVSIZE (vec); ++i) {
