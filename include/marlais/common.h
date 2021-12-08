@@ -28,6 +28,7 @@
 #include <marlais/object.h>
 #include <marlais/error.h>
 #include <marlais/boolean.h>
+#include <marlais/float.h>
 #include <marlais/number.h>
 #include <marlais/type.h>
 
