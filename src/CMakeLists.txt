@@ -106,6 +106,9 @@ add_library(marlais_lib
 set_target_properties(marlais_lib
   PROPERTIES OUTPUT_NAME marlais)
 
+# generated includes
+target_include_directories(marlais_lib PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+
 # includes
 target_include_directories(marlais_lib PUBLIC ../include)
 file(GLOB_RECURSE MARLAIS_INCLUDES "../include/*.h")
