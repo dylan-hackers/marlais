@@ -129,7 +129,8 @@ static void parse_args(int argc, char* argv[])
       printf("Marlais, version %s\n", VERSION);
       exit(0);
     default:
-      marlais_fatal ("fatal error: unrecognized option");
+      printf("Unrecognized option '-%c'\n", c);
+      exit(1);
     }
   }
 }
