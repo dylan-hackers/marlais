@@ -220,14 +220,33 @@ dylan_warning (Object msg_str, Object rest)
 }
 
 void
-marlais_fatal (const char *msg)
+marlais_fatal (const char *msg, ...)
 {
-  fprintf (stderr, "%s.\n", msg);
+  va_list args;
+  Object obj;
+
+  va_start (args, msg);
+  fprintf (stderr, "fatal error: %s", msg);
+  obj = va_arg (args, Object);
+
+  if (obj) {
+    fprintf (stderr, ": ");
+  }
+  while (obj) {
+    marlais_print_object (marlais_standard_error, obj, 0);
+    obj = va_arg (args, Object);
+
+    if (obj) {
+      fprintf (stderr, ", ");
+    }
+  }
+  fprintf (stderr, ".\n");
+
   abort();
 }
 
 Object
-marlais_error (const char *msg,...)
+marlais_error (const char *msg, ...)
 {
   va_list args;
   Object obj, signal_value, ret;
@@ -381,7 +400,7 @@ marlais_warning (const char *msg,...)
 static void
 signal_handler (int sig)
 {
-  marlais_fatal (sys_siglist[sig]);
+  marlais_fatal (sys_siglist[sig], NULL);
 }
 
 static Object

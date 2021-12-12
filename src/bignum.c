@@ -236,7 +236,7 @@ marlais_make_mpf_from_number(Object value)
     } else if (MPZP(value)) {
       mpf_set_z (MPFVAL(res), MPZVAL(value));
     } else {
-      marlais_fatal("%number->mpf: Wrong first argument");
+      marlais_fatal("%number->mpf: Wrong first argument", value, NULL);
     }
   }
 #endif
@@ -366,7 +366,7 @@ prim_mpf_set_bang(Object obj, Object value)
     /* TODO do this locally */
     prim_mpf_set_bang(obj, marlais_make_mpq_from_number(value));
   } else {
-    marlais_fatal("%mpf-set!: Wrong first argument");
+    marlais_fatal("%mpf-set!: Wrong second argument", value, NULL);
   }
   return value;
 }
@@ -395,7 +395,7 @@ prim_mpq_set_bang(Object obj, Object value)
   } else if (MPZP(value)) {
     mpq_set_z (MPQVAL(obj), MPZVAL(value));
   } else {
-    marlais_fatal("%mpq-set!: Wrong first argument");
+    marlais_fatal("%mpq-set!: Wrong second argument", value, NULL);
   }
   return value;
 }
@@ -426,7 +426,7 @@ prim_mpz_set_bang(Object obj, Object value)
     /* TODO do this locally */
     prim_mpz_set_bang(obj, marlais_make_mpq_from_number(value));
   } else {
-    marlais_fatal("%mpz-set!: Wrong first argument");
+    marlais_fatal("%mpz-set!: Wrong second argument", value, NULL);
   }
   return value;
 }
@@ -439,10 +439,10 @@ typedef struct big_integer mpz_obj;
   static Object prim_ ## _mt ## _lessthan (Object a, Object b) {        \
     bool res;                                                           \
     if (!_mp(a)) {                                                      \
-      marlais_error("%s: Wrong first argument", "%" #_mt "<");          \
+      marlais_fatal("%" #_mt "<: Wrong first argument", NULL);          \
     }                                                                   \
     if (!_mp(b)) {                                                      \
-      marlais_error("%s: Wrong second argument", "%" #_mt "<");         \
+      marlais_fatal("%" #_mt "<: Wrong second argument", NULL);         \
     }                                                                   \
     res = (_mt ## _cmp (_mg(a), _mg(b)) < 0);                           \
     return marlais_make_boolean(res);                                   \
@@ -450,10 +450,10 @@ typedef struct big_integer mpz_obj;
   static Object prim_ ## _mt ## _equal (Object a, Object b) {           \
     bool res;                                                           \
     if (!_mp(a)) {                                                      \
-      marlais_error("%s: Wrong first argument", "%" #_mt "=");          \
+      marlais_fatal("%" #_mt "=: Wrong first argument", NULL);          \
     }                                                                   \
     if (!_mp(b)) {                                                      \
-      marlais_error("%s: Wrong second argument", "%" #_mt "=");         \
+      marlais_fatal("%" #_mt "=: Wrong second argument", NULL);         \
     }                                                                   \
     res = (_mt ## _cmp (_mg(a), _mg(b)) == 0);                          \
     return marlais_make_boolean(res);                                   \
@@ -463,7 +463,7 @@ typedef struct big_integer mpz_obj;
   static Object prim_ ## _mt ## _ ## _op ## _bang (Object res, Object a) { \
     /* check */                                                         \
     if (!_mp(a)) {                                                      \
-      marlais_error("%s: Wrong argument", "%" #_mt "-" #_op);           \
+      marlais_fatal("%" #_mt "-" #_op ": Wrong arguments", NULL);       \
     }                                                                   \
     /* operate */                                                       \
     _mt ## _ ## _op (_mg(res), _mg(a));                                 \
@@ -484,10 +484,10 @@ typedef struct big_integer mpz_obj;
   static Object prim_ ## _mt ## _ ## _op ## _bang (Object res, Object a, Object b) { \
     /* check */                                                         \
     if (!_mp(a)) {                                                      \
-      marlais_error("%s: Wrong first argument", "%" #_mt "-" #_op);     \
+      marlais_fatal("%" #_mt "-" #_op ": Wrong arguments", NULL);       \
     }                                                                   \
     if (!_mp(b)) {                                                      \
-      marlais_error("%s: Wrong second argument", "%" #_mt "-" #_op);    \
+      marlais_fatal("%" #_mt "-" #_op ": Wrong arguments", NULL);       \
     }                                                                   \
     /* operate */                                                       \
     _mt ## _ ## _op (_mg(res), _mg(a), _mg(b));                         \
@@ -508,10 +508,10 @@ typedef struct big_integer mpz_obj;
   static Object prim_ ## _mt ## _ ## _op ## _bang (Object res, Object a, Object b) { \
     /* check */                                                         \
     if (!_mp(a)) {                                                      \
-      marlais_error("%s: Wrong first argument", "%" #_mt "-" #_op);     \
+      marlais_fatal("%" #_mt "-" #_op ": Wrong arguments", NULL);       \
     }                                                                   \
     if (!UNSIGNEDP(b)) {                                                \
-      marlais_error("%s: Wrong second argument", "%" #_mt "-" #_op);    \
+      marlais_fatal("%" #_mt "-" #_op ": Wrong arguments", NULL);       \
     }                                                                   \
     /* operate */                                                       \
     _mt ## _ ## _op ## _ui (_mg(res), _mg(a), INTVAL(b));               \
@@ -539,7 +539,7 @@ typedef struct big_integer mpz_obj;
       m = b;                                                            \
       i = a;                                                            \
     } else {                                                            \
-      marlais_error("%s: Wrong arguments", "%" #_mt "-" #_op);          \
+      marlais_fatal("%" #_mt "-" #_op ": Wrong arguments", NULL);       \
     }                                                                   \
     /* operate */                                                       \
     if (_mp(i)) {                                                       \
@@ -547,7 +547,7 @@ typedef struct big_integer mpz_obj;
     } else if (UNSIGNEDP(i)) {                                          \
       _mt ## _ ## _op ## _ui (_mg(res), _mg(m), INTVAL(i));             \
     } else {                                                            \
-      marlais_error("%s: Wrong arguments", "%" #_mt "-" #_op);          \
+      marlais_fatal("%" #_mt "-" #_op ": Wrong arguments", NULL);       \
     }                                                                   \
     /* return */                                                        \
     return res;                                                         \
@@ -566,7 +566,7 @@ typedef struct big_integer mpz_obj;
   static Object prim_ ## _mt ## _ ## _op ## _bang (Object res, Object a, Object b) { \
     /* check */                                                         \
     if (!_mp(a)) {                                                      \
-      marlais_error("%s: Wrong first argument", "%" #_mt "-" #_op);     \
+      marlais_fatal("%" #_mt "-" #_op ": Wrong arguments", NULL);       \
     }                                                                   \
     /* operate */                                                       \
     if (_mp(b)) {                                                       \
@@ -574,7 +574,7 @@ typedef struct big_integer mpz_obj;
     } else if (UNSIGNEDP(b)) {                                          \
       _mt ## _ ## _op ## _ui (_mg(res), _mg(a), INTVAL(b));             \
     } else {                                                            \
-      marlais_error("%s: Wrong second argument", "%" #_mt "-" #_op);    \
+      marlais_fatal("%" #_mt "-" #_op ": Wrong arguments", NULL);       \
     }                                                                   \
     /* return */                                                        \
     return res;                                                         \
@@ -599,7 +599,7 @@ typedef struct big_integer mpz_obj;
     } else if (_mp(b)) {                                                \
       _mt ## _ ## _op ## _ui (_mg(res), _mg(a), INTVAL(b));             \
     } else {                                                            \
-      marlais_error("%s: Wrong arguments", "%" #_mt "-" #_op);          \
+      marlais_fatal("%" #_mt "-" #_op ": Wrong arguments", NULL);       \
     }                                                                   \
     /* return */                                                        \
     return res;                                                         \

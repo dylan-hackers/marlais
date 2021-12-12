@@ -184,7 +184,7 @@ get_class_index (Object class, prec_graph graph)
       high_index = mid_point - 1;
     }
   }
-  marlais_fatal ("Unable to find index of class in cpl computation");
+  marlais_fatal ("Unable to find index of class in cpl computation", class, NULL);
 }
 
 static void
@@ -208,7 +208,7 @@ concatenate_successor (prec_graph graph,
     vec[i] = successor_class_index;
     return;
   }
-  marlais_fatal ("Too many successors for class");
+  marlais_fatal ("Too many successors for class", NULL);
 }
 
 static Object

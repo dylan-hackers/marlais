@@ -83,7 +83,8 @@ marlais_apply_internal (Object fun, Object args)
   }
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
   if (!POINTERP (fun)) {
-    return marlais_error ("apply: cannot apply this object", fun, NULL);
+    ret = marlais_error ("apply: cannot apply this object", fun, NULL);
+    goto done;
   }
 #endif
 
@@ -105,8 +106,11 @@ marlais_apply_internal (Object fun, Object args)
     ret = apply_exit (fun, args);
     break;
   default:
-    marlais_error ("apply: cannot apply this object", fun, NULL);
+    ret = marlais_error ("apply: cannot apply this object", fun, NULL);
+    break;
   }
+
+done:
   if (trace_functions && trace_level) {
     int i;
 

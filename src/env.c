@@ -192,7 +192,7 @@ marlais_get_module (Object module_name)
       return (binding);
     }
   }
-  marlais_fatal ("Unable to find binding for module");
+  marlais_fatal ("Unable to find binding for module", module_name, NULL);
 }
 
 struct module_binding *

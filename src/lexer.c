@@ -28,7 +28,7 @@ marlais_lexer_expand_char (char *str)
     /* escaped case */
     c = expand_escaped_character(str[2]);
   } else {
-    marlais_fatal("Expanding malformed character literal");
+    return marlais_error("Expanding malformed character literal", NULL);
   }
   /* return result */
   return marlais_make_character(c);

@@ -70,7 +70,7 @@ marlais_apply_prim (Object prim, Object args)
     case 1:
       return (*fun) (FIRST (args));
     default:
-      marlais_fatal ("incorrect number of args to primitive");
+      return marlais_error ("incorrect number of args to primitive", prim, NULL);
     }
   case prim_0_2:
     switch (marlais_list_length (args)) {
@@ -81,7 +81,7 @@ marlais_apply_prim (Object prim, Object args)
     case 2:
       return (*fun) (FIRST (args), SECOND (args));
     default:
-      marlais_fatal ("incorrect number of args to primitive");
+      return marlais_error ("incorrect number of args to primitive", prim, NULL);
     }
   case prim_0_3:
     switch (marlais_list_length (args)) {
@@ -94,7 +94,7 @@ marlais_apply_prim (Object prim, Object args)
     case 3:
       return (*fun) (FIRST (args), SECOND (args), THIRD (args));
     default:
-      marlais_fatal ("incorrect number of args to primitive");
+      return marlais_error ("incorrect number of args to primitive", prim, NULL);
     }
   case prim_1_1:
     switch (marlais_list_length (args)) {
@@ -103,7 +103,7 @@ marlais_apply_prim (Object prim, Object args)
     case 2:
       return (*fun) (FIRST (args), SECOND (args));
     default:
-      marlais_fatal ("incorrect number of args to primitive");
+      return marlais_error ("incorrect number of args to primitive", prim, NULL);
     }
   case prim_2_1:
     switch (marlais_list_length (args)) {
@@ -112,7 +112,7 @@ marlais_apply_prim (Object prim, Object args)
     case 3:
       return (*fun) (FIRST (args), SECOND (args), THIRD (args));
     default:
-      marlais_fatal ("incorrect number of args to primitive");
+      return marlais_error ("incorrect number of args to primitive", prim, NULL);
     }
   case prim_0_rest:
     return (*fun) (args);
@@ -121,6 +121,6 @@ marlais_apply_prim (Object prim, Object args)
   case prim_2_rest:
     return (*fun) (FIRST (args), SECOND (args), CDR (CDR (args)));
   default:
-    marlais_fatal ("cannot handle primitive type");
+    return marlais_error ("unknown primitive type", NULL);
   }
 }

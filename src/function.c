@@ -112,9 +112,7 @@ marlais_function_specializers (Object func)
   } else if (GFUNP (func)) {
     params = GFREQPARAMS (func);
   } else {
-    marlais_error ("function-specializers: arg. must be a method or generic function",
-                   func,
-                   NULL);
+    marlais_fatal ("function-specializers: arg. must be a method or generic function", func, NULL);
   }
   return make_specializers_from_params (params);
 }
@@ -123,7 +121,7 @@ Object
 marlais_generic_methods (Object gen)
 {
   if (!GFUNP (gen)) {
-    marlais_error ("generic-function-methods: argument must be a generic function", gen, NULL);
+    marlais_fatal ("generic-function-methods: argument must be a generic function", gen, NULL);
   }
   return (GFMETHODS (gen));
 }
@@ -278,7 +276,7 @@ marlais_applicable_method_p (Object argfun, Object sample_args, int strict_check
   Object funs, fun;
 
   if (!METHODP (argfun) && !GFUNP (argfun)) {
-    marlais_fatal ("applicable-method?: first argument must be a generic function or method");
+    marlais_fatal ("applicable-method?: first argument must be a generic function or method", argfun, NULL);
   }
   if (METHODP (argfun)) {
     funs = marlais_cons (argfun, MARLAIS_NIL);
@@ -849,9 +847,7 @@ function_values (Object func)
     vals = GFREQVALUES (func);
     rest = GFRESTVALUES (func);
   } else {
-    marlais_error ("function-values: arg. must be a method or generic function",
-                   func,
-                   NULL);
+    marlais_fatal ("function-values: arg. must be a method or generic function", func, NULL);
   }
   return marlais_construct_values (2,
                                    vals,
@@ -914,9 +910,9 @@ function_arguments (Object fun)
     }
     break;
   case Primitive:
-    marlais_fatal ("function-arguments: cannot query arguments of a primitive");
+    marlais_fatal ("function-arguments: cannot query arguments of a primitive", fun, NULL);
   default:
-    marlais_fatal ("function-arguments: bad argument");
+    marlais_fatal ("function-arguments: bad argument", fun, NULL);
   }
   return (marlais_construct_values (3, marlais_make_integer(marlais_list_length (params)), has_rest, keywords));
 }

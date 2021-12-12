@@ -63,7 +63,8 @@ marlais_gc_report (void)
 
   sz = GC_get_prof_stats(&stat, sizeof(stat));
   if(sz != sizeof(stat)) {
-    marlais_fatal("Error retrieving GC statistics");
+    marlais_warning("Error retrieving GC statistics", NULL);
+    return;
   }
 
   fprintf(stderr, "\nGarbage collector statistics:\n\n");
@@ -176,7 +177,7 @@ static Object prim_gc_enabled_p (void)
 static Object prim_gc_expand (Object amount)
 {
   if(!UNSIGNEDP (amount)) {
-    marlais_error("%gc-expand: amount must be an unsigned integer\n");
+    marlais_error("%gc-expand: amount must be an unsigned integer\n", amount, NULL);
   }
   GC_expand_hp(INTVAL(amount));
   return MARLAIS_UNSPECIFIED;
