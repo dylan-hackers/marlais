@@ -114,10 +114,11 @@ target_include_directories(marlais_lib PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 # includes
 target_include_directories(marlais_lib PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/../include)
 target_include_directories(marlais_lib PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/../include)
-file(GLOB_RECURSE MARLAIS_BINARY_INCLUDES "${CMAKE_CURRENT_BINARY_DIR}/../include/*.h")
-file(GLOB_RECURSE MARLAIS_SOURCE_INCLUDES "${CMAKE_CURRENT_SOURCE_DIR}/../include/*.h")
+file(GLOB_RECURSE MARLAIS_INCLUDES
+  "${CMAKE_CURRENT_BINARY_DIR}/../include/*.h"
+  "${CMAKE_CURRENT_SOURCE_DIR}/../include/*.h")
 set_target_properties(marlais_lib
-  PROPERTIES PUBLIC_HEADER "${MARLAIS_SOURCE_INCLUDES} ${MARLAIS_BINARY_INCLUDES}")
+  PROPERTIES PUBLIC_HEADER "${MARLAIS_INCLUDES}")
 
 # libdl
 target_link_libraries(marlais_lib PUBLIC dl)
