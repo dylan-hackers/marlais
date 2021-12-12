@@ -4,6 +4,7 @@
 #define MARLAIS_COMMON_H
 
 #include <marlais/config.h>
+#include <marlais/limits.h>
 
 #include <assert.h>
 #include <setjmp.h>
