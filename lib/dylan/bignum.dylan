@@ -120,6 +120,56 @@ define method \= (n1 :: <big-integer>, n2 :: <big-integer>)
   %mpz= (n1, n2);
 end method \=;
 
+// With other numbers
+
+define method \< (n1 :: <big-float>, n2 :: <number>)
+  %mpf< (n1, as(<big-float>, n2));
+end method \<;
+
+define method \< (n1 :: <number>, n2 :: <big-float>)
+  %mpf< (as(<big-float>, n1), n2);
+end method \<;
+
+define method \= (n1 :: <big-float>, n2 :: <number>)
+  %mpf= (n1, as(<big-float>, n2));
+end method \=;
+
+define method \= (n1 :: <number>, n2 :: <big-float>)
+  %mpf= (as(<big-float>, n1), n2);
+end method \<;
+
+define method \< (n1 :: <big-ratio>, n2 :: <number>)
+  %mpq< (n1, as(<big-ratio>, n2));
+end method \<;
+
+define method \< (n1 :: <number>, n2 :: <big-ratio>)
+  %mpq< (as(<big-ratio>, n1), n2);
+end method \<;
+
+define method \= (n1 :: <big-ratio>, n2 :: <number>)
+  %mpq= (n1, as(<big-ratio>, n2));
+end method \=;
+
+define method \= (n1 :: <number>, n2 :: <big-ratio>)
+  %mpq= (as(<big-ratio>, n1), n2);
+end method \<;
+
+define method \< (n1 :: <big-integer>, n2 :: <number>)
+  %mpz< (n1, as(<big-integer>, n2));
+end method \<;
+
+define method \< (n1 :: <number>, n2 :: <big-integer>)
+  %mpz< (as(<big-integer>, n1), n2);
+end method \<;
+
+define method \= (n1 :: <big-integer>, n2 :: <number>)
+  %mpz= (n1, as(<big-integer>, n2));
+end method \=;
+
+define method \= (n1 :: <number>, n2 :: <big-integer>)
+  %mpz= (as(<big-integer>, n1), n2);
+end method \<;
+
 //
 // Binary operations
 //
