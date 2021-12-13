@@ -204,7 +204,7 @@ marlais_make_wstring (const wchar_t *str)
 
     new = MARLAIS_ALLOCATE_WSTRING (size + 1);
 
-    wcsncpy (new, str, size);
+    wcsncpy (new, str, size + 1);
     new[size] = 0;
 
     return (make_wstring (new, size));
@@ -252,7 +252,7 @@ marlais_make_ustring (const UChar *str)
 
     new = MARLAIS_ALLOCATE_USTRING (size + 1);
 
-    u_strncpy (new, str, size);
+    u_strncpy (new, str, size + 1);
     new[size] = 0;
 
     return (make_ustring (new, size));
