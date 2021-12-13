@@ -1,9 +1,15 @@
-Marlais Dylan
-=============
+## Marlais Dylan
 
-The Marlais Dylan interpreter is a straightforward implementation of a programming language strongly resembling Dylan, an object-oriented dynamic language. It is copylefted software that was originally developed by Brent Benson of Harris Computer Systems. Further development was done by the Dylan Hackers.
+Marlais Dylan is an interactive implementation of the programming language Dylan, a modern derivative of Common Lisp with a friendly block syntax, a unified class-centric type system and support for programming in a range of paradigms. See the main project website for [Open Dylan](https://www.opendylan.org/) for details.
 
-This repository is an archive of that work, with some enhancements to make it build once more.
+This implementation of the language is designed as a straightforward interpreter that can be used for scripting, as an embedded interpreter and as a testbed for implementing language features. It is relatively slow, has a limited feature set and is not suitable for full-blown application development. We recommend that users start with Open Dylan instead and use Marlais Dylan only when they have a specific need for it.
 
-Currently not fully working.
+The Marlais Dylan interpreter was originally developped by Brent Benson of Harris Computer Systems. Further development work was done by the Dylan Hackers, a group from which the current development group descends. Modern versions have been significantly enhanced by @promovicz. This project is a side-project and will only be maintained according to need.
 
+### Features
+
+* Simple interpreter
+** Easy to understand
+** Easy to modify
+* Embeddable
+** Friendly C interface
