@@ -10,10 +10,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-
-#ifndef INIT_FILE
-#define INIT_FILE "dylan/init.dylan"
-#endif
+#define DYLAN_INIT_FILE "dylan/init.dylan"
+#define COMMON_INIT_FILE "common/init.dylan"
 
 #ifndef VERSION
 #define VERSION "0.6.4-io-beta"
@@ -138,7 +136,7 @@ static void parse_args(int argc, char* argv[])
 int
 main (int argc, char *argv[])
 {
-  char *init_file;
+  char *dylan_init, *common_init;
   int err;
   extern int optind;
   struct frame *cache_env;
@@ -158,38 +156,30 @@ main (int argc, char *argv[])
     exit (1);
   }
 
-  /* load initialization code */
+  /* load init code */
   if (!do_not_load_init_file) {
-    init_file = getenv ("MARLAIS_INIT");
-    if(!init_file) {
-      init_file = INIT_FILE;
+    dylan_init = getenv ("MARLAIS_DYLAN_INIT");
+    if(!dylan_init) {
+      dylan_init = DYLAN_INIT_FILE;
     }
-    marlais_load(marlais_make_bytestring (init_file));
+    common_init = getenv ("MARLAIS_COMMON_INIT");
+    if(!common_init) {
+      common_init = COMMON_INIT_FILE;
+    }
+    marlais_load(marlais_make_bytestring (dylan_init));
+    marlais_load(marlais_make_bytestring (common_init));
   }
 
+  /* create the dylan-user module */
   marlais_set_module (marlais_new_module (dylan_user_symbol));
   marlais_current_module ()->exported_bindings = all_symbol;
 
   marlais_use_module (dylan_symbol,
-	      all_symbol,
-	      MARLAIS_NIL,
-	      marlais_empty_string,
-	      MARLAIS_NIL,
-	      all_symbol);
-
-#ifdef DO_NOT_LOAD_COMMON_DYLAN_SPEC
-#else
-  {
-#define COMMON_DYLAN_LIB_DIR "common"
-    char* common_dylan = getenv("MARLAIS_LIB_DIR");
-    char file[256];
-    if(!common_dylan) {
-      common_dylan = COMMON_DYLAN_LIB_DIR;
-    }
-    sprintf(file, "%s/common-dylan.dylan", common_dylan);
-    marlais_load(marlais_make_bytestring(file));
-  }
-#endif
+                      all_symbol,
+                      MARLAIS_NIL,
+                      marlais_empty_string,
+                      MARLAIS_NIL,
+                      all_symbol);
 
   if(execute) {
     /* put in a ; in case the user forgets */

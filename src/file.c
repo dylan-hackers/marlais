@@ -117,20 +117,8 @@ open_file (Object filename)
   str = BYTESTRVAL (filename);
   fprintf(stderr, "Loading %s...\n", str);
   fp = fopen (str, "r");
-  if (!fp) {
-    {
-#define COMMON_DYLAN_LIB_DIR "common"
-      char* lib_dir = getenv("MARLAIS_LIB_DIR");
-      char file_name[256];
-      if(!lib_dir) {
-        lib_dir = COMMON_DYLAN_LIB_DIR;
-      }
-      sprintf(file_name, "%s/%s", lib_dir, str);
-      fp = fopen(file_name, "r");
-      if(!fp) {
-        marlais_error ("load: cannot open file", filename, NULL);
-      }
-    }
+  if(!fp) {
+    marlais_error ("load: cannot open file", filename, NULL);
   }
   open_file_list = marlais_cons (marlais_make_foreign_ptr (fp), open_file_list);
   return fp;
