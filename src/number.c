@@ -37,7 +37,6 @@ static Object prim_even_p (Object n);
 static Object prim_int_zero_p (Object n);
 static Object prim_int_positive_p (Object n);
 static Object prim_int_negative_p (Object n);
-static Object prim_integral_p (Object n);
 static Object prim_int_negative (Object n);
 static Object prim_int_inverse (Object n);
 static Object prim_binary_int_plus (Object n1, Object n2);
@@ -57,27 +56,26 @@ static Object prim_int_truncate_divide (Object i1, Object i2);
 
 static struct primitive number_prims[] =
 {
-    {"%odd?", prim_1, prim_odd_p},
-    {"%even?", prim_1, prim_even_p},
+    {"%int-odd?", prim_1, prim_odd_p},
+    {"%int-even?", prim_1, prim_even_p},
     {"%int-zero?", prim_1, prim_int_zero_p},
     {"%int-positive?", prim_1, prim_int_positive_p},
     {"%int-negative?", prim_1, prim_int_negative_p},
-    {"%integral?", prim_1, prim_integral_p},
     {"%int-negative", prim_1, prim_int_negative},
     {"%int-inverse", prim_1, prim_int_inverse},
-    {"%binary-int+", prim_2, prim_binary_int_plus},
-    {"%binary-int-", prim_2, prim_binary_int_minus},
-    {"%binary-int*", prim_2, prim_binary_int_times},
-    {"%binary-int/", prim_2, prim_binary_int_divide},
-    {"%binary-less-than", prim_2, prim_binary_less_than},
+    {"%int+", prim_2, prim_binary_int_plus},
+    {"%int-", prim_2, prim_binary_int_minus},
+    {"%int*", prim_2, prim_binary_int_times},
+    {"%int/", prim_2, prim_binary_int_divide},
+    {"%int<", prim_2, prim_binary_less_than},
     {"%int-sqrt", prim_1, prim_int_sqrt},
     {"%int-abs", prim_1, prim_int_abs},
-    {"%quotient", prim_2, prim_int_quotient},
-    {"%ash", prim_2, prim_ash},
-    {"%binary-logand", prim_2, prim_binary_logand},
-    {"%binary-logior", prim_2, prim_binary_logior},
-    {"%modulo", prim_2, prim_modulo},
-    {"%remainder-int", prim_2, prim_remainder_int},
+    {"%int-quotient", prim_2, prim_int_quotient},
+    {"%int-ash", prim_2, prim_ash},
+    {"%int-logand", prim_2, prim_binary_logand},
+    {"%int-logior", prim_2, prim_binary_logior},
+    {"%int-modulo", prim_2, prim_modulo},
+    {"%int-remainder", prim_2, prim_remainder_int},
     {"%int-truncate/", prim_2, prim_int_truncate_divide},
 };
 
@@ -216,16 +214,6 @@ static Object
 prim_int_negative_p (Object n)
 {
     if (INTVAL (n) < 0) {
-        return (MARLAIS_TRUE);
-    } else {
-        return (MARLAIS_FALSE);
-    }
-}
-
-static Object
-prim_integral_p (Object n)
-{
-    if (INTEGERP (n)) {
         return (MARLAIS_TRUE);
     } else {
         return (MARLAIS_FALSE);

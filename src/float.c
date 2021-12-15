@@ -47,6 +47,8 @@ static Object efloat_one;
 static Object prim_int_to_double (Object n);
 static Object prim_double_to_int (Object n);
 
+static Object prim_double_lessthan (Object n1, Object n2);
+
 static Object prim_double_zero_p (Object n);
 static Object prim_double_positive_p (Object n);
 static Object prim_double_negative_p (Object n);
@@ -85,6 +87,8 @@ static struct primitive float_prims[] =
     {"%int-to-double", prim_1, prim_int_to_double},
     {"%double-to-int", prim_1, prim_double_to_int},
 
+    {"%double<", prim_2, prim_double_lessthan},
+
     {"%double-zero?", prim_1, prim_double_zero_p},
     {"%double-positive?", prim_1, prim_double_positive_p},
     {"%double-negative?", prim_1, prim_double_negative_p},
@@ -92,23 +96,23 @@ static struct primitive float_prims[] =
     {"%double-negative", prim_1, prim_double_negative},
     {"%double-inverse", prim_1, prim_double_inverse},
 
-    {"%binary-double+", prim_2, prim_binary_double_plus},
-    {"%binary-double-", prim_2, prim_binary_double_minus},
-    {"%binary-double*", prim_2, prim_binary_double_times},
-    {"%binary-double/", prim_2, prim_binary_double_divide},
+    {"%double+", prim_2, prim_binary_double_plus},
+    {"%double-", prim_2, prim_binary_double_minus},
+    {"%double*", prim_2, prim_binary_double_times},
+    {"%double/", prim_2, prim_binary_double_divide},
 
-    {"%modulo-double", prim_2, prim_modulo_double},
-    {"%remainder-double", prim_2, prim_remainder_double},
+    {"%double-modulo", prim_2, prim_modulo_double},
+    {"%double-remainder", prim_2, prim_remainder_double},
 
-    {"%floor", prim_1, prim_floor},
-    {"%ceiling", prim_1, prim_ceiling},
-    {"%round", prim_1, prim_round},
-    {"%truncate", prim_1, prim_truncate},
+    {"%double-floor", prim_1, prim_floor},
+    {"%double-ceiling", prim_1, prim_ceiling},
+    {"%double-round", prim_1, prim_round},
+    {"%double-truncate", prim_1, prim_truncate},
 
-    {"%floor/", prim_2, prim_floor_divide},
-    {"%ceiling/", prim_2, prim_ceiling_divide},
-    {"%round/", prim_2, prim_round_divide},
-    {"%truncate/", prim_2, prim_truncate_divide},
+    {"%double-floor/", prim_2, prim_floor_divide},
+    {"%double-ceiling/", prim_2, prim_ceiling_divide},
+    {"%double-round/", prim_2, prim_round_divide},
+    {"%double-truncate/", prim_2, prim_truncate_divide},
 
     {"%double-exp", prim_1, prim_double_exp},
     {"%double-ln", prim_1, prim_double_log},
@@ -286,6 +290,16 @@ static Object
 prim_double_to_int (Object n)
 {
     return (marlais_make_integer (DFLOATVAL (n)));
+}
+
+static Object
+prim_double_lessthan (Object n1, Object n2)
+{
+    if (DFLOATVAL (n1) < DFLOATVAL (n2)) {
+        return (MARLAIS_TRUE);
+    } else {
+        return (MARLAIS_FALSE);
+    }
 }
 
 static Object
