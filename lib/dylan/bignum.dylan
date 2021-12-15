@@ -122,24 +122,84 @@ define method \= (n1 :: <big-integer>, n2 :: <big-integer>)
   %mpz= (n1, n2);
 end method \=;
 
-// <big-float> with any float
+// <big-float> with any real
 //
-// Coerce the other float to <big-float>.
+// Coerce the other real to <big-float>.
 
-define method \< (n1 :: <big-float>, n2 :: <float>)
+define method \< (n1 :: <big-float>, n2 :: <real>)
   %mpf< (n1, as(<big-float>, n2));
 end method \<;
 
-define method \< (n1 :: <float>, n2 :: <big-float>)
+define method \< (n1 :: <real>, n2 :: <big-float>)
   %mpf< (as(<big-float>, n1), n2);
 end method \<;
 
-define method \= (n1 :: <big-float>, n2 :: <float>)
+define method \= (n1 :: <big-float>, n2 :: <real>)
   %mpf= (n1, as(<big-float>, n2));
 end method \=;
 
-define method \= (n1 :: <float>, n2 :: <big-float>)
+define method \= (n1 :: <real>, n2 :: <big-float>)
   %mpf= (as(<big-float>, n1), n2);
+end method \<;
+
+// <big-float> with any rational
+//
+// Coerce the rational to <big-float>.
+
+define method \< (n1 :: <big-float>, n2 :: <rational>)
+  %mpf< (n1, as(<big-float>, n2));
+end method \<;
+
+define method \< (n1 :: <rational>, n2 :: <big-float>)
+  %mpf< (as(<big-float>, n1), n2);
+end method \<;
+
+define method \= (n1 :: <big-float>, n2 :: <rational>)
+  %mpf= (n1, as(<big-float>, n2));
+end method \=;
+
+define method \= (n1 :: <rational>, n2 :: <big-float>)
+  %mpf= (as(<big-float>, n1), n2);
+end method \<;
+
+// <big-float> with any integer
+//
+// Coerce the integer to <big-float>.
+
+define method \< (n1 :: <big-float>, n2 :: <integer>)
+  %mpf< (n1, as(<big-float>, n2));
+end method \<;
+
+define method \< (n1 :: <integer>, n2 :: <big-float>)
+  %mpf< (as(<big-float>, n1), n2);
+end method \<;
+
+define method \= (n1 :: <big-float>, n2 :: <integer>)
+  %mpf= (n1, as(<big-float>, n2));
+end method \=;
+
+define method \= (n1 :: <integer>, n2 :: <big-float>)
+  %mpf= (as(<big-float>, n1), n2);
+end method \<;
+
+// <big-ratio> with any real
+//
+// Coerce both to <big-float>.
+
+define method \< (n1 :: <big-ratio>, n2 :: <real>)
+  %mpf< (as(<big-float>, n1), as(<big-float>, n2));
+end method \<;
+
+define method \< (n1 :: <real>, n2 :: <big-ratio>)
+  %mpf< (as(<big-float>, n1), as(<big-float>, n2));
+end method \<;
+
+define method \= (n1 :: <big-ratio>, n2 :: <real>)
+  %mpf= (as(<big-float>, n1), as(<big-float>, n2));
+end method \=;
+
+define method \= (n1 :: <real>, n2 :: <big-ratio>)
+  %mpf= (as(<big-float>, n1), as(<big-float>, n2));
 end method \<;
 
 // <big-ratio> with any rational
@@ -162,24 +222,24 @@ define method \= (n1 :: <rational>, n2 :: <big-ratio>)
   %mpq= (as(<big-ratio>, n1), n2);
 end method \<;
 
-// <big-ratio> with any real
+// <big-ratio> with any integer
 //
-// Coerce both to <big-float>
+// Coerce the integer to <big-ratio>.
 
-define method \< (n1 :: <big-ratio>, n2 :: <real>)
-  %mpf< (as (<big-float>, n1), as(<big-float>, n2));
+define method \< (n1 :: <big-ratio>, n2 :: <integer>)
+  %mpq< (n1, as(<big-ratio>, n2));
 end method \<;
 
-define method \< (n1 :: <real>, n2 :: <big-ratio>)
-  %mpf< (as (<big-float>, n1), as (<big-float>, n2));
+define method \< (n1 :: <integer>, n2 :: <big-ratio>)
+  %mpq< (as(<big-ratio>, n1), n2);
 end method \<;
 
-define method \= (n1 :: <big-ratio>, n2 :: <real>)
-  %mpf= (as (<big-float>, n1), as (<big-float>, n2));
+define method \= (n1 :: <big-ratio>, n2 :: <integer>)
+  %mpq= (n1, as(<big-ratio>, n2));
 end method \=;
 
-define method \= (n1 :: <real>, n2 :: <big-ratio>)
-  %mpf= (as (<big-float>, n1), as (<big-float>, n2));
+define method \= (n1 :: <integer>, n2 :: <big-ratio>)
+  %mpq= (as(<big-ratio>, n1), n2);
 end method \<;
 
 // <big-integer> with any real
@@ -187,19 +247,19 @@ end method \<;
 // Coerce both to <big-float>.
 
 define method \< (n1 :: <big-integer>, n2 :: <real>)
-  %mpf< (as (<big-float>, n1), as(<big-float>, n2));
+  %mpf< (as(<big-float>, n1), as(<big-float>, n2));
 end method \<;
 
 define method \< (n1 :: <real>, n2 :: <big-integer>)
-  %mpf< (as (<big-float>, n1), as (<big-float>, n2));
+  %mpf< (as(<big-float>, n1), as(<big-float>, n2));
 end method \<;
 
 define method \= (n1 :: <big-integer>, n2 :: <real>)
-  %mpf= (as (<big-float>, n1), as (<big-float>, n2));
+  %mpf= (as(<big-float>, n1), as(<big-float>, n2));
 end method \=;
 
 define method \= (n1 :: <real>, n2 :: <big-integer>)
-  %mpf= (as (<big-float>, n1), as (<big-float>, n2));
+  %mpf= (as(<big-float>, n1), as(<big-float>, n2));
 end method \<;
 
 // <big-integer> with any rational
@@ -207,19 +267,19 @@ end method \<;
 // Coerce both to <big-ratio>.
 
 define method \< (n1 :: <big-integer>, n2 :: <rational>)
-  %mpq< (as (<big-ratio>, n1), as (<big-ratio>, n2));
+  %mpq< (as(<big-ratio>, n1), as(<big-ratio>, n2));
 end method \<;
 
 define method \< (n1 :: <rational>, n2 :: <big-integer>)
-  %mpq< (as (<big-ratio>, n1), as (<big-ratio>, n2));
+  %mpq< (as(<big-ratio>, n1), as(<big-ratio>, n2));
 end method \<;
 
 define method \= (n1 :: <big-integer>, n2 :: <rational>)
-  %mpq= (as (<big-ratio>, n1), as (<big-ratio>, n2));
+  %mpq= (as(<big-ratio>, n1), as(<big-ratio>, n2));
 end method \=;
 
 define method \= (n1 :: <rational>, n2 :: <big-integer>)
-  %mpq= (as (<big-ratio>, n1), as (<big-ratio>, n2));
+  %mpq= (as(<big-ratio>, n1), as(<big-ratio>, n2));
 end method \<;
 
 // <big-integer> with any integer
@@ -241,111 +301,6 @@ end method \=;
 define method \= (n1 :: <integer>, n2 :: <big-integer>)
   %mpz= (as(<big-integer>, n1), n2);
 end method \<;
-
-//
-// Binary operations
-//
-
-// \+ on <big-float>
-
-define method \+ (i1 :: <big-float>, i2 :: <big-float>)
-  %mpf-add (i1, i2);
-end method \+;
-
-define method \+ (i1 :: <big-float>, o2 :: <number>)
-  %mpf-add (i1, o2);
-end method \+;
-
-define method \+ (o1 :: <number>, i2 :: <big-float>)
-  %mpf-add (i2, o1);
-end method \+;
-
-// \+ on <big-integer>
-
-define method \+ (i1 :: <big-integer>, i2 :: <big-integer>)
-  %mpz-add (i1, i2);
-end method \+;
-
-define method \+ (i1 :: <big-integer>, o2 :: <integer>)
-  %mpz-add (i1, o2);
-end method \+;
-
-define method \+ (o1 :: <integer>, i2 :: <big-integer>)
-  %mpz-add (i2, o1);
-end method \+;
-
-// \+ on <big-ratio>
-
-define method \+ (i1 :: <big-ratio>, i2 :: <big-ratio>)
-  %mpq-add (i1, i2);
-end method \+;
-
-// \- on <big-float>
-
-define method \- (i1 :: <big-float>, i2 :: <big-float>)
-  %mpf-sub (i1, i2);
-end method \-;
-
-define method \- (i1 :: <big-float>, o2 :: <number>)
-  %mpf-sub (i1, o2);
-end method \-;
-
-define method \- (o1 :: <number>, i2 :: <big-float>)
-  %mpf-sub (o1, i2);
-end method \-;
-
-// \- on <big-integer>
-
-define method \- (i1 :: <big-integer>, i2 :: <big-integer>)
-  %mpz-sub (i1, i2);
-end method \-;
-
-define method \- (i1 :: <big-integer>, o2 :: <integer>)
-  %mpz-sub (i1, o2);
-end method \-;
-
-define method \- (o1 :: <integer>, i2 :: <big-integer>)
-  %mpz-sub (o1, i2);
-end method \-;
-
-// \- on <big-ratio>
-define method \- (i1 :: <big-ratio>, i2 :: <big-ratio>)
-  %mpq-sub (i1, i2);
-end method \-;
-
-// \* on <big-float>
-
-define method \* (i1 :: <big-float>, i2 :: <big-float>)
-  %mpf-mul (i1, i2);
-end method \*;
-
-define method \* (i1 :: <big-float>, o2 :: <number>)
-  %mpf-mul (i1, o2);
-end method \*;
-
-define method \* (o1 :: <number>, i2 :: <big-float>)
-  %mpf-mul (i2, o1);
-end method \*;
-
-// \* on <big-float>
-
-define method \* (i1 :: <big-integer>, i2 :: <big-integer>)
-  %mpz-mul (i1, i2);
-end method \*;
-
-define method \* (i1 :: <big-integer>, o2 :: <integer>)
-  %mpz-mul (i1, o2);
-end method \*;
-
-define method \* (o1 :: <integer>, i2 :: <big-integer>)
-  %mpz-mul (i2, o1);
-end method \*;
-
-// \* on <big-ratio>
-
-define method \* (i1 :: <big-ratio>, i2 :: <big-ratio>)
-  %mpq-mul (i1, i2);
-end method \*;
 
 //
 // Unary operations
@@ -399,3 +354,335 @@ end method neg;
 define method abs (n :: <big-integer>)
   %mpz-abs(n);
 end method abs;
+
+//
+// Binary operations
+//
+
+// <big-float>
+//
+// Simple cases.
+
+define method \+ (i1 :: <big-float>, i2 :: <big-float>)
+  %mpf-add (i1, i2);
+end method \+;
+
+define method \- (i1 :: <big-float>, i2 :: <big-float>)
+  %mpf-sub (i1, i2);
+end method \-;
+
+define method \* (i1 :: <big-float>, i2 :: <big-float>)
+  %mpf-mul (i1, i2);
+end method \*;
+
+// <big-ratio>
+//
+// Simple cases.
+
+define method \+ (i1 :: <big-ratio>, i2 :: <big-ratio>)
+  %mpq-add (i1, i2);
+end method \+;
+
+define method \- (i1 :: <big-ratio>, i2 :: <big-ratio>)
+  %mpq-sub (i1, i2);
+end method \-;
+
+define method \* (i1 :: <big-ratio>, i2 :: <big-ratio>)
+  %mpq-mul (i1, i2);
+end method \*;
+
+// <big-integer>
+//
+// Simple cases.
+
+define method \+ (i1 :: <big-integer>, i2 :: <big-integer>)
+  %mpz-add (i1, i2);
+end method \+;
+
+define method \- (i1 :: <big-integer>, i2 :: <big-integer>)
+  %mpz-sub (i1, i2);
+end method \-;
+
+define method \* (i1 :: <big-integer>, i2 :: <big-integer>)
+  %mpz-mul (i1, i2);
+end method \*;
+
+// <big-integer> and small integer
+//
+// Native cases.
+
+define method \+ (i1 :: <big-integer>, o2 :: <small-integer>)
+  %mpz-add (i1, o2);
+end method \+;
+
+define method \+ (o1 :: <small-integer>, i2 :: <big-integer>)
+  %mpz-add (i2, o1);
+end method \+;
+
+define method \- (i1 :: <big-integer>, o2 :: <small-integer>)
+  %mpz-sub (i1, o2);
+end method \-;
+
+define method \- (o1 :: <small-integer>, i2 :: <big-integer>)
+  %mpz-sub (o1, i2);
+end method \-;
+
+define method \* (i1 :: <big-integer>, o2 :: <small-integer>)
+  %mpz-mul (i1, o2);
+end method \*;
+
+define method \* (o1 :: <small-integer>, i2 :: <big-integer>)
+  %mpz-mul (i2, o1);
+end method \*;
+
+// <big-float> and any real
+//
+// Coerce the other real to <big-float>.
+
+define method \+ (n1 :: <big-float>, n2 :: <real>)
+  %mpf-add (n1, as (<big-float>, n2));
+end method \+;
+
+define method \+ (n1 :: <real>, n2 :: <big-float>)
+  %mpf-add (as (<big-float>, n1), n2);
+end method \+;
+
+define method \- (n1 :: <big-float>, n2 :: <real>)
+  %mpf-sub (n1, as (<big-float>, n2));
+end method \-;
+
+define method \- (n1 :: <real>, n2 :: <big-float>)
+  %mpf-sub (as (<big-float>, n1), n2);
+end method \-;
+
+define method \* (n1 :: <big-float>, n2 :: <real>)
+  %mpf-mul (n1, as (<big-float>, n2));
+end method \*;
+
+define method \* (n1 :: <real>, n2 :: <big-float>)
+  %mpf-mul (as (<big-float>, n1), n2);
+end method \*;
+
+// <big-float> and any rational
+//
+// Coerce the rational to <big-float>.
+
+define method \+ (n1 :: <big-float>, n2 :: <rational>)
+  %mpf-add (n1, as (<big-float>, n2));
+end method \+;
+
+define method \+ (n1 :: <rational>, n2 :: <big-float>)
+  %mpf-add (as (<big-float>, n1), n2);
+end method \+;
+
+define method \- (n1 :: <big-float>, n2 :: <rational>)
+  %mpf-sub (n1, as (<big-float>, n2));
+end method \-;
+
+define method \- (n1 :: <rational>, n2 :: <big-float>)
+  %mpf-sub (as (<big-float>, n1), n2);
+end method \-;
+
+define method \* (n1 :: <big-float>, n2 :: <rational>)
+  %mpf-mul (n1, as (<big-float>, n2));
+end method \*;
+
+define method \* (n1 :: <rational>, n2 :: <big-float>)
+  %mpf-mul (as (<big-float>, n1), n2);
+end method \*;
+
+// <big-float> and any integer
+//
+// Coerce the integer to <big-float>.
+
+define method \+ (n1 :: <big-float>, n2 :: <integer>)
+  %mpf-add (n1, as (<big-float>, n2));
+end method \+;
+
+define method \+ (n1 :: <integer>, n2 :: <big-float>)
+  %mpf-add (as (<big-float>, n1), n2);
+end method \+;
+
+define method \- (n1 :: <big-float>, n2 :: <integer>)
+  %mpf-sub (n1, as (<big-float>, n2));
+end method \-;
+
+define method \- (n1 :: <integer>, n2 :: <big-float>)
+  %mpf-sub (as (<big-float>, n1), n2);
+end method \-;
+
+define method \* (n1 :: <big-float>, n2 :: <integer>)
+  %mpf-mul (n1, as (<big-float>, n2));
+end method \*;
+
+define method \* (n1 :: <integer>, n2 :: <big-float>)
+  %mpf-mul (as (<big-float>, n1), n2);
+end method \*;
+
+// <big-ratio> and any real
+//
+// Coerce both to <big-float>
+
+define method \+ (n1 :: <big-ratio>, n2 :: <real>)
+  %mpf-add (as (<big-float>, n1), as (<big-float>, n2));
+end method \+;
+
+define method \+ (n1 :: <real>, n2 :: <big-ratio>)
+  %mpf-add (as (<big-float>, n1), as (<big-float>, n2));
+end method \+;
+
+define method \- (n1 :: <big-ratio>, n2 :: <real>)
+  %mpf-sub (as (<big-float>, n1), as (<big-float>, n2));
+end method \-;
+
+define method \- (n1 :: <real>, n2 :: <big-ratio>)
+  %mpf-sub (as (<big-float>, n1), as (<big-float>, n2));
+end method \-;
+
+define method \* (n1 :: <big-ratio>, n2 :: <real>)
+  %mpf-mul (as (<big-float>, n1), as (<big-float>, n2));
+end method \*;
+
+define method \* (n1 :: <real>, n2 :: <big-ratio>)
+  %mpf-mul (as (<big-float>, n1), as (<big-float>));
+end method \*;
+
+// <big-ratio> and any rational
+//
+// Coerce the other rational to <big-ratio>.
+
+define method \+ (n1 :: <big-ratio>, n2 :: <rational>)
+  %mpq-add (n1, as (<big-ratio>, n2));
+end method \+;
+
+define method \+ (n1 :: <rational>, n2 :: <big-ratio>)
+  %mpq-add (as (<big-ratio>, n1), n2);
+end method \+;
+
+define method \- (n1 :: <big-ratio>, n2 :: <rational>)
+  %mpq-sub (n1, as (<big-ratio>, n2));
+end method \-;
+
+define method \- (n1 :: <rational>, n2 :: <big-ratio>)
+  %mpq-sub (as (<big-ratio>, n1), n2);
+end method \-;
+
+define method \* (n1 :: <big-ratio>, n2 :: <rational>)
+  %mpq-mul (n1, as (<big-ratio>, n2));
+end method \*;
+
+define method \* (n1 :: <rational>, n2 :: <big-ratio>)
+  %mpq-mul (as (<big-ratio>, n1), n2);
+end method \*;
+
+// <big-ratio> and any integer
+//
+// Coerce the integer to <big-ratio>.
+
+define method \+ (n1 :: <big-ratio>, n2 :: <integer>)
+  %mpq-add (n1, as (<big-ratio>, n2));
+end method \+;
+
+define method \+ (n1 :: <integer>, n2 :: <big-ratio>)
+  %mpq-add (as (<big-ratio>, n1), n2);
+end method \+;
+
+define method \- (n1 :: <big-ratio>, n2 :: <integer>)
+  %mpq-sub (n1, as (<big-ratio>, n2));
+end method \-;
+
+define method \- (n1 :: <integer>, n2 :: <big-ratio>)
+  %mpq-sub (as (<big-ratio>, n1), n2);
+end method \-;
+
+define method \* (n1 :: <big-ratio>, n2 :: <integer>)
+  %mpq-mul (n1, as (<big-ratio>, n2));
+end method \*;
+
+define method \* (n1 :: <integer>, n2 :: <big-ratio>)
+  %mpq-mul (as (<big-ratio>, n1), n2);
+end method \*;
+
+// <big-integer> and any real
+//
+// Coerce both to <big-float>
+
+define method \+ (n1 :: <big-integer>, n2 :: <real>)
+  %mpf-add (as (<big-float>, n1), as (<big-float>, n2));
+end method \+;
+
+define method \+ (n1 :: <real>, n2 :: <big-integer>)
+  %mpf-add (as (<big-float>, n1), as (<big-float>, n2));
+end method \+;
+
+define method \- (n1 :: <big-integer>, n2 :: <real>)
+  %mpf-sub (as (<big-float>, n1), as (<big-float>, n2));
+end method \-;
+
+define method \- (n1 :: <real>, n2 :: <big-integer>)
+  %mpf-sub (as (<big-float>, n1), as (<big-float>, n2));
+end method \-;
+
+define method \* (n1 :: <big-integer>, n2 :: <real>)
+  %mpf-mul (as (<big-float>, n1), as (<big-float>, n2));
+end method \*;
+
+define method \* (n1 :: <real>, n2 :: <big-integer>)
+  %mpf-mul (as (<big-float>, n1), as (<big-float>));
+end method \*;
+
+// <big-integer> and any rational
+//
+// Coerce both to <big-ratio>
+
+define method \+ (n1 :: <big-integer>, n2 :: <rational>)
+  %mpq-add (as (<big-ratio>, n1), as (<big-ratio>, n2));
+end method \+;
+
+define method \+ (n1 :: <rational>, n2 :: <big-integer>)
+  %mpq-add (as (<big-ratio>, n1), as (<big-ratio>, n2));
+end method \+;
+
+define method \- (n1 :: <big-integer>, n2 :: <rational>)
+  %mpq-sub (as (<big-ratio>, n1), as (<big-ratio>, n2));
+end method \-;
+
+define method \- (n1 :: <rational>, n2 :: <big-integer>)
+  %mpq-sub (as (<big-ratio>, n1), as (<big-ratio>, n2));
+end method \-;
+
+define method \* (n1 :: <big-integer>, n2 :: <rational>)
+  %mpq-mul (as (<big-ratio>, n1), as (<big-ratio>, n2));
+end method \*;
+
+define method \* (n1 :: <rational>, n2 :: <big-integer>)
+  %mpq-mul (as (<big-ratio>, n1), as (<big-ratio>));
+end method \*;
+
+// <big-integer> and any integer
+//
+// Coerce the other integer to <big-integer>.
+
+define method \+ (n1 :: <big-integer>, n2 :: <integer>)
+  %mpz-add (n1, as (<big-integer>, n2));
+end method \+;
+
+define method \+ (n1 :: <integer>, n2 :: <big-integer>)
+  %mpz-add (as (<big-integer>, n1), n2);
+end method \+;
+
+define method \- (n1 :: <big-integer>, n2 :: <integer>)
+  %mpz-sub (n1, as (<big-integer>, n2));
+end method \-;
+
+define method \- (n1 :: <integer>, n2 :: <big-integer>)
+  %mpu-sub (as (<big-integer>, n1), n2);
+end method \-;
+
+define method \* (n1 :: <big-integer>, n2 :: <integer>)
+  %mpz-mul (n1, as (<big-integer>, n2));
+end method \*;
+
+define method \* (n1 :: <integer>, n2 :: <big-integer>)
+  %mpz-mul (as (<big-integer>, n1), n2);
+end method \*;
