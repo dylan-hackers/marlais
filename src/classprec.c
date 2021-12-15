@@ -33,7 +33,7 @@
 #include <marlais/common.h>
 
 #if defined(MARLAIS_CLASS_PRECEDENCE_CLOS)
-#include "classprec-close.c"
+#include "classprec-clos.c"
 #elif defined(MARLAIS_CLASS_PRECEDENCE_LL)
 #include "classprec-ll.c"
 #else
