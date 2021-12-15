@@ -228,7 +228,7 @@ define method \/ (d1 :: <double-float>, d2 :: <double-float>)
   %double/ (d1, d2);
 end method \/;
 
-// Binary <integer> <double-float>
+// Binary <small-integer> <double-float>
 
 define method \+ (i1 :: <small-integer>, d2 :: <double-float>)
   %double+ (as (<double-float>, i1), d2);
@@ -246,7 +246,7 @@ define method \/ (i1 :: <small-integer>, d2 :: <double-float>)
   %double/ (as (<double-float>, i1), d2);
 end method \/;
 
-// Binary <double-float> <integer>
+// Binary <double-float> <small-integer>
 
 define method \+ (d1 :: <double-float>, i2 :: <small-integer>)
   %double+ (d1, as (<double-float>, i2));
