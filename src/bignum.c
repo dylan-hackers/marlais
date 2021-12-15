@@ -594,10 +594,10 @@ typedef struct big_integer mpz_obj;
     /* operate */                                                       \
     if (_mp(a) && _mp(b)) {                                             \
       _mt ## _ ## _op (_mg(res), _mg(a), _mg(b));                       \
-    } else if (_mp(a)) {                                                \
-      _mt ## _ui_ ## _op (_mg(res), INTVAL(a), _mg(b));                 \
-    } else if (_mp(b)) {                                                \
+    } else if (_mp(a) && UNSIGNEDP(b)) {                                \
       _mt ## _ ## _op ## _ui (_mg(res), _mg(a), INTVAL(b));             \
+    } else if (UNSIGNEDP(a) && _mp(b)) {                                \
+      _mt ## _ui_ ## _op (_mg(res), INTVAL(a), _mg(b));                 \
     } else {                                                            \
       marlais_fatal("%" #_mt "-" #_op ": Wrong arguments", NULL);       \
     }                                                                   \
