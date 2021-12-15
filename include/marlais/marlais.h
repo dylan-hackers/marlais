@@ -48,7 +48,7 @@
 #include <marlais/bignum.h>
 #endif
 
-#ifdef MARLAIS_ENABLE_ICU
+#ifdef MARLAIS_ENABLE_UCHAR
 #include <marlais/unicode.h>
 #endif
 

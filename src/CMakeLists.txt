@@ -1,30 +1,46 @@
 
-
-# Interpreter configuration
-set(MARLAIS_CONFIG_CLASSPREC "LL" CACHE STRING
+# Class precedence algorithm
+set(MARLAIS_CLASS_PRECEDENCE "LL" CACHE STRING
   "Class precedence algorithm to use")
-set_property(CACHE MARLAIS_CONFIG_CLASSPREC
+set_property(CACHE MARLAIS_CLASS_PRECEDENCE
   PROPERTY STRINGS "CLOS;LL")
+if (MARLAIS_CLASS_PRECEDENCE STREQUAL CLOS)
+  set(MARLAIS_CLASS_PRECEDENCE_CLOS ON)
+else ()
+  set(MARLAIS_CLASS_PRECEDENCE_CLOS OFF)
+endif ()
+if (MARLAIS_CLASS_PRECEDENCE STREQUAL LL)
+  set(MARLAIS_CLASS_PRECEDENCE_LL ON)
+else ()
+  set(MARLAIS_CLASS_PRECEDENCE_LL OFF)
+endif ()
 
-set(MARLAIS_CONFIG_OBJMODEL "SMALL" CACHE STRING
+# Object model
+set(MARLAIS_OBJECT_MODEL "SMALL" CACHE STRING
   "Object model to use")
-set_property(CACHE MARLAIS_CONFIG_OBJMODEL
+set_property(CACHE MARLAIS_OBJECT_MODEL
   PROPERTY STRINGS "LARGE;SMALL")
+if (MARLAIS_OBJECT_MODEL STREQUAL LARGE)
+  set(MARLAIS_OBJECT_MODEL_LARGE ON)
+else ()
+  set(MARLAIS_OBJECT_MODEL_LARGE OFF)
+endif ()
+if (MARLAIS_OBJECT_MODEL STREQUAL SMALL)
+  set(MARLAIS_OBJECT_MODEL_SMALL ON)
+else ()
+  set(MARLAIS_OBJECT_MODEL_SMALL OFF)
+endif ()
 
+# Standard character type
 set(MARLAIS_CONFIG_STDSTRING "BYTE" CACHE STRING
   "Default string and character type")
 set_property(CACHE MARLAIS_CONFIG_STDSTRING
   PROPERTY STRINGS "BYTE;WIDE;UNICODE")
 
-# GMP support
-option(MARLAIS_ENABLE_GMP "Enable GMP multi-precision numbers" ON)
-if (MARLAIS_ENABLE_GMP)
-  set (MARLAIS_GMP_SOURCES bignum.c)
-endif ()
-
-option(MARLAIS_ENABLE_ICU "Enable ICU unicode string support" ON)
-if (MARLAIS_ENABLE_ICU)
-  set (MARLAIS_ICU_SOURCES unicode.c)
+# Bignum support
+option(MARLAIS_ENABLE_BIGNUM "Enable GMP bignum support" ON)
+if (MARLAIS_ENABLE_BIGNUM)
+  set (MARLAIS_BIGNUM_SOURCES bignum.c)
 endif ()
 
 # READLINE support
@@ -32,6 +48,9 @@ option(MARLAIS_ENABLE_READLINE "Enable readline command-line editor" ON)
 
 # ICU unicode support
 option(MARLAIS_ENABLE_UCHAR "Enable unicode character support (uses ICU)" ON)
+if (MARLAIS_ENABLE_UCHAR)
+  set (MARLAIS_UNICODE_SOURCES unicode.c)
+endif ()
 
 # Wide character support
 option(MARLAIS_ENABLE_WCHAR "Enable wide character support" ON)
@@ -100,8 +119,8 @@ add_library(marlais_lib
   ${BISON_PARSER_OUTPUTS}
   ${FLEX_LEXER_OUTPUTS}
 
-  ${MARLAIS_GMP_SOURCES}
-  ${MARLAIS_ICU_SOURCES}
+  ${MARLAIS_BIGNUM_SOURCES}
+  ${MARLAIS_UNICODE_SOURCES}
 )
 
 # actual name
