@@ -47,11 +47,11 @@ static Object prim_binary_less_than (Object n1, Object n2);
 static Object prim_int_sqrt (Object n);
 static Object prim_int_abs (Object n);
 static Object prim_int_quotient (Object n1, Object n2);
-static Object prim_ash (Object n, Object count);
-static Object prim_binary_logand (Object n1, Object n2);
-static Object prim_binary_logior (Object n1, Object n2);
-static Object prim_modulo (Object d1, Object d2);
-static Object prim_remainder_int (Object i1, Object i2);
+static Object prim_int_ash (Object n, Object count);
+static Object prim_int_logand (Object n1, Object n2);
+static Object prim_int_logior (Object n1, Object n2);
+static Object prim_int_modulo (Object d1, Object d2);
+static Object prim_int_remainder (Object i1, Object i2);
 static Object prim_int_truncate_divide (Object i1, Object i2);
 
 static struct primitive number_prims[] =
@@ -71,11 +71,11 @@ static struct primitive number_prims[] =
     {"%int-sqrt", prim_1, prim_int_sqrt},
     {"%int-abs", prim_1, prim_int_abs},
     {"%int-quotient", prim_2, prim_int_quotient},
-    {"%int-ash", prim_2, prim_ash},
-    {"%int-logand", prim_2, prim_binary_logand},
-    {"%int-logior", prim_2, prim_binary_logior},
-    {"%int-modulo", prim_2, prim_modulo},
-    {"%int-remainder", prim_2, prim_remainder_int},
+    {"%int-ash", prim_2, prim_int_ash},
+    {"%int-logand", prim_2, prim_int_logand},
+    {"%int-logior", prim_2, prim_int_logior},
+    {"%int-modulo", prim_2, prim_int_modulo},
+    {"%int-remainder", prim_2, prim_int_remainder},
     {"%int-truncate/", prim_2, prim_int_truncate_divide},
 };
 
@@ -345,7 +345,7 @@ prim_int_quotient (Object n1, Object n2)
 }
 
 static Object
-prim_ash (Object n, Object count)
+prim_int_ash (Object n, Object count)
 {
     int num;
 
@@ -355,13 +355,13 @@ prim_ash (Object n, Object count)
 }
 
 static Object
-prim_binary_logand (Object n1, Object n2)
+prim_int_logand (Object n1, Object n2)
 {
     return (marlais_make_integer (INTVAL (n1) & INTVAL (n2)));
 }
 
 static Object
-prim_binary_logior (Object n1, Object n2)
+prim_int_logior (Object n1, Object n2)
 {
     return (marlais_make_integer (INTVAL (n1) | INTVAL (n2)));
 }
@@ -374,7 +374,7 @@ prim_sign (int x)
 }
 
 static Object
-prim_modulo (Object i1, Object i2)
+prim_int_modulo (Object i1, Object i2)
 {
     int i1val = INTVAL (i1);
     int i2val = INTVAL (i2);
@@ -392,7 +392,7 @@ prim_modulo (Object i1, Object i2)
 #else
 
 static Object
-prim_modulo (Object i1, Object i2)
+prim_int_modulo (Object i1, Object i2)
 {
     double d1val;
     double d2val;
@@ -404,7 +404,7 @@ prim_modulo (Object i1, Object i2)
 #endif
 
 static Object
-prim_remainder_int (Object i1, Object i2)
+prim_int_remainder (Object i1, Object i2)
 {
     int i1val;
     int i2val;
