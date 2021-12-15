@@ -356,6 +356,41 @@ define method min (n1 :: <real>, #rest more-reals)
 end method min;
 
 //
+// Exponentiation
+//
+
+// Thanks for Marty Hall for making the following get into this file
+//
+// Exponentiation has the following caveats:
+//
+// If there's no big integer support on your platform, this will
+// give wrong results without warning for larger numbers.
+//
+// Raising floats to large exponents gives results that are
+// limited by the precision of the float implementation.
+
+define method \^ (base :: <number>, exponent :: <integer>)
+ => base-to-exponent :: <number>;
+  local method power(b :: <number>,
+		     e :: <integer>,
+		     residual :: <number>) => b-to-e :: <number>;
+	  if (e == 0)
+	    residual;
+	  elseif (e.even?)
+	    power (b * b, floor/(e, 2), residual);
+	  else
+	    power (b, e - 1, residual * b);
+	  end if;
+	end method power;
+
+  if (exponent.negative?)
+    1.0 / power (base, - exponent, 1);
+  else
+    power (base, exponent, 1);
+  end if;
+end method \^;
+
+//
 // Various extensions
 //
 
@@ -430,36 +465,3 @@ define method gcd(int1 :: <integer>, int2 :: <integer>)
     gcd-internal(int2, int1);
   end if;
 end method gcd;
-
-// Thanks for Marty Hall for making the following get into this file
-//
-// Exponentiation has the following caveats:
-//
-// If there's no big integer support on your platform, this will
-// give wrong results without warning for larger numbers.
-//
-// Raising floats to large exponents gives results that are
-// limited by the precision of the float implementation.
-
-define method \^ (base :: <number>, exponent :: <integer>)
- => base-to-exponent :: <number>;
-  local method power(b :: <number>,
-		     e :: <integer>,
-		     residual :: <number>) => b-to-e :: <number>;
-	  if (e == 0)
-	    residual;
-	  elseif (e.even?)
-	    power (b * b, floor/(e, 2), residual);
-	  else
-	    power (b, e - 1, residual * b);
-	  end if;
-	end method power;
-
-  if (exponent.negative?)
-    1.0 / power (base, - exponent, 1);
-  else
-    power (base, exponent, 1);
-  end if;
-end method \^;
-
-// end number.dyl
