@@ -143,7 +143,7 @@ marlais_initialize_class (void)
                         MARLAIS_CLASS_SEALED,
                         object_class);
 
-  /* Numeric classes */
+  /* Numeric base classes */
   number_class =
     make_builtin_class ("<number>",
                         MARLAIS_CLASS_ABSTRACT,
@@ -164,18 +164,16 @@ marlais_initialize_class (void)
     make_builtin_class ("<integer>",
                         MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
                         rational_class);
-  small_integer_class =
-    make_builtin_class ("<small-integer>",
-                        MAYBE_IMMEDIATE|MARLAIS_CLASS_SEALED,
-                        integer_class);
-  ratio_class =
-    make_builtin_class ("<ratio>",
-                        MARLAIS_CLASS_SEALED,
-                        rational_class);
   float_class =
     make_builtin_class ("<float>",
                         MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
                         real_class);
+
+  /* Numeric classes */
+  small_integer_class =
+    make_builtin_class ("<small-integer>",
+                        MAYBE_IMMEDIATE|MARLAIS_CLASS_SEALED,
+                        integer_class);
   single_float_class =
     make_builtin_class ("<single-float>",
                         MARLAIS_CLASS_SEALED,
@@ -188,6 +186,10 @@ marlais_initialize_class (void)
     make_builtin_class ("<extended-float>",
                         MARLAIS_CLASS_SEALED,
                         float_class);
+  ratio_class =
+    make_builtin_class ("<ratio>",
+                        MARLAIS_CLASS_SEALED,
+                        rational_class);
 
   /* Collection base classes */
   collection_class =
