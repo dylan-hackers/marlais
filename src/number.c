@@ -92,16 +92,6 @@ marlais_register_number (void)
     int num =  sizeof (number_prims) / sizeof (struct primitive);
     marlais_register_prims (num, number_prims);
 
-    /* byte constants */
-    marlais_add_export (marlais_make_name ("$byte-bits"),
-                        marlais_make_integer (8), 1);
-    marlais_add_export (marlais_make_name ("$byte-size"),
-                        marlais_make_integer (1), 1);
-    marlais_add_export (marlais_make_name ("$minimum-byte"),
-                        marlais_make_integer (0), 1);
-    marlais_add_export (marlais_make_name ("$maximum-byte"),
-                        marlais_make_integer (255), 1);
-
     /* integer constants */
     marlais_add_export (marlais_make_name ("$integer-bits"),
                         marlais_make_integer (MARLAIS_INTEGER_WIDTH), 1);
