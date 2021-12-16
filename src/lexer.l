@@ -1,4 +1,4 @@
-%{ /*  Emacs: -*- Fundamental -*- */
+%{
 /*   Lexical analyzer for Dylan interm report tokens
      see COPYRIGHT for use */
 

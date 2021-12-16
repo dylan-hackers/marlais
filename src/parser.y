@@ -26,10 +26,12 @@
 #include "lexer.gen.h"
 
 /* Defined in parser.c */
+
 extern Object marlais_yybindings;
 extern Object marlais_yyresult;
 
 /* Defined in lexer.l */
+
 extern void marlais_lexer_push_intermediate_words (Object begin_word);
 extern void marlais_lexer_pop_intermediate_words (void);
 
@@ -151,7 +153,7 @@ evaluable_constituent
 		{ marlais_yyresult = MARLAIS_UNSPECIFIED;
 		  marlais_warning("local binding outside of block ignored", NULL);
 		  YYACCEPT;
-	        }
+		}
 
 /*	| constituent ';'
 		{ marlais_yyresult = $1; YYACCEPT; }
@@ -175,7 +177,7 @@ body
 	| nonempty_body	{ $$ = $1; }
 
 nonempty_body
-	: 	{ push_bindings (); }
+	:	{ push_bindings (); }
 
 	  nonempty_constituents
 
@@ -197,8 +199,8 @@ nonempty_constituents
 	| constituent ';' constituents	{ $$ = marlais_cons ($1, $3); }
 
 constituents
-	:		 		{ $$ = MARLAIS_NIL; }
-	| constituent 			{ $$ = marlais_cons ($1, MARLAIS_NIL); }
+	:				{ $$ = MARLAIS_NIL; }
+	| constituent			{ $$ = marlais_cons ($1, MARLAIS_NIL); }
 	| constituent ';' constituents	{ $$ = marlais_cons ($1, $3); }
 /*
 	| local_declaration_block	{ $$ = marlais_cons ($1, MARLAIS_NIL); }
@@ -219,7 +221,7 @@ expression
 	: binary_operand	{ $$ = $1; }
 /*	| unparenthesized_operand COLON_EQUAL expression */
 	| expression COLON_EQUAL expression
-           { if (NAMEP ( $1)) {
+	   { if (NAMEP ( $1)) {
 		 $$ = marlais_make_list (set_bang_symbol, $1, $3, NULL);
 	     } else {
 		 $$ = make_setter_expr ($1, $3);
@@ -283,7 +285,7 @@ operand	: operand '(' arguments_opt ')'
 #endif
 	  }
 	| operand '[' arguments_opt ']'	/* array ref!!! */
-    		{ if (marlais_list_length ($3) == 1) {
+		{ if (marlais_list_length ($3) == 1) {
 			$$ = marlais_cons (element_symbol, marlais_cons ($1, $3));
 		  } else {
 			$$ = marlais_cons (aref_symbol, marlais_cons ($1, $3));
@@ -303,7 +305,7 @@ unparenthesized_operand
 #endif
 		}
 	| unparenthesized_operand '[' arguments ']'
-    		{ $$ = marlais_cons (element_symbol, marlais_cons ($1, $3)); }
+		{ $$ = marlais_cons (element_symbol, marlais_cons ($1, $3)); }
 	| unparenthesized_operand '.' variable_name
 		{ $$ = marlais_cons ($3, marlais_cons ($1, MARLAIS_NIL)); }
 	| unparenthesized_leaf		{ $$ = $1; }
@@ -442,12 +444,12 @@ case_body
 	  case_tail SEMICOLON_opt
 	  { $$ =  marlais_cons (marlais_cons ($1, !EMPTYLISTP (CAR ($3))
 				  ? marlais_cons (marlais_cons (unbinding_begin_symbol,
-					        marlais_cons (bindings_top (),
+						marlais_cons (bindings_top (),
 						      CAR ($3))),
-				          MARLAIS_NIL)
+					  MARLAIS_NIL)
 				  : MARLAIS_NIL),
-		        CDR ($3));
-          }
+			CDR ($3));
+	  }
 
 
 case_tail
@@ -459,11 +461,11 @@ case_tail
 	{ $$ = marlais_cons (MARLAIS_NIL,
 		     marlais_cons (marlais_cons ($2, !EMPTYLISTP (CAR ($4))
 				     ? marlais_cons (marlais_cons (unbinding_begin_symbol,
-					           marlais_cons (bindings_top(),
+						   marlais_cons (bindings_top(),
 							 CAR ($4))),
-				             MARLAIS_NIL)
+					     MARLAIS_NIL)
 				     : MARLAIS_NIL),
-		          CDR ($4)));
+			  CDR ($4)));
 	  pop_bindings ();
       }
 
@@ -480,7 +482,7 @@ case_tail
 		     marlais_cons ( marlais_cons ($3, !EMPTYLISTP (CAR ($5))
 				     ? marlais_cons (marlais_cons (unbinding_begin_symbol,
 						   marlais_cons (bindings_top(),
-						         CAR ($5))),
+							 CAR ($5))),
 					     MARLAIS_NIL)
 				     : MARLAIS_NIL),
 			   CDR ($5)));
@@ -506,7 +508,7 @@ select_statement
 						 $8))); }
 
 test_opt
-	: 			{ $$ = NULL; }
+	:			{ $$ = NULL; }
 	| BY expression		{ $$ = $2; }
 select_body
 	:  { $$ = MARLAIS_NIL; }
@@ -517,10 +519,10 @@ select_body
 				  ? marlais_cons (marlais_cons (unbinding_begin_symbol,
 						marlais_cons (bindings_top (),
 						      CAR ($3))),
-				          MARLAIS_NIL)
+					  MARLAIS_NIL)
 				  : MARLAIS_NIL),
 		      CDR ($3));
-          }
+	  }
 
 select_tail
 	:	{ $$ = marlais_cons (MARLAIS_NIL, MARLAIS_NIL); }
@@ -531,11 +533,11 @@ select_tail
 	{ $$ = marlais_cons (MARLAIS_NIL,
 		     marlais_cons (marlais_cons ($2, !EMPTYLISTP (CAR ($4))
 				     ? marlais_cons (marlais_cons (unbinding_begin_symbol,
-					           marlais_cons (bindings_top(),
+						   marlais_cons (bindings_top(),
 							 CAR ($4))),
-				    	     MARLAIS_NIL)
+					     MARLAIS_NIL)
 				     : MARLAIS_NIL),
-		           CDR ($4)));
+			   CDR ($4)));
 	  pop_bindings ();
       }
 
@@ -552,7 +554,7 @@ select_tail
 		     marlais_cons ( marlais_cons ($3, !EMPTYLISTP (CAR ($5))
 				     ? marlais_cons (marlais_cons (unbinding_begin_symbol,
 						   marlais_cons (bindings_top(),
-						         CAR ($5))),
+							 CAR ($5))),
 					     MARLAIS_NIL)
 				     : MARLAIS_NIL),
 			   CDR ($5)));
@@ -596,7 +598,7 @@ for_clauses
 	| for_clause ',' for_clauses	{ $$ = marlais_cons ($1, $3); }
 
 for_clauses_opt
-	: 			{ $$ = MARLAIS_NIL; }
+	:			{ $$ = MARLAIS_NIL; }
 	| for_clauses		{ $$ = $1; }
 
 for_clause
@@ -613,7 +615,7 @@ for_clause
 
 bound_opt
 	:	{ $$ = MARLAIS_NIL; }
-        | TO expression
+	| TO expression
 		{ $$ = marlais_cons ($1, marlais_cons ($2, MARLAIS_NIL)); }
 	| ABOVE expression
 		{ $$ = marlais_cons ($1, marlais_cons ($2, MARLAIS_NIL)); }
@@ -630,16 +632,16 @@ for_terminator_opt
 					     MARLAIS_NIL); }
 	| UNTIL expression	{ $$ = marlais_cons ($2, MARLAIS_NIL); }
 	| WHILE expression	{ $$ = marlais_cons (marlais_cons (not_symbol,
-					           marlais_cons ($2,
-                                                         MARLAIS_NIL)),
-                                             MARLAIS_NIL); }
+						   marlais_cons ($2,
+							 MARLAIS_NIL)),
+					     MARLAIS_NIL); }
 	| SYMBOL expression	{ if ($1 == until_keyword) {
 				      $$ =marlais_cons ($2, MARLAIS_NIL);
 				  } else if ($1 == while_keyword) {
 				      $$ = marlais_cons (marlais_cons (not_symbol,
 						       marlais_cons ($2,
 							     MARLAIS_NIL)),
-					         MARLAIS_NIL);
+						 MARLAIS_NIL);
 				  } else {
 					marlais_error ("Bogus keyword in if",
 						$1,
@@ -668,7 +670,7 @@ block_statement
 
 		{ $$ = marlais_make_list (bind_exit_symbol,
 			       marlais_cons ($4, MARLAIS_NIL),
-                               nelistem(unwind_protect_symbol,
+			       nelistem(unwind_protect_symbol,
 					nelistem (bind_symbol,
 					       marlais_cons (marlais_make_list (hash_rest_symbol,
 							       vals_symbol,
@@ -688,10 +690,10 @@ block_statement
 
 afterwards_opt
 	:			{ $$ = MARLAIS_NIL; }
-	| AFTERWARDS body 	{ $$ = $2; }
+	| AFTERWARDS body	{ $$ = $2; }
 
 cleanup_opt
-	: 		{ $$ = MARLAIS_NIL; }
+	:		{ $$ = MARLAIS_NIL; }
 	| CLEANUP body	{ $$ = $2; }
 
 exceptions
@@ -856,8 +858,8 @@ slot_spec
 		}
 
 slot_modifiers_opt
-	: 				{ $$ = MARLAIS_NIL; }
-	| NAME slot_modifiers_opt 	{ $$ = marlais_cons ($1, $2); }
+	:				{ $$ = MARLAIS_NIL; }
+	| NAME slot_modifiers_opt	{ $$ = marlais_cons ($1, $2); }
 	| CLASS slot_modifiers_opt	{ $$ = marlais_cons ($1, $2); }
 
 initialization_argument_spec
@@ -920,7 +922,7 @@ create_clause
 
 modifiers
 	: NAME		{ $$ = marlais_cons ($1, MARLAIS_NIL); }
-	| NAME modifiers 	{ $$ = marlais_cons ($1, $2); }
+	| NAME modifiers	{ $$ = marlais_cons ($1, $2); }
 
 expression_list
 	: '(' expressions_opt ')'	{ $$ = $2; }
@@ -985,7 +987,7 @@ generic_function_body
 			     MARLAIS_NIL); }
 	| '(' parameter_list_opt ')' EQUAL_ARROW '(' value_list_opt ')'
 		{ $$ = marlais_cons (marlais_append_bang ($2, marlais_cons (hash_values_symbol, $6)),
-		 	     MARLAIS_NIL); }
+			     MARLAIS_NIL); }
 
 parameter_list
 	: parameter		{ $$ = marlais_cons ($1, MARLAIS_NIL); }
@@ -1041,7 +1043,7 @@ keyword_parameters
 keyword_parameter
 	: SYMBOL variable_name type_designator_opt default_opt
 		{ Object variable = $3 == NULL? $2
-                                              : marlais_make_list ($2, $3, NULL);
+					      : marlais_make_list ($2, $3, NULL);
 		  if ($4) {
 		    if ($1) {
 			$$ =marlais_cons ($1, marlais_cons (variable,
@@ -1098,7 +1100,7 @@ local_declaration
 	| LOCAL { methnames = methdefs = MARLAIS_NIL; }
 	  local_methods
 
-          {   Object methbindings = marlais_cons (marlais_append (methnames,
+	  {   Object methbindings = marlais_cons (marlais_append (methnames,
 						  marlais_cons (marlais_cons (values_symbol,
 							      methdefs),
 							MARLAIS_NIL)),
@@ -1231,7 +1233,7 @@ comma_opt
 	| ','
 
 comma_arguments_opt
-	: 		{ $$ = MARLAIS_NIL; }
+	:		{ $$ = MARLAIS_NIL; }
 	| ',' arguments { $$ = $2; }
 
 arguments_opt
@@ -1243,7 +1245,7 @@ constants_opt
 	| constants	{ $$ = $1; }
 
 list_constants_opt
-	: 				{ $$ = marlais_cons (list_symbol,
+	:				{ $$ = marlais_cons (list_symbol,
 						     MARLAIS_NIL); }
 	| list_constants		{ $$ = $1; }
 
@@ -1419,14 +1421,14 @@ symtab_insert_bindings (Object bindings)
 
     /*
      * bindings created by parser are always of form
-     *  #( #( variable1, variable2, ... , variablen, values))
+     *	#( #( variable1, variable2, ... , variablen, values))
      */
     bindings = CAR (bindings);
     while ( !EMPTYLISTP (CDR (bindings))) {
 	variable = CAR (bindings);
 	if (PAIRP (variable)) {
 #if 0
-	    marlais_warning ("  symtab element",
+	    marlais_warning ("	symtab element",
 		     CAR (variable),
 		     SECOND (variable),
 		     NULL);
