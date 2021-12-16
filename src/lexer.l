@@ -5,16 +5,11 @@
 #include <marlais/common.h>
 
 #include <marlais/alloc.h>
-#include <marlais/string.h>
 #include <marlais/character.h>
-#include <marlais/lexer.h>
-#include <marlais/list.h>
-#include <marlais/number.h>
 #include <marlais/env.h>
-#include <marlais/symbol.h>
+#include <marlais/lexer.h>
+#include <marlais/string.h>
 #include <marlais/yystype.h>
-
-#include "parser.gen.h"
 
 #include <sys/time.h>
 
@@ -23,6 +18,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #endif
+
+#include "parser.gen.h"
 
 #define mydebug  marlais_yydebug
 #define mylval   marlais_yylval
