@@ -39,18 +39,18 @@ if (MARLAIS_STANDARD_CHARACTER STREQUAL UNICODE)
 endif ()
 
 # Bignum support
-option(MARLAIS_ENABLE_BIGNUM "Enable GMP bignum support" ON)
-if (MARLAIS_ENABLE_BIGNUM)
-  set (MARLAIS_BIGNUM_SOURCES bignum.c)
+option(MARLAIS_ENABLE_GMP "Enable GMP bignum support" ON)
+if (MARLAIS_ENABLE_GMP)
+  set (MARLAIS_GMP_SOURCES bignum.c)
 endif ()
 
 # READLINE support
 option(MARLAIS_ENABLE_READLINE "Enable readline command-line editor" ON)
 
 # ICU unicode support
-option(MARLAIS_ENABLE_UCHAR "Enable unicode character support (uses ICU)" ON)
-if (MARLAIS_ENABLE_UCHAR)
-  set (MARLAIS_UNICODE_SOURCES unicode.c)
+option(MARLAIS_ENABLE_ICU "Enable ICU unicode support" ON)
+if (MARLAIS_ENABLE_ICU)
+  set (MARLAIS_ICU_SOURCES unicode.c)
 endif ()
 
 # Wide character support
@@ -120,8 +120,8 @@ add_library(marlais_lib
   ${BISON_PARSER_OUTPUTS}
   ${FLEX_LEXER_OUTPUTS}
 
-  ${MARLAIS_BIGNUM_SOURCES}
-  ${MARLAIS_UNICODE_SOURCES}
+  ${MARLAIS_GMP_SOURCES}
+  ${MARLAIS_ICU_SOURCES}
 )
 
 # actual name
@@ -152,10 +152,12 @@ target_include_directories(marlais_lib PRIVATE ${BDWGC_INCLUDE_DIRS})
 if (MARLAIS_ENABLE_READLINE)
   target_link_libraries(marlais_lib PUBLIC readline)
 endif (MARLAIS_ENABLE_READLINE)
+
 # libgmp
 if (MARLAIS_ENABLE_GMP)
   target_link_libraries(marlais_lib PUBLIC gmp)
 endif (MARLAIS_ENABLE_GMP)
+
 # libicu
 if (MARLAIS_ENABLE_ICU)
   target_link_libraries (marlais_lib PUBLIC ${ICU_LINK_LIBRARIES})

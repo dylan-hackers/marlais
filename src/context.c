@@ -247,7 +247,7 @@ marlais_initialize (void)
 #ifdef MARLAIS_ENABLE_GMP
   marlais_register_gmp ();
 #endif
-#ifdef MARLAIS_ENABLE_UCHAR
+#ifdef MARLAIS_ENABLE_ICU
   marlais_register_icu ();
 #endif
 }
