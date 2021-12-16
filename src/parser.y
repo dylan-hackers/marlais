@@ -1,30 +1,4 @@
-%{ /* Emacs: -*- Fundamental -*- */
-
-/* interim-dylan.y -- dylan phrase grammar from 5/12/94 interim report
-   see COPYRIGHT for use */
-
-/*
- * this grammar is, i believe, an accurate translation of the
- * BNF grammar in the appendix to the 5/12/94 interim report
- * into yacc-friendly format.  the differences are
- *
- *	+ where the BNF used ellipses to indicate repitition,
- *	  (right) recursive productions have been added.
- *
- *	+ the grammar has been rearranged to eliminate ambiguities
- *	  (what yacc calls conflicts);  this grammar should have
- *	  no shift/reduce or reduce/reduce conflicts.  occasional
- *	  comments explain what had to be done in the dicier of
- *	  situations.
- *
- *	+ according to notes from the partners' mailing list, a
- *	  few productions were omitted from the grammar in the
- *	  report;  these are flagged with the comment "omitted"
- *	  in this grammar.
- *
- * paul haahr
- * 22 may 1994
- */
+%{
 
 /*
    Marlais Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
@@ -38,14 +12,6 @@
    conditions set forth in this notice.
 */
 
-/*
- * Modified this to have built-in rules for control constructs.
- * I'll save macro implementation for a little later.
- *
- * jnw@cis.ufl.edu
- * 15 July 1994
- */
-
 /* #define OPTIMIZE_SPECIALIZERS */
 
 #include <marlais/common.h>
@@ -53,9 +19,6 @@
 #include <marlais/boolean.h>
 #include <marlais/string.h>
 #include <marlais/error.h>
-#include <marlais/list.h>
-#include <marlais/number.h>
-#include <marlais/symbol.h>
 #include <marlais/table.h>
 #include <marlais/vector.h>
 #include <marlais/yystype.h>
