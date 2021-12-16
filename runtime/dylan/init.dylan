@@ -17,6 +17,7 @@ load("dylan/object.dylan");
 load("dylan/function.dylan");
 load("dylan/comparison.dylan");
 load("dylan/number.dylan");
+load("dylan/stdint.dylan");
 load("dylan/character.dylan");
 load("dylan/type.dylan");
 load("dylan/functional.dylan");
