@@ -20,17 +20,19 @@ define generic positive? (r :: <object>) => value :: <boolean>;
 define generic negative? (r :: <object>) => value :: <boolean>;
 define generic integral? (n :: <object>) => value :: <boolean>;
 
-// Basic operations
+// Basic arithmetic operations
 
 define generic \+ (n1 :: <number>, n2 :: <number>) => value :: <number>;
 define generic \* (n1 :: <number>, n2 :: <number>) => value :: <number>;
 define generic \- (n1 :: <number>, n2 :: <number>) => value :: <number>;
 define generic \/ (n1 :: <number>, n2 :: <number>) => value :: <number>;
 
+// Sign operations
+
 define generic abs (n :: <number>) => value :: <number>;
 define generic negative (n :: <number>) => value :: <number>;
 
-// Division
+// Division operations
 
 define generic floor (r :: <real>)
  => (integer-part :: <integer>, remainder :: <real>);
@@ -52,6 +54,8 @@ define generic truncate/ (r1 :: <real>, r2 :: <real>)
 
 define generic modulo (r1 :: <real>, r2 :: <real>) => modulus :: <real>;
 define generic remainder (r1 :: <real>, r2 :: <real>) => remains :: <real>;
+
+// Exponentiation
 
 define generic \^ (n :: <number>, i :: <integer>) => value :: <number>;
 
@@ -211,7 +215,7 @@ define method \- (i1 :: <small-integer>, i2 :: <small-integer>)
   %int- (i1, i2);
 end method \-;
 
-define method \* (i1 ::<small-integer>, i2 :: <small-integer>)
+define method \* (i1 :: <small-integer>, i2 :: <small-integer>)
   %int* (i1, i2);
 end method \*;
 
@@ -446,7 +450,7 @@ define method lcm(int1 :: <integer>, int2 :: <integer>)
  => multiple :: <integer>;
   let result = floor/ (abs(int1 * int2), gcd(int1, int2));
   result;
- end method lcm;
+end method lcm;
 
 // GCD via Euclid's Algorithm, yielding O(log N) performance, where N is the
 // smaller of the two numbers. See _Structure and Interpretation
