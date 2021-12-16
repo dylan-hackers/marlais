@@ -70,15 +70,18 @@ extern Object marlais_yyresult;
 extern void marlais_lexer_push_intermediate_words (Object begin_word);
 extern void marlais_lexer_pop_intermediate_words (void);
 
-static void yyerror (char *);
+/* Local variables */
 
-static Object nelistem (Object car,...);
-
-Object symtab;
-Object methnames, methdefs;
+static Object methnames;
+static Object methdefs;
+#ifdef OPTIMIZE_SPECIALIZERS
+static Object symtab;
+#endif
 
 /* Internal function declarations */
 
+static void yyerror (char *);
+static Object nelistem (Object car,...);
 static void push_bindings();
 static void pop_bindings();
 static Object bindings_top ();
