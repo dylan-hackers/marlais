@@ -62,16 +62,18 @@
 
 #include "lexer.gen.h"
 
+/* Defined in parser.c */
+extern Object marlais_yybindings;
+extern Object marlais_yyresult;
+
+/* Defined in lexer.l */
+extern void marlais_lexer_push_intermediate_words (Object begin_word);
+extern void marlais_lexer_pop_intermediate_words (void);
+
 static void yyerror (char *);
 
 static Object nelistem (Object car,...);
 
-extern Object *parse_value_ptr;
-
-void marlais_lexer_push_intermediate_words (Object begin_word);
-void marlais_lexer_pop_intermediate_words (void);
-
-Object binding_stack;
 Object symtab;
 Object methnames, methdefs;
 
@@ -171,34 +173,34 @@ dylan_program
 */
 
 evaluable_constituent
-	: ';'	{ *parse_value_ptr = MARLAIS_UNSPECIFIED; YYACCEPT; }
+	: ';'	{ marlais_yyresult = MARLAIS_UNSPECIFIED; YYACCEPT; }
 
 	| defining_form	';'
-		{ *parse_value_ptr = $1; YYACCEPT; }
+		{ marlais_yyresult = $1; YYACCEPT; }
 
 	| expression ';'
-		{ *parse_value_ptr = $1; YYACCEPT; }
+		{ marlais_yyresult = $1; YYACCEPT; }
 
 	| local_declaration
-		{ *parse_value_ptr = MARLAIS_UNSPECIFIED;
+		{ marlais_yyresult = MARLAIS_UNSPECIFIED;
 		  marlais_warning("local binding outside of block ignored", NULL);
 		  YYACCEPT;
 	        }
 
 /*	| constituent ';'
-		{ *parse_value_ptr = $1; YYACCEPT; }
+		{ marlais_yyresult = $1; YYACCEPT; }
 */
 
-	| EOF_TOKEN	{ *parse_value_ptr = MARLAIS_EOF; YYACCEPT; }
+	| EOF_TOKEN	{ marlais_yyresult = MARLAIS_EOF; YYACCEPT; }
 
 	| error ';'
 		{ yyerrok;
-		  *parse_value_ptr = MARLAIS_UNSPECIFIED;
+		  marlais_yyresult = MARLAIS_UNSPECIFIED;
 		  YYACCEPT;
 		}
 	| error EOF_TOKEN
 		{ yyerrok;
-		  *parse_value_ptr = MARLAIS_EOF;
+		  marlais_yyresult = MARLAIS_EOF;
 		  YYACCEPT;
 		}
 
@@ -1369,26 +1371,26 @@ nelistem (Object car,...)
 static void
 push_bindings()
 {
-    binding_stack = marlais_cons (marlais_make_integer(0), binding_stack);
+    marlais_yybindings = marlais_cons (marlais_make_integer(0), marlais_yybindings);
 }
 
 static void
 pop_bindings()
 {
-    binding_stack = CDR (binding_stack);
+    marlais_yybindings = CDR (marlais_yybindings);
 }
 
 
 static Object
 bindings_top ()
 {
-    return CAR (binding_stack);
+    return CAR (marlais_yybindings);
 }
 
 static void
 bindings_increment ()
 {
-    CAR (binding_stack) = marlais_make_integer (INTVAL (CAR (binding_stack)) + 1);
+    CAR (marlais_yybindings) = marlais_make_integer (INTVAL (CAR (marlais_yybindings)) + 1);
 }
 
 static Object

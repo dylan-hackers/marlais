@@ -39,11 +39,17 @@
 #include "lexer.gen.h"
 #include "parser.gen.h"
 
-Object *parse_value_ptr;
+/* The parser knows about these */
+Object marlais_yybindings;
+Object marlais_yyresult;
 
 void
 marlais_parser_reset (void)
 {
+  /* clear the result */
+  marlais_yyresult = MARLAIS_UNSPECIFIED;
+  /* initialize the binding stack */
+  marlais_yybindings = marlais_cons (marlais_make_integer (0), MARLAIS_NIL);
   /* reset the lexer */
   marlais_lexer_reset ();
   /* reset the parser */
@@ -75,12 +81,18 @@ marlais_parser_prepare_string (const char *str, int debug)
 Object
 marlais_parse_object (void)
 {
-  Object parse_value;
-  parse_value_ptr = &parse_value;
+  Object res;
+  /* run the parser */
   if (marlais_yyparse () == 0) {
-    return parse_value;
+    /* get the result */
+    res = marlais_yyresult;
   } else {
-    marlais_warning ("Parser failed in inexplicable way", parse_value, NULL);
-    return MARLAIS_EOF;
+    /* parse error */
+    marlais_warning ("Parser failed in inexplicable way", marlais_yyresult, NULL);
+    res = MARLAIS_EOF;
   }
+  /* destroy stray reference */
+  marlais_yyresult = MARLAIS_UNSPECIFIED;
+  /* return whatever result */
+  return res;
 }

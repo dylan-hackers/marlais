@@ -8,8 +8,6 @@
 #include <marlais/parser.h>
 #include <marlais/unicode.h>
 
-extern Object binding_stack;
-
 void
 marlais_initialize (void)
 {
@@ -209,9 +207,6 @@ marlais_initialize (void)
   marlais_add_export (marlais_make_name ("%default-object"),
                       marlais_default,
                       1);
-
-  /* initialize the binding stack */
-  binding_stack = marlais_cons (marlais_make_integer (0), MARLAIS_NIL);
 
   /* define default string and character types */
   marlais_add_export (marlais_make_name ("<standard-character>"), byte_character_class, 1);
