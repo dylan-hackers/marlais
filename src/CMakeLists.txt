@@ -38,7 +38,7 @@ if (MARLAIS_STANDARD_CHARACTER STREQUAL UNICODE)
   set(MARLAIS_STANDARD_CHARACTER_UNICODE ON)
 endif ()
 
-# Bignum support
+# GMP bignum support
 option(MARLAIS_ENABLE_GMP "Enable GMP bignum support" ON)
 if (MARLAIS_ENABLE_GMP)
   set (MARLAIS_GMP_SOURCES bignum.c)
@@ -53,9 +53,10 @@ if (MARLAIS_ENABLE_ICU)
   set (MARLAIS_ICU_SOURCES unicode.c)
 endif ()
 
-# Wide character support
+# WCHAR support
 option(MARLAIS_ENABLE_WCHAR "Enable wide character support" ON)
 
+# Generate config header
 configure_file(config.h.in ../include/marlais/config.h)
 
 # Generate parser
