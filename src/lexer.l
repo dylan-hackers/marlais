@@ -284,8 +284,9 @@ binary-operator:
 binaryOPERATOR  [\+\-\*\/\^\=\<\>\&\|]|([\<\>=:~]=)|(~==)
 
 /*
-operator:       # this definition is custom
+operator:       # this definition is slightly custom
                 # operators are passed to parser with no regard for arity
+                # the parser knows to distinguish them by token identity
                 unary-operator
                 binary-operator
 */
