@@ -464,6 +464,15 @@ struct environment {
 
 #define ENVIRONMENT(obj)      (((struct environment *)obj)->env)
 
+struct module {
+    ObjectHeader header;
+    Object sym;
+    struct frame *namespace;
+    Object exported_bindings;
+};
+
+#define MODULE(obj) ((struct module *)obj)
+
 struct object_handle {
     ObjectHeader header;
     Object the_object;

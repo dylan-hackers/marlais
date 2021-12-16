@@ -903,11 +903,11 @@ define_module_eval (Object form)
   Object clauses, clause;
   Object module_name;
   Object option;
-  struct module_binding *the_module;
+  struct module *the_module;
 
   /* Bogus for now */
   if (PAIRP (form) && marlais_list_length (form) >= 2 && NAMEP (SECOND (form))) {
-    the_module = marlais_new_module (SECOND (form));
+    the_module = marlais_make_module (SECOND (form));
     clauses = CDR (CDR (form));
 
     while (PAIRP (clauses)) {
@@ -925,7 +925,7 @@ define_module_eval (Object form)
           int prefix_specified = 0;
           int renames_specified = 0;
           int exports_specified = 0;
-          struct module_binding *old_module;
+          struct module *old_module;
 
           if (marlais_list_length (clause) >= 2) {
             module_name = SECOND (clause);
@@ -966,14 +966,14 @@ define_module_eval (Object form)
               marlais_error ("Define module: Can't specify both imports: "
                              "and exclusions:", clause, NULL);
             }
-            old_module = marlais_set_module (the_module);
+            old_module = marlais_set_current_module (the_module);
             marlais_use_module (module_name,
                         imports,
                         exclusions,
                         prefix,
                         renames,
                         exports);
-            marlais_set_module (old_module);
+            marlais_set_current_module (old_module);
           } else {
             marlais_error ("define-module: Bad use clause", clause, NULL);
           }
@@ -1819,9 +1819,14 @@ static Object
 set_module_eval (Object form)
 {
   if (PAIRP (form) && marlais_list_length (form) == 2 && SYMBOLP (SECOND (form))) {
-    return marlais_user_set_module (marlais_devalue (CDR (form)));
+    Object sym = marlais_devalue (CDR (form));
+    Object mod = marlais_find_module (sym);
+    if (mod == MARLAIS_FALSE) {
+      marlais_error ("set-module: could not find module", sym, NULL);
+    }
+    return marlais_set_current_module (mod);
   } else {
-    marlais_error ("set_module: argument list not a single symbol", form, NULL);
+    marlais_error ("set-module: argument list not a single symbol", form, NULL);
   }
   return MARLAIS_UNSPECIFIED;
 }

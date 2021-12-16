@@ -196,6 +196,30 @@ marlais_symbol_binding (Object sym)
   return (marlais_symbol_binding_top_level (sym));
 }
 
+struct binding *
+marlais_symbol_binding_top_level (Object sym)
+{
+  struct binding *binding;
+  int h, i;
+  char *str;
+
+  i = h = 0;
+  str = SYMBOLNAME (sym);
+  while (str[i]) {
+    h += str[i++];
+  }
+  h = h % TOP_LEVEL_SIZE;
+
+  binding = the_env->top_level_env[h];
+  while (binding) {
+    if (binding->sym == sym) {
+      return (binding);
+    }
+    binding = binding->next;
+  }
+  return (NULL);
+}
+
 /* Internal functions */
 
 /* Unwind the eval stack until we reach a context having a frame

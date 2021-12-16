@@ -234,7 +234,7 @@ table_element_handle (Object table, Object key, Object *default_val)
   entry = TABLETABLE (table)[h];
 
   old_env = the_env;
-  the_env = marlais_get_module (dylan_symbol)->namespace;
+  the_env = MODULE(marlais_find_module (dylan_symbol))->namespace;
   equal_fun = marlais_symbol_value (equal_symbol);
   the_env = old_env;
 

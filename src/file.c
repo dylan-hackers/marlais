@@ -40,7 +40,7 @@ load_internal (Object filename)
 {
     FILE *fp;
     Object obj, res;
-    struct module_binding *old_module;
+    Object old_module;
     Object expr_list = MARLAIS_NIL;
     Object *expr_list_ptr;
     int old_load_file_context;
@@ -48,7 +48,7 @@ load_internal (Object filename)
     /* save current states. */
     old_load_file_context = load_file_context;
     load_file_context = 1;
-    old_module = marlais_current_module ();
+    old_module = marlais_get_current_module ();
 
     fp = open_file (filename);
 
@@ -71,7 +71,7 @@ load_internal (Object filename)
     }
 
 #ifdef NO_LOADING_LIBRARIES
-    marlais_set_module (old_module);
+    marlais_set_current_module (old_module);
 #endif
 
     load_file_context = old_load_file_context;

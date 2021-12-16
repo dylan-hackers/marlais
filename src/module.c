@@ -11,9 +11,10 @@
 #include <marlais/stream.h>
 #include <marlais/table.h>
 
-/* XXX remaining global */
-struct modules modules;
+/* Local variables */
 
+static Object marlais_all_modules;
+static Object marlais_current_module;
 
 /* Internal function declarations */
 
@@ -27,79 +28,87 @@ static void add_module_binding(Object sym, Object val,
 
 /* Primitives */
 
-static struct primitive env_prims[] =
+static Object prim_get_current_module (void);
+static Object prim_set_current_module (Object mod_or_sym);
+static Object prim_find_module (Object sym);
+
+static struct primitive module_prims[] =
 {
-    {"current-module", prim_0, marlais_user_current_module},
-    {"set-module", prim_0_rest, marlais_user_set_module},
-#if 0
-    {"reset-module", prim_0_rest, reset_module},
-#endif
+    {"%get-current-module",  prim_0, prim_get_current_module},
+    {"%set-current-module",  prim_1, prim_set_current_module},
+    {"%find-module", prim_1, prim_find_module},
 };
 
 /* Exported functions */
 
 void
+marlais_initialize_module (void)
+{
+  marlais_all_modules = MARLAIS_NIL;
+  marlais_current_module = MARLAIS_FALSE;
+}
+
+void
 marlais_register_module (void)
 {
-  int num = sizeof (env_prims) / sizeof (struct primitive);
-  marlais_register_prims (num, env_prims);
+  int num = sizeof (module_prims) / sizeof (struct primitive);
+  marlais_register_prims (num, module_prims);
 }
 
-struct module_binding *
-marlais_get_module (Object module_name)
+Object
+marlais_get_current_module ()
 {
-  struct module_binding *binding;
-  int i;
+  return marlais_current_module;
+}
 
-  for (i = 0; i < modules.size; ++i) {
-    binding = modules.bindings[i];
-    if (binding->sym == module_name) {
-      return (binding);
-    }
+Object
+marlais_set_current_module (Object new_module)
+{
+  struct module *m = MODULE(new_module);
+  Object old_module = marlais_get_current_module ();
+
+  the_env = m->namespace;
+  if (eval_stack && eval_stack->next == 0) {
+    eval_stack = 0;
   }
-  marlais_fatal ("Unable to find binding for module", module_name, NULL);
+  marlais_push_eval_stack (m->sym);
+  eval_stack->frame = the_env;
+
+  marlais_current_module = new_module;
+
+  return old_module;
 }
 
-struct module_binding *
-marlais_new_module (Object module_name)
+Object
+marlais_make_module (Object module_name)
 {
-  struct module_binding *this_module;
+  struct module *this_module;
 
-  this_module = MARLAIS_ALLOCATE_STRUCT (struct module_binding);
+  this_module = MARLAIS_ALLOCATE_STRUCT (struct module);
   this_module->sym = module_name;
   this_module->namespace = initialize_namespace (module_name);
   this_module->exported_bindings = marlais_make_table (DEFAULT_TABLE_SIZE);
 
-  modules.size++;
-  modules.bindings = (struct module_binding **)
-    marlais_reallocate_memory (modules.bindings,
-                               (modules.size * sizeof (struct module_binding *)));
+  marlais_all_modules = marlais_cons((Object)this_module, marlais_all_modules);
 
-  modules.bindings[modules.size - 1] = this_module;
-
-  return this_module;
+  return (Object)this_module;
 }
 
-struct module_binding *
-marlais_set_module (struct module_binding *new_module)
+Object
+marlais_find_module (Object module_name)
 {
-  struct module_binding *old_module = marlais_current_module ();
+  Object l;
 
-  the_env = new_module->namespace;
-  if (eval_stack && eval_stack->next == 0) {
-    eval_stack = 0;
+  l = marlais_all_modules;
+  while(!EMPTYLISTP(l)) {
+    Object m = CAR(l);
+    if (MODULE(m)->sym == module_name) {
+      return m;
+    }
+    l = CDR(l);
   }
-  marlais_push_eval_stack (new_module->sym);
-  eval_stack->frame = the_env;
 
-  the_current_module = new_module;
-  return old_module;
-}
-
-struct module_binding *
-marlais_current_module ()
-{
-  return the_current_module;
+  return MARLAIS_FALSE;
 }
 
 void
@@ -162,7 +171,7 @@ marlais_use_module (Object module_name,
   struct binding *binding;
   struct binding *bindings = NULL;
   struct binding *old_binding;
-  struct module_binding *import_module;
+  struct module *import_module;
   unsigned i;
   int all_imports;
   char *prefix_string;
@@ -204,7 +213,10 @@ marlais_use_module (Object module_name,
    */
   if (NAMEP (module_name)) {
 
-    import_module = marlais_get_module (module_name);
+    import_module = marlais_find_module (module_name);
+    if (import_module == MARLAIS_FALSE) {
+      marlais_fatal("Could not find import module", module_name);
+    }
     frame = import_module->namespace;
     /* Look at each has location */
     for (i = 0; i < TOP_LEVEL_SIZE; i++) {
@@ -318,57 +330,29 @@ marlais_use_module (Object module_name,
   return MARLAIS_UNSPECIFIED;
 }
 
-Object
-marlais_user_set_module (Object args)
-{
-  Object module_name;
+/* Primitives */
 
-  if (marlais_list_length (args) != 1) {
-    return marlais_error ("set-module: requires a single argument", NULL);
-  } else {
-    module_name = CAR (args);
-  }
-  if (SYMBOLP (module_name)) {
-    return
-      marlais_name_to_symbol (marlais_set_module
-                              (marlais_get_module
-                               (marlais_symbol_to_name (module_name)))
-                              ->sym);
-  } else {
-    return marlais_error ("set-module: argument should be a symbol",
-                          module_name,
-                          NULL);
-  }
+static Object prim_get_current_module (void)
+{
+  return marlais_current_module;
 }
 
-Object
-marlais_user_current_module ()
+static Object prim_set_current_module (Object mod_or_sym)
 {
-  return marlais_name_to_symbol (marlais_current_module ()->sym);
+  Object mod;
+  if (SYMBOLP(mod_or_sym)) {
+    mod = marlais_find_module (mod_or_sym);
+  } else if (MODULEP(mod_or_sym)) {
+    mod = mod_or_sym;
+  } else {
+    marlais_fatal("%set-module: Invalid argument", mod_or_sym, NULL);
+  }
+  return marlais_set_current_module (mod);
 }
 
-struct binding *
-marlais_symbol_binding_top_level (Object sym)
+static Object prim_find_module (Object sym)
 {
-  struct binding *binding;
-  int h, i;
-  char *str;
-
-  i = h = 0;
-  str = SYMBOLNAME (sym);
-  while (str[i]) {
-    h += str[i++];
-  }
-  h = h % TOP_LEVEL_SIZE;
-
-  binding = the_env->top_level_env[h];
-  while (binding) {
-    if (binding->sym == sym) {
-      return (binding);
-    }
-    binding = binding->next;
-  }
-  return (NULL);
+  return marlais_find_module (sym);
 }
 
 /* Internal functions */

@@ -438,6 +438,12 @@ marlais_initialize_class (void)
                         MARLAIS_CLASS_SEALED,
                         object_class);
 
+  /* Environment objects */
+  module_class =
+    make_builtin_class ("<module>",
+                        MARLAIS_CLASS_SEALED,
+                        object_class);
+
   /* Object handles */
   object_handle_class =
     make_builtin_class ("<object-handle>",
@@ -575,6 +581,8 @@ marlais_object_class (Object obj)
     return (foreign_pointer_class);
   case UninitializedValue:
     return (object_class);
+  case Module:
+    return (module_class);
 #ifdef MARLAIS_ENABLE_GMP
   case BigFloat:
     return big_float_class;

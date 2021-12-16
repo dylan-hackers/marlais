@@ -171,8 +171,8 @@ main (int argc, char *argv[])
   }
 
   /* create the dylan-user module */
-  marlais_set_module (marlais_new_module (dylan_user_symbol));
-  marlais_current_module ()->exported_bindings = all_symbol;
+  marlais_set_current_module (marlais_make_module (dylan_user_symbol));
+  MODULE(marlais_get_current_module ())->exported_bindings = all_symbol;
 
   marlais_use_module (dylan_symbol,
                       all_symbol,
@@ -220,7 +220,7 @@ main (int argc, char *argv[])
     load_file_context = 0;
     the_env = cache_env;
     eval_stack = 0;
-    marlais_push_eval_stack (marlais_current_module ()->sym);
+    marlais_push_eval_stack (MODULE(marlais_get_current_module ())->sym);
     num_debug_contexts = 0;
     prompt = "? ";
     current_prompt = prompt;

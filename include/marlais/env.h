@@ -80,6 +80,7 @@ extern Object marlais_symbol_value (Object sym);
 extern void marlais_modify_value (Object sym, Object new_val);
 
 extern struct binding *marlais_symbol_binding (Object sym);
+extern struct binding *marlais_symbol_binding_top_level (Object sym);
 
 /* TODO namespace */
 Object print_env (struct frame *env);

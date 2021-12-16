@@ -39,13 +39,14 @@ marlais_initialize (void)
   marlais_empty_string = marlais_make_bytestring ("");
 
   /* initialize the dylan module */
+  marlais_initialize_module();
   dylan_symbol = marlais_make_name ("dylan");
   dylan_user_symbol = marlais_make_name ("dylan-user");
 
-  marlais_set_module (marlais_new_module (dylan_symbol));
+  marlais_set_current_module (marlais_make_module (dylan_symbol));
 
   all_symbol = marlais_make_name ("all");
-  (marlais_current_module ())->exported_bindings = all_symbol;
+  MODULE(marlais_get_current_module ())->exported_bindings = all_symbol;
 
   /* initialize the initial streams */
   marlais_initialize_stream ();

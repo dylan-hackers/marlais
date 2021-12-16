@@ -66,6 +66,7 @@ typedef enum {
     ObjectHandle,
     ForeignPtr,
     Environment,
+    Module,
 
     /* C level interfaces */
     StdioHandle,

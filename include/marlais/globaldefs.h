@@ -32,7 +32,6 @@ GLOBAL struct frame *the_env;
 GLOBAL jmp_buf *the_eval_context;
 GLOBAL Object default_module;
 GLOBAL Object all_symbol;
-GLOBAL struct module_binding *the_current_module;
 GLOBAL Object ResultValueStack;
 GLOBAL Object open_file_list;
 GLOBAL int trace_bindings;
@@ -204,6 +203,7 @@ GLOBAL Object equal_arrow_symbol;
 GLOBAL Object colon_colon_symbol;
 GLOBAL Object object_handle_class;
 GLOBAL Object foreign_pointer_class;	/* <pcb> */
+GLOBAL Object module_class;
 GLOBAL Object stdio_handle_class;
 GLOBAL Object big_float_class;
 GLOBAL Object big_ratio_class;

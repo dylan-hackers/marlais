@@ -989,8 +989,11 @@ make_header_val()
 {
         if (header_key == module_keyword) {
                 Object symbol = marlais_make_name (get_nonws_symbol (yytext));
-                struct module_binding *module = marlais_get_module (symbol);
-                marlais_set_module (module);
+                Object module = marlais_find_module (symbol);
+		if (module == MARLAIS_FALSE) {
+		    marlais_fatal("Could not find module", symbol, NULL);
+		}
+                marlais_set_current_module (module);
         }
 }
 
