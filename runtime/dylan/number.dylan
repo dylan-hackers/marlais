@@ -215,6 +215,10 @@ define method \* (i1 ::<small-integer>, i2 :: <small-integer>)
   %int* (i1, i2);
 end method \*;
 
+define method \/ (i1 :: <small-integer>, i2 :: <small-integer>)
+  %int/ (i1, i2);
+end method \*;
+
 // Binary <double-float> <double-float>
 
 define method \+ (d1 :: <double-float>, d2 :: <double-float>)
