@@ -30,7 +30,9 @@
 #include <marlais/error.h>
 #include <marlais/boolean.h>
 #include <marlais/float.h>
+#include <marlais/list.h>
 #include <marlais/number.h>
+#include <marlais/symbol.h>
 #include <marlais/type.h>
 
 #endif /* MARLAIS_COMMON_H */
