@@ -6,21 +6,6 @@ module: dylan
 // Authors:
 //
 
-define constant \~ =
-  method(a)
-      %not(a)
-  end;
-
-define constant \== =
-  method(a, b)
-      %identical?(a, b)
-  end;
-
-define constant \~== =
-  method(a, b)
-      %not(%identical?(a, b))
-  end;
-
 // according to DIRM, = should be a generic function so it can be extended
 // by user classes. most primitive version just checks if they are ==.
 

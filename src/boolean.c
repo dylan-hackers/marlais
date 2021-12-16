@@ -39,14 +39,16 @@
 /* Primitives */
 
 static Object prim_not (Object obj);
+static Object prim_eq (Object obj1, Object obj2, Object rest);
+static Object prim_not_eq (Object obj1, Object obj2, Object rest);
 static Object prim_identity (Object obj);
-static Object prim_identical_p (Object obj1, Object obj2, Object rest);
 
 static struct primitive boolean_prims[] =
 {
-  {"%not", prim_1, prim_not},
-  {"%identity", prim_1, prim_identity},
-  {"%identical?", prim_2_rest, prim_identical_p},
+  {"~", prim_1, prim_not},
+  {"==", prim_2_rest, prim_eq},
+  {"~==", prim_2_rest, prim_not_eq},
+  {"identity", prim_1, prim_identity},
 };
 
 /* Exported functions */
@@ -111,7 +113,7 @@ prim_identity (Object obj)
 }
 
 static Object
-prim_identical_p (Object obj1, Object obj2, Object rest)
+prim_eq (Object obj1, Object obj2, Object rest)
 {
   /* check fixed arguments first */
   if(!marlais_identical_p(obj1, obj2)) {
@@ -131,4 +133,10 @@ prim_identical_p (Object obj1, Object obj2, Object rest)
 
   /* if we get here they are all identical */
   return MARLAIS_TRUE;
+}
+
+static Object
+prim_not_eq (Object obj1, Object obj2, Object rest)
+{
+  return prim_not (prim_eq (obj1, obj2, rest));
 }
