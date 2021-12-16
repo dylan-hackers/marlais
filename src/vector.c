@@ -35,11 +35,8 @@
 #include <marlais/vector.h>
 
 #include <marlais/alloc.h>
-#include <marlais/list.h>
-#include <marlais/number.h>
 #include <marlais/prim.h>
 #include <marlais/sequence.h>
-#include <marlais/symbol.h>
 
 /* Primitives */
 
@@ -73,15 +70,17 @@ marlais_make_vector (int size, Object fill_obj)
   Object res;
   int i;
 
-  /* actually fabricate the vector */
+  /* allocate the object and the vector */
   res = marlais_allocate_object (SimpleObjectVector, sizeof (struct simple_object_vector));
-
   SOVSIZE (res) = size;
   SOVELS (res) = (Object *) marlais_allocate_memory (size * sizeof (Object));
 
+  /* fill the vector */
   for (i = 0; i < size; ++i) {
     SOVELS (res)[i] = fill_obj;
   }
+
+  /* return the result */
   return (res);
 }
 
@@ -93,7 +92,7 @@ marlais_make_vector_entrypoint (Object args)
 
   marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<vector>");
 
-  // XXX check size
+  /* TODO check size */
 
   return marlais_make_vector (size, fill_obj);
 }
@@ -104,7 +103,7 @@ marlais_list_to_vector (Object list)
   Object obj, els;
   int size, i;
 
-  /* XXX improve this - count first, allocate, overwrite */
+  /* TODO improve this - count first, allocate, overwrite */
 
   obj = marlais_allocate_object (SimpleObjectVector, sizeof (struct simple_object_vector));
 
