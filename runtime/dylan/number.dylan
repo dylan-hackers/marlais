@@ -181,12 +181,24 @@ define method ash (i :: <small-integer>, count :: <small-integer>)
   %int-ash (i, count);
 end method ash;
 
+// TODO generic function, bignum support
+define method lognot (i :: <small-integer>)
+  %int-lognot (i);
+end method logior;
+
+// TODO type safety, bignum support
 define method logior (#rest integers)
   reduce1 (%int-logior, integers);
 end method logior;
 
+// TODO type safety, bignum support
 define method logand (#rest integers)
   reduce1 (%int-logand, integers);
+end method logand;
+
+// TODO type safety, bignum support
+define method logxor (#rest integers)
+  reduce1 (%int-logxor, integers);
 end method logand;
 
 // Binary <small-integer> <small-integer>
