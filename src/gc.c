@@ -37,9 +37,8 @@ void
 marlais_initialize_gc (void)
 {
   GC_init ();
-  GC_set_on_collection_event(marlais_gc_on_event);
-  GC_set_on_heap_resize(marlais_gc_on_resize);
-  marlais_gc_report();
+  //GC_set_on_collection_event(marlais_gc_on_event);
+  //GC_set_on_heap_resize(marlais_gc_on_resize);
 }
 
 void
@@ -106,7 +105,6 @@ marlais_gc_on_event (GC_EventType event)
   bool flush = true;
   switch(event) {
   case GC_EVENT_START:
-    marlais_gc_report();
     fprintf(stderr, "gc: collection starts\n");
     break;
   case GC_EVENT_MARK_START:
