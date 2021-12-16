@@ -50,4 +50,7 @@ extern Object marlais_table_element_setter (Object table, Object key, Object val
 extern Object *marlais_table_element_by_vector (Object table, Object key);
 extern Object marlais_table_element_setter_by_vector (Object table, Object key, Object val);
 
+/* TODO namespace */
+extern Object fill_table_from_property_set (Object the_table, Object the_set);
+
 #endif

@@ -36,6 +36,9 @@
 
 #include <marlais/common.h>
 
+/* If TOP_LEVEL_SIZE is not a power of two, see change required below */
+#define TOP_LEVEL_SIZE 1024
+
 struct binding {
     Object sym, *val, type;
     int props;
@@ -50,17 +53,6 @@ struct binding {
 #define IS_CONSTANT_BINDING(binding) (binding->props & CONSTANT_BINDING)
 #define IS_EXPORTED_BINDING(binding) (binding->props & EXPORTED_BINDING)
 
-struct modules {
-    int size;
-    struct module_binding **bindings;
-};
-
-struct module_binding {
-    Object sym;
-    struct frame *namespace;
-    Object exported_bindings;
-};
-
 struct frame {
     int size;
     Object owner;
@@ -68,8 +60,6 @@ struct frame {
     struct frame *next;
     struct binding **top_level_env;
 };
-
-extern void marlais_register_env (void);
 
 extern Object marlais_make_environment (struct frame *env);
 extern struct frame *marlais_current_environment (void);
@@ -86,39 +76,15 @@ extern void marlais_add_locals (Object syms, Object vals, int constant,
 extern void marlais_add_local (Object sym, Object val, int constant,
 			       struct frame *to_frame);
 
-extern struct module_binding *marlais_get_module (Object module_name);
-extern struct module_binding *marlais_new_module (Object module_name);
-extern struct module_binding *marlais_set_module (struct module_binding *module);
-extern struct module_binding *marlais_current_module (void);
-
-extern void marlais_add_binding(Object sym, Object val, int constant);
-extern void marlais_add_export(Object sym, Object val, int constant);
-extern void marlais_change_binding (Object sym, Object new_val);
-
-extern Object marlais_use_module (Object module_name,
-				  Object imports,
-				  Object exclusions,
-				  Object prefix,
-				  Object renames,
-				  Object exports);
-
-extern Object marlais_user_current_module (void);
-extern Object marlais_user_set_module (Object args);
-
 extern Object marlais_symbol_value (Object sym);
 extern void marlais_modify_value (Object sym, Object new_val);
 
 extern struct binding *marlais_symbol_binding (Object sym);
-extern struct binding *marlais_symbol_binding_top_level (Object sym);
-
-
 
 /* TODO namespace */
-void fill_table_from_property_set (Object the_table, Object the_set);
 Object print_env (struct frame *env);
 Object show_bindings (Object args);
 int unwind_to_exit (Object exit_sym);
 struct frame *module_namespace ();
-
 
 #endif

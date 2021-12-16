@@ -183,6 +183,31 @@ marlais_table_element_setter_by_vector (Object table, Object key, Object val)
   return (MARLAIS_UNSPECIFIED);
 }
 
+/*
+ * Stores entry for each property in the_set in the_table.  If
+ * property is an atom, the key and value are both the atom.
+ * If property is a pair, the key is the CAR and the value is the CDR.
+ */
+Object
+fill_table_from_property_set (Object the_table, Object the_set)
+{
+  Object the_element;
+
+  while (!EMPTYLISTP (the_set)) {
+    the_element = CAR (the_set);
+    if (PAIRP (the_element)) {
+      marlais_table_element_setter (the_table,
+                                    CAR (the_element),
+                                    CDR (the_element));
+    } else {
+      marlais_table_element_setter (the_table, the_element, the_element);
+    }
+    the_set = CDR (the_set);
+  }
+
+  return the_table;
+}
+
 /* local functions */
 
 static Object

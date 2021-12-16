@@ -213,7 +213,7 @@ marlais_initialize (void)
   marlais_add_export (marlais_make_name ("<standard-string>"), byte_string_class, 1);
 
   /* initialize primitives */
-  marlais_register_env ();
+  marlais_register_module ();
   marlais_register_list ();
   marlais_register_symbol ();
   marlais_register_type ();

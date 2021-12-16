@@ -100,6 +100,7 @@ add_library(marlais_lib
   lexer.c
   list.c
   misc.c
+  module.c
   number.c
   object.c
   parser.c
