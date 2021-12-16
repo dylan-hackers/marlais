@@ -78,11 +78,11 @@ end method \<;
 
 // <double-float> and small integers
 
-define method \= (i :: <integer>, d :: <double-float>)
+define method \= (i :: <small-integer>, d :: <double-float>)
   as(<double-float>, i) == d;
 end method \=;
 
-define method \= (d :: <double-float>, i :: <integer>)
+define method \= (d :: <double-float>, i :: <small-integer>)
   d == as(<double-float>, i);
 end method \=;
 
