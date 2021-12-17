@@ -65,6 +65,8 @@ typedef enum {
     /* miscelaneous */
     ObjectHandle,
     ForeignPtr,
+
+    /* bindings */
     Environment,
     Module,
 

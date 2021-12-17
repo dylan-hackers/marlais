@@ -18,7 +18,6 @@ static Object marlais_current_module;
 
 /* Internal function declarations */
 
-static struct frame *initialize_namespace (Object owner);
 static void fill_imports_table_from_property_set (Object imports_table,
                                                   Object imports_set,
                                                   Object renames_table);
@@ -28,17 +27,19 @@ static void add_module_binding(Object sym, Object val,
 
 /* Primitives */
 
-static Object prim_get_module (void);
+static Object prim_current_module (void);
 static Object prim_set_module (Object mod_or_sym);
 static Object prim_find_module (Object sym);
 static Object prim_module_name (Object sym);
+static Object prim_module_environment (Object sym);
 
 static struct primitive module_prims[] =
 {
-    {"%get-module",  prim_0, prim_get_module},
+    {"current-module",  prim_0, prim_current_module},
     {"%set-module",  prim_1, prim_set_module},
     {"%find-module", prim_1, prim_find_module},
     {"%module-name", prim_1, prim_module_name},
+    {"%module-environment", prim_1, prim_module_environment},
 };
 
 /* Exported functions */
@@ -84,15 +85,18 @@ marlais_set_current_module (Object new_module)
 Object
 marlais_make_module (Object module_name)
 {
-  Object module;
+  struct module *module;
 
+  /* construct the module */
   module = MARLAIS_ALLOCATE_OBJECT (Module, struct module);
-  MODULE(module)->sym = module_name;
-  MODULE(module)->namespace = initialize_namespace (module_name);
-  MODULE(module)->exported_bindings = marlais_make_table (DEFAULT_TABLE_SIZE);
+  module->sym = module_name;
+  module->namespace = marlais_make_toplevel (module);
+  module->exported_bindings = marlais_make_table (DEFAULT_TABLE_SIZE);
 
-  marlais_all_modules = marlais_cons(module, marlais_all_modules);
+  /* add to global list */
+  marlais_all_modules = marlais_cons((Object)module, marlais_all_modules);
 
+  /* return the module */
   return module;
 }
 
@@ -169,7 +173,7 @@ marlais_use_module (Object module_name,
 		    Object renames,
 		    Object exports)
 {
-  struct frame *frame;
+  struct environment *frame;
   struct binding *binding;
   struct binding *bindings = NULL;
   struct binding *old_binding;
@@ -334,7 +338,7 @@ marlais_use_module (Object module_name,
 
 /* Primitives */
 
-static Object prim_get_module (void)
+static Object prim_current_module (void)
 {
   return marlais_current_module;
 }
@@ -362,22 +366,9 @@ static Object prim_module_name (Object module)
   return marlais_name_to_symbol (MODULE(module)->sym);
 }
 
-/* Internal functions */
-
-static struct frame *
-initialize_namespace (Object owner)
+static Object prim_module_environment (Object module)
 {
-  struct frame *frame;
-
-  frame = MARLAIS_ALLOCATE_STRUCT (struct frame);
-  frame->size = TOP_LEVEL_SIZE;
-  frame->owner = owner;
-  frame->bindings =
-    (struct binding **) marlais_allocate_memory (TOP_LEVEL_SIZE * sizeof (struct binding));
-  frame->next = NULL;
-  frame->top_level_env = frame->bindings;
-
-  return frame;
+  return (Object)MODULE(module)->namespace;
 }
 
 /*

@@ -256,7 +256,7 @@ struct clas {
     int num_precs;
     int ordinal_index;
     int properties;
-    struct frame *creation_env;
+    struct environment *creation_env;
 };
 
 #define CLASSNAME(obj)    (((struct clas *)obj)->name)
@@ -393,7 +393,7 @@ struct method {
     Object rest_return_type;
     Object body;
     Object my_handle;
-    struct frame *env;
+    struct environment *env;
 };
 
 #define METHNAME(obj)       (((struct method *)obj)->name)
@@ -459,15 +459,19 @@ struct foreign_ptr {
 
 struct environment {
     ObjectHeader header;
-    struct frame *env;
+    int size;
+    Object owner;
+    struct binding **bindings;
+    struct environment *next;
+    struct binding **top_level_env;
 };
 
-#define ENVIRONMENT(obj)      (((struct environment *)obj)->env)
+#define ENVIRONMENT(obj)      ((struct environment *)obj)
 
 struct module {
     ObjectHeader header;
     Object sym;
-    struct frame *namespace;
+    struct environment *namespace;
     Object exported_bindings;
 };
 

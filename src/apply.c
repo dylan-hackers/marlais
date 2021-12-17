@@ -141,7 +141,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
   Object rest_var, class, keyword, keys;
   Object *tmp_ptr;
   int hit_rest, hit_key, hit_values;
-  struct frame *old_env;
+  struct environment *old_env;
 
   if (trace_functions && trace_level) {
     int i;

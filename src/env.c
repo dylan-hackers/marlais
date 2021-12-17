@@ -17,34 +17,53 @@
 
 /* Exported functions */
 
-Object
-marlais_make_environment (struct frame *env)
-{
-  Object obj;
-  obj = marlais_allocate_object (Environment, sizeof (struct environment));
-  ENVIRONMENT (obj) = env;
-  return obj;
+static struct environment *
+marlais_make_environment (int size, Object owner) {
+  struct environment *frame;
+  struct binding **bindings = NULL;
+
+  if(size > 0) {
+    bindings = marlais_allocate_memory (size * sizeof (struct binding *));
+  }
+
+  frame = MARLAIS_ALLOCATE_OBJECT (Environment, struct environment);
+  frame->size = size;
+  frame->owner = owner;
+  frame->bindings = bindings;
+  frame->next = NULL;
+  frame->top_level_env = NULL;
+
+  return (Object)frame;
 }
 
-struct frame *
-marlais_current_environment (void)
+Object
+marlais_make_toplevel (Object owner)
 {
-  return (the_env);
+  struct environment *frame;
+
+  /* make a new frame */
+  frame = marlais_make_environment (TOP_LEVEL_SIZE, owner);
+
+  /* toplevel frames reference their own bindings */
+  frame->top_level_env = frame->bindings;
+
+  /* return it */
+  return frame;
 }
 
 void
 marlais_push_scope (Object owner)
 {
-  struct frame *frame;
+  struct environment *frame;
 
-  /* push a new frame */
-  frame = MARLAIS_ALLOCATE_STRUCT (struct frame);
-  frame->owner = owner;
-  frame->size = 0;
-  frame->bindings = NULL;
-  frame->next = the_env;
+  /* make a new frame with no bindings */
+  frame = marlais_make_environment (0, owner);
+
+  /* reference the toplevel environment of the parent */
   frame->top_level_env = the_env->top_level_env;
 
+  /* push it on the stack */
+  frame->next = the_env;
   the_env = frame;
   eval_stack->frame = frame;
 }
@@ -56,9 +75,9 @@ marlais_pop_scope (void)
 }
 
 void
-marlais_add_locals (Object syms, Object vals, int constant, struct frame *to_frame)
+marlais_add_locals (Object syms, Object vals, int constant, struct environment *to_frame)
 {
-  struct frame *frame;
+  struct environment *frame;
   struct binding *binding;
   int num_bindings, i;
   Object sym_list;
@@ -103,9 +122,9 @@ marlais_add_locals (Object syms, Object vals, int constant, struct frame *to_fra
 }
 
 void
-marlais_add_local (Object sym, Object val, int constant, struct frame *to_frame)
+marlais_add_local (Object sym, Object val, int constant, struct environment *to_frame)
 {
-  struct frame *frame;
+  struct environment *frame;
   struct binding *binding;
 
   binding = MARLAIS_ALLOCATE_STRUCT (struct binding);
@@ -176,7 +195,7 @@ marlais_modify_value (Object sym, Object new_val)
 struct binding *
 marlais_symbol_binding (Object sym)
 {
-  struct frame *frame;
+  struct environment *frame;
   struct binding *binding;
   int i;
 
@@ -229,7 +248,7 @@ marlais_symbol_binding_top_level (Object sym)
 int
 unwind_to_exit (Object exit_proc)
 {
-  struct frame *frame;
+  struct environment *frame;
   Object body;
   struct eval_stack *tmp_eval_stack, *save_eval_stack;
 
@@ -267,23 +286,9 @@ unwind_to_exit (Object exit_proc)
 }
 
 Object
-print_env (struct frame *env)
-{
-  struct frame *frame;
-  int i;
-
-  for (i = 0, frame = env; frame != NULL; frame = frame->next, i++) {
-    fprintf (stderr, "#%d ", i);
-    marlais_print_object(marlais_standard_error, frame->owner, 1);
-    fprintf (stderr, "\n");
-  }
-  return MARLAIS_UNSPECIFIED;
-}
-
-Object
 show_bindings (Object args)
 {
-  struct frame *frame;
+  struct environment *frame;
   int i;
   int slot;
   struct binding **bindings, *binding;

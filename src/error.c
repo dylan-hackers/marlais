@@ -481,5 +481,14 @@ fail_function (void)
 static Object
 my_print_env (void)
 {
-  return print_env (the_env);
+  struct environment *frame;
+  int i;
+
+  for (i = 0, frame = the_env; frame != NULL; frame = frame->next, i++) {
+    fprintf (stdout, "#%d ", i);
+    marlais_print_object(marlais_standard_output, frame->owner, 1);
+    fprintf (stdout, "\n");
+  }
+
+  return MARLAIS_UNSPECIFIED;
 }

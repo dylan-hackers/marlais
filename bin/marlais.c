@@ -136,7 +136,7 @@ main (int argc, char *argv[])
   char *dylan_init, *common_init;
   int err;
   extern int optind;
-  struct frame *cache_env;
+  struct environment *cache_env;
   int maybe_quit = 0;
 
   setlocale(LC_ALL, "");

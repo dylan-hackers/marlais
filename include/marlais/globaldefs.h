@@ -32,7 +32,7 @@ GLOBAL Object marlais_module_dylan_user;
 /* globals */
 GLOBAL jmp_buf error_return;
 GLOBAL int load_file_context;
-GLOBAL struct frame *the_env;
+GLOBAL struct environment *the_env;
 GLOBAL jmp_buf *the_eval_context;
 GLOBAL Object default_module;
 GLOBAL Object all_symbol;
@@ -207,6 +207,7 @@ GLOBAL Object equal_arrow_symbol;
 GLOBAL Object colon_colon_symbol;
 GLOBAL Object object_handle_class;
 GLOBAL Object foreign_pointer_class;	/* <pcb> */
+GLOBAL Object environment_class;
 GLOBAL Object module_class;
 GLOBAL Object stdio_handle_class;
 GLOBAL Object big_float_class;

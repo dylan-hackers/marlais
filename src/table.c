@@ -227,7 +227,7 @@ table_element_handle (Object table, Object key, Object *default_val)
 {
   Object hval, equal_fun, entry;
   int h;
-  struct frame *old_env;
+  struct environment *old_env;
 
   hval = equal_hash (key);
   h = abs (INTVAL (hval)) % TABLESIZE (table);

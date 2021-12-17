@@ -146,7 +146,7 @@ marlais_make_generic (Object name, Object params, Object methods)
 }
 
 Object
-marlais_make_method (Object name, Object params, Object body, struct frame *env, int do_generic)
+marlais_make_method (Object name, Object params, Object body, struct environment *env, int do_generic)
 {
   Object obj, gf;
 

@@ -53,16 +53,7 @@ struct binding {
 #define IS_CONSTANT_BINDING(binding) (binding->props & CONSTANT_BINDING)
 #define IS_EXPORTED_BINDING(binding) (binding->props & EXPORTED_BINDING)
 
-struct frame {
-    int size;
-    Object owner;
-    struct binding **bindings;
-    struct frame *next;
-    struct binding **top_level_env;
-};
-
-extern Object marlais_make_environment (struct frame *env);
-extern struct frame *marlais_current_environment (void);
+extern Object marlais_make_toplevel (Object owner);
 
 extern void marlais_push_scope (Object owner);
 extern void marlais_pop_scope (void);
@@ -72,9 +63,9 @@ extern void marlais_pop_scope (void);
    hopelessly screwed up.
  */
 extern void marlais_add_locals (Object syms, Object vals, int constant,
-				struct frame *to_frame);
+				struct environment *to_frame);
 extern void marlais_add_local (Object sym, Object val, int constant,
-			       struct frame *to_frame);
+			       struct environment *to_frame);
 
 extern Object marlais_symbol_value (Object sym);
 extern void marlais_modify_value (Object sym, Object new_val);
@@ -83,9 +74,8 @@ extern struct binding *marlais_symbol_binding (Object sym);
 extern struct binding *marlais_symbol_binding_top_level (Object sym);
 
 /* TODO namespace */
-Object print_env (struct frame *env);
 Object show_bindings (Object args);
 int unwind_to_exit (Object exit_sym);
-struct frame *module_namespace ();
+struct environment *module_namespace ();
 
 #endif

@@ -43,7 +43,7 @@ extern Object marlais_generic_methods (Object generic);
 
 extern Object marlais_make_generic (Object name, Object params, Object methods);
 extern Object marlais_make_generic_entrypoint (Object args);
-extern Object marlais_make_method (Object name, Object params, Object body, struct frame *env, int do_generic);
+extern Object marlais_make_method (Object name, Object params, Object body, struct environment *env, int do_generic);
 extern Object marlais_add_method (Object generic, Object method);
 extern Object marlais_make_next_method (Object generic, Object rest_methods, Object args);
 

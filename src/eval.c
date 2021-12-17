@@ -127,7 +127,7 @@ eval_combination (Object obj, int do_apply)
     Object op;
     syntax_fun sf;
     Object fun, args, ret;
-    struct frame *old_env;
+    struct environment *old_env;
     struct eval_stack *old_stack;
     jmp_buf *old_context;
     jmp_buf this_context;

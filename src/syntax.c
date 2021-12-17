@@ -36,12 +36,12 @@ static void install_syntax_entry (char *name, syntax_fun fun);
 static void bind_variables (Object init_list,
                             int top_level,
                             int constant,
-                            struct frame *to_frame);
+                            struct environment *to_frame);
 static void add_variable_binding (Object var,
                                   Object val,
                                   int top_level,
                                   int constant,
-                                  struct frame *to_frame);
+                                  struct environment *to_frame);
 
 /* functions emobodying evaluation rules for forms */
 
@@ -299,9 +299,9 @@ static Object
 bind_eval (Object form)
 {
     Object bindings, body, result;
-    struct frame *initial_env;
-    struct frame *enclosing_env;
-    struct frame *binding_env;
+    struct environment *initial_env;
+    struct environment *enclosing_env;
+    struct environment *binding_env;
 
     if (EMPTYLISTP (CDR (form))) {
       marlais_error ("malformed bind form", form, NULL);
@@ -339,8 +339,8 @@ static Object
 local_bind_eval (Object form)
 {
     Object bindings;
-    struct frame *enclosing_env;
-    struct frame *binding_env;
+    struct environment *enclosing_env;
+    struct environment *binding_env;
 
     if (EMPTYLISTP (CDR (form))) {
       marlais_error ("malformed local binding", form, NULL);
@@ -621,7 +621,7 @@ static void
 bind_variables (Object init_list,
                 int top_level,
                 int constant,
-                struct frame *to_frame)
+                struct environment *to_frame)
 {
   Object variable, variables, init, val;
   Object first, last, new;
@@ -712,7 +712,7 @@ add_variable_binding (Object var,
                       Object val,
                       int top_level,
                       int constant,
-                      struct frame *to_frame)
+                      struct environment *to_frame)
 {
   Object type;
 

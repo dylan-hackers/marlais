@@ -43,6 +43,7 @@ static void print_class (Object stream, Object class, int escaped);
 static void print_array (Object stream, Object array, int escaped);
 static void print_stream (Object out_stream, Object stream);
 static void print_type_name (Object stream, Object class, int escaped);
+static void print_env (Object stream, Object env, int escaped);
 
 #ifdef MARLAIS_ENABLE_WCHAR
 static void print_wchar (Object stream, Object c, int escaped);
@@ -239,9 +240,7 @@ marlais_print_object (Object fd, Object obj, int escaped)
     fprintf (fp, "{module %s}", SYMBOLNAME(MODULE (obj)->sym));
     break;
   case Environment:
-    fprintf (fp, "{environment object ");
-    print_env (ENVIRONMENT (obj));
-    fprintf (fp, "}");
+    print_env (fd, ENVIRONMENT (obj), escaped);
     break;
 #ifdef MARLAIS_ENABLE_GMP
   case BigFloat:
@@ -802,6 +801,16 @@ print_type_name (Object fd, Object obj, int escaped)
   default:
     marlais_error ("print_type_name: object is not a type", obj);
   }
+}
+
+static void
+print_env (Object fd, Object env, int escaped)
+{
+  FILE *fp = print_file_from_fd(fd);
+
+  fprintf(fp, "{environment ");
+  marlais_print_object (fd, ENVIRONMENT(env)->owner, 1);
+  fprintf(fp, "}");
 }
 
 #ifdef MARLAIS_ENABLE_WCHAR

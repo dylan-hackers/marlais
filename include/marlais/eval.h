@@ -40,7 +40,7 @@
 struct eval_stack {
     struct eval_stack *next;
     Object context;
-    struct frame *frame;
+    struct environment *frame;
 };
 
 extern struct eval_stack *eval_stack;
