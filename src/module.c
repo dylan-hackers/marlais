@@ -16,14 +16,16 @@
 static Object marlais_all_modules;
 static Object marlais_current_module;
 
-/* Internal function declarations */
+/* Internal functions */
 
+static void import_module_binding (struct binding *import_binding,
+                                   struct binding **bindings,
+                                   int all_imports);
+static void add_module_binding(Object sym, Object val,
+                               int constant, int exported);
 static void fill_imports_table_from_property_set (Object imports_table,
                                                   Object imports_set,
                                                   Object renames_table);
-static void add_module_binding(Object sym, Object val,
-                               int constant, int exported);
-
 
 /* Primitives */
 
@@ -147,31 +149,13 @@ marlais_change_binding (Object sym, Object new_val)
   }
 }
 
-static void
-import_top_level_binding (struct binding *import_binding,
-                          struct binding **bindings,
-                          int all_imports)
-{
-  struct binding *binding;
-
-  binding = MARLAIS_ALLOCATE_STRUCT (struct binding);
-  binding->type = import_binding->type;
-  /* binding->props |= import_binding->props & CONSTANT_BINDING; */
-  binding->props |= import_binding->props;
-
-  /* Share storage with old binding */
-  binding->val = import_binding->val;
-  binding->next = *bindings;
-  *bindings = binding;
-}
-
 Object
 marlais_use_module (Object module_name,
-		    Object imports,
-		    Object exclusions,
-		    Object prefix,
-		    Object renames,
-		    Object exports)
+                    Object imports,
+                    Object exclusions,
+                    Object prefix,
+                    Object renames,
+                    Object exports)
 {
   struct environment *frame;
   struct binding *binding;
@@ -242,9 +226,9 @@ marlais_use_module (Object module_name,
           /*
            * This binding is importable.  Go for it.
            */
-          import_top_level_binding (binding,
-                                    &bindings,
-                                    all_imports);
+          import_module_binding (binding,
+                                 &bindings,
+                                 all_imports);
           /*
            * See what the bindings name needs to be.
            */
@@ -371,28 +355,24 @@ static Object prim_module_environment (Object module)
   return (Object)MODULE(module)->namespace;
 }
 
-/*
- * Like fill_table_from..., but stores variable renamings in renames_table.
- */
-static void
-fill_imports_table_from_property_set (Object imports_table,
-                                      Object imports_set,
-                                      Object renames_table)
-{
-  Object the_element;
+/* Internal functions */
 
-  while (!EMPTYLISTP (imports_set)) {
-    the_element = CAR (imports_set);
-    if (PAIRP (the_element)) {
-      marlais_table_element_setter (imports_table, the_element, the_element);
-      marlais_table_element_setter (renames_table,
-                                    CAR (the_element),
-                                    CDR (the_element));
-    } else {
-      marlais_table_element_setter (imports_table, the_element, the_element);
-    }
-    imports_set = CDR (imports_set);
-  }
+static void
+import_module_binding (struct binding *import_binding,
+                       struct binding **bindings,
+                       int all_imports)
+{
+  struct binding *binding;
+
+  binding = MARLAIS_ALLOCATE_STRUCT (struct binding);
+  binding->type = import_binding->type;
+  /* binding->props |= import_binding->props & CONSTANT_BINDING; */
+  binding->props |= import_binding->props;
+
+  /* Share storage with old binding */
+  binding->val = import_binding->val;
+  binding->next = *bindings;
+  *bindings = binding;
 }
 
 static void
@@ -448,5 +428,29 @@ add_module_binding(Object sym, Object val, int constant, int exported)
 
   if (trace_bindings) {
     fprintf(stderr, "%s %s\n", (exported?"Export":"Binding"), str);
+  }
+}
+
+/*
+ * Like fill_table_from..., but stores variable renamings in renames_table.
+ */
+static void
+fill_imports_table_from_property_set (Object imports_table,
+                                      Object imports_set,
+                                      Object renames_table)
+{
+  Object the_element;
+
+  while (!EMPTYLISTP (imports_set)) {
+    the_element = CAR (imports_set);
+    if (PAIRP (the_element)) {
+      marlais_table_element_setter (imports_table, the_element, the_element);
+      marlais_table_element_setter (renames_table,
+                                    CAR (the_element),
+                                    CDR (the_element));
+    } else {
+      marlais_table_element_setter (imports_table, the_element, the_element);
+    }
+    imports_set = CDR (imports_set);
   }
 }
