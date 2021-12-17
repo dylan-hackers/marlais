@@ -4,14 +4,14 @@ copyright: (c) 2001, LGPL, Marlais Hackers (see COPYRIGHT file for use)
 // module: file-streams
 // source file history:
 // 08-28-2001 dma started file
-  
+
 //------------------------FILE-DESCRIPTORS-------------------------------
 define class <fd-stream> (<stream>)
   slot file-descriptor, required-init-keyword: fd:;
   slot fd-direction, init-keyword: direction:, init-value: #"input";
 end class <fd-stream>;
 
-define method initialize(stream :: <fd-stream>, 
+define method initialize(stream :: <fd-stream>,
 	#key direction = #"input", fd) => (ans :: <fd-stream>)
   next-method();
   stream.fd-direction := direction;
@@ -65,7 +65,7 @@ define method write-element (s :: <fd-stream>, c :: <character>)
   write(s, str);
 end method write-element;
 
-define method write(s :: <fd-stream>, str :: <string>, 
+define method write(s :: <fd-stream>, str :: <string>,
 	#key start = 0, end: stop = str.size)
   let seq = copy-sequence(str, start: start, end: stop);
 // maybe later or never:  let buf = as(<buffer>, seq);
@@ -73,7 +73,7 @@ define method write(s :: <fd-stream>, str :: <string>,
 end method write;
 
 /*** need to invent <buffer>s for this to work
-define method read(s :: <fd-stream>, n :: <integer>, 
+define method read(s :: <fd-stream>, n :: <integer>,
 		   #key on-end-of-stream = $unspecified)
   let str = make(<buffer>, size: n);
   let len = %read(s.fd, str, n);
@@ -89,10 +89,9 @@ define method read(s :: <fd-stream>, n :: <integer>,
 end method read;
 
 // Here, again, read is more efficient that read-element for FD's
-define method read-element(s :: <fd-stream>, 
+define method read-element(s :: <fd-stream>,
 			   #key on-end-of-stream = $unspecified)
   let str = read(s, 1, on-end-of-stream: on-end-of-stream);
   str[0];
 end method read-element;
  */
-

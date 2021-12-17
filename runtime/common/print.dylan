@@ -99,4 +99,3 @@ define method format (stream :: <stream>, s :: <string>, #rest args) => ()
 end method format;
 
 define constant format-out = curry(format, *standard-output*);
-
