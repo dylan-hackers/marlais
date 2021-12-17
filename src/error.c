@@ -117,24 +117,30 @@ struct jmp_buf_stack *error_ok_return = 0;
 static jmp_buf *error_ok_return_pop (void);
 static jmp_buf *error_ok_return_push (void);
 
-static void signal_handler (int sig);
-static Object my_print_env (void);
-
-/* primitives */
-
 static void signal_handler_init (void);
 
-Object print_env_symbol;
-Object print_stack_symbol;
-Object show_bindings_symbol;
-Object help_symbol;
-Object return_symbol;
-Object fail_symbol;
-Object debugger_symbol;
+static void signal_handler (int sig);
 
-static Object return_value (Object args);
-static Object fail_function (void);
-static Object help_function (void);
+/* Local symbols */
+
+static Object show_bindings_symbol;
+static Object show_frames_symbol;
+static Object show_stack_symbol;
+static Object help_symbol;
+static Object return_symbol;
+static Object fail_symbol;
+static Object debugger_symbol;
+
+/* Debugger functions */
+
+static Object debug_show_bindings (Object rest);
+static Object debug_show_frames (void);
+static Object debug_show_stack (void);
+static Object debug_fail (void);
+static Object debug_return (Object values);
+static Object debug_help (void);
+
+/* Primitives */
 
 static Object dylan_error (Object msg_str, Object rest);
 static Object dylan_warning (Object msg_str, Object rest);
@@ -156,13 +162,13 @@ marlais_register_error (void)
 {
   int num;
 
-  print_env_symbol = marlais_make_name ("print-env");
-  print_stack_symbol = marlais_make_name ("print-stack");
   show_bindings_symbol = marlais_make_name ("show-bindings");
+  show_frames_symbol = marlais_make_name ("show-frames");
+  show_stack_symbol = marlais_make_name ("show-stack");
   help_symbol = marlais_make_name ("help");
   return_symbol = marlais_make_name ("return");
   fail_symbol = marlais_make_name ("fail");
-  debugger_symbol = marlais_make_name ("<<Debugger>>");
+  debugger_symbol = marlais_make_name ("<<debugger>>");
 
   num = sizeof (error_prims) / sizeof (struct primitive);
   marlais_register_prims (num, error_prims);
@@ -278,38 +284,45 @@ marlais_error (const char *msg, ...)
       marlais_push_scope (debugger_symbol);
 
       /* Put debugging functions this frame */
-      marlais_add_local (print_env_symbol,
-		   marlais_make_primitive ("print-env", prim_0, my_print_env),
-		   1,
-		   the_env);
-      marlais_add_local (print_stack_symbol,
-		   marlais_make_primitive ("print-stack", prim_0, marlais_print_stack),
-		   1,
-		   the_env);
       marlais_add_local (show_bindings_symbol,
-		   marlais_make_primitive ("show-bindings",
-				   prim_0_rest,
-				   show_bindings),
-		   1,
-		   the_env);
-      marlais_add_local (help_symbol,
-		   marlais_make_primitive ("help",
-				   prim_0_rest,
-				   help_function),
-		   1,
-		   the_env);
-
+                         marlais_make_primitive ("show-bindings",
+                                                 prim_0_rest,
+                                                 debug_show_bindings),
+                         1,
+                         the_env);
+      marlais_add_local (show_frames_symbol,
+                         marlais_make_primitive ("show-frames",
+                                                 prim_0,
+                                                 debug_show_frames),
+                         1,
+                         the_env);
+      marlais_add_local (show_stack_symbol,
+                         marlais_make_primitive ("show-stack",
+                                                 prim_0,
+                                                 debug_show_stack),
+                         1,
+                         the_env);
       marlais_add_local (return_symbol,
-		   marlais_make_primitive ("return", prim_0_rest, return_value),
-		   1,
-		   the_env);
+                         marlais_make_primitive ("return",
+                                                 prim_0_rest,
+                                                 debug_return),
+                         1,
+                         the_env);
       marlais_add_local (fail_symbol,
-		   marlais_make_primitive ("fail", prim_0, fail_function),
-		   1,
-		   the_env);
+                         marlais_make_primitive ("fail",
+                                                 prim_0,
+                                                 debug_fail),
+                         1,
+                         the_env);
+      marlais_add_local (help_symbol,
+                         marlais_make_primitive ("help",
+                                                 prim_0,
+                                                 debug_help),
+                         1,
+                         the_env);
 
       if (!message_printed) {
-	help_function ();
+	debug_help ();
 	message_printed = 1;
       }
       prompt = prompt_buf;
@@ -403,43 +416,6 @@ signal_handler (int sig)
   marlais_fatal (sys_siglist[sig], NULL);
 }
 
-static Object
-return_value (Object args)
-{
-  jmp_buf *buf;
-
-  if (marlais_list_length (args) != 1) {
-    fprintf (stderr, "return: Requires one argument\n");
-  }
-  marlais_pop_scope ();
-  marlais_pop_eval_stack ();
-  buf = error_ok_return_pop ();
-  longjmp (*buf, (int) (CAR (args)));
-}
-
-static Object
-help_function (void)
-{
-  fprintf (stderr, "\n");
-  fprintf (stderr, "** Debugger **\n\n");
-  fprintf (stderr, "  debugging functions:\n\n");
-  fprintf (stderr, "    print-stack () => () "
-	   "// print numbered entries in the runtime stack\n");
-  fprintf (stderr, "    print-env () => ()   "
-	   "// print numbered frames in static environment\n");
-  fprintf (stderr, "    show-bindings (frame-number :: <integer>) => ()\n");
-  fprintf (stderr, "                         "
-	   "// show variable bindings in specified frame\n");
-  fprintf (stderr, "    return (value) => () "
-	   "// return to error context with specified value\n");
-  fprintf (stderr, "                         "
-	   "// return will almost always fail at this time\n");
-  fprintf (stderr, "    help() => ()         // print this message\n");
-  fprintf (stderr, "    fail() => ()         "
-	   "// or ^D returns to the read-eval-print loop\n");
-  return MARLAIS_UNSPECIFIED;
-}
-
 static jmp_buf
 *
 error_ok_return_pop (void)
@@ -472,14 +448,106 @@ error_ok_return_push ()
   return &(error_ok_return->buf);
 }
 
+/* Debugger commands */
+
 static Object
-fail_function (void)
+debug_help (void)
+{
+  fprintf (stderr, "\n");
+  fprintf (stderr, "** Debugger **\n\n");
+  fprintf (stderr, "  debugging functions:\n\n");
+  fprintf (stderr, "    show-bindings (frame :: <integer>) => ()\n");
+  fprintf (stderr, "                         "
+           "// show variable bindings in specified frame\n");
+  fprintf (stderr, "    show-frames () => () "
+           "// print numbered frames in static environment\n");
+  fprintf (stderr, "    show-stack () => ()  "
+           "// print numbered entries in the runtime stack\n");
+  fprintf (stderr, "    return (value) => () "
+           "// return to error context with specified value\n");
+  fprintf (stderr, "                         "
+           "// return will almost always fail at this time\n");
+  fprintf (stderr, "    fail() => ()         "
+           "// or ^D returns to the read-eval-print loop\n");
+  fprintf (stderr, "    help() => ()         // print this message\n");
+  return MARLAIS_UNSPECIFIED;
+}
+
+static Object
+debug_fail (void)
 {
   longjmp (error_return, 1);
 }
 
 static Object
-my_print_env (void)
+debug_return (Object args)
+{
+  jmp_buf *buf;
+
+  if (marlais_list_length (args) != 1) {
+    fprintf (stderr, "return: Requires one argument\n");
+  }
+  marlais_pop_scope ();
+  marlais_pop_eval_stack ();
+  buf = error_ok_return_pop ();
+  longjmp (*buf, (int) (CAR (args)));
+}
+
+static Object
+debug_show_bindings (Object args)
+{
+  struct environment *frame;
+  int i;
+  int slot;
+  struct binding **bindings, *binding;
+  int frame_number;
+
+  if (marlais_list_length (args) != 1 || !INTEGERP (CAR (args))) {
+    marlais_error ("show_bindings: requires a single <integer> argument", NULL);
+  }
+  frame_number = INTVAL (CAR (args));
+
+  for (frame = the_env, i = frame_number;
+       i > 0 && frame != NULL;
+       frame = frame->next, i--) ;
+  if (i != 0) {
+    fprintf (stderr, "Frame number %d does not exist\n",
+             frame_number);
+  } else {
+    fprintf (stderr, "** Bindings for frame %d [",
+             frame_number);
+    marlais_print_object (marlais_standard_error, frame->owner, 1);
+    fprintf (stderr, "]\n");
+    /*
+     * Print the bindings in all the frame slots.
+     */
+    for (bindings = frame->bindings, slot = 0;
+         slot < frame->size;
+         slot++) {
+      /*
+       * Print the bindings in one slot
+       */
+      for (binding = frame->bindings[slot];
+           binding != NULL;
+           binding = binding->next) {
+        fprintf (stderr, "   ");
+        marlais_print_object (marlais_standard_error, binding->sym, 1);
+        if (binding->type != object_class) {
+          fprintf (stderr, " :: ");
+          marlais_print_object (marlais_standard_error, binding->type, 1);
+        }
+        fprintf (stderr, " = ");
+        marlais_print_object (marlais_standard_error, *(binding->val), 1);
+        fprintf (stderr, "\n");
+      }
+    }
+
+  }
+  return MARLAIS_UNSPECIFIED;
+}
+
+static Object
+debug_show_frames (void)
 {
   struct environment *frame;
   int i;
@@ -491,4 +559,20 @@ my_print_env (void)
   }
 
   return MARLAIS_UNSPECIFIED;
+}
+
+static Object
+debug_show_stack (void)
+{
+    struct eval_stack *entry;
+    int i;
+
+    for (i = 0, entry = eval_stack->next;
+         entry != NULL;
+         entry = entry->next, i++) {
+        fprintf (stderr, "#%d ", i);
+        marlais_print_object (marlais_standard_error, entry->context, 1);
+        fprintf (stderr, "\n");
+    }
+    return MARLAIS_UNSPECIFIED;
 }

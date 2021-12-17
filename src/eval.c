@@ -103,22 +103,6 @@ marlais_push_eval_stack (Object obj)
     eval_stack = tmp;
 }
 
-Object
-marlais_print_stack (void)
-{
-    struct eval_stack *entry;
-    int i;
-
-    for (i = 0, entry = eval_stack->next;
-         entry != NULL;
-         entry = entry->next, i++) {
-        fprintf (stderr, "#%d ", i);
-        marlais_print_object (marlais_standard_error, entry->context, 1);
-        fprintf (stderr, "\n");
-    }
-    return MARLAIS_UNSPECIFIED;
-}
-
 /* Internal functions */
 
 static Object
