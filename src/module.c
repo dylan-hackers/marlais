@@ -28,15 +28,17 @@ static void add_module_binding(Object sym, Object val,
 
 /* Primitives */
 
-static Object prim_get_current_module (void);
-static Object prim_set_current_module (Object mod_or_sym);
+static Object prim_get_module (void);
+static Object prim_set_module (Object mod_or_sym);
 static Object prim_find_module (Object sym);
+static Object prim_module_name (Object sym);
 
 static struct primitive module_prims[] =
 {
-    {"%get-current-module",  prim_0, prim_get_current_module},
-    {"%set-current-module",  prim_1, prim_set_current_module},
+    {"%get-module",  prim_0, prim_get_module},
+    {"%set-module",  prim_1, prim_set_module},
     {"%find-module", prim_1, prim_find_module},
+    {"%module-name", prim_1, prim_module_name},
 };
 
 /* Exported functions */
@@ -332,12 +334,12 @@ marlais_use_module (Object module_name,
 
 /* Primitives */
 
-static Object prim_get_current_module (void)
+static Object prim_get_module (void)
 {
   return marlais_current_module;
 }
 
-static Object prim_set_current_module (Object mod_or_sym)
+static Object prim_set_module (Object mod_or_sym)
 {
   Object mod;
   if (SYMBOLP(mod_or_sym)) {
@@ -353,6 +355,11 @@ static Object prim_set_current_module (Object mod_or_sym)
 static Object prim_find_module (Object sym)
 {
   return marlais_find_module (marlais_symbol_to_name (sym));
+}
+
+static Object prim_module_name (Object module)
+{
+  return marlais_name_to_symbol (MODULE(module)->sym);
 }
 
 /* Internal functions */
