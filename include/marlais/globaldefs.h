@@ -213,6 +213,11 @@ GLOBAL Object big_float_class;
 GLOBAL Object big_ratio_class;
 GLOBAL Object big_integer_class;
 
+/* standard character classes */
+
+GLOBAL Object standard_character_class;
+GLOBAL Object standard_string_class;
+
 /* reserved word symbols */
 GLOBAL Object above_symbol;
 GLOBAL Object afterwards_symbol;

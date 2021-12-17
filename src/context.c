@@ -219,9 +219,23 @@ marlais_initialize (void)
                       marlais_default,
                       1);
 
-  /* define default string and character types */
-  marlais_add_export (marlais_make_name ("<standard-character>"), byte_character_class, 1);
-  marlais_add_export (marlais_make_name ("<standard-string>"), byte_string_class, 1);
+  /* determine default string and character classes */
+#if defined(MARLAIS_STANDARD_CHARACTER_BYTE)
+  standard_character_class = byte_character_class;
+  standard_string_class = byte_string_class;
+#elif defined(MARLAIS_STANDARD_CHARACTER_WIDE)
+  standard_character_class = wide_character_class;
+  standard_string_class = wide_string_class;
+#elif defined(MARLAIS_STANDARD_CHARACTER_UNICODE)
+  standard_character_class = unicode_character_class;
+  standard_string_class = unicode_string_class;
+#else
+#error Unknown standard character class.
+#endif
+
+  /* export the standard character classes */
+  marlais_add_export (marlais_make_name ("<standard-character>"), standard_character_class, 1);
+  marlais_add_export (marlais_make_name ("<standard-string>"), standard_string_class, 1);
 
   /* initialize primitives */
   marlais_register_module ();
