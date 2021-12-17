@@ -26,7 +26,7 @@ marlais_initialize (void)
 #endif
 
   /* initialize ICU memory management */
-#ifdef MARLAIS_ENABLE_UCHAR
+#ifdef MARLAIS_ENABLE_ICU
   marlais_initialize_icu ();
 #endif
 
