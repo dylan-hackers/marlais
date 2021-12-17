@@ -12,8 +12,10 @@
 #include <marlais/stream.h>
 #include <marlais/table.h>
 
-/* the top level environment */
-#define BIND_ALLOC_CHUNK 4
+/* Local constants */
+
+/* Chunking size for single-binding frames */
+#define BINDING_ALLOC_CHUNK 8
 
 /* Exported functions */
 
@@ -152,10 +154,10 @@ marlais_add_local (Object sym, Object val, int constant, struct environment *to_
   }
   frame = to_frame;
 
-  if ((frame->size % BIND_ALLOC_CHUNK) == 0) {
+  if ((frame->size % BINDING_ALLOC_CHUNK) == 0) {
     frame->bindings = (struct binding **)
       marlais_reallocate_memory (frame->bindings,
-                                 (frame->size + BIND_ALLOC_CHUNK) * sizeof (struct binding *));
+                                 (frame->size + BINDING_ALLOC_CHUNK) * sizeof (struct binding *));
   }
   frame->bindings[frame->size] = binding;
   frame->size++;
