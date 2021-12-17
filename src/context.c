@@ -8,9 +8,15 @@
 #include <marlais/parser.h>
 #include <marlais/unicode.h>
 
+#define DYLAN_INIT_FILE "dylan/init.dylan"
+#define COMMON_INIT_FILE "common/init.dylan"
+
 void
 marlais_initialize (void)
 {
+  int err;
+  const char *dylan_init, *common_init;
+
   /* intialize garbage collector */
   marlais_initialize_gc ();
 
@@ -38,14 +44,18 @@ marlais_initialize (void)
   marlais_default = marlais_cons (MARLAIS_FALSE, MARLAIS_FALSE);
   marlais_empty_string = marlais_make_bytestring ("");
 
-  /* initialize the dylan module */
-  marlais_initialize_module();
+  /* create core modules */
+  all_symbol = marlais_make_name ("all");
   dylan_symbol = marlais_make_name ("dylan");
   dylan_user_symbol = marlais_make_name ("dylan-user");
+  marlais_initialize_module();
+  marlais_module_dylan = marlais_make_module (dylan_symbol);
+  marlais_module_dylan_user = marlais_make_module (dylan_user_symbol);
 
-  marlais_set_current_module (marlais_make_module (dylan_symbol));
+  /* Switch to the dylan module */
+  marlais_set_current_module (marlais_module_dylan);
 
-  all_symbol = marlais_make_name ("all");
+  /* Export all bindings from dylan module */
   MODULE(marlais_get_current_module ())->exported_bindings = all_symbol;
 
   /* initialize the initial streams */
@@ -221,6 +231,7 @@ marlais_initialize (void)
   marlais_register_class ();
   marlais_register_slot ();
   marlais_register_file ();
+  open_file_list = MARLAIS_NIL; // TODO cleanup
   marlais_register_function ();
   marlais_register_values ();
   marlais_register_print ();
@@ -246,4 +257,37 @@ marlais_initialize (void)
 #ifdef MARLAIS_ENABLE_ICU
   marlais_register_icu ();
 #endif
+
+  /* error catch for initialization code */
+  err = setjmp (error_return);
+  if (err) {
+    printf ("error in initialization code -- exiting.\n");
+    exit (1);
+  }
+
+  /* load init code */
+  dylan_init = getenv ("MARLAIS_DYLAN_INIT");
+  if(!dylan_init) {
+    dylan_init = DYLAN_INIT_FILE;
+  }
+  common_init = getenv ("MARLAIS_COMMON_INIT");
+  if(!common_init) {
+    common_init = COMMON_INIT_FILE;
+  }
+  marlais_load(marlais_make_bytestring (dylan_init));
+  marlais_load(marlais_make_bytestring (common_init));
+
+  /* Switch to dylan-user */
+  marlais_set_current_module (marlais_module_dylan_user);
+
+  /* Export all bindings from the dylan-user module */
+  MODULE(marlais_get_current_module ())->exported_bindings = all_symbol;
+
+  /* Make dylan-user use dylan */
+  marlais_use_module (dylan_symbol,
+                      all_symbol,
+                      MARLAIS_NIL,
+                      marlais_empty_string,
+                      MARLAIS_NIL,
+                      all_symbol);
 }

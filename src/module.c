@@ -82,16 +82,16 @@ marlais_set_current_module (Object new_module)
 Object
 marlais_make_module (Object module_name)
 {
-  struct module *this_module;
+  Object module;
 
-  this_module = MARLAIS_ALLOCATE_STRUCT (struct module);
-  this_module->sym = module_name;
-  this_module->namespace = initialize_namespace (module_name);
-  this_module->exported_bindings = marlais_make_table (DEFAULT_TABLE_SIZE);
+  module = MARLAIS_ALLOCATE_OBJECT (Module, struct module);
+  MODULE(module)->sym = module_name;
+  MODULE(module)->namespace = initialize_namespace (module_name);
+  MODULE(module)->exported_bindings = marlais_make_table (DEFAULT_TABLE_SIZE);
 
-  marlais_all_modules = marlais_cons((Object)this_module, marlais_all_modules);
+  marlais_all_modules = marlais_cons(module, marlais_all_modules);
 
-  return (Object)this_module;
+  return module;
 }
 
 Object
@@ -341,7 +341,7 @@ static Object prim_set_current_module (Object mod_or_sym)
 {
   Object mod;
   if (SYMBOLP(mod_or_sym)) {
-    mod = marlais_find_module (mod_or_sym);
+    mod = marlais_find_module (marlais_symbol_to_name (mod_or_sym));
   } else if (MODULEP(mod_or_sym)) {
     mod = mod_or_sym;
   } else {
@@ -352,7 +352,7 @@ static Object prim_set_current_module (Object mod_or_sym)
 
 static Object prim_find_module (Object sym)
 {
-  return marlais_find_module (sym);
+  return marlais_find_module (marlais_symbol_to_name (sym));
 }
 
 /* Internal functions */

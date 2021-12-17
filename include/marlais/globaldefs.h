@@ -25,6 +25,10 @@ GLOBAL Object marlais_standard_input;
 GLOBAL Object marlais_standard_output;
 GLOBAL Object marlais_standard_error;
 
+/* modules */
+GLOBAL Object marlais_module_dylan;
+GLOBAL Object marlais_module_dylan_user;
+
 /* globals */
 GLOBAL jmp_buf error_return;
 GLOBAL int load_file_context;

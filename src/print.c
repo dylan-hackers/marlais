@@ -235,6 +235,9 @@ marlais_print_object (Object fd, Object obj, int escaped)
   case ForeignPtr: /* <pcb> my foreign pointer type. */
     fprintf (fp, "{foreign pointer %p}", FOREIGNPTR (obj));
     break;
+  case Module:
+    fprintf (fp, "{module %s}", SYMBOLNAME(MODULE (obj)->sym));
+    break;
   case Environment:
     fprintf (fp, "{environment object ");
     print_env (ENVIRONMENT (obj));

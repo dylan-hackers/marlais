@@ -10,9 +10,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#define DYLAN_INIT_FILE "dylan/init.dylan"
-#define COMMON_INIT_FILE "common/init.dylan"
-
 #ifndef VERSION
 #define VERSION "0.6.4-io-beta"
 #endif
@@ -146,40 +143,8 @@ main (int argc, char *argv[])
 
   /* initialization */
   marlais_initialize ();
-  open_file_list = MARLAIS_NIL;
+
   parse_args(argc, argv);
-
-  /* error catch for initialization code */
-  err = setjmp (error_return);
-  if (err) {
-    printf ("error in initialization code -- exiting.\n");
-    exit (1);
-  }
-
-  /* load init code */
-  if (!do_not_load_init_file) {
-    dylan_init = getenv ("MARLAIS_DYLAN_INIT");
-    if(!dylan_init) {
-      dylan_init = DYLAN_INIT_FILE;
-    }
-    common_init = getenv ("MARLAIS_COMMON_INIT");
-    if(!common_init) {
-      common_init = COMMON_INIT_FILE;
-    }
-    marlais_load(marlais_make_bytestring (dylan_init));
-    marlais_load(marlais_make_bytestring (common_init));
-  }
-
-  /* create the dylan-user module */
-  marlais_set_current_module (marlais_make_module (dylan_user_symbol));
-  MODULE(marlais_get_current_module ())->exported_bindings = all_symbol;
-
-  marlais_use_module (dylan_symbol,
-                      all_symbol,
-                      MARLAIS_NIL,
-                      marlais_empty_string,
-                      MARLAIS_NIL,
-                      all_symbol);
 
   if(execute) {
     /* put in a ; in case the user forgets */
