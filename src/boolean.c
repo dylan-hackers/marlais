@@ -80,12 +80,12 @@ marlais_identical_p (Object obj1, Object obj2)
 #ifdef MARLAIS_ENABLE_WCHAR
   } else if (WCHARP (obj1) && WCHARP (obj2)) {
     return (WCHARVAL (obj1) == WCHARVAL (obj2));
-#endif
+#endif /* MARLAIS_ENABLE_WCHAR */
 
 #ifdef MARLAIS_ENABLE_UCHAR
   } else if (UCHARP (obj1) && UCHARP (obj2)) {
     return (UCHARVAL (obj1) == UCHARVAL (obj2));
-#endif
+#endif /* MARLAIS_ENABLE_UCHAR */
 
 #endif /* MARLAIS_OBJECT_MODEL_LARGE */
 

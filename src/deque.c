@@ -40,7 +40,7 @@
 #include <marlais/sequence.h>
 #include <marlais/symbol.h>
 
-/* Static declarations */
+/* Internal functions */
 
 static Object deque_make_entry (Object prev, Object value, Object next);
 
