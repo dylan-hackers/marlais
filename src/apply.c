@@ -101,7 +101,7 @@ marlais_apply_internal (Object fun, Object args)
   case NextMethod:
     ret = apply_next_method (fun, args);
     break;
-  case Exit:
+  case UnwindFunction:
     ret = apply_exit (fun, args);
     break;
   default:

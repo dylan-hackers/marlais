@@ -563,9 +563,9 @@ marlais_object_class (Object obj)
     return (generic_function_class);
   case Method:
     return (method_class);
-  case Exit:
+  case UnwindFunction:
     return (exit_function_class);
-  case Unwind:
+  case UnwindProtect:
     return (unwind_protect_function_class);
   case UnspecifiedValue:
     return (object_class);

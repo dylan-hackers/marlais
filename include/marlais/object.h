@@ -42,7 +42,7 @@ typedef enum {
     ByteString, WideString, UnicodeCharacter,
 
     /* conditions */
-    Condition, Exit, Unwind,
+    Condition,
 
     /* symbols */
     Symbol, Name,
@@ -69,6 +69,7 @@ typedef enum {
     /* bindings */
     Environment,
     Module,
+    UnwindFunction, UnwindProtect,
 
     /* C level interfaces */
     StdioHandle,
