@@ -233,10 +233,8 @@ table_element_handle (Object table, Object key, Object *default_val)
   h = abs (INTVAL (hval)) % TABLESIZE (table);
   entry = TABLETABLE (table)[h];
 
-  old_env = the_env;
-  the_env = MODULE(marlais_find_module (dylan_symbol))->namespace;
+  /* TODO this should be a lookup in the dylan module */
   equal_fun = marlais_symbol_value (equal_symbol);
-  the_env = old_env;
 
   while (entry) {
     if (marlais_apply (equal_fun,
