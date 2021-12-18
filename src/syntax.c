@@ -419,7 +419,8 @@ unbinding_begin_eval (Object form)
 static Object
 bind_exit_eval (Object form)
 {
-    Object exit_obj, sym, body, ret, sec;
+    int err;
+    Object exit_obj, sym, body, sec, ret;
 
     if (EMPTYLISTP (CDR (form))) {
       marlais_error ("malformed bind-exit form", form, NULL);
@@ -433,30 +434,35 @@ bind_exit_eval (Object form)
     if (!NAMEP (sym)) {
       marlais_error ("bind-exit: bad exit procedure name", sym, NULL);
     }
-    exit_obj = marlais_make_exit (sym);
 
+    /* build the exit object including the special marker frame */
+    exit_obj = marlais_allocate_object (Exit, sizeof (struct exitproc));
     marlais_push_scope (CAR (form));
     marlais_add_local (sym, exit_obj, 1, the_env);
+    EXITSYM (exit_obj) = sym;
+    EXITVAL (exit_obj) = MARLAIS_UNSPECIFIED;
     EXITBINDING (exit_obj) = the_env->bindings[0];
-    ret = (Object) setjmp (*EXITRET (exit_obj));
-
-
-    if (!ret) {
+    err = setjmp (EXITJMP (exit_obj));
+    if (err) {
+      /* exit called */
+      /* TODO burn the exit */
+      ret = EXITVAL (exit_obj);
+    } else {
+      /* evaluate the body */
 #if 1
+      /* evaluate without tail calls */
+      /* TODO consider different implementation? */
       ret = MARLAIS_FALSE;
       while (!EMPTYLISTP (body)) {
         ret = marlais_eval (CAR (body));
         body = CDR (body);
       }
 #else
-      eval_body (body, MARLAIS_FALSE);
+      ret = eval_body (body, MARLAIS_FALSE);
 #endif
-      marlais_pop_scope ();
-      return (ret);
-    } else {
-      marlais_pop_scope ();
-      return (ret);
     }
+    marlais_pop_scope ();
+    return (ret);
 }
 
 static Object

@@ -37,17 +37,6 @@
 #include <marlais/alloc.h>
 #include <marlais/prim.h>
 
-/* jump buffer must be filled in by
-   calling routine. */
-Object
-marlais_make_exit (Object sym)
-{
-  Object obj = marlais_allocate_object (Exit, sizeof (struct exitproc));
-  EXITSYM (obj) = sym;
-  EXITRET (obj) = (jmp_buf *) marlais_allocate_memory (sizeof (jmp_buf));
-  return (obj);
-}
-
 Object
 marlais_make_unwind (Object body)
 {

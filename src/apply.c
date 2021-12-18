@@ -658,15 +658,20 @@ static Object
 apply_exit (Object exit_proc, Object args)
 {
   if (unwind_to_exit (exit_proc)) {
-    /* XXX casts are wrong and must be fixed */
+    Object val;
     switch (marlais_list_length (args)) {
     case 0:
-      longjmp (*EXITRET (exit_proc), (int) (MARLAIS_UNSPECIFIED));
+      val = MARLAIS_UNSPECIFIED;
+      break;
     case 1:
-      longjmp (*EXITRET (exit_proc), (int) FIRST (args));
+      val = FIRST (args);
+      break;
     default:
-      longjmp (*EXITRET (exit_proc), (int) (marlais_values (args)));
+      val = marlais_values(args);
+      break;
     }
+    EXITVAL (exit_proc) = val;
+    longjmp (EXITJMP (exit_proc), 1);
   } else {
     return marlais_error ("No exit procedure binding -- returning", 0);
   }

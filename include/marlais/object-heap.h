@@ -434,13 +434,15 @@ struct values {
 
 struct exitproc {
     ObjectHeader header;
-    Object sym;
-    jmp_buf *ret;
+    Object  sym;
+    Object  val;
+    jmp_buf jmp;
     struct binding *exit_binding;
 };
 
 #define EXITSYM(obj)      (((struct exitproc *)obj)->sym)
-#define EXITRET(obj)      (((struct exitproc *)obj)->ret)
+#define EXITVAL(obj)      (((struct exitproc *)obj)->val)
+#define EXITJMP(obj)      (((struct exitproc *)obj)->jmp)
 #define EXITBINDING(obj)  (((struct exitproc *)obj)->exit_binding)
 
 struct unwind {
