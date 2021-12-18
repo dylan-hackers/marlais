@@ -312,6 +312,7 @@ string:
 
 /*              # we ignore this restriction
                 # and allow all escape characters
+                # TODO we should not
 escapeCHAR      [\\\'\"abefnrt0]|{hexDIG}
 */
 
