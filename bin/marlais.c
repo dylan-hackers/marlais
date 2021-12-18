@@ -185,7 +185,6 @@ main (int argc, char *argv[])
     the_env = cache_env;
     eval_stack = 0;
     marlais_push_eval_stack (MODULE(marlais_get_current_module ())->sym);
-    num_debug_contexts = 0;
     prompt = "? ";
     current_prompt = prompt;
   }

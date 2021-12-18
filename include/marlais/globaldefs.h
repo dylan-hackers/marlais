@@ -35,6 +35,7 @@ GLOBAL struct environment *the_env;
 GLOBAL Object   marlais_results;
 GLOBAL jmp_buf *marlais_error_jump;
 GLOBAL jmp_buf *marlais_tail_jump;
+
 GLOBAL bool     marlais_loading;
 GLOBAL Object   marlais_loading_files;
 
@@ -42,8 +43,6 @@ GLOBAL int trace_bindings;
 GLOBAL int trace_functions;
 GLOBAL int trace_only_user_funs;
 GLOBAL int trace_level;
-GLOBAL int num_debug_contexts;
-GLOBAL int NoDebug;
 
 /* important objects */
 GLOBAL Object apply_symbol;

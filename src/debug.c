@@ -21,8 +21,10 @@ extern char* prompt;
 extern char* current_prompt;
 extern int sequence_num;
 
+static int debug_depth;
 static Object debug_results;
 static char prompt_buf[20];
+
 static struct jmp_buf_stack *error_ok_return = 0;
 
 /* Local symbols */
@@ -99,8 +101,8 @@ marlais_push_error (void)
   struct jmp_buf_stack *tmp =
     (struct jmp_buf_stack *) marlais_allocate_memory (sizeof (struct jmp_buf_stack));
 
-  num_debug_contexts++;
-  snprintf(prompt_buf, 20, "Debug[%d]> ", num_debug_contexts);
+  debug_depth++;
+  snprintf(prompt_buf, 20, "Debug[%d]> ", debug_depth);
   prompt = prompt_buf;
   tmp->next = error_ok_return;
   error_ok_return = tmp;
@@ -112,11 +114,11 @@ marlais_pop_error (void)
 {
   jmp_buf *ret = &(error_ok_return->buf);
 
-  num_debug_contexts--;
+  debug_depth--;
   error_ok_return = error_ok_return->next;
 
-  if(num_debug_contexts) {
-    snprintf(prompt_buf, 20, "Debug[%d]> ", num_debug_contexts);
+  if(debug_depth) {
+    snprintf(prompt_buf, 20, "Debug[%d]> ", debug_depth);
     prompt = prompt_buf;
   } else {
     prompt = "? ";

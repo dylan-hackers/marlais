@@ -85,11 +85,10 @@ marlais_error (const char *msg, ...)
   }
   fprintf (stderr, ".\n");
 
-  if (!NoDebug) {
-    ret = marlais_debugger();
-    if (ret != MARLAIS_UNSPECIFIED) {
-      return ret;
-    }
+  /* TODO make this optional? dispatch to dylan? */
+  ret = marlais_debugger();
+  if (ret != MARLAIS_UNSPECIFIED) {
+    return ret;
   }
 
   /* TODO this should be a lookup in dylan module */
