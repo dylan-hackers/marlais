@@ -49,7 +49,7 @@ extern Object marlais_allocate_object (ObjectType type, size_t size);
 /* allocate copy of a zero-terminated string */
 extern char *marlais_allocate_strdup (const char *str);
 
-/* allocate a data structure */
+/* allocate a data structure with casting */
 #define MARLAIS_ALLOCATE_STRUCT(_type) \
   ((_type *)marlais_allocate_memory(sizeof(_type)))
 
