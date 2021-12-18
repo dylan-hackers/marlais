@@ -656,7 +656,7 @@ define method \* (n1 :: <big-integer>, n2 :: <rational>)
 end method \*;
 
 define method \* (n1 :: <rational>, n2 :: <big-integer>)
-  %mpq-mul (as (<big-ratio>, n1), as (<big-ratio>));
+  %mpq-mul (as (<big-ratio>, n1), as (<big-ratio>), n2);
 end method \*;
 
 // <big-integer> and any integer
