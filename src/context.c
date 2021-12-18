@@ -280,7 +280,7 @@ marlais_initialize (void)
 #endif
 
   /* error catch for initialization code */
-  err = setjmp (&errbuf);
+  err = setjmp (errbuf);
   if (err) {
     printf ("error in initialization code -- exiting.\n");
     exit (1);
