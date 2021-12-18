@@ -99,7 +99,6 @@ add_library(marlais_lib
   globals.c
   lexer.c
   list.c
-  misc.c
   module.c
   number.c
   object.c

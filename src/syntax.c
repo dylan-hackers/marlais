@@ -1884,7 +1884,9 @@ unwind_protect_eval (Object form)
   }
   protected = SECOND (form);
   cleanups = CDR (CDR (form));
-  unwind = marlais_make_unwind (cleanups);
+
+  unwind = marlais_allocate_object (Unwind, sizeof (struct unwind));
+  UNWINDBODY (unwind) = cleanups;
 
   marlais_push_scope (CAR (form));
 
