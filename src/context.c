@@ -15,6 +15,7 @@ void
 marlais_initialize (void)
 {
   int err;
+  jmp_buf errbuf;
   const char *dylan_init, *common_init;
 
   /* intialize garbage collector */
@@ -43,6 +44,13 @@ marlais_initialize (void)
   /* initialize additional constants */
   marlais_default = marlais_cons (MARLAIS_FALSE, MARLAIS_FALSE);
   marlais_empty_string = marlais_make_bytestring ("");
+
+  /* initialize interpreter state */
+  marlais_results = MARLAIS_NIL;
+  marlais_error_jump = NULL;
+  marlais_tail_jump = NULL;
+  marlais_loading = false;
+  marlais_loading_files = MARLAIS_NIL;
 
   /* create core modules */
   all_symbol = marlais_make_name ("all");
@@ -245,7 +253,6 @@ marlais_initialize (void)
   marlais_register_class ();
   marlais_register_slot ();
   marlais_register_file ();
-  open_file_list = MARLAIS_NIL; // TODO cleanup
   marlais_register_function ();
   marlais_register_values ();
   marlais_register_print ();
@@ -273,11 +280,12 @@ marlais_initialize (void)
 #endif
 
   /* error catch for initialization code */
-  err = setjmp (error_return);
+  err = setjmp (&errbuf);
   if (err) {
     printf ("error in initialization code -- exiting.\n");
     exit (1);
   }
+  marlais_error_jump = &errbuf;
 
   /* load init code */
   dylan_init = getenv ("MARLAIS_DYLAN_INIT");

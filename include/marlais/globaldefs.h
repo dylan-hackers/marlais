@@ -29,15 +29,15 @@ GLOBAL Object marlais_standard_error;
 GLOBAL Object marlais_module_dylan;
 GLOBAL Object marlais_module_dylan_user;
 
-/* globals */
-GLOBAL jmp_buf error_return;
-GLOBAL int load_file_context;
+/* kernel state */
 GLOBAL struct environment *the_env;
-GLOBAL jmp_buf *the_eval_context;
-GLOBAL Object default_module;
-GLOBAL Object all_symbol;
-GLOBAL Object ResultValueStack;
-GLOBAL Object open_file_list;
+
+GLOBAL Object   marlais_results;
+GLOBAL jmp_buf *marlais_error_jump;
+GLOBAL jmp_buf *marlais_tail_jump;
+GLOBAL bool     marlais_loading;
+GLOBAL Object   marlais_loading_files;
+
 GLOBAL int trace_bindings;
 GLOBAL int trace_functions;
 GLOBAL int trace_only_user_funs;

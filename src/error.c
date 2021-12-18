@@ -215,7 +215,7 @@ static Object
 dylan_error (Object msg_str, Object rest)
 {
   print_dylan_error_helper("error", msg_str, rest);
-  longjmp (error_return, 1);
+  longjmp (*marlais_error_jump, 1);
 }
 
 static Object
@@ -369,14 +369,14 @@ marlais_error (const char *msg, ...)
 	   marlais_cons (marlais_make (simple_error_class, MARLAIS_NIL),
 		 MARLAIS_NIL));
   } else {
-    longjmp (error_return, 1);
+    longjmp (*marlais_error_jump, 1);
   }
 }
 
 static Object
 signal_error_jump ()
 {
-  longjmp (error_return, 1);
+  longjmp (*marlais_error_jump, 1);
 }
 
 static Object
@@ -476,7 +476,7 @@ debug_help (void)
 static Object
 debug_fail (void)
 {
-  longjmp (error_return, 1);
+  longjmp (*marlais_error_jump, 1);
 }
 
 static Object

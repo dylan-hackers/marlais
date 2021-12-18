@@ -43,11 +43,11 @@ load_internal (Object filename)
     Object old_module;
     Object expr_list = MARLAIS_NIL;
     Object *expr_list_ptr;
-    int old_load_file_context;
+    bool old_loading;
 
     /* save current states. */
-    old_load_file_context = load_file_context;
-    load_file_context = 1;
+    old_loading = marlais_loading;
+    marlais_loading = true;
     old_module = marlais_get_current_module ();
 
     fp = open_file (filename);
@@ -74,7 +74,7 @@ load_internal (Object filename)
     marlais_set_current_module (old_module);
 #endif
 
-    load_file_context = old_load_file_context;
+    marlais_loading = old_loading;
 
     return (res);
 }
@@ -97,9 +97,9 @@ marlais_load (Object filename)
 void
 marlais_close_open_files (void)
 {
-  while (PAIRP (open_file_list)) {
-    fclose ((FILE *) FOREIGNPTR (CAR (open_file_list)));
-    open_file_list = CDR (open_file_list);
+  while (PAIRP (marlais_loading_files)) {
+    fclose ((FILE *) FOREIGNPTR (CAR (marlais_loading_files)));
+    marlais_loading_files = CDR (marlais_loading_files);
   }
 }
 
@@ -120,16 +120,16 @@ open_file (Object filename)
   if(!fp) {
     marlais_error ("load: cannot open file", filename, NULL);
   }
-  open_file_list = marlais_cons (marlais_make_foreign_ptr (fp), open_file_list);
+  marlais_loading_files = marlais_cons (marlais_make_foreign_ptr (fp), marlais_loading_files);
   return fp;
 }
 
 static void
 close_file (FILE * fp)
 {
-  if ((FILE *) FOREIGNPTR (CAR (open_file_list)) != fp) {
+  if ((FILE *) FOREIGNPTR (CAR (marlais_loading_files)) != fp) {
     marlais_error ("close-file called with bogus fp (BUG)", NULL);
   }
   fclose (fp);
-  open_file_list = CDR (open_file_list);
+  marlais_loading_files = CDR (marlais_loading_files);
 }

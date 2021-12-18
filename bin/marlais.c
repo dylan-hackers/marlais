@@ -135,6 +135,7 @@ main (int argc, char *argv[])
 {
   char *dylan_init, *common_init;
   int err;
+  jmp_buf errjmp;
   extern int optind;
   struct environment *cache_env;
   int maybe_quit = 0;
@@ -166,13 +167,11 @@ main (int argc, char *argv[])
   if(maybe_quit && !stay) exit(0);
   printf("Marlais %s\n", VERSION);
 
-  load_file_context = 0;
-
   cache_env = the_env;
   current_prompt = prompt;
 
   /* errors reset to here */
-  err = setjmp (error_return);
+  err = setjmp (errjmp);
   /* things to do on an error reset */
   if (err) {
     marlais_close_open_files ();
@@ -182,7 +181,7 @@ main (int argc, char *argv[])
       printf ("; reset\n");
       trace_level = 0;
     }
-    load_file_context = 0;
+    marlais_loading = 0;
     the_env = cache_env;
     eval_stack = 0;
     marlais_push_eval_stack (MODULE(marlais_get_current_module ())->sym);
@@ -190,6 +189,7 @@ main (int argc, char *argv[])
     prompt = "? ";
     current_prompt = prompt;
   }
+  marlais_error_jump = &errjmp;
 
   while(read_eval_print(stdin, 1)) {
     cache_env = the_env;

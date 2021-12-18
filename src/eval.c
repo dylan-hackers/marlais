@@ -12,7 +12,6 @@
 #include <marlais/syntax.h>
 
 struct eval_stack *eval_stack = 0;
-jmp_buf *the_eval_context = NULL;
 static Object the_eval_obj = NULL;
 
 /* Internal function declarations */
@@ -75,10 +74,10 @@ marlais_tail_eval (Object obj)
     }
     if (PAIRP (obj)) {
         the_eval_obj = obj;
-        if (the_eval_context == NULL) {
+        if (marlais_tail_jump == NULL) {
             marlais_error ("tail_eval called without a prior eval in progress.", NULL);
         }
-        longjmp (*the_eval_context, 1);
+        longjmp (*marlais_tail_jump, 1);
     }
 #endif
     /* if it's not a <pair>, then call good old eval. */
@@ -113,21 +112,21 @@ eval_combination (Object obj, int do_apply)
     Object fun, args, ret;
     struct environment *old_env;
     struct eval_stack *old_stack;
-    jmp_buf *old_context;
-    jmp_buf this_context;
+    jmp_buf *old_tail;
+    jmp_buf this_tail;
     int is_tail_call = 0;
     Object tail_required_values;
     Object tail_rest_values;
 
-    ResultValueStack = marlais_cons (marlais_default_result_value (), ResultValueStack);
+    marlais_results = marlais_cons (marlais_default_result_value (), marlais_results);
 
     old_env = the_env;
     old_stack = eval_stack;
 
     /* save a place for tail_eval to longjmp to later. */
-    old_context = the_eval_context;
-    the_eval_context = &this_context;
-    if (setjmp (this_context) != 0) {
+    old_tail = marlais_tail_jump;
+    marlais_tail_jump = &this_tail;
+    if (setjmp (this_tail) != 0) {
         obj = the_eval_obj;
 
         eval_stack = old_stack; /* restore the state of the "eval" stack. */
@@ -158,15 +157,15 @@ eval_combination (Object obj, int do_apply)
     }
 
     /* restore previous frame's context. */
-    the_eval_context = old_context;
+    marlais_tail_jump = old_tail;
 
     /* here we restore the environment since is not restored via tail calls. */
     if (is_tail_call)
         the_env = old_env;
 
-    tail_required_values = CAR (CAR (ResultValueStack));
-    tail_rest_values = CDR (CAR (ResultValueStack));
-    ResultValueStack = CDR (ResultValueStack);
+    tail_required_values = CAR (CAR (marlais_results));
+    tail_rest_values = CDR (CAR (marlais_results));
+    marlais_results = CDR (marlais_results);
 
     ret = marlais_construct_return_values (ret,
                                            tail_required_values,

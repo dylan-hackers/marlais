@@ -625,7 +625,7 @@ int yywrap() {
   char buffer[BUFSIZE];
   char* input;
 
-  if(load_file_context) return 1;
+  if(marlais_loading) return 1;
 
 #ifdef MARLAIS_ENABLE_READLINE
   input = readline(current_prompt);

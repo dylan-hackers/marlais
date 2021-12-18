@@ -52,7 +52,6 @@ marlais_register_apply (void)
   marlais_register_prims (num, apply_prims);
 
   user_keyword = marlais_make_symbol ("user:");
-  ResultValueStack = MARLAIS_NIL;
 }
 
 Object
@@ -333,13 +332,13 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
       /* tail recursion optimization. */
 
       /* If return values of this method are narrower types
-       * than what is currently on top of the ResultValueStack,
+       * than what is currently on top of the marlais_results,
        * trim it down to match.
        */
 
-      narrow_value_types (&CAR (CAR (ResultValueStack)),
+      narrow_value_types (&CAR (CAR (marlais_results)),
                           METHREQVALUES (meth),
-                          &CDR (CAR (ResultValueStack)),
+                          &CDR (CAR (marlais_results)),
                           METHRESTVALUES (meth));
 
       ret = marlais_tail_eval (form);
@@ -453,7 +452,7 @@ marlais_construct_return_values (Object ret,
    * <pcb> could at least wrap it in a stack variable to avoid an alloc.
    */
 
-  ResultValueStack = marlais_cons (marlais_default_result_value (), ResultValueStack);
+  marlais_results = marlais_cons (marlais_default_result_value (), marlais_results);
 
   if (!ret) {
     /*
@@ -519,7 +518,7 @@ marlais_construct_return_values (Object ret,
   if (VALUESNUM (ret) == 1) {
     ret = VALUESELS (ret)[0];
   }
-  ResultValueStack = CDR (ResultValueStack);
+  marlais_results = CDR (marlais_results);
   return (ret);
 }
 
