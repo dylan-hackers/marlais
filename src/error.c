@@ -17,15 +17,15 @@
 
 /* Primitives */
 
-static Object signal_error_jump (void);
-static Object dylan_error (Object msg_str, Object rest);
-static Object dylan_warning (Object msg_str, Object rest);
+static Object prim_signal (void);
+static Object prim_error (Object msg_str, Object rest);
+static Object prim_warning (Object msg_str, Object rest);
 
 static struct primitive error_prims[] =
 {
-  {"%signal-error-jump", prim_0, signal_error_jump},
-  {"%error", prim_1_rest, dylan_error},
-  {"%warning", prim_1_rest, dylan_warning},
+  {"%signal", prim_0, prim_signal},
+  {"%error", prim_1_rest, prim_error},
+  {"%warning", prim_1_rest, prim_warning},
 };
 
 /* Exported functions */
@@ -130,13 +130,7 @@ marlais_fatal (const char *msg, ...)
   abort();
 }
 
-/* Primitives */
-
-static Object
-signal_error_jump ()
-{
-  longjmp (*marlais_error_jump, 1);
-}
+/* Internal functions */
 
 static void
 print_dylan_error_helper(const char* kind, Object msg_str, Object rest)
@@ -155,15 +149,23 @@ print_dylan_error_helper(const char* kind, Object msg_str, Object rest)
   fprintf (stderr, ".\n");
 }
 
+/* Primitives */
+
 static Object
-dylan_error (Object msg_str, Object rest)
+prim_signal (void)
+{
+  longjmp (*marlais_error_jump, 1);
+}
+
+static Object
+prim_error (Object msg_str, Object rest)
 {
   print_dylan_error_helper("error", msg_str, rest);
   longjmp (*marlais_error_jump, 1);
 }
 
 static Object
-dylan_warning (Object msg_str, Object rest)
+prim_warning (Object msg_str, Object rest)
 {
   print_dylan_error_helper("warning", msg_str, rest);
   return MARLAIS_UNSPECIFIED;

@@ -19,5 +19,5 @@ define method cerror (#rest args)
 end method cerror;
 
 define method signal (#rest args)
-  %signal-error-jump();
+  %signal();
 end method signal;
