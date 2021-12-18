@@ -46,6 +46,7 @@ static Object deque_make_entry (Object prev, Object value, Object next);
 
 /* Primitives */
 
+static Object deque_size (Object d);
 static Object deque_push (Object d, Object new);
 static Object deque_pop (Object d);
 static Object deque_push_last (Object d, Object new);
@@ -66,6 +67,7 @@ static Object deque_current_element_setter (Object d,
 
 static struct primitive deque_prims[] =
 {
+/*{"%deque-size", prim_1, deque_size},*/
   {"%deque-push", prim_2, deque_push},
   {"%deque-pop", prim_1, deque_pop},
   {"%deque-push-last", prim_2, deque_push_last},
