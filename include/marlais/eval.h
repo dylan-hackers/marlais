@@ -43,8 +43,6 @@ struct eval_stack {
     struct environment *frame;
 };
 
-extern struct eval_stack *eval_stack;
-
 /* Apply arguments to function */
 extern Object marlais_apply (Object fun, Object args);
 

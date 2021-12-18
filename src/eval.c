@@ -11,9 +11,6 @@
 #include <marlais/stream.h>
 #include <marlais/syntax.h>
 
-struct eval_stack *eval_stack = 0;
-static Object the_eval_obj = NULL;
-
 /* Internal function declarations */
 
 static Object eval_combination (Object obj, int do_apply);

@@ -31,6 +31,8 @@ GLOBAL Object marlais_module_dylan_user;
 
 /* kernel state */
 GLOBAL struct environment *the_env;
+GLOBAL struct eval_stack *eval_stack;
+GLOBAL Object the_eval_obj;
 
 GLOBAL Object   marlais_results;
 GLOBAL jmp_buf *marlais_error_jump;
