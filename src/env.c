@@ -247,8 +247,8 @@ marlais_symbol_binding_top_level (Object sym)
  * with exit_sym as its only binding.  Perform unwind-protect
  * cleanups when we find them.
  */
-int
-unwind_to_exit (Object exit_proc)
+bool
+marlais_unwind_to_exit (Object exit_proc)
 {
   struct environment *frame;
   Object body;
@@ -264,7 +264,7 @@ unwind_to_exit (Object exit_proc)
       if (frame->bindings[0] == EXITBINDING (exit_proc)) {
         the_env = tmp_eval_stack->frame;
         eval_stack = tmp_eval_stack;
-        return 1;
+        return true;
       }
       if (tmp_eval_stack->context == unwind_protect_symbol) {
         body = UNWINDBODY (*(frame->bindings[0]->val));
@@ -284,5 +284,5 @@ unwind_to_exit (Object exit_proc)
   marlais_error ("unwound to end of stack without finding exit context",
                  exit_proc,
                  NULL);
-  return 0;
+  return false;
 }

@@ -74,7 +74,7 @@ extern struct binding *marlais_symbol_binding (Object sym);
 extern struct binding *marlais_symbol_binding_top_level (Object sym);
 
 /* TODO namespace */
-int unwind_to_exit (Object exit_sym);
+extern bool marlais_unwind_to_exit (Object exit_sym);
 struct environment *module_namespace ();
 
 #endif

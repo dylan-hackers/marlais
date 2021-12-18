@@ -657,7 +657,7 @@ apply_generic (Object gen, Object args)
 static Object
 apply_exit (Object exit_proc, Object args)
 {
-  if (unwind_to_exit (exit_proc)) {
+  if (marlais_unwind_to_exit (exit_proc)) {
     Object val;
     switch (marlais_list_length (args)) {
     case 0:
