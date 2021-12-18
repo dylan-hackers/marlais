@@ -86,6 +86,7 @@ add_library(marlais_lib
   class.c
   classprec.c
   context.c
+  debug.c
   deque.c
   env.c
   error.c
@@ -106,6 +107,7 @@ add_library(marlais_lib
   prim.c
   print.c
   sequence.c
+  signal.c
   slot.c
   stdio.c
   stream.c
