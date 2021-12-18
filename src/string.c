@@ -575,7 +575,7 @@ static Object wstring_to_bstring (Object string)
   char *newstr;
 
   len = wcstombs(NULL, WIDESTRVAL (string), 0);
-  assert (len >= 0);
+  //assert (len >= 0);
   newstr = MARLAIS_ALLOCATE_STRING (len + 1);
   // NOTE call wcstombs with space for null byte
   chk = wcstombs(newstr, WIDESTRVAL (string), len + 1);
@@ -590,7 +590,7 @@ static Object bstring_to_wstring (Object string)
   wchar_t *newstr;
 
   len = mbstowcs(NULL, BYTESTRVAL (string), 0);
-  assert (len >= 0);
+  //assert (len >= 0);
   newstr = MARLAIS_ALLOCATE_WSTRING (len + 1);
   // NOTE call mbstowcs with space for null byte
   chk = mbstowcs(newstr, BYTESTRVAL (string), len + 1);
