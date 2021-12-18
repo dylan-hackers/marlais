@@ -7,7 +7,7 @@
 
 /* Initialize standard streams */
 void marlais_initialize_stream (void);
-/* Registream stream primitives */
+/* Register stream primitives */
 void marlais_register_stream (void);
 
 #endif
