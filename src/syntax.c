@@ -19,7 +19,7 @@
 #include <marlais/table.h>
 #include <marlais/values.h>
 
-/* data structures */
+/* Data structures */
 
 struct syntax_entry {
     Object sym;
@@ -27,10 +27,12 @@ struct syntax_entry {
     struct syntax_entry *next;
 };
 
-#define SYNTAX_TABLE_SIZE 1024
-struct syntax_entry *syntax_table[SYNTAX_TABLE_SIZE];
+/* Internal variables */
 
-/* local variables and functions */
+#define SYNTAX_TABLE_SIZE 1024
+static struct syntax_entry *syntax_table[SYNTAX_TABLE_SIZE];
+
+/* Internal functions */
 
 static void install_syntax_entry (char *name, syntax_fun fun);
 static void bind_variables (Object init_list,
@@ -43,10 +45,9 @@ static void add_variable_binding (Object var,
                                   int constant,
                                   struct environment *to_frame);
 
-/* functions emobodying evaluation rules for forms */
+/* Syntax functions */
 
 static Object and_eval (Object form);
-static Object car (Object lst);
 static Object begin_eval (Object form);
 static Object bind_eval (Object form);
 static Object bind_exit_eval (Object form);
@@ -99,7 +100,6 @@ static Object set_module_eval (Object form);
 static Object unless_eval (Object form);
 static Object until_eval (Object form);
 static Object unwind_protect_eval (Object form);
-
 static Object while_eval (Object form);
 static Object local_bind_eval (Object form);
 static Object local_bind_rec_eval (Object form);
@@ -107,7 +107,6 @@ static Object unbinding_begin_eval (Object form);
 
 static char *syntax_operators[] =
 {
-/*  "and", */
     "&",
     "begin",
     "bind",
@@ -129,7 +128,6 @@ static char *syntax_operators[] =
     "for-each",
     "if",
     "method",
-/*  "or", */
     "|",
     "quasiquote",
     "quote",
@@ -147,7 +145,6 @@ static char *syntax_operators[] =
 
 static syntax_fun syntax_functions[] =
 {
- /*    and_eval, */
     and_eval,
     begin_eval,
     bind_eval,
@@ -169,7 +166,6 @@ static syntax_fun syntax_functions[] =
     for_each_eval,
     if_eval,
     method_eval,
-/*  or_eval, */
     or_eval,
     quasiquote_eval,
     quote_eval,
@@ -184,6 +180,8 @@ static syntax_fun syntax_functions[] =
     local_bind_rec_eval,
     unbinding_begin_eval,
 };
+
+/* Exported functions */
 
 void
 marlais_initialize_syntax (void)
@@ -215,6 +213,8 @@ marlais_syntax_function (Object sym)
     return (NULL);
 }
 
+/* Internal functions */
+
 static void
 install_syntax_entry (char *name, syntax_fun fun)
 {
@@ -233,8 +233,135 @@ install_syntax_entry (char *name, syntax_fun fun)
     syntax_table[h] = entry;
 }
 
-/* <pcb> a single function to evaluate bodies. uses tail_eval. */
+static void
+bind_variables (Object init_list,
+                int top_level,
+                int constant,
+                struct environment *to_frame)
+{
+  Object variable, variables, init, val;
+  Object first, last, new;
+  int i, value_count;
 
+  if (!PAIRP (init_list) || EMPTYLISTP (CDR (init_list))) {
+    marlais_error ("Initializer list requires at least two elements", init_list, NULL);
+  }
+  variables = init = init_list;
+  while (!EMPTYLISTP (CDR (init))) {
+    init = CDR (init);
+  }
+  val = marlais_eval (CAR (init));
+  if (VALUESP (val)) {
+    value_count = 0;
+    while (variables != init) {
+      variable = CAR (variables);
+      if (variable == hash_rest_symbol) {
+        variable = SECOND (variables);
+        last = NULL;
+        first = MARLAIS_NIL;
+        /* bind rest values */
+        for (i = value_count; i < VALUESNUM (val); ++i) {
+          new = marlais_cons (VALUESELS (val)[i], MARLAIS_NIL);
+          if (last) {
+            CDR (last) = new;
+          } else {
+            first = new;
+          }
+          last = new;
+        }
+        if (top_level) {
+          marlais_add_export (variable, first, constant);
+        } else {
+          marlais_add_local (variable, first, constant, to_frame);
+        }
+        /* check for no variables after #rest */
+        if (CDR (CDR (variables)) != init) {
+          marlais_error ("Badly placed #rest specifier", init_list, NULL);
+        }
+        /* finished with bindings */
+        break;
+      } else {
+        /* check for not enough inits */
+        if (value_count < VALUESNUM (val)) {
+          new = VALUESELS (val)[value_count];
+        } else {
+          new = MARLAIS_FALSE;
+        }
+        add_variable_binding (variable,
+                              new,
+                              top_level,
+                              constant,
+                              to_frame);
+        value_count++;
+      }
+      variables = CDR (variables);
+    }
+  } else {
+    /* init is not a values object */
+    if (CAR (variables) == hash_rest_symbol) {
+      add_variable_binding (SECOND (variables),
+                            marlais_cons (val, MARLAIS_NIL),
+                            top_level,
+                            constant,
+                            to_frame);
+    } else {
+      add_variable_binding (CAR (variables),
+                            val,
+                            top_level,
+                            constant,
+                            to_frame);
+      for (variables = CDR (variables);
+           variables != init;
+           variables = CDR (variables)) {
+        add_variable_binding (CAR (variables),
+                              MARLAIS_FALSE,
+                              top_level,
+                              constant,
+                              to_frame);
+      }
+    }
+  }
+}
+
+static void
+add_variable_binding (Object var,
+                      Object val,
+                      int top_level,
+                      int constant,
+                      struct environment *to_frame)
+{
+  Object type;
+
+  if (PAIRP (var)) {
+    if (!PAIRP (CDR (var))) {
+      marlais_error ("badly formed variable", var, NULL);
+    }
+    type = marlais_eval (SECOND (var));
+    if (!marlais_instance_p (type, type_class)) {
+      marlais_error ("badly formed variable", var, NULL);
+    }
+  } else {
+    type = object_class;
+  }
+  if (top_level) {
+    /* marlais_add_export can't easily check type match.
+     * do it here.
+     */
+    if (!marlais_instance_p (val, type)) {
+      marlais_error ("initial value does not satisfy type constraint",
+                     val,
+                     type,
+                     NULL);
+    }
+    marlais_add_export (var, val, constant);
+  } else {
+    marlais_add_local (var, val, constant, to_frame);
+  }
+}
+
+/* Syntax functions */
+
+/* CAUTION: this uses tail optimization */
 static Object
 eval_body (Object body, Object null_body_result_value)
 {
@@ -253,9 +380,6 @@ eval_body (Object body, Object null_body_result_value)
 
     return result;
 }
-
-/* functions that perform the special evaluation
-   rules for syntax forms. */
 
 static Object
 and_eval (Object form)
@@ -621,132 +745,6 @@ define_constant_eval (Object form)
 {
   define_eval_helper(form, 1, 1);
   return MARLAIS_UNSPECIFIED;
-}
-
-static void
-bind_variables (Object init_list,
-                int top_level,
-                int constant,
-                struct environment *to_frame)
-{
-  Object variable, variables, init, val;
-  Object first, last, new;
-  int i, value_count;
-
-  if (!PAIRP (init_list) || EMPTYLISTP (CDR (init_list))) {
-    marlais_error ("Initializer list requires at least two elements", init_list, NULL);
-  }
-  variables = init = init_list;
-  while (!EMPTYLISTP (CDR (init))) {
-    init = CDR (init);
-  }
-  val = marlais_eval (CAR (init));
-  if (VALUESP (val)) {
-    value_count = 0;
-    while (variables != init) {
-      variable = CAR (variables);
-      if (variable == hash_rest_symbol) {
-        variable = SECOND (variables);
-        last = NULL;
-        first = MARLAIS_NIL;
-        /* bind rest values */
-        for (i = value_count; i < VALUESNUM (val); ++i) {
-          new = marlais_cons (VALUESELS (val)[i], MARLAIS_NIL);
-          if (last) {
-            CDR (last) = new;
-          } else {
-            first = new;
-          }
-          last = new;
-        }
-        if (top_level) {
-          marlais_add_export (variable, first, constant);
-        } else {
-          marlais_add_local (variable, first, constant, to_frame);
-        }
-        /* check for no variables after #rest */
-        if (CDR (CDR (variables)) != init) {
-          marlais_error ("Badly placed #rest specifier", init_list, NULL);
-        }
-        /* finished with bindings */
-        break;
-      } else {
-        /* check for not enough inits */
-        if (value_count < VALUESNUM (val)) {
-          new = VALUESELS (val)[value_count];
-        } else {
-          new = MARLAIS_FALSE;
-        }
-        add_variable_binding (variable,
-                              new,
-                              top_level,
-                              constant,
-                              to_frame);
-        value_count++;
-      }
-      variables = CDR (variables);
-    }
-  } else {
-    /* init is not a values object */
-    if (CAR (variables) == hash_rest_symbol) {
-      add_variable_binding (SECOND (variables),
-                            marlais_cons (val, MARLAIS_NIL),
-                            top_level,
-                            constant,
-                            to_frame);
-    } else {
-      add_variable_binding (CAR (variables),
-                            val,
-                            top_level,
-                            constant,
-                            to_frame);
-      for (variables = CDR (variables);
-           variables != init;
-           variables = CDR (variables)) {
-        add_variable_binding (CAR (variables),
-                              MARLAIS_FALSE,
-                              top_level,
-                              constant,
-                              to_frame);
-      }
-    }
-  }
-}
-
-static void
-add_variable_binding (Object var,
-                      Object val,
-                      int top_level,
-                      int constant,
-                      struct environment *to_frame)
-{
-  Object type;
-
-  if (PAIRP (var)) {
-    if (!PAIRP (CDR (var))) {
-      marlais_error ("badly formed variable", var, NULL);
-    }
-    type = marlais_eval (SECOND (var));
-    if (!marlais_instance_p (type, type_class)) {
-      marlais_error ("badly formed variable", var, NULL);
-    }
-  } else {
-    type = object_class;
-  }
-  if (top_level) {
-    /* marlais_add_export can't easily check type match.
-     * do it here.
-     */
-    if (!marlais_instance_p (val, type)) {
-      marlais_error ("initial value does not satisfy type constraint",
-                     val,
-                     type,
-                     NULL);
-    }
-    marlais_add_export (var, val, constant);
-  } else {
-    marlais_add_local (var, val, constant, to_frame);
-  }
 }
 
 static Object
@@ -1571,7 +1569,7 @@ for_each_eval (Object form)
   return_forms = CDR (THIRD (form));
 
   var_forms = SECOND (form);
-  vars = marlais_map1 (car, var_forms);
+  vars = marlais_map1 (marlais_car, var_forms);
   collections = marlais_map1 (marlais_second, var_forms);
   collections = marlais_map1 (marlais_eval, collections);
   states = marlais_map_apply1 (init_state_fun, collections);
