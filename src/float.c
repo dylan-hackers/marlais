@@ -49,7 +49,10 @@ static Object prim_double_to_int (Object n);
 
 static Object prim_double_lessthan (Object n1, Object n2);
 
+static Object prim_double_nan_p (Object n);
 static Object prim_double_zero_p (Object n);
+static Object prim_double_finite_p (Object n);
+static Object prim_double_infinite_p (Object n);
 static Object prim_double_positive_p (Object n);
 static Object prim_double_negative_p (Object n);
 
@@ -89,7 +92,10 @@ static struct primitive float_prims[] =
 
     {"%double<", prim_2, prim_double_lessthan},
 
+    {"%double-nan?", prim_1, prim_double_nan_p},
     {"%double-zero?", prim_1, prim_double_zero_p},
+    {"%double-finite?", prim_1, prim_double_finite_p},
+    {"%double-infinite?", prim_1, prim_double_infinite_p},
     {"%double-positive?", prim_1, prim_double_positive_p},
     {"%double-negative?", prim_1, prim_double_negative_p},
 
@@ -303,13 +309,27 @@ prim_double_lessthan (Object n1, Object n2)
 }
 
 static Object
+prim_double_nan_p (Object n)
+{
+    return marlais_make_boolean (isnan (DFLOATVAL (n)));
+}
+
+static Object
 prim_double_zero_p (Object n)
 {
-    if (DFLOATVAL (n) == 0.0) {
-        return (MARLAIS_TRUE);
-    } else {
-        return (MARLAIS_FALSE);
-    }
+    return marlais_make_boolean (fpclassify (DFLOATVAL (n)) == FP_ZERO);
+}
+
+static Object
+prim_double_finite_p (Object n)
+{
+    return marlais_make_boolean (isfinite (DFLOATVAL (n)));
+}
+
+static Object
+prim_double_infinite_p (Object n)
+{
+    return marlais_make_boolean (isinf (DFLOATVAL (n)));
 }
 
 static Object

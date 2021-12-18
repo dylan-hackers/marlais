@@ -20,6 +20,12 @@ define generic positive? (r :: <object>) => value :: <boolean>;
 define generic negative? (r :: <object>) => value :: <boolean>;
 define generic integral? (n :: <object>) => value :: <boolean>;
 
+// Extended predicates
+
+define generic nan? (n :: <object>) => value :: <boolean>;
+define generic finite? (n :: <object>) => value :: <boolean>;
+define generic infinite? (n :: <object>) => value :: <boolean>;
+
 // Basic arithmetic operations
 
 define generic \+ (n1 :: <number>, n2 :: <number>) => value :: <number>;
@@ -152,6 +158,40 @@ end method integral?;
 define method integral? (i :: <integer>) => value :: <boolean>;
   #t;
 end method integral?;
+
+//
+// Extended predicates
+//
+
+define method nan? (n :: <number>)
+ => (value :: <boolean>);
+  #f
+end method;
+
+define method finite? (n :: <number>)
+ => (value :: <boolean>);
+  #t
+end method;
+
+define method infinite? (n :: <number>)
+ => (value :: <boolean>);
+  #f
+end method;
+
+define method nan? (n :: <double-float>)
+ => (value :: <boolean>);
+  %double-nan? (n);
+end method;
+
+define method finite? (n :: <double-float>)
+ => (value :: <boolean>);
+  %double-finite? (n);
+end method;
+
+define method infinite? (n :: <double-float>)
+ => (value :: <boolean>);
+  %double-infinite? (n);
+end method;
 
 //
 // Arithmetic operations
