@@ -40,7 +40,9 @@ static void print_top_level_constant(Object obj, int bind_p)
   }
 
   marlais_apply (marlais_eval (print_symbol),
-	 marlais_make_list (obj, marlais_eval(standard_output_symbol), NULL));
+                 marlais_make_list (obj,
+                                    marlais_eval(standard_output_symbol),
+                                    NULL));
 
   fprintf (stdout, "\n");
 }
@@ -78,19 +80,19 @@ static void show_help()
 {
   printf("Marlais %s -- a Dylan Language Interactor\n\n", VERSION);
   printf("marlais [-dhnpsv] [-e '<Dylan expression>'|<file.dylan> ...]\n\n"
-  	 "Options:\n  -d -- Provide debugging information\n"
-  	 "  -e -- Execute Dylan expression, print return values and "
-	 "optionally exit\n"
-  	 "  -h -- Show help information on Marlais\n"
-  	 "  -n -- Do not load bootstrap init.dylan file\n"
-	 "  -p -- Do not show continuation prompt for incomplete "
-	 "expressions\n"
-	 "  -s -- Stay in interactor after executing file or expression\n"
-	 "  -v -- print version number\n\n"
-	 "If Marlais receives files to execute, it will do so, in order, and\n"
-	 "then (optionally) exit.\n\n"
-	 "To quit the interactor, send it the EOF or BRK character at the\n"
-	 "prompt (EOF is <CTRL>-D for Unix and <CTRL>-Z for Windows, BRK is\n"
+         "Options:\n  -d -- Provide debugging information\n"
+         "  -e -- Execute Dylan expression, print return values and "
+         "optionally exit\n"
+         "  -h -- Show help information on Marlais\n"
+         "  -n -- Do not load bootstrap init.dylan file\n"
+         "  -p -- Do not show continuation prompt for incomplete "
+         "expressions\n"
+         "  -s -- Stay in interactor after executing file or expression\n"
+         "  -v -- print version number\n\n"
+         "If Marlais receives files to execute, it will do so, in order, and\n"
+         "then (optionally) exit.\n\n"
+         "To quit the interactor, send it the EOF or BRK character at the\n"
+         "prompt (EOF is <CTRL>-D for Unix and <CTRL>-Z for Windows, BRK is\n"
          "<CTRL-C>).\n");
   exit(0);
 }
