@@ -41,6 +41,9 @@ endif ()
 # EFLOAT support
 option(MARLAIS_ENABLE_EFLOAT "Enable extended float precision" ON)
 
+# WCHAR support
+option(MARLAIS_ENABLE_WCHAR "Enable wide character support" ON)
+
 # GMP bignum support
 option(MARLAIS_ENABLE_GMP "Enable GMP bignum support" ON)
 if (MARLAIS_ENABLE_GMP)
@@ -55,9 +58,6 @@ option(MARLAIS_ENABLE_ICU "Enable ICU unicode support" ON)
 if (MARLAIS_ENABLE_ICU)
   set (MARLAIS_ICU_SOURCES unicode.c)
 endif ()
-
-# WCHAR support
-option(MARLAIS_ENABLE_WCHAR "Enable wide character support" ON)
 
 # Generate config header
 configure_file(config.h.in ../include/marlais/config.h)
