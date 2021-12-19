@@ -32,18 +32,21 @@ static Object ratio_cache[MARLAIS_CONFIG_RATIO_CACHE^2];
 
 /* Primitives */
 
-static Object prim_odd_p (Object n);
-static Object prim_even_p (Object n);
+static Object prim_int_less_than (Object n1, Object n2);
+static Object prim_int_odd_p (Object n);
+static Object prim_int_even_p (Object n);
 static Object prim_int_zero_p (Object n);
 static Object prim_int_positive_p (Object n);
 static Object prim_int_negative_p (Object n);
 static Object prim_int_negative (Object n);
 static Object prim_int_inverse (Object n);
-static Object prim_binary_int_plus (Object n1, Object n2);
-static Object prim_binary_int_minus (Object n1, Object n2);
-static Object prim_binary_int_times (Object n1, Object n2);
-static Object prim_binary_int_divide (Object n1, Object n2);
-static Object prim_binary_less_than (Object n1, Object n2);
+static Object prim_int_add (Object n1, Object n2);
+static Object prim_int_sub (Object n1, Object n2);
+static Object prim_int_mul (Object n1, Object n2);
+static Object prim_int_div (Object n1, Object n2);
+static Object prim_int_rem (Object i1, Object i2);
+static Object prim_int_mod (Object d1, Object d2);
+static Object prim_int_truncate_divide (Object i1, Object i2);
 static Object prim_int_sqrt (Object n);
 static Object prim_int_abs (Object n);
 static Object prim_int_quotient (Object n1, Object n2);
@@ -52,35 +55,39 @@ static Object prim_int_lognot (Object n1);
 static Object prim_int_logand (Object n1, Object n2);
 static Object prim_int_logior (Object n1, Object n2);
 static Object prim_int_logxor (Object n1, Object n2);
-static Object prim_int_modulo (Object d1, Object d2);
-static Object prim_int_remainder (Object i1, Object i2);
-static Object prim_int_truncate_divide (Object i1, Object i2);
 
 static struct primitive number_prims[] =
 {
-    {"%int-odd?", prim_1, prim_odd_p},
-    {"%int-even?", prim_1, prim_even_p},
+    {"%int<", prim_2, prim_int_less_than},
+
+    {"%int-odd?", prim_1, prim_int_odd_p},
+    {"%int-even?", prim_1, prim_int_even_p},
     {"%int-zero?", prim_1, prim_int_zero_p},
     {"%int-positive?", prim_1, prim_int_positive_p},
     {"%int-negative?", prim_1, prim_int_negative_p},
-    {"%int-negative", prim_1, prim_int_negative},
-    {"%int-inverse", prim_1, prim_int_inverse},
-    {"%int+", prim_2, prim_binary_int_plus},
-    {"%int-", prim_2, prim_binary_int_minus},
-    {"%int*", prim_2, prim_binary_int_times},
-    {"%int/", prim_2, prim_binary_int_divide},
-    {"%int<", prim_2, prim_binary_less_than},
-    {"%int-sqrt", prim_1, prim_int_sqrt},
+
     {"%int-abs", prim_1, prim_int_abs},
-    {"%int-quotient", prim_2, prim_int_quotient},
+    {"%int-negative", prim_1, prim_int_negative},
+
+    {"%int-inverse", prim_1, prim_int_inverse},
+
+    {"%int-add", prim_2, prim_int_add},
+    {"%int-sub", prim_2, prim_int_sub},
+    {"%int-mul", prim_2, prim_int_mul},
+    {"%int-div", prim_2, prim_int_div},
+    {"%int-mod", prim_2, prim_int_mod},
+    {"%int-rem", prim_2, prim_int_rem},
+
+    {"%int-truncate/", prim_2, prim_int_truncate_divide},
+
     {"%int-ash", prim_2, prim_int_ash},
+    {"%int-quotient", prim_2, prim_int_quotient},
     {"%int-lognot", prim_1, prim_int_lognot},
     {"%int-logand", prim_2, prim_int_logand},
     {"%int-logior", prim_2, prim_int_logior},
     {"%int-logxor", prim_2, prim_int_logxor},
-    {"%int-modulo", prim_2, prim_int_modulo},
-    {"%int-remainder", prim_2, prim_int_remainder},
-    {"%int-truncate/", prim_2, prim_int_truncate_divide},
+
+    {"%int-sqrt", prim_1, prim_int_sqrt},
 };
 
 /* function definitions */
@@ -165,7 +172,41 @@ marlais_make_ratio (DyInteger numerator, DyInteger denominator)
 /* Primitives */
 
 static Object
-prim_odd_p (Object n)
+prim_int_less_than (Object n1, Object n2)
+{
+    if (INTEGERP (n1)) {
+        if (INTEGERP (n2)) {
+            if (INTVAL (n1) < INTVAL (n2)) {
+                return (MARLAIS_TRUE);
+            } else {
+                return (MARLAIS_FALSE);
+            }
+        } else {
+            if (INTVAL (n1) < DFLOATVAL (n2)) {
+                return (MARLAIS_TRUE);
+            } else {
+                return (MARLAIS_FALSE);
+            }
+        }
+    } else {
+        if (INTEGERP (n2)) {
+            if (DFLOATVAL (n1) < INTVAL (n2)) {
+                return (MARLAIS_TRUE);
+            } else {
+                return (MARLAIS_FALSE);
+            }
+        } else {
+            if (DFLOATVAL (n1) < DFLOATVAL (n2)) {
+                return (MARLAIS_TRUE);
+            } else {
+                return (MARLAIS_FALSE);
+            }
+        }
+    }
+}
+
+static Object
+prim_int_odd_p (Object n)
 {
     if ((INTVAL (n) % 2) == 1) {
         return (MARLAIS_TRUE);
@@ -175,7 +216,7 @@ prim_odd_p (Object n)
 }
 
 static Object
-prim_even_p (Object n)
+prim_int_even_p (Object n)
 {
     if ((INTVAL (n) % 2) == 0) {
         return (MARLAIS_TRUE);
@@ -227,13 +268,13 @@ prim_int_inverse (Object n)
 }
 
 static Object
-prim_binary_int_plus (Object n1, Object n2)
+prim_int_add (Object n1, Object n2)
 {
     return (marlais_make_integer (INTVAL (n1) + INTVAL (n2)));
 }
 
 static Object
-prim_binary_int_minus (Object n1, Object n2)
+prim_int_sub (Object n1, Object n2)
 {
     return (marlais_make_integer (INTVAL (n1) - INTVAL (n2)));
 }
@@ -241,7 +282,7 @@ prim_binary_int_minus (Object n1, Object n2)
 #ifdef MARLAIS_ENABLE_BIG_INTEGERS
 
 static Object
-prim_binary_int_times (Object n1, Object n2)
+prim_int_mul (Object n1, Object n2)
 {
     int i1 = INTVAL (n1), i2 = INTVAL (n2);
 
@@ -255,7 +296,7 @@ prim_binary_int_times (Object n1, Object n2)
 #else
 
 static Object
-prim_binary_int_times (Object n1, Object n2)
+prim_int_mul (Object n1, Object n2)
 {
     return (marlais_make_integer (INTVAL (n1) * INTVAL (n2)));
 }
@@ -263,46 +304,12 @@ prim_binary_int_times (Object n1, Object n2)
 #endif
 
 static Object
-prim_binary_int_divide (Object n1, Object n2)
+prim_int_div (Object n1, Object n2)
 {
     if ((INTVAL (n1) % INTVAL (n2)) == 0) {
         return (marlais_make_integer (INTVAL (n1) / INTVAL (n2)));
     } else {
         return (marlais_make_dfloat ((double) INTVAL (n1) / (double) INTVAL (n2)));
-    }
-}
-
-static Object
-prim_binary_less_than (Object n1, Object n2)
-{
-    if (INTEGERP (n1)) {
-        if (INTEGERP (n2)) {
-            if (INTVAL (n1) < INTVAL (n2)) {
-                return (MARLAIS_TRUE);
-            } else {
-                return (MARLAIS_FALSE);
-            }
-        } else {
-            if (INTVAL (n1) < DFLOATVAL (n2)) {
-                return (MARLAIS_TRUE);
-            } else {
-                return (MARLAIS_FALSE);
-            }
-        }
-    } else {
-        if (INTEGERP (n2)) {
-            if (DFLOATVAL (n1) < INTVAL (n2)) {
-                return (MARLAIS_TRUE);
-            } else {
-                return (MARLAIS_FALSE);
-            }
-        } else {
-            if (DFLOATVAL (n1) < DFLOATVAL (n2)) {
-                return (MARLAIS_TRUE);
-            } else {
-                return (MARLAIS_FALSE);
-            }
-        }
     }
 }
 
@@ -380,7 +387,7 @@ prim_sign (int x)
 }
 
 static Object
-prim_int_modulo (Object i1, Object i2)
+prim_mod (Object i1, Object i2)
 {
     int i1val = INTVAL (i1);
     int i2val = INTVAL (i2);
@@ -398,7 +405,7 @@ prim_int_modulo (Object i1, Object i2)
 #else
 
 static Object
-prim_int_modulo (Object i1, Object i2)
+prim_int_mod (Object i1, Object i2)
 {
     double d1val;
     double d2val;
@@ -410,7 +417,7 @@ prim_int_modulo (Object i1, Object i2)
 #endif
 
 static Object
-prim_int_remainder (Object i1, Object i2)
+prim_int_rem (Object i1, Object i2)
 {
     int i1val;
     int i2val;

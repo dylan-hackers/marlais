@@ -25,13 +25,16 @@ static void  gmp_gc_free (void *obj, size_t old_size);
 #define DECLARE_BINARY(_mtype, _name)                               \
   static Object prim_ ## _mtype ## _ ## _name (Object a, Object b); \
   static Object prim_ ## _mtype ## _ ## _name ## _bang (Object res, Object a, Object b);
+#define DECLARE_DIVIDE(_mtype, _name)                               \
+  static Object prim_ ## _mtype ## _ ## _name (Object a, Object b); \
+  static Object prim_ ## _mtype ## _ ## _name ## _bang (Object q, Object r, Object a, Object b);
 #define DECLARE_PREDICATE(_mtype, _name)                        \
   static Object prim_ ## _mtype ## _ ## _name ## _p (Object a);
 #define DECLARE_COMPARE(_mtype)                                     \
   static Object prim_ ## _mtype ## _lessthan (Object a, Object b);  \
   static Object prim_ ## _mtype ## _equal (Object a, Object b);
 
-/* Primitives that operate on <mp-float> */
+/* Primitives that operate on <big-float> */
 static Object prim_string_to_mpf(Object str, Object base);
 static Object prim_mpf_precision(Object obj);
 static Object prim_mpf_precision_setter(Object obj, Object value);
@@ -52,7 +55,7 @@ DECLARE_UNARY(mpf, floor);
 DECLARE_UNARY(mpf, trunc);
 DECLARE_UNARY(mpf, sqrt);
 
-/* Primitives that operate on <mp-ratio> */
+/* Primitives that operate on <big-ratio> */
 static Object prim_string_to_mpq(Object str, Object base);
 static Object prim_mpq_set_bang(Object obj, Object value);
 DECLARE_COMPARE(mpq);
@@ -67,7 +70,7 @@ DECLARE_UNARY(mpq, neg);
 DECLARE_UNARY(mpq, abs);
 DECLARE_UNARY(mpq, inv);
 
-/* Primitives that operate on <mp-integer> */
+/* Primitives that operate on <big-integer> */
 static Object prim_string_to_mpz(Object str, Object base);
 static Object prim_mpz_set_bang(Object obj, Object value);
 DECLARE_COMPARE(mpz);
@@ -81,15 +84,21 @@ DECLARE_BINARY(mpz, sub);
 DECLARE_BINARY(mpz, mul);
 DECLARE_BINARY(mpz, cdiv_q);
 DECLARE_BINARY(mpz, cdiv_r);
-DECLARE_BINARY(mpz, cdiv_qr);
+DECLARE_DIVIDE(mpz, cdiv_qr);
 DECLARE_BINARY(mpz, fdiv_q);
 DECLARE_BINARY(mpz, fdiv_r);
-DECLARE_BINARY(mpz, fdiv_qr);
+DECLARE_DIVIDE(mpz, fdiv_qr);
 DECLARE_BINARY(mpz, tdiv_q);
 DECLARE_BINARY(mpz, tdiv_r);
-DECLARE_BINARY(mpz, tdiv_qr);
+DECLARE_DIVIDE(mpz, tdiv_qr);
 DECLARE_UNARY(mpz, neg);
 DECLARE_UNARY(mpz, abs);
+DECLARE_UNARY(mpz, com);
+#if 0
+DECLARE_BINARY(mpz, and);
+DECLARE_BINARY(mpz, ior);
+DECLARE_BINARY(mpz, xor);
+#endif
 
 /* We no longer need the declaration macros */
 #undef DECLARE_UNARY
@@ -100,86 +109,134 @@ DECLARE_UNARY(mpz, abs);
 /* Our table of primitives */
 static struct primitive gmp_prims[] =
 {
- /* <mp-float> */
+  /* <big-float> */
+
   {"%number->mpf", prim_1, marlais_make_mpf_from_number},
   {"%string->mpf", prim_2, prim_string_to_mpf},
+
   {"%mpf-precision", prim_1, prim_mpf_precision},
   {"%mpf-precision-setter", prim_2, prim_mpf_precision_setter},
+
   {"%mpf<", prim_2, prim_mpf_lessthan},
   {"%mpf=", prim_2, prim_mpf_equal},
+
   {"%mpf-zero?", prim_1, prim_mpf_zero_p},
   {"%mpf-positive?", prim_1, prim_mpf_positive_p},
   {"%mpf-negative?", prim_1, prim_mpf_negative_p},
-  {"%mpf-set!", prim_2, prim_mpf_set_bang},
+
+  {"%mpf-abs", prim_1, prim_mpf_abs},
+  {"%mpf-neg", prim_1, prim_mpf_neg},
+
   {"%mpf-add", prim_2, prim_mpf_add},
   {"%mpf-sub", prim_2, prim_mpf_sub},
   {"%mpf-mul", prim_2, prim_mpf_mul},
   {"%mpf-div", prim_2, prim_mpf_div},
-  {"%mpf-pow", prim_2, prim_mpf_pow},
-  {"%mpf-neg", prim_1, prim_mpf_neg},
-  {"%mpf-abs", prim_1, prim_mpf_abs},
+
   {"%mpf-ceil", prim_1, prim_mpf_ceil},
   {"%mpf-floor", prim_1, prim_mpf_floor},
   {"%mpf-trunc", prim_1, prim_mpf_trunc},
+
+  {"%mpf-pow", prim_2, prim_mpf_pow},
   {"%mpf-sqrt", prim_1, prim_mpf_sqrt},
 
-  /* <mp-ratio> */
+  {"%mpf-set!", prim_2, prim_mpf_set_bang},
+
+  /* <big-ratio> */
+
   {"%number->mpq", prim_1, marlais_make_mpq_from_number},
   {"%string->mpq", prim_2, prim_string_to_mpq},
+
   {"%mpq<", prim_2, prim_mpq_lessthan},
   {"%mpq=", prim_2, prim_mpq_equal},
+
   {"%mpq-zero?", prim_1, prim_mpq_zero_p},
   {"%mpq-positive?", prim_1, prim_mpq_positive_p},
   {"%mpq-negative?", prim_1, prim_mpq_negative_p},
-  {"%mpq-set!", prim_2, prim_mpq_set_bang},
+
+  {"%mpq-abs", prim_1, prim_mpq_abs},
+  {"%mpq-neg", prim_1, prim_mpq_neg},
+  {"%mpq-inv", prim_1, prim_mpq_inv},
+
   {"%mpq-add", prim_2, prim_mpq_add},
   {"%mpq-sub", prim_2, prim_mpq_sub},
   {"%mpq-mul", prim_2, prim_mpq_mul},
   {"%mpq-div", prim_2, prim_mpq_div},
-  {"%mpq-neg", prim_1, prim_mpq_neg},
-  {"%mpq-abs", prim_1, prim_mpq_abs},
-  {"%mpq-inv", prim_1, prim_mpq_inv},
+
+  {"%mpq-set!", prim_2, prim_mpq_set_bang},
+
+  {"%mpq-abs!", prim_2, prim_mpq_abs_bang},
+  {"%mpq-neg!", prim_2, prim_mpq_neg_bang},
+  {"%mpq-inv!", prim_2, prim_mpq_inv_bang},
+
   {"%mpq-add!", prim_3, prim_mpq_add_bang},
   {"%mpq-sub!", prim_3, prim_mpq_sub_bang},
   {"%mpq-mul!", prim_3, prim_mpq_mul_bang},
   {"%mpq-div!", prim_3, prim_mpq_div_bang},
-  {"%mpq-neg!", prim_2, prim_mpq_neg_bang},
-  {"%mpq-abs!", prim_2, prim_mpq_abs_bang},
-  {"%mpq-inv!", prim_2, prim_mpq_inv_bang},
 
-  /* <mp-integer> */
+  /* <big-integer> */
+
   {"%number->mpz", prim_1, marlais_make_mpz_from_number},
   {"%string->mpz", prim_2, prim_string_to_mpz},
+
   {"%mpz<", prim_2, prim_mpz_lessthan},
   {"%mpz=", prim_2, prim_mpz_equal},
+
   {"%mpz-zero?", prim_1, prim_mpz_zero_p},
   {"%mpz-positive?", prim_1, prim_mpz_positive_p},
   {"%mpz-negative?", prim_1, prim_mpz_negative_p},
   {"%mpz-odd?", prim_1, prim_mpz_odd_p},
   {"%mpz-even?", prim_1, prim_mpz_even_p},
-  {"%mpz-set!", prim_2, prim_mpz_set_bang},
+
+  {"%mpz-abs", prim_1, prim_mpz_abs},
+  {"%mpz-neg", prim_1, prim_mpz_neg},
+
   {"%mpz-add", prim_2, prim_mpz_add},
   {"%mpz-sub", prim_2, prim_mpz_sub},
   {"%mpz-mul", prim_2, prim_mpz_mul},
+
   {"%mpz-cdiv-q", prim_2, prim_mpz_cdiv_q},
   {"%mpz-cdiv-r", prim_2, prim_mpz_cdiv_r},
+  {"%mpz-cdiv-qr", prim_2, prim_mpz_cdiv_qr},
   {"%mpz-fdiv-q", prim_2, prim_mpz_fdiv_q},
   {"%mpz-fdiv-r", prim_2, prim_mpz_fdiv_r},
+  {"%mpz-fdiv-qr", prim_2, prim_mpz_fdiv_qr},
   {"%mpz-tdiv-q", prim_2, prim_mpz_tdiv_q},
   {"%mpz-tdiv-r", prim_2, prim_mpz_tdiv_r},
-  {"%mpz-neg", prim_1, prim_mpz_neg},
-  {"%mpz-abs", prim_1, prim_mpz_abs},
+  {"%mpz-tdiv-qr", prim_2, prim_mpz_tdiv_qr},
+
+#if 0
+  {"%mpz-com", prim_1, prim_mpz_com},
+  {"%mpz-and", prim_2, prim_mpz_and},
+  {"%mpz-ior", prim_2, prim_mpz_ior},
+  {"%mpz-xor", prim_2, prim_mpz_xor},
+#endif
+
+  {"%mpz-set!", prim_2, prim_mpz_set_bang},
+
+  {"%mpz-abs!", prim_2, prim_mpz_abs_bang},
+  {"%mpz-neg!", prim_2, prim_mpz_neg_bang},
+
   {"%mpz-add!", prim_3, prim_mpz_add_bang},
   {"%mpz-sub!", prim_3, prim_mpz_sub_bang},
   {"%mpz-mul!", prim_3, prim_mpz_mul_bang},
+
   {"%mpz-cdiv-q!", prim_3, prim_mpz_cdiv_q_bang},
   {"%mpz-cdiv-r!", prim_3, prim_mpz_cdiv_r_bang},
+  {"%mpz-cdiv-qr!", prim_4, prim_mpz_cdiv_qr_bang},
   {"%mpz-fdiv-q!", prim_3, prim_mpz_fdiv_q_bang},
   {"%mpz-fdiv-r!", prim_3, prim_mpz_fdiv_r_bang},
+  {"%mpz-fdiv-qr!", prim_4, prim_mpz_fdiv_qr_bang},
   {"%mpz-tdiv-q!", prim_3, prim_mpz_tdiv_q_bang},
   {"%mpz-tdiv-r!", prim_3, prim_mpz_tdiv_r_bang},
-  {"%mpz-neg!", prim_2, prim_mpz_neg_bang},
-  {"%mpz-abs!", prim_2, prim_mpz_abs_bang},
+  {"%mpz-tdiv-qr!", prim_4, prim_mpz_tdiv_qr_bang},
+
+#if 0
+  {"%mpz-com!", prim_2, prim_mpz_com_bang},
+  {"%mpz-and!", prim_3, prim_mpz_and_bang},
+  {"%mpz-ior!", prim_3, prim_mpz_ior_bang},
+  {"%mpz-xor!", prim_3, prim_mpz_xor_bang},
+#endif
+
 };
 
 /* Exported functions */
@@ -614,6 +671,31 @@ typedef struct big_integer mpz_obj;
     return prim_ ## _mt ## _ ## _op ## _bang (res, a, b);               \
   }
 
+#define DEFINE_DIVIDE_MP_MPUI(_mt, _dt, _mp, _mg, _op)                  \
+  static Object prim_ ## _mt ## _ ## _op ## _bang (Object q, Object r, Object a, Object b) { \
+    /* operate */                                                       \
+    if (_mp(a) && _mp(b)) {                                             \
+      _mt ## _ ## _op (_mg(q), _mg(r), _mg(a), _mg(b));                 \
+    } else if (_mp(a) && UNSIGNEDP(b)) {                                \
+      _mt ## _ ## _op ## _ui (_mg(q), _mg(r), _mg(a), INTVAL(b));       \
+    } else {                                                            \
+      marlais_fatal("%" #_mt "-" #_op ": Wrong arguments", NULL);       \
+    }                                                                   \
+    /* return */                                                        \
+    return marlais_construct_values(2, q, r);                           \
+  }                                                                     \
+  static Object prim_ ## _mt ## _ ## _op (Object a, Object b) {         \
+    Object q, r;                                                        \
+    /* allocate */                                                      \
+    q = marlais_allocate_object(_dt, sizeof(_mt ## _obj));              \
+    r = marlais_allocate_object(_dt, sizeof(_mt ## _obj));              \
+    /* initialize */                                                    \
+    _mt ## _init (_mg(q));                                              \
+    _mt ## _init (_mg(r));                                              \
+    /* operate and return */                                            \
+    return prim_ ## _mt ## _ ## _op ## _bang (q, r, a, b);              \
+  }
+
 DEFINE_COMPARE_MP_MP(mpf, BigFloat, MPFP, MPFVAL);
 DEFINE_BINARY_MP_MPUI_COM(mpf, BigFloat, MPFP, MPFVAL, add);
 DEFINE_BINARY_MPUI_MPUI(mpf, BigFloat, MPFP, MPFVAL, sub);
@@ -678,10 +760,13 @@ DEFINE_BINARY_MPUI_MPUI(mpz, BigInteger, MPZP, MPZVAL, sub);
 DEFINE_BINARY_MP_MPUI_COM(mpz, BigInteger, MPZP, MPZVAL, mul);
 DEFINE_BINARY_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, cdiv_q);
 DEFINE_BINARY_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, cdiv_r);
+DEFINE_DIVIDE_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, cdiv_qr);
 DEFINE_BINARY_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, fdiv_q);
 DEFINE_BINARY_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, fdiv_r);
+DEFINE_DIVIDE_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, fdiv_qr);
 DEFINE_BINARY_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, tdiv_q);
 DEFINE_BINARY_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, tdiv_r);
+DEFINE_DIVIDE_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, tdiv_qr);
 DEFINE_UNARY_MP(mpz, BigInteger, MPZP, MPZVAL, neg);
 DEFINE_UNARY_MP(mpz, BigInteger, MPZP, MPZVAL, abs);
 
