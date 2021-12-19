@@ -36,7 +36,7 @@ static Object sfloat_one;
 static Object dfloat_zero;
 static Object dfloat_one;
 
-#ifdef MARLAIS_ENABLE_EXTENDED_FLOAT
+#ifdef MARLAIS_ENABLE_EFLOAT
 /* Cache for <extended-float> */
 static Object efloat_zero;
 static Object efloat_one;
@@ -183,6 +183,29 @@ marlais_register_float (void)
                         marlais_make_integer (DBL_MIN_EXP), 1);
     marlais_add_export (marlais_make_name ("$maximum-double-float-exponent"),
                         marlais_make_integer (DBL_MAX_EXP), 1);
+
+    /* extended float */
+#ifdef MARLAIS_ENABLE_EFLOAT
+    marlais_add_export (marlais_make_name ("$extended-float-bits"),
+                        marlais_make_integer (sizeof(long double) * 8), 1);
+    marlais_add_export (marlais_make_name ("$extended-float-size"),
+                        marlais_make_integer (sizeof(long double)), 1);
+#if 0
+    /* TODO glibc on my machine has 0.0 as a value for this!? */
+    marlais_add_export (marlais_make_name ("$extended-float-epsilon"),
+                        marlais_make_efloat (LDBL_EPSILON), 1);
+#endif
+    marlais_add_export (marlais_make_name ("$extended-float-exponent-bits"),
+                        marlais_make_integer (LDBL_DIG), 1);
+    marlais_add_export (marlais_make_name ("$minimum-extended-float"),
+                        marlais_make_efloat (LDBL_MIN), 1);
+    marlais_add_export (marlais_make_name ("$maximum-extended-float"),
+                        marlais_make_efloat (LDBL_MAX), 1);
+    marlais_add_export (marlais_make_name ("$minimum-extended-float-exponent"),
+                        marlais_make_integer (LDBL_MIN_EXP), 1);
+    marlais_add_export (marlais_make_name ("$maximum-extended-float-exponent"),
+                        marlais_make_integer (LDBL_MAX_EXP), 1);
+#endif /* MARLAIS_ENABLE_EFLOAT */
 }
 
 Object
@@ -231,7 +254,7 @@ marlais_make_dfloat (double d)
     return (obj);
 }
 
-#ifdef MARLAIS_ENABLE_EXTENDED_FLOAT
+#ifdef MARLAIS_ENABLE_EFLOAT
 Object
 marlais_make_efloat (long double e)
 {

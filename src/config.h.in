@@ -13,8 +13,7 @@
 
 /* Features */
 
-#define MARLAIS_ENABLE_EXTENDED_FLOAT
-
+#cmakedefine MARLAIS_ENABLE_EFLOAT
 #cmakedefine MARLAIS_ENABLE_GMP
 #cmakedefine MARLAIS_ENABLE_ICU
 #cmakedefine MARLAIS_ENABLE_READLINE
@@ -23,3 +22,4 @@
 #ifdef MARLAIS_ENABLE_ICU
 #define MARLAIS_ENABLE_UCHAR
 #endif
+

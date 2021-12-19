@@ -101,6 +101,11 @@ marlais_print_object (Object fd, Object obj, int escaped)
   case DoubleFloat:
     fprintf (fp, "%f", DFLOATVAL (obj));
     break;
+#ifdef MARLAIS_ENABLE_EFLOAT
+  case ExtendedFloat:
+    fprintf (fp, "%lf", EFLOATVAL (obj));
+    break;
+#endif
   case Name:
     fprintf (fp, "%s", NAMENAME (obj));
     break;

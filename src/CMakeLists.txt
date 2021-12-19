@@ -38,6 +38,9 @@ if (MARLAIS_STANDARD_CHARACTER STREQUAL UNICODE)
   set(MARLAIS_STANDARD_CHARACTER_UNICODE ON)
 endif ()
 
+# EFLOAT support
+option(MARLAIS_ENABLE_EFLOAT "Enable extended float precision" ON)
+
 # GMP bignum support
 option(MARLAIS_ENABLE_GMP "Enable GMP bignum support" ON)
 if (MARLAIS_ENABLE_GMP)

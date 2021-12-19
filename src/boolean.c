@@ -70,6 +70,13 @@ marlais_identical_p (Object obj1, Object obj2)
   } else if (DFLOATP (obj1) && DFLOATP (obj2)) {
     return (DFLOATVAL (obj1) == DFLOATVAL (obj2));
 
+#ifdef MARLAIS_ENABLE_EFLOAT
+
+  } else if (EFLOATP (obj1) && EFLOATP (obj2)) {
+    return (EFLOATVAL (obj1) == EFLOATVAL (obj2));
+
+#endif /* MARLAIS_ENABLE_EFLOAT */
+
 #ifdef MARLAIS_OBJECT_MODEL_LARGE
 
   } else if (INTEGERP (obj1) && INTEGERP (obj2)) {

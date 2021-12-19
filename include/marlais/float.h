@@ -42,9 +42,9 @@ extern void marlais_register_float (void);
 extern Object marlais_make_sfloat (float f);
 /* Make a <double-float> */
 extern Object marlais_make_dfloat (double d);
-#ifdef MARLAIS_EXTENDED_FLOAT
+#ifdef MARLAIS_ENABLE_EFLOAT
 /* Make an <extended-float> */
-extern Object marlais_make_efloat (double d);
+extern Object marlais_make_efloat (long double d);
 #endif
 
 #endif
