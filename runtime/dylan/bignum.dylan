@@ -416,7 +416,7 @@ define method \+ (i1 :: <big-integer>, o2 :: <small-integer>)
 end method \+;
 
 define method \+ (o1 :: <small-integer>, i2 :: <big-integer>)
-  %mpz-add (i2, o1);
+  %mpz-add (o1, i2);
 end method \+;
 
 define method \- (i1 :: <big-integer>, o2 :: <small-integer>)
@@ -432,7 +432,7 @@ define method \* (i1 :: <big-integer>, o2 :: <small-integer>)
 end method \*;
 
 define method \* (o1 :: <small-integer>, i2 :: <big-integer>)
-  %mpz-mul (i2, o1);
+  %mpz-mul (o1, i2);
 end method \*;
 
 // <big-float> and any real
