@@ -38,44 +38,52 @@
 #include <marlais/apply.h>
 #include <marlais/env.h>
 #include <marlais/eval.h>
-#include <marlais/list.h>
-#include <marlais/number.h>
 #include <marlais/prim.h>
 #include <marlais/symbol.h>
 
-/* local function prototypes */
+/* Internal variables */
+
+static Object table_default = NULL;
+
+/* Internal functions */
 
 static Object make_table_entry (int row, Object key, Object value, Object next);
 static Object *table_element_handle (Object table,
                                      Object key,
                                      Object *default_val);
 static int table_vectors_equal (Object vec1, Object vec2);
-static Object table_initial_state (Object table);
-static Object table_next_state (Object table, Object state);
-static Object table_current_element (Object table, Object state);
-static Object table_current_key (Object table, Object state);
-static Object table_current_element_setter (Object table, Object state, Object value);
-static Object equal_hash (Object key);
+
+/* Hashing */
+
 static Object hash_pair (Object pair);
 static Object hash_deque (Object deq);
 static Object hash_string (Object string);
 static Object hash_vector (Object vector);
+static Object equal_hash (Object key);
 
-static Object table_default = NULL;
+/* Primitives */
 
-/* primitives */
+static Object table_initial_state (Object table);
+static Object table_next_state (Object table, Object state);
+static Object table_current_element (Object table, Object state);
+static Object table_current_element_setter (Object table, Object state, Object value);
+static Object table_current_key (Object table, Object state);
 
 static struct primitive table_prims[] =
 {
   {"%table-element", prim_3, marlais_table_element},
   {"%table-element-setter", prim_3, marlais_table_element_setter},
+
   {"%table-initial-state", prim_1, table_initial_state},
   {"%table-next-state", prim_2, table_next_state},
   {"%table-current-element", prim_2, table_current_element},
-  {"%table-current-key", prim_2, table_current_key},
   {"%table-current-element-setter", prim_3, table_current_element_setter},
+  {"%table-current-key", prim_2, table_current_key},
+
   {"%=hash", prim_1, equal_hash},
 };
+
+/* Exported functions */
 
 void
 marlais_register_table (void)
@@ -189,7 +197,7 @@ marlais_table_element_setter_by_vector (Object table, Object key, Object val)
  * If property is a pair, the key is the CAR and the value is the CDR.
  */
 Object
-fill_table_from_property_set (Object the_table, Object the_set)
+marlais_table_fill_properties (Object the_table, Object the_set)
 {
   Object the_element;
 
@@ -208,7 +216,144 @@ fill_table_from_property_set (Object the_table, Object the_set)
   return the_table;
 }
 
-/* local functions */
+/* Primitives */
+
+static Object
+table_initial_state (Object table)
+{
+  int i;
+
+  for (i = 0; i < TABLESIZE (table); ++i) {
+    if (TABLETABLE (table)[i]) {
+      return (TABLETABLE (table)[i]);
+    }
+  }
+  return (MARLAIS_FALSE);
+}
+
+static Object
+table_next_state (Object table, Object state)
+{
+  int i;
+
+  if (TENEXT (state)) {
+    return (TENEXT (state));
+  }
+  for (i = (TEROW (state) + 1); i < TABLESIZE (table); ++i) {
+    if (TABLETABLE (table)[i]) {
+      return (TABLETABLE (table)[i]);
+    }
+  }
+  return (MARLAIS_FALSE);
+}
+
+static Object
+table_current_element (Object table, Object state)
+{
+  return (TEVALUE (state));
+}
+
+static Object
+table_current_key (Object table, Object state)
+{
+  return (TEKEY (state));
+}
+
+static Object
+table_current_element_setter (Object table, Object state, Object value)
+{
+  TEVALUE (state) = value;
+  return (MARLAIS_UNSPECIFIED);
+}
+
+/* Hashing */
+
+static Object
+hash_pair (Object pair)
+{
+  int h = INTVAL (equal_hash (CAR (pair))) + INTVAL (equal_hash (CDR (pair)));
+  return (marlais_make_integer (h));
+}
+
+static Object
+hash_deque (Object deq)
+{
+  int h = 0;
+  Object entry;
+
+  entry = DEQUEFIRST (deq);
+  while (!EMPTYLISTP (entry)) {
+    h += INTVAL (equal_hash (DEVALUE (entry)));
+    entry = DENEXT (entry);
+  }
+  return (marlais_make_integer (h));
+}
+
+static Object
+hash_string (Object string)
+{
+  int i, h;
+
+  h = 0;
+  for (i = 0; i < BYTESTRSIZE (string); ++i) {
+    h += BYTESTRVAL (string)[i];
+  }
+  return (marlais_make_integer (h));
+}
+
+static Object
+hash_vector (Object vector)
+{
+  int i, h = 0;
+  for (i = 0; i < SOVSIZE (vector); ++i) {
+    h += INTVAL (equal_hash (SOVELS (vector)[i]));
+  }
+  return (marlais_make_integer (h));
+}
+
+static Object
+equal_hash (Object key)
+{
+  Object hashfun;
+
+  if (INSTANCEP (key)) {
+    hashfun = marlais_symbol_value (equal_hash_symbol);
+    /*
+     * Need to be able to hash arbitrary instances here!
+     */
+    if (!hashfun) {
+      marlais_error ("no =hash method defined for key class", key, NULL);
+    }
+    return (marlais_apply (hashfun, marlais_cons (key, MARLAIS_NIL)));
+  } else {
+    if (INTEGERP (key)) {
+      return (key);
+    } else if (CHARP (key)) {
+      return (marlais_make_integer (CHARVAL (key)));
+    } else if (TRUEP (key)) {
+      return (marlais_make_integer (1));
+    } else if (FALSEP (key)) {
+      return (marlais_make_integer (0));
+    } else if (EMPTYLISTP (key)) {
+      return (marlais_make_integer (2));
+    } else if (PAIRP (key)) {
+      return (hash_pair (key));
+    } else if (DEQUEP (key)) {
+      return (hash_deque (key));
+    } else if (BYTESTRP (key)) {
+      return (hash_string (key));
+    } else if (SOVP (key)) {
+      return (hash_vector (key));
+    } else if (NAMEP (key) || SYMBOLP (key)) {
+      return (marlais_make_integer ((DyInteger)key));
+    } else {
+      /* marlais_error ("=hash: don't know how to hash object", key, NULL);  */
+      return (marlais_make_integer ((DyInteger)key));
+    }
+  }
+}
+
+/* Internal functions */
 
 static Object
 make_table_entry (int row, Object key, Object value, Object next)
@@ -263,139 +408,4 @@ table_vectors_equal (Object vec1, Object vec2)
       return (0);
   }
   return (1);
-}
-
-/* iteration protocol */
-
-static Object
-table_initial_state (Object table)
-{
-  int i;
-
-  for (i = 0; i < TABLESIZE (table); ++i) {
-    if (TABLETABLE (table)[i]) {
-      return (TABLETABLE (table)[i]);
-    }
-  }
-  return (MARLAIS_FALSE);
-}
-
-static Object
-table_next_state (Object table, Object state)
-{
-  int i;
-
-  if (TENEXT (state)) {
-    return (TENEXT (state));
-  }
-  for (i = (TEROW (state) + 1); i < TABLESIZE (table); ++i) {
-    if (TABLETABLE (table)[i]) {
-      return (TABLETABLE (table)[i]);
-    }
-  }
-  return (MARLAIS_FALSE);
-}
-
-static Object
-table_current_element (Object table, Object state)
-{
-  return (TEVALUE (state));
-}
-
-static Object
-table_current_key (Object table, Object state)
-{
-  return (TEKEY (state));
-}
-
-static Object
-table_current_element_setter (Object table, Object state, Object value)
-{
-  TEVALUE (state) = value;
-  return (MARLAIS_UNSPECIFIED);
-}
-
-static Object
-equal_hash (Object key)
-{
-  Object hashfun;
-
-  if (INSTANCEP (key)) {
-    hashfun = marlais_symbol_value (equal_hash_symbol);
-    /*
-     * Need to be able to hash arbitrary instances here!
-     */
-    if (!hashfun) {
-      marlais_error ("no =hash method defined for key class", key, NULL);
-    }
-    return (marlais_apply (hashfun, marlais_cons (key, MARLAIS_NIL)));
-  } else {
-    if (INTEGERP (key)) {
-      return (key);
-    } else if (CHARP (key)) {
-      return (marlais_make_integer (CHARVAL (key)));
-    } else if (TRUEP (key)) {
-      return (marlais_make_integer (1));
-    } else if (FALSEP (key)) {
-      return (marlais_make_integer (0));
-    } else if (EMPTYLISTP (key)) {
-      return (marlais_make_integer (2));
-    } else if (PAIRP (key)) {
-      return (hash_pair (key));
-    } else if (DEQUEP (key)) {
-      return (hash_deque (key));
-    } else if (BYTESTRP (key)) {
-      return (hash_string (key));
-    } else if (SOVP (key)) {
-      return (hash_vector (key));
-    } else if (NAMEP (key) || SYMBOLP (key)) {
-      return (marlais_make_integer ((DyInteger)key));
-    } else {
-      /* marlais_error ("=hash: don't know how to hash object", key, NULL);  */
-      return (marlais_make_integer ((DyInteger)key));
-    }
-  }
-}
-
-static Object
-hash_pair (Object pair)
-{
-  int h = INTVAL (equal_hash (CAR (pair))) + INTVAL (equal_hash (CDR (pair)));
-  return (marlais_make_integer (h));
-}
-
-static Object
-hash_deque (Object deq)
-{
-  int h = 0;
-  Object entry;
-
-  entry = DEQUEFIRST (deq);
-  while (!EMPTYLISTP (entry)) {
-    h += INTVAL (equal_hash (DEVALUE (entry)));
-    entry = DENEXT (entry);
-  }
-  return (marlais_make_integer (h));
-}
-
-static Object
-hash_string (Object string)
-{
-  int i, h;
-
-  h = 0;
-  for (i = 0; i < BYTESTRSIZE (string); ++i) {
-    h += BYTESTRVAL (string)[i];
-  }
-  return (marlais_make_integer (h));
-}
-
-static Object
-hash_vector (Object vector)
-{
-  int i, h = 0;
-  for (i = 0; i < SOVSIZE (vector); ++i) {
-    h += INTVAL (equal_hash (SOVELS (vector)[i]));
-  }
-  return (marlais_make_integer (h));
 }

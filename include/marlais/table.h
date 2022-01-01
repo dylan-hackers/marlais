@@ -42,15 +42,15 @@ extern void marlais_register_table (void);
 extern Object marlais_make_table (int size);
 /* Entrypoint for make(<table>) */
 extern Object marlais_make_table_entrypoint (Object rest);
-/* Get value in table */
+/* Get element by key */
 extern Object marlais_table_element (Object table, Object key, Object default_val);
-/* Set value in table */
+/* Set element by key */
 extern Object marlais_table_element_setter (Object table, Object key, Object val);
-
+/* Get element by vector key */
 extern Object *marlais_table_element_by_vector (Object table, Object key);
+/* Set element by vector key */
 extern Object marlais_table_element_setter_by_vector (Object table, Object key, Object val);
-
-/* TODO namespace */
-extern Object fill_table_from_property_set (Object the_table, Object the_set);
+/* Fill table from properties */
+extern Object marlais_table_fill_properties (Object the_table, Object the_set);
 
 #endif

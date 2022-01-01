@@ -981,15 +981,12 @@ define_module_eval (Object form)
             marlais_error ("define-module: Bad use clause", clause, NULL);
           }
         } else if (CAR (clause) == export_symbol) {
-          fill_table_from_property_set (the_module->exported_bindings,
-                                        CDR (clause));
+          marlais_table_fill_properties (the_module->exported_bindings,
+                                         CDR (clause));
         } else if (CAR (clause) == create_symbol) {
-          /*
-	   * Aside from this, it's not clear to me (jnw) what
-	   * needs to be done for create clause.
-	   */
-          fill_table_from_property_set (the_module->exported_bindings,
-                                        CDR (clause));
+          /* TODO redefinition checks? */
+          marlais_table_fill_properties (the_module->exported_bindings,
+                                         CDR (clause));
         } else {
           marlais_error ("define-module: Bad clause", clause, NULL);
         }

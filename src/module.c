@@ -182,12 +182,12 @@ marlais_use_module (Object module_name,
   }
 
   exclusions_table = marlais_make_table (DEFAULT_TABLE_SIZE);
-  fill_table_from_property_set (exclusions_table, exclusions);
+  marlais_table_fill_properties (exclusions_table, exclusions);
 
-  fill_table_from_property_set (renames_table, renames);
+  marlais_table_fill_properties (renames_table, renames);
   if (exports != all_symbol) {
     exports_table = marlais_make_table (DEFAULT_TABLE_SIZE);
-    fill_table_from_property_set (exports_table, exports);
+    marlais_table_fill_properties (exports_table, exports);
   }
   if (prefix == marlais_empty_string) { /* is this check correct? */
     prefix_string = 0;
