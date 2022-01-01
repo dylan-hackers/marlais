@@ -35,10 +35,8 @@
 #include <marlais/deque.h>
 
 #include <marlais/alloc.h>
-#include <marlais/list.h>
 #include <marlais/prim.h>
 #include <marlais/sequence.h>
-#include <marlais/symbol.h>
 
 /* Internal functions */
 

@@ -4,8 +4,6 @@
 #include <marlais/alloc.h>
 #include <marlais/env.h>
 #include <marlais/prim.h>
-#include <marlais/symbol.h>
-#include <marlais/values.h>
 
 #include <float.h>
 #include <math.h>

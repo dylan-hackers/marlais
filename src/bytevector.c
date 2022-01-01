@@ -2,11 +2,8 @@
 #include <marlais/bytevector.h>
 
 #include <marlais/alloc.h>
-#include <marlais/list.h>
-#include <marlais/number.h>
 #include <marlais/prim.h>
 #include <marlais/sequence.h>
-#include <marlais/symbol.h>
 
 /* Primitives */
 

@@ -5,7 +5,6 @@
 #include <marlais/alloc.h>
 #include <marlais/apply.h>
 #include <marlais/debug.h>
-#include <marlais/string.h>
 #include <marlais/class.h>
 #include <marlais/env.h>
 #include <marlais/eval.h>

@@ -32,7 +32,6 @@
 
 #include <marlais/classprec.h>
 
-#include <marlais/list.h>
 #include <marlais/print.h>
 
 /* Internal function declarations */

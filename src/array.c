@@ -35,10 +35,7 @@
 #include <marlais/array.h>
 
 #include <marlais/alloc.h>
-#include <marlais/list.h>
-#include <marlais/number.h>
 #include <marlais/prim.h>
-#include <marlais/symbol.h>
 
 /* Internal function declarations */
 

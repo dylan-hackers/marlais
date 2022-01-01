@@ -3,7 +3,6 @@
 #include <marlais/env.h>
 
 #include <marlais/alloc.h>
-#include <marlais/string.h>
 #include <marlais/class.h>
 #include <marlais/eval.h>
 #include <marlais/function.h>

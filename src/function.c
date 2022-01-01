@@ -38,12 +38,8 @@
 #include <marlais/class.h>
 #include <marlais/env.h>
 #include <marlais/eval.h>
-#include <marlais/list.h>
-#include <marlais/number.h>
 #include <marlais/prim.h>
-#include <marlais/symbol.h>
 #include <marlais/table.h>
-#include <marlais/values.h>
 #include <marlais/vector.h>
 
 /* Internal function prototypes */

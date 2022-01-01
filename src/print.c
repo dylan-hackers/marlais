@@ -3,11 +3,8 @@
 #include <marlais/print.h>
 
 #include <marlais/apply.h>
-#include <marlais/character.h>
 #include <marlais/eval.h>
 #include <marlais/function.h>
-#include <marlais/list.h>
-#include <marlais/number.h>
 #include <marlais/prim.h>
 #include <marlais/slot.h>
 #include <marlais/stream.h>

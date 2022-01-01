@@ -5,21 +5,15 @@
 #include <marlais/alloc.h>
 #include <marlais/apply.h>
 #include <marlais/array.h>
-#include <marlais/boolean.h>
 #include <marlais/bytevector.h>
-#include <marlais/string.h>
 #include <marlais/classprec.h>
 #include <marlais/deque.h>
 #include <marlais/env.h>
 #include <marlais/eval.h>
 #include <marlais/function.h>
-#include <marlais/list.h>
-#include <marlais/number.h>
 #include <marlais/prim.h>
 #include <marlais/slot.h>
-#include <marlais/symbol.h>
 #include <marlais/table.h>
-#include <marlais/values.h>
 #include <marlais/vector.h>
 
 int last_class_index = 0;

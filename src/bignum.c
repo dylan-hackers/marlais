@@ -3,9 +3,7 @@
 
 #include <marlais/alloc.h>
 #include <marlais/env.h>
-#include <marlais/number.h>
 #include <marlais/prim.h>
-#include <marlais/symbol.h>
 
 #include <gmp.h>
 

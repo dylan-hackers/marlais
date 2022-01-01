@@ -39,7 +39,6 @@
 #include <marlais/env.h>
 #include <marlais/eval.h>
 #include <marlais/prim.h>
-#include <marlais/symbol.h>
 
 /* Internal variables */
 

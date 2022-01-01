@@ -3,7 +3,6 @@
 #include <marlais/common.h>
 
 #include <marlais/alloc.h>
-#include <marlais/number.h>
 
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
 

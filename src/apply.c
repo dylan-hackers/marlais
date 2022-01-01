@@ -7,15 +7,11 @@
 #include <marlais/env.h>
 #include <marlais/eval.h>
 #include <marlais/function.h>
-#include <marlais/list.h>
-#include <marlais/number.h>
 #include <marlais/print.h>
 #include <marlais/prim.h>
 #include <marlais/stream.h>
-#include <marlais/symbol.h>
 #include <marlais/syntax.h>
 #include <marlais/table.h>
-#include <marlais/values.h>
 #include <marlais/vector.h>
 
 /* Internal functions */

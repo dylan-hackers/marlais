@@ -5,10 +5,8 @@
 #include <marlais/common.h>
 
 #include <marlais/alloc.h>
-#include <marlais/character.h>
 #include <marlais/env.h>
 #include <marlais/lexer.h>
-#include <marlais/string.h>
 #include <marlais/yystype.h>
 
 #include <sys/time.h>

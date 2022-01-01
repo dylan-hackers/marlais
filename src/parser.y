@@ -16,9 +16,6 @@
 
 #include <marlais/common.h>
 
-#include <marlais/boolean.h>
-#include <marlais/string.h>
-#include <marlais/error.h>
 #include <marlais/table.h>
 #include <marlais/vector.h>
 #include <marlais/yystype.h>

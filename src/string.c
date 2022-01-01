@@ -35,11 +35,8 @@
 #include <marlais/string.h>
 
 #include <marlais/alloc.h>
-#include <marlais/character.h>
-#include <marlais/number.h>
 #include <marlais/prim.h>
 #include <marlais/sequence.h>
-#include <marlais/symbol.h>
 
 #include <ctype.h>
 
