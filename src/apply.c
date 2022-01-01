@@ -42,13 +42,8 @@ static struct primitive apply_prims[] =
 void
 marlais_register_apply (void)
 {
-  int num;
-
-  num = sizeof (apply_prims) / sizeof (struct primitive);
-
+  int num = sizeof (apply_prims) / sizeof (struct primitive);
   marlais_register_prims (num, apply_prims);
-
-  user_keyword = marlais_make_symbol ("user:");
 }
 
 Object

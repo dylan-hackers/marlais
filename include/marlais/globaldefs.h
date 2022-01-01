@@ -85,7 +85,6 @@ GLOBAL Object debug_name_keyword;
 GLOBAL Object min_keyword;
 GLOBAL Object max_keyword;
 GLOBAL Object dim_keyword;
-GLOBAL Object user_keyword;
 
 GLOBAL Object instance_symbol;
 GLOBAL Object class_symbol;
