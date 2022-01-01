@@ -15,10 +15,10 @@ static struct primitive type_prims[] =
 {
     {"%instance?", prim_2, instance_p},
     {"%subtype?", prim_2, subtype_p},
-    {"%limited-integer", prim_1, marlais_make_limited_integer},
-    {"%singleton", prim_1, marlais_make_singleton},
-    {"%subclass", prim_1, marlais_make_subclass},
-    {"%union-type", prim_1, marlais_make_union},
+    {"%make-limited-integer", prim_1, marlais_make_limited_integer},
+    {"%make-singleton", prim_1, marlais_make_singleton},
+    {"%make-subclass", prim_1, marlais_make_subclass},
+    {"%make-union", prim_1, marlais_make_union},
 };
 
 /* Exported functions */
@@ -155,6 +155,41 @@ marlais_same_class_p (Object class1, Object class2)
   }
 }
 
+/*
+ * Largely speculative.  Probably will change all around.
+ */
+Object
+marlais_make_limited_integer (Object args)
+{
+  Object obj;
+
+  obj = marlais_allocate_object (LimitedIntType, sizeof (struct limited_int_type));
+
+  while (!EMPTYLISTP (args)) {
+    if (FIRST (args) == min_keyword) {
+      if (LIMINTHASMIN (obj)) {
+        marlais_error ("Minimum value for limited type specified twice", NULL);
+      } else {
+        LIMINTMIN (obj) = INTVAL (SECOND (args));
+        LIMINTPROPS (obj) |= LIMMINMASK;
+      }
+    } else if (FIRST (args) == max_keyword) {
+      if (LIMINTHASMAX (obj)) {
+        marlais_error ("Maximum value for limited type specified twice", NULL);
+      } else {
+        LIMINTMAX (obj) = INTVAL (SECOND (args));
+        LIMINTPROPS (obj) |= LIMMAXMASK;
+      }
+    } else {
+      marlais_error ("make: unsupported keyword for limited integer type",
+                     FIRST (args), NULL);
+    }
+    args = CDR (CDR (args));
+  }
+
+  return (obj);
+}
+
 Object
 marlais_make_singleton (Object val)
 {
@@ -197,41 +232,6 @@ marlais_make_union (Object typelist)
   UNIONLIST (obj) = union_types;
 
   return obj;
-}
-
-/*
- * Largely speculative.  Probably will change all around.
- */
-Object
-marlais_make_limited_integer (Object args)
-{
-  Object obj;
-
-  obj = marlais_allocate_object (LimitedIntType, sizeof (struct limited_int_type));
-
-  while (!EMPTYLISTP (args)) {
-    if (FIRST (args) == min_keyword) {
-      if (LIMINTHASMIN (obj)) {
-        marlais_error ("Minimum value for limited type specified twice", NULL);
-      } else {
-        LIMINTMIN (obj) = INTVAL (SECOND (args));
-        LIMINTPROPS (obj) |= LIMMINMASK;
-      }
-    } else if (FIRST (args) == max_keyword) {
-      if (LIMINTHASMAX (obj)) {
-        marlais_error ("Maximum value for limited type specified twice", NULL);
-      } else {
-        LIMINTMAX (obj) = INTVAL (SECOND (args));
-        LIMINTPROPS (obj) |= LIMMAXMASK;
-      }
-    } else {
-      marlais_error ("make: unsupported keyword for limited integer type",
-                     FIRST (args), NULL);
-    }
-    args = CDR (CDR (args));
-  }
-
-  return (obj);
 }
 
 /* Internal functions */

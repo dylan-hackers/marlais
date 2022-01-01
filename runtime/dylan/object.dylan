@@ -56,17 +56,17 @@ define constant subtype? =
 
 define constant singleton =
   method (o :: <object>) => <singleton>;
-    %singleton (o);
+    %make-singleton (o);
   end method;
 
 define constant subclass =
   method (c :: <class>) => <subclass>;
-    %subclass (c);
+    %make-subclass (c);
   end method;
 
 define constant type-union =
   method (#rest types)
-    %union-type (types);
+    %make-union (types);
   end method;
 
 define generic limited (c :: <class>, #rest keys, #key, #all-keys)
@@ -74,7 +74,7 @@ define generic limited (c :: <class>, #rest keys, #key, #all-keys)
 
 define method limited (int == <integer>, #rest args, #key min, max)
  => (limited-type :: <limited-integer>);
-  %limited-integer(args);
+  %make-limited-integer(args);
 end method;
 
 //
