@@ -11,7 +11,7 @@
 #include <stdio.h>
 
 #ifndef VERSION
-#define VERSION "0.6.4-io-beta"
+#define VERSION "0.7.0-preview0"
 #endif
 
 static int do_not_load_init_file = 0;
@@ -167,6 +167,7 @@ main (int argc, char *argv[])
   }
 
   if(maybe_quit && !stay) exit(0);
+
   printf("Marlais %s\n", VERSION);
 
   cache_env = the_env;
