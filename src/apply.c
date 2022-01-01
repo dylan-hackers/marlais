@@ -20,14 +20,14 @@
 
 /* Internal functions */
 
-static Object apply_generic (Object gen, Object args);
+static void devalue_args (Object args);
 static void narrow_value_types (Object *values_list,
                                 Object new_values_list,
                                 Object *rest_type,
                                 Object new_rest_type);
 static Object apply_exit (Object exit_proc, Object args);
-static Object apply_next_method (Object next_method, Object args);
-static void devalue_args (Object args);
+static Object apply_generic (Object gen, Object args);
+static Object apply_next (Object next_method, Object args);
 
 /* Primitives */
 
@@ -91,7 +91,7 @@ marlais_apply_internal (Object fun, Object args)
     ret = apply_generic (fun, args);
     break;
   case NextMethod:
-    ret = apply_next_method (fun, args);
+    ret = apply_next (fun, args);
     break;
   case UnwindFunction:
     ret = apply_exit (fun, args);
@@ -337,9 +337,9 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
     } else {
 #endif
 
-      ret = marlais_construct_return_values (marlais_eval (form),
-                                             METHREQVALUES (meth),
-                                             METHRESTVALUES (meth));
+      ret = marlais_return_check (marlais_eval (form),
+                                  METHREQVALUES (meth),
+                                  METHRESTVALUES (meth));
 #ifdef MARLAIS_ENABLE_TAIL_CALL_OPTIMIZATION
     }
 #endif
@@ -366,75 +366,10 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
   return ret;
 }
 
-/* Internal functions */
-
-static void
-narrow_value_types (Object *values_list_ptr,
-                    Object new_values_list,
-                    Object *rest_type,
-                    Object new_rest_type)
-{
-  Object values_list;
-
-  /* First check each value common to both lists.
-   * If a new value is a subtype, substitute it.
-   */
-  for (; !EMPTYLISTP (*values_list_ptr);
-       values_list_ptr = &CDR (*values_list_ptr),
-         new_values_list = CDR (new_values_list)) {
-    if (EMPTYLISTP (new_values_list)) {
-      break;
-    }
-    if (marlais_subtype_p (CAR (new_values_list), CAR (*values_list_ptr))) {
-      CAR (*values_list_ptr) = CAR (new_values_list);
-    }
-  }
-
-  if (EMPTYLISTP (*values_list_ptr)) {
-    /* We had enough values in the new list to match all the old ones */
-
-    /* If there were more new_values than old.
-     * They must match the rest type of the old list, and must
-     * be added to the list.
-     */
-    while (!EMPTYLISTP (new_values_list)) {
-      if (marlais_subtype_p (CAR (new_values_list), *rest_type)) {
-        *values_list_ptr = marlais_cons (CAR (new_values_list),
-                                 MARLAIS_NIL);
-      } else {
-        *values_list_ptr = marlais_cons (*rest_type, MARLAIS_NIL);
-      }
-      values_list_ptr = &CDR (*values_list_ptr);
-      new_values_list = CDR (new_values_list);
-    }
-  } else {
-    /* We didn't match all the values.
-     * Make sure the remaining values are equally as narrow as
-     * new_rest_values
-     */
-    if (new_rest_type == NULL) {
-      marlais_error ("Incompatible value specification in call", NULL);
-    }
-    values_list = *values_list_ptr;
-    while (!EMPTYLISTP (values_list)) {
-      if (marlais_subtype_p (new_rest_type, CAR (values_list))) {
-        CAR (values_list) = new_rest_type;
-      }
-      values_list = CDR (values_list);
-    }
-  }
-  if (new_rest_type == NULL) {
-    /* No rest values are allowed to be returned */
-    *rest_type = NULL;
-  } else if (*rest_type == NULL || marlais_subtype_p (*rest_type, new_rest_type)) {
-    *rest_type = new_rest_type;
-  }
-}
-
 Object
-marlais_construct_return_values (Object ret,
-                                 Object required_values,
-                                 Object rest_values)
+marlais_return_check (Object ret,
+                      Object required_values,
+                      Object rest_values)
 {
   int i, j;
   Object newret;
@@ -514,6 +449,88 @@ marlais_construct_return_values (Object ret,
   return (ret);
 }
 
+/* Internal functions */
+
+static void
+devalue_args (Object args)
+{
+  while (!EMPTYLISTP (args)) {
+    Object arg = CAR (args);
+
+    if (VALUESP (arg)) {
+      if (VALUESNUM (arg) > 0) {
+        CAR (args) = VALUESELS (arg)[0];
+      } else {
+        marlais_error ("Null values construct used as an argument", NULL);
+      }
+    }
+    args = CDR (args);
+  }
+}
+
+static void
+narrow_value_types (Object *values_list_ptr,
+                    Object new_values_list,
+                    Object *rest_type,
+                    Object new_rest_type)
+{
+  Object values_list;
+
+  /* First check each value common to both lists.
+   * If a new value is a subtype, substitute it.
+   */
+  for (; !EMPTYLISTP (*values_list_ptr);
+       values_list_ptr = &CDR (*values_list_ptr),
+         new_values_list = CDR (new_values_list)) {
+    if (EMPTYLISTP (new_values_list)) {
+      break;
+    }
+    if (marlais_subtype_p (CAR (new_values_list), CAR (*values_list_ptr))) {
+      CAR (*values_list_ptr) = CAR (new_values_list);
+    }
+  }
+
+  if (EMPTYLISTP (*values_list_ptr)) {
+    /* We had enough values in the new list to match all the old ones */
+
+    /* If there were more new_values than old.
+     * They must match the rest type of the old list, and must
+     * be added to the list.
+     */
+    while (!EMPTYLISTP (new_values_list)) {
+      if (marlais_subtype_p (CAR (new_values_list), *rest_type)) {
+        *values_list_ptr = marlais_cons (CAR (new_values_list),
+                                 MARLAIS_NIL);
+      } else {
+        *values_list_ptr = marlais_cons (*rest_type, MARLAIS_NIL);
+      }
+      values_list_ptr = &CDR (*values_list_ptr);
+      new_values_list = CDR (new_values_list);
+    }
+  } else {
+    /* We didn't match all the values.
+     * Make sure the remaining values are equally as narrow as
+     * new_rest_values
+     */
+    if (new_rest_type == NULL) {
+      marlais_error ("Incompatible value specification in call", NULL);
+    }
+    values_list = *values_list_ptr;
+    while (!EMPTYLISTP (values_list)) {
+      if (marlais_subtype_p (new_rest_type, CAR (values_list))) {
+        CAR (values_list) = new_rest_type;
+      }
+      values_list = CDR (values_list);
+    }
+  }
+  if (new_rest_type == NULL) {
+    /* No rest values are allowed to be returned */
+    *rest_type = NULL;
+  } else if (*rest_type == NULL || marlais_subtype_p (*rest_type, new_rest_type)) {
+    *rest_type = new_rest_type;
+  }
+}
+
 #ifdef MARLAIS_ENABLE_METHOD_CACHING
 static Object
 get_specializers (Object gen, Object args)
@@ -587,7 +604,7 @@ build_rest_methods (Object cache_tail, Object args)
 }
 #endif
 
-Object
+static Object
 apply_generic (Object gen, Object args)
 {
 
@@ -670,7 +687,7 @@ apply_exit (Object exit_proc, Object args)
 }
 
 static Object
-apply_next_method (Object next_method, Object args)
+apply_next (Object next_method, Object args)
 {
   Object method, rest_methods, real_args;
 
@@ -688,21 +705,4 @@ apply_next_method (Object next_method, Object args)
     real_args = args;
   }
   return marlais_apply_method (method, real_args, rest_methods, NMGF (next_method));
-}
-
-static void
-devalue_args (Object args)
-{
-  while (!EMPTYLISTP (args)) {
-    Object arg = CAR (args);
-
-    if (VALUESP (arg)) {
-      if (VALUESNUM (arg) > 0) {
-        CAR (args) = VALUESELS (arg)[0];
-      } else {
-        marlais_error ("Null values construct used as an argument", NULL);
-      }
-    }
-    args = CDR (args);
-  }
 }

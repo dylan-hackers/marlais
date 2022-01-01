@@ -17,8 +17,8 @@ extern Object marlais_apply_method (Object meth,
                                     Object rest_methods,
                                     Object generic_apply);
 /* Construct and check return values */
-extern Object marlais_construct_return_values (Object ret,
-                                               Object required_values,
-                                               Object rest_values);
+extern Object marlais_return_check (Object ret,
+                                    Object required_values,
+                                    Object rest_values);
 
 #endif

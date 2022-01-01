@@ -164,8 +164,7 @@ eval_combination (Object obj, int do_apply)
     tail_rest_values = CDR (CAR (marlais_results));
     marlais_results = CDR (marlais_results);
 
-    ret = marlais_construct_return_values (ret,
-                                           tail_required_values,
-                                           tail_rest_values);
-    return ret;
+    return marlais_return_check (ret,
+                                 tail_required_values,
+                                 tail_rest_values);
 }
