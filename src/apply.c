@@ -31,12 +31,9 @@ static void devalue_args (Object args);
 
 /* Primitives */
 
-static Object set_trace (Object flag);
-
 static struct primitive apply_prims[] =
 {
     {"%apply", prim_2, marlais_apply},
-    {"%trace", prim_1, set_trace},
     {"%eval", prim_1, marlais_eval},
 };
 
@@ -696,21 +693,6 @@ apply_next_method (Object next_method, Object args)
     real_args = args;
   }
   return marlais_apply_method (method, real_args, rest_methods, NMGF (next_method));
-}
-
-static Object
-set_trace (Object flag)
-{
-  if (flag == MARLAIS_FALSE) {
-    trace_functions = 0;
-    trace_only_user_funs = 0;
-  } else {
-    trace_functions = 1;
-    if (flag == user_keyword) {
-      trace_only_user_funs = 1;
-    }
-  }
-  return (flag);
 }
 
 static void
