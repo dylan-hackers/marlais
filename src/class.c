@@ -27,7 +27,7 @@ static Object class_slots_class;
 
 /* primitives */
 
-static Object class_debug_name (Object class);
+static Object class_name (Object class);
 static Object class_abstract_p (Object class);
 static Object class_primary_p (Object class);
 static Object class_sealed_p (Object class);
@@ -41,7 +41,7 @@ static struct primitive class_prims[] =
 
     {"%make", prim_2, marlais_make},
 
-    {"%class-debug-name", prim_1, class_debug_name},
+    {"%class-name", prim_1, class_name},
 
     {"%class-abstract?", prim_1, class_abstract_p},
     {"%class-primary?", prim_1, class_primary_p},
@@ -653,7 +653,7 @@ marlais_make (Object class, Object rest)
 }
 
 static Object
-class_debug_name (Object class)
+class_name (Object class)
 {
   return CLASSNAME (class);
 }
