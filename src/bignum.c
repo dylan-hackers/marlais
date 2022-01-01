@@ -682,7 +682,7 @@ typedef struct big_integer mpz_obj;
       marlais_fatal("%" #_mt "-" #_op ": Wrong arguments", NULL);       \
     }                                                                   \
     /* return */                                                        \
-    return marlais_construct_values(2, q, r);                           \
+    return marlais_values_args(2, q, r);                                \
   }                                                                     \
   static Object prim_ ## _mt ## _ ## _op (Object a, Object b) {         \
     Object q, r;                                                        \

@@ -1253,7 +1253,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
     slotd = CAR (tmp_slotds);
     slots[i] = marlais_make_list (marlais_slot_init_value (slotd), SLOTDSLOTTYPE (slotd), NULL);
   }
-  return marlais_construct_values (2, slots, marlais_append (default_initializers,
+  return marlais_values_args (2, slots, marlais_append (default_initializers,
                                                      extra_initializers));
 }
 

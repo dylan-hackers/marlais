@@ -61,7 +61,7 @@ static int read_eval_print(FILE* f, int bind_constant_p)
       vals = VALUESNUM(obj);
     }
     else {
-      obj = marlais_construct_values(1, obj);
+      obj = marlais_values_args(1, obj);
       vals = 1;
     }
     for(x = 0; x < vals; x++) {

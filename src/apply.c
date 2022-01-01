@@ -389,7 +389,7 @@ marlais_return_check (Object ret,
     marlais_error ("return value is invalid", NULL);
   }
   if (!VALUESP (ret)) {
-    ret = marlais_make_values (marlais_make_list (ret, NULL));
+    ret = marlais_values_list (marlais_make_list (ret, NULL));
   }
   /* check return values (not done for non VALUESTYPE values yet */
   for (i = 0;

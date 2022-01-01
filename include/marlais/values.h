@@ -38,10 +38,13 @@
 
 /* Register vector primitives */
 extern void marlais_register_values (void);
-/* Make a values from a list */
-extern Object marlais_make_values (Object vals);
+/* Make values from arguments */
+extern Object marlais_values_args (int num,...);
+/* Make values from list */
+extern Object marlais_values_list (Object vals);
+/* Make values (primitive/rest form) */
 extern Object marlais_values (Object rest);
-extern Object marlais_construct_values (int num,...);
+/* Reduce to single value */
 extern Object marlais_devalue (Object val);
 
 #endif

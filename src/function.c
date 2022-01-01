@@ -226,10 +226,10 @@ marlais_add_method (Object generic, Object method)
 
       if (!last) {
         GFMETHODS (generic) = marlais_cons (method, CDR (methods));
-        return (marlais_construct_values (2, method, old_method));
+        return (marlais_values_args (2, method, old_method));
       } else {
         CDR (last) = marlais_cons (method, CDR (methods));
-        return (marlais_construct_values (2, method, old_method));
+        return (marlais_values_args (2, method, old_method));
       }
     }
     last = methods;
@@ -242,7 +242,7 @@ marlais_add_method (Object generic, Object method)
   GFCACHE (generic) = marlais_make_table (50);
 #endif
 
-  return (marlais_construct_values (2, method, MARLAIS_FALSE));
+  return (marlais_values_args (2, method, MARLAIS_FALSE));
 }
 
 Object
@@ -849,7 +849,7 @@ function_values (Object func)
   } else {
     marlais_fatal ("function-values: arg. must be a method or generic function", func, NULL);
   }
-  return marlais_construct_values (2,
+  return marlais_values_args (2,
                                    vals,
                                    rest == NULL ? MARLAIS_FALSE : rest);
 
@@ -914,7 +914,7 @@ function_arguments (Object fun)
   default:
     marlais_fatal ("function-arguments: bad argument", fun, NULL);
   }
-  return (marlais_construct_values (3, marlais_make_integer(marlais_list_length (params)), has_rest, keywords));
+  return (marlais_values_args (3, marlais_make_integer(marlais_list_length (params)), has_rest, keywords));
 }
 
 static int
@@ -1134,7 +1134,7 @@ split_sorted_methods (Object methods, Object sample_args)
       break;
     }
   }
-  return marlais_construct_values (2, methods, next);
+  return marlais_values_args (2, methods, next);
 }
 
 /* See KLUDGE ALERT below */

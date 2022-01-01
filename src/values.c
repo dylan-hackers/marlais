@@ -54,34 +54,15 @@ marlais_register_values (void)
 }
 
 Object
-marlais_make_values (Object vals)
-{
-  Object obj;
-  int i;
-
-  if (EMPTYLISTP (vals)) {
-    return MARLAIS_UNSPECIFIED;
-  } else {
-    obj = marlais_allocate_object (Values, sizeof (struct values));
-
-    VALUESNUM (obj) = marlais_list_length (vals);
-    VALUESELS (obj) = (Object *)
-      marlais_allocate_memory (VALUESNUM (obj) * sizeof (Object));
-
-    for (i = 0; i < VALUESNUM (obj); ++i) {
-      VALUESELS (obj)[i] = CAR (vals);
-      vals = CDR (vals);
-    }
-    return (obj);
-  }
-}
-
-Object
-marlais_construct_values (int num,...)
+marlais_values_args (int num,...)
 {
   Object obj;
   int i;
   va_list args;
+
+  if(num == 0) {
+    return MARLAIS_UNSPECIFIED;
+  }
 
   obj = marlais_allocate_object (Values, sizeof (struct values));
 
@@ -93,14 +74,40 @@ marlais_construct_values (int num,...)
     VALUESELS (obj)[i] = va_arg (args, Object);
   }
   va_end (args);
+
+  return (obj);
+}
+
+Object
+marlais_values_list (Object vals)
+{
+  Object obj;
+  int i;
+
+  if(EMPTYLISTP (vals)) {
+    return MARLAIS_UNSPECIFIED;
+  }
+
+  obj = marlais_allocate_object (Values, sizeof (struct values));
+
+  VALUESNUM (obj) = marlais_list_length (vals);
+  VALUESELS (obj) = (Object *) marlais_allocate_memory (VALUESNUM (obj) * sizeof (Object));
+
+  for (i = 0; i < VALUESNUM (obj); ++i) {
+    VALUESELS (obj)[i] = CAR (vals);
+    vals = CDR (vals);
+  }
+
   return (obj);
 }
 
 Object
 marlais_values (Object rest)
 {
-  if (EMPTYLISTP (rest) || PAIRP (CDR (rest))) {
-    return marlais_make_values (rest);
+  if (EMPTYLISTP (rest)) {
+    return MARLAIS_UNSPECIFIED;
+  } else if (PAIRP (CDR (rest))) {
+    return marlais_values_list (rest);
   } else {
     return (CAR (rest));
   }

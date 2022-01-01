@@ -433,7 +433,7 @@ prim_int_truncate_divide (Object i1, Object i2)
     int i2val;
     int quotient = (int) ((float) (i1val = INTVAL (i1)) / (i2val = INTVAL (i2)));
 
-    return marlais_construct_values (2,
+    return marlais_values_args (2,
                                      marlais_make_integer (quotient),
                                      marlais_make_integer (i1val - i2val * quotient));
 }
