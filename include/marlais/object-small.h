@@ -150,7 +150,6 @@ DEFINE_IMMEDP_PREDICATE(UCHARP, MARLAIS_SUB_UCHAR);
   static inline bool _name(Object obj) {                   \
     return (POINTERP(obj) && (POINTERTYPE(obj) == _type)); \
   }
-DEFINE_POINTERP_PREDICATE(BIGINTP, BigInteger);
 DEFINE_POINTERP_PREDICATE(SFLOATP, SingleFloat);
 DEFINE_POINTERP_PREDICATE(DFLOATP, DoubleFloat);
 DEFINE_POINTERP_PREDICATE(EFLOATP, ExtendedFloat);
