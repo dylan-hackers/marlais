@@ -560,7 +560,7 @@ bind_exit_eval (Object form)
     }
 
     /* build the exit object including the special marker frame */
-    exit_obj = marlais_allocate_object (Exit, sizeof (struct exitproc));
+    exit_obj = marlais_allocate_object (UnwindFunction, sizeof (struct exitproc));
     marlais_push_scope (CAR (form));
     marlais_add_local (sym, exit_obj, 1, the_env);
     EXITSYM (exit_obj) = sym;
@@ -1883,7 +1883,7 @@ unwind_protect_eval (Object form)
   protected = SECOND (form);
   cleanups = CDR (CDR (form));
 
-  unwind = marlais_allocate_object (Unwind, sizeof (struct unwind));
+  unwind = marlais_allocate_object (UnwindProtect, sizeof (struct unwind));
   UNWINDBODY (unwind) = cleanups;
 
   marlais_push_scope (CAR (form));

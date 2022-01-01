@@ -216,10 +216,10 @@ marlais_print_object (Object fd, Object obj, int escaped)
     break;
   case UnspecifiedValue:
     break;
-  case Exit:
-    fprintf (fp, "{exit procedure}");
+  case UnwindFunction:
+    fprintf (fp, "{unwind function}");
     break;
-  case Unwind:
+  case UnwindProtect:
     fprintf (fp, "{unwind protect}");
     break;
   case ObjectTableEntry:
