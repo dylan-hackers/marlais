@@ -10,18 +10,17 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#ifndef VERSION
-#define VERSION "0.7.0-preview0"
-#endif
-
-static int do_not_load_init_file = 0;
 static char *optstring = "dehnpsv";
+
+static bool opt_execute = 0;
+static bool opt_debug = 0;
+static bool opt_noinit = 0;
+static bool opt_stay = 0;
+
+
 char *prompt = "? ";
 char *prompt_continuation = "> ";
 char *current_prompt;
-static int debug = 0;
-int execute = 0;
-int stay = 0;
 int sequence_num = 0;
 
 static void print_top_level_constant(Object obj, int bind_p)
@@ -53,7 +52,7 @@ static int read_eval_print(FILE* f, int bind_constant_p)
   Object obj;
 
   /* <pcb> needs to be cleared after loading file */
-  marlais_parser_prepare_string("", debug);
+  marlais_parser_prepare_string("", opt_debug);
 
   if ((obj = marlais_parse_object ()) && (obj != MARLAIS_EOF)) {
     obj = marlais_eval (obj);
@@ -78,7 +77,7 @@ static int read_eval_print(FILE* f, int bind_constant_p)
 
 static void show_help()
 {
-  printf("Marlais %s -- a Dylan Language Interactor\n\n", VERSION);
+  printf("Marlais %s -- a Dylan Language Interactor\n\n", MARLAIS_VERSION);
   printf("marlais [-dhnpsv] [-e '<Dylan expression>'|<file.dylan> ...]\n\n"
          "Options:\n  -d -- Provide debugging information\n"
          "  -e -- Execute Dylan expression, print return values and "
@@ -105,25 +104,27 @@ static void parse_args(int argc, char* argv[])
   while ((c = getopt (argc, argv, optstring)) != EOF) {
     switch (c) {
     case 'd':
-      debug = 1;
+      opt_debug = true;
       break;
     case 'e':
-      execute = 1;
-      break;
-    case 'h':
-      show_help();
+      opt_execute = true;
       break;
     case 'n':
-      do_not_load_init_file = 1;
+      opt_noinit = true;
       break;
+    case 's':
+      opt_stay = true;
+      break;
+
     case 'p':
       prompt_continuation = "";
       break;
-    case 's':
-      stay = 1;
+
+    case 'h':
+      show_help();
       break;
     case 'v':
-      printf("Marlais, version %s\n", VERSION);
+      printf("Marlais, version %s\n", MARLAIS_VERSION);
       exit(0);
     default:
       printf("Unrecognized option '-%c'\n", c);
@@ -142,20 +143,22 @@ main (int argc, char *argv[])
   struct environment *cache_env;
   int maybe_quit = 0;
 
+  /* initialize locales */
   setlocale(LC_ALL, "");
 
-  /* initialization */
+  /* initialize marlais */
   marlais_initialize ();
 
+  /* parse arguments */
   parse_args(argc, argv);
 
-  if(execute) {
+  if(opt_execute) {
     /* put in a ; in case the user forgets */
     char command[256]; // win32 MSVC++ requires a constant here
     sprintf(command, "%s;", argv[optind]);
-    marlais_parser_prepare_string(command, debug);
+    marlais_parser_prepare_string(command, opt_debug);
     read_eval_print(stdin, 0);
-    if(!stay) exit(0);
+    if(!opt_stay) exit(0);
     optind++;
   }
 
@@ -166,9 +169,9 @@ main (int argc, char *argv[])
     optind++;
   }
 
-  if(maybe_quit && !stay) exit(0);
+  if(maybe_quit && !opt_stay) exit(0);
 
-  printf("Marlais %s\n", VERSION);
+  printf("Marlais %s\n", MARLAIS_VERSION);
 
   cache_env = the_env;
   current_prompt = prompt;

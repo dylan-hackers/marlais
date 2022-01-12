@@ -1,4 +1,11 @@
 
+/**/
+
+#define MARLAIS_VERSION "0.7.0-preview0"
+#define MARLAIS_BINARY_DIR  "bin"
+#define MARLAIS_INCLUDE_DIR "include"
+#define MARLAIS_LIBRARY_DIR "lib/marlais"
+
 /* Interpreter configuration */
 
 #define MARLAIS_ENABLE_METHOD_CACHING
@@ -22,4 +29,3 @@
 #ifdef MARLAIS_ENABLE_ICU
 #define MARLAIS_ENABLE_UCHAR
 #endif
-
