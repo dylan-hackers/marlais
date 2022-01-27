@@ -1,7 +1,7 @@
 module: dylan
 
 //
-// numbers.dylan
+// number.dylan
 //
 // Authors:
 //   Brent Benson
