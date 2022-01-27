@@ -32,7 +32,7 @@ static void  gmp_gc_free (void *obj, size_t old_size);
   static Object prim_ ## _mtype ## _lessthan (Object a, Object b);  \
   static Object prim_ ## _mtype ## _equal (Object a, Object b);
 
-/* Primitives that operate on <big-float> */
+/* Primitives on <big-float> */
 static Object prim_string_to_mpf(Object str, Object base);
 static Object prim_mpf_precision(Object obj);
 static Object prim_mpf_precision_setter(Object obj, Object value);
@@ -53,7 +53,7 @@ DECLARE_UNARY(mpf, floor);
 DECLARE_UNARY(mpf, trunc);
 DECLARE_UNARY(mpf, sqrt);
 
-/* Primitives that operate on <big-ratio> */
+/* Primitives on <big-ratio> */
 static Object prim_string_to_mpq(Object str, Object base);
 static Object prim_mpq_set_bang(Object obj, Object value);
 DECLARE_COMPARE(mpq);
@@ -68,7 +68,7 @@ DECLARE_UNARY(mpq, neg);
 DECLARE_UNARY(mpq, abs);
 DECLARE_UNARY(mpq, inv);
 
-/* Primitives that operate on <big-integer> */
+/* Primitives on <big-integer> */
 static Object prim_string_to_mpz(Object str, Object base);
 static Object prim_mpz_set_bang(Object obj, Object value);
 DECLARE_COMPARE(mpz);
@@ -486,9 +486,13 @@ prim_mpz_set_bang(Object obj, Object value)
   return value;
 }
 
+/* Internal type aliases */
+
 typedef struct marlais_bigfloat   mpf_obj;
 typedef struct marlais_bigratio   mpq_obj;
 typedef struct marlais_biginteger mpz_obj;
+
+/* Primitive definition macros */
 
 #define DEFINE_COMPARE_MP_MP(_mt, _dt, _mp, _mg)                        \
   static Object prim_ ## _mt ## _lessthan (Object a, Object b) {        \
@@ -694,6 +698,8 @@ typedef struct marlais_biginteger mpz_obj;
     return prim_ ## _mt ## _ ## _op ## _bang (q, r, a, b);              \
   }
 
+/* Primitives on <big-float> */
+
 DEFINE_COMPARE_MP_MP(mpf, BigFloat, MPFP, MPFVAL);
 DEFINE_BINARY_MP_MPUI_COM(mpf, BigFloat, MPFP, MPFVAL, add);
 DEFINE_BINARY_MPUI_MPUI(mpf, BigFloat, MPFP, MPFVAL, sub);
@@ -725,6 +731,8 @@ prim_mpf_negative_p (Object a)
   return marlais_make_boolean(mpf_sgn(MPFVAL(a)) < 0);
 }
 
+/* Primitives on <big-ratio> */
+
 DEFINE_COMPARE_MP_MP(mpq, BigRatio, MPQP, MPQVAL);
 DEFINE_BINARY_MP_MP(mpq, BigRatio, MPQP, MPQVAL, add);
 DEFINE_BINARY_MP_MP(mpq, BigRatio, MPQP, MPQVAL, sub);
@@ -751,6 +759,8 @@ prim_mpq_negative_p (Object a)
 {
   return marlais_make_boolean(mpq_sgn(MPQVAL(a)) < 0);
 }
+
+/* Primitives on <big-integer> */
 
 DEFINE_COMPARE_MP_MP(mpz, BigInteger, MPZP, MPZVAL);
 DEFINE_BINARY_MP_MPUI_COM(mpz, BigInteger, MPZP, MPZVAL, add);
