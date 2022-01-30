@@ -54,38 +54,37 @@ static Object prim_int_logand (Object n1, Object n2);
 static Object prim_int_logior (Object n1, Object n2);
 static Object prim_int_logxor (Object n1, Object n2);
 
-static struct primitive number_prims[] =
-{
-    {"%int<", prim_2, prim_int_less_than},
+static struct primitive number_prims[] = {
+  {"%int<", prim_2, prim_int_less_than},
 
-    {"%int-odd?", prim_1, prim_int_odd_p},
-    {"%int-even?", prim_1, prim_int_even_p},
-    {"%int-zero?", prim_1, prim_int_zero_p},
-    {"%int-positive?", prim_1, prim_int_positive_p},
-    {"%int-negative?", prim_1, prim_int_negative_p},
+  {"%int-odd?", prim_1, prim_int_odd_p},
+  {"%int-even?", prim_1, prim_int_even_p},
+  {"%int-zero?", prim_1, prim_int_zero_p},
+  {"%int-positive?", prim_1, prim_int_positive_p},
+  {"%int-negative?", prim_1, prim_int_negative_p},
 
-    {"%int-abs", prim_1, prim_int_abs},
-    {"%int-negative", prim_1, prim_int_negative},
+  {"%int-abs", prim_1, prim_int_abs},
+  {"%int-negative", prim_1, prim_int_negative},
 
-    {"%int-inverse", prim_1, prim_int_inverse},
+  {"%int-inverse", prim_1, prim_int_inverse},
 
-    {"%int-add", prim_2, prim_int_add},
-    {"%int-sub", prim_2, prim_int_sub},
-    {"%int-mul", prim_2, prim_int_mul},
-    {"%int-div", prim_2, prim_int_div},
-    {"%int-mod", prim_2, prim_int_mod},
-    {"%int-rem", prim_2, prim_int_rem},
+  {"%int-add", prim_2, prim_int_add},
+  {"%int-sub", prim_2, prim_int_sub},
+  {"%int-mul", prim_2, prim_int_mul},
+  {"%int-div", prim_2, prim_int_div},
+  {"%int-mod", prim_2, prim_int_mod},
+  {"%int-rem", prim_2, prim_int_rem},
 
-    {"%int-truncate/", prim_2, prim_int_truncate_divide},
+  {"%int-truncate/", prim_2, prim_int_truncate_divide},
 
-    {"%int-ash", prim_2, prim_int_ash},
-    {"%int-quotient", prim_2, prim_int_quotient},
-    {"%int-lognot", prim_1, prim_int_lognot},
-    {"%int-logand", prim_2, prim_int_logand},
-    {"%int-logior", prim_2, prim_int_logior},
-    {"%int-logxor", prim_2, prim_int_logxor},
+  {"%int-ash", prim_2, prim_int_ash},
+  {"%int-quotient", prim_2, prim_int_quotient},
+  {"%int-lognot", prim_1, prim_int_lognot},
+  {"%int-logand", prim_2, prim_int_logand},
+  {"%int-logior", prim_2, prim_int_logior},
+  {"%int-logxor", prim_2, prim_int_logxor},
 
-    {"%int-sqrt", prim_1, prim_int_sqrt},
+  {"%int-sqrt", prim_1, prim_int_sqrt},
 };
 
 /* function definitions */
@@ -96,17 +95,17 @@ marlais_register_number (void)
   /* register primitives */
   MARLAIS_REGISTER_PRIMS (number_prims);
 
-    /* integer constants */
-    marlais_add_export (marlais_make_name ("$integer-bits"),
-                        marlais_make_integer (MARLAIS_INTEGER_WIDTH), 1);
-    marlais_add_export (marlais_make_name ("$integer-size"),
-                        marlais_make_integer (sizeof(DyInteger)), 1);
-    marlais_add_export (marlais_make_name ("$integer-significant-bits"),
-                        marlais_make_integer (MARLAIS_INTEGER_WIDTH - 1), 1);
-    marlais_add_export (marlais_make_name ("$minimum-integer"),
-                        marlais_make_integer (MARLAIS_INTEGER_MIN), 1);
-    marlais_add_export (marlais_make_name ("$maximum-integer"),
-                        marlais_make_integer (MARLAIS_INTEGER_MAX), 1);
+  /* integer constants */
+  marlais_add_export (marlais_make_name ("$integer-bits"),
+                      marlais_make_integer (MARLAIS_INTEGER_WIDTH), 1);
+  marlais_add_export (marlais_make_name ("$integer-size"),
+                      marlais_make_integer (sizeof(DyInteger)), 1);
+  marlais_add_export (marlais_make_name ("$integer-significant-bits"),
+                      marlais_make_integer (MARLAIS_INTEGER_WIDTH - 1), 1);
+  marlais_add_export (marlais_make_name ("$minimum-integer"),
+                      marlais_make_integer (MARLAIS_INTEGER_MIN), 1);
+  marlais_add_export (marlais_make_name ("$maximum-integer"),
+                      marlais_make_integer (MARLAIS_INTEGER_MAX), 1);
 }
 
 #ifndef MARLAIS_OBJECT_MODEL_SMALL

@@ -84,48 +84,47 @@ static Object prim_double_tan (Object n);
 static Object prim_double_atan (Object n);
 static Object prim_double_atan2 (Object n1, Object n2);
 
-static struct primitive float_prims[] =
-{
-    {"%int-to-double", prim_1, prim_int_to_double},
-    {"%double-to-int", prim_1, prim_double_to_int},
+static struct primitive float_prims[] = {
+  {"%int-to-double", prim_1, prim_int_to_double},
+  {"%double-to-int", prim_1, prim_double_to_int},
 
-    {"%double<", prim_2, prim_double_lessthan},
+  {"%double<", prim_2, prim_double_lessthan},
 
-    {"%double-nan?", prim_1, prim_double_nan_p},
-    {"%double-zero?", prim_1, prim_double_zero_p},
-    {"%double-finite?", prim_1, prim_double_finite_p},
-    {"%double-infinite?", prim_1, prim_double_infinite_p},
-    {"%double-positive?", prim_1, prim_double_positive_p},
-    {"%double-negative?", prim_1, prim_double_negative_p},
+  {"%double-nan?", prim_1, prim_double_nan_p},
+  {"%double-zero?", prim_1, prim_double_zero_p},
+  {"%double-finite?", prim_1, prim_double_finite_p},
+  {"%double-infinite?", prim_1, prim_double_infinite_p},
+  {"%double-positive?", prim_1, prim_double_positive_p},
+  {"%double-negative?", prim_1, prim_double_negative_p},
 
-    {"%double-abs", prim_1, prim_double_abs},
-    {"%double-inverse", prim_1, prim_double_inverse},
-    {"%double-negative", prim_1, prim_double_negative},
+  {"%double-abs", prim_1, prim_double_abs},
+  {"%double-inverse", prim_1, prim_double_inverse},
+  {"%double-negative", prim_1, prim_double_negative},
 
-    {"%double-add", prim_2, prim_double_add},
-    {"%double-sub", prim_2, prim_double_sub},
-    {"%double-mul", prim_2, prim_double_mul},
-    {"%double-div", prim_2, prim_double_div},
-    {"%double-mod", prim_2, prim_double_mod},
-    {"%double-rem", prim_2, prim_double_rem},
+  {"%double-add", prim_2, prim_double_add},
+  {"%double-sub", prim_2, prim_double_sub},
+  {"%double-mul", prim_2, prim_double_mul},
+  {"%double-div", prim_2, prim_double_div},
+  {"%double-mod", prim_2, prim_double_mod},
+  {"%double-rem", prim_2, prim_double_rem},
 
-    {"%double-floor", prim_1, prim_double_floor},
-    {"%double-ceiling", prim_1, prim_double_ceiling},
-    {"%double-round", prim_1, prim_double_round},
-    {"%double-truncate", prim_1, prim_double_truncate},
-    {"%double-floor/", prim_2, prim_double_floor_divide},
-    {"%double-ceiling/", prim_2, prim_double_ceiling_divide},
-    {"%double-round/", prim_2, prim_double_round_divide},
-    {"%double-truncate/", prim_2, prim_double_truncate_divide},
+  {"%double-floor", prim_1, prim_double_floor},
+  {"%double-ceiling", prim_1, prim_double_ceiling},
+  {"%double-round", prim_1, prim_double_round},
+  {"%double-truncate", prim_1, prim_double_truncate},
+  {"%double-floor/", prim_2, prim_double_floor_divide},
+  {"%double-ceiling/", prim_2, prim_double_ceiling_divide},
+  {"%double-round/", prim_2, prim_double_round_divide},
+  {"%double-truncate/", prim_2, prim_double_truncate_divide},
 
-    {"%double-pow", prim_2, prim_double_pow},
-    {"%double-sqrt", prim_1, prim_double_sqrt},
-    {"%double-exp", prim_1, prim_double_exp},
-    {"%double-ln", prim_1, prim_double_log},
-    {"%double-cos", prim_1, prim_double_cos},
-    {"%double-sin", prim_1, prim_double_sin},
-    {"%double-atan", prim_1, prim_double_atan},
-    {"%double-atan2", prim_2, prim_double_atan2},
+  {"%double-pow", prim_2, prim_double_pow},
+  {"%double-sqrt", prim_1, prim_double_sqrt},
+  {"%double-exp", prim_1, prim_double_exp},
+  {"%double-ln", prim_1, prim_double_log},
+  {"%double-cos", prim_1, prim_double_cos},
+  {"%double-sin", prim_1, prim_double_sin},
+  {"%double-atan", prim_1, prim_double_atan},
+  {"%double-atan2", prim_2, prim_double_atan2},
 };
 
 /* External functions */
@@ -136,72 +135,72 @@ marlais_register_float (void)
   /* register primitives */
   MARLAIS_REGISTER_PRIMS (float_prims);
 
-    /* float constants */
-    marlais_add_export (marlais_make_name ("$float-radix"),
-                        marlais_make_integer (FLT_RADIX), 1);
+  /* float constants */
+  marlais_add_export (marlais_make_name ("$float-radix"),
+                      marlais_make_integer (FLT_RADIX), 1);
 
-    /* TODO the values of these constants are often wrong */
+  /* TODO the values of these constants are often wrong */
 
-    /* single float */
-    marlais_add_export (marlais_make_name ("$single-float-bits"),
-                        marlais_make_integer (sizeof(float) * 8), 1);
-    marlais_add_export (marlais_make_name ("$single-float-size"),
-                        marlais_make_integer (sizeof(float)), 1);
+  /* single float */
+  marlais_add_export (marlais_make_name ("$single-float-bits"),
+                      marlais_make_integer (sizeof(float) * 8), 1);
+  marlais_add_export (marlais_make_name ("$single-float-size"),
+                      marlais_make_integer (sizeof(float)), 1);
 #if 0
-    marlais_add_export (marlais_make_name ("$single-float-epsilon"),
-                        marlais_make_sfloat (FLT_EPSILON), 1);
+  marlais_add_export (marlais_make_name ("$single-float-epsilon"),
+                      marlais_make_sfloat (FLT_EPSILON), 1);
 #endif
-    marlais_add_export (marlais_make_name ("$single-float-exponent-bits"),
-                        marlais_make_integer (FLT_DIG), 1);
-    marlais_add_export (marlais_make_name ("$minimum-single-float"),
-                        marlais_make_sfloat (FLT_MIN), 1);
-    marlais_add_export (marlais_make_name ("$maximum-single-float"),
-                        marlais_make_sfloat (FLT_MAX), 1);
-    marlais_add_export (marlais_make_name ("$minimum-single-float-exponent"),
-                        marlais_make_integer (FLT_MIN_EXP), 1);
-    marlais_add_export (marlais_make_name ("$maximum-single-float-exponent"),
-                        marlais_make_integer (FLT_MAX_EXP), 1);
+  marlais_add_export (marlais_make_name ("$single-float-exponent-bits"),
+                      marlais_make_integer (FLT_DIG), 1);
+  marlais_add_export (marlais_make_name ("$minimum-single-float"),
+                      marlais_make_sfloat (FLT_MIN), 1);
+  marlais_add_export (marlais_make_name ("$maximum-single-float"),
+                      marlais_make_sfloat (FLT_MAX), 1);
+  marlais_add_export (marlais_make_name ("$minimum-single-float-exponent"),
+                      marlais_make_integer (FLT_MIN_EXP), 1);
+  marlais_add_export (marlais_make_name ("$maximum-single-float-exponent"),
+                      marlais_make_integer (FLT_MAX_EXP), 1);
 
-    /* double float */
-    marlais_add_export (marlais_make_name ("$double-float-bits"),
-                        marlais_make_integer (sizeof(double) * 8), 1);
-    marlais_add_export (marlais_make_name ("$double-float-size"),
-                        marlais_make_integer (sizeof(double)), 1);
+  /* double float */
+  marlais_add_export (marlais_make_name ("$double-float-bits"),
+                      marlais_make_integer (sizeof(double) * 8), 1);
+  marlais_add_export (marlais_make_name ("$double-float-size"),
+                      marlais_make_integer (sizeof(double)), 1);
 #if 0
-    marlais_add_export (marlais_make_name ("$double-float-epsilon"),
-                        marlais_make_dfloat (DBL_EPSILON), 1);
+  marlais_add_export (marlais_make_name ("$double-float-epsilon"),
+                      marlais_make_dfloat (DBL_EPSILON), 1);
 #endif
-    marlais_add_export (marlais_make_name ("$double-float-exponent-bits"),
-                        marlais_make_integer (DBL_DIG), 1);
-    marlais_add_export (marlais_make_name ("$minimum-double-float"),
-                        marlais_make_dfloat (DBL_MIN), 1);
-    marlais_add_export (marlais_make_name ("$maximum-double-float"),
-                        marlais_make_dfloat (DBL_MAX), 1);
-    marlais_add_export (marlais_make_name ("$minimum-double-float-exponent"),
-                        marlais_make_integer (DBL_MIN_EXP), 1);
-    marlais_add_export (marlais_make_name ("$maximum-double-float-exponent"),
-                        marlais_make_integer (DBL_MAX_EXP), 1);
+  marlais_add_export (marlais_make_name ("$double-float-exponent-bits"),
+                      marlais_make_integer (DBL_DIG), 1);
+  marlais_add_export (marlais_make_name ("$minimum-double-float"),
+                      marlais_make_dfloat (DBL_MIN), 1);
+  marlais_add_export (marlais_make_name ("$maximum-double-float"),
+                      marlais_make_dfloat (DBL_MAX), 1);
+  marlais_add_export (marlais_make_name ("$minimum-double-float-exponent"),
+                      marlais_make_integer (DBL_MIN_EXP), 1);
+  marlais_add_export (marlais_make_name ("$maximum-double-float-exponent"),
+                      marlais_make_integer (DBL_MAX_EXP), 1);
 
     /* extended float */
 #ifdef MARLAIS_ENABLE_EFLOAT
-    marlais_add_export (marlais_make_name ("$extended-float-bits"),
-                        marlais_make_integer (sizeof(long double) * 8), 1);
-    marlais_add_export (marlais_make_name ("$extended-float-size"),
-                        marlais_make_integer (sizeof(long double)), 1);
+  marlais_add_export (marlais_make_name ("$extended-float-bits"),
+                      marlais_make_integer (sizeof(long double) * 8), 1);
+  marlais_add_export (marlais_make_name ("$extended-float-size"),
+                      marlais_make_integer (sizeof(long double)), 1);
 #if 0
-    marlais_add_export (marlais_make_name ("$extended-float-epsilon"),
-                        marlais_make_efloat (LDBL_EPSILON), 1);
+  marlais_add_export (marlais_make_name ("$extended-float-epsilon"),
+                      marlais_make_efloat (LDBL_EPSILON), 1);
 #endif
-    marlais_add_export (marlais_make_name ("$extended-float-exponent-bits"),
-                        marlais_make_integer (LDBL_DIG), 1);
-    marlais_add_export (marlais_make_name ("$minimum-extended-float"),
-                        marlais_make_efloat (LDBL_MIN), 1);
-    marlais_add_export (marlais_make_name ("$maximum-extended-float"),
-                        marlais_make_efloat (LDBL_MAX), 1);
-    marlais_add_export (marlais_make_name ("$minimum-extended-float-exponent"),
-                        marlais_make_integer (LDBL_MIN_EXP), 1);
-    marlais_add_export (marlais_make_name ("$maximum-extended-float-exponent"),
-                        marlais_make_integer (LDBL_MAX_EXP), 1);
+  marlais_add_export (marlais_make_name ("$extended-float-exponent-bits"),
+                      marlais_make_integer (LDBL_DIG), 1);
+  marlais_add_export (marlais_make_name ("$minimum-extended-float"),
+                      marlais_make_efloat (LDBL_MIN), 1);
+  marlais_add_export (marlais_make_name ("$maximum-extended-float"),
+                      marlais_make_efloat (LDBL_MAX), 1);
+  marlais_add_export (marlais_make_name ("$minimum-extended-float-exponent"),
+                      marlais_make_integer (LDBL_MIN_EXP), 1);
+  marlais_add_export (marlais_make_name ("$maximum-extended-float-exponent"),
+                      marlais_make_integer (LDBL_MAX_EXP), 1);
 #endif /* MARLAIS_ENABLE_EFLOAT */
 }
 
