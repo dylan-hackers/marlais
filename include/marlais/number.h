@@ -53,5 +53,9 @@ extern Object marlais_make_ratio (DyInteger numerator, DyInteger denominator);
 extern Object marlais_make_sfloat (float f);
 /* Make a <double-float> */
 extern Object marlais_make_dfloat (double d);
+#ifdef MARLAIS_ENABLE_EFLOAT
+/* Make a <extended-float> */
+extern Object marlais_make_efloat (long double d);
+#endif
 
 #endif
