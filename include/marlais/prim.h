@@ -44,4 +44,9 @@ extern Object marlais_make_primitive (char *name, enum primtype type, Object (*f
 /* Apply a primitive */
 extern Object marlais_apply_prim (Object prim, Object args);
 
+/* Convenience macro for registering primitives */
+#define MARLAIS_REGISTER_PRIMS(_array) \
+  marlais_register_prims(sizeof(_array) / sizeof(struct primitive),     \
+                         _array);
+
 #endif

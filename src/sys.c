@@ -51,11 +51,7 @@ static struct primitive sys_prims[] =
 void
 marlais_register_sys (void)
 {
-    int num;
-
-    num = sizeof (sys_prims) / sizeof (struct primitive);
-
-    marlais_register_prims (num, sys_prims);
+  MARLAIS_REGISTER_PRIMS (sys_prims);
 }
 
 Object

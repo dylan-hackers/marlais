@@ -92,10 +92,7 @@ static struct primitive function_prims[] =
 void
 marlais_register_function (void)
 {
-  int num;
-
-  num = sizeof (function_prims) / sizeof (struct primitive);
-  marlais_register_prims (num, function_prims);
+  MARLAIS_REGISTER_PRIMS (function_prims);
 }
 
 Object

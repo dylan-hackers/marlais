@@ -44,11 +44,7 @@ static struct primitive foreign_prims[] =
 void
 init_foreign_prims (void)
 {
-    int num;
-
-    num = sizeof (foreign_prims) / sizeof (struct primitive);
-
-    marlais_register_prims (num, foreign_prims);
+  MARLAIS_REGISTER_PRIMS (foreign_prims);
 }
 
 #ifdef DLOPEN

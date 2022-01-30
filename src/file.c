@@ -30,8 +30,7 @@ static void close_file (FILE * fp);
 void
 marlais_register_file (void)
 {
-  int num = sizeof (file_prims) / sizeof (struct primitive);
-  marlais_register_prims (num, file_prims);
+  MARLAIS_REGISTER_PRIMS (file_prims);
 }
 
 static Object

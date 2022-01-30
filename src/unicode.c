@@ -62,8 +62,7 @@ marlais_initialize_icu (void)
 void
 marlais_register_icu (void)
 {
-  int num = sizeof (icu_prims) / sizeof (struct primitive);
-  marlais_register_prims (num, icu_prims);
+  MARLAIS_REGISTER_PRIMS (icu_prims);
 
   /* unicode constants */
   marlais_add_export (marlais_make_name ("$unicode-version"),

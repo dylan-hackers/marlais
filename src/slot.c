@@ -31,11 +31,7 @@ static struct primitive slot_prims[] =
 void
 marlais_register_slot (void)
 {
-    int num;
-
-    num = sizeof (slot_prims) / sizeof (struct primitive);
-
-    marlais_register_prims (num, slot_prims);
+  MARLAIS_REGISTER_PRIMS (slot_prims);
 }
 
 Object

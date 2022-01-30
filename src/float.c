@@ -133,9 +133,8 @@ static struct primitive float_prims[] =
 void
 marlais_register_float (void)
 {
-    /* register primitives */
-    int num =  sizeof (float_prims) / sizeof (struct primitive);
-    marlais_register_prims (num, float_prims);
+  /* register primitives */
+  MARLAIS_REGISTER_PRIMS (float_prims);
 
     /* float constants */
     marlais_add_export (marlais_make_name ("$float-radix"),

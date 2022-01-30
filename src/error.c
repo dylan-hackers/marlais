@@ -32,8 +32,7 @@ static struct primitive error_prims[] =
 void
 marlais_register_error (void)
 {
-  int num = sizeof (error_prims) / sizeof (struct primitive);
-  marlais_register_prims (num, error_prims);
+  MARLAIS_REGISTER_PRIMS (error_prims);
 }
 
 Object

@@ -55,8 +55,7 @@ marlais_initialize_module (void)
 void
 marlais_register_module (void)
 {
-  int num = sizeof (module_prims) / sizeof (struct primitive);
-  marlais_register_prims (num, module_prims);
+  MARLAIS_REGISTER_PRIMS (module_prims);
 }
 
 Object

@@ -87,8 +87,7 @@ static struct primitive table_prims[] =
 void
 marlais_register_table (void)
 {
-  int num = sizeof (table_prims) / sizeof (struct primitive);
-  marlais_register_prims (num, table_prims);
+  MARLAIS_REGISTER_PRIMS (table_prims);
   table_default = marlais_cons (MARLAIS_FALSE, MARLAIS_FALSE);
 }
 

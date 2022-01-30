@@ -44,8 +44,7 @@ marlais_initialize_gc (void)
 void
 marlais_register_gc (void)
 {
-  int num = sizeof (gc_prims) / sizeof (struct primitive);
-  marlais_register_prims (num, gc_prims);
+  MARLAIS_REGISTER_PRIMS (gc_prims);
 }
 
 void

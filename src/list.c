@@ -85,8 +85,7 @@ static struct primitive list_prims[] =
 void
 marlais_register_list (void)
 {
-    int num = sizeof (list_prims) / sizeof (struct primitive);
-    marlais_register_prims (num, list_prims);
+  MARLAIS_REGISTER_PRIMS (list_prims);
 }
 
 Object

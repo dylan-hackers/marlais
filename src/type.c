@@ -25,8 +25,7 @@ static struct primitive type_prims[] =
 void
 marlais_register_type (void)
 {
-  int num = sizeof (type_prims) / sizeof (struct primitive);
-  marlais_register_prims (num, type_prims);
+  MARLAIS_REGISTER_PRIMS (type_prims);
 }
 
 bool

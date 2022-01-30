@@ -70,8 +70,7 @@ static struct primitive symbol_prims[] =
 void
 marlais_register_symbol (void)
 {
-  int num = sizeof (symbol_prims) / sizeof (struct primitive);
-  marlais_register_prims (num, symbol_prims);
+  MARLAIS_REGISTER_PRIMS (symbol_prims);
 }
 
 Object

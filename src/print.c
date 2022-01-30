@@ -65,8 +65,7 @@ static struct primitive print_prims[] =
 void
 marlais_register_print (void)
 {
-  int num = sizeof (print_prims) / sizeof (struct primitive);
-  marlais_register_prims (num, print_prims);
+  MARLAIS_REGISTER_PRIMS (print_prims);
 }
 
 void

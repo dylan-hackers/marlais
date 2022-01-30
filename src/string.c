@@ -143,8 +143,7 @@ static struct primitive string_prims[] =
 void
 marlais_register_string (void)
 {
-    int num = sizeof (string_prims) / sizeof (struct primitive);
-    marlais_register_prims (num, string_prims);
+  MARLAIS_REGISTER_PRIMS (string_prims);
 }
 
 Object

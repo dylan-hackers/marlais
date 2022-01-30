@@ -30,8 +30,7 @@ static struct primitive stdio_prims[] =
 void
 marlais_register_stdio (void)
 {
-  int num = sizeof (stdio_prims) / sizeof (struct primitive);
-  marlais_register_prims (num, stdio_prims);
+  MARLAIS_REGISTER_PRIMS (stdio_prims);
 }
 
 Object

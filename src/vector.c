@@ -60,8 +60,7 @@ static struct primitive vector_prims[] =
 void
 marlais_register_vector (void)
 {
-  int num = sizeof (vector_prims) / sizeof (struct primitive);
-  marlais_register_prims (num, vector_prims);
+  MARLAIS_REGISTER_PRIMS (vector_prims);
 }
 
 Object

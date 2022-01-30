@@ -93,9 +93,8 @@ static struct primitive number_prims[] =
 void
 marlais_register_number (void)
 {
-    /* register primitives */
-    int num =  sizeof (number_prims) / sizeof (struct primitive);
-    marlais_register_prims (num, number_prims);
+  /* register primitives */
+  MARLAIS_REGISTER_PRIMS (number_prims);
 
     /* integer constants */
     marlais_add_export (marlais_make_name ("$integer-bits"),
