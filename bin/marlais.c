@@ -12,8 +12,8 @@
 
 static char *optstring = "dehnpsv";
 
-static bool opt_execute = 0;
 static bool opt_debug = 0;
+static bool opt_expressions = 0;
 static bool opt_noinit = 0;
 static bool opt_stay = 0;
 
@@ -107,7 +107,7 @@ static void parse_args(int argc, char* argv[])
       opt_debug = true;
       break;
     case 'e':
-      opt_execute = true;
+      opt_expressions = true;
       break;
     case 'n':
       opt_noinit = true;
@@ -152,20 +152,20 @@ main (int argc, char *argv[])
   /* parse arguments */
   parse_args(argc, argv);
 
-  if(opt_execute) {
+  /* load any source files specified on command line */
+  while (optind < argc) {
+    marlais_load (marlais_make_bytestring (argv[optind]));
+    maybe_quit = 1;
+    optind++;
+  }
+
+  if(opt_expressions) {
     /* put in a ; in case the user forgets */
     char command[256]; // win32 MSVC++ requires a constant here
     sprintf(command, "%s;", argv[optind]);
     marlais_parser_prepare_string(command, opt_debug);
     read_eval_print(stdin, 0);
     if(!opt_stay) exit(0);
-    optind++;
-  }
-
-  /* load any source files specified on command line */
-  while (optind < argc) {
-    marlais_load (marlais_make_bytestring (argv[optind]));
-    maybe_quit = 1;
     optind++;
   }
 
