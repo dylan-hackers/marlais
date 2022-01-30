@@ -326,7 +326,7 @@ octal-digit:
                 one of 0 1 2 3 4 5 6 7
 decimal-digit:
                 one of 0 1 2 3 4 5 6 7 8 9
-hex-digit:      # we extend this to accept lowercase
+hex-digit:
                 one of 0 1 2 3 4 5 6 7 8 9 A B C D E F
 */
 
