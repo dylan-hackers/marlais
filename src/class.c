@@ -460,6 +460,74 @@ marlais_initialize_class (void)
                         MARLAIS_CLASS_SEALED,
                         object_class);
 
+  /* Expressions */
+#if 0
+  d_expression_class =
+    make_builtin_class("<d-expression>",
+                       MARLAIS_CLASS_ABSTRACT,
+                       object_class);
+  d_leaf_class =
+    make_builtin_class("<d-leaf>",
+                       MARLAIS_CLASS_ABSTRACT,
+                       d_expression_class);
+  d_compound_class =
+    make_builtin_class("<d-compound>",
+                       MARLAIS_CLASS_ABSTRACT,
+                       d_expression_class);
+  d_identifier_class =
+    make_builtin_class("<d-identifier>",
+                       MARLAIS_CLASS_DEFAULT,
+                       d_leaf_class);
+  d_literal_class =
+    make_builtin_class("<d-literal>",
+                       MARLAIS_CLASS_DEFAULT,
+                       d_leaf_class);
+  d_punctuation_class =
+    make_builtin_class("<d-punctuation>",
+                       MARLAIS_CLASS_DEFAULT,
+                       d_leaf_class);
+  d_nested_class =
+    make_builtin_class("<d-nested>",
+                       MARLAIS_CLASS_DEFAULT,
+                       d_compound_class);
+  d_macro_call_class =
+    make_builtin_class("<d-macro-call>",
+                       MARLAISS_CLASS_DEFAULT,
+                       d_compound_class);
+  d_sequence_class =
+    make_builtin_class("<d-sequence>",
+                       MARLAIS_CLASS_DEFAULT,
+                       d_compound_class);
+#endif
+
+  /* Unwinder */
+#if 0
+  unwind_frame_class =
+    make_builtin_class ("<unwind-frame>",
+                        MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
+                        object_class);
+  toplevel_frame_class =
+    make_builtin_class ("<toplevel-frame>",
+                        MARLAIS_CLASS_SEALED,
+                        unwind_frame_class);
+  bindings_frame_class =
+    make_builtin_class ("<bindings-frame>",
+                        MARLAIS_CLASS_SEALED,
+                        unwind_frame_class);
+  call_frame_class =
+    make_builtin_class ("<call-frame>",
+                        MARLAIS_CLASS_SEALED,
+                        unwind_frame_class);
+  exit_frame_class =
+    make_builtin_class ("<exit-frame>",
+                        MARLAIS_CLASS_SEALED,
+                        unwind_frame_class);
+  cleanup_frame_class =
+    make_builtin_class ("<cleanup-frame>",
+                        MARLAIS_CLASS_SEALED,
+                        unwind_frame_class);
+#endif
+
   /* GMP numbers */
 #ifdef MARLAIS_ENABLE_GMP
   big_float_class =
