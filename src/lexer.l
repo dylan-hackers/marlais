@@ -716,8 +716,8 @@ marlais_initialize_lexer (void)
 void
 marlais_lexer_reset (void)
 {
-        yylineno = 1;
-        BEGIN(INI);
+  yylineno = 1;
+  BEGIN(INI);
 }
 
 void
