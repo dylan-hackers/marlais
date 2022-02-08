@@ -486,7 +486,7 @@ define method lognot (i :: <small-integer>)
   %int-lognot (i);
 end method;
 
-define method binary-logand (i1 :: <integer>, i2 :: <integer>)
+define method binary-logand (i1 :: <small-integer>, i2 :: <small-integer>)
  => value :: <small-integer>;
   %int-logand (i1, i2);
 end method;
