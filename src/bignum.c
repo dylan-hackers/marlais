@@ -92,11 +92,9 @@ DECLARE_DIVIDE(mpz, tdiv_qr);
 DECLARE_UNARY(mpz, neg);
 DECLARE_UNARY(mpz, abs);
 DECLARE_UNARY(mpz, com);
-#if 0
 DECLARE_BINARY(mpz, and);
 DECLARE_BINARY(mpz, ior);
 DECLARE_BINARY(mpz, xor);
-#endif
 
 /* We no longer need the declaration macros */
 #undef DECLARE_UNARY
@@ -202,12 +200,10 @@ static struct primitive gmp_prims[] =
   {"%mpz-tdiv-r", prim_2, prim_mpz_tdiv_r},
   {"%mpz-tdiv-qr", prim_2, prim_mpz_tdiv_qr},
 
-#if 0
   {"%mpz-com", prim_1, prim_mpz_com},
   {"%mpz-and", prim_2, prim_mpz_and},
   {"%mpz-ior", prim_2, prim_mpz_ior},
   {"%mpz-xor", prim_2, prim_mpz_xor},
-#endif
 
   {"%mpz-set!", prim_2, prim_mpz_set_bang},
 
@@ -228,12 +224,10 @@ static struct primitive gmp_prims[] =
   {"%mpz-tdiv-r!", prim_3, prim_mpz_tdiv_r_bang},
   {"%mpz-tdiv-qr!", prim_4, prim_mpz_tdiv_qr_bang},
 
-#if 0
   {"%mpz-com!", prim_2, prim_mpz_com_bang},
   {"%mpz-and!", prim_3, prim_mpz_and_bang},
   {"%mpz-ior!", prim_3, prim_mpz_ior_bang},
   {"%mpz-xor!", prim_3, prim_mpz_xor_bang},
-#endif
 
 };
 
@@ -777,6 +771,10 @@ DEFINE_BINARY_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, tdiv_r);
 DEFINE_DIVIDE_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, tdiv_qr);
 DEFINE_UNARY_MP(mpz, BigInteger, MPZP, MPZVAL, neg);
 DEFINE_UNARY_MP(mpz, BigInteger, MPZP, MPZVAL, abs);
+DEFINE_UNARY_MP(mpz, BigInteger, MPZP, MPZVAL, com);
+DEFINE_BINARY_MP_MP(mpz, BigInteger, MPZP, MPZVAL, and);
+DEFINE_BINARY_MP_MP(mpz, BigInteger, MPZP, MPZVAL, ior);
+DEFINE_BINARY_MP_MP(mpz, BigInteger, MPZP, MPZVAL, xor);
 
 static Object
 prim_mpz_zero_p (Object a)
