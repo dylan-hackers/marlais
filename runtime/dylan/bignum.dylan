@@ -1,6 +1,13 @@
 module: dylan
 
 //
+// bignum.dylan
+//
+// Authors:
+//   Ingo Albrecht
+//
+
+//
 // Number coercion
 //
 
@@ -303,22 +310,42 @@ define method \= (n1 :: <integer>, n2 :: <big-integer>)
 end method \<;
 
 //
-// Unary operations
+// Sign operations
 //
 
 // On <big-float>
-
-define method negative (n :: <big-float>)
-  %mpf-neg(n);
-end method negative;
 
 define method abs (n :: <big-float>)
   %mpf-abs(n);
 end method abs;
 
-define method sqrt (n :: <big-float>)
-  %mpf-sqrt(n);
-end method sqrt;
+define method negative (n :: <big-float>)
+  %mpf-neg(n);
+end method negative;
+
+// On <big-ratio>
+
+define method abs (n :: <big-ratio>)
+  %mpq-abs(n);
+end method abs;
+
+define method negative (n :: <big-ratio>)
+  %mpq-neg(n);
+end method neg;
+
+// On <big-integer>
+
+define method abs (n :: <big-integer>)
+  %mpz-abs(n);
+end method abs;
+
+define method negative (n :: <big-integer>)
+  %mpz-neg(n);
+end method neg;
+
+//
+// Division operations
+//
 
 define method ceiling (n :: <big-float>)
   // XXX no remainder
@@ -335,25 +362,34 @@ define method truncate (n :: <big-float>)
   %mpf-trunc(n);
 end method truncate;
 
-// On <big-ratio>
+//
+// Integer operations
+//
 
-define method negative (n :: <big-ratio>)
-  %mpq-neg(n);
-end method neg;
+define method popcount (i :: <big-integer>)
+ => count :: <integer>;
+  %mpz-popcount (i);
+end method;
 
-define method abs (n :: <big-ratio>)
-  %mpq-abs(n);
-end method abs;
+define method lognot (i :: <big-integer>)
+ => value :: <big-integer>;
+  %mpz-com (i);
+end method;
 
-// On <big-integer>
+define method binary-logand (i1 :: <big-integer>, i2 :: <big-integer>)
+ => value :: <big-integer>;
+  %mpz-and (i1, i2);
+end method;
 
-define method negative (n :: <big-integer>)
-  %mpz-neg(n);
-end method neg;
+define method binary-logior (i1 :: <big-integer>, i2 :: <big-integer>)
+ => value :: <big-integer>;
+  %mpz-ior (i1, i2);
+end method;
 
-define method abs (n :: <big-integer>)
-  %mpz-abs(n);
-end method abs;
+define method binary-logxor (i1 :: <big-integer>, i2 :: <big-integer>)
+ => value :: <big-integer>;
+  %mpz-xor (i1, i2);
+end method;
 
 //
 // Binary operations
@@ -686,3 +722,19 @@ end method \*;
 define method \* (n1 :: <integer>, n2 :: <big-integer>)
   %mpz-mul (as (<big-integer>, n1), n2);
 end method \*;
+
+//
+// Roots
+//
+
+define method sqrt (n :: <big-float>)
+  %mpf-sqrt(n);
+end method sqrt;
+
+define method sqrt (n :: <big-ratio>)
+  %mpf-sqrt(as(<big-float>, n));
+end method sqrt;
+
+define method sqrt (n :: <big-integer>)
+  %mpf-sqrt(as(<big-float>, n));
+end method sqrt;
