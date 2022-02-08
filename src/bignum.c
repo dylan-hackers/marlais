@@ -722,7 +722,7 @@ prim_mpf_positive_p (Object a)
 static Object
 prim_mpf_negative_p (Object a)
 {
-  return marlais_make_boolean(mpf_sgn(MPFVAL(a)) < 0);
+  return marlais_make_boolean(MPFP(a) && mpf_sgn(MPFVAL(a)) < 0);
 }
 
 /* Primitives on <big-ratio> */
@@ -739,19 +739,19 @@ DEFINE_UNARY_MP(mpq, BigRatio, MPQP, MPQVAL, inv);
 static Object
 prim_mpq_zero_p (Object a)
 {
-  return marlais_make_boolean(mpq_sgn(MPQVAL(a)) == 0);
+  return marlais_make_boolean(MPQP(a) && mpq_sgn(MPQVAL(a)) == 0);
 }
 
 static Object
 prim_mpq_positive_p (Object a)
 {
-  return marlais_make_boolean(mpq_sgn(MPQVAL(a)) > 0);
+  return marlais_make_boolean(MPQP(a) && mpq_sgn(MPQVAL(a)) > 0);
 }
 
 static Object
 prim_mpq_negative_p (Object a)
 {
-  return marlais_make_boolean(mpq_sgn(MPQVAL(a)) < 0);
+  return marlais_make_boolean(MPQP(a) && mpq_sgn(MPQVAL(a)) < 0);
 }
 
 /* Primitives on <big-integer> */
@@ -779,29 +779,29 @@ DEFINE_BINARY_MP_MP(mpz, BigInteger, MPZP, MPZVAL, xor);
 static Object
 prim_mpz_zero_p (Object a)
 {
-  return marlais_make_boolean(mpz_sgn(MPZVAL(a)) == 0);
+  return marlais_make_boolean(MPZP(a) && mpz_sgn(MPZVAL(a)) == 0);
 }
 
 static Object
 prim_mpz_positive_p (Object a)
 {
-  return marlais_make_boolean(mpz_sgn(MPZVAL(a)) > 0);
+  return marlais_make_boolean(MPZP(a) && mpz_sgn(MPZVAL(a)) > 0);
 }
 
 static Object
 prim_mpz_negative_p (Object a)
 {
-  return marlais_make_boolean(mpz_sgn(MPZVAL(a)) < 0);
+  return marlais_make_boolean(MPZP(a) && mpz_sgn(MPZVAL(a)) < 0);
 }
 
 static Object
 prim_mpz_even_p (Object a)
 {
-  return marlais_make_boolean(mpz_even_p(MPZVAL(a)));
+  return marlais_make_boolean(MPZP(a) && mpz_even_p(MPZVAL(a)));
 }
 
 static Object
 prim_mpz_odd_p (Object a)
 {
-  return marlais_make_boolean(mpz_odd_p(MPZVAL(a)));
+  return marlais_make_boolean(MPZP(a) && mpz_odd_p(MPZVAL(a)));
 }
