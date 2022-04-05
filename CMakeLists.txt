@@ -8,7 +8,7 @@ find_package(PkgConfig REQUIRED)
 find_package(BISON REQUIRED)
 find_package(FLEX REQUIRED)
 
-# Check for the BDWgarbage collector
+# Check for the BDW garbage collector
 pkg_check_modules(BDWGC REQUIRED bdw-gc)
 # Check for the ICU unicode library
 pkg_check_modules(ICU REQUIRED icu-uc icu-io)
