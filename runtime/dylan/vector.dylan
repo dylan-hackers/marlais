@@ -28,7 +28,11 @@ define method initial-state (v :: <vector>)
 end method initial-state;
 
 define method final-state (v :: <vector>)
-  v.size - 1;
+  if (v.size == 0)
+    #f
+  else
+    v.size - 1;
+  end if;
 end method final-state;
 
 define method next-state (v :: <vector>, state :: <integer-state>)
