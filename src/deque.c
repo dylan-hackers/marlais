@@ -37,6 +37,7 @@
 #include <marlais/alloc.h>
 #include <marlais/prim.h>
 #include <marlais/sequence.h>
+#include <marlais/vector.h>
 
 /* Internal functions */
 
@@ -45,10 +46,6 @@ static Object deque_make_entry (Object prev, Object value, Object next);
 /* Primitives */
 
 static Object deque_size (Object d);
-static Object deque_push (Object d, Object new);
-static Object deque_pop (Object d);
-static Object deque_push_last (Object d, Object new);
-static Object deque_pop_last (Object d);
 static Object deque_first (Object d, Object default_ob);
 static Object deque_last (Object d, Object default_ob);
 static Object deque_element (Object d, Object i, Object default_ob);
@@ -65,11 +62,13 @@ static Object deque_current_element_setter (Object d,
 
 static struct primitive deque_prims[] =
 {
-/*{"%deque-size", prim_1, deque_size},*/
-  {"%deque-push", prim_2, deque_push},
-  {"%deque-pop", prim_1, deque_pop},
-  {"%deque-push-last", prim_2, deque_push_last},
-  {"%deque-pop-last", prim_1, deque_pop_last},
+  {"%deque-size",      prim_1, deque_size},
+
+  {"%deque-push",      prim_2, marlais_deque_push},
+  {"%deque-pop",       prim_1, marlais_deque_pop},
+  {"%deque-push-last", prim_2, marlais_deque_push_last},
+  {"%deque-pop-last",  prim_1, marlais_deque_pop_last},
+
   {"%deque-first", prim_2, deque_first},
   {"%deque-last", prim_2, deque_last},
   {"%deque-element", prim_3, deque_element},
@@ -81,6 +80,11 @@ static struct primitive deque_prims[] =
   {"%deque-previous-state", prim_2, deque_previous_state},
   {"%deque-current-element", prim_2, deque_current_element},
   {"%deque-current-element-setter", prim_3, deque_current_element_setter},
+
+  {"%deque->list",   prim_1, marlais_deque_to_list},
+  {"%deque->vector", prim_1, marlais_deque_to_vector},
+  {"%list->deque",   prim_1, marlais_list_to_deque},
+  {"%vector->deque", prim_1, marlais_vector_to_deque},
 };
 
 /* Exported functions */
@@ -128,21 +132,21 @@ marlais_make_deque_entrypoint (Object args)
   return (deq);
 }
 
-/* Internal functions */
-
-static Object
-deque_make_entry (Object prev, Object value, Object next)
+int
+marlais_deque_size (Object d)
 {
-  Object obj = marlais_allocate_object (ObjectDequeEntry, sizeof (struct deque_entry));
-
-  DEPREV (obj) = prev;
-  DEVALUE (obj) = value;
-  DENEXT (obj) = next;
-  return (obj);
+  int res = 0;
+  Object de = DEQUEFIRST(d);
+  while(!EMPTYLISTP(de)) {
+    res++;
+    de = DENEXT (de);
+  }
+  return res;
 }
 
-static Object
-deque_push (Object d, Object new)
+
+Object
+marlais_deque_push (Object d, Object new)
 {
   Object new_entry = deque_make_entry(MARLAIS_NIL, new, DEQUEFIRST (d));
   if (EMPTYLISTP (DEQUEFIRST (d))) {
@@ -154,8 +158,8 @@ deque_push (Object d, Object new)
   return (d);
 }
 
-static Object
-deque_pop (Object d)
+Object
+marlais_deque_pop (Object d)
 {
   Object ret;
 
@@ -170,8 +174,8 @@ deque_pop (Object d)
   return (ret);
 }
 
-static Object
-deque_push_last (Object d, Object new)
+Object
+marlais_deque_push_last (Object d, Object new)
 {
   Object new_entry = deque_make_entry (DEQUELAST (d), new, MARLAIS_NIL);
   if (EMPTYLISTP (DEQUEFIRST (d))) {
@@ -184,8 +188,8 @@ deque_push_last (Object d, Object new)
   return (d);
 }
 
-static Object
-deque_pop_last (Object d)
+Object
+marlais_deque_pop_last (Object d)
 {
   Object res;
 
@@ -202,6 +206,75 @@ deque_pop_last (Object d)
     }
   }
   return (res);
+}
+
+Object
+marlais_deque_to_list (Object deq)
+{
+  Object l = MARLAIS_NIL;
+  Object de = DEQUELAST(deq);
+  while(!EMPTYLISTP (de)) {
+    l = marlais_cons (DEVALUE (de), l);
+    de = DEPREV (de);
+  }
+  return l;
+}
+
+Object
+marlais_deque_to_vector (Object deq)
+{
+  int n = marlais_deque_size (deq), i = 0;
+  Object v = marlais_make_vector (n, MARLAIS_NIL);
+  Object de = DEQUEFIRST (deq);
+  while(!EMPTYLISTP (de)) {
+    SOVELS(v)[i] = DEVALUE (de);
+    de = DENEXT (de);
+  }
+  return v;
+}
+
+Object
+marlais_list_to_deque (Object lst)
+{
+  Object d = marlais_make_deque ();
+  Object l = lst;
+  while(!EMPTYLISTP (l)) {
+    marlais_deque_push_last (d, CAR (l));
+    l = CDR (l);
+  }
+  return d;
+}
+
+Object
+marlais_vector_to_deque (Object vec)
+{
+  Object d = marlais_make_deque ();
+  int n = SOVSIZE (vec), i;
+  for(i = 0; i < n; i++) {
+    marlais_deque_push_last (d, SOVELS(vec)[i]);
+  }
+  return d;
+}
+
+/* Internal functions */
+
+static Object
+deque_make_entry (Object prev, Object value, Object next)
+{
+  Object obj = marlais_allocate_object (ObjectDequeEntry, sizeof (struct deque_entry));
+
+  DEPREV (obj) = prev;
+  DEVALUE (obj) = value;
+  DENEXT (obj) = next;
+  return (obj);
+}
+
+/* Primitives */
+
+static Object
+deque_size (Object d)
+{
+  return marlais_make_integer(marlais_deque_size(d));
 }
 
 static Object

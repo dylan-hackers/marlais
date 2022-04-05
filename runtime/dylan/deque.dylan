@@ -8,12 +8,12 @@ module: dylan
 //
 
 //
-// empty?
+// Sizing
 //
 
 // This method required because the general empty? method assumes that
 // the final state is #f.
-define method empty?(d :: <deque>)
+define method empty? (d :: <deque>)
   if (%deque-initial-state (d))
     #f
   else
@@ -21,49 +21,37 @@ define method empty?(d :: <deque>)
   end
 end method empty?;
 
+define method size (d :: <deque>)
+  %deque-size (d);
+end method;
+
 //
-// push
+// Push and pop
 //
 
 define method push (d :: <deque>, new)
   %deque-push (d, new);
 end method push;
 
-//
-// pop
-//
-
 define method pop (d :: <deque>)
   %deque-pop (d);
 end method pop;
 
-//
-// push-last
-//
-
 define method push-last (d :: <deque>, new)
   %deque-push-last (d, new);
 end method push-last;
-
-//
-// pop-last
-//
 
 define method pop-last (d :: <deque>)
   %deque-pop-last (d);
 end method pop-last;
 
 //
-// first
+// Element access
 //
 
 define method first (d ::<deque>, #key default = %default-object)
   %deque-first (d, default);
 end method first;
-
-//
-// last
-//
 
 define method last (d :: <deque>, #key default = %default-object)
   %deque-last (d, default)
@@ -71,34 +59,22 @@ end method last;
 
 // TODO mising first-setter and last-setter? check the spec.
 
-//
-// element
-//
-
 define method element (d ::<deque>, i :: <small-integer>,
 		       #key default = %default-object)
   %deque-element (d, i, default)
 end method element;
-
-//
-// element-setter
-//
 
 define method element-setter (new, d :: <deque>, i :: <small-integer>)
   %deque-element-setter (d, i, new)
 end method element-setter;
 
 //
-// add!
+// Insertion and removal
 //
 
 define method add! (d :: <deque>, new)
   %deque-push (d, new);
 end method add;
-
-//
-// remove!
-//
 
 define method remove! (d :: <deque>, value,
                        #key test = \==, count)
@@ -107,7 +83,27 @@ define method remove! (d :: <deque>, value,
 end method remove!;
 
 //
-// iteration-protocol implementation
+// Coercion
+//
+
+define method as (cls == <deque>, s :: <list>)
+  %list->deque (s);
+end method;
+
+define method as (cls == <deque>, s :: <vector>)
+  %vector->deque (s);
+end method;
+
+define method as (cls == <list>, s :: <deque>)
+  %deque->list (s);
+end method;
+
+define method as (cls == <vector>, s :: <deque>)
+  %deque->vector (s);
+end method;
+
+//
+// Iteration protocol
 //
 
 define method initial-state (d :: <deque>)
@@ -191,5 +187,3 @@ define method forward-iteration-protocol (d :: <deque>)
 	  current-element-setter,
 	  copy-state);
 end method forward-iteration-protocol;
-
-// end deque.dyl

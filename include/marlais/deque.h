@@ -38,9 +38,35 @@
 
 /* Register deque primitives */
 extern void marlais_register_deque (void);
+
 /* Make an empty <deque> */
 extern Object marlais_make_deque (void);
 /* Entrypoint for make(<deque>) */
 extern Object marlais_make_deque_entrypoint (Object args);
+
+/* Get an element from a deque */
+extern int marlais_deque_size (Object deq);
+/* Get an element from a deque */
+extern Object marlais_deque_element (Object deq, int idx, Object def);
+/* Set an element in a deque */
+extern Object marlais_deque_element_setter (Object deq, int idx, Object val);
+
+/* Push an element at the start of a deque */
+extern Object marlais_deque_push (Object deq, Object new);
+/* Pop an element at the start of a deque */
+extern Object marlais_deque_pop (Object deq);
+/* Push an element at the end of a deque */
+extern Object marlais_deque_push_last (Object deq, Object new);
+/* Pop an element at the end of a deque */
+extern Object marlais_deque_pop_last (Object deq);
+
+/* Convert a deque to a list */
+extern Object marlais_deque_to_list (Object deq);
+/* Convert a deque to a vector */
+extern Object marlais_deque_to_vector (Object deq);
+/* Convert a list to a deque */
+extern Object marlais_list_to_deque (Object lst);
+/* Convert a vector to a deque */
+extern Object marlais_vector_to_deque (Object vec);
 
 #endif /* !MARLAIS_DEQUE_H */
