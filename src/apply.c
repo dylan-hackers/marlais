@@ -647,9 +647,9 @@ apply_generic (Object gen, Object args)
   return marlais_apply_method (method, args, rest_methods, gen);
 #else
   methods = GFMETHODS (gen);
-  sorted_methods = FIRSTVAL (sorted_applicable_methods (gen, args));
+  sorted_methods = FIRSTVAL (marlais_sorted_applicable_methods (gen, args));
   if (EMPTYLISTP (sorted_methods)) {
-    marlais_error ("Ambiguous methods in apply generic function", gen, args, NULL);
+    return marlais_error ("Ambiguous methods in apply generic function", gen, args, NULL);
   } else {
     return marlais_apply_method (CAR (sorted_methods),
                                  args,
