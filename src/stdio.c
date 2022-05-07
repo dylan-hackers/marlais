@@ -38,7 +38,7 @@ marlais_make_stdio_handle (FILE *fp, bool owned)
 {
   Object res;
 
-  res = marlais_allocate_object (StdioHandle, sizeof (struct stdio_handle));
+  res = marlais_allocate_object (StdioHandle, sizeof (struct marlais_stdio_handle));
 
   STDIOOWNEDP (res) = owned;
   STDIOFILE (res) = fp;
