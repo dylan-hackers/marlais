@@ -36,6 +36,22 @@
 
 #include <marlais/common.h>
 
+#if defined(MARLAIS_OBJECT_MODEL_LARGE)
+struct integer {
+    ObjectHeader header;
+    DyInteger val;
+};
+#define INTVAL(obj)       (((struct integer *)obj)->val)
+#endif
+
+struct ratio {
+    ObjectHeader header;
+    DyInteger numerator, denominator;
+};
+
+#define RATIONUM(obj)     (((struct ratio *)obj)->numerator)
+#define RATIODEN(obj)     (((struct ratio *)obj)->denominator)
+
 /* Register number primitives */
 extern void marlais_register_number (void);
 /* Make an <integer> */

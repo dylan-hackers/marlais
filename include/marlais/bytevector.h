@@ -36,6 +36,19 @@
 
 #include <marlais/common.h>
 
+/* Data structures */
+
+struct byte_vector {
+    ObjectHeader header;
+    int size;
+    uint8_t *els;
+};
+
+#define BYTEVSIZE(obj)      (((struct byte_vector *)obj)->size)
+#define BYTEVELS(obj)       (((struct byte_vector *)obj)->els)
+
+/* Function declarations */
+
 extern void marlais_register_bytevector (void);
 
 /* Make a <byte-vector> */

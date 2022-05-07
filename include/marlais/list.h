@@ -36,6 +36,14 @@
 
 #include <marlais/common.h>
 
+struct pair {
+    ObjectHeader header;
+    Object car, cdr;
+};
+
+#define CAR(obj)          (((struct pair *)obj)->car)
+#define CDR(obj)          (((struct pair *)obj)->cdr)
+
 /* Register list primitives */
 extern void marlais_register_list (void);
 

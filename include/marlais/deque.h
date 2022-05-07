@@ -36,6 +36,30 @@
 
 #include <marlais/common.h>
 
+
+/* Data structures */
+
+struct marlais_deque {
+    ObjectHeader header;
+    Object first, last;
+};
+
+#define DEQUEFIRST(obj)   (((struct marlais_deque *)obj)->first)
+#define DEQUELAST(obj)    (((struct marlais_deque *)obj)->last)
+
+struct marlais_deque_entry {
+    ObjectHeader header;
+    Object value;
+    Object prev, next;
+};
+
+#define DEVALUE(obj)      (((struct marlais_deque_entry *)obj)->value)
+#define DEPREV(obj)       (((struct marlais_deque_entry *)obj)->prev)
+#define DENEXT(obj)       (((struct marlais_deque_entry *)obj)->next)
+
+
+/* Function declarations */
+
 /* Register deque primitives */
 extern void marlais_register_deque (void);
 

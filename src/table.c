@@ -36,9 +36,11 @@
 
 #include <marlais/alloc.h>
 #include <marlais/apply.h>
+#include <marlais/deque.h>
 #include <marlais/env.h>
 #include <marlais/eval.h>
 #include <marlais/prim.h>
+#include <marlais/vector.h>
 
 /* Internal variables */
 
@@ -94,7 +96,7 @@ marlais_register_table (void)
 Object
 marlais_make_table (int size)
 {
-  Object obj = marlais_allocate_object (ObjectTable, sizeof (struct table));
+  Object obj = marlais_allocate_object (ObjectTable, sizeof (struct marlais_table));
 
   TABLESIZE (obj) = size;
   TABLETABLE (obj) = (Object *) marlais_allocate_memory (sizeof (Object) * size);
@@ -356,7 +358,7 @@ equal_hash (Object key)
 static Object
 make_table_entry (int row, Object key, Object value, Object next)
 {
-  Object obj = marlais_allocate_object (ObjectTableEntry, sizeof (struct table_entry));
+  Object obj = marlais_allocate_object (ObjectTableEntry, sizeof (struct marlais_table_entry));
 
   TEROW (obj) = row;
   TEKEY (obj) = key;

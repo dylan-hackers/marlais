@@ -36,6 +36,41 @@
 
 #include <marlais/common.h>
 
+/* Data structures */
+
+struct byte_string {
+    ObjectHeader header;
+    int size;
+    char *val;
+};
+
+#define BYTESTRSIZE(obj)  (((struct byte_string *)obj)->size)
+#define BYTESTRVAL(obj)   (((struct byte_string *)obj)->val)
+
+#ifdef MARLAIS_ENABLE_WCHAR
+struct wide_string {
+    ObjectHeader header;
+    int size;
+    wchar_t *val;
+};
+
+#define WIDESTRSIZE(obj)  (((struct wide_string *)obj)->size)
+#define WIDESTRVAL(obj)   (((struct wide_string *)obj)->val)
+#endif
+
+#ifdef MARLAIS_ENABLE_UCHAR
+struct unicode_string {
+    ObjectHeader header;
+    int size;
+    UChar *val;
+};
+
+#define USTRSIZE(obj)  (((struct unicode_string *)obj)->size)
+#define USTRVAL(obj)   (((struct unicode_string *)obj)->val)
+#endif
+
+/* Function declarations */
+
 /* allocate a char string */
 #define MARLAIS_ALLOCATE_STRING(_size) \
   ((char *)marlais_allocate_atomic(_size))

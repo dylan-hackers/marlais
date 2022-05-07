@@ -36,6 +36,32 @@
 
 #include <marlais/common.h>
 
+/* Data structures */
+
+struct marlais_table {
+    ObjectHeader header;
+    int size;
+    Object *the_table;
+};
+
+#define TABLESIZE(obj)    (((struct marlais_table *)obj)->size)
+#define TABLETABLE(obj)   (((struct marlais_table *)obj)->the_table)
+
+struct marlais_table_entry {
+    ObjectHeader header;
+    int row;
+    Object key;
+    Object value;
+    Object next;
+};
+
+#define TEROW(obj)        (((struct marlais_table_entry *)obj)->row)
+#define TEKEY(obj)        (((struct marlais_table_entry *)obj)->key)
+#define TEVALUE(obj)      (((struct marlais_table_entry *)obj)->value)
+#define TENEXT(obj)       (((struct marlais_table_entry *)obj)->next)
+
+/* Function declarations */
+
 /* Register table primitives */
 extern void marlais_register_table (void);
 /* Make a new table of given size */

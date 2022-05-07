@@ -3,6 +3,15 @@
 
 #include <marlais/common.h>
 
+struct module {
+    ObjectHeader header;
+    Object sym;
+    struct environment *namespace;
+    Object exported_bindings;
+};
+
+#define MODULE(obj) ((struct module *)obj)
+
 extern void marlais_initialize_module (void);
 extern void marlais_register_module (void);
 

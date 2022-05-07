@@ -36,6 +36,19 @@
 
 #include <marlais/common.h>
 
+/* Data structures */
+
+struct simple_object_vector {
+    ObjectHeader header;
+    int size;
+    Object *els;
+};
+
+#define SOVSIZE(obj)      (((struct simple_object_vector *)obj)->size)
+#define SOVELS(obj)       (((struct simple_object_vector *)obj)->els)
+
+/* Function declarations */
+
 /* Register vector primitives */
 extern void marlais_register_vector (void);
 /* Make a <vector> */

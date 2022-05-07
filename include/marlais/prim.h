@@ -37,6 +37,29 @@
 
 #include <marlais/common.h>
 
+enum primtype {
+    /* prim_n: n required  */
+    /* prim_n_m: n requied, m optional */
+    /* prim_n_rest: n required, rest args */
+    prim_0, prim_1, prim_2, prim_3, prim_4, prim_5,
+    prim_0_1, prim_0_2, prim_0_3,
+    prim_1_1, prim_1_2, prim_2_1,
+    prim_0_rest, prim_1_rest, prim_2_rest
+};
+struct primitive {
+    char *name;
+    enum primtype prim_type;
+    Object (*fun) ();
+};
+struct prim {
+    ObjectHeader header;
+    struct primitive p;
+};
+
+#define PRIMNAME(obj)     (((struct prim *)obj)->p.name)
+#define PRIMPTYPE(obj)    (((struct prim *)obj)->p.prim_type)
+#define PRIMFUN(obj)      (((struct prim *)obj)->p.fun)
+
 /* Register a set of primitives */
 extern void marlais_register_prims (int num, struct primitive prims[]);
 /* Create a new primitive */

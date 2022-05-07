@@ -36,6 +36,31 @@
 
 #include <marlais/common.h>
 
+/* Data structures */
+
+struct single_float {
+    ObjectHeader header;
+    float val;
+};
+
+#define SFLOATVAL(obj)    (((struct single_float *)obj)->val)
+
+struct double_float {
+    ObjectHeader header;
+    double val;
+};
+
+#define DFLOATVAL(obj)    (((struct double_float *)obj)->val)
+
+struct extended_float {
+    ObjectHeader header;
+    long double val;
+};
+
+#define EFLOATVAL(obj)    (((struct double_float *)obj)->val)
+
+/* Function declarations */
+
 /* Register number primitives */
 extern void marlais_register_float (void);
 /* Make a <single-float> */

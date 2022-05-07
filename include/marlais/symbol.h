@@ -36,6 +36,14 @@
 
 #include <marlais/common.h>
 
+struct symbol {
+    ObjectHeader header;
+    char *name;
+};
+
+#define SYMBOLNAME(obj)   (((struct symbol *)obj)->name)
+#define NAMENAME(obj)     (((struct symbol *)obj)->name)
+
 extern void marlais_register_symbol (void);
 
 extern Object marlais_make_name (const char *name);

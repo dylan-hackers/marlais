@@ -16,6 +16,7 @@
 
 #include <marlais/common.h>
 
+#include <marlais/class.h>
 #include <marlais/table.h>
 #include <marlais/vector.h>
 #include <marlais/yystype.h>

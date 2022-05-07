@@ -39,6 +39,17 @@
 /* If TOP_LEVEL_SIZE is not a power of two, see change required below */
 #define TOP_LEVEL_SIZE 1024
 
+struct environment {
+    ObjectHeader header;
+    int size;
+    Object owner;
+    struct binding **bindings;
+    struct environment *next;
+    struct binding **top_level_env;
+};
+
+#define ENVIRONMENT(obj)      ((struct environment *)obj)
+
 struct binding {
     Object sym, *val, type;
     int props;

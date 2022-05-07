@@ -3,11 +3,17 @@
 #include <marlais/print.h>
 
 #include <marlais/apply.h>
+#include <marlais/array.h>
+#include <marlais/bytevector.h>
+#include <marlais/class.h>
+#include <marlais/deque.h>
 #include <marlais/eval.h>
+#include <marlais/foreign_ptr.h>
 #include <marlais/function.h>
 #include <marlais/prim.h>
 #include <marlais/slot.h>
 #include <marlais/stream.h>
+#include <marlais/vector.h>
 
 #include <stdio.h>
 #include <string.h>

@@ -36,6 +36,15 @@
 
 #include <marlais/common.h>
 
+struct values {
+    ObjectHeader header;
+    int num;
+    Object *els;
+};
+
+#define VALUESNUM(obj)    (((struct values *)obj)->num)
+#define VALUESELS(obj)    (((struct values *)obj)->els)
+
 /* Register vector primitives */
 extern void marlais_register_values (void);
 /* Make values from arguments */

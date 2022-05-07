@@ -9,6 +9,7 @@
 #include <marlais/prim.h>
 #include <marlais/print.h>
 #include <marlais/stream.h>
+#include <marlais/syntax.h>
 #include <marlais/table.h>
 
 /* Local constants */

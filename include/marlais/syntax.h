@@ -5,6 +5,26 @@
 
 #include <marlais/common.h>
 
+struct exitproc {
+    ObjectHeader header;
+    Object  sym;
+    Object  val;
+    jmp_buf jmp;
+    struct binding *exit_binding;
+};
+
+#define EXITSYM(obj)      (((struct exitproc *)obj)->sym)
+#define EXITVAL(obj)      (((struct exitproc *)obj)->val)
+#define EXITJMP(obj)      (((struct exitproc *)obj)->jmp)
+#define EXITBINDING(obj)  (((struct exitproc *)obj)->exit_binding)
+
+struct unwind {
+    ObjectHeader header;
+    Object body;
+};
+
+#define UNWINDBODY(obj)   (((struct unwind *)obj)->body)
+
 /* global objects */
 extern Object type_class, initial_state_sym, next_state_sym;
 extern Object current_element_sym;

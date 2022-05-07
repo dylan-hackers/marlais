@@ -36,6 +36,21 @@
 
 #include <marlais/common.h>
 
+/* Data structures */
+
+struct array {
+    ObjectHeader header;
+    int size;
+    Object dimensions;
+    Object *elements;
+};
+
+#define ARRSIZE(obj)      (((struct array *)obj)->size)
+#define ARRDIMS(obj)      (((struct array *)obj)->dimensions)
+#define ARRELS(obj)       (((struct array *)obj)->elements)
+
+/* Function declarations */
+
 /* Initialize array primitives */
 extern void marlais_register_array (void);
 /* Entrypoint for make(<array>) */
