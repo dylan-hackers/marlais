@@ -250,7 +250,7 @@ marlais_initialize_class (void)
                         marlais_make_list (mutable_sequence_class,
                                            stretchy_collection_class,
                                            NULL));
-  object_table_class =
+  object_deque_class =
     make_builtin_class ("<object-deque>",
                         MARLAIS_CLASS_SEALED,
                         deque_class);
