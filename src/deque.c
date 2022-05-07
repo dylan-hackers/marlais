@@ -224,10 +224,10 @@ Object
 marlais_deque_to_vector (Object deq)
 {
   int n = marlais_deque_size (deq), i = 0;
-  Object v = marlais_make_vector (n, MARLAIS_NIL);
+  Object v = marlais_make_vector (n, MARLAIS_FALSE);
   Object de = DEQUEFIRST (deq);
   while(!EMPTYLISTP (de)) {
-    SOVELS(v)[i] = DEVALUE (de);
+    SOVELS(v)[i++] = DEVALUE (de);
     de = DENEXT (de);
   }
   return v;
