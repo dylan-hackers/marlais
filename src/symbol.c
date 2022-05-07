@@ -190,8 +190,8 @@ intern_symbol (ObjectType type, const char *name)
     entry = entry->next;
   }
 
-    /* not found, create new entry for it. */
-  sym = marlais_allocate_object (type, sizeof (struct symbol));
+  /* not found, create new entry for it. */
+  sym = marlais_allocate_object (type, sizeof (struct marlais_symbol));
 
   SYMBOLNAME (sym) = marlais_allocate_strdup (name);
 

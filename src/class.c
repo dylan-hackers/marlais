@@ -1386,7 +1386,7 @@ replace_slotd_init (Object init_slotds, Object keyword, Object init)
     slotd = CAR (init_slotds);
 
     if (SLOTDINITKEYWORD (slotd) == keyword) {
-      new_slotd = marlais_allocate_object (SlotDescriptor, sizeof (struct slot_descriptor));
+      new_slotd = marlais_allocate_object (SlotDescriptor, sizeof (struct marlais_slot_descriptor));
 
       CAR (init_slotds) = new_slotd;
       SLOTDPROPS (new_slotd) = SLOTDPROPS (slotd) & ~SLOTDINITFUNCTIONMASK;

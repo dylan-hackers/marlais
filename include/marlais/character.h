@@ -39,27 +39,27 @@
 /* Data structures */
 
 #if defined(MARLAIS_OBJECT_MODEL_LARGE)
-struct character {
+struct marlais_bchar {
     ObjectHeader header;
     char val;
 };
-#define CHARVAL(obj)       (((struct character *)obj)->val)
+#define CHARVAL(obj)       (((struct marlais_bchar *)obj)->val)
 #endif
 
 #if defined(MARLAIS_OBJECT_MODEL_LARGE) && defined(MARLAIS_ENABLE_WCHAR)
-struct wide_character {
+struct marlais_wchar {
     ObjectHeader header;
     wchar_t val;
 };
-#define WCHARVAL(obj)       (((struct wide_character *)obj)->val)
+#define WCHARVAL(obj)       (((struct marlais_wchar *)obj)->val)
 #endif
 
 #if defined(MARLAIS_OBJECT_MODEL_LARGE) && defined(MARLAIS_ENABLE_UCHAR)
-struct unicode_character {
+struct marlais_uchar {
     ObjectHeader header;
     UChar32 val;
 };
-#define UCHARVAL(obj)       (((struct unicode_character *)obj)->val)
+#define UCHARVAL(obj)       (((struct marlais_uchar *)obj)->val)
 #endif
 
 /* Function declarations */

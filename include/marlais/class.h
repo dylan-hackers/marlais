@@ -73,7 +73,7 @@ enum {
 #define CLASSENV(obj)     (((struct marlais_class *)obj)->creation_env)
 #define CLASSINDEX(obj)     (((struct marlais_class *)obj)->ordinal_index)
 
-struct slot_descriptor {
+struct marlais_slot_descriptor {
     ObjectHeader header;
     unsigned char properties;
     Object getter_name;
@@ -85,7 +85,7 @@ struct slot_descriptor {
     Object dynamism;
 };
 
-#define SLOTDPROPS(obj)        (((struct slot_descriptor *)obj)->properties)
+#define SLOTDPROPS(obj)        (((struct marlais_slot_descriptor *)obj)->properties)
 #define SLOTDKEYREQMASK        0x01
 #define SLOTDINHERITEDMASK     0x02
 #define SLOTDINITFUNCTIONMASK  0x04
@@ -94,13 +94,13 @@ struct slot_descriptor {
 #define SLOTDINHERITED(obj)    (SLOTDPROPS (obj) & SLOTDINHERITEDMASK)
 #define SLOTDINITFUNCTION(obj) (SLOTDPROPS (obj) & SLOTDINITFUNCTIONMASK)
 #define SLOTDDEFERREDTYPE(obj) (SLOTDPROPS (obj) & SLOTDDEFERREDTYPEMASK)
-#define SLOTDGETTER(obj)       (((struct slot_descriptor *)obj)->getter_name)
-#define SLOTDSETTER(obj)       (((struct slot_descriptor *)obj)->setter_name)
-#define SLOTDSLOTTYPE(obj)     (((struct slot_descriptor *)obj)->slot_type)
-#define SLOTDINIT(obj)         (((struct slot_descriptor *)obj)->init)
-#define SLOTDINITKEYWORD(obj)  (((struct slot_descriptor *)obj)->init_keyword)
-#define SLOTDALLOCATION(obj)   (((struct slot_descriptor *)obj)->allocation)
-#define SLOTDDYNAMISM(obj)     (((struct slot_descriptor *)obj)->dynamism)
+#define SLOTDGETTER(obj)       (((struct marlais_slot_descriptor *)obj)->getter_name)
+#define SLOTDSETTER(obj)       (((struct marlais_slot_descriptor *)obj)->setter_name)
+#define SLOTDSLOTTYPE(obj)     (((struct marlais_slot_descriptor *)obj)->slot_type)
+#define SLOTDINIT(obj)         (((struct marlais_slot_descriptor *)obj)->init)
+#define SLOTDINITKEYWORD(obj)  (((struct marlais_slot_descriptor *)obj)->init_keyword)
+#define SLOTDALLOCATION(obj)   (((struct marlais_slot_descriptor *)obj)->allocation)
+#define SLOTDDYNAMISM(obj)     (((struct marlais_slot_descriptor *)obj)->dynamism)
 
 /* Globals */
 extern int last_class_index;

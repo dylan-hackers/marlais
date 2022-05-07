@@ -38,14 +38,14 @@
 
 /* Data structures */
 
-struct byte_vector {
+struct marlais_byte_vector {
     ObjectHeader header;
     int size;
     uint8_t *els;
 };
 
-#define BYTEVSIZE(obj)      (((struct byte_vector *)obj)->size)
-#define BYTEVELS(obj)       (((struct byte_vector *)obj)->els)
+#define BYTEVSIZE(obj)      (((struct marlais_byte_vector *)obj)->size)
+#define BYTEVELS(obj)       (((struct marlais_byte_vector *)obj)->els)
 
 /* Function declarations */
 

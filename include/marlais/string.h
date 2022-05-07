@@ -38,35 +38,35 @@
 
 /* Data structures */
 
-struct byte_string {
+struct marlais_byte_string {
     ObjectHeader header;
     int size;
     char *val;
 };
 
-#define BYTESTRSIZE(obj)  (((struct byte_string *)obj)->size)
-#define BYTESTRVAL(obj)   (((struct byte_string *)obj)->val)
+#define BYTESTRSIZE(obj)  (((struct marlais_byte_string *)obj)->size)
+#define BYTESTRVAL(obj)   (((struct marlais_byte_string *)obj)->val)
 
 #ifdef MARLAIS_ENABLE_WCHAR
-struct wide_string {
+struct marlais_wide_string {
     ObjectHeader header;
     int size;
     wchar_t *val;
 };
 
-#define WIDESTRSIZE(obj)  (((struct wide_string *)obj)->size)
-#define WIDESTRVAL(obj)   (((struct wide_string *)obj)->val)
+#define WIDESTRSIZE(obj)  (((struct marlais_wide_string *)obj)->size)
+#define WIDESTRVAL(obj)   (((struct marlais_wide_string *)obj)->val)
 #endif
 
 #ifdef MARLAIS_ENABLE_UCHAR
-struct unicode_string {
+struct marlais_unicode_string {
     ObjectHeader header;
     int size;
     UChar *val;
 };
 
-#define USTRSIZE(obj)  (((struct unicode_string *)obj)->size)
-#define USTRVAL(obj)   (((struct unicode_string *)obj)->val)
+#define USTRSIZE(obj)  (((struct marlais_unicode_string *)obj)->size)
+#define USTRVAL(obj)   (((struct marlais_unicode_string *)obj)->val)
 #endif
 
 /* Function declarations */

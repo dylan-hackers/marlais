@@ -62,7 +62,7 @@ marlais_values_args (int num,...)
     return MARLAIS_UNSPECIFIED;
   }
 
-  obj = marlais_allocate_object (Values, sizeof (struct values));
+  obj = marlais_allocate_object (Values, sizeof (struct marlais_values));
 
   VALUESNUM (obj) = num;
   VALUESELS (obj) = (Object *) marlais_allocate_memory (num * sizeof (Object));
@@ -86,7 +86,7 @@ marlais_values_list (Object vals)
     return MARLAIS_UNSPECIFIED;
   }
 
-  obj = marlais_allocate_object (Values, sizeof (struct values));
+  obj = marlais_allocate_object (Values, sizeof (struct marlais_values));
 
   VALUESNUM (obj) = marlais_list_length (vals);
   VALUESELS (obj) = (Object *) marlais_allocate_memory (VALUESNUM (obj) * sizeof (Object));

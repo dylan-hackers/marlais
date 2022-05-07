@@ -150,7 +150,7 @@ marlais_make_slot_descriptor (unsigned char properties, Object getter, Object se
 {
     Object obj;
 
-    obj = marlais_allocate_object (SlotDescriptor, sizeof (struct slot_descriptor));
+    obj = marlais_allocate_object (SlotDescriptor, sizeof (struct marlais_slot_descriptor));
 
     SLOTDPROPS (obj) = properties;
     SLOTDGETTER (obj) = getter;

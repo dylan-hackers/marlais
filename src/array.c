@@ -121,7 +121,7 @@ array_make (Object dims, Object fill)
   Object obj, dl, val;
   unsigned int size, i;
 
-  obj = marlais_allocate_object (ObjectArray, sizeof (struct array));
+  obj = marlais_allocate_object (ObjectArray, sizeof (struct marlais_array));
 
   ARRDIMS (obj) = dims;
   dl = dims;

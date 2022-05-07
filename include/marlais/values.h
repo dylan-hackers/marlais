@@ -36,14 +36,14 @@
 
 #include <marlais/common.h>
 
-struct values {
+struct marlais_values {
     ObjectHeader header;
     int num;
     Object *els;
 };
 
-#define VALUESNUM(obj)    (((struct values *)obj)->num)
-#define VALUESELS(obj)    (((struct values *)obj)->els)
+#define VALUESNUM(obj)    (((struct marlais_values *)obj)->num)
+#define VALUESELS(obj)    (((struct marlais_values *)obj)->els)
 
 /* Register vector primitives */
 extern void marlais_register_values (void);

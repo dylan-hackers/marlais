@@ -290,7 +290,7 @@ static Object
 make_bstring(char *str, size_t len) {
   Object obj;
 
-  obj = marlais_allocate_object (ByteString, sizeof (struct byte_string));
+  obj = marlais_allocate_object (ByteString, sizeof (struct marlais_byte_string));
   BYTESTRVAL (obj) = str;
   BYTESTRSIZE (obj) = len;
 
@@ -302,7 +302,7 @@ static Object
 make_wstring(wchar_t *str, size_t len) {
   Object obj;
 
-  obj = marlais_allocate_object (WideString, sizeof (struct wide_string));
+  obj = marlais_allocate_object (WideString, sizeof (struct marlais_wide_string));
   WIDESTRVAL (obj) = str;
   WIDESTRSIZE (obj) = len;
 
@@ -315,7 +315,7 @@ static Object
 make_ustring(UChar *str, size_t len) {
   Object obj;
 
-  obj = marlais_allocate_object (UnicodeString, sizeof (struct unicode_string));
+  obj = marlais_allocate_object (UnicodeString, sizeof (struct marlais_unicode_string));
   USTRVAL (obj) = str;
   USTRSIZE (obj) = len;
 

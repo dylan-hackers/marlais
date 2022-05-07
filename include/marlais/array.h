@@ -38,16 +38,16 @@
 
 /* Data structures */
 
-struct array {
+struct marlais_array {
     ObjectHeader header;
     int size;
     Object dimensions;
     Object *elements;
 };
 
-#define ARRSIZE(obj)      (((struct array *)obj)->size)
-#define ARRDIMS(obj)      (((struct array *)obj)->dimensions)
-#define ARRELS(obj)       (((struct array *)obj)->elements)
+#define ARRSIZE(obj)      (((struct marlais_array *)obj)->size)
+#define ARRDIMS(obj)      (((struct marlais_array *)obj)->dimensions)
+#define ARRELS(obj)       (((struct marlais_array *)obj)->elements)
 
 /* Function declarations */
 

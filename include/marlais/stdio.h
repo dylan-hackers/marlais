@@ -3,14 +3,14 @@
 
 #include <marlais/common.h>
 
-struct stdio_handle {
+struct marlais_stdio_handle {
   ObjectHeader header;
   bool owned;
   FILE *file;
 };
 
-#define STDIOOWNEDP(obj) (((struct stdio_handle *)obj)->owned)
-#define STDIOFILE(obj) (((struct stdio_handle *)obj)->file)
+#define STDIOOWNEDP(obj) (((struct marlais_stdio_handle *)obj)->owned)
+#define STDIOFILE(obj) (((struct marlais_stdio_handle *)obj)->file)
 
 extern void marlais_register_stdio (void);
 

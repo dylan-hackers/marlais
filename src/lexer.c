@@ -51,7 +51,7 @@ marlais_lexer_expand_string (char *str)
     }
     strcat(exp_str, str);
 
-    obj = marlais_allocate_object (ByteString, sizeof (struct byte_string));
+    obj = marlais_allocate_object (ByteString, sizeof (struct marlais_byte_string));
     BYTESTRSIZE(obj) = strlen (exp_str);
     BYTESTRVAL(obj) = exp_str;
     return (obj);

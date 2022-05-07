@@ -224,7 +224,7 @@ marlais_make_character (char ch)
   }
 #endif
 
-  obj = marlais_allocate_object (Character, sizeof (struct character));
+  obj = marlais_allocate_object (Character, sizeof (struct marlais_byte_character));
   CHARVAL (obj) = ch;
 
 #if MARLAIS_CONFIG_CHARACTER_CACHE > 0
@@ -256,7 +256,7 @@ marlais_make_wchar (wchar_t ch)
   }
 #endif
 
-  obj = marlais_allocate_object (WideCharacter, sizeof (struct wide_character));
+  obj = marlais_allocate_object (WideCharacter, sizeof (struct marlais_wide_character));
   WCHARVAL (obj) = ch;
 
 #if MARLAIS_CONFIG_WCHAR_CACHE > 0
@@ -288,7 +288,7 @@ marlais_make_uchar (wchar_t ch)
   }
 #endif
 
-  obj = marlais_allocate_object (UnicodeCharacter, sizeof (struct unicode_character));
+  obj = marlais_allocate_object (UnicodeCharacter, sizeof (struct marlais_unicode_character));
   UCHARVAL (obj) = ch;
 
 #if MARLAIS_CONFIG_UCHAR_CACHE > 0

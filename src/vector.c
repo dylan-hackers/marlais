@@ -41,7 +41,6 @@
 /* Primitives */
 
 static Object prim_vector_size (Object vec);
-static Object prim_vector_size_setter (Object vec, Object size);
 static Object prim_vector_element (Object vec, Object index, Object def);
 static Object prim_vector_element_setter (Object vec, Object index, Object val);
 
@@ -70,7 +69,7 @@ marlais_make_vector (int size, Object fill_obj)
   int i;
 
   /* allocate the object and the vector */
-  res = marlais_allocate_object (SimpleObjectVector, sizeof (struct simple_object_vector));
+  res = marlais_allocate_object (SimpleObjectVector, sizeof (struct marlais_simple_object_vector));
   SOVSIZE (res) = size;
   SOVELS (res) = (Object *) marlais_allocate_memory (size * sizeof (Object));
 
@@ -104,7 +103,7 @@ marlais_list_to_vector (Object list)
 
   /* TODO improve this - count first, allocate, overwrite */
 
-  obj = marlais_allocate_object (SimpleObjectVector, sizeof (struct simple_object_vector));
+  obj = marlais_allocate_object (SimpleObjectVector, sizeof (struct marlais_simple_object_vector));
 
   size = 0;
   els = list;

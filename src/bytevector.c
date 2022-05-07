@@ -34,7 +34,7 @@ marlais_make_bytevector (int size, uint8_t fill)
   int i;
 
   /* actually fabricate the vector */
-  res = marlais_allocate_object (ByteVector, sizeof (struct byte_vector));
+  res = marlais_allocate_object (ByteVector, sizeof (struct marlais_byte_vector));
 
   BYTEVSIZE (res) = size;
   BYTEVELS (res) = (uint8_t *) marlais_allocate_atomic (size);
