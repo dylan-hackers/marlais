@@ -332,7 +332,7 @@ literal	: LITERAL				{ $$ = $1; }
 	| HASH_PAREN list_constants_opt ')'
 		{ $$ = $2; }
 	| HASH_BRACKET constants_opt ']'
-		{ $$ = marlais_vector ($2); }
+		{ $$ = marlais_list_to_vector ($2); }
 
 strings	: STRING	    { $$ = $1; }
 	| STRING component_strings
