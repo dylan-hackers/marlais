@@ -163,13 +163,13 @@ marlais_make_list_entrypoint (Object args)
 Object
 marlais_car (Object lst)
 {
-    return (EMPTYLISTP (lst) ? lst : CAR (lst));
+    return (EMPTYLISTP (lst) ? MARLAIS_NIL : CAR (lst));
 }
 
 Object
 marlais_cdr (Object lst)
 {
-    return (EMPTYLISTP (lst) ? lst : CDR (lst));
+    return (EMPTYLISTP (lst) ? MARLAIS_NIL : CDR (lst));
 }
 
 int
