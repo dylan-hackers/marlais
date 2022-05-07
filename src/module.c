@@ -59,7 +59,7 @@ marlais_register_module (void)
 }
 
 Object
-marlais_get_current_module ()
+marlais_get_current_module (void)
 {
   return marlais_current_module;
 }
