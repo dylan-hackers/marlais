@@ -238,7 +238,7 @@ enum {
       MARLAIS_CLASS_DEFAULT = 0
 };
 
-struct clas {
+struct marlais_class {
     ObjectHeader header;
     Object name;
     Object supers;
@@ -259,21 +259,21 @@ struct clas {
     struct environment *creation_env;
 };
 
-#define CLASSNAME(obj)    (((struct clas *)obj)->name)
-#define CLASSSUPERS(obj)  (((struct clas *)obj)->supers)
-#define CLASSSUBS(obj)    (((struct clas *)obj)->subs)
-#define CLASSINSLOTDS(obj) (((struct clas *)obj)->inherited_slot_descriptors)
-#define CLASSSLOTDS(obj)  (((struct clas *)obj)->inst_slot_descriptors)
-#define CLASSCSLOTS(obj)  (((struct clas *)obj)->class_slots)
-#define CLASSCSLOTDS(obj) (((struct clas *)obj)->class_slot_descriptors)
-#define CLASSESSLOTDS(obj) (((struct clas *)obj)->eachsubclass_slot_descriptors)
-#define CLASSESSLOTS(obj) (((struct clas *)obj)->eachsubclass_slots)
-#define CLASSCONSTSLOTDS(obj) (((struct clas *)obj)->constant_slot_descriptors)
-#define CLASSVSLOTDS(obj) (((struct clas *)obj)->virtual_slot_descriptors)
-#define CLASSPRECLIST(obj)(((struct clas *)obj)->precedence_list)
-#define CLASSSORTEDPRECS(obj) (((struct clas *)obj)->sorted_prec_list)
-#define CLASSNUMPRECS(obj) (((struct clas *)obj)->num_precs)
-#define CLASSPROPS(obj)   (((struct clas *)obj)->properties)
+#define CLASSNAME(obj)    (((struct marlais_class *)obj)->name)
+#define CLASSSUPERS(obj)  (((struct marlais_class *)obj)->supers)
+#define CLASSSUBS(obj)    (((struct marlais_class *)obj)->subs)
+#define CLASSINSLOTDS(obj) (((struct marlais_class *)obj)->inherited_slot_descriptors)
+#define CLASSSLOTDS(obj)  (((struct marlais_class *)obj)->inst_slot_descriptors)
+#define CLASSCSLOTS(obj)  (((struct marlais_class *)obj)->class_slots)
+#define CLASSCSLOTDS(obj) (((struct marlais_class *)obj)->class_slot_descriptors)
+#define CLASSESSLOTDS(obj) (((struct marlais_class *)obj)->eachsubclass_slot_descriptors)
+#define CLASSESSLOTS(obj) (((struct marlais_class *)obj)->eachsubclass_slots)
+#define CLASSCONSTSLOTDS(obj) (((struct marlais_class *)obj)->constant_slot_descriptors)
+#define CLASSVSLOTDS(obj) (((struct marlais_class *)obj)->virtual_slot_descriptors)
+#define CLASSPRECLIST(obj)(((struct marlais_class *)obj)->precedence_list)
+#define CLASSSORTEDPRECS(obj) (((struct marlais_class *)obj)->sorted_prec_list)
+#define CLASSNUMPRECS(obj) (((struct marlais_class *)obj)->num_precs)
+#define CLASSPROPS(obj)   (((struct marlais_class *)obj)->properties)
 #define CLASSABSTRACTP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_ABSTRACT))
 #define CLASSDEFINEDP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_DEFINED))
 #define CLASSIMMEDIATEP(obj)    (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_IMMEDIATE))
@@ -281,8 +281,8 @@ struct clas {
 #define CLASSSEALEDP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_SEALED))
 #define CLASSBUILTINP(obj)      (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_BUILTIN))
 #define CLASSUNINITIALIZED(obj)  (CLASSP (obj) && (CLASSPROPS (obj) & MARLAIS_CLASS_UNINITIALIZED))
-#define CLASSENV(obj)     (((struct clas *)obj)->creation_env)
-#define CLASSINDEX(obj)     (((struct clas *)obj)->ordinal_index)
+#define CLASSENV(obj)     (((struct marlais_class *)obj)->creation_env)
+#define CLASSINDEX(obj)     (((struct marlais_class *)obj)->ordinal_index)
 
 struct instance {
     ObjectHeader header;

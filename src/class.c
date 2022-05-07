@@ -1208,7 +1208,7 @@ make_class_entrypoint (Object args)
   if (EMPTYLISTP (supers_obj)) {
     supers_obj = object_class;
   }
-  obj = marlais_allocate_object (Class, sizeof (struct clas));
+  obj = marlais_allocate_object (Class, sizeof (struct marlais_class));
 
   CLASSNAME (obj) = marlais_make_name (BYTESTRVAL (debug_obj));
   flags |= MARLAIS_CLASS_UNINITIALIZED;
@@ -1501,7 +1501,7 @@ make_builtin_class (char *name, int flags, Object supers)
 {
   Object obj;
 
-  obj = marlais_allocate_object (Class, sizeof (struct clas));
+  obj = marlais_allocate_object (Class, sizeof (struct marlais_class));
 
   CLASSNAME (obj) = marlais_make_name (name);
   marlais_make_class (obj, supers, MARLAIS_NIL, flags, NULL);

@@ -805,7 +805,7 @@ define_class_eval (Object form)
    * Must introduce binding for the class before eval'ing
    * the slot definitions.
    */
-  obj = marlais_allocate_object (Class, sizeof (struct clas));
+  obj = marlais_allocate_object (Class, sizeof (struct marlais_class));
 
   CLASSNAME (obj) = name;
   marlais_add_export (name, obj, 0);
