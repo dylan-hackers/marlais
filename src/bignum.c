@@ -260,7 +260,7 @@ marlais_make_mpf_from_number(Object value)
 {
   Object res;
 
-  res = marlais_allocate_object(BigFloat, sizeof(struct big_float));
+  res = marlais_allocate_object(BigFloat, sizeof(struct marlais_bigfloat));
 
 #if 0
   /* Simple version using separate init and set */
@@ -304,7 +304,7 @@ marlais_make_mpf_from_string(const char *str, int base)
 {
   Object res;
 
-  res = marlais_allocate_object(BigFloat, sizeof(struct big_float));
+  res = marlais_allocate_object(BigFloat, sizeof(struct marlais_bigfloat));
 
   mpf_init (MPFVAL(res));
   mpf_set_str(MPFVAL(res), str, base);
@@ -317,7 +317,7 @@ marlais_make_mpq_from_number(Object value)
 {
   Object res;
 
-  res = marlais_allocate_object(BigRatio, sizeof(struct big_ratio));
+  res = marlais_allocate_object(BigRatio, sizeof(struct marlais_bigratio));
 
   mpq_init (MPQVAL(res));
   prim_mpq_set_bang(res, value);
@@ -330,7 +330,7 @@ marlais_make_mpq_from_string(const char *str, int base)
 {
   Object res;
 
-  res = marlais_allocate_object(BigRatio, sizeof(struct big_ratio));
+  res = marlais_allocate_object(BigRatio, sizeof(struct marlais_bigratio));
 
   mpq_init (MPQVAL(res));
   mpq_set_str(MPQVAL(res), str, base);
@@ -343,7 +343,7 @@ marlais_make_mpz_from_number(Object value)
 {
   Object res;
 
-  res = marlais_allocate_object(BigInteger, sizeof(struct big_integer));
+  res = marlais_allocate_object(BigInteger, sizeof(struct marlais_biginteger));
 
   mpz_init (MPZVAL(res));
   prim_mpz_set_bang(res, value);
@@ -356,7 +356,7 @@ marlais_make_mpz_from_string(const char *str, int base)
 {
   Object res;
 
-  res = marlais_allocate_object(BigInteger, sizeof(struct big_integer));
+  res = marlais_allocate_object(BigInteger, sizeof(struct marlais_biginteger));
 
   mpz_init (MPZVAL(res));
   mpz_set_str(MPZVAL(res), str, base);
@@ -486,9 +486,9 @@ prim_mpz_set_bang(Object obj, Object value)
   return value;
 }
 
-typedef struct big_float   mpf_obj;
-typedef struct big_ratio   mpq_obj;
-typedef struct big_integer mpz_obj;
+typedef struct marlais_bigfloat   mpf_obj;
+typedef struct marlais_bigratio   mpq_obj;
+typedef struct marlais_biginteger mpz_obj;
 
 #define DEFINE_COMPARE_MP_MP(_mt, _dt, _mp, _mg)                        \
   static Object prim_ ## _mt ## _lessthan (Object a, Object b) {        \

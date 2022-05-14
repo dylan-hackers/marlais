@@ -100,10 +100,6 @@ typedef struct {
 
 #include <marlais/object-heap.h>
 
-#ifdef MARLAIS_ENABLE_GMP
-#include <marlais/object-gmp.h>
-#endif
-
 #include <marlais/globals.h>
 
 #ifdef MARLAIS_OBJECT_MODEL_SMALL

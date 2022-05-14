@@ -4,6 +4,7 @@
 
 #include <marlais/apply.h>
 #include <marlais/array.h>
+#include <marlais/bignum.h>
 #include <marlais/bytevector.h>
 #include <marlais/class.h>
 #include <marlais/deque.h>
