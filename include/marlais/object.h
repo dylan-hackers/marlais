@@ -158,6 +158,6 @@ Object make_handle (Object an_object);
 #define FOURTHVAL(vals) (VALUESELS(vals)[3])
 #define FIFTHVAL(vals)  (VALUESELS(vals)[4])
 
-ObjectType object_type (Object obj);
+ObjectType marlais_object_type (Object obj);
 
 #endif

@@ -559,7 +559,7 @@ marlais_register_class (void)
 Object
 marlais_object_class (Object obj)
 {
-  switch (object_type (obj)) {
+  switch (marlais_object_type (obj)) {
   case Integer:
     return (small_integer_class);
   case True:

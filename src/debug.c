@@ -201,7 +201,7 @@ debug_main(void)
       fprintf (stdout, " $%i = ", sequence_num);
       sequence_num++;
     }
-    if (object_type (obj) == Values) {
+    if (marlais_object_type (obj) == Values) {
       marlais_print_obj (marlais_standard_output, obj);
       if (VALUESNUM (obj)) {
         fprintf (stdout, "\n");

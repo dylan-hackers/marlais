@@ -7,7 +7,7 @@
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
 
 ObjectType
-object_type (Object obj)
+marlais_object_type (Object obj)
 {
   if (POINTERP (obj)) {
     return (POINTERTYPE (obj));
@@ -47,7 +47,7 @@ object_type (Object obj)
 #else
 
 ObjectType
-object_type (Object obj) {
+marlais_object_type (Object obj) {
   return POINTERTYPE(obj);
 }
 

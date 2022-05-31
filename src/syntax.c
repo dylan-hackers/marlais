@@ -1248,7 +1248,7 @@ get_vars_and_inits (Object var_forms,
           marlais_error ("for: badly formed numeric clause", var_form, NULL);
         }
       }
-      switch (object_type (by)) {
+      switch (marlais_object_type (by)) {
       case Integer:
         negative = (INTVAL (by) >= 0) ? MARLAIS_FALSE : MARLAIS_TRUE;
         break;
