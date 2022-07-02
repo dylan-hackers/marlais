@@ -61,7 +61,7 @@ load_foreign (Object name)
     if (!handle) {
 	marlais_error ("load-foreign: could not load file", name, NULL);
     }
-    return (marlais_make_integer ((DyInteger) handle));
+    return (marlais_make_integer ((marlais_int_t) handle));
 }
 
 #endif /* DLOPEN */
@@ -82,7 +82,7 @@ load_foreign (Object name)
     handle = dlopen (filename, RTLD_LAZY);
     if (!handle) {
     }
-    return (marlais_make_integer ((DyInteger) handle));
+    return (marlais_make_integer ((marlais_int_t) handle));
 #endif
 
     return MARLAIS_UNSPECIFIED;

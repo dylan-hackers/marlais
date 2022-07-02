@@ -39,14 +39,14 @@
 #if defined(MARLAIS_OBJECT_MODEL_LARGE)
 struct integer {
     ObjectHeader header;
-    DyInteger val;
+    marlais_int_t val;
 };
 #define INTVAL(obj)       (((struct integer *)obj)->val)
 #endif
 
 struct ratio {
     ObjectHeader header;
-    DyInteger numerator, denominator;
+    marlais_int_t numerator, denominator;
 };
 
 #define RATIONUM(obj)     (((struct ratio *)obj)->numerator)
@@ -56,15 +56,15 @@ struct ratio {
 extern void marlais_register_number (void);
 /* Make an <integer> */
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
-static inline Object marlais_make_integer(DyInteger i) {
+static inline Object marlais_make_integer(marlais_int_t i) {
   /* XXX bignum support */
   return (MAKE_INT (i));
 }
 #else
-extern Object marlais_make_integer (DyInteger i);
+extern Object marlais_make_integer (marlais_int_t i);
 #endif
 /* Make a <ratio> */
-extern Object marlais_make_ratio (DyInteger numerator, DyInteger denominator);
+extern Object marlais_make_ratio (marlais_int_t numerator, marlais_int_t denominator);
 /* Make a <single-float> */
 extern Object marlais_make_sfloat (float f);
 /* Make a <double-float> */

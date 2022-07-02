@@ -195,7 +195,7 @@ marlais_syntax_function (Object sym)
     struct syntax_entry *entry;
     int h;
 
-    h = ((DyInteger) sym) % SYNTAX_TABLE_SIZE;
+    h = ((marlais_int_t) sym) % SYNTAX_TABLE_SIZE;
     entry = syntax_table[h];
     while (entry) {
       if (entry->sym == sym) {
@@ -216,7 +216,7 @@ install_syntax_entry (char *name, syntax_fun fun)
     int h;
 
     sym = marlais_make_name (name);
-    h = ((DyInteger) sym) % SYNTAX_TABLE_SIZE;
+    h = ((marlais_int_t) sym) % SYNTAX_TABLE_SIZE;
     entry = (struct syntax_entry *)
       marlais_allocate_memory (sizeof (struct syntax_entry));
 

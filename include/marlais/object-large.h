@@ -4,7 +4,7 @@ typedef ObjectHeader *Object;
 /* Constants for boxed integers */
 #define MARLAIS_INTEGER_MIN   (MARLAIS_INT_MIN)
 #define MARLAIS_INTEGER_MAX   (MARLAIS_INT_MAX)
-#define MARLAIS_INTEGER_WIDTH (sizeof(DyInteger) * 8)
+#define MARLAIS_INTEGER_WIDTH (sizeof(marlais_int_t) * 8)
 #define MARLAIS_INTEGER_PRI    MARLAIS_INT_PRI
 
 /* All objects are pointers */

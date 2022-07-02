@@ -433,7 +433,7 @@ prim_double_floor (Object d)
     double dval, tmp = floor (dval = DFLOATVAL (d));
 
     return marlais_values_args (2,
-                                     marlais_make_integer ((DyInteger) tmp),
+                                     marlais_make_integer ((marlais_int_t) tmp),
                                      marlais_make_dfloat (dval - tmp));
 }
 
@@ -443,7 +443,7 @@ prim_double_ceiling (Object d)
     double dval, tmp = ceil (dval = DFLOATVAL (d));
 
     return marlais_values_args (2,
-                                     marlais_make_integer ((DyInteger) tmp),
+                                     marlais_make_integer ((marlais_int_t) tmp),
                                      marlais_make_dfloat (dval - tmp));
 }
 
@@ -453,7 +453,7 @@ prim_double_round (Object d)
     double dval, tmp = anint (dval = DFLOATVAL (d));
 
     return marlais_values_args (2,
-                                     marlais_make_integer ((DyInteger) tmp),
+                                     marlais_make_integer ((marlais_int_t) tmp),
                                      marlais_make_dfloat (dval - tmp));
 }
 
@@ -463,7 +463,7 @@ prim_double_truncate (Object d)
     double dval, tmp = aint (dval = DFLOATVAL (d));
 
     return marlais_values_args (2,
-                                     marlais_make_integer ((DyInteger) tmp),
+                                     marlais_make_integer ((marlais_int_t) tmp),
                                      marlais_make_dfloat (dval - tmp));
 }
 

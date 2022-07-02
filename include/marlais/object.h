@@ -3,7 +3,7 @@
 #ifndef MARLAIS_OBJECT_H
 #define MARLAIS_OBJECT_H
 
-typedef intptr_t  DyInteger;
+typedef intptr_t  marlais_int_t;
 #define MARLAIS_INT_MIN   (INTPTR_MIN)
 #define MARLAIS_INT_MAX   (INTPTR_MAX)
 #if 0
@@ -11,7 +11,7 @@ typedef intptr_t  DyInteger;
 #endif
 #define MARLAIS_INT_PRI   PRIdPTR
 
-typedef uintptr_t DyUnsigned;
+typedef uintptr_t marlais_uint_t;
 #define MARLAIS_UINT_MAX   (UINTPTR_MAX)
 #if 0
 #define MARLAIS_UINT_WIDTH (UINTPTR_WIDTH)

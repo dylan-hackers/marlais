@@ -99,7 +99,7 @@ marlais_register_number (void)
   marlais_add_export (marlais_make_name ("$integer-bits"),
                       marlais_make_integer (MARLAIS_INTEGER_WIDTH), 1);
   marlais_add_export (marlais_make_name ("$integer-size"),
-                      marlais_make_integer (sizeof(DyInteger)), 1);
+                      marlais_make_integer (sizeof(marlais_int_t)), 1);
   marlais_add_export (marlais_make_name ("$integer-significant-bits"),
                       marlais_make_integer (MARLAIS_INTEGER_WIDTH - 1), 1);
   marlais_add_export (marlais_make_name ("$minimum-integer"),
@@ -111,7 +111,7 @@ marlais_register_number (void)
 #ifndef MARLAIS_OBJECT_MODEL_SMALL
 /* small version is inline in marlais/number.h */
 Object
-marlais_make_integer (DyInteger i)
+marlais_make_integer (marlais_int_t i)
 {
   Object obj;
 
@@ -137,12 +137,12 @@ marlais_make_integer (DyInteger i)
 #endif
 
 Object
-marlais_make_ratio (DyInteger numerator, DyInteger denominator)
+marlais_make_ratio (marlais_int_t numerator, marlais_int_t denominator)
 {
     Object obj;
 
 #if MARLAIS_CONFIG_RATIO_CACHE > 0
-    DyInteger index = -1;
+    marlais_int_t index = -1;
     if(numerator >= 0 && numerator < MARLAIS_CONFIG_RATIO_CACHE
        && denominator >= 0 && denominator < MARLAIS_CONFIG_RATIO_CACHE) {
       index = numerator + denominator * MARLAIS_CONFIG_RATIO_CACHE;
@@ -407,7 +407,7 @@ prim_int_mod (Object i1, Object i2)
     double d2val;
     double tmp = (d1val = INTVAL (i1)) / (d2val = (float) INTVAL (i2));
 
-    return marlais_make_integer ((DyInteger) (d1val - d2val * floor (tmp)));
+    return marlais_make_integer ((marlais_int_t) (d1val - d2val * floor (tmp)));
 }
 
 #endif
