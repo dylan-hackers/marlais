@@ -53,19 +53,19 @@ marlais_apply_internal (Object fun, Object args)
 {
   Object ret;
 
-  if (trace_functions) {
+  if (marlais_trace_functions) {
     int i;
 
-    if ((!trace_only_user_funs) || (!PRIMP (fun))) {
+    if (marlais_trace_primitives || (!PRIMP (fun))) {
       printf ("; ");
-      for (i = 0; i < trace_level; ++i) {
+      for (i = 0; i < marlais_trace_level; ++i) {
         putchar ('-');
       }
       marlais_print_object (marlais_standard_output, fun, 1);
       printf (" called with ");
       marlais_print_object (marlais_standard_output, args, 1);
       printf ("\n");
-      trace_level++;
+      marlais_trace_level++;
     }
   }
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
@@ -98,13 +98,13 @@ marlais_apply_internal (Object fun, Object args)
   }
 
 done:
-  if (trace_functions && trace_level) {
+  if (marlais_trace_functions && marlais_trace_level) {
     int i;
 
-    if ((!trace_only_user_funs) || (!PRIMP (fun))) {
-      trace_level--;
+    if (marlais_trace_primitives || (!PRIMP (fun))) {
+      marlais_trace_level--;
       printf ("; ");
-      for (i = 0; i < trace_level; ++i) {
+      for (i = 0; i < marlais_trace_level; ++i) {
         printf ("-");
       }
       printf ("returned: ");
@@ -130,12 +130,12 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
   int hit_rest, hit_key, hit_values;
   struct environment *old_env;
 
-  if (trace_functions && trace_level) {
+  if (marlais_trace_functions && marlais_trace_level) {
     int i;
 
-    if (!trace_only_user_funs) {
+    if (marlais_trace_primitives) {
       printf ("; ");
-      for (i = 0; i < trace_level; ++i) {
+      for (i = 0; i < marlais_trace_level; ++i) {
         putchar ('-');
       }
       printf ("apply-method applying ");
@@ -311,11 +311,11 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
 #ifdef MARLAIS_ENABLE_TAIL_CALL_OPTIMIZATION
     /* when in tail form, we use tail_eval */
     if (EMPTYLISTP (CDR (body))) {
-      if (trace_functions) {
-        if (!trace_only_user_funs)
+      if (marlais_trace_functions) {
+        if (marlais_trace_primitives)
           marlais_warning ("tail position: ", form, NULL);
-        if (trace_level)
-          --trace_level;
+        if (marlais_trace_level)
+          --marlais_trace_level;
       }
       /* tail recursion optimization. */
 

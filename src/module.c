@@ -424,7 +424,7 @@ add_module_binding(Object sym, Object val, int constant, int exported)
   binding->next = the_env->top_level_env[h];
   the_env->top_level_env[h] = binding;
 
-  if (trace_bindings) {
+  if (marlais_trace_bindings) {
     fprintf(stderr, "%s %s\n", (exported?"Export":"Binding"), str);
   }
 }

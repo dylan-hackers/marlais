@@ -41,10 +41,11 @@ GLOBAL jmp_buf *marlais_tail_jump;
 GLOBAL bool     marlais_loading;
 GLOBAL Object   marlais_loading_files;
 
-GLOBAL int trace_bindings;
-GLOBAL int trace_functions;
-GLOBAL int trace_only_user_funs;
-GLOBAL int trace_level;
+/* trace flags */
+GLOBAL int marlais_trace_bindings;
+GLOBAL int marlais_trace_functions;
+GLOBAL int marlais_trace_primitives;
+GLOBAL int marlais_trace_level;
 
 /* important objects */
 GLOBAL Object apply_symbol;

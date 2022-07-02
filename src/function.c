@@ -643,7 +643,7 @@ parse_generic_function_parameters (Object gf_obj, Object params)
   if (PAIRP (params)) {
     marlais_error ("objects encountered after parameter list", params, NULL);
   }
-  if (trace_functions) {
+  if (marlais_trace_functions) {
     marlais_warning ("Got GF", GFNAME (gf_obj), NULL);
     marlais_warning (" Required parameters", GFREQPARAMS (gf_obj), NULL);
     marlais_warning (" Rest parameter", GFRESTPARAM (gf_obj), NULL);
@@ -685,7 +685,7 @@ parse_method_parameters (Object meth_obj, Object params)
   if (PAIRP (params)) {
     marlais_error ("objects encountered after parameter list", params, NULL);
   }
-  if (trace_functions) {
+  if (marlais_trace_functions) {
     marlais_warning ("Got Method", METHNAME (meth_obj), NULL);
     marlais_warning (" Required parameters", METHREQPARAMS (meth_obj), NULL);
     marlais_warning (" Rest parameter", METHRESTPARAM (meth_obj), NULL);

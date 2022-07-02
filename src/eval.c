@@ -61,7 +61,7 @@ marlais_tail_eval (Object obj)
 {
 
 #ifdef MARLAIS_ENABLE_TAIL_CALL_OPTIMIZATION
-    if (trace_functions) {
+    if (marlais_trace_functions) {
         marlais_warning ("in tail eval context, parent context",
                          eval_stack->context,
                          eval_stack->next->context,

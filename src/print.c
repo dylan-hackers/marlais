@@ -317,7 +317,7 @@ marlais_print_err_escaped (Object obj)
 static void
 apply_print (Object fd, Object obj, int escaped)
 {
-  if (DebugPrint || trace_functions) {
+  if (DebugPrint || marlais_trace_functions) {
     marlais_print_obj (fd, obj);
   } else {
     Object stream;

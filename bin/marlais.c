@@ -149,6 +149,11 @@ main (int argc, char *argv[])
   /* initialize marlais */
   marlais_initialize ();
 
+  marlais_trace_bindings = 0;
+  marlais_trace_functions = 0;
+  marlais_trace_primitives = 0;
+  marlais_trace_level = 0;
+
   /* parse arguments */
   parse_args(argc, argv);
 
@@ -183,9 +188,9 @@ main (int argc, char *argv[])
     marlais_close_open_files ();
     fflush (stdout);
     clearerr (stdin);
-    if (trace_functions) {
+    if (marlais_trace_functions) {
       printf ("; reset\n");
-      trace_level = 0;
+      marlais_trace_level = 0;
     }
     marlais_loading = 0;
     the_env = cache_env;
