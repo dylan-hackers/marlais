@@ -36,7 +36,7 @@ static void apply_print (Object fd, Object obj, int escaped);
 static void print_pair (Object stream, Object pair, int escaped);
 static void print_character (Object stream, Object c, int escaped);
 static void print_vector (Object stream, Object vec, int escaped);
-static void print_byte_vector (Object stream, Object vec, int escaped);
+static void print_bytevector (Object stream, Object vec, int escaped);
 static void print_values (Object stream, Object vals, int escaped);
 static void print_string (Object stream, Object str, int escaped);
 static void print_instance (Object stream, Object inst, int escaped);
@@ -131,7 +131,7 @@ marlais_print_object (Object fd, Object obj, int escaped)
     print_vector (fd, obj, escaped);
     break;
   case ByteVector:
-    print_byte_vector (fd, obj, escaped);
+    print_bytevector (fd, obj, escaped);
     break;
   case Character:
     print_character (fd, obj, escaped);
@@ -425,15 +425,16 @@ print_vector (Object fd, Object vec, int escaped)
 }
 
 static void
-print_byte_vector (Object fd, Object vec, int escaped)
+print_bytevector (Object fd, Object vec, int escaped)
 {
+  struct marlais_bytevector *v = MARLAIS_CAST_BYTEVECTOR(vec);
   int i;
   FILE *fp = print_file_from_fd(fd);
 
   fprintf (fp, "#[");
-  for (i = 0; i < BYTEVSIZE (vec); ++i) {
-    apply_print (fd, marlais_make_integer(BYTEVELS (vec)[i]), escaped);
-    if (i < (BYTEVSIZE (vec) - 1)) {
+  for (i = 0; i < v->bv_size; ++i) {
+    apply_print (fd, marlais_make_integer(v->bv_data[i]), escaped);
+    if (i < (v->bv_size - 1)) {
       fprintf (fp, ", ");
     }
   }

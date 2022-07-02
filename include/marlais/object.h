@@ -160,4 +160,7 @@ Object make_handle (Object an_object);
 
 ObjectType marlais_object_type (Object obj);
 
+#define MARLAIS_CAST_OBJECT(_obj, _mtype, _ctype)        \
+  ((_ctype *)_obj)
+
 #endif

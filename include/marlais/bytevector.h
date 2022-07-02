@@ -38,20 +38,21 @@
 
 /* Data structures */
 
-struct marlais_byte_vector {
+struct marlais_bytevector {
     ObjectHeader header;
-    int size;
-    uint8_t *els;
+    int bv_size;
+    uint8_t *bv_data;
 };
 
-#define BYTEVSIZE(obj)      (((struct marlais_byte_vector *)obj)->size)
-#define BYTEVELS(obj)       (((struct marlais_byte_vector *)obj)->els)
+#define MARLAIS_CAST_BYTEVECTOR(_obj) \
+  MARLAIS_CAST_OBJECT((_obj), ByteVector, struct marlais_bytevector)
 
 /* Function declarations */
 
+/* Register bytevector primitives */
 extern void marlais_register_bytevector (void);
 
-/* Make a <byte-vector> */
+/* Make a bytevector */
 extern Object marlais_make_bytevector (int size, uint8_t fill);
 /* Entrypoint for make(<byte-vector>) */
 extern Object marlais_make_bytevector_entrypoint (Object args);

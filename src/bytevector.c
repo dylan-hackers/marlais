@@ -24,24 +24,24 @@ void
 marlais_register_bytevector (void)
 {
   int num = sizeof (bytevector_prims) / sizeof (struct primitive);
-  marlais_register_prims (num, bytevector_prims);
+  marlais_register_prims(num, bytevector_prims);
 }
 
 Object
 marlais_make_bytevector (int size, uint8_t fill)
 {
-  Object res;
-  int i;
+  struct marlais_bytevector *res;
 
-  /* actually fabricate the vector */
-  res = marlais_allocate_object (ByteVector, sizeof (struct marlais_byte_vector));
+  res = MARLAIS_ALLOCATE_OBJECT(ByteVector, struct marlais_bytevector);
 
-  BYTEVSIZE (res) = size;
-  BYTEVELS (res) = (uint8_t *) marlais_allocate_atomic (size);
+  res->bv_size = size;
+  res->bv_data = (uint8_t *) marlais_allocate_atomic(size);
 
-  memset(BYTEVELS (res), fill, size);
+  if(fill != 0) {
+    memset(res->bv_data, fill, size);
+  }
 
-  return (res);
+  return res;
 }
 
 Object
@@ -68,37 +68,40 @@ marlais_make_bytevector_entrypoint (Object args)
 static Object
 prim_bytevector_size (Object vec)
 {
-  return (marlais_make_integer (BYTEVSIZE (vec)));
+  struct marlais_bytevector *v = MARLAIS_CAST_BYTEVECTOR(vec);
+  return marlais_make_integer(v->bv_size);
 }
 
 static Object
-prim_bytevector_element (Object vec, Object index, Object default_ob)
+prim_bytevector_element (Object vec, Object index, Object default_obj)
 {
+  struct marlais_bytevector *v = MARLAIS_CAST_BYTEVECTOR(vec);
   int i, size;
 
   i = INTVAL (index);
-  size = BYTEVSIZE (vec);
+  size = v->bv_size;
   if ((i < 0) || (i >= size)) {
-    if (default_ob == marlais_default) {
-      marlais_error ("element: index out of range", vec, index, NULL);
+    if (default_obj == marlais_default) {
+      marlais_error("element: index out of range", vec, index, NULL);
     } else {
-      return default_ob;
+      return default_obj;
     }
   }
-  return marlais_make_integer (BYTEVELS (vec)[i]);
+  return marlais_make_integer(v->bv_data[i]);
 }
 
 static Object
-prim_bytevector_element_setter (Object vec, Object index, Object val)
+prim_bytevector_element_setter (Object vec, Object index, Object value)
 {
+  struct marlais_bytevector *v = MARLAIS_CAST_BYTEVECTOR(vec);
   int i, size;
-  uint8_t v;
+  uint8_t new;
 
   i = INTVAL (index);
-  size = BYTEVSIZE (vec);
+  size = v->bv_size;
   if ((i < 0) || (i >= size)) {
     marlais_error ("element-setter: index out of range", vec, index, NULL);
   }
-  v = INTVAL (val) & 0xFF;
-  return marlais_make_integer (BYTEVELS (vec)[i] = v);
+  new = INTVAL (value) & 0xFF;
+  return marlais_make_integer (v->bv_data[i] = new);
 }
