@@ -64,8 +64,6 @@ static Object bstring_equal (Object str1, Object str2);
 static Object bstring_append2 (Object str1, Object str2);
 static Object bstring_as_lowercase (Object string);
 static Object bstring_as_uppercase (Object string);
-static Object bstring_as_lowercase_bang (Object string);
-static Object bstring_as_uppercase_bang (Object string);
 
 #ifdef MARLAIS_ENABLE_WCHAR
 static Object wstring_element (Object string, Object index, Object default_ob);
@@ -106,8 +104,6 @@ static struct primitive string_prims[] =
     {"%string-append2", prim_2, bstring_append2},
     {"%string-as-lowercase", prim_1, bstring_as_lowercase},
     {"%string-as-uppercase", prim_1, bstring_as_uppercase},
-    {"%string-as-lowercase!", prim_1, bstring_as_lowercase_bang},
-    {"%string-as-uppercase!", prim_1, bstring_as_uppercase_bang},
 
 #ifdef MARLAIS_ENABLE_WCHAR
     {"%wstring-element", prim_3, wstring_element},
@@ -425,40 +421,6 @@ bstring_as_uppercase (Object string)
     newstr[len] = 0;
 
     return (make_bstring (newstr, len));
-}
-
-static Object
-bstring_as_lowercase_bang (Object string)
-{
-    int len, i;
-    char *str;
-
-    len = BYTESTRSIZE (string);
-    str = BYTESTRVAL (string);
-
-    for(i = 0; i < len; i++) {
-      str[i] = tolower (str[i]);
-    }
-    str[len] = 0;
-
-    return (string);
-}
-
-static Object
-bstring_as_uppercase_bang (Object string)
-{
-    int len, i;
-    char *str;
-
-    len = BYTESTRSIZE (string);
-    str = BYTESTRVAL (string);
-
-    for(i = 0; i < len; i++) {
-      str[i] = toupper (str[i]);
-    }
-    str[len] = 0;
-
-    return (string);
 }
 
 #ifdef MARLAIS_ENABLE_WCHAR
