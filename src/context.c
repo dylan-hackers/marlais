@@ -237,14 +237,14 @@ marlais_initialize (void)
 
   /* determine default string and character classes */
 #if defined(MARLAIS_STANDARD_CHARACTER_BYTE)
-  standard_character_class = byte_character_class;
-  standard_string_class = byte_string_class;
+  standard_character_class = marlais_class_byte_character;
+  standard_string_class = marlais_class_byte_string;
 #elif defined(MARLAIS_STANDARD_CHARACTER_WIDE)
-  standard_character_class = wide_character_class;
-  standard_string_class = wide_string_class;
+  standard_character_class = marlais_class_wide_character;
+  standard_string_class = marlais_class_wide_string;
 #elif defined(MARLAIS_STANDARD_CHARACTER_UNICODE)
-  standard_character_class = unicode_character_class;
-  standard_string_class = unicode_string_class;
+  standard_character_class = marlais_class_unicode_character;
+  standard_string_class = marlais_class_unicode_string;
 #else
 #error Unknown standard character class.
 #endif

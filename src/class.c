@@ -17,7 +17,6 @@
 #include <marlais/vector.h>
 
 int last_class_index = 0;
-static Object class_slots_class;
 
 /* primitives */
 
@@ -85,7 +84,7 @@ void
 marlais_initialize_class (void)
 {
   /* Define the root of all things */
-  object_class =
+  marlais_class_object =
     make_builtin_class ("<object>",
                         MARLAIS_CLASS_ABSTRACT,
                         MARLAIS_NIL);
@@ -95,8 +94,8 @@ marlais_initialize_class (void)
   {
     struct binding *binding;
 
-    binding = marlais_symbol_binding (CLASSNAME (object_class));
-    binding->type = object_class;
+    binding = marlais_symbol_binding (CLASSNAME (marlais_class_object));
+    binding->type = marlais_class_object;
   }
 
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
@@ -105,367 +104,369 @@ marlais_initialize_class (void)
 #define MAYBE_IMMEDIATE (0)
 #endif
 
-  /* Literal classes */
-  boolean_class =
+  /* Booleans */
+  marlais_class_boolean =
     make_builtin_class ("<boolean>",
                         MAYBE_IMMEDIATE|MARLAIS_CLASS_SEALED,
-                        object_class);
-  character_class =
+                        marlais_class_object);
+
+  /* Characters */
+  marlais_class_character =
     make_builtin_class ("<character>",
                         MAYBE_IMMEDIATE|MARLAIS_CLASS_SEALED,
-                        object_class);
-  byte_character_class =
+                        marlais_class_object);
+  marlais_class_byte_character =
     make_builtin_class ("<byte-character>",
                         MAYBE_IMMEDIATE|MARLAIS_CLASS_SEALED,
-                        character_class);
-  wide_character_class =
+                        marlais_class_character);
+  marlais_class_wide_character =
     make_builtin_class ("<wide-character>",
                         MAYBE_IMMEDIATE|MARLAIS_CLASS_SEALED,
-                        character_class);
-  unicode_character_class =
+                        marlais_class_character);
+  marlais_class_unicode_character =
     make_builtin_class ("<unicode-character>",
                         MAYBE_IMMEDIATE|MARLAIS_CLASS_SEALED,
-                        character_class);
+                        marlais_class_character);
 
   /* Symbol classes */
-  name_class =
+  marlais_class_name =
     make_builtin_class ("<name>",
                         MARLAIS_CLASS_SEALED,
-                        object_class);
-  symbol_class =
+                        marlais_class_object);
+  marlais_class_symbol =
     make_builtin_class ("<symbol>",
                         MARLAIS_CLASS_SEALED,
-                        object_class);
+                        marlais_class_object);
 
   /* Numeric base classes */
-  number_class =
+  marlais_class_number =
     make_builtin_class ("<number>",
                         MARLAIS_CLASS_ABSTRACT,
-                        object_class);
-  complex_class =
+                        marlais_class_object);
+  marlais_class_complex =
     make_builtin_class ("<complex>",
                         MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
-                        number_class);
-  real_class =
+                        marlais_class_number);
+  marlais_class_real =
     make_builtin_class ("<real>",
                         MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
-                        complex_class);
-  rational_class =
+                        marlais_class_complex);
+  marlais_class_rational =
     make_builtin_class ("<rational>",
                         MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
-                        real_class);
-  integer_class =
+                        marlais_class_real);
+  marlais_class_integer =
     make_builtin_class ("<integer>",
                         MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
-                        rational_class);
-  float_class =
+                        marlais_class_rational);
+  marlais_class_float =
     make_builtin_class ("<float>",
                         MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
-                        real_class);
+                        marlais_class_real);
 
   /* Numeric classes */
-  small_integer_class =
+  marlais_class_small_integer =
     make_builtin_class ("<small-integer>",
                         MAYBE_IMMEDIATE|MARLAIS_CLASS_SEALED,
-                        integer_class);
-  single_float_class =
+                        marlais_class_integer);
+  marlais_class_single_float =
     make_builtin_class ("<single-float>",
                         MARLAIS_CLASS_SEALED,
-                        float_class);
-  double_float_class =
+                        marlais_class_float);
+  marlais_class_double_float =
     make_builtin_class ("<double-float>",
                         MARLAIS_CLASS_SEALED,
-                        float_class);
-  extended_float_class =
+                        marlais_class_float);
+  marlais_class_extended_float =
     make_builtin_class ("<extended-float>",
                         MARLAIS_CLASS_SEALED,
-                        float_class);
-  ratio_class =
+                        marlais_class_float);
+  marlais_class_ratio =
     make_builtin_class ("<ratio>",
                         MARLAIS_CLASS_SEALED,
-                        rational_class);
+                        marlais_class_rational);
 
   /* Collection base classes */
-  collection_class =
+  marlais_class_collection =
     make_builtin_class ("<collection>",
                         MARLAIS_CLASS_ABSTRACT,
-                        object_class);
-  sequence_class =
+                        marlais_class_object);
+  marlais_class_sequence =
     make_builtin_class ("<sequence>",
                         MARLAIS_CLASS_ABSTRACT,
-                        collection_class);
-  mutable_collection_class =
+                        marlais_class_collection);
+  marlais_class_mutable_collection =
     make_builtin_class ("<mutable-collection>",
                         MARLAIS_CLASS_ABSTRACT,
-                        collection_class);
-  mutable_sequence_class =
+                        marlais_class_collection);
+  marlais_class_mutable_sequence =
     make_builtin_class ("<mutable-sequence>",
                         MARLAIS_CLASS_ABSTRACT,
-                        marlais_make_list (mutable_collection_class,
-                                           sequence_class,
+                        marlais_make_list (marlais_class_mutable_collection,
+                                           marlais_class_sequence,
                                            NULL));
-  explicit_key_collection_class =
+  marlais_class_explicit_key_collection =
     make_builtin_class ("<explicit-key-collection>",
                         MARLAIS_CLASS_ABSTRACT,
-                        collection_class);
-  mutable_explicit_key_collection_class =
+                        marlais_class_collection);
+  marlais_class_mutable_explicit_key_collection =
     make_builtin_class ("<mutable-explicit-key-collection>",
                         MARLAIS_CLASS_ABSTRACT,
-                        marlais_make_list (explicit_key_collection_class,
-                                           mutable_collection_class,
+                        marlais_make_list (marlais_class_explicit_key_collection,
+                                           marlais_class_mutable_collection,
                                            NULL));
-  stretchy_collection_class =
+  marlais_class_stretchy_collection =
     make_builtin_class ("<stretchy-collection>",
                         MARLAIS_CLASS_ABSTRACT,
-                        collection_class);
+                        marlais_class_collection);
 
   /* List classes */
-  list_class =
+  marlais_class_list =
     make_builtin_class ("<list>",
                         MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
-                        mutable_sequence_class);
-  empty_list_class =
+                        marlais_class_mutable_sequence);
+  marlais_class_empty_list =
     make_builtin_class ("<empty-list>",
                         MAYBE_IMMEDIATE|MARLAIS_CLASS_SEALED,
-                        list_class);
-  pair_class =
+                        marlais_class_list);
+  marlais_class_pair =
     make_builtin_class ("<pair>",
                         MARLAIS_CLASS_SEALED,
-                        list_class);
+                        marlais_class_list);
 
   /* Array classes */
-  array_class =
+  marlais_class_array =
     make_builtin_class ("<array>",
                         MARLAIS_CLASS_ABSTRACT,
-                        mutable_sequence_class);
-  object_array_class =
+                        marlais_class_mutable_sequence);
+  marlais_class_object_array =
     make_builtin_class ("<object-array>",
                         MARLAIS_CLASS_SEALED,
-                        array_class);
+                        marlais_class_array);
 
   /* Deque classes */
-  deque_class =
+  marlais_class_deque =
     make_builtin_class ("<deque>",
                         MARLAIS_CLASS_ABSTRACT|MARLAIS_CLASS_PRIMARY,
-                        marlais_make_list (mutable_sequence_class,
-                                           stretchy_collection_class,
+                        marlais_make_list (marlais_class_mutable_sequence,
+                                           marlais_class_stretchy_collection,
                                            NULL));
-  object_deque_class =
+  marlais_class_object_deque =
     make_builtin_class ("<object-deque>",
                         MARLAIS_CLASS_SEALED,
-                        deque_class);
-  object_deque_entry_class =
+                        marlais_class_deque);
+  marlais_class_object_deque_entry =
     make_builtin_class ("<object-deque-entry>",
                         MARLAIS_CLASS_SEALED,
-                        object_class);
+                        marlais_class_object);
 
   /* Table classes */
-  table_class =
+  marlais_class_table =
     make_builtin_class ("<table>",
                         MARLAIS_CLASS_ABSTRACT|MARLAIS_CLASS_PRIMARY,
-                        marlais_make_list (mutable_explicit_key_collection_class,
-                                           stretchy_collection_class,
+                        marlais_make_list (marlais_class_mutable_explicit_key_collection,
+                                           marlais_class_stretchy_collection,
                                            NULL));
-  object_table_class =
+  marlais_class_object_table =
     make_builtin_class ("<object-table>",
                         MARLAIS_CLASS_SEALED,
-                        table_class);
-  object_table_entry_class =
+                        marlais_class_table);
+  marlais_class_object_table_entry =
     make_builtin_class ("<object-table-entry>",
                         MARLAIS_CLASS_SEALED,
-                        object_class);
+                        marlais_class_object);
 
   /* Vector classes */
-  vector_class =
+  marlais_class_vector =
     make_builtin_class ("<vector>",
                         MARLAIS_CLASS_ABSTRACT,
-                        array_class);
-  simple_vector_class =
+                        marlais_class_array);
+  marlais_class_simple_vector =
     make_builtin_class ("<simple-vector>",
                         MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
-                        vector_class);
-  stretchy_vector_class =
+                        marlais_class_vector);
+  marlais_class_stretchy_vector =
     make_builtin_class ("<stretchy-vector>",
                         MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
-                        marlais_make_list (vector_class,
-                                           stretchy_collection_class,
+                        marlais_make_list (marlais_class_vector,
+                                           marlais_class_stretchy_collection,
                                            NULL));
-  simple_object_vector_class =
+  marlais_class_simple_object_vector =
     make_builtin_class ("<simple-object-vector>",
                         MARLAIS_CLASS_SEALED,
-                        simple_vector_class);
+                        marlais_class_simple_vector);
 
   /* Byte vectors */
-  byte_vector_class =
+  marlais_class_byte_vector =
     make_builtin_class ("<byte-vector>",
                         MARLAIS_CLASS_SEALED,
-                        simple_vector_class);
+                        marlais_class_simple_vector);
 
   /* String classes */
-  string_class =
+  marlais_class_string =
     make_builtin_class ("<string>",
                         MARLAIS_CLASS_ABSTRACT,
-                        mutable_sequence_class);
-  byte_string_class =
+                        marlais_class_mutable_sequence);
+  marlais_class_byte_string =
     make_builtin_class ("<byte-string>",
                         MARLAIS_CLASS_SEALED,
-                        marlais_make_list (string_class,
-                                           simple_vector_class,
+                        marlais_make_list (marlais_class_string,
+                                           marlais_class_simple_vector,
                                            NULL));
-  wide_string_class =
+  marlais_class_wide_string =
     make_builtin_class ("<wide-string>",
                         MARLAIS_CLASS_SEALED,
-                        marlais_make_list (string_class,
-                                           simple_vector_class,
+                        marlais_make_list (marlais_class_string,
+                                           marlais_class_simple_vector,
                                            NULL));
-  unicode_string_class =
+  marlais_class_unicode_string =
     make_builtin_class ("<unicode-string>",
                         MARLAIS_CLASS_SEALED,
-                        marlais_make_list (string_class,
-                                           simple_vector_class,
+                        marlais_make_list (marlais_class_string,
+                                           marlais_class_simple_vector,
                                            NULL));
 
   /* Condition classes */
-  condition_class =
+  marlais_class_condition =
     make_builtin_class ("<condition>",
                         MARLAIS_CLASS_ABSTRACT,
-                        object_class);
-  serious_condition_class =
+                        marlais_class_object);
+  marlais_class_serious_condition =
     make_builtin_class ("<serious-condition>",
                         MARLAIS_CLASS_ABSTRACT,
-                        condition_class);
-  warning_class =
+                        marlais_class_condition);
+  marlais_class_warning =
     make_builtin_class ("<warning>",
                         MARLAIS_CLASS_ABSTRACT,
-                        condition_class);
-  restart_class =
+                        marlais_class_condition);
+  marlais_class_restart =
     make_builtin_class ("<restart>",
                         MARLAIS_CLASS_ABSTRACT,
-                        condition_class);
-  error_class =
+                        marlais_class_condition);
+  marlais_class_error =
     make_builtin_class ("<error>",
                         MARLAIS_CLASS_ABSTRACT,
-                        condition_class);
-  simple_warning_class =
+                        marlais_class_condition);
+  marlais_class_simple_warning =
     make_builtin_class ("<simple-warning>",
                         MARLAIS_CLASS_SEALED,
-                        warning_class);
-  simple_restart_class =
+                        marlais_class_warning);
+  marlais_class_simple_restart =
     make_builtin_class ("<simple-restart>",
                         MARLAIS_CLASS_SEALED,
-                        restart_class);
-  abort_class =
+                        marlais_class_restart);
+  marlais_class_abort =
     make_builtin_class ("<abort>",
                         MARLAIS_CLASS_SEALED,
-                        restart_class);
-  simple_error_class =
+                        marlais_class_restart);
+  marlais_class_simple_error =
     make_builtin_class ("<simple-error>",
                         MARLAIS_CLASS_SEALED,
-                        error_class);
-  type_error_class =
+                        marlais_class_error);
+  marlais_class_type_error =
     make_builtin_class ("<type-error>",
                         MARLAIS_CLASS_SEALED,
-                        error_class);
-  sealed_object_error_class =
+                        marlais_class_error);
+  marlais_class_sealed_object_error =
     make_builtin_class ("<sealed-object-error>",
                         MARLAIS_CLASS_SEALED,
-                        error_class);
+                        marlais_class_error);
 
   /* Function classes */
-  function_class =
+  marlais_class_function =
     make_builtin_class ("<function>",
                         MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
-                        object_class);
-  primitive_class =
+                        marlais_class_object);
+  marlais_class_primitive =
     make_builtin_class ("<primitive>",
                         MARLAIS_CLASS_SEALED,
-                        function_class);
-  generic_function_class =
+                        marlais_class_function);
+  marlais_class_generic_function =
     make_builtin_class ("<generic-function>",
                         MARLAIS_CLASS_SEALED,
-                        function_class);
-  method_class =
+                        marlais_class_function);
+  marlais_class_method =
     make_builtin_class ("<method>",
                         MARLAIS_CLASS_SEALED,
-                        function_class);
-  exit_function_class =
+                        marlais_class_function);
+  marlais_class_exit_function =
     make_builtin_class ("<exit-function>",
                         MARLAIS_CLASS_SEALED,
-                        function_class);
-  unwind_protect_function_class =
+                        marlais_class_function);
+  marlais_class_unwind_protect_function =
     make_builtin_class ("<unwind-protect-function>",
                         MARLAIS_CLASS_SEALED,
-                        function_class);
+                        marlais_class_function);
 
   /* Type classes */
-  type_class =
+  marlais_class_type =
     make_builtin_class ("<type>",
                         MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
-                        object_class);
-  class_class =
+                        marlais_class_object);
+  marlais_class_class =
     make_builtin_class ("<class>",
                         MARLAIS_CLASS_SEALED,
-                        type_class);
-  singleton_class =
+                        marlais_class_type);
+  marlais_class_singleton =
     make_builtin_class ("<singleton>",
                         MARLAIS_CLASS_SEALED,
-                        type_class);
-  subclass_class =
+                        marlais_class_type);
+  marlais_class_subclass =
     make_builtin_class ("<subclass>",
                         MARLAIS_CLASS_SEALED,
-                        type_class);
-  union_class =
+                        marlais_class_type);
+  marlais_class_union =
     make_builtin_class ("<union>",
                         MARLAIS_CLASS_SEALED,
-                        type_class);
-  limited_type_class =
+                        marlais_class_type);
+  marlais_class_limited_type =
     make_builtin_class ("<limited-type>",
                         MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
-                        type_class);
-  limited_integer_class =
+                        marlais_class_type);
+  marlais_class_limited_integer =
     make_builtin_class ("<limited-integer>",
                         MARLAIS_CLASS_SEALED,
-                        limited_type_class);
+                        marlais_class_limited_type);
 
-  class_slots_class =
+  marlais_class_class_slots =
     make_builtin_class ("<class-slots-class>",
                         MARLAIS_CLASS_SEALED,
-                        object_class);
+                        marlais_class_object);
 
   /* Environment objects */
-  environment_class =
+  marlais_class_environment =
     make_builtin_class ("<environment>",
                         MARLAIS_CLASS_SEALED,
-                        object_class);
-  module_class =
+                        marlais_class_object);
+  marlais_class_module =
     make_builtin_class ("<module>",
                         MARLAIS_CLASS_SEALED,
-                        object_class);
+                        marlais_class_object);
 
   /* Object handles */
-  object_handle_class =
+  marlais_class_object_handle =
     make_builtin_class ("<object-handle>",
                         MARLAIS_CLASS_SEALED,
-                        object_class);
+                        marlais_class_object);
 
   /* Foreign objects */
-  foreign_pointer_class =
+  marlais_class_foreign_pointer =
     make_builtin_class ("<foreign-pointer>",
                         MARLAIS_CLASS_SEALED,
-                        object_class);
+                        marlais_class_object);
 
   /* Resource handles */
-  stdio_handle_class =
+  marlais_class_stdio_handle =
     make_builtin_class ("<stdio-handle>",
                         MARLAIS_CLASS_SEALED,
-                        object_class);
+                        marlais_class_object);
 
   /* Expressions */
 #if 0
   d_expression_class =
     make_builtin_class("<d-expression>",
                        MARLAIS_CLASS_ABSTRACT,
-                       object_class);
+                       marlais_class_object);
   d_leaf_class =
     make_builtin_class("<d-leaf>",
                        MARLAIS_CLASS_ABSTRACT,
@@ -505,7 +506,7 @@ marlais_initialize_class (void)
   unwind_frame_class =
     make_builtin_class ("<unwind-frame>",
                         MARLAIS_CLASS_SEALED|MARLAIS_CLASS_ABSTRACT,
-                        object_class);
+                        marlais_class_object);
   toplevel_frame_class =
     make_builtin_class ("<toplevel-frame>",
                         MARLAIS_CLASS_SEALED,
@@ -530,18 +531,18 @@ marlais_initialize_class (void)
 
   /* GMP numbers */
 #ifdef MARLAIS_ENABLE_GMP
-  big_float_class =
+  marlais_class_big_float =
     make_builtin_class ("<big-float>",
                         MARLAIS_CLASS_SEALED,
-                        float_class);
-  big_ratio_class =
+                        marlais_class_float);
+  marlais_class_big_ratio =
     make_builtin_class ("<big-ratio>",
                         MARLAIS_CLASS_SEALED,
-                        rational_class);
-  big_integer_class =
+                        marlais_class_rational);
+  marlais_class_big_integer =
     make_builtin_class ("<big-integer>",
                         MARLAIS_CLASS_SEALED,
-                        integer_class);
+                        marlais_class_integer);
 #endif
 
   /* clean up our macros */
@@ -561,103 +562,103 @@ marlais_object_class (Object obj)
 {
   switch (marlais_object_type (obj)) {
   case Integer:
-    return (small_integer_class);
+    return (marlais_class_small_integer);
   case True:
   case False:
-    return (boolean_class);
+    return (marlais_class_boolean);
   case Ratio:
-    return (ratio_class);
+    return (marlais_class_ratio);
   case SingleFloat:
-    return (single_float_class);
+    return (marlais_class_single_float);
   case DoubleFloat:
-    return (double_float_class);
+    return (marlais_class_double_float);
   case ExtendedFloat:
-    return (extended_float_class);
+    return (marlais_class_extended_float);
   case EmptyList:
-    return (empty_list_class);
+    return (marlais_class_empty_list);
   case Pair:
-    return (pair_class);
+    return (marlais_class_pair);
   case ByteString:
-    return (byte_string_class);
+    return (marlais_class_byte_string);
 #ifdef MARLAIS_ENABLE_WCHAR
   case WideCharacter:
-    return (wide_character_class);
+    return (marlais_class_wide_character);
   case WideString:
-    return (wide_string_class);
+    return (marlais_class_wide_string);
 #endif
 #ifdef MARLAIS_ENABLE_UCHAR
   case UnicodeCharacter:
-    return (unicode_character_class);
+    return (marlais_class_unicode_character);
   case UnicodeString:
-    return (unicode_string_class);
+    return (marlais_class_unicode_string);
 #endif
   case ByteVector:
-    return (byte_vector_class);
+    return (marlais_class_byte_vector);
   case ObjectVector:
-    return (simple_object_vector_class);
+    return (marlais_class_simple_object_vector);
   case ObjectTable:
-    return (object_table_class);
+    return (marlais_class_object_table);
   case ObjectDeque:
-    return (object_deque_class);
+    return (marlais_class_object_deque);
   case ObjectArray:
-    return (object_array_class);
+    return (marlais_class_object_array);
   case Condition:
-    return (condition_class);
+    return (marlais_class_condition);
   case Symbol:
-    return (symbol_class);
+    return (marlais_class_symbol);
   case Name:
-    return (name_class);
+    return (marlais_class_name);
   case Character:
-    return (byte_character_class);
+    return (marlais_class_byte_character);
   case NextMethod:
-    return (method_class);
+    return (marlais_class_method);
   case Class:
-    return (class_class);
+    return (marlais_class_class);
   case Instance:
     return (INSTCLASS (obj));
   case LimitedIntType:
-    return (limited_integer_class);
+    return (marlais_class_limited_integer);
   case UnionType:
-    return (union_class);
+    return (marlais_class_union);
   case Primitive:
-    return (primitive_class);
+    return (marlais_class_primitive);
   case GenericFunction:
-    return (generic_function_class);
+    return (marlais_class_generic_function);
   case Method:
-    return (method_class);
+    return (marlais_class_method);
   case UnwindFunction:
-    return (exit_function_class);
+    return (marlais_class_exit_function);
   case UnwindProtect:
-    return (unwind_protect_function_class);
+    return (marlais_class_unwind_protect_function);
   case UnspecifiedValue:
-    return (object_class);
+    return (marlais_class_object);
   case EndOfFile:
-    return (object_class);
+    return (marlais_class_object);
   case ObjectTableEntry:
-    return (object_table_entry_class);
+    return (marlais_class_object_table_entry);
   case ObjectDequeEntry:
-    return (object_deque_entry_class);
+    return (marlais_class_object_deque_entry);
   case Singleton:
-    return (singleton_class);
+    return (marlais_class_singleton);
   case Subclass:
-    return (subclass_class);
+    return (marlais_class_subclass);
   case ObjectHandle:
-    return (object_handle_class);
+    return (marlais_class_object_handle);
   case ForeignPtr:
-    return (foreign_pointer_class);
+    return (marlais_class_foreign_pointer);
   case UninitializedValue:
-    return (object_class);
+    return (marlais_class_object);
   case Environment:
-    return (environment_class);
+    return (marlais_class_environment);
   case Module:
-    return (module_class);
+    return (marlais_class_module);
 #ifdef MARLAIS_ENABLE_GMP
   case BigFloat:
-    return big_float_class;
+    return (marlais_class_big_float);
   case BigRatio:
-    return big_ratio_class;
+    return (marlais_class_big_ratio);
   case BigInteger:
-    return big_integer_class;
+    return (marlais_class_big_integer);
 #endif
   default:
     return marlais_error ("object-class: don't know class of object", obj, NULL);
@@ -670,33 +671,33 @@ marlais_make (Object class, Object rest)
   Object ret, initialize_fun;
 
   /* special case the builtin classes */
-  if (class == pair_class) {
+  if (class == marlais_class_pair) {
     ret = marlais_make_pair_entrypoint (rest);
-  } else if (class == empty_list_class) {
+  } else if (class == marlais_class_empty_list) {
     ret = MARLAIS_NIL;
-  } else if (class == list_class) {
+  } else if (class == marlais_class_list) {
     ret = marlais_make_list_entrypoint (rest);
-  } else if (class == byte_vector_class) {
+  } else if (class == marlais_class_byte_vector) {
     ret = marlais_make_bytevector_entrypoint (rest);
-  } else if ((class == vector_class) ||
-             (class == simple_object_vector_class)) {
+  } else if ((class == marlais_class_vector) ||
+             (class == marlais_class_simple_object_vector)) {
     ret = marlais_make_vector_entrypoint (rest);
-  } else if (class == string_class) {
+  } else if (class == marlais_class_string) {
     /* TODO default string type */
     ret = marlais_make_bytestring_entrypoint (rest);
-  } else if (class == byte_string_class) {
+  } else if (class == marlais_class_byte_string) {
     ret = marlais_make_bytestring_entrypoint (rest);
-  } else if (class == wide_string_class) {
+  } else if (class == marlais_class_wide_string) {
     ret = marlais_make_wstring_entrypoint (rest);
-  } else if (class == generic_function_class) {
+  } else if (class == marlais_class_generic_function) {
     ret = marlais_make_generic_entrypoint (rest);
-  } else if ((class == table_class) || (class == object_table_class)) {
+  } else if ((class == marlais_class_table) || (class == marlais_class_object_table)) {
     ret = marlais_make_table_entrypoint (rest);
-  } else if ((class == deque_class) || class == object_deque_class) {
+  } else if ((class == marlais_class_deque) || class == marlais_class_object_deque) {
     ret = marlais_make_deque_entrypoint (rest);
-  } else if ((class == array_class) || class == object_array_class) {
+  } else if ((class == marlais_class_array) || class == marlais_class_object_array) {
     ret = marlais_make_array_entrypoint (rest);
-  } else if (class == class_class) {
+  } else if (class == marlais_class_class) {
     ret = make_class_entrypoint (rest);
   } else {
     if (CLASSABSTRACTP (class)) {
@@ -893,7 +894,7 @@ marlais_make_class (Object obj,
   /* initialize class and each-subclass slot objects */
   CLASSCSLOTS (obj) = marlais_allocate_object (Instance, sizeof (struct instance));
 
-  INSTCLASS (CLASSCSLOTS (obj)) = class_slots_class;
+  INSTCLASS (CLASSCSLOTS (obj)) = marlais_class_class_slots;
 
   /*
    * Note - CLASSCSLOTDS must precede CLASSESSLOTDS for
@@ -929,7 +930,7 @@ marlais_make_slot_descriptor_list (Object slots, int do_eval)
 
     getter = NULL;
     setter = NULL;
-    type = CLASSNAME (object_class);
+    type = CLASSNAME (marlais_class_object);
     init = MARLAIS_UNINITIALIZED;
     init_keyword = NULL;
     allocation = instance_symbol;
@@ -1180,7 +1181,7 @@ make_class_entrypoint (Object args)
   Object supers_obj, slots_obj, debug_obj, abstract_obj;
   Object obj;
 
-  supers_obj = object_class;
+  supers_obj = marlais_class_object;
   slots_obj = MARLAIS_NIL;
   debug_obj = NULL;
   abstract_obj = MARLAIS_FALSE;
@@ -1206,7 +1207,7 @@ make_class_entrypoint (Object args)
     marlais_error ("make <class> debug-name: must be a string", NULL);
   }
   if (EMPTYLISTP (supers_obj)) {
-    supers_obj = object_class;
+    supers_obj = marlais_class_object;
   }
   obj = marlais_allocate_object (Class, sizeof (struct marlais_class));
 

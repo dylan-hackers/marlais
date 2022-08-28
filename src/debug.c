@@ -300,7 +300,7 @@ debug_show_bindings (Object args)
            binding = binding->next) {
         fprintf (stderr, "   ");
         marlais_print_object (marlais_standard_error, binding->sym, 1);
-        if (binding->type != object_class) {
+        if (binding->type != marlais_class_object) {
           fprintf (stderr, " :: ");
           marlais_print_object (marlais_standard_error, binding->type, 1);
         }

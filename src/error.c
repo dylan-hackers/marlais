@@ -93,7 +93,7 @@ marlais_error (const char *msg, ...)
   signal_value = marlais_symbol_value (signal_symbol);
   if (signal_value) {
     ret = marlais_apply (signal_value,
-                         marlais_cons (marlais_make (simple_error_class, MARLAIS_NIL),
+                         marlais_cons (marlais_make (marlais_class_simple_error, MARLAIS_NIL),
                                        MARLAIS_NIL));
   } else {
     longjmp (*marlais_error_jump, 1);

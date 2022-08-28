@@ -60,7 +60,7 @@ marlais_instance_p (Object obj, Object type)
     } else {
       return false;
     }
-  } else if (type == object_class) {
+  } else if (type == marlais_class_object) {
     return true;
   }
 
@@ -95,7 +95,7 @@ marlais_subtype_p (Object type1, Object type2)
         return 0;
       }
     } else {
-      return (marlais_subtype_p (integer_class, type2));
+      return (marlais_subtype_p (marlais_class_integer, type2));
     }
   } else if (UNIONP (type1)) {
     Object ptr;
@@ -119,7 +119,7 @@ marlais_subtype_p (Object type1, Object type2)
     if (SUBCLASSP (type2)) {
       return marlais_subtype_p (SUBCLASSVAL (type1), SUBCLASSVAL (type2));
     } else {
-      return marlais_subtype_p (class_class, type2);
+      return marlais_subtype_p (marlais_class_class, type2);
     }
   } else {
     supers = CLASSSUPERS (type1);

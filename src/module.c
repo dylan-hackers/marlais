@@ -394,7 +394,7 @@ marlais_add_module_binding(Object sym, Object val, int constant, int exported)
     binding->type = marlais_eval (SECOND (sym));
   } else {
     binding->sym = sym;
-    binding->type = object_class;
+    binding->type = marlais_class_object;
   }
 
   binding->props &= !IMPORTED_BINDING;

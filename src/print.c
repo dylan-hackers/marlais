@@ -562,7 +562,7 @@ print_param (Object fd, Object param, int escaped)
 {
   FILE *fp = print_file_from_fd(fd);
 
-  if (SECOND (param) != object_class
+  if (SECOND (param) != marlais_class_object
       /* || CAR (param) == MARLAIS_UNSPECIFIED */
       ) {
     marlais_print_object (fd, CAR (param), escaped);
@@ -713,7 +713,7 @@ print_slot_descriptor (Object fd, Object slotd, int escaped)
     fprintf (fp, " setter: ");
     marlais_print_object (fd, SLOTDSETTER (slotd), escaped);
   }
-  if (SLOTDSLOTTYPE (slotd) != object_class) {
+  if (SLOTDSLOTTYPE (slotd) != marlais_class_object) {
     if (SLOTDDEFERREDTYPE (slotd)) {
       fprintf (fp, " deferred-type: ");
     } else {

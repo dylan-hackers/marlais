@@ -104,7 +104,7 @@ marlais_add_locals (Object syms, Object vals, int constant, struct environment *
     binding = MARLAIS_ALLOCATE_STRUCT (struct binding);
     binding->sym = CAR (syms);
     /* ??? */
-    binding->type = object_class;
+    binding->type = marlais_class_object;
     binding->val = (Object *) marlais_allocate_memory (sizeof (Object *));
 
     *(binding->val) = CAR (vals);
@@ -135,7 +135,7 @@ marlais_add_local (Object sym, Object val, int constant, struct environment *to_
     binding->type = marlais_eval (SECOND (sym));
   } else {
     binding->sym = sym;
-    binding->type = object_class;
+    binding->type = marlais_class_object;
   }
   binding->val = (Object *) marlais_allocate_memory (sizeof (Object *));
 

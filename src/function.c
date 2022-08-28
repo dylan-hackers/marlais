@@ -417,7 +417,7 @@ parse_function_required_parameters (Object *params, Object *tmp_ptr)
                                  NULL),
                          MARLAIS_NIL);
     } else {
-      *tmp_ptr = marlais_cons (marlais_make_list (entry, object_class, NULL),
+      *tmp_ptr = marlais_cons (marlais_make_list (entry, marlais_class_object, NULL),
                        MARLAIS_NIL);
     }
     tmp_ptr = &CDR (*tmp_ptr);
@@ -472,7 +472,7 @@ gf_rest_return_assign(Object gf_obj, Object params)
   if (PAIRP (CAR (params))) {
     GFRESTVALUES (gf_obj) = marlais_eval (SECOND (CAR (params)));
   } else {
-    GFRESTVALUES (gf_obj) = object_class;
+    GFRESTVALUES (gf_obj) = marlais_class_object;
   }
 }
 
@@ -489,7 +489,7 @@ method_rest_return_assign(Object meth_obj, Object params)
   if (PAIRP (CAR (params))) {
     METHRESTVALUES (meth_obj) = marlais_eval (SECOND (CAR (params)));
   } else {
-    METHRESTVALUES (meth_obj) = object_class;
+    METHRESTVALUES (meth_obj) = marlais_class_object;
   }
 }
 
@@ -510,7 +510,7 @@ parse_function_return_parameters(Object functor, Object* params,
     if (PAIRP (entry)) {
       result_type = marlais_eval (SECOND (entry));
     } else {
-      result_type = object_class;
+      result_type = marlais_class_object;
     }
 
     (*tmp_ptr) = marlais_cons (result_type, MARLAIS_NIL);
@@ -637,7 +637,7 @@ parse_generic_function_parameters (Object gf_obj, Object params)
     parse_function_rest_parameter(gf_obj, &params, gf_rest_return_assign);
   } else { /* no values specified */
     GFREQVALUES (gf_obj) = MARLAIS_NIL;
-    GFRESTVALUES (gf_obj) = object_class;
+    GFRESTVALUES (gf_obj) = marlais_class_object;
   }
 
   if (PAIRP (params)) {
@@ -679,7 +679,7 @@ parse_method_parameters (Object meth_obj, Object params)
     parse_function_rest_parameter(meth_obj, &params,method_rest_return_assign);
   } else {
     METHREQVALUES (meth_obj) = MARLAIS_NIL;
-    METHRESTVALUES (meth_obj) = object_class;
+    METHRESTVALUES (meth_obj) = marlais_class_object;
   }
 
   if (PAIRP (params)) {
@@ -1020,9 +1020,9 @@ broad_class (Object obj)
   if (SINGLETONP (obj)) {
     return (marlais_object_class (SINGLEVAL (obj)));
   } else if (SUBCLASSP (obj)) {
-    return (class_class);
+    return (marlais_class_class);
   } else if (LIMINTP (obj)) {
-    return (integer_class);
+    return (marlais_class_integer);
   } else if (UNIONP (obj)) {
     class_list = MARLAIS_NIL;
     union_types = UNIONLIST (obj);

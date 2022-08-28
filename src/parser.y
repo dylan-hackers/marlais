@@ -802,7 +802,7 @@ slot_spec
 		  int slot_type_specified = 0;
 
 		  slot_type = marlais_cons (type_keyword,
-				    marlais_cons (CLASSNAME (object_class),
+				    marlais_cons (CLASSNAME (marlais_class_object),
 					  MARLAIS_NIL));
 		  allocation = marlais_cons (allocation_keyword,
 				     marlais_cons (instance_symbol,

@@ -330,11 +330,11 @@ add_variable_binding (Object var,
       marlais_error ("badly formed variable", var, NULL);
     }
     type = marlais_eval (SECOND (var));
-    if (!marlais_instance_p (type, type_class)) {
+    if (!marlais_instance_p (type, marlais_class_type)) {
       marlais_error ("badly formed variable", var, NULL);
     }
   } else {
-    type = object_class;
+    type = marlais_class_object;
   }
   if (top_level) {
     /* marlais_add_export can't easily check type match.
@@ -810,7 +810,7 @@ define_class_eval (Object form)
   CLASSNAME (obj) = name;
   marlais_add_export (name, obj, 0);
   supers = marlais_map1 (marlais_eval, CAR (tmp_form));
-  if(EMPTYLISTP(supers)) supers = marlais_cons (object_class, MARLAIS_NIL);
+  if(EMPTYLISTP(supers)) supers = marlais_cons (marlais_class_object, MARLAIS_NIL);
   slots = marlais_make_slot_descriptor_list (CDR (tmp_form), 1);
   marlais_make_getter_setter_gfs (slots);
 

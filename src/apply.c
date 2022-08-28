@@ -45,7 +45,7 @@ marlais_register_apply (void)
 Object
 marlais_default_result_value (void)
 {
-  return marlais_cons (MARLAIS_NIL, object_class);
+  return marlais_cons (MARLAIS_NIL, marlais_class_object);
 }
 
 Object
