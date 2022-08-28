@@ -63,15 +63,5 @@ static inline Object marlais_make_integer(marlais_int_t i) {
 #else
 extern Object marlais_make_integer (marlais_int_t i);
 #endif
-/* Make a <ratio> */
-extern Object marlais_make_ratio (marlais_int_t numerator, marlais_int_t denominator);
-/* Make a <single-float> */
-extern Object marlais_make_sfloat (float f);
-/* Make a <double-float> */
-extern Object marlais_make_dfloat (double d);
-#ifdef MARLAIS_ENABLE_EFLOAT
-/* Make a <extended-float> */
-extern Object marlais_make_efloat (long double d);
-#endif
 
 #endif

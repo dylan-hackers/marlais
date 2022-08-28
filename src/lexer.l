@@ -502,7 +502,8 @@ WHITESPACE      [\ \t\f\v\r]
                         long numerator, denominator;
                         numerator = strtol (yytext, &ptr, 10);
                         denominator = strtol (ptr + 1, NULL, 10);
-                        mylval = marlais_make_ratio (numerator, denominator);
+                        //mylval = marlais_make_ratio (numerator, denominator);
+			mylval = marlais_error ("Literal ratio not supported");
                         return (LITERAL);
                         }
 

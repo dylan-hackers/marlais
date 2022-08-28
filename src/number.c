@@ -9,11 +9,6 @@
 #include <float.h>
 #include <math.h>
 
-/* Helper macros */
-
-#define MAX_SMALL_FACTOR (23170)
-#define INT_ABS(i) (i < 0 ? -i : i)
-
 /* Internal variables */
 
 /* Cache for <small-integer> */
@@ -21,11 +16,6 @@
 #if MARLAIS_CONFIG_INTEGER_CACHE > 0
 static Object integer_cache[MARLAIS_CONFIG_INTEGER_CACHE];
 #endif
-#endif
-
-/* Cache for <ratio> */
-#if MARLAIS_CONFIG_RATIO_CACHE > 0
-static Object ratio_cache[MARLAIS_CONFIG_RATIO_CACHE^2];
 #endif
 
 /* Primitives */
@@ -135,35 +125,6 @@ marlais_make_integer (marlais_int_t i)
   return (obj);
 }
 #endif
-
-Object
-marlais_make_ratio (marlais_int_t numerator, marlais_int_t denominator)
-{
-    Object obj;
-
-#if MARLAIS_CONFIG_RATIO_CACHE > 0
-    marlais_int_t index = -1;
-    if(numerator >= 0 && numerator < MARLAIS_CONFIG_RATIO_CACHE
-       && denominator >= 0 && denominator < MARLAIS_CONFIG_RATIO_CACHE) {
-      index = numerator + denominator * MARLAIS_CONFIG_RATIO_CACHE;
-      if(ratio_cache[index]) {
-        return ratio_cache[index];
-      }
-    }
-#endif
-
-    obj = marlais_allocate_object (Ratio, sizeof (struct ratio));
-    RATIONUM (obj) = numerator;
-    RATIODEN (obj) = denominator;
-
-#if MARLAIS_CONFIG_RATIO_CACHE > 0
-    if(index != -1) {
-      ratio_cache[index] = obj;
-    }
-#endif
-
-    return (obj);
-}
 
 /* Primitives */
 
