@@ -36,6 +36,7 @@ static Object prim_int_rem (Object i1, Object i2);
 static Object prim_int_mod (Object d1, Object d2);
 static Object prim_int_truncate_divide (Object i1, Object i2);
 static Object prim_int_sqrt (Object n);
+static Object prim_int_cbrt (Object n);
 static Object prim_int_abs (Object n);
 static Object prim_int_quotient (Object n1, Object n2);
 static Object prim_int_ash (Object n, Object count);
@@ -75,6 +76,7 @@ static struct primitive number_prims[] = {
   {"%int-logxor", prim_2, prim_int_logxor},
 
   {"%int-sqrt", prim_1, prim_int_sqrt},
+  {"%int-cbrt", prim_1, prim_int_cbrt},
 };
 
 /* function definitions */
@@ -276,6 +278,19 @@ prim_int_sqrt (Object n)
     double ans;
 
     ans = sqrt (INTVAL (n));
+    if ((ans - floor (ans)) == 0) {
+        return (marlais_make_integer (ans));
+    } else {
+        return (marlais_make_dfloat (ans));
+    }
+}
+
+static Object
+prim_int_cbrt (Object n)
+{
+    double ans;
+
+    ans = cbrt (INTVAL (n));
     if ((ans - floor (ans)) == 0) {
         return (marlais_make_integer (ans));
     } else {
