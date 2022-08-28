@@ -40,10 +40,10 @@ enum {
       MARLAIS_CLASS_BUILTIN = (1<<4),
       /* class was defined at toplevel */
       MARLAIS_CLASS_DEFINED = (1<<5),
+      /* instances are immediate values */
+      MARLAIS_CLASS_IMMEDIATE = (1<<6),
       /* class slots are uninitialized */
-      MARLAIS_CLASS_UNINITIALIZED = (1<<6),
-      /* instances of this class are immediate values */
-      MARLAIS_CLASS_IMMEDIATE = (1<<7),
+      MARLAIS_CLASS_UNINITIALIZED = (1<<7),
       /* by default a class is none of those things */
       MARLAIS_CLASS_DEFAULT = 0
 };
