@@ -20,6 +20,10 @@ GLOBAL Object marlais_uninitialized;
 GLOBAL Object marlais_default;
 GLOBAL Object marlais_empty_string;
 
+/* character classes */
+GLOBAL Object marlais_standard_character_class;
+GLOBAL Object marlais_standard_string_class;
+
 /* streams */
 GLOBAL Object marlais_standard_input;
 GLOBAL Object marlais_standard_output;
@@ -128,11 +132,6 @@ GLOBAL Object marlais_class_stdio_handle;
 GLOBAL Object marlais_class_big_float;
 GLOBAL Object marlais_class_big_ratio;
 GLOBAL Object marlais_class_big_integer;
-
-/* standard character classes */
-
-GLOBAL Object standard_character_class;
-GLOBAL Object standard_string_class;
 
 /* reserved word symbols */
 GLOBAL Object above_symbol;
