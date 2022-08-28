@@ -127,7 +127,7 @@ marlais_print_object (Object fd, Object obj, int escaped)
   case Pair:
     print_pair (fd, obj, escaped);
     break;
-  case SimpleObjectVector:
+  case ObjectVector:
     print_vector (fd, obj, escaped);
     break;
   case ByteVector:

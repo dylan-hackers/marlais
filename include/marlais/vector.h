@@ -38,14 +38,14 @@
 
 /* Data structures */
 
-struct marlais_simple_object_vector {
+struct marlais_object_vector {
     ObjectHeader header;
     int size;
     Object *els;
 };
 
-#define SOVSIZE(obj)      (((struct marlais_simple_object_vector *)obj)->size)
-#define SOVELS(obj)       (((struct marlais_simple_object_vector *)obj)->els)
+#define SOVSIZE(obj)      (((struct marlais_object_vector *)obj)->size)
+#define SOVELS(obj)       (((struct marlais_object_vector *)obj)->els)
 
 /* Function declarations */
 

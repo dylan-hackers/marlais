@@ -593,7 +593,7 @@ marlais_object_class (Object obj)
 #endif
   case ByteVector:
     return (byte_vector_class);
-  case SimpleObjectVector:
+  case ObjectVector:
     return (simple_object_vector_class);
   case ObjectTable:
     return (object_table_class);
