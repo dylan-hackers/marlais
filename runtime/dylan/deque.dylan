@@ -14,7 +14,7 @@ module: dylan
 // This method required because the general empty? method assumes that
 // the final state is #f.
 define method empty? (d :: <deque>)
-  if (%deque-initial-state (d))
+  if (%deque-first-entry (d))
     #f
   else
     #t
@@ -107,21 +107,21 @@ end method;
 //
 
 define method initial-state (d :: <deque>)
-  pair (%deque-initial-state (d), 0);
+  pair (%deque-first-entry (d), 0);
 end method initial-state;
 
 define method next-state (d :: <deque>, state :: <pair>)
-  state.head := %deque-next-state (d, state.head);
+  state.head := %deque-entry-next (d, state.head);
   state.tail := state.tail + 1;
   state
 end method next-state;
 
 define method final-state (d :: <deque>)
-  pair (%deque-final-state (d), d.size - 1);
+  pair (%deque-last-entry (d), d.size - 1);
 end method final-state;
 
 define method previous-state (d :: <deque>, state :: <pair>)
-  state.head := %deque-previous-state (d, state.head);
+  state.head := %deque-entry-previous (d, state.head);
   state.tail := state.tail - 1;
   state
 end method previous-state;
@@ -131,7 +131,7 @@ define method current-key (d :: <deque>, state :: <pair>)
 end method current-key;
 
 define method current-element (d :: <deque>, state :: <pair>)
-  %deque-current-element (d, state.head);
+  %deque-entry-value (d, state.head);
 end method current-element;
 
 define method finished-state? (d :: <deque>, state :: <pair>, limit)
@@ -141,7 +141,7 @@ end method finished-state?;
 define method current-element-setter (new-value,
 				      d :: <deque>,
 				      state ::<pair>)
-  %deque-current-element-setter (d, state.head, new-value);
+  %deque-entry-value-setter (d, state.head, new-value);
 end method current-element-setter;
 
 define method copy-state (d :: <deque>, state :: <pair>)
@@ -153,7 +153,7 @@ define method forward-iteration-protocol (d :: <deque>)
   let initial-state = initial-state (d);
   let limit = forward-limit (d);
   let next-state = method (d :: <deque>, state :: <pair>)
-		     state.head := %deque-next-state (d, state.head);
+		     state.head := %deque-entry-next (d, state.head);
 		     state.tail := state.tail + 1;
 		     state
 		   end method;
@@ -164,14 +164,14 @@ define method forward-iteration-protocol (d :: <deque>)
 		      state.tail;
 		    end method;
   let current-element =  method (d :: <deque>, state :: <pair>)
-			   %deque-current-element (d, state.head);
+			   %deque-entry-value (d, state.head);
 			 end method;
   let current-element-setter = method (new-value,
 				       d :: <deque>,
 				       state ::<pair>)
-				 %deque-current-element-setter (d,
-								state.head,
-								new-value);
+				 %deque-entry-value-setter (d,
+                                                            state.head,
+                                                            new-value);
 			       end method;
 
   let copy-state = method (d :: <deque>, s :: <pair>)

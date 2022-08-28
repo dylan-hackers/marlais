@@ -50,18 +50,19 @@ static Object deque_first (Object d, Object default_ob);
 static Object deque_last (Object d, Object default_ob);
 static Object deque_element (Object d, Object i, Object default_ob);
 static Object deque_element_setter (Object d, Object i, Object new);
-/*static Object deque_remove_bang (Object d, Object v, Object test, Object count);*/
-static Object deque_initial_state (Object d);
-static Object deque_next_state (Object d, Object s);
-static Object deque_final_state (Object d);
-static Object deque_previous_state (Object d, Object s);
-static Object deque_current_element (Object d, Object s);
-static Object deque_current_element_setter (Object d,
-                                            Object s,
-                                            Object new_value);
 
-static struct primitive deque_prims[] =
-{
+/*static Object deque_remove_bang (Object d, Object v, Object test, Object count);*/
+
+static Object deque_first_entry (Object d);
+static Object deque_last_entry (Object d);
+
+static Object deque_entry_next (Object de);
+static Object deque_entry_previous (Object de);
+static Object deque_entry_value (Object de);
+static Object deque_entry_value_setter (Object de,
+                                        Object new_value);
+
+static struct primitive deque_prims[] = {
   {"%deque-size",      prim_1, deque_size},
 
   {"%deque-push",      prim_2, marlais_deque_push},
@@ -69,22 +70,25 @@ static struct primitive deque_prims[] =
   {"%deque-push-last", prim_2, marlais_deque_push_last},
   {"%deque-pop-last",  prim_1, marlais_deque_pop_last},
 
+  {"%deque->list",     prim_1, marlais_deque_to_list},
+  {"%deque->vector",   prim_1, marlais_deque_to_vector},
+  {"%list->deque",     prim_1, marlais_list_to_deque},
+  {"%vector->deque",   prim_1, marlais_vector_to_deque},
+
   {"%deque-first", prim_2, deque_first},
   {"%deque-last", prim_2, deque_last},
   {"%deque-element", prim_3, deque_element},
   {"%deque-element-setter", prim_3, deque_element_setter},
-/*{"%deque-remove!", prim_4, deque_remove_bang},*/
-  {"%deque-initial-state", prim_1, deque_initial_state},
-  {"%deque-next-state", prim_2, deque_next_state},
-  {"%deque-final-state", prim_1, deque_final_state},
-  {"%deque-previous-state", prim_2, deque_previous_state},
-  {"%deque-current-element", prim_2, deque_current_element},
-  {"%deque-current-element-setter", prim_3, deque_current_element_setter},
 
-  {"%deque->list",   prim_1, marlais_deque_to_list},
-  {"%deque->vector", prim_1, marlais_deque_to_vector},
-  {"%list->deque",   prim_1, marlais_list_to_deque},
-  {"%vector->deque", prim_1, marlais_vector_to_deque},
+/*{"%deque-remove!", prim_4, deque_remove_bang},*/
+
+  {"%deque-first-entry", prim_1, deque_first_entry},
+  {"%deque-last-entry", prim_1, deque_last_entry},
+
+  {"%deque-entry-next", prim_1, deque_entry_next},
+  {"%deque-entry-previous", prim_1, deque_entry_previous},
+  {"%deque-entry-value", prim_1, deque_entry_value},
+  {"%deque-entry-value-setter", prim_2, deque_entry_value_setter},
 };
 
 /* Exported functions */
@@ -100,7 +104,6 @@ Object
 marlais_make_deque (void)
 {
   Object obj = marlais_allocate_object (ObjectDeque, sizeof (struct marlais_deque));
-
   DEQUEFIRST (obj) = MARLAIS_NIL;
   DEQUELAST (obj) = MARLAIS_NIL;
   return (obj);
@@ -348,7 +351,7 @@ deque_element_setter (Object d, Object index, Object new)
 }
 
 static Object
-deque_initial_state (Object d)
+deque_first_entry (Object d)
 {
   if (EMPTYLISTP (DEQUEFIRST (d))) {
     return (MARLAIS_FALSE);
@@ -358,17 +361,7 @@ deque_initial_state (Object d)
 }
 
 static Object
-deque_next_state (Object d, Object s)
-{
-  if (EMPTYLISTP (DENEXT (s))) {
-    return (MARLAIS_FALSE);
-  } else {
-    return (DENEXT (s));
-  }
-}
-
-static Object
-deque_final_state (Object d)
+deque_last_entry (Object d)
 {
   if (EMPTYLISTP (DEQUELAST (d))) {
     return (MARLAIS_FALSE);
@@ -378,23 +371,33 @@ deque_final_state (Object d)
 }
 
 static Object
-deque_previous_state (Object d, Object s)
+deque_entry_next (Object de)
 {
-  if (EMPTYLISTP (DEPREV (s))) {
+  if (EMPTYLISTP (DENEXT (de))) {
     return (MARLAIS_FALSE);
   } else {
-    return (DEPREV (s));
+    return (DENEXT (de));
   }
 }
 
 static Object
-deque_current_element (Object d, Object s)
+deque_entry_previous (Object de)
 {
-  return (DEVALUE (s));
+  if (EMPTYLISTP (DEPREV (de))) {
+    return (MARLAIS_FALSE);
+  } else {
+    return (DEPREV (de));
+  }
 }
 
 static Object
-deque_current_element_setter (Object d, Object s, Object new_value)
+deque_entry_value (Object de)
 {
-  return (DEVALUE (s) = new_value);
+  return (DEVALUE (de));
+}
+
+static Object
+deque_entry_value_setter (Object de, Object new_value)
+{
+  return (DEVALUE (de) = new_value);
 }
