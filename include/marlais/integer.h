@@ -52,8 +52,8 @@ struct ratio {
 #define RATIONUM(obj)     (((struct ratio *)obj)->numerator)
 #define RATIODEN(obj)     (((struct ratio *)obj)->denominator)
 
-/* Register number primitives */
-extern void marlais_register_number (void);
+/* Register integer primitives */
+extern void marlais_register_integer (void);
 /* Make an <integer> */
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
 static inline Object marlais_make_integer(marlais_int_t i) {

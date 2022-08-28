@@ -1,6 +1,6 @@
 /* number.c -- see COPYRIGHT for use */
 
-#include <marlais/number.h>
+#include <marlais/integer.h>
 
 #include <marlais/alloc.h>
 #include <marlais/env.h>
@@ -45,7 +45,7 @@ static Object prim_int_logand (Object n1, Object n2);
 static Object prim_int_logior (Object n1, Object n2);
 static Object prim_int_logxor (Object n1, Object n2);
 
-static struct primitive number_prims[] = {
+static struct primitive integer_prims[] = {
   {"%int<", prim_2, prim_int_less_than},
 
   {"%int-odd?", prim_1, prim_int_odd_p},
@@ -82,10 +82,10 @@ static struct primitive number_prims[] = {
 /* function definitions */
 
 void
-marlais_register_number (void)
+marlais_register_integer (void)
 {
   /* register primitives */
-  MARLAIS_REGISTER_PRIMS (number_prims);
+  MARLAIS_REGISTER_PRIMS (integer_prims);
 
   /* integer constants */
   marlais_add_export (marlais_make_name ("$integer-bits"),

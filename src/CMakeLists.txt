@@ -101,10 +101,10 @@ add_library(marlais_lib
   function.c
   gc.c
   globals.c
+  integer.c
   lexer.c
   list.c
   module.c
-  number.c
   object.c
   parser.c
   prim.c

@@ -264,7 +264,7 @@ marlais_initialize (void)
   marlais_register_function ();
   marlais_register_values ();
   marlais_register_print ();
-  marlais_register_number ();
+  marlais_register_integer ();
   marlais_register_float ();
   marlais_register_apply ();
   marlais_register_boolean ();
