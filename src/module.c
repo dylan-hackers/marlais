@@ -17,30 +17,36 @@ static Object marlais_current_module;
 
 /* Internal functions */
 
-static void import_module_binding (struct binding *import_binding,
-                                   struct binding **bindings,
-                                   int all_imports);
-static void add_module_binding(Object sym, Object val,
-                               int constant, int exported);
-static void fill_imports_table_from_property_set (Object imports_table,
-                                                  Object imports_set,
-                                                  Object renames_table);
+static void marlais_import_module_binding (struct binding *import_binding,
+                                           struct binding **bindings,
+                                           int all_imports);
+static void marlais_add_module_binding(Object sym, Object val,
+                                       int constant, int exported);
+static void marlais_fill_imports_table_from_property_set (Object imports_table,
+                                                          Object imports_set,
+                                                          Object renames_table);
 
 /* Primitives */
 
 static Object prim_current_module (void);
 static Object prim_set_module (Object mod_or_sym);
 static Object prim_find_module (Object sym);
-static Object prim_module_name (Object sym);
-static Object prim_module_environment (Object sym);
+static Object prim_library_name (Object lib);
+static Object prim_library_modules (Object lib);
+static Object prim_module_name (Object mod);
+static Object prim_module_environment (Object mod);
 
 static struct primitive module_prims[] =
 {
-    {"current-module",  prim_0, prim_current_module},
-    {"%set-module",  prim_1, prim_set_module},
-    {"%find-module", prim_1, prim_find_module},
-    {"%module-name", prim_1, prim_module_name},
-    {"%module-environment", prim_1, prim_module_environment},
+  {"current-module",      prim_0, prim_current_module},
+  {"%set-module",         prim_1, prim_set_module},
+  {"%find-module",        prim_1, prim_find_module},
+#if 0
+  {"%library-name",       prim_1, prim_library_name},
+  {"%library-modules",    prim_1, prim_library_modules},
+#endif
+  {"%module-name",        prim_1, prim_module_name},
+  {"%module-environment", prim_1, prim_module_environment},
 };
 
 /* Exported functions */
@@ -120,13 +126,13 @@ marlais_find_module (Object module_name)
 void
 marlais_add_binding (Object sym, Object val, int constant)
 {
-  add_module_binding(sym, val, constant, 0);
+  marlais_add_module_binding(sym, val, constant, 0);
 }
 
 void
 marlais_add_export (Object sym, Object val, int constant)
 {
-  add_module_binding(sym, val, constant, 1);
+  marlais_add_module_binding(sym, val, constant, 1);
 }
 
 void
@@ -172,9 +178,9 @@ marlais_use_module (Object module_name,
   renames_table = marlais_make_table (DEFAULT_TABLE_SIZE);
   if (imports != all_symbol) {
     imports_table = marlais_make_table (DEFAULT_TABLE_SIZE);
-    fill_imports_table_from_property_set (imports_table,
-                                          imports,
-                                          renames_table);
+    marlais_fill_imports_table_from_property_set (imports_table,
+                                                  imports,
+                                                  renames_table);
   } else {
     all_imports = 1;
   }
@@ -224,9 +230,9 @@ marlais_use_module (Object module_name,
           /*
            * This binding is importable.  Go for it.
            */
-          import_module_binding (binding,
-                                 &bindings,
-                                 all_imports);
+          marlais_import_module_binding (binding,
+                                         &bindings,
+                                         all_imports);
           /*
            * See what the bindings name needs to be.
            */
@@ -356,9 +362,9 @@ static Object prim_module_environment (Object module)
 /* Internal functions */
 
 static void
-import_module_binding (struct binding *import_binding,
-                       struct binding **bindings,
-                       int all_imports)
+marlais_import_module_binding (struct binding *import_binding,
+                               struct binding **bindings,
+                               int all_imports)
 {
   struct binding *binding;
 
@@ -374,7 +380,7 @@ import_module_binding (struct binding *import_binding,
 }
 
 static void
-add_module_binding(Object sym, Object val, int constant, int exported)
+marlais_add_module_binding(Object sym, Object val, int constant, int exported)
 {
   struct binding *binding, *old_binding;
   int i;
@@ -433,9 +439,9 @@ add_module_binding(Object sym, Object val, int constant, int exported)
  * Like fill_table_from..., but stores variable renamings in renames_table.
  */
 static void
-fill_imports_table_from_property_set (Object imports_table,
-                                      Object imports_set,
-                                      Object renames_table)
+marlais_fill_imports_table_from_property_set (Object imports_table,
+                                              Object imports_set,
+                                              Object renames_table)
 {
   Object the_element;
 
