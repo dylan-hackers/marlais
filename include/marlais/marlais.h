@@ -1,17 +1,6 @@
 
 #include <marlais/common.h>
 
-#if 0
-/* these are in common.h */
-#include <marlais/config.h>
-#include <marlais/compiler.h>
-#include <marlais/object.h>
-#include <marlais/globals.h>
-#include <marlais/error.h>
-#include <marlais/boolean.h>
-#include <marlais/type.h>
-#endif
-
 #include <marlais/alloc.h>
 #include <marlais/apply.h>
 #include <marlais/array.h>
@@ -49,4 +38,3 @@
 #ifdef MARLAIS_ENABLE_UCHAR
 #include <marlais/unicode.h>
 #endif
-
