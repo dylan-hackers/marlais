@@ -35,8 +35,6 @@ static Object prim_int_div (Object n1, Object n2);
 static Object prim_int_rem (Object i1, Object i2);
 static Object prim_int_mod (Object d1, Object d2);
 static Object prim_int_truncate_divide (Object i1, Object i2);
-static Object prim_int_sqrt (Object n);
-static Object prim_int_cbrt (Object n);
 static Object prim_int_abs (Object n);
 static Object prim_int_quotient (Object n1, Object n2);
 static Object prim_int_ash (Object n, Object count);
@@ -44,6 +42,8 @@ static Object prim_int_lognot (Object n1);
 static Object prim_int_logand (Object n1, Object n2);
 static Object prim_int_logior (Object n1, Object n2);
 static Object prim_int_logxor (Object n1, Object n2);
+static Object prim_int_sqrt (Object n);
+static Object prim_int_cbrt (Object n);
 
 static struct primitive integer_prims[] = {
   {"%int<", prim_2, prim_int_less_than},
@@ -54,22 +54,21 @@ static struct primitive integer_prims[] = {
   {"%int-positive?", prim_1, prim_int_positive_p},
   {"%int-negative?", prim_1, prim_int_negative_p},
 
-  {"%int-abs", prim_1, prim_int_abs},
+  {"%int-abs",      prim_1, prim_int_abs},
   {"%int-negative", prim_1, prim_int_negative},
-
-  {"%int-inverse", prim_1, prim_int_inverse},
+  {"%int-inverse",  prim_1, prim_int_inverse},
 
   {"%int-add", prim_2, prim_int_add},
   {"%int-sub", prim_2, prim_int_sub},
   {"%int-mul", prim_2, prim_int_mul},
+
   {"%int-div", prim_2, prim_int_div},
   {"%int-mod", prim_2, prim_int_mod},
   {"%int-rem", prim_2, prim_int_rem},
-
   {"%int-truncate/", prim_2, prim_int_truncate_divide},
-
-  {"%int-ash", prim_2, prim_int_ash},
   {"%int-quotient", prim_2, prim_int_quotient},
+
+  {"%int-ash",    prim_2, prim_int_ash},
   {"%int-lognot", prim_1, prim_int_lognot},
   {"%int-logand", prim_2, prim_int_logand},
   {"%int-logior", prim_2, prim_int_logior},

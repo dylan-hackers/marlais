@@ -549,7 +549,7 @@ define method exp (n :: <number>) => value :: <number>;
 end method exp;
 
 define method ln (n :: <number>) => value :: <number>;
-  %double-ln (as(<double-float>, n));
+  %double-log (as(<double-float>, n));
 end method ln;
 
 define method cos (n :: <real>) => value :: <real>;

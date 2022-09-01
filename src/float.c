@@ -76,12 +76,25 @@ static Object prim_double_truncate_divide (Object d1, Object d2);
 
 static Object prim_double_pow (Object n1, Object n2);
 static Object prim_double_sqrt (Object n);
+static Object prim_double_cbrt (Object n);
+
 static Object prim_double_exp (Object n);
 static Object prim_double_log (Object n);
-static Object prim_double_cos (Object n);
+
 static Object prim_double_sin (Object n);
+static Object prim_double_cos (Object n);
 static Object prim_double_tan (Object n);
+static Object prim_double_asin (Object n);
+static Object prim_double_acos (Object n);
 static Object prim_double_atan (Object n);
+
+static Object prim_double_sinh (Object n);
+static Object prim_double_cosh (Object n);
+static Object prim_double_tanh (Object n);
+static Object prim_double_asinh (Object n);
+static Object prim_double_acosh (Object n);
+static Object prim_double_atanh (Object n);
+
 static Object prim_double_atan2 (Object n1, Object n2);
 
 static struct primitive float_prims[] = {
@@ -119,11 +132,25 @@ static struct primitive float_prims[] = {
 
   {"%double-pow", prim_2, prim_double_pow},
   {"%double-sqrt", prim_1, prim_double_sqrt},
+  {"%double-cbrt", prim_1, prim_double_cbrt},
+
   {"%double-exp", prim_1, prim_double_exp},
-  {"%double-ln", prim_1, prim_double_log},
+  {"%double-log", prim_1, prim_double_log},
+
   {"%double-cos", prim_1, prim_double_cos},
   {"%double-sin", prim_1, prim_double_sin},
+  {"%double-tan", prim_1, prim_double_tan},
+  {"%double-acos", prim_1, prim_double_acos},
+  {"%double-asin", prim_1, prim_double_asin},
   {"%double-atan", prim_1, prim_double_atan},
+
+  {"%double-cosh", prim_1, prim_double_cosh},
+  {"%double-sinh", prim_1, prim_double_sinh},
+  {"%double-tanh", prim_1, prim_double_tanh},
+  {"%double-acosh", prim_1, prim_double_acosh},
+  {"%double-asinh", prim_1, prim_double_asinh},
+  {"%double-atanh", prim_1, prim_double_atanh},
+
   {"%double-atan2", prim_2, prim_double_atan2},
 };
 
@@ -372,6 +399,12 @@ prim_double_negative_p (Object n)
 }
 
 static Object
+prim_double_abs (Object n)
+{
+    return (marlais_make_dfloat (fabs (DFLOATVAL (n))));
+}
+
+static Object
 prim_double_negative (Object n)
 {
     return (marlais_make_dfloat (-DFLOATVAL (n)));
@@ -528,6 +561,12 @@ prim_double_sqrt (Object n)
 }
 
 static Object
+prim_double_cbrt (Object n)
+{
+    return (marlais_make_dfloat (cbrt (DFLOATVAL (n))));
+}
+
+static Object
 prim_double_exp (Object n1)
 {
     return (marlais_make_dfloat (exp (DFLOATVAL (n1))));
@@ -537,12 +576,6 @@ static Object
 prim_double_log (Object n1)
 {
     return (marlais_make_dfloat (log (DFLOATVAL (n1))));
-}
-
-static Object
-prim_double_abs (Object n)
-{
-    return (marlais_make_dfloat (fabs (DFLOATVAL (n))));
 }
 
 static Object
@@ -564,9 +597,57 @@ prim_double_tan (Object n1)
 }
 
 static Object
+prim_double_acos (Object n1)
+{
+    return (marlais_make_dfloat (acos (DFLOATVAL (n1))));
+}
+
+static Object
+prim_double_asin (Object n1)
+{
+    return (marlais_make_dfloat (asin (DFLOATVAL (n1))));
+}
+
+static Object
 prim_double_atan (Object n1)
 {
     return (marlais_make_dfloat (atan (DFLOATVAL (n1))));
+}
+
+static Object
+prim_double_cosh (Object n1)
+{
+    return (marlais_make_dfloat (cosh (DFLOATVAL (n1))));
+}
+
+static Object
+prim_double_sinh (Object n1)
+{
+    return (marlais_make_dfloat (sinh (DFLOATVAL (n1))));
+}
+
+static Object
+prim_double_tanh (Object n1)
+{
+    return (marlais_make_dfloat (tanh (DFLOATVAL (n1))));
+}
+
+static Object
+prim_double_acosh (Object n1)
+{
+    return (marlais_make_dfloat (acosh (DFLOATVAL (n1))));
+}
+
+static Object
+prim_double_asinh (Object n1)
+{
+    return (marlais_make_dfloat (asinh (DFLOATVAL (n1))));
+}
+
+static Object
+prim_double_atanh (Object n1)
+{
+    return (marlais_make_dfloat (atanh (DFLOATVAL (n1))));
 }
 
 static Object
