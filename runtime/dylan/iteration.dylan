@@ -11,11 +11,11 @@ module: dylan
 //
 
 define generic forward-iteration-protocol (c :: <collection>)
-  => (initial-state, limit, next-state, finished-state?, current-key,
+  => (state, limit, next-state, finished-state?, current-key,
       current-element, current-element-setter, copy-state);
 
 define generic backward-iteration-protocol (c :: <collection>)
-  => (initial-state, limit, previous-state, finished-state?, current-key,
+  => (state, limit, previous-state, finished-state?, current-key,
       current-element, current-element-setter, copy-state);
 
 //
@@ -44,10 +44,20 @@ define generic current-element (c :: <collection>, state :: <object>)
   => (element :: <object>);
 define generic current-element-setter (element :: <object>, c :: <collection>, state :: <object>)
   => (element :: <object>);
+define generic copy-state (s :: <collection>, state :: <object>)
+  => (copy :: <object>);
 
 //
 // Default implementations
 //
+
+define method initial-state (c :: <collection>)
+  error ("Don't know how to find initial state", c);
+end method next-state;
+
+define method final-state (c :: <collection>)
+  error ("Don't know how to find final state", c);
+end method next-state;
 
 define method forward-limit (c :: <collection>)
   #f
@@ -55,6 +65,14 @@ end method next-state;
 
 define method backward-limit (c :: <collection>)
   #f
+end method next-state;
+
+define method next-state (c :: <collection>, state)
+  error ("Don't know how to find next state", c);
+end method next-state;
+
+define method previous-state (c :: <collection>, state)
+  error ("Don't know how to find next state", c);
 end method next-state;
 
 define method finished-state? (c :: <collection>, state :: <object>, limit :: <object>)
@@ -83,26 +101,6 @@ define method copy-state (s :: <collection>, state :: <object>)
 end method copy-state;
 
 //
-// Default methods for generic implementation
-//
-
-define method initial-state (c :: <collection>)
-  error ("Don't know how to find initial state", c);
-end method next-state;
-
-define method final-state (c :: <collection>)
-  error ("Don't know how to find final state", c);
-end method next-state;
-
-define method next-state (c :: <collection>, state)
-  error ("Don't know how to find next state", c);
-end method next-state;
-
-define method previous-state (c :: <collection>, state)
-  error ("Don't know how to find next state", c);
-end method next-state;
-
-//
 // New method chooses the best specific method for the specified
 // collection.  Assumes that any type object may be placed in the
 // collection by current-element-setter.
@@ -118,10 +116,7 @@ define method forward-iteration-protocol (c :: <collection>)
   let finished-state? = best-method (finished-state?, c, initial-state, limit);
   let current-key = best-method (current-key, c, initial-state);
   let current-element = best-method (current-element, c, initial-state);
-  let current-element-setter = best-method (current-element-setter,
-					    0,
-					    c,
-					    initial-state);
+  let current-element-setter = best-method (current-element-setter, 0, c, initial-state);
   let copy-state = best-method (copy-state, c, initial-state);
   values (initial-state,
 	  limit,
@@ -144,10 +139,7 @@ define method backward-iteration-protocol (c :: <collection>)
   let finished-state? = best-method (finished-state?, c, final-state, limit);
   let current-key = best-method (current-key, c, final-state);
   let current-element = best-method (current-element, c, final-state);
-  let current-element-setter = best-method (current-element-setter,
-					    0,
-					    c,
-					    final-state);
+  let current-element-setter = best-method (current-element-setter, 0, c, final-state);
   let copy-state = best-method (copy-state, c, final-state);
   values (final-state,
 	  limit,
