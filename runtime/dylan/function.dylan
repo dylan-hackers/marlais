@@ -6,17 +6,7 @@ module: dylan
 // Authors:
 //
 
-define method generic-function-methods (gf :: <generic-function>)
-  %generic-function-methods(gf);
-end method generic-function-methods;
-
-define method add-method (gf :: <generic-function>, meth :: <method>)
-  %add-method(gf, meth);
-end method add-method;
-
-define method generic-function-mandatory-keywords (gf :: <generic-function>)
-  %generic-function-mandatory-keywords(gf);
-end method generic-function-mandatory-keywords;
+// Generic methods on functions
 
 define method function-specializers (func :: <function>)
  => type-sequence :: <sequence>;
@@ -31,6 +21,20 @@ end method function-return-values;
 define method function-arguments (f :: <function>)
   %function-arguments(f);
 end method function-arguments;
+
+// Methods on generic functions
+
+define method generic-function-methods (gf :: <generic-function>)
+  %generic-function-methods(gf);
+end method generic-function-methods;
+
+define method add-method (gf :: <generic-function>, meth :: <method>)
+  %add-method(gf, meth);
+end method add-method;
+
+define method generic-function-mandatory-keywords (gf :: <generic-function>)
+  %generic-function-mandatory-keywords(gf);
+end method generic-function-mandatory-keywords;
 
 define method applicable-method? (m :: <function>, #rest args)
   %apply(%applicable-method?, pair(m, args));
@@ -60,6 +64,7 @@ define method make (gftype == <generic-function>,
   end if;
 end method make;
 
+// Function application
 
 define method apply (f :: <function>, #rest args)
 
