@@ -145,7 +145,7 @@ marlais_table_element_setter (Object table, Object key, Object val)
     *element_handle = val;
   } else {
     hval = equal_hash (key);
-    h = abs (INTVAL (hval)) % TABLESIZE (table);
+    h = labs (INTVAL (hval)) % TABLESIZE (table);
     entry = make_table_entry (h, key, val, TABLETABLE (table)[h]);
     TABLETABLE (table)[h] = entry;
   }
@@ -159,7 +159,7 @@ marlais_table_element_by_vector (Object table, Object key)
   int h;
 
   hval = equal_hash (key);
-  h = abs (INTVAL (hval)) % TABLESIZE (table);
+  h = labs (INTVAL (hval)) % TABLESIZE (table);
   entry = TABLETABLE (table)[h];
 
   while (entry) {
@@ -183,7 +183,7 @@ marlais_table_element_setter_by_vector (Object table, Object key, Object val)
     *element_handle = val;
   } else {
     hval = equal_hash (key);
-    h = abs (INTVAL (hval)) % TABLESIZE (table);
+    h = labs (INTVAL (hval)) % TABLESIZE (table);
 
     entry = make_table_entry (h, key, val, TABLETABLE (table)[h]);
     TABLETABLE (table)[h] = entry;
@@ -375,7 +375,7 @@ table_element_handle (Object table, Object key, Object *default_val)
   struct environment *old_env;
 
   hval = equal_hash (key);
-  h = abs (INTVAL (hval)) % TABLESIZE (table);
+  h = labs (INTVAL (hval)) % TABLESIZE (table);
   entry = TABLETABLE (table)[h];
 
   /* TODO this should be a lookup in the dylan module */
