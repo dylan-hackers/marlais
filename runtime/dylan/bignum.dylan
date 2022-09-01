@@ -676,7 +676,7 @@ define method \- (n1 :: <big-integer>, n2 :: <integer>)
 end method \-;
 
 define method \- (n1 :: <integer>, n2 :: <big-integer>)
-  %mpu-sub (as (<big-integer>, n1), n2);
+  %mpz-sub (as (<big-integer>, n1), n2);
 end method \-;
 
 define method \* (n1 :: <big-integer>, n2 :: <integer>)
