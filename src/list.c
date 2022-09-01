@@ -42,42 +42,52 @@
 
 /* Primitives */
 
-static Object first_d (Object pair, Object default_ob);
-static Object second_d (Object pair, Object default_ob);
-static Object third_d (Object pair, Object default_ob);
-static Object set_car (Object pair, Object val);
-static Object set_cdr (Object pair, Object val);
-static Object list_length (Object lst);
-static Object list_element (Object pair, Object index, Object default_ob);
-static Object list_element_setter (Object pair, Object index, Object obj);
-static Object list_member_p (Object obj, Object lst, Object test);
-static Object list_reduce (Object fun, Object init, Object lst);
-static Object list_reduce1 (Object fun, Object lst);
-static Object list_last (Object lst, Object default_ob);
+static Object prim_head_setter (Object pair, Object val);
+static Object prim_tail_setter (Object pair, Object val);
+
+static Object prim_list_first (Object pair, Object default_ob);
+static Object prim_list_second (Object pair, Object default_ob);
+static Object prim_list_third (Object pair, Object default_ob);
+static Object prim_list_last (Object lst, Object default_ob);
+
+static Object prim_list_length (Object lst);
+static Object prim_list_element (Object pair, Object index, Object default_ob);
+static Object prim_list_element_setter (Object pair, Object index, Object obj);
+static Object prim_list_member_p (Object obj, Object lst, Object test);
+
+static Object prim_list_reduce (Object fun, Object init, Object lst);
+static Object prim_list_reduce1 (Object fun, Object lst);
 
 static struct primitive list_prims[] =
 {
     {"list", prim_0_rest, marlais_copy_list},
     {"pair", prim_2, marlais_cons},
+
     {"%head", prim_1, marlais_car},
     {"%tail", prim_1, marlais_cdr},
-    {"%first", prim_2, first_d},
-    {"%second", prim_2, second_d},
-    {"%third", prim_2, third_d},
-    {"%head-setter", prim_2, set_car},
-    {"%tail-setter", prim_2, set_cdr},
-    {"%list-length", prim_1, list_length},
-    {"%list-element", prim_3, list_element},
-    {"%list-element-setter", prim_3, list_element_setter},
-    {"%list-map1", prim_2, marlais_map_apply1},
-    {"%list-append", prim_2, marlais_append},
+    {"%head-setter", prim_2, prim_head_setter},
+    {"%tail-setter", prim_2, prim_tail_setter},
+
+    {"%list-first", prim_2, prim_list_first},
+    {"%list-second", prim_2, prim_list_second},
+    {"%list-third", prim_2, prim_list_third},
+    {"%list-last", prim_2, prim_list_last},
+
+    {"%list-length",         prim_1, prim_list_length},
+    {"%list-element",        prim_3, prim_list_element},
+    {"%list-element-setter", prim_3, prim_list_element_setter},
+
+    {"%list-member?", prim_3, prim_list_member_p},
+
+    {"%list-append",  prim_2, marlais_append},
     {"%list-append!", prim_2, marlais_append_bang}, /* not used yet */
-    {"%list-member?", prim_3, list_member_p},
-    {"%list-reduce", prim_3, list_reduce},
-    {"%list-reduce1", prim_2, list_reduce1},
-    {"%list-reverse", prim_1, marlais_list_reverse},
+
+    {"%list-reverse",  prim_1, marlais_list_reverse},
     {"%list-reverse!", prim_1, marlais_list_reverse_bang},
-    {"%list-last", prim_2, list_last},
+
+    {"%list-map1", prim_2, marlais_map_apply1},
+    {"%list-reduce", prim_3, prim_list_reduce},
+    {"%list-reduce1", prim_2, prim_list_reduce1},
 };
 
 /* Exported functions */
@@ -136,7 +146,7 @@ marlais_cons (Object car, Object cdr)
 Object
 marlais_make_pair_entrypoint (Object args)
 {
-    return marlais_cons (MARLAIS_FALSE, MARLAIS_FALSE); /* who knows ?? */
+    return marlais_cons (MARLAIS_FALSE, MARLAIS_FALSE); /* TODO who knows ?? */
 }
 
 Object
@@ -187,6 +197,8 @@ marlais_list_length (Object lst)
         back_list = lst;
         fore_list = CDR (lst);
         CDR (back_list) = MARLAIS_NIL;
+
+        /* TODO don't modify the list */
 
         /* Reverse pointers in the list and see if we end up at the head. */
         while (PAIRP (fore_list)) {
@@ -278,10 +290,6 @@ marlais_append (Object l1, Object l2)
     }
 }
 
-/*
- * marlais_append_bang appends l2 to l1 if l1 is nonempty.
- * if l1 is empty, it just returns l2.
- */
 Object
 marlais_append_bang(Object l1, Object l2)
 {
@@ -372,7 +380,7 @@ static Object nth(Object lst, Object default_ob, const char* where,
 }
 
 static Object
-first_d (Object lst, Object default_ob)
+prim_list_first (Object lst, Object default_ob)
 {
   return nth(lst, default_ob, "first",
              PAIRP(lst),
@@ -380,7 +388,7 @@ first_d (Object lst, Object default_ob)
 }
 
 static Object
-second_d (Object lst, Object default_ob)
+prim_list_second (Object lst, Object default_ob)
 {
   return nth(lst, default_ob, "second",
              PAIRP(lst) && PAIRP(CDR(lst)),
@@ -388,7 +396,7 @@ second_d (Object lst, Object default_ob)
 }
 
 static Object
-third_d (Object lst, Object default_ob)
+prim_list_third (Object lst, Object default_ob)
 {
   return nth(lst, default_ob, "third",
              PAIRP (lst) && PAIRP (CDR (lst)) && PAIRP (CDR (CDR (lst))),
@@ -396,46 +404,46 @@ third_d (Object lst, Object default_ob)
 }
 
 static Object
-list_member_p (Object obj, Object lst, Object test)
+prim_list_last (Object lst, Object default_ob)
+{
+    Object last = MARLAIS_UNSPECIFIED;
+
+    if (EMPTYLISTP (lst)) {
+        if (default_ob == marlais_default) {
+            marlais_error ("attempt to get last of empty list", NULL);
+        } else {
+            return default_ob;
+        }
+    }
+    while (!EMPTYLISTP (lst)) {
+        last = CAR (lst);
+        lst = CDR (lst);
+    }
+    return (last);
+}
+
+static Object
+prim_list_member_p (Object obj, Object lst, Object test)
 {
   return marlais_make_boolean (marlais_member_test_p (obj, lst, test));
 }
 
 static Object
-list_reduce (Object fun, Object init, Object lst)
-{
-    Object val;
-
-    val = init;
-    while (!EMPTYLISTP (lst)) {
-        val = marlais_apply (fun, marlais_make_list (val, CAR (lst), NULL));
-        lst = CDR (lst);
-    }
-    return (val);
-}
-
-static Object
-list_reduce1 (Object fun, Object lst)
-{
-    return list_reduce(fun, CAR(lst), CDR(lst));
-}
-
-static Object
-set_car (Object pair, Object val)
+prim_head_setter (Object pair, Object val)
 {
     CAR (pair) = val;
     return (val);
 }
 
 static Object
-set_cdr (Object pair, Object val)
+prim_tail_setter (Object pair, Object val)
 {
     CDR (pair) = val;
     return (val);
 }
 
 static Object
-list_length (Object lst)
+prim_list_length (Object lst)
 {
     int len = marlais_list_length (lst);
 
@@ -447,7 +455,7 @@ list_length (Object lst)
 }
 
 static Object
-list_element (Object pair, Object index, Object default_ob)
+prim_list_element (Object pair, Object index, Object default_ob)
 {
     int i;
     Object lst;
@@ -476,7 +484,7 @@ list_element (Object pair, Object index, Object default_ob)
 }
 
 static Object
-list_element_setter (Object pair, Object index, Object obj)
+prim_list_element_setter (Object pair, Object index, Object obj)
 {
     int i, el;
     Object lst;
@@ -502,20 +510,20 @@ list_element_setter (Object pair, Object index, Object obj)
 }
 
 static Object
-list_last (Object lst, Object default_ob)
+prim_list_reduce (Object fun, Object init, Object lst)
 {
-    Object last = MARLAIS_UNSPECIFIED;
+    Object val;
 
-    if (EMPTYLISTP (lst)) {
-        if (default_ob == marlais_default) {
-            marlais_error ("attempt to get last of empty list", NULL);
-        } else {
-            return default_ob;
-        }
-    }
+    val = init;
     while (!EMPTYLISTP (lst)) {
-        last = CAR (lst);
+        val = marlais_apply (fun, marlais_make_list (val, CAR (lst), NULL));
         lst = CDR (lst);
     }
-    return (last);
+    return (val);
+}
+
+static Object
+prim_list_reduce1 (Object fun, Object lst)
+{
+    return prim_list_reduce(fun, CAR(lst), CDR(lst));
 }
