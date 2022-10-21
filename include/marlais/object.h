@@ -25,10 +25,10 @@ typedef enum {
     True, False, EmptyList, EndOfFile, UnspecifiedValue, UninitializedValue,
 
     /* characters */
-    Character, WideCharacter, UnicodeString,
+    Character, WideCharacter, UnicodeCharacter,
 
     /* numbers */
-    Integer, Ratio, SingleFloat, DoubleFloat, ExtendedFloat,
+    Integer, SingleFloat, DoubleFloat, ExtendedFloat,
 
     /* collections */
     Pair,
@@ -39,7 +39,7 @@ typedef enum {
     ObjectTable, ObjectTableEntry,
 
     /* strings */
-    ByteString, WideString, UnicodeCharacter,
+    ByteString, WideString, UnicodeString,
 
     /* conditions */
     Condition,
@@ -74,6 +74,7 @@ typedef enum {
     /* C level interfaces */
     StdioHandle,
 
+    Ratio,
 } ObjectType;
 
 /* Common header of all heap objects */
