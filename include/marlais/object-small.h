@@ -1,10 +1,12 @@
 /*
-   Data Representation:
-
-   pointer:   PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP00  (P=pointer address bit)
-   immed:     DDDDDDDDDDDDDDDDDDDDDDDDDDSSSS01  (D=immediate data, S=secondary tag)
-   integer:   IIIIIIIIIIIIIIIIIIIIIIIIIIIIII10  (I=immediate integer data)
-
+ * Object representation with tagging on the lowest bits.
+ *
+ * Values are tagged to distinguish three cases:
+ *
+ *  Pointer:   PPPPPPPPPPPPPPPPPPPPPPPPPPPPPP00  (P=pointer address bit)
+ *  Immediate: DDDDDDDDDDDDDDDDDDDDDDDDDDSSSS01  (D=immediate data, S=secondary tag)
+ *  Integer:   IIIIIIIIIIIIIIIIIIIIIIIIIIIIII10  (I=immediate integer data)
+ *
  */
 
 /* Type for marlais objects */
