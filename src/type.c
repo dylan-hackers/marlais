@@ -7,13 +7,13 @@
 
 /* Primitives */
 
-static Object instance_p (Object obj, Object class);
-static Object subtype_p (Object class1, Object class2);
+static Object prim_instance_p (Object obj, Object class);
+static Object prim_subtype_p (Object class1, Object class2);
 
 static struct primitive type_prims[] =
 {
-    {"%instance?", prim_2, instance_p},
-    {"%subtype?", prim_2, subtype_p},
+    {"%instance?", prim_2, prim_instance_p},
+    {"%subtype?", prim_2, prim_subtype_p},
     {"%make-limited-integer", prim_1, marlais_make_limited_integer},
     {"%make-singleton", prim_1, marlais_make_singleton},
     {"%make-subclass", prim_1, marlais_make_subclass},
@@ -235,13 +235,13 @@ marlais_make_union (Object typelist)
 /* Internal functions */
 
 static Object
-instance_p (Object obj, Object type)
+prim_instance_p (Object obj, Object type)
 {
   return marlais_make_boolean (marlais_instance_p (obj, type));
 }
 
 static Object
-subtype_p (Object type1, Object type2)
+prim_subtype_p (Object type1, Object type2)
 {
   return marlais_make_boolean (marlais_subtype_p (type1, type2));
 }
