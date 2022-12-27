@@ -38,20 +38,25 @@
 #include <marlais/prim.h>
 #include <marlais/sequence.h>
 
-/* Primitives */
+/* Forward declarations */
 
+static Object prim_vector (Object rest);
 static Object prim_vector_size (Object vec);
 static Object prim_vector_element (Object vec, Object index, Object def);
 static Object prim_vector_element_setter (Object vec, Object index, Object val);
+static Object prim_vector_to_list (Object vec);
+static Object prim_list_to_vector (Object lst);
+
+/* Primitive definitions */
 
 static struct primitive vector_prims[] =
 {
-    {"vector", prim_0_rest, marlais_list_to_vector},
-    {"%vector-size", prim_1, prim_vector_size},
-    {"%vector-element", prim_3, prim_vector_element},
-    {"%vector-element-setter", prim_3, prim_vector_element_setter},
-    {"%vector->list", prim_1, marlais_vector_to_list},
-    {"%list->vector", prim_1, marlais_list_to_vector},
+  {"vector",                 prim_0_rest, prim_vector},
+  {"%vector-size",           prim_1,      prim_vector_size},
+  {"%vector-element",        prim_3,      prim_vector_element},
+  {"%vector-element-setter", prim_3,      prim_vector_element_setter},
+  {"%vector->list",          prim_1,      prim_vector_to_list},
+  {"%list->vector",          prim_1,      prim_list_to_vector},
 };
 
 /* Exported functions */
@@ -145,6 +150,12 @@ marlais_vector_to_list (Object vec)
 /* Primitives */
 
 static Object
+prim_vector (Object rest)
+{
+  return marlais_list_to_vector (rest);
+}
+
+static Object
 prim_vector_size (Object vec)
 {
   return (marlais_make_integer (SOVSIZE (vec)));
@@ -178,4 +189,16 @@ prim_vector_element_setter (Object vec, Object index, Object val)
     marlais_error ("element-setter: index out of range", vec, index, NULL);
   }
   return (SOVELS (vec)[i] = val);
+}
+
+static Object
+prim_vector_to_list (Object vec)
+{
+  return marlais_vector_to_list (vec);
+}
+
+static Object
+prim_list_to_vector (Object lst)
+{
+  return marlais_list_to_vector (lst);
 }

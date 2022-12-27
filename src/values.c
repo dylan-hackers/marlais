@@ -36,11 +36,15 @@
 #include <marlais/alloc.h>
 #include <marlais/prim.h>
 
-/* Primitives */
+/* Forward declarations */
+
+static Object prim_values(Object rest);
+
+/* Primitive definitions */
 
 static struct primitive values_prims[] =
 {
-  {"values", prim_0_rest, marlais_values},
+  {"values", prim_0_rest, prim_values},
 };
 
 /* Exported functions */
@@ -124,3 +128,12 @@ marlais_devalue (Object val)
     return val;
   }
 }
+
+/* Primitive implementations */
+
+static Object
+prim_values (Object rest)
+{
+  return marlais_values (rest);
+}
+
