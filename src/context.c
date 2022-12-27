@@ -78,6 +78,117 @@ marlais_initialize (void)
   marlais_initialize_debug ();
 
   /* initialize symbols */
+  marlais_initialize_symbols ();
+
+  /* initialize table of syntax operators and functions */
+  marlais_initialize_syntax ();
+  marlais_initialize_lexer ();
+
+  /* initialize builtin classes */
+  marlais_initialize_class ();
+
+  /* export core constants */
+  marlais_add_export (marlais_make_name ("%unspecified"),
+                      MARLAIS_UNSPECIFIED,
+                      1);
+  marlais_add_export (marlais_make_name ("%uninitialized-slot-value"),
+                      MARLAIS_UNINITIALIZED,
+                      1);
+  marlais_add_export (marlais_make_name ("%default-object"),
+                      marlais_default,
+                      1);
+
+  /* determine default string and character classes */
+#if defined(MARLAIS_STANDARD_CHARACTER_BYTE)
+  marlais_standard_character_class = marlais_class_byte_character;
+  marlais_standard_string_class = marlais_class_byte_string;
+#elif defined(MARLAIS_STANDARD_CHARACTER_WIDE)
+  marlais_standard_character_class = marlais_class_wide_character;
+  marlais_standard_string_class = marlais_class_wide_string;
+#elif defined(MARLAIS_STANDARD_CHARACTER_UNICODE)
+  marlais_standard_character_class = marlais_class_unicode_character;
+  marlais_standard_string_class = marlais_class_unicode_string;
+#else
+#error Unknown standard character class.
+#endif
+
+  /* export the standard character classes */
+  marlais_add_export (marlais_make_name ("<standard-character>"), marlais_standard_character_class, 1);
+  marlais_add_export (marlais_make_name ("<standard-string>"), marlais_standard_string_class, 1);
+
+  /* initialize primitives */
+  marlais_register_module ();
+  marlais_register_list ();
+  marlais_register_symbol ();
+  marlais_register_type ();
+  marlais_register_class ();
+  marlais_register_slot ();
+  marlais_register_file ();
+  marlais_register_function ();
+  marlais_register_values ();
+  marlais_register_print ();
+  marlais_register_integer ();
+  marlais_register_float ();
+  marlais_register_apply ();
+  marlais_register_boolean ();
+  marlais_register_string ();
+  marlais_register_bytevector ();
+  marlais_register_vector ();
+  marlais_register_error ();
+  marlais_register_stream ();
+  marlais_register_table ();
+  marlais_register_character ();
+  marlais_register_deque ();
+  marlais_register_array ();
+  marlais_register_sys ();
+  marlais_register_gc ();
+
+#ifdef MARLAIS_ENABLE_GMP
+  marlais_register_gmp ();
+#endif
+#ifdef MARLAIS_ENABLE_ICU
+  marlais_register_icu ();
+#endif
+
+  /* error catch for initialization code */
+  err = setjmp (errbuf);
+  if (err) {
+    printf ("error in initialization code -- exiting.\n");
+    exit (1);
+  }
+  marlais_error_jump = &errbuf;
+
+  /* load init code */
+  dylan_init = getenv ("MARLAIS_DYLAN_INIT");
+  if(!dylan_init) {
+    dylan_init = DYLAN_INIT_FILE;
+  }
+  common_init = getenv ("MARLAIS_COMMON_INIT");
+  if(!common_init) {
+    common_init = COMMON_INIT_FILE;
+  }
+  marlais_load(marlais_make_bytestring (dylan_init));
+  marlais_load(marlais_make_bytestring (common_init));
+
+  /* Switch to dylan-user */
+  marlais_set_current_module (marlais_module_dylan_user);
+
+  /* Export all bindings from the dylan-user module */
+  MODULE(marlais_get_current_module ())->exported_bindings = all_symbol;
+
+  /* Make dylan-user use dylan */
+  marlais_use_module (dylan_symbol,
+                      all_symbol,
+                      MARLAIS_NIL,
+                      marlais_empty_string,
+                      MARLAIS_NIL,
+                      all_symbol);
+}
+
+static void
+marlais_initialize_symbols(void)
+{
+  /* initialize symbols */
   equal_symbol = marlais_make_name ("=");
   apply_symbol = marlais_make_name ("apply");
   key_symbol = marlais_make_name ("#key");
@@ -216,108 +327,4 @@ marlais_initialize (void)
   prefix_keyword = marlais_make_symbol ("prefix:");
   rename_keyword = marlais_make_symbol ("rename:");
   export_keyword = marlais_make_symbol ("export:");
-
-  /* initialize table of syntax operators and functions */
-  marlais_initialize_syntax ();
-  marlais_initialize_lexer ();
-
-  /* initialize builtin classes */
-  marlais_initialize_class ();
-
-  /* export core constants */
-  marlais_add_export (marlais_make_name ("%unspecified"),
-                      MARLAIS_UNSPECIFIED,
-                      1);
-  marlais_add_export (marlais_make_name ("%uninitialized-slot-value"),
-                      MARLAIS_UNINITIALIZED,
-                      1);
-  marlais_add_export (marlais_make_name ("%default-object"),
-                      marlais_default,
-                      1);
-
-  /* determine default string and character classes */
-#if defined(MARLAIS_STANDARD_CHARACTER_BYTE)
-  marlais_standard_character_class = marlais_class_byte_character;
-  marlais_standard_string_class = marlais_class_byte_string;
-#elif defined(MARLAIS_STANDARD_CHARACTER_WIDE)
-  marlais_standard_character_class = marlais_class_wide_character;
-  marlais_standard_string_class = marlais_class_wide_string;
-#elif defined(MARLAIS_STANDARD_CHARACTER_UNICODE)
-  marlais_standard_character_class = marlais_class_unicode_character;
-  marlais_standard_string_class = marlais_class_unicode_string;
-#else
-#error Unknown standard character class.
-#endif
-
-  /* export the standard character classes */
-  marlais_add_export (marlais_make_name ("<standard-character>"), marlais_standard_character_class, 1);
-  marlais_add_export (marlais_make_name ("<standard-string>"), marlais_standard_string_class, 1);
-
-  /* initialize primitives */
-  marlais_register_module ();
-  marlais_register_list ();
-  marlais_register_symbol ();
-  marlais_register_type ();
-  marlais_register_class ();
-  marlais_register_slot ();
-  marlais_register_file ();
-  marlais_register_function ();
-  marlais_register_values ();
-  marlais_register_print ();
-  marlais_register_integer ();
-  marlais_register_float ();
-  marlais_register_apply ();
-  marlais_register_boolean ();
-  marlais_register_string ();
-  marlais_register_bytevector ();
-  marlais_register_vector ();
-  marlais_register_error ();
-  marlais_register_stream ();
-  marlais_register_table ();
-  marlais_register_character ();
-  marlais_register_deque ();
-  marlais_register_array ();
-  marlais_register_sys ();
-  marlais_register_gc ();
-
-#ifdef MARLAIS_ENABLE_GMP
-  marlais_register_gmp ();
-#endif
-#ifdef MARLAIS_ENABLE_ICU
-  marlais_register_icu ();
-#endif
-
-  /* error catch for initialization code */
-  err = setjmp (errbuf);
-  if (err) {
-    printf ("error in initialization code -- exiting.\n");
-    exit (1);
-  }
-  marlais_error_jump = &errbuf;
-
-  /* load init code */
-  dylan_init = getenv ("MARLAIS_DYLAN_INIT");
-  if(!dylan_init) {
-    dylan_init = DYLAN_INIT_FILE;
-  }
-  common_init = getenv ("MARLAIS_COMMON_INIT");
-  if(!common_init) {
-    common_init = COMMON_INIT_FILE;
-  }
-  marlais_load(marlais_make_bytestring (dylan_init));
-  marlais_load(marlais_make_bytestring (common_init));
-
-  /* Switch to dylan-user */
-  marlais_set_current_module (marlais_module_dylan_user);
-
-  /* Export all bindings from the dylan-user module */
-  MODULE(marlais_get_current_module ())->exported_bindings = all_symbol;
-
-  /* Make dylan-user use dylan */
-  marlais_use_module (dylan_symbol,
-                      all_symbol,
-                      MARLAIS_NIL,
-                      marlais_empty_string,
-                      MARLAIS_NIL,
-                      all_symbol);
 }
