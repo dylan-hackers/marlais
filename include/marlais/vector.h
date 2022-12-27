@@ -51,14 +51,17 @@ struct marlais_object_vector {
 
 /* Register vector primitives */
 extern void marlais_register_vector (void);
+
 /* Make a <vector> */
 extern Object marlais_make_vector (int size, Object fill_obj);
 /* Entrypoint for make(<vector>) */
 extern Object marlais_make_vector_entrypoint (Object args);
+
 /* Get an element from the vector */
 extern Object marlais_vector_get (Object vec, unsigned index, Object def);
 /* Set an element in the vector */
 extern Object marlais_vector_set (Object vec, unsigned index, Object val);
+
 /* Make a vector from a list */
 extern Object marlais_list_to_vector (Object list);
 /* Convert a vector to a list */

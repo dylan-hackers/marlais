@@ -47,6 +47,7 @@ struct marlais_values {
 
 /* Register vector primitives */
 extern void marlais_register_values (void);
+
 /* Make values from arguments */
 extern Object marlais_values_args (int num,...);
 /* Make values from list */
