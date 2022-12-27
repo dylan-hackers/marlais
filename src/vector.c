@@ -158,7 +158,7 @@ prim_vector (Object rest)
 static Object
 prim_vector_size (Object vec)
 {
-  return (marlais_make_integer (SOVSIZE (vec)));
+  return marlais_make_integer (SOVSIZE (vec));
 }
 
 static Object
