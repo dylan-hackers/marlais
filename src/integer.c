@@ -216,59 +216,37 @@ prim_int_negative_p (Object n)
 static Object
 prim_int_negative (Object n)
 {
-    return (marlais_make_integer (-INTVAL (n)));
+    return marlais_make_integer (-INTVAL (n));
 }
 
 static Object
 prim_int_inverse (Object n)
 {
-    return (marlais_make_dfloat (1.0 / INTVAL (n)));
+    return marlais_make_dfloat (1.0 / INTVAL (n));
 }
 
 static Object
 prim_int_add (Object n1, Object n2)
 {
-    return (marlais_make_integer (INTVAL (n1) + INTVAL (n2)));
+    return marlais_make_integer (INTVAL (n1) + INTVAL (n2));
 }
 
 static Object
 prim_int_sub (Object n1, Object n2)
 {
-    return (marlais_make_integer (INTVAL (n1) - INTVAL (n2)));
+    return marlais_make_integer (INTVAL (n1) - INTVAL (n2));
 }
-
-#ifdef MARLAIS_ENABLE_BIG_INTEGERS
 
 static Object
 prim_int_mul (Object n1, Object n2)
 {
-    int i1 = INTVAL (n1), i2 = INTVAL (n2);
-
-    // watch for overflow.
-    if (i1 <= MAX_SMALL_FACTOR && i2 <= MAX_SMALL_FACTOR)
-	return marlais_make_integer (i1 * i2);
-    else
-	return binary_bigint_times (make_big_integer (i1), make_big_integer (i2));
+    return marlais_make_integer (INTVAL (n1) * INTVAL (n2));
 }
-
-#else
-
-static Object
-prim_int_mul (Object n1, Object n2)
-{
-    return (marlais_make_integer (INTVAL (n1) * INTVAL (n2)));
-}
-
-#endif
 
 static Object
 prim_int_div (Object n1, Object n2)
 {
-    if ((INTVAL (n1) % INTVAL (n2)) == 0) {
-        return (marlais_make_integer (INTVAL (n1) / INTVAL (n2)));
-    } else {
-        return (marlais_make_dfloat ((double) INTVAL (n1) / (double) INTVAL (n2)));
-    }
+    return marlais_make_integer (INTVAL (n1) / INTVAL (n2));
 }
 
 static Object
