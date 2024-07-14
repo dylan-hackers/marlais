@@ -361,7 +361,7 @@ WHITESPACE      [\ \t\f\v\r]
 /* BEGINING OF RULES                                                          */
 /******************************************************************************/
 
-%x INI KEY VAL ETC
+%x INI KEY VAL ETC CMNT
 /* start contexts courtesy of Roger Critchlow */
 
 %%
@@ -425,29 +425,14 @@ WHITESPACE      [\ \t\f\v\r]
 
  /* Ignore block comments */
 
-<ETC>"/*"       { int ch;
-                  loop:
-                        do {
-                                ch = input();
-                                if (ch == '\n')
-                                        ++yylineno;
-                                else
-                                if (ch == EOF)
-                                        break;
-                        } while (ch != '*');
-                  inner:
-                        switch (input()) {
-                        case EOF:
-                        case '/': break;
-                        case '*': goto inner;
-                        case '\n': ++yylineno;
-                        default: goto loop;
-                      }
-                }
+<ETC>"/*"       { BEGIN(CMNT); }
+<CMNT>"*/"      { BEGIN(ETC); }
+<CMNT>.         { }
+
 
  /* Count newlines */
 
-<ETC>[\n]               { ++yylineno; /* Bogus hack! */ }
+<ETC,CMNT>[\n]  { ++yylineno; /* Bogus hack! */ }
 
  /* Integers */
 
