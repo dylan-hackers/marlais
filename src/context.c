@@ -13,6 +13,8 @@
 #define DYLAN_INIT_FILE "dylan/init.dylan"
 #define COMMON_INIT_FILE "common/init.dylan"
 
+static void marlais_initialize_symbols(void);
+
 void
 marlais_initialize (void)
 {
