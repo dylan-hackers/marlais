@@ -8,7 +8,7 @@
 
 /* Internal function declarations */
 
-static char expand_escaped_character (char ch);
+static char marlais_lexer_expand_escaped (char ch);
 
 /* Exported functions */
 
@@ -24,7 +24,7 @@ marlais_lexer_expand_char (char *str)
   } else if((len == 4) && (str[0] == '\'')
             && (str[1] == '\\') && (str[3] == '\'')) {
     /* escaped case */
-    c = expand_escaped_character(str[2]);
+    c = marlais_lexer_expand_escaped(str[2]);
   } else {
     return marlais_error("Expanding malformed character literal", NULL);
   }
@@ -43,7 +43,7 @@ marlais_lexer_expand_string (char *str)
     exp_str = marlais_allocate_strdup (str);
     exp_str[0] = '\0';
     while (backslash) {
-      backslash[0] = expand_escaped_character(backslash[1]);
+      backslash[0] = marlais_lexer_expand_escaped(backslash[1]);
       backslash[1] = '\0';
       strcat(exp_str, str);
       str = backslash + 2;
@@ -62,7 +62,7 @@ marlais_lexer_expand_string (char *str)
 /* Internal functions */
 
 static char
-expand_escaped_character (char ch)
+marlais_lexer_expand_escaped (char ch)
 {
   switch (ch) {
   case 'a':
