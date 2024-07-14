@@ -38,12 +38,12 @@
 
 struct marlais_values {
     ObjectHeader header;
-    int num;
-    Object *els;
+    int     values_size;
+    Object *values_elts;
 };
 
-#define VALUESNUM(obj)    (((struct marlais_values *)obj)->num)
-#define VALUESELS(obj)    (((struct marlais_values *)obj)->els)
+#define VALUESNUM(obj)    (((struct marlais_values *)obj)->values_size)
+#define VALUESELS(obj)    (((struct marlais_values *)obj)->values_elts)
 
 /* Register vector primitives */
 extern void marlais_register_values (void);
