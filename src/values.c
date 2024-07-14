@@ -52,7 +52,7 @@ static struct primitive values_prims[] =
 void
 marlais_register_values (void)
 {
-  MARLAIS_REGISTER_PRIMS (values_prims);
+  MARLAIS_REGISTER_PRIMS(values_prims);
 }
 
 Object
@@ -67,23 +67,23 @@ marlais_values_alloc (int num)
 Object
 marlais_values_args (int num,...)
 {
+  va_list args;
   Object obj;
   int i;
-  va_list args;
 
   if(num == 0) {
     return MARLAIS_UNSPECIFIED;
   }
 
-  obj = marlais_values_alloc (num);
+  obj = marlais_values_alloc(num);
 
-  va_start (args, num);
+  va_start(args, num);
   for (i = 0; i < num; ++i) {
-    VALUESELS (obj)[i] = va_arg (args, Object);
+    VALUESELS(obj)[i] = va_arg(args, Object);
   }
-  va_end (args);
+  va_end(args);
 
-  return (obj);
+  return(obj);
 }
 
 Object
@@ -92,15 +92,15 @@ marlais_values_list (Object vals)
   Object obj;
   int i;
 
-  if(EMPTYLISTP (vals)) {
+  if(EMPTYLISTP(vals)) {
     return MARLAIS_UNSPECIFIED;
   }
 
-  obj = marlais_values_alloc (marlais_list_length(vals));
+  obj = marlais_values_alloc(marlais_list_length(vals));
 
-  for (i = 0; i < VALUESNUM (obj); ++i) {
-    VALUESELS (obj)[i] = CAR (vals);
-    vals = CDR (vals);
+  for (i = 0; i < VALUESNUM(obj); ++i) {
+    VALUESELS(obj)[i] = CAR(vals);
+    vals = CDR(vals);
   }
 
   return (obj);
@@ -109,21 +109,21 @@ marlais_values_list (Object vals)
 Object
 marlais_values (Object rest)
 {
-  if (EMPTYLISTP (rest)) {
+  if (EMPTYLISTP(rest)) {
     return MARLAIS_UNSPECIFIED;
-  } else if (PAIRP (CDR (rest))) {
-    return marlais_values_list (rest);
+  } else if (PAIRP(CDR(rest))) {
+    return marlais_values_list(rest);
   } else {
-    return (CAR (rest));
+    return (CAR(rest));
   }
 }
 
 Object
 marlais_devalue (Object val)
 {
-  if (VALUESP (val)) {
-    if (VALUESNUM (val)) {
-      return VALUESELS (val)[0];
+  if (VALUESP(val)) {
+    if (VALUESNUM(val)) {
+      return VALUESELS(val)[0];
     } else {
       return marlais_error ("Null values construct used in an invalid context", NULL);
     }
@@ -137,5 +137,5 @@ marlais_devalue (Object val)
 static Object
 prim_values (Object rest)
 {
-  return marlais_values (rest);
+  return marlais_values(rest);
 }
