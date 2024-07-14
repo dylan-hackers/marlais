@@ -7,7 +7,6 @@
 #include <marlais/gc.h>
 #include <marlais/lexer.h>
 #include <marlais/parser.h>
-#include <marlais/signal.h>
 #include <marlais/unicode.h>
 
 #define DYLAN_INIT_FILE "dylan/init.dylan"
@@ -34,9 +33,6 @@ marlais_initialize (void)
 #ifdef MARLAIS_ENABLE_ICU
   marlais_initialize_icu ();
 #endif
-
-  /* initialize signal handling */
-  marlais_initialize_signal ();
 
   /* intialize core constants */
 #ifdef MARLAIS_OBJECT_MODEL_LARGE

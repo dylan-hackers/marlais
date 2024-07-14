@@ -110,7 +110,6 @@ add_library(marlais_lib
   prim.c
   print.c
   sequence.c
-  signal.c
   slot.c
   stdio.c
   stream.c
