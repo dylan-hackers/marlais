@@ -423,11 +423,8 @@ marlais_return_check (Object ret,
                        NULL);
       }
     }
-    newret = marlais_allocate_object (Values, sizeof (struct marlais_values));
 
-    VALUESNUM (newret) = i + j;
-    VALUESELS (newret) = (Object *)
-      marlais_malloc (VALUESNUM (newret) * sizeof (Object));
+    newret = marlais_values_alloc (i+j);
 
     for (i = 0; i < VALUESNUM (ret); i++) {
       VALUESELS (newret)[i] = VALUESELS (ret)[i];

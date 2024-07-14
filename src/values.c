@@ -56,6 +56,15 @@ marlais_register_values (void)
 }
 
 Object
+marlais_values_alloc (int num)
+{
+  Object obj = marlais_allocate_object(Values, sizeof(struct marlais_values) + (num * sizeof(Object)));
+  VALUESNUM(obj) = num;
+  VALUESELS(obj) = (Object*)(((void*)obj)+sizeof(struct marlais_values));
+  return obj;
+}
+
+Object
 marlais_values_args (int num,...)
 {
   Object obj;
@@ -66,10 +75,7 @@ marlais_values_args (int num,...)
     return MARLAIS_UNSPECIFIED;
   }
 
-  obj = marlais_allocate_object (Values, sizeof (struct marlais_values));
-
-  VALUESNUM (obj) = num;
-  VALUESELS (obj) = (Object *) marlais_malloc (num * sizeof (Object));
+  obj = marlais_values_alloc (num);
 
   va_start (args, num);
   for (i = 0; i < num; ++i) {
@@ -90,10 +96,7 @@ marlais_values_list (Object vals)
     return MARLAIS_UNSPECIFIED;
   }
 
-  obj = marlais_allocate_object (Values, sizeof (struct marlais_values));
-
-  VALUESNUM (obj) = marlais_list_length (vals);
-  VALUESELS (obj) = (Object *) marlais_malloc (VALUESNUM (obj) * sizeof (Object));
+  obj = marlais_values_alloc (marlais_list_length(vals));
 
   for (i = 0; i < VALUESNUM (obj); ++i) {
     VALUESELS (obj)[i] = CAR (vals);
@@ -136,4 +139,3 @@ prim_values (Object rest)
 {
   return marlais_values (rest);
 }
-
