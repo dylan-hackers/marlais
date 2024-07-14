@@ -40,7 +40,7 @@ marlais_lexer_expand_string (char *str)
     char* exp_str;
     Object obj;
 
-    exp_str = marlais_allocate_strdup (str);
+    exp_str = marlais_strdup (str);
     exp_str[0] = '\0';
     while (backslash) {
       backslash[0] = marlais_lexer_expand_escaped(backslash[1]);

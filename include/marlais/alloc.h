@@ -37,21 +37,22 @@
 #include <marlais/common.h>
 
 /* allocate normal memory */
-extern void *marlais_allocate_memory (size_t size);
+extern void *marlais_malloc (size_t size);
 /* reallocate normal memory */
-extern void *marlais_reallocate_memory (void *old_obj, size_t new_size);
+extern void *marlais_realloc (void *old_obj, size_t new_size);
 /* free normal memory */
-extern void marlais_free_memory (void *obj);
+extern void  marlais_free (void *obj);
+/* allocate copy of a zero-terminated string */
+extern char *marlais_strdup (const char *str);
+
 /* allocate atomic memory */
-extern void *marlais_allocate_atomic (size_t size);
+extern void  *marlais_allocate_atomic (size_t size);
 /* allocate an object */
 extern Object marlais_allocate_object (ObjectType type, size_t size);
-/* allocate copy of a zero-terminated string */
-extern char *marlais_allocate_strdup (const char *str);
 
 /* allocate a data structure with casting */
-#define MARLAIS_ALLOCATE_STRUCT(_type) \
-  ((_type *)marlais_allocate_memory(sizeof(_type)))
+#define MARLAIS_MALLOC(_type) \
+  ((_type *)marlais_malloc(sizeof(_type)))
 
 /* allocate an object with casting */
 #define MARLAIS_ALLOCATE_OBJECT(_type, _repr) \

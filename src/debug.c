@@ -98,7 +98,7 @@ jmp_buf *
 marlais_push_error (void)
 {
   struct jmp_buf_stack *tmp =
-    (struct jmp_buf_stack *) marlais_allocate_memory (sizeof (struct jmp_buf_stack));
+    (struct jmp_buf_stack *) marlais_malloc (sizeof (struct jmp_buf_stack));
 
   debug_depth++;
   snprintf(prompt_buf, 20, "Debug[%d]> ", debug_depth);

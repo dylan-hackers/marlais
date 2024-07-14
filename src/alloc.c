@@ -36,7 +36,7 @@
 /* Exported functions */
 
 void *
-marlais_allocate_memory (size_t size)
+marlais_malloc (size_t size)
 {
   void *obj;
   /* allocate */
@@ -50,7 +50,7 @@ marlais_allocate_memory (size_t size)
 }
 
 void *
-marlais_reallocate_memory (void *old_obj, size_t new_size)
+marlais_realloc (void *old_obj, size_t new_size)
 {
   void *obj;
   /* allocate */
@@ -64,9 +64,22 @@ marlais_reallocate_memory (void *old_obj, size_t new_size)
 }
 
 void
-marlais_free_memory (void *obj)
+marlais_free (void *obj)
 {
   GC_free(obj);
+}
+
+char *
+marlais_strdup (const char *str)
+{
+  size_t size = strlen (str) + 1;
+  char *copy;
+  /* allocate copy */
+  copy = GC_malloc_atomic(size);
+  /* perform copy */
+  strcpy (copy, str);
+  /* return result */
+  return copy;
 }
 
 void *
@@ -88,7 +101,7 @@ marlais_allocate_object (ObjectType type, size_t size)
 {
   Object obj;
   /* allocate memory for the object */
-  obj = (Object) marlais_allocate_memory (size);
+  obj = (Object) marlais_malloc (size);
   /* initialize header fields */
 #ifdef POINTERTYPE
   POINTERTYPE(obj) = type;
@@ -98,17 +111,4 @@ marlais_allocate_object (ObjectType type, size_t size)
 #endif
   /* return result */
   return obj;
-}
-
-char *
-marlais_allocate_strdup (const char *str)
-{
-  size_t size = strlen (str) + 1;
-  char *copy;
-  /* allocate copy */
-  copy = marlais_allocate_atomic(size);
-  /* perform copy */
-  strcpy (copy, str);
-  /* return result */
-  return copy;
 }

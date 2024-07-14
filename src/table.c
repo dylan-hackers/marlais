@@ -99,7 +99,7 @@ marlais_make_table (int size)
   Object obj = marlais_allocate_object (ObjectTable, sizeof (struct marlais_table));
 
   TABLESIZE (obj) = size;
-  TABLETABLE (obj) = (Object *) marlais_allocate_memory (sizeof (Object) * size);
+  TABLETABLE (obj) = (Object *) marlais_malloc (sizeof (Object) * size);
   memset (TABLETABLE (obj), 0, sizeof (Object) * size);
 
   return (obj);

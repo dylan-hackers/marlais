@@ -375,17 +375,17 @@ marlais_make_mpz_from_string(const char *str, int base)
 
 static void *
 gmp_gc_alloc (size_t size) {
-  return marlais_allocate_memory(size);
+  return marlais_malloc(size);
 }
 
 static void *
 gmp_gc_realloc (void *obj, size_t old_size, size_t new_size) {
-  return marlais_reallocate_memory(obj, new_size);
+  return marlais_realloc(obj, new_size);
 }
 
 static void
 gmp_gc_free (void *obj, size_t old_size) {
-  marlais_free_memory(obj);
+  marlais_free(obj);
 }
 
 /* Primitives */

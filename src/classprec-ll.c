@@ -104,7 +104,7 @@ build_l_graph (Object class,
   { /* Initialize class vector */
     Object sorted_supers;
 
-    class_vec = (Object *) marlais_allocate_memory (num_classes * sizeof (Object));
+    class_vec = (Object *) marlais_malloc (num_classes * sizeof (Object));
 
     sorted_supers = CLASSSORTEDPRECS (class);
 
@@ -115,7 +115,7 @@ build_l_graph (Object class,
   }
   graph.class_vec = class_vec;
   graph.succ_size = marlais_list_length (direct_superclasses);
-  graph.succ_vec = (int *) marlais_allocate_memory (num_classes * graph.succ_size
+  graph.succ_vec = (int *) marlais_malloc (num_classes * graph.succ_size
                                                     * sizeof (int));
 
   graph.num_classes = num_classes;
@@ -218,7 +218,7 @@ loops (Object class,
   int *vec;
   l_list new_list;
 
-  subs = (int *) marlais_allocate_memory (graph.num_classes * sizeof (int));
+  subs = (int *) marlais_malloc (graph.num_classes * sizeof (int));
 
   for (i = 0; i < graph.num_classes; i++) {
     subs[i] = 0;
@@ -263,7 +263,7 @@ step (int class_index, int *subs, prec_graph graph)
   /* l_list = marlais_cons (graph.class_vec[class_index], MARLAIS_NIL); */
 
   this_l_list.size = 1;
-  this_l_list.vec = (int *) marlais_allocate_memory (sizeof (int));
+  this_l_list.vec = (int *) marlais_malloc (sizeof (int));
 
   this_l_list.vec[0] = class_index;
 
@@ -288,7 +288,7 @@ loops_concatenate (l_list l_list1, l_list l_list2, prec_graph graph)
   int used_classes[graph.num_classes];
 
 #else
-  int *used_classes = (int *) marlais_allocate_memory (graph.num_classes * sizeof (int));
+  int *used_classes = (int *) marlais_malloc (graph.num_classes * sizeof (int));
 
 #endif
   int i, j;
@@ -297,7 +297,7 @@ loops_concatenate (l_list l_list1, l_list l_list2, prec_graph graph)
     used_classes[i] = 0;
   }
 
-  new_l_list.vec = (int *) marlais_allocate_memory ((l_list1.size + l_list2.size)
+  new_l_list.vec = (int *) marlais_malloc ((l_list1.size + l_list2.size)
                                                     * sizeof (int));
 
   for (i = 0; i < l_list1.size; i++) {

@@ -134,7 +134,7 @@ array_make (Object dims, Object fill)
     size *= INTVAL (val);
     dl = CDR (dl);
   }
-  ARRELS (obj) = (Object *) marlais_allocate_memory (sizeof (Object) * size);
+  ARRELS (obj) = (Object *) marlais_malloc (sizeof (Object) * size);
 
   ARRSIZE (obj) = size;
   for (i = 0; i < size; ++i) {

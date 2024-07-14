@@ -427,7 +427,7 @@ marlais_return_check (Object ret,
 
     VALUESNUM (newret) = i + j;
     VALUESELS (newret) = (Object *)
-      marlais_allocate_memory (VALUESNUM (newret) * sizeof (Object));
+      marlais_malloc (VALUESNUM (newret) * sizeof (Object));
 
     for (i = 0; i < VALUESNUM (ret); i++) {
       VALUESELS (newret)[i] = VALUESELS (ret)[i];

@@ -25,7 +25,7 @@ marlais_make_environment (int size, Object owner) {
   struct binding **bindings = NULL;
 
   if(size > 0) {
-    bindings = marlais_allocate_memory (size * sizeof (struct binding *));
+    bindings = marlais_malloc (size * sizeof (struct binding *));
   }
 
   frame = MARLAIS_ALLOCATE_OBJECT (Environment, struct environment);
@@ -94,18 +94,18 @@ marlais_add_locals (Object syms, Object vals, int constant, struct environment *
   frame = to_frame;
 
   frame->bindings = (struct binding **)
-    marlais_reallocate_memory (frame->bindings,
-                               (frame->size + num_bindings) * sizeof(struct binding *));
+    marlais_realloc (frame->bindings,
+                        (frame->size + num_bindings) * sizeof(struct binding *));
 
   for (i = 0; i < num_bindings; ++i) {
     if ((!syms) || (!vals)) {
       marlais_error ("mismatched number of symbols and values", NULL);
     }
-    binding = MARLAIS_ALLOCATE_STRUCT (struct binding);
+    binding = MARLAIS_MALLOC (struct binding);
     binding->sym = CAR (syms);
     /* ??? */
     binding->type = marlais_class_object;
-    binding->val = (Object *) marlais_allocate_memory (sizeof (Object *));
+    binding->val = (Object *) marlais_malloc (sizeof (Object *));
 
     *(binding->val) = CAR (vals);
 
@@ -129,7 +129,7 @@ marlais_add_local (Object sym, Object val, int constant, struct environment *to_
   struct environment *frame;
   struct binding *binding;
 
-  binding = MARLAIS_ALLOCATE_STRUCT (struct binding);
+  binding = MARLAIS_MALLOC (struct binding);
   if (PAIRP (sym)) {
     binding->sym = CAR (sym);
     binding->type = marlais_eval (SECOND (sym));
@@ -137,7 +137,7 @@ marlais_add_local (Object sym, Object val, int constant, struct environment *to_
     binding->sym = sym;
     binding->type = marlais_class_object;
   }
-  binding->val = (Object *) marlais_allocate_memory (sizeof (Object *));
+  binding->val = (Object *) marlais_malloc (sizeof (Object *));
 
   if (!marlais_instance_p (val, binding->type)) {
     marlais_error ("add_local: value does not satisfy type constraint",
@@ -156,8 +156,8 @@ marlais_add_local (Object sym, Object val, int constant, struct environment *to_
 
   if ((frame->size % BINDING_ALLOC_CHUNK) == 0) {
     frame->bindings = (struct binding **)
-      marlais_reallocate_memory (frame->bindings,
-                                 (frame->size + BINDING_ALLOC_CHUNK) * sizeof (struct binding *));
+      marlais_realloc (frame->bindings,
+                        (frame->size + BINDING_ALLOC_CHUNK) * sizeof (struct binding *));
   }
   frame->bindings[frame->size] = binding;
   frame->size++;
