@@ -95,6 +95,11 @@ DECLARE_UNARY(mpz, com);
 DECLARE_BINARY(mpz, and);
 DECLARE_BINARY(mpz, ior);
 DECLARE_BINARY(mpz, xor);
+DECLARE_BINARY(mpz, gcd);
+DECLARE_BINARY(mpz, lcm);
+/* the following primitives have no bang variant */
+static Object prim_mpz_gcdext(Object a, Object b);
+static Object prim_mpz_popcount(Object a);
 
 /* We no longer need the declaration macros */
 #undef DECLARE_UNARY
@@ -205,6 +210,11 @@ static struct primitive gmp_prims[] =
   {"%mpz-ior", prim_2, prim_mpz_ior},
   {"%mpz-xor", prim_2, prim_mpz_xor},
 
+  {"%mpz-gcd", prim_2, prim_mpz_gcd},
+  {"%mpz-lcm", prim_2, prim_mpz_lcm},
+
+  {"%mpz-popcount", prim_1, prim_mpz_popcount},
+
   {"%mpz-set!", prim_2, prim_mpz_set_bang},
 
   {"%mpz-abs!", prim_2, prim_mpz_abs_bang},
@@ -228,6 +238,9 @@ static struct primitive gmp_prims[] =
   {"%mpz-and!", prim_3, prim_mpz_and_bang},
   {"%mpz-ior!", prim_3, prim_mpz_ior_bang},
   {"%mpz-xor!", prim_3, prim_mpz_xor_bang},
+
+  {"%mpz-gcd!", prim_3, prim_mpz_gcd_bang},
+  {"%mpz-lcm!", prim_3, prim_mpz_lcm_bang},
 
 };
 
@@ -710,13 +723,13 @@ DEFINE_UNARY_MP(mpf, BigFloat, MPFP, MPFVAL, sqrt);
 static Object
 prim_mpf_zero_p (Object a)
 {
-  return marlais_make_boolean(mpf_sgn(MPFVAL(a)) == 0);
+  return marlais_make_boolean(MPFP(a) && mpf_sgn(MPFVAL(a)) == 0);
 }
 
 static Object
 prim_mpf_positive_p (Object a)
 {
-  return marlais_make_boolean(mpf_sgn(MPFVAL(a)) > 0);
+  return marlais_make_boolean(MPFP(a) && mpf_sgn(MPFVAL(a)) > 0);
 }
 
 static Object
@@ -775,6 +788,8 @@ DEFINE_UNARY_MP(mpz, BigInteger, MPZP, MPZVAL, com);
 DEFINE_BINARY_MP_MP(mpz, BigInteger, MPZP, MPZVAL, and);
 DEFINE_BINARY_MP_MP(mpz, BigInteger, MPZP, MPZVAL, ior);
 DEFINE_BINARY_MP_MP(mpz, BigInteger, MPZP, MPZVAL, xor);
+DEFINE_BINARY_MP_MP(mpz, BigInteger, MPZP, MPZVAL, gcd);
+DEFINE_BINARY_MP_MPUI_COM(mpz, BigInteger, MPZP, MPZVAL, lcm);
 
 static Object
 prim_mpz_zero_p (Object a)
@@ -804,4 +819,39 @@ static Object
 prim_mpz_odd_p (Object a)
 {
   return marlais_make_boolean(MPZP(a) && mpz_odd_p(MPZVAL(a)));
+}
+
+static Object
+prim_mpz_popcount(Object a)
+{
+  return marlais_make_integer(mpz_popcount(MPZVAL(a)));
+}
+
+static Object
+prim_mpz_gcdext_bang(Object g, Object s, Object t, Object a, Object b)
+{
+  /* operate */
+  if (MPZP(a) && MPZP(b)) {
+    mpz_gcdext(MPZVAL(g), MPZVAL(s), MPZVAL(t), MPZVAL(g), MPZVAL(b));
+  } else {
+    marlais_fatal("%mpz-gcdext: Wrong arguments", NULL);
+  }
+  /* return */
+  return marlais_values_args(3, g, s, t);
+}
+
+static Object
+prim_mpz_gcdext(Object a, Object b)
+{
+  Object g, s, t;
+  /* allocate */
+  g = marlais_allocate_object(BigInteger, sizeof(struct marlais_biginteger));
+  s = marlais_allocate_object(BigInteger, sizeof(struct marlais_biginteger));
+  t = marlais_allocate_object(BigInteger, sizeof(struct marlais_biginteger));
+  /* initialize */
+  mpz_init (MPZVAL(g));
+  mpz_init (MPZVAL(s));
+  mpz_init (MPZVAL(t));
+  /* operate and return */
+  return prim_mpz_gcdext_bang(g, s, t, a, b);
 }
