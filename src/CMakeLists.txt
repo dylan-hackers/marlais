@@ -47,7 +47,7 @@ option(MARLAIS_ENABLE_WCHAR "Enable wide character support" ON)
 # GMP bignum support
 option(MARLAIS_ENABLE_GMP "Enable GMP bignum support" ON)
 if (MARLAIS_ENABLE_GMP)
-  set (MARLAIS_GMP_SOURCES bignum.c)
+  set (MARLAIS_GMP_SOURCES prims/bignum.c)
 endif ()
 
 # READLINE support
@@ -56,7 +56,7 @@ option(MARLAIS_ENABLE_READLINE "Enable readline command-line editor" ON)
 # ICU unicode support
 option(MARLAIS_ENABLE_ICU "Enable ICU unicode support" ON)
 if (MARLAIS_ENABLE_ICU)
-  set (MARLAIS_ICU_SOURCES unicode.c)
+  set (MARLAIS_ICU_SOURCES prims/unicode.c)
 endif ()
 
 # Generate config header
@@ -64,14 +64,14 @@ configure_file(config.h.in ../include/marlais/config.h)
 
 # Generate parser
 bison_target(
-  PARSER parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.gen.c
+  PARSER parser/parser.y ${CMAKE_CURRENT_BINARY_DIR}/parser.gen.c
   COMPILE_FLAGS "-v -t -p marlais_yy"
   DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/parser.gen.h
   REPORT_FILE ${CMAKE_CURRENT_BINARY_DIR}/parser.gen.log
 )
 # Generate lexer
 flex_target(
-  LEXER lexer.l ${CMAKE_CURRENT_BINARY_DIR}/lexer.gen.c
+  LEXER parser/lexer.l ${CMAKE_CURRENT_BINARY_DIR}/lexer.gen.c
   COMPILE_FLAGS "-v -I -P marlais_yy"
   DEFINES_FILE ${CMAKE_CURRENT_BINARY_DIR}/lexer.gen.h
 )
@@ -80,47 +80,47 @@ add_flex_bison_dependency(LEXER PARSER)
 
 # Main library
 add_library(marlais_lib
-  alloc.c
-  apply.c
-  array.c
-  boolean.c
-  bytevector.c
-  character.c
-  class.c
-  classprec.c
-  context.c
-  debug.c
-  deque.c
-  env.c
-  error.c
-  eval.c
-  file.c
-  float.c
-  foreign.c
-  foreign_ptr.c
-  function.c
-  gc.c
-  globals.c
-  integer.c
-  lexer.c
-  list.c
-  module.c
-  object.c
-  parser.c
-  prim.c
-  print.c
-  sequence.c
-  slot.c
-  stdio.c
-  stream.c
-  string.c
-  symbol.c
-  syntax.c
-  sys.c
-  table.c
-  type.c
-  values.c
-  vector.c
+  core/alloc.c
+  core/apply.c
+  core/classprec.c
+  core/context.c
+  core/debug.c
+  core/env.c
+  core/eval.c
+  core/file.c
+  core/globals.c
+  core/object.c
+  parser/lexer.c
+  parser/parser.c
+  parser/syntax.c
+  prims/array.c
+  prims/boolean.c
+  prims/bytevector.c
+  prims/character.c
+  prims/class.c
+  prims/deque.c
+  prims/error.c
+  prims/float.c
+  prims/foreign.c
+  prims/foreign_ptr.c
+  prims/function.c
+  prims/gc.c
+  prims/integer.c
+  prims/list.c
+  prims/module.c
+  prims/prim.c
+  prims/print.c
+  prims/sequence.c
+  prims/slot.c
+  prims/stdio.c
+  prims/stream.c
+  prims/string.c
+  prims/symbol.c
+  prims/sys.c
+  prims/table.c
+  prims/type.c
+  prims/values.c
+  prims/vector.c
 
   ${BISON_PARSER_OUTPUTS}
   ${FLEX_LEXER_OUTPUTS}
