@@ -50,19 +50,6 @@ struct pair {
 #define FOURTH(obj)     (CAR(CDR(CDR(CDR(obj)))))
 #define FIFTH(obj)      (CAR(CDR(CDR(CDR(CDR(obj))))))
 
-#define FIRSTVALP(vals)  (VALUESNUM(vals)>0)
-#define SECONDVALP(vals) (VALUESNUM(vals)>1)
-#define THIRDVALP(vals)  (VALUESNUM(vals)>2)
-#define FOURTHVALP(vals) (VALUESNUM(vals)>3)
-#define FIFTHVALP(vals)  (VALUESNUM(vals)>4)
-
-#define FIRSTVAL(vals)  (VALUESELS(vals)[0])
-#define SECONDVAL(vals) (VALUESELS(vals)[1])
-#define THIRDVAL(vals)  (VALUESELS(vals)[2])
-#define FOURTHVAL(vals) (VALUESELS(vals)[3])
-#define FIFTHVAL(vals)  (VALUESELS(vals)[4])
-
-
 /* Register list primitives */
 extern void marlais_register_list (void);
 
