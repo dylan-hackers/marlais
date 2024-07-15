@@ -380,7 +380,7 @@ gmp_gc_alloc (size_t size) {
 
 static void *
 gmp_gc_realloc (void *obj, size_t old_size, size_t new_size) {
-  return marlais_realloc(obj, new_size);
+  return marlais_realloc_general(obj, new_size);
 }
 
 static void

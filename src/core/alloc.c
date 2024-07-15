@@ -64,7 +64,7 @@ marlais_malloc_atomic (size_t size)
 }
 
 void *
-marlais_realloc (void *old_obj, size_t new_size)
+marlais_realloc_general (void *old_obj, size_t new_size)
 {
   void *obj;
   /* allocate */

@@ -42,7 +42,7 @@ extern void *marlais_malloc_general (size_t size);
 extern void *marlais_malloc_atomic (size_t size);
 
 /* Reallocate memmory */
-extern void *marlais_realloc (void *old_obj, size_t new_size);
+extern void *marlais_realloc_general (void *old_obj, size_t new_size);
 /* Free memory */
 extern void  marlais_free (void *obj);
 /* Allocate copy of a zero-terminated string */
@@ -63,6 +63,9 @@ extern Object marlais_allocate_object (ObjectType type, size_t size);
 /* Allocate an array with casting */
 #define MARLAIS_MALLOC_ARRAY_ATOMIC(_nmemb,_type)               \
   ((_type *)marlais_malloc_atomic((_nmemb)*sizeof(_type)))
+/* Reallocate an array with casting */
+#define MARLAIS_REALLOC_ARRAY_GENERAL(_oldptr,_nmemb,_type)             \
+  ((_type *)marlais_realloc_general(((void*)(_oldptr)),(_nmemb)*sizeof(_type)))
 
 /* Allocate an object with casting */
 #define MARLAIS_ALLOCATE_OBJECT(_type, _repr)                   \

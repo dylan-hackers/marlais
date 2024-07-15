@@ -93,9 +93,8 @@ marlais_add_locals (Object syms, Object vals, int constant, struct environment *
 
   frame = to_frame;
 
-  frame->bindings = (struct binding **)
-    marlais_realloc (frame->bindings,
-                        (frame->size + num_bindings) * sizeof(struct binding *));
+  frame->bindings = MARLAIS_REALLOC_ARRAY_GENERAL
+    (frame->bindings, frame->size + num_bindings, struct binding *);
 
   for (i = 0; i < num_bindings; ++i) {
     if ((!syms) || (!vals)) {
@@ -155,9 +154,8 @@ marlais_add_local (Object sym, Object val, int constant, struct environment *to_
   frame = to_frame;
 
   if ((frame->size % BINDING_ALLOC_CHUNK) == 0) {
-    frame->bindings = (struct binding **)
-      marlais_realloc (frame->bindings,
-                        (frame->size + BINDING_ALLOC_CHUNK) * sizeof (struct binding *));
+    frame->bindings = MARLAIS_REALLOC_ARRAY_GENERAL
+      (frame->bindings, frame->size + BINDING_ALLOC_CHUNK, struct binding *);
   }
   frame->bindings[frame->size] = binding;
   frame->size++;

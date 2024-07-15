@@ -85,7 +85,7 @@ static void *icu_gc_alloc (void *context, size_t size)
 
 static void *icu_gc_realloc (void *context, void *obj, size_t new_size)
 {
-  return marlais_realloc (obj, new_size);
+  return marlais_realloc_general (obj, new_size);
 }
 
 static void icu_gc_free (void *context, void *obj)
