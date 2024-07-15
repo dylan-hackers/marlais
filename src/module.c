@@ -411,7 +411,7 @@ marlais_add_module_binding(Object sym, Object val, int constant, int exported)
     marlais_warning ("Symbol already defined. Previous value", sym,
                      *(old_binding->val), NULL);
   }
-  binding->val = (Object *) marlais_malloc (sizeof (Object *));
+  binding->val = MARLAIS_MALLOC (Object *);
 
   *(binding->val) = val;
 

@@ -105,7 +105,7 @@ marlais_add_locals (Object syms, Object vals, int constant, struct environment *
     binding->sym = CAR (syms);
     /* ??? */
     binding->type = marlais_class_object;
-    binding->val = (Object *) marlais_malloc (sizeof (Object *));
+    binding->val = MARLAIS_MALLOC (Object *);
 
     *(binding->val) = CAR (vals);
 
@@ -137,7 +137,7 @@ marlais_add_local (Object sym, Object val, int constant, struct environment *to_
     binding->sym = sym;
     binding->type = marlais_class_object;
   }
-  binding->val = (Object *) marlais_malloc (sizeof (Object *));
+  binding->val = MARLAIS_MALLOC (Object *);
 
   if (!marlais_instance_p (val, binding->type)) {
     marlais_error ("add_local: value does not satisfy type constraint",
