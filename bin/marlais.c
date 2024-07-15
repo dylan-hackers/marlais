@@ -58,14 +58,12 @@ static int read_eval_print(FILE* f, int bind_constant_p)
     obj = marlais_eval (obj);
     if(POINTERP(obj) && POINTERTYPE(obj) == Values) {
       vals = VALUESNUM(obj);
-    }
-    else {
-      obj = marlais_values_args(1, obj);
-      vals = 1;
-    }
-    for(x = 0; x < vals; x++) {
-      Object elt = VALUESELS(obj)[x];
-      print_top_level_constant(elt, bind_constant_p);
+      for(x = 0; x < vals; x++) {
+        Object elt = VALUESELS(obj)[x];
+        print_top_level_constant(elt, bind_constant_p);
+      }
+    } else {
+      print_top_level_constant(obj, bind_constant_p);
     }
     fflush (stdout);
     return 1;
