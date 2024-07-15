@@ -57,8 +57,9 @@ static int read_eval_print(FILE* f, int bind_constant_p)
   if ((obj = marlais_parse_object ()) && (obj != MARLAIS_EOF)) {
     obj = marlais_eval (obj);
 
+    /* print values */
     int idx; Object elt;
-    MARLAIS_FORVALUES(obj,idx,elt) {
+    MARLAIS_VALUES_FOREACH(obj,idx,elt) {
       print_top_level_constant(elt, bind_constant_p);
     }
 

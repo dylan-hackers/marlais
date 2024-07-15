@@ -45,16 +45,17 @@ struct marlais_values {
 #define VALUESNUM(obj)    (((struct marlais_values *)obj)->values_size)
 #define VALUESELS(obj)    (((struct marlais_values *)obj)->values_elts)
 
-#define MARLAIS_FORVALUES(_values,_indexvar,_valuevar)                  \
-  for(_indexvar = 0,                                                    \
-        _valuevar = (VALUESP((_values))                                 \
-                     ? VALUESELS((_values))[_indexvar]                  \
-                     : (_values));                                      \
-      (VALUESP((_values)) && _indexvar < VALUESNUM((_values)))          \
-        ||((!VALUESP((_values))) && _indexvar < 1);                     \
-      _indexvar++,                                                      \
-        _valuevar=VALUESP((_values))                                    \
-        ? VALUESELS((_values))[_indexvar]                               \
+/* Iterate multiple values */
+#define MARLAIS_VALUES_FOREACH(_values,_idxvar,_valvar)                 \
+  for(_idxvar = 0,                                                      \
+        _valvar = (VALUESP((_values))                                   \
+                   ? VALUESELS((_values))[_idxvar]                      \
+                   : (_values));                                        \
+      (VALUESP((_values)) && _idxvar < VALUESNUM((_values)))            \
+        ||((!VALUESP((_values))) && _idxvar < 1);                       \
+      _idxvar++,                                                        \
+        _valvar=VALUESP((_values))                                      \
+        ? VALUESELS((_values))[_idxvar]                                 \
         : MARLAIS_UNSPECIFIED)
 
 /* Register vector primitives */
