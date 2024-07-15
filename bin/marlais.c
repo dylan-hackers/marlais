@@ -56,15 +56,12 @@ static int read_eval_print(FILE* f, int bind_constant_p)
 
   if ((obj = marlais_parse_object ()) && (obj != MARLAIS_EOF)) {
     obj = marlais_eval (obj);
-    if(POINTERP(obj) && POINTERTYPE(obj) == Values) {
-      vals = VALUESNUM(obj);
-      for(x = 0; x < vals; x++) {
-        Object elt = VALUESELS(obj)[x];
-        print_top_level_constant(elt, bind_constant_p);
-      }
-    } else {
-      print_top_level_constant(obj, bind_constant_p);
+
+    int idx; Object elt;
+    MARLAIS_FORVALUES(obj,idx,elt) {
+      print_top_level_constant(elt, bind_constant_p);
     }
+
     fflush (stdout);
     return 1;
     /*    cache_env = the_env;
