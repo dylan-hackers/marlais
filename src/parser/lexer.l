@@ -429,7 +429,6 @@ WHITESPACE      [\ \t\f\v\r]
 <CMNT>"*/"      { BEGIN(ETC); }
 <CMNT>.         { }
 
-
  /* Count newlines */
 
 <ETC,CMNT>[\n]  { ++yylineno; /* Bogus hack! */ }
