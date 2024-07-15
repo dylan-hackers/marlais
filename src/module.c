@@ -368,7 +368,7 @@ marlais_import_module_binding (struct binding *import_binding,
 {
   struct binding *binding;
 
-  binding = MARLAIS_MALLOC (struct binding);
+  binding = MARLAIS_MALLOC_GENERAL (struct binding);
   binding->type = import_binding->type;
   /* binding->props |= import_binding->props & CONSTANT_BINDING; */
   binding->props |= import_binding->props;
@@ -387,7 +387,7 @@ marlais_add_module_binding(Object sym, Object val, int constant, int exported)
   unsigned h;
   char *str;
 
-  binding = MARLAIS_MALLOC (struct binding);
+  binding = MARLAIS_MALLOC_GENERAL (struct binding);
 
   if (PAIRP (sym)) {
     binding->sym = CAR (sym);
@@ -411,7 +411,7 @@ marlais_add_module_binding(Object sym, Object val, int constant, int exported)
     marlais_warning ("Symbol already defined. Previous value", sym,
                      *(old_binding->val), NULL);
   }
-  binding->val = MARLAIS_MALLOC (Object *);
+  binding->val = MARLAIS_MALLOC_GENERAL (Object *);
 
   *(binding->val) = val;
 

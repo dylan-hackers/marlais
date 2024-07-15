@@ -36,11 +36,25 @@
 /* Exported functions */
 
 void *
-marlais_malloc (size_t size)
+marlais_malloc_general (size_t size)
 {
   void *obj;
   /* allocate */
   obj = GC_malloc (size);
+  /* check */
+  if (!obj) {
+    marlais_fatal ("memory allocation failure", NULL);
+  }
+  /* return */
+  return obj;
+}
+
+void *
+marlais_malloc_atomic (size_t size)
+{
+  void *obj;
+  /* allocate */
+  obj = GC_malloc_atomic (size);
   /* check */
   if (!obj) {
     marlais_fatal ("memory allocation failure", NULL);
@@ -82,26 +96,12 @@ marlais_strdup (const char *str)
   return copy;
 }
 
-void *
-marlais_allocate_atomic (size_t size)
-{
-  void *obj;
-  /* allocate */
-  obj = GC_malloc_atomic (size);
-  /* check */
-  if (!obj) {
-    marlais_fatal ("memory allocation failure", NULL);
-  }
-  /* return */
-  return obj;
-}
-
 Object
 marlais_allocate_object (ObjectType type, size_t size)
 {
   Object obj;
   /* allocate memory for the object */
-  obj = (Object) marlais_malloc (size);
+  obj = (Object) marlais_malloc_general (size);
   /* initialize header fields */
 #ifdef POINTERTYPE
   POINTERTYPE(obj) = type;

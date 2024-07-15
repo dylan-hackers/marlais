@@ -76,7 +76,7 @@ marlais_make_vector (int size, Object fill_obj)
   /* allocate the object and the vector */
   res = marlais_allocate_object (ObjectVector, sizeof (struct marlais_object_vector));
   SOVSIZE (res) = size;
-  SOVELS (res) = (Object *) marlais_malloc (size * sizeof (Object));
+  SOVELS (res) = MARLAIS_MALLOC_ARRAY_GENERAL (size, Object);
 
   /* fill the vector */
   for (i = 0; i < size; ++i) {
@@ -117,7 +117,7 @@ marlais_list_to_vector (Object list)
     els = CDR (els);
   }
   SOVSIZE (obj) = size;
-  SOVELS (obj) = (Object *) marlais_malloc (size * sizeof (Object));
+  SOVELS (obj) = (Object *) MARLAIS_MALLOC_ARRAY_GENERAL (size, Object);
 
   els = list;
   i = 0;

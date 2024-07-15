@@ -88,7 +88,7 @@ marlais_pop_eval_stack (void)
 void
 marlais_push_eval_stack (Object obj)
 {
-    struct eval_stack *tmp = MARLAIS_MALLOC (struct eval_stack);
+    struct eval_stack *tmp = MARLAIS_MALLOC_GENERAL (struct eval_stack);
 
     tmp->next = eval_stack;
     tmp->context = obj;

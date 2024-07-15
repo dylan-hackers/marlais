@@ -375,7 +375,7 @@ marlais_make_mpz_from_string(const char *str, int base)
 
 static void *
 gmp_gc_alloc (size_t size) {
-  return marlais_malloc(size);
+  return marlais_malloc_general(size);
 }
 
 static void *

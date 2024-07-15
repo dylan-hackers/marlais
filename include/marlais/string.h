@@ -73,18 +73,18 @@ struct marlais_unicode_string {
 
 /* allocate a char string */
 #define MARLAIS_ALLOCATE_STRING(_size) \
-  ((char *)marlais_allocate_atomic(_size))
+  ((char *)marlais_malloc_atomic(_size))
 
 #ifdef MARLAIS_ENABLE_WCHAR
 /* allocate a wchar_t string */
 #define MARLAIS_ALLOCATE_WSTRING(_size) \
-  ((wchar_t *)marlais_allocate_atomic((_size) * sizeof(wchar_t)))
+  ((wchar_t *)marlais_malloc_atomic((_size) * sizeof(wchar_t)))
 #endif
 
 #ifdef MARLAIS_ENABLE_UCHAR
 /* allocate a UChar string */
 #define MARLAIS_ALLOCATE_USTRING(_size) \
-  ((UChar *)marlais_allocate_atomic((_size) * sizeof(UChar)))
+  ((UChar *)marlais_malloc_atomic((_size) * sizeof(UChar)))
 #endif
 
 /* Register string primitives */

@@ -711,7 +711,7 @@ marlais_lexer_push_intermediate_words(Object begin_word)
 {
     struct intermediate_word_struct *new_table;
 
-    new_table = MARLAIS_MALLOC (struct intermediate_word_struct);
+    new_table = MARLAIS_MALLOC_GENERAL (struct intermediate_word_struct);
 
     if (begin_word == if_symbol) {
         new_table->num_words = NUM_IF_INTERMEDIATE_WORDS;
@@ -727,7 +727,7 @@ marlais_lexer_push_intermediate_words(Object begin_word)
         new_table->reswords = for_intermediate_word_table;
         new_table->next = intermediate_words;
         intermediate_words = new_table;
-        new_table = MARLAIS_MALLOC (struct intermediate_word_struct);
+        new_table = MARLAIS_MALLOC_GENERAL (struct intermediate_word_struct);
         new_table->num_words = NUM_FOR_CLAUSE_WORDS;
         new_table->reswords = for_clause_word_table;
     } else if (begin_word == block_symbol) {
@@ -954,7 +954,7 @@ get_nonws_symbol (char *text)
              *end_ptr != ' ' && *end_ptr != '\t' && *end_ptr != '\f'
                 && *end_ptr != '\v' && *end_ptr != '\r' && *end_ptr != '\n';
              end_ptr++);
-        buf_ptr = buffer = (char *) marlais_allocate_atomic((end_ptr - start_ptr + 1) * sizeof (char));
+        buf_ptr = buffer = (char *) marlais_malloc_atomic((end_ptr - start_ptr + 1));
         for(; start_ptr < end_ptr; *buf_ptr++ = *start_ptr++);
         *buf_ptr = '\0';
         return buffer;

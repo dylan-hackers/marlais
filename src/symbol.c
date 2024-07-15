@@ -195,7 +195,7 @@ intern_symbol (ObjectType type, const char *name)
 
   SYMBOLNAME (sym) = marlais_strdup (name);
 
-  entry = MARLAIS_MALLOC (struct symtab);
+  entry = MARLAIS_MALLOC_GENERAL (struct symtab);
   entry->sym = sym;
   entry->next = symbol_table[h];
 

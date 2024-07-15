@@ -36,26 +36,36 @@
 
 #include <marlais/common.h>
 
-/* allocate normal memory */
-extern void *marlais_malloc (size_t size);
-/* reallocate normal memory */
+/* Allocate memory (that may contain pointers) */
+extern void *marlais_malloc_general (size_t size);
+/* Allocate memory (that will contain no pointers) */
+extern void *marlais_malloc_atomic (size_t size);
+
+/* Reallocate memmory */
 extern void *marlais_realloc (void *old_obj, size_t new_size);
-/* free normal memory */
+/* Free memory */
 extern void  marlais_free (void *obj);
-/* allocate copy of a zero-terminated string */
+/* Allocate copy of a zero-terminated string */
 extern char *marlais_strdup (const char *str);
 
-/* allocate atomic memory */
-extern void  *marlais_allocate_atomic (size_t size);
-/* allocate an object */
+/* Allocate an object */
 extern Object marlais_allocate_object (ObjectType type, size_t size);
 
-/* allocate a data structure with casting */
-#define MARLAIS_MALLOC(_type) \
-  ((_type *)marlais_malloc(sizeof(_type)))
+/* Allocate a structure with casting */
+#define MARLAIS_MALLOC_GENERAL(_type)                           \
+  ((_type *)marlais_malloc_general(sizeof(_type)))
+/* Allocate an array with casting */
+#define MARLAIS_MALLOC_ARRAY_GENERAL(_nmemb,_type)              \
+  ((_type *)marlais_malloc_general((_nmemb)*sizeof(_type)))
+/* Allocate a structure with casting */
+#define MARLAIS_MALLOC_ATOMIC(_type)                            \
+  ((_type *)marlais_malloc_atomic(sizeof(_type)))
+/* Allocate an array with casting */
+#define MARLAIS_MALLOC_ARRAY_ATOMIC(_nmemb,_type)               \
+  ((_type *)marlais_malloc_atomic((_nmemb)*sizeof(_type)))
 
-/* allocate an object with casting */
-#define MARLAIS_ALLOCATE_OBJECT(_type, _repr) \
+/* Allocate an object with casting */
+#define MARLAIS_ALLOCATE_OBJECT(_type, _repr)                   \
   ((_repr *)marlais_allocate_object(_type, sizeof(_repr)))
 
 #endif

@@ -35,7 +35,7 @@ marlais_make_bytevector (int size, uint8_t fill)
   res = MARLAIS_ALLOCATE_OBJECT(ByteVector, struct marlais_bytevector);
 
   res->bv_size = size;
-  res->bv_data = (uint8_t *) marlais_allocate_atomic(size);
+  res->bv_data = (uint8_t *) marlais_malloc_atomic(size);
 
   if(fill != 0) {
     memset(res->bv_data, fill, size);

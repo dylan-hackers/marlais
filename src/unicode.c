@@ -80,7 +80,7 @@ marlais_register_icu (void)
 
 static void *icu_gc_alloc (void *context, size_t size)
 {
-  return marlais_malloc (size);
+  return marlais_malloc_general (size);
 }
 
 static void *icu_gc_realloc (void *context, void *obj, size_t new_size)
