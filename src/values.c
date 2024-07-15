@@ -72,16 +72,21 @@ marlais_values_args (int num,...)
   int i;
 
   if(num == 0) {
-    return MARLAIS_UNSPECIFIED;
+    obj = MARLAIS_UNSPECIFIED;
+#if 0
+  } else if(num == 1) {
+    va_start(args,num);
+    obj = va_arg(args,Object);
+    va_end(args);
+#endif
+  } else {
+    obj = marlais_values_alloc(num);
+    va_start(args, num);
+    for (i = 0; i < num; ++i) {
+      VALUESELS(obj)[i] = va_arg(args, Object);
+    }
+    va_end(args);
   }
-
-  obj = marlais_values_alloc(num);
-
-  va_start(args, num);
-  for (i = 0; i < num; ++i) {
-    VALUESELS(obj)[i] = va_arg(args, Object);
-  }
-  va_end(args);
 
   return(obj);
 }
@@ -90,20 +95,25 @@ Object
 marlais_values_list (Object vals)
 {
   Object obj;
-  int i;
+  int num, i;
+
+  num = marlais_list_length(vals);
 
   if(EMPTYLISTP(vals)) {
-    return MARLAIS_UNSPECIFIED;
+    obj = MARLAIS_UNSPECIFIED;
+#if 0
+  } else if(num == 1) {
+    obj = CAR(vals);
+#endif
+  } else {
+    obj = marlais_values_alloc(num);
+    for (i = 0; i < VALUESNUM(obj); ++i) {
+      VALUESELS(obj)[i] = CAR(vals);
+      vals = CDR(vals);
+    }
   }
 
-  obj = marlais_values_alloc(marlais_list_length(vals));
-
-  for (i = 0; i < VALUESNUM(obj); ++i) {
-    VALUESELS(obj)[i] = CAR(vals);
-    vals = CDR(vals);
-  }
-
-  return (obj);
+  return(obj);
 }
 
 Object
