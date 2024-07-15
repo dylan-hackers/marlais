@@ -201,15 +201,9 @@ debug_main(void)
       fprintf (stdout, " $%i = ", sequence_num);
       sequence_num++;
     }
-    if (marlais_object_type (obj) == Values) {
-      marlais_print_obj (marlais_standard_output, obj);
-      if (VALUESNUM (obj)) {
-        fprintf (stdout, "\n");
-      }
-    } else {
-      marlais_apply (marlais_eval(print_symbol), marlais_make_list(obj, marlais_standard_output, NULL));
-      fprintf (stdout, "\n");
-    }
+
+    marlais_print_obj (marlais_standard_output, obj);
+
     current_prompt = prompt;
     fflush (stdout);
   }
