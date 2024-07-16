@@ -36,8 +36,6 @@
 
 #include <marlais/common.h>
 
-/* Register print primitives */
-extern void marlais_register_print (void);
 /* Print an object */
 extern void   marlais_print_object (Object stream, Object obj, int escaped);
 /* Print an object without escaping */
