@@ -1,6 +1,5 @@
 /*
-
-   foreign_ptr.c
+   sequence.c
 
    This software is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,7 +17,9 @@
 
    Original copyright notice follows:
 
-   Copyright (C) 1994, Patrick C. Beard.  All Rights Reserved.
+   Copyright, 1993, Brent Benson.  All Rights Reserved.
+   0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
+   0.6 Revisions Copyright 2001, Douglas M. Auclair.  All Rights Reserved.
 
    Permission to use, copy, and modify this software and its
    documentation is hereby granted only under the following terms and
@@ -30,17 +31,36 @@
 
  */
 
-#include <marlais/foreign_ptr.h>
+#include <marlais/object/sequence.h>
 
-#include <marlais/alloc.h>
-
-Object
-marlais_make_foreign_ptr (void *ptr)
+void marlais_make_sequence_entry
+    (Object args,
+     int* size,
+     Object* size_obj,
+     Object* fill_obj,
+     const char* type)
 {
-    Object obj;
+  *size = 0;
+  *size_obj = NULL;
+  *fill_obj = MARLAIS_FALSE;
 
-    obj = marlais_allocate_object (ForeignPtr, sizeof (struct foreign_ptr));
-
-    FOREIGNPTR (obj) = ptr;
-    return (obj);
+  while (!EMPTYLISTP (args)) {
+    if (FIRST (args) == size_keyword) {
+      *size_obj = SECOND (args);
+    } else if (FIRST (args) == fill_keyword) {
+      *fill_obj = SECOND (args);
+    } else {
+      char err_msg[80];
+      sprintf(err_msg, "make: unsupported keyword for %s class", type);
+      marlais_error (err_msg, FIRST (args), NULL);
+    }
+    args = CDR (CDR (args));
+  }
+  if (*size_obj) {
+    if (!INTEGERP (*size_obj)) {
+      marlais_error ("make: value of size: argument must be an integer",
+                     size_obj, NULL);
+    }
+    *size = INTVAL (*size_obj);
+  }
 }

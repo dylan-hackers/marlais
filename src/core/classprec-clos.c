@@ -30,9 +30,9 @@
 
  */
 
-#include <marlais/classprec.h>
+#include <marlais/core/classprec.h>
 
-#include <marlais/print.h>
+#include <marlais/core/print.h>
 
 /* Internal function declarations */
 

@@ -4,7 +4,7 @@
 #define MARLAIS_CLASS_H
 
 #include <marlais/common.h>
-#include <marlais/symbol.h>
+#include <marlais/object/symbol.h>
 
 /* Data structures */
 

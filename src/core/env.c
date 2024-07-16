@@ -1,16 +1,16 @@
 /* env.c -- see COPYRIGHT for use */
 
-#include <marlais/env.h>
+#include <marlais/core/env.h>
 
-#include <marlais/alloc.h>
-#include <marlais/class.h>
-#include <marlais/eval.h>
-#include <marlais/function.h>
-#include <marlais/prim.h>
-#include <marlais/print.h>
-#include <marlais/stream.h>
-#include <marlais/syntax.h>
-#include <marlais/table.h>
+#include <marlais/core/alloc.h>
+#include <marlais/core/eval.h>
+#include <marlais/core/print.h>
+#include <marlais/core/syntax.h>
+#include <marlais/object/class.h>
+#include <marlais/object/function.h>
+#include <marlais/object/prim.h>
+#include <marlais/object/table.h>
+#include <marlais/object/stream.h>
 
 /* Local constants */
 

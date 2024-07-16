@@ -1,10 +1,10 @@
 /* classprec-ll.c -- see COPYRIGHT for use */
 
-#include <marlais/classprec.h>
+#include <marlais/core/classprec.h>
 
-#include <marlais/alloc.h>
-#include <marlais/print.h>
-#include <marlais/stream.h>
+#include <marlais/core/alloc.h>
+#include <marlais/core/print.h>
+#include <marlais/object/stream.h>
 
 /* Internal types */
 

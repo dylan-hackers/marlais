@@ -30,11 +30,10 @@
 
  */
 
-#include <marlais/parser.h>
+#include <marlais/parser/parser.h>
 
-#include <marlais/lexer.h>
-#include <marlais/print.h>
-#include <marlais/yystype.h>
+#include <marlais/parser/lexer.h>
+#include <marlais/parser/yystype.h>
 
 #include "lexer.gen.h"
 #include "parser.gen.h"

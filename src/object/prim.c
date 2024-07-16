@@ -1,9 +1,8 @@
 /* prim.c -- see COPYRIGHT for use */
 
-#include <marlais/prim.h>
+#include <marlais/object/prim.h>
 
-#include <marlais/alloc.h>
-#include <marlais/env.h>
+#include <marlais/core/env.h>
 
 void
 marlais_register_prims (int num, struct primitive prims[])

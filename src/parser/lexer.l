@@ -4,10 +4,10 @@
 
 #include <marlais/common.h>
 
-#include <marlais/alloc.h>
-#include <marlais/env.h>
-#include <marlais/lexer.h>
-#include <marlais/yystype.h>
+#include <marlais/core/alloc.h>
+#include <marlais/core/env.h>
+#include <marlais/parser/lexer.h>
+#include <marlais/parser/yystype.h>
 
 #include <sys/time.h>
 

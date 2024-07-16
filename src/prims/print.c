@@ -1,20 +1,20 @@
 /* print.c -- see COPYRIGHT for use */
 
-#include <marlais/print.h>
+#include <marlais/core/print.h>
 
-#include <marlais/apply.h>
-#include <marlais/array.h>
-#include <marlais/bignum.h>
-#include <marlais/bytevector.h>
-#include <marlais/class.h>
-#include <marlais/deque.h>
-#include <marlais/eval.h>
-#include <marlais/foreign_ptr.h>
-#include <marlais/function.h>
-#include <marlais/prim.h>
-#include <marlais/slot.h>
-#include <marlais/stream.h>
-#include <marlais/vector.h>
+#include <marlais/core/apply.h>
+#include <marlais/core/eval.h>
+#include <marlais/object/array.h>
+#include <marlais/object/bignum.h>
+#include <marlais/object/bytevector.h>
+#include <marlais/object/class.h>
+#include <marlais/object/deque.h>
+#include <marlais/object/foreignptr.h>
+#include <marlais/object/function.h>
+#include <marlais/object/prim.h>
+#include <marlais/object/slot.h>
+#include <marlais/object/stream.h>
+#include <marlais/object/vector.h>
 
 #include <stdio.h>
 #include <string.h>

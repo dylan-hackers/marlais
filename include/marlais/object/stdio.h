@@ -14,6 +14,6 @@ struct marlais_stdio_handle {
 
 extern void marlais_register_stdio (void);
 
-extern Object marlais_make_stdio_handle (FILE *fp, bool owned);
+extern Object marlais_make_stdio_stream (FILE *fp, bool owned);
 
 #endif /* !MARLAIS_STDIO_H */

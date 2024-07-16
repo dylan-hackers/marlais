@@ -1,11 +1,11 @@
 
-#include <marlais/debug.h>
+#include <marlais/core/debug.h>
 
-#include <marlais/alloc.h>
-#include <marlais/eval.h>
-#include <marlais/parser.h>
-#include <marlais/print.h>
-#include <marlais/prim.h>
+#include <marlais/core/alloc.h>
+#include <marlais/core/eval.h>
+#include <marlais/core/print.h>
+#include <marlais/object/prim.h>
+#include <marlais/parser/parser.h>
 
 /* Internal data types */
 

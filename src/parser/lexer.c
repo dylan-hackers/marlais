@@ -1,7 +1,5 @@
 
-#include <marlais/lexer.h>
-
-#include <marlais/alloc.h>
+#include <marlais/parser/lexer.h>
 
 #include "parser.gen.h"
 #include "lexer.gen.h"

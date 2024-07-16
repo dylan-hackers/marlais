@@ -1,9 +1,8 @@
 
-#include <marlais/unicode.h>
+#include <marlais/object/unicode.h>
 
-#include <marlais/alloc.h>
-#include <marlais/env.h>
-#include <marlais/prim.h>
+#include <marlais/core/env.h>
+#include <marlais/object/prim.h>
 
 #include <unicode/utypes.h>
 

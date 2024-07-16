@@ -5,5 +5,5 @@
 #include <marlais/common.h>
 
 #define GLOBAL
-#include <marlais/globaldefs.h>
+#include <marlais/core/globaldefs.h>
 #undef  GLOBAL

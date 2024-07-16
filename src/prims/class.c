@@ -1,20 +1,19 @@
 /* class.c -- see COPYRIGHT for use */
 
-#include <marlais/class.h>
+#include <marlais/object/class.h>
 
-#include <marlais/alloc.h>
-#include <marlais/apply.h>
-#include <marlais/array.h>
-#include <marlais/bytevector.h>
-#include <marlais/classprec.h>
-#include <marlais/deque.h>
-#include <marlais/env.h>
-#include <marlais/eval.h>
-#include <marlais/function.h>
-#include <marlais/prim.h>
-#include <marlais/slot.h>
-#include <marlais/table.h>
-#include <marlais/vector.h>
+#include <marlais/core/apply.h>
+#include <marlais/core/classprec.h>
+#include <marlais/core/env.h>
+#include <marlais/core/eval.h>
+#include <marlais/object/array.h>
+#include <marlais/object/bytevector.h>
+#include <marlais/object/deque.h>
+#include <marlais/object/function.h>
+#include <marlais/object/prim.h>
+#include <marlais/object/slot.h>
+#include <marlais/object/table.h>
+#include <marlais/object/vector.h>
 
 int last_class_index = 0;
 

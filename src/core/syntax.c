@@ -1,16 +1,14 @@
 /* syntax.c -- see COPYRIGHT for use */
 
-#include <marlais/syntax.h>
+#include <marlais/core/syntax.h>
 
-#include <marlais/alloc.h>
-#include <marlais/apply.h>
-#include <marlais/class.h>
-#include <marlais/env.h>
-#include <marlais/eval.h>
-#include <marlais/function.h>
-#include <marlais/print.h>
-#include <marlais/stream.h>
-#include <marlais/table.h>
+#include <marlais/core/apply.h>
+#include <marlais/core/env.h>
+#include <marlais/core/eval.h>
+#include <marlais/object/class.h>
+#include <marlais/object/function.h>
+#include <marlais/object/stream.h>
+#include <marlais/object/table.h>
 
 /* Data structures */
 

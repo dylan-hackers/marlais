@@ -1,13 +1,13 @@
 /* eval.c -- see COPYRIGHT for use */
 
-#include <marlais/eval.h>
+#include <marlais/core/eval.h>
 
-#include <marlais/alloc.h>
-#include <marlais/apply.h>
-#include <marlais/env.h>
-#include <marlais/print.h>
-#include <marlais/stream.h>
-#include <marlais/syntax.h>
+#include <marlais/core/alloc.h>
+#include <marlais/core/apply.h>
+#include <marlais/core/env.h>
+#include <marlais/core/print.h>
+#include <marlais/core/syntax.h>
+#include <marlais/object/stream.h>
 
 /* Internal function declarations */
 

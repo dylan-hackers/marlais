@@ -32,15 +32,14 @@
 
  */
 
-#include <marlais/table.h>
+#include <marlais/object/table.h>
 
-#include <marlais/alloc.h>
-#include <marlais/apply.h>
-#include <marlais/deque.h>
-#include <marlais/env.h>
-#include <marlais/eval.h>
-#include <marlais/prim.h>
-#include <marlais/vector.h>
+#include <marlais/core/apply.h>
+#include <marlais/core/env.h>
+#include <marlais/core/eval.h>
+#include <marlais/object/deque.h>
+#include <marlais/object/prim.h>
+#include <marlais/object/vector.h>
 
 /* Internal variables */
 

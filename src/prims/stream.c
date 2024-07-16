@@ -1,8 +1,8 @@
 /* stream.c, see COPYRIGHT for use */
 
-#include <marlais/stream.h>
+#include <marlais/object/stream.h>
 
-#include <marlais/prim.h>
+#include <marlais/object/prim.h>
 
 #include <fcntl.h>
 #include <stdio.h>

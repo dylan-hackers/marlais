@@ -12,6 +12,10 @@ struct module {
 
 #define MODULE(obj) ((struct module *)obj)
 
+/* TODO do we want these exposed? */
+extern Object marlais_all_modules;
+extern Object marlais_current_module;
+
 extern void marlais_initialize_module (void);
 extern void marlais_register_module (void);
 

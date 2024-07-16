@@ -31,11 +31,11 @@
 
  */
 
-#include <marlais/character.h>
+#include <marlais/object/character.h>
 
-#include <marlais/alloc.h>
-#include <marlais/env.h>
-#include <marlais/prim.h>
+#include <marlais/core/alloc.h>
+#include <marlais/core/env.h>
+#include <marlais/object/prim.h>
 
 #include <ctype.h>
 

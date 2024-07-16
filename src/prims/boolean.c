@@ -31,10 +31,9 @@
 
  */
 
-#include <marlais/boolean.h>
+#include <marlais/object/boolean.h>
 
-#include <marlais/alloc.h>
-#include <marlais/prim.h>
+#include <marlais/object/prim.h>
 
 /* Primitives */
 

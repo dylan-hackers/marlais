@@ -1,10 +1,9 @@
 /* number.c -- see COPYRIGHT for use */
 
-#include <marlais/integer.h>
+#include <marlais/object/integer.h>
 
-#include <marlais/alloc.h>
-#include <marlais/env.h>
-#include <marlais/prim.h>
+#include <marlais/core/env.h>
+#include <marlais/object/prim.h>
 
 #include <float.h>
 #include <math.h>

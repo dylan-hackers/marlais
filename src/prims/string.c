@@ -32,11 +32,10 @@
 
  */
 
-#include <marlais/string.h>
+#include <marlais/object/string.h>
 
-#include <marlais/alloc.h>
-#include <marlais/prim.h>
-#include <marlais/sequence.h>
+#include <marlais/object/prim.h>
+#include <marlais/object/sequence.h>
 
 #include <ctype.h>
 

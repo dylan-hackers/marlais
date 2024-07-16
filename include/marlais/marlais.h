@@ -1,40 +1,40 @@
 
 #include <marlais/common.h>
 
-#include <marlais/alloc.h>
-#include <marlais/apply.h>
-#include <marlais/array.h>
-#include <marlais/bytevector.h>
-#include <marlais/character.h>
-#include <marlais/class.h>
-#include <marlais/classprec.h>
-#include <marlais/context.h>
-#include <marlais/deque.h>
-#include <marlais/env.h>
-#include <marlais/eval.h>
-#include <marlais/file.h>
-#include <marlais/foreign.h>
-#include <marlais/foreign_ptr.h>
-#include <marlais/function.h>
-#include <marlais/list.h>
-#include <marlais/prim.h>
-#include <marlais/print.h>
-#include <marlais/read.h>
-#include <marlais/sequence.h>
-#include <marlais/slot.h>
-#include <marlais/stream.h>
-#include <marlais/string.h>
-#include <marlais/symbol.h>
-#include <marlais/syntax.h>
-#include <marlais/sys.h>
-#include <marlais/table.h>
-#include <marlais/values.h>
-#include <marlais/vector.h>
+#include <marlais/core/alloc.h>
+#include <marlais/core/apply.h>
+#include <marlais/core/classprec.h>
+#include <marlais/core/context.h>
+#include <marlais/core/env.h>
+#include <marlais/core/eval.h>
+#include <marlais/core/file.h>
+#include <marlais/core/print.h>
+#include <marlais/core/read.h>
+#include <marlais/core/syntax.h>
+#include <marlais/object/array.h>
+#include <marlais/object/bytevector.h>
+#include <marlais/object/character.h>
+#include <marlais/object/class.h>
+#include <marlais/object/deque.h>
+#include <marlais/object/foreign.h>
+#include <marlais/object/foreignptr.h>
+#include <marlais/object/function.h>
+#include <marlais/object/list.h>
+#include <marlais/object/prim.h>
+#include <marlais/object/sequence.h>
+#include <marlais/object/slot.h>
+#include <marlais/object/stream.h>
+#include <marlais/object/string.h>
+#include <marlais/object/symbol.h>
+#include <marlais/object/sys.h>
+#include <marlais/object/table.h>
+#include <marlais/object/values.h>
+#include <marlais/object/vector.h>
 
 #ifdef MARLAIS_ENABLE_GMP
-#include <marlais/bignum.h>
+#include <marlais/object/bignum.h>
 #endif
 
 #ifdef MARLAIS_ENABLE_UCHAR
-#include <marlais/unicode.h>
+#include <marlais/object/unicode.h>
 #endif

@@ -31,10 +31,9 @@
 
  */
 
-#include <marlais/values.h>
+#include <marlais/object/values.h>
 
-#include <marlais/alloc.h>
-#include <marlais/prim.h>
+#include <marlais/object/prim.h>
 
 /* Forward declarations */
 
@@ -53,93 +52,6 @@ void
 marlais_register_values (void)
 {
   MARLAIS_REGISTER_PRIMS(values_prims);
-}
-
-Object
-marlais_values_alloc (int num)
-{
-  Object obj = marlais_allocate_object(Values, sizeof(struct marlais_values) + (num * sizeof(Object)));
-  VALUESNUM(obj) = num;
-  VALUESELS(obj) = (Object*)(((void*)obj)+sizeof(struct marlais_values));
-  return obj;
-}
-
-Object
-marlais_values_args (int num,...)
-{
-  va_list args;
-  Object obj;
-  int i;
-
-  if(num == 0) {
-    obj = MARLAIS_UNSPECIFIED;
-#if 0
-  } else if(num == 1) {
-    va_start(args,num);
-    obj = va_arg(args,Object);
-    va_end(args);
-#endif
-  } else {
-    obj = marlais_values_alloc(num);
-    va_start(args, num);
-    for (i = 0; i < num; ++i) {
-      VALUESELS(obj)[i] = va_arg(args, Object);
-    }
-    va_end(args);
-  }
-
-  return(obj);
-}
-
-Object
-marlais_values_list (Object vals)
-{
-  Object obj;
-  int num, i;
-
-  num = marlais_list_length(vals);
-
-  if(EMPTYLISTP(vals)) {
-    obj = MARLAIS_UNSPECIFIED;
-#if 0
-  } else if(num == 1) {
-    obj = CAR(vals);
-#endif
-  } else {
-    obj = marlais_values_alloc(num);
-    for (i = 0; i < VALUESNUM(obj); ++i) {
-      VALUESELS(obj)[i] = CAR(vals);
-      vals = CDR(vals);
-    }
-  }
-
-  return(obj);
-}
-
-Object
-marlais_values (Object rest)
-{
-  if (EMPTYLISTP(rest)) {
-    return MARLAIS_UNSPECIFIED;
-  } else if (PAIRP(CDR(rest))) {
-    return marlais_values_list(rest);
-  } else {
-    return (CAR(rest));
-  }
-}
-
-Object
-marlais_devalue (Object val)
-{
-  if (VALUESP(val)) {
-    if (VALUESNUM(val)) {
-      return VALUESELS(val)[0];
-    } else {
-      return marlais_error ("Null values construct used in an invalid context", NULL);
-    }
-  } else {
-    return val;
-  }
 }
 
 /* Primitive implementations */

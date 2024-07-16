@@ -4,7 +4,7 @@
 #define MARLAIS_COMMON_H
 
 #include <marlais/config.h>
-#include <marlais/limits.h>
+#include <marlais/core/limits.h>
 
 #include <assert.h>
 #include <setjmp.h>
@@ -25,18 +25,20 @@
 #include <unicode/uchar.h>
 #endif
 
-#include <marlais/compiler.h>
-#include <marlais/object.h>
-#include <marlais/error.h>
-#include <marlais/boolean.h>
-#include <marlais/character.h>
-#include <marlais/float.h>
-#include <marlais/integer.h>
-#include <marlais/list.h>
-#include <marlais/module.h>
-#include <marlais/string.h>
-#include <marlais/symbol.h>
-#include <marlais/type.h>
-#include <marlais/values.h>
+#include <marlais/core/compiler.h>
+#include <marlais/core/object.h>
+#include <marlais/core/alloc.h>
+#include <marlais/core/error.h>
+#include <marlais/core/print.h>
+#include <marlais/object/boolean.h>
+#include <marlais/object/character.h>
+#include <marlais/object/float.h>
+#include <marlais/object/integer.h>
+#include <marlais/object/module.h>
+#include <marlais/object/symbol.h>
+#include <marlais/object/type.h>
+#include <marlais/object/values.h>
+#include <marlais/object/string.h>
+#include <marlais/object/list.h>
 
 #endif /* MARLAIS_COMMON_H */

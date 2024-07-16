@@ -92,16 +92,16 @@ typedef struct {
 //#define POINTERSIZE(obj) (((ObjectHeader *)obj)->object_size)
 
 #if defined(MARLAIS_OBJECT_MODEL_SMALL)
-#include <marlais/object-small.h>
+#include <marlais/core/object-small.h>
 #elif defined(MARLAIS_OBJECT_MODEL_LARGE)
-#include <marlais/object-large.h>
+#include <marlais/core/object-large.h>
 #else
 #error No object model configured.
 #endif
 
-#include <marlais/object-heap.h>
+#include <marlais/core/object-heap.h>
 
-#include <marlais/globals.h>
+#include <marlais/core/globals.h>
 
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
 #define MARLAIS_TRUE  (TRUEVAL)

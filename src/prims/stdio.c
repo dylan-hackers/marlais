@@ -1,8 +1,7 @@
 
-#include <marlais/stdio.h>
+#include <marlais/object/stdio.h>
 
-#include <marlais/alloc.h>
-#include <marlais/prim.h>
+#include <marlais/object/prim.h>
 
 /* Primitives */
 
@@ -33,19 +32,6 @@ marlais_register_stdio (void)
   MARLAIS_REGISTER_PRIMS (stdio_prims);
 }
 
-Object
-marlais_make_stdio_handle (FILE *fp, bool owned)
-{
-  Object res;
-
-  res = marlais_allocate_object (StdioHandle, sizeof (struct marlais_stdio_handle));
-
-  STDIOOWNEDP (res) = owned;
-  STDIOFILE (res) = fp;
-
-  return res;
-}
-
 /* Primitives */
 
 static Object
@@ -55,7 +41,7 @@ prim_stdio_fopen (Object pathname, Object mode)
 
   fp = fopen (BYTESTRVAL (pathname), BYTESTRVAL (mode));
 
-  return marlais_make_stdio_handle (fp, true);
+  return marlais_make_stdio_stream (fp, true);
 }
 
 static Object

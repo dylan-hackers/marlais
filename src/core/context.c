@@ -1,13 +1,13 @@
 
-#include <marlais/context.h>
+#include <marlais/core/context.h>
 
 #include <marlais/marlais.h>
 
-#include <marlais/debug.h>
-#include <marlais/gc.h>
-#include <marlais/lexer.h>
-#include <marlais/parser.h>
-#include <marlais/unicode.h>
+#include <marlais/core/debug.h>
+#include <marlais/core/gc.h>
+#include <marlais/object/unicode.h>
+#include <marlais/parser/lexer.h>
+#include <marlais/parser/parser.h>
 
 #define DYLAN_INIT_FILE "dylan/init.dylan"
 #define COMMON_INIT_FILE "common/init.dylan"

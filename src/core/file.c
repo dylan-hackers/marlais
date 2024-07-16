@@ -1,15 +1,15 @@
 /* file.c -- see COPYRIGHT for use */
 
-#include <marlais/file.h>
+#include <marlais/core/file.h>
 
-#include <marlais/env.h>
-#include <marlais/eval.h>
-#include <marlais/foreign_ptr.h>
-#include <marlais/lexer.h>
-#include <marlais/parser.h>
-#include <marlais/prim.h>
-#include <marlais/print.h>
-#include <marlais/read.h>
+#include <marlais/core/env.h>
+#include <marlais/core/eval.h>
+#include <marlais/core/print.h>
+#include <marlais/core/read.h>
+#include <marlais/parser/lexer.h>
+#include <marlais/parser/parser.h>
+#include <marlais/object/foreignptr.h>
+#include <marlais/object/prim.h>
 
 #include "lexer.gen.h"
 

@@ -88,29 +88,41 @@ add_library(marlais_lib
   core/env.c
   core/eval.c
   core/file.c
+  core/gc.c
   core/globals.c
   core/object.c
+  core/syntax.c
+  object/bytevector.c
+  object/condition.c
+  object/deque.c
+  object/foreignptr.c
+  object/list.c
+  object/module.c
+  object/prim.c
+  object/stdio.c
+  object/sequence.c
+  object/stdio.c
+  object/symbol.c
+  object/type.c
+  object/values.c
+  object/vector.c
   parser/lexer.c
   parser/parser.c
-  parser/syntax.c
   prims/array.c
   prims/boolean.c
   prims/bytevector.c
   prims/character.c
   prims/class.c
+  prims/condition.c
   prims/deque.c
-  prims/error.c
   prims/float.c
   prims/foreign.c
-  prims/foreign_ptr.c
   prims/function.c
   prims/gc.c
   prims/integer.c
   prims/list.c
   prims/module.c
-  prims/prim.c
   prims/print.c
-  prims/sequence.c
   prims/slot.c
   prims/stdio.c
   prims/stream.c

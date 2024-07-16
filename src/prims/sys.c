@@ -30,10 +30,10 @@
 
  */
 
-#include <marlais/sys.h>
+#include <marlais/object/sys.h>
 
-#include <marlais/prim.h>
-#include <marlais/values.h>
+#include <marlais/object/prim.h>
+#include <marlais/object/values.h>
 
 #include <time.h>
 

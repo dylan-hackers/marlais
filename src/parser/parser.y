@@ -16,10 +16,10 @@
 
 #include <marlais/common.h>
 
-#include <marlais/class.h>
-#include <marlais/table.h>
-#include <marlais/vector.h>
-#include <marlais/yystype.h>
+#include <marlais/object/class.h>
+#include <marlais/object/table.h>
+#include <marlais/object/vector.h>
+#include <marlais/parser/yystype.h>
 
 #include "lexer.gen.h"
 

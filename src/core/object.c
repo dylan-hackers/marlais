@@ -2,8 +2,6 @@
 
 #include <marlais/common.h>
 
-#include <marlais/alloc.h>
-
 #ifdef MARLAIS_OBJECT_MODEL_SMALL
 
 ObjectType

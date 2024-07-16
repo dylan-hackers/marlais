@@ -2,8 +2,8 @@
 
 #include <marlais/marlais.h>
 
-#include <marlais/gc.h>
-#include <marlais/parser.h>
+#include <marlais/core/gc.h>
+#include <marlais/parser/parser.h>
 
 #include <getopt.h>
 #include <locale.h>

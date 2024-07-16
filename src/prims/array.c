@@ -32,10 +32,10 @@
 
  */
 
-#include <marlais/array.h>
+#include <marlais/object/array.h>
 
-#include <marlais/alloc.h>
-#include <marlais/prim.h>
+#include <marlais/core/alloc.h>
+#include <marlais/object/prim.h>
 
 /* Internal function declarations */
 

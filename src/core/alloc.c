@@ -29,7 +29,7 @@
    conditions set forth in this notice.
  */
 
-#include <marlais/alloc.h>
+#include <marlais/core/alloc.h>
 
 #include <gc.h>
 
