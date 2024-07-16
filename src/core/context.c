@@ -115,11 +115,11 @@ marlais_initialize (void)
   marlais_add_export (marlais_make_name ("<standard-string>"), marlais_standard_string_class, 1);
 
   /* initialize primitives */
+  marlais_register_core ();
   marlais_register_module ();
   marlais_register_list ();
   marlais_register_class ();
   marlais_register_slot ();
-  marlais_register_file ();
   marlais_register_function ();
   marlais_register_integer ();
   marlais_register_float ();

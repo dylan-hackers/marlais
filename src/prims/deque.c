@@ -95,8 +95,7 @@ static struct primitive deque_prims[] = {
 void
 marlais_register_deque (void)
 {
-  int num = sizeof (deque_prims) / sizeof (struct primitive);
-  marlais_register_prims (num, deque_prims);
+  MARLAIS_REGISTER_PRIMS (deque_prims);
 }
 
 /* Primitives */

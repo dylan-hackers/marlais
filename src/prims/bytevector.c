@@ -1,9 +1,8 @@
 
 #include <marlais/object/bytevector.h>
 
-#include <marlais/core/alloc.h>
-#include <marlais/object/prim.h>
 #include <marlais/object/sequence.h>
+#include <marlais/object/prim.h>
 
 /* Primitives */
 

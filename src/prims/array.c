@@ -34,7 +34,6 @@
 
 #include <marlais/object/array.h>
 
-#include <marlais/core/alloc.h>
 #include <marlais/object/prim.h>
 
 /* Primitives */
@@ -69,8 +68,7 @@ static struct primitive array_prims[] =
 void
 marlais_register_array (void)
 {
-  int num = sizeof (array_prims) / sizeof (struct primitive);
-  marlais_register_prims (num, array_prims);
+  MARLAIS_REGISTER_PRIMS (array_prims);
 }
 
 /*

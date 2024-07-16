@@ -1,6 +1,6 @@
 /*
 
-   read.h
+   load.h
 
    This software is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -20,7 +20,6 @@
 
    Copyright, 1993, Brent Benson.  All Rights Reserved.
    0.4 & 0.5 Revisions Copyright 1994, Joseph N. Wilson.  All Rights Reserved.
-   0.6 Revisions Copyright 2001, Douglas M. Auclair.  All Rights Reserved.
 
    Permission to use, copy, and modify this software and its
    documentation is hereby granted only under the following terms and
@@ -32,12 +31,14 @@
 
  */
 
-#ifndef MARLAIS_READ_H
-#define MARLAIS_READ_H
+#ifndef MARLAIS_FILE_H
+#define MARLAIS_FILE_H
 
 #include <marlais/common.h>
 
-/* Register read primitives */
-void marlais_register_read (void);
+/* Load a dylan source file */
+extern Object marlais_load (Object filename);
+/* Close all open load streams */
+extern void marlais_close_open_files (void);
 
-#endif
+#endif /* !MARLAIS_FILE_H */

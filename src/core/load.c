@@ -1,11 +1,10 @@
-/* file.c -- see COPYRIGHT for use */
+/* load.c -- see COPYRIGHT for use */
 
-#include <marlais/core/file.h>
+#include <marlais/core/load.h>
 
 #include <marlais/core/env.h>
 #include <marlais/core/eval.h>
 #include <marlais/core/print.h>
-#include <marlais/core/read.h>
 #include <marlais/parser/lexer.h>
 #include <marlais/parser/parser.h>
 #include <marlais/object/foreignptr.h>
@@ -13,25 +12,12 @@
 
 #include "lexer.gen.h"
 
-/* Primitives */
-
-static struct primitive file_prims[] =
-{
-    {"load", prim_1, marlais_load},
-};
-
 /* Internal function declarations */
 
 static FILE * open_file (Object filename);
 static void close_file (FILE * fp);
 
 /* Exported functions */
-
-void
-marlais_register_file (void)
-{
-  MARLAIS_REGISTER_PRIMS (file_prims);
-}
 
 static Object
 load_internal (Object filename)

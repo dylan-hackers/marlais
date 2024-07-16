@@ -88,9 +88,9 @@ add_library(marlais_lib
   core/debug.c
   core/env.c
   core/eval.c
-  core/file.c
   core/gc.c
   core/globals.c
+  core/load.c
   core/object.c
   core/print.c
   core/syntax.c

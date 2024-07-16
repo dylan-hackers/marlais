@@ -37,6 +37,7 @@
 
 #include <marlais/core/apply.h>
 #include <marlais/core/eval.h>
+#include <marlais/core/load.h>
 
 /* Forward declarations */
 
@@ -71,6 +72,7 @@ static struct primitive core_prims[] =
   {"%eval", prim_1, marlais_eval},
   {"%print", prim_2, marlais_print_obj},
   {"%princ", prim_2, marlais_print_obj_escaped},
+  {"load", prim_1, marlais_load},
 };
 
 /* Exported functions */
