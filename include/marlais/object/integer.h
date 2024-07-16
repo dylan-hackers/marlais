@@ -36,7 +36,7 @@
 
 #include <marlais/common.h>
 
-#if defined(MARLAIS_OBJECT_MODEL_LARGE)
+#if defined(MARLAIS_OBJECT_MODEL_BOXED)
 struct marlais_small_integer {
     ObjectHeader header;
     marlais_int_t val;
@@ -55,7 +55,7 @@ struct marlais_small_ratio {
 /* Register integer primitives */
 extern void marlais_register_integer (void);
 /* Make an <integer> */
-#ifdef MARLAIS_OBJECT_MODEL_SMALL
+#ifdef MARLAIS_OBJECT_MODEL_TAGGED
 static inline Object marlais_make_integer(marlais_int_t i) {
   /* XXX bignum support */
   return (MAKE_INT (i));

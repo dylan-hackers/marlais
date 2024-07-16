@@ -27,7 +27,7 @@ marlais_make_primitive (char *name, enum primtype type, Object (*fun) ())
 {
   Object obj;
 
-#ifndef MARLAIS_OBJECT_MODEL_SMALL
+#ifndef MARLAIS_OBJECT_MODEL_TAGGED
   obj = marlais_allocate_object (Primitive, sizeof (struct primitive));
 #else
   obj = marlais_allocate_object (Primitive, sizeof (struct prim));

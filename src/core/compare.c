@@ -52,7 +52,7 @@ marlais_identical_p (Object obj1, Object obj2)
 
 #endif /* MARLAIS_ENABLE_EFLOAT */
 
-#ifdef MARLAIS_OBJECT_MODEL_LARGE
+#ifdef MARLAIS_OBJECT_MODEL_BOXED
 
   } else if (INTEGERP (obj1) && INTEGERP (obj2)) {
     return (INTVAL (obj1) == INTVAL (obj2));
@@ -69,7 +69,7 @@ marlais_identical_p (Object obj1, Object obj2)
     return (UCHARVAL (obj1) == UCHARVAL (obj2));
 #endif /* MARLAIS_ENABLE_UCHAR */
 
-#endif /* MARLAIS_OBJECT_MODEL_LARGE */
+#endif /* MARLAIS_OBJECT_MODEL_BOXED */
 
   } else {
     return false;

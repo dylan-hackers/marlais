@@ -19,7 +19,7 @@ marlais_allocate_object (ObjectType type, size_t size)
   return obj;
 }
 
-#ifdef MARLAIS_OBJECT_MODEL_SMALL
+#ifdef MARLAIS_OBJECT_MODEL_TAGGED
 
 ObjectType
 marlais_object_type (Object obj)

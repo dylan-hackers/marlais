@@ -97,7 +97,7 @@ marlais_initialize_class (void)
     binding->type = marlais_class_object;
   }
 
-#ifdef MARLAIS_OBJECT_MODEL_SMALL
+#ifdef MARLAIS_OBJECT_MODEL_TAGGED
 #define MAYBE_IMMEDIATE MARLAIS_CLASS_IMMEDIATE
 #else
 #define MAYBE_IMMEDIATE (0)

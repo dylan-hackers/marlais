@@ -53,7 +53,7 @@ marlais_apply_internal (Object fun, Object args)
       marlais_trace_level++;
     }
   }
-#ifdef MARLAIS_OBJECT_MODEL_SMALL
+#ifdef MARLAIS_OBJECT_MODEL_TAGGED
   if (!POINTERP (fun)) {
     ret = marlais_error ("apply: cannot apply this object", fun, NULL);
     goto done;

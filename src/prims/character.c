@@ -45,7 +45,7 @@
 
 /* Internal variables */
 
-#ifdef MARLAIS_OBJECT_MODEL_LARGE
+#ifdef MARLAIS_OBJECT_MODEL_BOXED
 
 #if MARLAIS_CONFIG_CHARACTER_CACHE > 0
 static Object character_cache[MARLAIS_CONFIG_CHARACTER_CACHE];
@@ -63,7 +63,7 @@ static Object uchar_cache[MARLAIS_CONFIG_UCHAR_CACHE];
 #endif
 #endif
 
-#endif /* MARLAIS_OBJECT_MODEL_LARGE */
+#endif /* MARLAIS_OBJECT_MODEL_BOXED */
 
 /* Primitives */
 
@@ -207,7 +207,7 @@ marlais_register_character (void)
                       1);
 }
 
-#ifdef MARLAIS_OBJECT_MODEL_LARGE
+#ifdef MARLAIS_OBJECT_MODEL_BOXED
 /* small version is inline in marlais/character.h */
 Object
 marlais_make_character (char ch)
@@ -238,7 +238,7 @@ marlais_make_character (char ch)
 #endif
 
 
-#ifdef MARLAIS_OBJECT_MODEL_LARGE
+#ifdef MARLAIS_OBJECT_MODEL_BOXED
 #ifdef MARLAIS_ENABLE_WCHAR
 /* small version is inline in marlais/character.h */
 Object
@@ -270,7 +270,7 @@ marlais_make_wchar (wchar_t ch)
 #endif
 #endif
 
-#ifdef MARLAIS_OBJECT_MODEL_LARGE
+#ifdef MARLAIS_OBJECT_MODEL_BOXED
 #ifdef MARLAIS_ENABLE_UCHAR
 /* small version is inline in marlais/character.h */
 Object

@@ -38,7 +38,7 @@
 
 /* Data structures */
 
-#if defined(MARLAIS_OBJECT_MODEL_LARGE)
+#if defined(MARLAIS_OBJECT_MODEL_BOXED)
 struct marlais_bchar {
     ObjectHeader header;
     char bchar_value;
@@ -46,7 +46,7 @@ struct marlais_bchar {
 #define CHARVAL(obj)       (((struct marlais_bchar *)obj)->bchar_value)
 #endif
 
-#if defined(MARLAIS_OBJECT_MODEL_LARGE) && defined(MARLAIS_ENABLE_WCHAR)
+#if defined(MARLAIS_OBJECT_MODEL_BOXED) && defined(MARLAIS_ENABLE_WCHAR)
 struct marlais_wchar {
     ObjectHeader header;
     wchar_t wchar_value;
@@ -54,7 +54,7 @@ struct marlais_wchar {
 #define WCHARVAL(obj)       (((struct marlais_wchar *)obj)->wchar_value)
 #endif
 
-#if defined(MARLAIS_OBJECT_MODEL_LARGE) && defined(MARLAIS_ENABLE_UCHAR)
+#if defined(MARLAIS_OBJECT_MODEL_BOXED) && defined(MARLAIS_ENABLE_UCHAR)
 struct marlais_uchar {
     ObjectHeader header;
     UChar32 uchar_value;
@@ -68,7 +68,7 @@ struct marlais_uchar {
 extern void marlais_register_character (void);
 
 /* Make a <byte-character> */
-#ifdef MARLAIS_OBJECT_MODEL_SMALL
+#ifdef MARLAIS_OBJECT_MODEL_TAGGED
 static inline Object marlais_make_character (char ch) {
   return MAKE_CHAR(ch);
 }
@@ -78,7 +78,7 @@ extern Object marlais_make_character (char ch);
 
 /* Make a <wide-character> */
 #ifdef MARLAIS_ENABLE_WCHAR
-#ifdef MARLAIS_OBJECT_MODEL_SMALL
+#ifdef MARLAIS_OBJECT_MODEL_TAGGED
 static inline Object marlais_make_wchar (wchar_t ch) {
   return MAKE_WCHAR(ch);
 }
@@ -89,7 +89,7 @@ extern Object marlais_make_wchar (wchar_t ch);
 
 /* Make a <unicode-character> */
 #ifdef MARLAIS_ENABLE_UCHAR
-#ifdef MARLAIS_OBJECT_MODEL_SMALL
+#ifdef MARLAIS_OBJECT_MODEL_TAGGED
 static inline Object marlais_make_uchar (UChar32 ch) {
   return MAKE_UCHAR(ch);
 }

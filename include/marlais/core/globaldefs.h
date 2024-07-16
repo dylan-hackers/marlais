@@ -7,7 +7,7 @@
 #endif
 
 /* core constants */
-#ifdef MARLAIS_OBJECT_MODEL_LARGE
+#ifdef MARLAIS_OBJECT_MODEL_BOXED
 GLOBAL Object marlais_true;
 GLOBAL Object marlais_false;
 GLOBAL Object marlais_nil;

@@ -70,7 +70,7 @@ marlais_get_time ()
 
     (void) time (&time_loc);
 
-#ifndef MARLAIS_OBJECT_MODEL_SMALL
+#ifndef MARLAIS_OBJECT_MODEL_TAGGED
     time_loc = abs ((int) time_loc);
 #else
     time_loc &= POSITIVE_SMALL_INT_MASK;
@@ -86,7 +86,7 @@ marlais_get_clock ()
 
     clock_val = clock ();
 
-#ifndef MARLAIS_OBJECT_MODEL_SMALL
+#ifndef MARLAIS_OBJECT_MODEL_TAGGED
     clock_val = abs ((int) clock_val);
 #else
     clock_val = abs ((int) (clock_val << 2)) >> 2;

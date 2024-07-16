@@ -11,7 +11,7 @@
 /* Internal variables */
 
 /* Cache for <small-integer> */
-#ifndef MARLAIS_OBJECT_MODEL_SMALL
+#ifndef MARLAIS_OBJECT_MODEL_TAGGED
 #if MARLAIS_CONFIG_INTEGER_CACHE > 0
 static Object integer_cache[MARLAIS_CONFIG_INTEGER_CACHE];
 #endif

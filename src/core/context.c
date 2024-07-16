@@ -35,7 +35,7 @@ marlais_initialize (void)
 #endif
 
   /* intialize core constants */
-#ifdef MARLAIS_OBJECT_MODEL_LARGE
+#ifdef MARLAIS_OBJECT_MODEL_BOXED
   marlais_true = marlais_allocate_object (True, sizeof (struct marlais_empty));
   marlais_false = marlais_allocate_object (False, sizeof (struct marlais_empty));
   marlais_nil = marlais_allocate_object (EmptyList, sizeof (struct marlais_empty));

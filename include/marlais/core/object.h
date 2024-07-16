@@ -91,10 +91,10 @@ typedef struct {
 #define POINTERTYPE(obj) (((ObjectHeader *)obj)->object_type)
 //#define POINTERSIZE(obj) (((ObjectHeader *)obj)->object_size)
 
-#if defined(MARLAIS_OBJECT_MODEL_SMALL)
-#include <marlais/core/object-small.h>
-#elif defined(MARLAIS_OBJECT_MODEL_LARGE)
-#include <marlais/core/object-large.h>
+#if defined(MARLAIS_OBJECT_MODEL_BOXED)
+#include <marlais/core/object-boxed.h>
+#elif defined(MARLAIS_OBJECT_MODEL_TAGGED)
+#include <marlais/core/object-tagged.h>
 #else
 #error No object model configured.
 #endif
@@ -141,8 +141,12 @@ struct marlais_instance {
 #define INSTSLOTS(obj)    (((struct marlais_instance *)obj)->slots)
 
 /* Allocate an object with casting */
-#define MARLAIS_ALLOCATE_OBJECT(_repr, _type)                   \
+#define MARLAIS_ALLOCATE_OBJECT(_repr, _type)           \
   ((_type *)marlais_allocate_object(_repr, sizeof(_type)))
+
+/* Cast an object */
+#define MARLAIS_CAST_OBJECT(_obj, _repr, _type) \
+  ((_type *)_obj)
 
 /* Allocate an object */
 extern Object marlais_allocate_object (ObjectType type, size_t size);
@@ -152,8 +156,5 @@ extern ObjectType marlais_object_type (Object obj);
 extern Object marlais_object_class (Object obj);
 
 extern Object marlais_make_handle (Object an_object);
-
-#define MARLAIS_CAST_OBJECT(_obj, _mtype, _ctype)        \
-  ((_ctype *)_obj)
 
 #endif

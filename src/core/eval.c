@@ -27,13 +27,13 @@ marlais_eval (Object obj)
 {
     Object val;
 
-#ifdef MARLAIS_OBJECT_MODEL_SMALL
+#ifdef MARLAIS_OBJECT_MODEL_TAGGED
     if (!POINTERP (obj)) {
         return (obj);
     }
 #endif
 
-#ifdef MARLAIS_OBJECT_MODEL_SMALL
+#ifdef MARLAIS_OBJECT_MODEL_TAGGED
     switch (POINTERTYPE (obj))
 #else
     switch (object_type (obj))
