@@ -110,9 +110,6 @@ extern int last_class_index;
 extern void marlais_initialize_class (void);
 extern void marlais_register_class (void);
 
-/* Instance methods */
-extern Object marlais_object_class (Object obj);
-
 /* Class methods */
 extern Object marlais_direct_subclasses (Object class);
 extern Object marlais_direct_superclasses (Object class);

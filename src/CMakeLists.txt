@@ -83,6 +83,7 @@ add_library(marlais_lib
   core/alloc.c
   core/apply.c
   core/classprec.c
+  core/compare.c
   core/context.c
   core/debug.c
   core/env.c
@@ -91,6 +92,7 @@ add_library(marlais_lib
   core/gc.c
   core/globals.c
   core/object.c
+  core/print.c
   core/syntax.c
   object/array.c
   object/bytevector.c
@@ -110,11 +112,11 @@ add_library(marlais_lib
   parser/lexer.c
   parser/parser.c
   prims/array.c
-  prims/boolean.c
   prims/bytevector.c
   prims/character.c
   prims/class.c
   prims/condition.c
+  prims/core.c
   prims/deque.c
   prims/float.c
   prims/foreign.c
@@ -123,16 +125,12 @@ add_library(marlais_lib
   prims/integer.c
   prims/list.c
   prims/module.c
-  prims/print.c
   prims/slot.c
   prims/stdio.c
   prims/stream.c
   prims/string.c
-  prims/symbol.c
   prims/sys.c
   prims/table.c
-  prims/type.c
-  prims/values.c
   prims/vector.c
 
   ${BISON_PARSER_OUTPUTS}

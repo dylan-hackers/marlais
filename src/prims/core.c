@@ -1,6 +1,6 @@
 /*
 
-   boolean.c
+   core.c
 
    This software is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,76 +31,69 @@
 
  */
 
-#include <marlais/object/boolean.h>
+#include <marlais/object/values.h>
 
 #include <marlais/object/prim.h>
 
-/* Primitives */
+#include <marlais/core/apply.h>
+#include <marlais/core/eval.h>
 
+/* Forward declarations */
+
+static Object prim_identity (Object obj);
+static Object prim_values(Object rest);
 static Object prim_not (Object obj);
 static Object prim_eq (Object obj1, Object obj2, Object rest);
 static Object prim_not_eq (Object obj1, Object obj2, Object rest);
-static Object prim_identity (Object obj);
+static Object prim_instance_p (Object obj, Object class);
+static Object prim_subtype_p (Object class1, Object class2);
 
-static struct primitive boolean_prims[] =
+/* Primitive definitions */
+
+static struct primitive core_prims[] =
 {
+  {"identity", prim_1, prim_identity},
+  {"values", prim_0_rest, prim_values},
   {"~", prim_1, prim_not},
   {"==", prim_2_rest, prim_eq},
   {"~==", prim_2_rest, prim_not_eq},
-  {"identity", prim_1, prim_identity},
+  {"%instance?", prim_2, prim_instance_p},
+  {"%subtype?", prim_2, prim_subtype_p},
+  {"%make-limited-integer", prim_1, marlais_make_limited_integer},
+  {"%make-singleton", prim_1, marlais_make_singleton},
+  {"%make-subclass", prim_1, marlais_make_subclass},
+  {"%make-union", prim_1, marlais_make_union},
+  {"%symbol->string", prim_1, marlais_symbol_to_string},
+  {"%string->symbol", prim_1, marlais_string_to_symbol},
+  {"%symbol->name", prim_1, marlais_symbol_to_name},
+  {"%name->symbol", prim_1, marlais_name_to_symbol},
+  {"%apply", prim_2, marlais_apply},
+  {"%eval", prim_1, marlais_eval},
+  {"%print", prim_2, marlais_print_obj},
+  {"%princ", prim_2, marlais_print_obj_escaped},
 };
 
 /* Exported functions */
 
 void
-marlais_register_boolean (void)
+marlais_register_core (void)
 {
-  int num = sizeof (boolean_prims) / sizeof (struct primitive);
-  marlais_register_prims (num, boolean_prims);
+  MARLAIS_REGISTER_PRIMS(core_prims);
 }
 
-bool
-marlais_identical_p (Object obj1, Object obj2)
+/* Primitive implementations */
+
+static Object
+prim_identity (Object obj)
 {
-  if (obj1 == obj2) {
-    return true;
-  } else if (SFLOATP (obj1) && SFLOATP (obj2)) {
-    return (SFLOATVAL (obj1) == SFLOATVAL (obj2));
-  } else if (DFLOATP (obj1) && DFLOATP (obj2)) {
-    return (DFLOATVAL (obj1) == DFLOATVAL (obj2));
-
-#ifdef MARLAIS_ENABLE_EFLOAT
-
-  } else if (EFLOATP (obj1) && EFLOATP (obj2)) {
-    return (EFLOATVAL (obj1) == EFLOATVAL (obj2));
-
-#endif /* MARLAIS_ENABLE_EFLOAT */
-
-#ifdef MARLAIS_OBJECT_MODEL_LARGE
-
-  } else if (INTEGERP (obj1) && INTEGERP (obj2)) {
-    return (INTVAL (obj1) == INTVAL (obj2));
-  } else if (CHARP (obj1) && CHARP (obj2)) {
-    return (CHARVAL (obj1) == CHARVAL (obj2));
-
-#ifdef MARLAIS_ENABLE_WCHAR
-  } else if (WCHARP (obj1) && WCHARP (obj2)) {
-    return (WCHARVAL (obj1) == WCHARVAL (obj2));
-#endif /* MARLAIS_ENABLE_WCHAR */
-
-#ifdef MARLAIS_ENABLE_UCHAR
-  } else if (UCHARP (obj1) && UCHARP (obj2)) {
-    return (UCHARVAL (obj1) == UCHARVAL (obj2));
-#endif /* MARLAIS_ENABLE_UCHAR */
-
-#endif /* MARLAIS_OBJECT_MODEL_LARGE */
-
-  } else {
-    return false;
-  }
+  return obj;
 }
 
-/* Primitives */
+static Object
+prim_values (Object rest)
+{
+  return marlais_values(rest);
+}
 
 static Object
 prim_not (Object obj)
@@ -110,12 +103,6 @@ prim_not (Object obj)
   } else {
     return (MARLAIS_FALSE);
   }
-}
-
-static Object
-prim_identity (Object obj)
-{
-  return obj;
 }
 
 static Object
@@ -145,4 +132,16 @@ static Object
 prim_not_eq (Object obj1, Object obj2, Object rest)
 {
   return prim_not (prim_eq (obj1, obj2, rest));
+}
+
+static Object
+prim_instance_p (Object obj, Object type)
+{
+  return marlais_make_boolean (marlais_instance_p (obj, type));
+}
+
+static Object
+prim_subtype_p (Object type1, Object type2)
+{
+  return marlais_make_boolean (marlais_subtype_p (type1, type2));
 }

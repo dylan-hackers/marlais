@@ -25,22 +25,7 @@ static Object apply_exit (Object exit_proc, Object args);
 static Object apply_generic (Object gen, Object args);
 static Object apply_next (Object next_method, Object args);
 
-/* Primitives */
-
-static struct primitive apply_prims[] =
-{
-    {"%apply", prim_2, marlais_apply},
-    {"%eval", prim_1, marlais_eval},
-};
-
 /* Exported functions */
-
-void
-marlais_register_apply (void)
-{
-  int num = sizeof (apply_prims) / sizeof (struct primitive);
-  marlais_register_prims (num, apply_prims);
-}
 
 Object
 marlais_default_result_value (void)

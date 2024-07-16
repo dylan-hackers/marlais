@@ -1,6 +1,6 @@
 /*
 
-   symbol.c
+   compare.c
 
    This software is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,24 +31,47 @@
 
  */
 
-#include <marlais/object/symbol.h>
-
-#include <marlais/object/prim.h>
-
-/* Primitives */
-
-static struct primitive symbol_prims[] =
-{
-    {"%symbol->string", prim_1, marlais_symbol_to_string},
-    {"%string->symbol", prim_1, marlais_string_to_symbol},
-    {"%symbol->name", prim_1, marlais_symbol_to_name},
-    {"%name->symbol", prim_1, marlais_name_to_symbol},
-};
+#include <marlais/core/compare.h>
 
 /* Exported functions */
 
-void
-marlais_register_symbol (void)
+bool
+marlais_identical_p (Object obj1, Object obj2)
 {
-  MARLAIS_REGISTER_PRIMS (symbol_prims);
+  if (obj1 == obj2) {
+    return true;
+  } else if (SFLOATP (obj1) && SFLOATP (obj2)) {
+    return (SFLOATVAL (obj1) == SFLOATVAL (obj2));
+  } else if (DFLOATP (obj1) && DFLOATP (obj2)) {
+    return (DFLOATVAL (obj1) == DFLOATVAL (obj2));
+
+#ifdef MARLAIS_ENABLE_EFLOAT
+
+  } else if (EFLOATP (obj1) && EFLOATP (obj2)) {
+    return (EFLOATVAL (obj1) == EFLOATVAL (obj2));
+
+#endif /* MARLAIS_ENABLE_EFLOAT */
+
+#ifdef MARLAIS_OBJECT_MODEL_LARGE
+
+  } else if (INTEGERP (obj1) && INTEGERP (obj2)) {
+    return (INTVAL (obj1) == INTVAL (obj2));
+  } else if (CHARP (obj1) && CHARP (obj2)) {
+    return (CHARVAL (obj1) == CHARVAL (obj2));
+
+#ifdef MARLAIS_ENABLE_WCHAR
+  } else if (WCHARP (obj1) && WCHARP (obj2)) {
+    return (WCHARVAL (obj1) == WCHARVAL (obj2));
+#endif /* MARLAIS_ENABLE_WCHAR */
+
+#ifdef MARLAIS_ENABLE_UCHAR
+  } else if (UCHARP (obj1) && UCHARP (obj2)) {
+    return (UCHARVAL (obj1) == UCHARVAL (obj2));
+#endif /* MARLAIS_ENABLE_UCHAR */
+
+#endif /* MARLAIS_OBJECT_MODEL_LARGE */
+
+  } else {
+    return false;
+  }
 }

@@ -59,21 +59,7 @@ static void print_uchar (Object stream, Object c, int escaped);
 static void print_ustring (Object stream, Object s, int escaped);
 #endif
 
-/* Primitives */
-
-static struct primitive print_prims[] =
-{
-  {"%print", prim_2, marlais_print_obj},
-  {"%princ", prim_2, marlais_print_obj_escaped},
-};
-
 /* Exported functions */
-
-void
-marlais_register_print (void)
-{
-  MARLAIS_REGISTER_PRIMS (print_prims);
-}
 
 void
 marlais_print_object (Object fd, Object obj, int escaped)

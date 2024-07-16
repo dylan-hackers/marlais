@@ -117,18 +117,12 @@ marlais_initialize (void)
   /* initialize primitives */
   marlais_register_module ();
   marlais_register_list ();
-  marlais_register_symbol ();
-  marlais_register_type ();
   marlais_register_class ();
   marlais_register_slot ();
   marlais_register_file ();
   marlais_register_function ();
-  marlais_register_values ();
-  marlais_register_print ();
   marlais_register_integer ();
   marlais_register_float ();
-  marlais_register_apply ();
-  marlais_register_boolean ();
   marlais_register_string ();
   marlais_register_bytevector ();
   marlais_register_vector ();

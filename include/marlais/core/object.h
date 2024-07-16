@@ -138,9 +138,11 @@ static inline bool LISTP(Object obj) {
   return NULLP(obj)||PAIRP(obj);
 }
 
-Object make_handle (Object an_object);
+extern Object make_handle (Object an_object);
 
-ObjectType marlais_object_type (Object obj);
+extern ObjectType marlais_object_type (Object obj);
+
+extern Object marlais_object_class (Object obj);
 
 #define MARLAIS_CAST_OBJECT(_obj, _mtype, _ctype)        \
   ((_ctype *)_obj)

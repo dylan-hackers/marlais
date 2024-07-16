@@ -23,8 +23,7 @@ static struct primitive bytevector_prims[] =
 void
 marlais_register_bytevector (void)
 {
-  int num = sizeof (bytevector_prims) / sizeof (struct primitive);
-  marlais_register_prims(num, bytevector_prims);
+  MARLAIS_REGISTER_PRIMS(bytevector_prims);
 }
 
 /* Primitives */
