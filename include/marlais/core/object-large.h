@@ -7,6 +7,14 @@ typedef ObjectHeader *Object;
 #define MARLAIS_INTEGER_WIDTH (sizeof(marlais_int_t) * 8)
 #define MARLAIS_INTEGER_PRI    MARLAIS_INT_PRI
 
+/* Constant objects */
+#define MARLAIS_TRUE  (marlais_true)
+#define MARLAIS_FALSE (marlais_false)
+#define MARLAIS_NIL (marlais_nil)
+#define MARLAIS_EOF  (marlais_eof)
+#define MARLAIS_UNSPECIFIED (marlais_unspecified)
+#define MARLAIS_UNINITIALIZED (marlais_uninitialized)
+
 /* All objects are pointers */
 static inline bool POINTERP(Object obj) {
   return true;

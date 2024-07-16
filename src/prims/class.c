@@ -782,7 +782,7 @@ marlais_make_class (Object obj,
     marlais_warning ("Making class name", CLASSNAME(obj), NULL);
   }
   /* initialize class and each-subclass slot objects */
-  CLASSCSLOTS (obj) = marlais_allocate_object (Instance, sizeof (struct instance));
+  CLASSCSLOTS (obj) = marlais_allocate_object (Instance, sizeof (struct marlais_instance));
 
   INSTCLASS (CLASSCSLOTS (obj)) = marlais_class_class_slots;
 
@@ -1052,7 +1052,7 @@ make_instance (Object class, Object *initializers)
 {
   Object obj, ret;
 
-  obj = marlais_allocate_object (Instance, sizeof (struct instance));
+  obj = marlais_allocate_object (Instance, sizeof (struct marlais_instance));
 
   INSTCLASS (obj) = class;
   initialize_slotds (class);

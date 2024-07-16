@@ -36,12 +36,12 @@ marlais_initialize (void)
 
   /* intialize core constants */
 #ifdef MARLAIS_OBJECT_MODEL_LARGE
-  marlais_true = marlais_allocate_object (True, sizeof (struct empty));
-  marlais_false = marlais_allocate_object (False, sizeof (struct empty));
-  marlais_nil = marlais_allocate_object (EmptyList, sizeof (struct empty));
-  marlais_eof = marlais_allocate_object (EndOfFile, sizeof (struct empty));
-  marlais_unspecified = marlais_allocate_object (UnspecifiedValue, sizeof (struct empty));
-  marlais_uninitialized = marlais_allocate_object (UninitializedValue, sizeof (struct empty));
+  marlais_true = marlais_allocate_object (True, sizeof (struct marlais_empty));
+  marlais_false = marlais_allocate_object (False, sizeof (struct marlais_empty));
+  marlais_nil = marlais_allocate_object (EmptyList, sizeof (struct marlais_empty));
+  marlais_eof = marlais_allocate_object (EndOfFile, sizeof (struct marlais_empty));
+  marlais_unspecified = marlais_allocate_object (UnspecifiedValue, sizeof (struct marlais_empty));
+  marlais_uninitialized = marlais_allocate_object (UninitializedValue, sizeof (struct marlais_empty));
 #endif
 
   /* initialize additional constants */

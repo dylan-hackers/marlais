@@ -36,6 +36,18 @@
 
 #include <marlais/common.h>
 
+enum condtype {
+    SimpleError, TypeError, SimpleWarning,
+    SimpleRestart, Abort
+};
+
+struct condition {
+    ObjectHeader header;
+    enum condtype condtype;
+};
+
+#define CONDCTYPE(obj)    (((struct condition *)obj)->condtype)
+
 /* Register error primitives */
 extern void marlais_register_error (void);
 /* Signal a fatal error */

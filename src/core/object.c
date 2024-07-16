@@ -160,11 +160,11 @@ marlais_object_class (Object obj)
 }
 
 Object
-make_handle (Object an_object)
+marlais_make_handle (Object an_object)
 {
   Object new_handle;
 
-  new_handle = marlais_allocate_object (ObjectHandle, sizeof (struct object_handle));
+  new_handle = marlais_allocate_object (ObjectHandle, sizeof (struct marlais_handle));
 
   HDLOBJ (new_handle) = an_object;
   return (new_handle);

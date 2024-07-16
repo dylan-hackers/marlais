@@ -67,6 +67,13 @@ typedef marlais_uint_t MarlaisSub;
 #define UNSPECVAL       ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_UNSPECIFIED))
 #define UNINITVAL       ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_UNINITIALIZED))
 
+#define MARLAIS_TRUE  (TRUEVAL)
+#define MARLAIS_FALSE (FALSEVAL)
+#define MARLAIS_NIL (EMPTYLISTVAL)
+#define MARLAIS_EOF (EOFVAL)
+#define MARLAIS_UNSPECIFIED (UNSPECVAL)
+#define MARLAIS_UNINITIALIZED (UNINITVAL)
+
 /* Field extraction */
 static inline marlais_uint_t TAGPART(Object obj) {
   return (((marlais_uint_t)obj) & MARLAIS_TAG_MASK);

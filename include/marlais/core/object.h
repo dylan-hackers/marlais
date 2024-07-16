@@ -99,25 +99,7 @@ typedef struct {
 #error No object model configured.
 #endif
 
-#include <marlais/core/object-heap.h>
-
 #include <marlais/core/globals.h>
-
-#ifdef MARLAIS_OBJECT_MODEL_SMALL
-#define MARLAIS_TRUE  (TRUEVAL)
-#define MARLAIS_FALSE (FALSEVAL)
-#define MARLAIS_NIL (EMPTYLISTVAL)
-#define MARLAIS_EOF (EOFVAL)
-#define MARLAIS_UNSPECIFIED (UNSPECVAL)
-#define MARLAIS_UNINITIALIZED (UNINITVAL)
-#else
-#define MARLAIS_TRUE  (marlais_true)
-#define MARLAIS_FALSE (marlais_false)
-#define MARLAIS_NIL (marlais_nil)
-#define MARLAIS_EOF  (marlais_eof)
-#define MARLAIS_UNSPECIFIED (marlais_unspecified)
-#define MARLAIS_UNINITIALIZED (marlais_uninitialized)
-#endif
 
 /* Constructor for booleans */
 static inline Object marlais_make_boolean(bool b) {
@@ -138,11 +120,31 @@ static inline bool LISTP(Object obj) {
   return NULLP(obj)||PAIRP(obj);
 }
 
-extern Object make_handle (Object an_object);
+struct marlais_empty {
+    ObjectHeader header;
+};
+
+struct marlais_handle {
+    ObjectHeader header;
+    Object handle_reference;
+};
+
+#define HDLOBJ(obj)      (((struct marlais_handle *)obj)->handle_reference)
+
+struct marlais_instance {
+    ObjectHeader header;
+    Object class;
+    Object *slots;
+};
+
+#define INSTCLASS(obj)    (((struct marlais_instance *)obj)->class)
+#define INSTSLOTS(obj)    (((struct marlais_instance *)obj)->slots)
 
 extern ObjectType marlais_object_type (Object obj);
 
 extern Object marlais_object_class (Object obj);
+
+extern Object marlais_make_handle (Object an_object);
 
 #define MARLAIS_CAST_OBJECT(_obj, _mtype, _ctype)        \
   ((_ctype *)_obj)

@@ -155,7 +155,7 @@ marlais_make_method (Object name, Object params, Object body, struct environment
 
 #ifdef MARLAIS_ENABLE_METHOD_CACHING
   /* create my handle (will redo if replacing existing method) */
-  METHHANDLE (obj) = make_handle (obj);
+  METHHANDLE (obj) = marlais_make_handle (obj);
 #endif
 
   if (do_generic && name) {
