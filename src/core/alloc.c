@@ -95,20 +95,3 @@ marlais_strdup (const char *str)
   /* return result */
   return copy;
 }
-
-Object
-marlais_allocate_object (ObjectType type, size_t size)
-{
-  Object obj;
-  /* allocate memory for the object */
-  obj = (Object) marlais_malloc_general (size);
-  /* initialize header fields */
-#ifdef POINTERTYPE
-  POINTERTYPE(obj) = type;
-#endif
-#ifdef POINTERSIZE
-  POINTERSIZE(obj) = size;
-#endif
-  /* return result */
-  return obj;
-}

@@ -140,6 +140,13 @@ struct marlais_instance {
 #define INSTCLASS(obj)    (((struct marlais_instance *)obj)->class)
 #define INSTSLOTS(obj)    (((struct marlais_instance *)obj)->slots)
 
+/* Allocate an object with casting */
+#define MARLAIS_ALLOCATE_OBJECT(_repr, _type)                   \
+  ((_type *)marlais_allocate_object(_repr, sizeof(_type)))
+
+/* Allocate an object */
+extern Object marlais_allocate_object (ObjectType type, size_t size);
+
 extern ObjectType marlais_object_type (Object obj);
 
 extern Object marlais_object_class (Object obj);

@@ -43,32 +43,32 @@ extern void *marlais_malloc_atomic (size_t size);
 
 /* Reallocate memmory */
 extern void *marlais_realloc_general (void *old_obj, size_t new_size);
+/* Reallocate memmory */
+extern void *marlais_realloc_atomic (void *old_obj, size_t new_size);
+
 /* Free memory */
 extern void  marlais_free (void *obj);
+
 /* Allocate copy of a zero-terminated string */
 extern char *marlais_strdup (const char *str);
-
-/* Allocate an object */
-extern Object marlais_allocate_object (ObjectType type, size_t size);
 
 /* Allocate a structure with casting */
 #define MARLAIS_MALLOC_GENERAL(_type)                           \
   ((_type *)marlais_malloc_general(sizeof(_type)))
-/* Allocate an array with casting */
-#define MARLAIS_MALLOC_ARRAY_GENERAL(_nmemb,_type)              \
-  ((_type *)marlais_malloc_general((_nmemb)*sizeof(_type)))
 /* Allocate a structure with casting */
 #define MARLAIS_MALLOC_ATOMIC(_type)                            \
   ((_type *)marlais_malloc_atomic(sizeof(_type)))
+/* Allocate an array with casting */
+#define MARLAIS_MALLOC_ARRAY_GENERAL(_nmemb,_type)              \
+  ((_type *)marlais_malloc_general((_nmemb)*sizeof(_type)))
 /* Allocate an array with casting */
 #define MARLAIS_MALLOC_ARRAY_ATOMIC(_nmemb,_type)               \
   ((_type *)marlais_malloc_atomic((_nmemb)*sizeof(_type)))
 /* Reallocate an array with casting */
 #define MARLAIS_REALLOC_ARRAY_GENERAL(_oldptr,_nmemb,_type)             \
   ((_type *)marlais_realloc_general(((void*)(_oldptr)),(_nmemb)*sizeof(_type)))
-
-/* Allocate an object with casting */
-#define MARLAIS_ALLOCATE_OBJECT(_type, _repr)                   \
-  ((_repr *)marlais_allocate_object(_type, sizeof(_repr)))
+/* Reallocate an array with casting */
+#define MARLAIS_REALLOC_ARRAY_ATOMIC(_oldptr,_nmemb,_type)             \
+  ((_type *)marlais_realloc_atomic(((void*)(_oldptr)),(_nmemb)*sizeof(_type)))
 
 #endif
