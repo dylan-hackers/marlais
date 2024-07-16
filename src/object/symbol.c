@@ -50,7 +50,7 @@ struct symtab *symbol_table[SYMTAB_SIZE];
 
 /* Internal function declarations */
 
-static Object intern_symbol (ObjectType type, const char *name);
+static Object intern_symbol (marlais_repr_t type, const char *name);
 
 /* Exported functions */
 
@@ -145,7 +145,7 @@ marlais_name_to_symbol (Object symbol)
 /* Internal functions */
 
 static Object
-intern_symbol (ObjectType type, const char *name)
+intern_symbol (marlais_repr_t type, const char *name)
 {
   int i;
   unsigned h;

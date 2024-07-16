@@ -874,7 +874,7 @@ function_arguments (Object fun)
   Object params, keywords;
   Object has_rest;
 
-  switch (POINTERTYPE (fun)) {
+  switch (marlais_object_repr (fun)) {
   case GenericFunction:
     params = GFREQPARAMS (fun);
     if (GFALLKEYS (fun)) {

@@ -3,7 +3,7 @@
 #include <marlais/common.h>
 
 Object
-marlais_allocate_object (ObjectType type, size_t size)
+marlais_allocate_object (marlais_repr_t type, size_t size)
 {
   Object obj;
   /* allocate memory for the object */
@@ -21,7 +21,7 @@ marlais_allocate_object (ObjectType type, size_t size)
 
 #ifdef MARLAIS_OBJECT_MODEL_TAGGED
 
-ObjectType
+marlais_repr_t
 marlais_object_repr (Object obj)
 {
   if (POINTERP (obj)) {
@@ -58,14 +58,6 @@ marlais_object_repr (Object obj)
   }
   return (Uninitialized);
 }
-
-#else
-
-ObjectType
-marlais_object_repr (Object obj) {
-  return POINTERTYPE(obj);
-}
-
 #endif
 
 Object

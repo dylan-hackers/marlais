@@ -119,8 +119,8 @@ marlais_same_class_p (Object class1, Object class2)
 {
   if (class1 == class2) {
     return 1;
-  } else if ((POINTERTYPE (class1) == Singleton) &&
-             (POINTERTYPE (class2) == Singleton)) {
+  } else if ((marlais_object_repr (class1) == Singleton) &&
+             (marlais_object_repr (class2) == Singleton)) {
     if (marlais_identical_p (SINGLEVAL(class1), SINGLEVAL(class2))) {
       return 1;
     } else {

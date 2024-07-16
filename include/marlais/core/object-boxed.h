@@ -1,5 +1,10 @@
 
-typedef ObjectHeader *Object;
+typedef marlais_header_t *Object;
+
+static inline marlais_repr_t
+marlais_object_repr (Object obj) {
+  return obj->object_repr;
+}
 
 /* Constants for boxed integers */
 #define MARLAIS_INTEGER_MIN   (MARLAIS_INT_MIN)

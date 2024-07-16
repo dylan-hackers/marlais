@@ -37,7 +37,7 @@
 #include <marlais/common.h>
 
 struct marlais_pair {
-    ObjectHeader header;
+    marlais_header_t header;
     Object pair_car, pair_cdr;
 };
 
@@ -49,6 +49,13 @@ struct marlais_pair {
 #define THIRD(obj)      (CAR(CDR(CDR(obj))))
 #define FOURTH(obj)     (CAR(CDR(CDR(CDR(obj)))))
 #define FIFTH(obj)      (CAR(CDR(CDR(CDR(CDR(obj))))))
+
+static inline bool NULLP(Object obj) {
+  return EMPTYLISTP(obj);
+}
+static inline bool LISTP(Object obj) {
+  return NULLP(obj)||PAIRP(obj);
+}
 
 /* Register list primitives */
 extern void marlais_register_list (void);

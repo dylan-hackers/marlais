@@ -61,7 +61,7 @@ marlais_apply_internal (Object fun, Object args)
 #endif
 
   devalue_args (args);
-  switch (POINTERTYPE (fun)) {
+  switch (marlais_object_repr (fun)) {
   case Primitive:
     ret = marlais_apply_prim (fun, args);
     break;

@@ -39,7 +39,7 @@
 /* Data structures */
 
 struct marlais_byte_string {
-    ObjectHeader header;
+    marlais_header_t header;
     int size;
     char *val;
 };
@@ -49,7 +49,7 @@ struct marlais_byte_string {
 
 #ifdef MARLAIS_ENABLE_WCHAR
 struct marlais_wide_string {
-    ObjectHeader header;
+    marlais_header_t header;
     int size;
     wchar_t *val;
 };
@@ -60,7 +60,7 @@ struct marlais_wide_string {
 
 #ifdef MARLAIS_ENABLE_UCHAR
 struct marlais_unicode_string {
-    ObjectHeader header;
+    marlais_header_t header;
     int size;
     UChar *val;
 };

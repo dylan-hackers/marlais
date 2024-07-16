@@ -39,7 +39,7 @@
 /* Data structures */
 
 struct marlais_symbol {
-    ObjectHeader header;
+    marlais_header_t header;
     char *name;
 };
 

@@ -40,7 +40,7 @@
 /* Data structures */
 
 struct marlais_deque {
-    ObjectHeader header;
+    marlais_header_t header;
     Object first, last;
 };
 
@@ -48,7 +48,7 @@ struct marlais_deque {
 #define DEQUELAST(obj)    (((struct marlais_deque *)obj)->last)
 
 struct marlais_deque_entry {
-    ObjectHeader header;
+    marlais_header_t header;
     Object value;
     Object prev, next;
 };

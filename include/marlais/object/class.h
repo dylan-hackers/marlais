@@ -9,7 +9,7 @@
 /* Data structures */
 
 struct marlais_class {
-    ObjectHeader header;
+    marlais_header_t header;
     Object name;
     Object supers;
     Object subs;
@@ -74,7 +74,7 @@ enum {
 #define CLASSINDEX(obj)     (((struct marlais_class *)obj)->ordinal_index)
 
 struct marlais_slot_descriptor {
-    ObjectHeader header;
+    marlais_header_t header;
     unsigned char properties;
     Object getter_name;
     Object setter_name;

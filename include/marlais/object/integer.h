@@ -38,14 +38,14 @@
 
 #if defined(MARLAIS_OBJECT_MODEL_BOXED)
 struct marlais_small_integer {
-    ObjectHeader header;
+    marlais_header_t header;
     marlais_int_t val;
 };
 #define INTVAL(obj)       (((struct marlais_small_integer *)obj)->val)
 #endif
 
 struct marlais_small_ratio {
-    ObjectHeader header;
+    marlais_header_t header;
     marlais_int_t numerator, denominator;
 };
 
@@ -63,5 +63,12 @@ static inline Object marlais_make_integer(marlais_int_t i) {
 #else
 extern Object marlais_make_integer (marlais_int_t i);
 #endif
+
+static inline bool ZEROP(Object obj) {
+  return INTEGERP(obj) && (INTVAL(obj) == 0);
+}
+static inline bool UNSIGNEDP(Object obj) {
+  return INTEGERP(obj) && (INTVAL(obj) >= 0);
+}
 
 #endif

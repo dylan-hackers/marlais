@@ -39,7 +39,7 @@
 /* Data structures */
 
 struct marlais_table {
-    ObjectHeader header;
+    marlais_header_t header;
     int size;
     Object *the_table;
 };
@@ -48,7 +48,7 @@ struct marlais_table {
 #define TABLETABLE(obj)   (((struct marlais_table *)obj)->the_table)
 
 struct marlais_table_entry {
-    ObjectHeader header;
+    marlais_header_t header;
     int row;
     Object key;
     Object value;

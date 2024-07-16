@@ -35,7 +35,7 @@
 #include <marlais/common.h>
 
 struct marlais_foreign_ptr {
-    ObjectHeader header;
+    marlais_header_t header;
     void *ptr;
 };
 

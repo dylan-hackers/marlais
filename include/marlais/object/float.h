@@ -45,21 +45,21 @@ typedef long double marlais_efloat_t;
 /* Data structures */
 
 struct marlais_sfloat {
-    ObjectHeader header;
+    marlais_header_t header;
     marlais_sfloat_t sfloat_value;
 };
 
 #define SFLOATVAL(obj)    (((struct marlais_sfloat *)obj)->sfloat_value)
 
 struct marlais_dfloat {
-    ObjectHeader header;
+    marlais_header_t header;
     marlais_dfloat_t dfloat_value;
 };
 
 #define DFLOATVAL(obj)    (((struct marlais_dfloat *)obj)->dfloat_value)
 
 struct marlais_efloat {
-    ObjectHeader header;
+    marlais_header_t header;
     marlais_efloat_t efloat_value;
 };
 

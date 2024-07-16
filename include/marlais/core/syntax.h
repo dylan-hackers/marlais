@@ -6,7 +6,7 @@
 #include <marlais/common.h>
 
 struct exitproc {
-    ObjectHeader header;
+    marlais_header_t header;
     Object  sym;
     Object  val;
     jmp_buf jmp;
@@ -19,7 +19,7 @@ struct exitproc {
 #define EXITBINDING(obj)  (((struct exitproc *)obj)->exit_binding)
 
 struct unwind {
-    ObjectHeader header;
+    marlais_header_t header;
     Object body;
 };
 

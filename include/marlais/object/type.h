@@ -4,21 +4,21 @@
 #include <marlais/common.h>
 
 struct singleton {
-    ObjectHeader header;
+    marlais_header_t header;
     Object val;
 };
 
 #define SINGLEVAL(obj)    (((struct singleton *)obj)->val)
 
 struct subclass {
-    ObjectHeader header;
+    marlais_header_t header;
     Object val;
 };
 
 #define SUBCLASSVAL(obj)    (((struct subclass *)obj)->val)
 
 struct limited_int_type {
-    ObjectHeader header;
+    marlais_header_t header;
     unsigned char properties;
     int min, max;
 };
@@ -32,7 +32,7 @@ struct limited_int_type {
 #define LIMINTMAX(obj)    (((struct limited_int_type *)obj)->max)
 
 struct union_type {
-    ObjectHeader header;
+    marlais_header_t header;
     Object list;
 };
 

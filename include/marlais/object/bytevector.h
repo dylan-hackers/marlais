@@ -39,7 +39,7 @@
 /* Data structures */
 
 struct marlais_bytevector {
-    ObjectHeader header;
+    marlais_header_t header;
     int bv_size;
     uint8_t *bv_data;
 };

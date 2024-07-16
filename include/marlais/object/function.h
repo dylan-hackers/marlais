@@ -37,7 +37,7 @@
 #include <marlais/common.h>
 
 struct marlais_generic_function {
-    ObjectHeader header;
+    marlais_header_t header;
     Object name;
     unsigned char properties;
     Object required_params;
@@ -67,7 +67,7 @@ struct marlais_generic_function {
 #define GFACTIVENM(obj)   (((struct marlais_generic_function *)obj)->active_next_methods)
 
 struct marlais_method {
-    ObjectHeader header;
+    marlais_header_t header;
     Object name;
     unsigned char properties;
     Object required_params;
@@ -96,7 +96,7 @@ struct marlais_method {
 #define METHHANDLE(obj)     (((struct marlais_method *)obj)->my_handle)
 
 struct marlais_next_method {
-    ObjectHeader header;
+    marlais_header_t header;
     Object generic_function;
     Object next_method_;
     Object rest_methods;

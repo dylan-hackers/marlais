@@ -8,21 +8,21 @@
 #include <gmp.h>
 
 struct marlais_bigfloat {
-  ObjectHeader header;
+  marlais_header_t header;
   mpf_t mpf;
 };
 
 #define MPFVAL(obj) (((struct marlais_bigfloat *)obj)->mpf)
 
 struct marlais_bigratio {
-  ObjectHeader header;
+  marlais_header_t header;
   mpq_t mpq;
 };
 
 #define MPQVAL(obj) (((struct marlais_bigratio *)obj)->mpq)
 
 struct marlais_biginteger {
-  ObjectHeader header;
+  marlais_header_t header;
   mpz_t mpz;
 };
 

@@ -42,7 +42,7 @@ enum condtype {
 };
 
 struct condition {
-    ObjectHeader header;
+    marlais_header_t header;
     enum condtype condtype;
 };
 

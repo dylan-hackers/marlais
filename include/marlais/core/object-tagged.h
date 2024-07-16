@@ -12,6 +12,9 @@
 /* Type for marlais objects */
 typedef void *Object;
 
+/* Determine the representation of an object */
+extern marlais_repr_t marlais_object_repr (Object obj);
+
 /* Type for handling value tags */
 typedef marlais_uint_t MarlaisTag;
 #define MARLAIS_TAG_SHIFT         (0)

@@ -75,21 +75,25 @@ typedef enum {
     StdioHandle,
 
     Ratio,
-} ObjectType;
+} marlais_repr_t;
+
+struct marlais_header;
+struct marlais_empty;
+struct marlais_instance;
+struct marlais_handle;
+
+typedef struct marlais_header marlais_header_t;
+typedef struct marlais_empty marlais_empty_t;
+typedef struct marlais_instance marlais_instance_t;
+typedef struct marlais_handle marlais_handle_t;
 
 /* Common header of all heap objects */
-typedef struct {
+struct marlais_header {
   /* Low-level type of the object */
-  ObjectType object_type;
-#if 0
-  /* Size of the object in bytes */
-  size_t     object_size;
-#endif
-} ObjectHeader;
+  marlais_repr_t object_repr;
+};
 
-/* Accessor for the type of a heap object */
-#define POINTERTYPE(obj) (((ObjectHeader *)obj)->object_type)
-//#define POINTERSIZE(obj) (((ObjectHeader *)obj)->object_size)
+#define POINTERTYPE(obj) (((marlais_header_t *)(obj))->object_repr)
 
 #if defined(MARLAIS_OBJECT_MODEL_BOXED)
 #include <marlais/core/object-boxed.h>
@@ -99,46 +103,30 @@ typedef struct {
 #error No object model configured.
 #endif
 
-#include <marlais/core/globals.h>
-
-/* Constructor for booleans */
-static inline Object marlais_make_boolean(bool b) {
-  return b ? MARLAIS_TRUE : MARLAIS_FALSE;
-}
-
-/* Additional predicates */
-static inline bool ZEROP(Object obj) {
-  return INTEGERP(obj) && (INTVAL(obj) == 0);
-}
-static inline bool UNSIGNEDP(Object obj) {
-  return INTEGERP(obj) && (INTVAL(obj) >= 0);
-}
-static inline bool NULLP(Object obj) {
-  return EMPTYLISTP(obj);
-}
-static inline bool LISTP(Object obj) {
-  return NULLP(obj)||PAIRP(obj);
-}
-
+/* Empty objects (used for constants in boxed model) */
 struct marlais_empty {
-    ObjectHeader header;
+    marlais_header_t header;
 };
 
-struct marlais_handle {
-    ObjectHeader header;
-    Object handle_reference;
-};
-
-#define HDLOBJ(obj)      (((struct marlais_handle *)obj)->handle_reference)
-
+/* Instances of user-defined classes */
 struct marlais_instance {
-    ObjectHeader header;
+    marlais_header_t header;
     Object class;
     Object *slots;
 };
 
 #define INSTCLASS(obj)    (((struct marlais_instance *)obj)->class)
 #define INSTSLOTS(obj)    (((struct marlais_instance *)obj)->slots)
+
+/* Object handles (used internally) */
+struct marlais_handle {
+    marlais_header_t header;
+    Object handle_reference;
+};
+
+#define HDLOBJ(obj)      (((struct marlais_handle *)obj)->handle_reference)
+
+#include <marlais/core/globals.h>
 
 /* Allocate an object with casting */
 #define MARLAIS_ALLOCATE_OBJECT(_repr, _type)           \
@@ -148,15 +136,11 @@ struct marlais_instance {
 #define MARLAIS_CAST_OBJECT(_obj, _repr, _type) \
   ((_type *)_obj)
 
-/* Allocate an object */
-extern Object marlais_allocate_object (ObjectType type, size_t size);
-
-
-/* Determine the representation of an object */
-extern ObjectType marlais_object_repr (Object obj);
-
 /* Determine the object class of an object */
 extern Object marlais_object_class (Object obj);
+
+/* Allocate an object */
+extern Object marlais_allocate_object (marlais_repr_t repr, size_t size);
 
 /* Make a handle for the given object */
 extern Object marlais_make_handle (Object obj);

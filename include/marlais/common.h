@@ -28,6 +28,7 @@
 #include <marlais/core/compiler.h>
 #include <marlais/core/object.h>
 #include <marlais/core/alloc.h>
+#include <marlais/core/boolean.h>
 #include <marlais/core/compare.h>
 #include <marlais/core/error.h>
 #include <marlais/core/print.h>

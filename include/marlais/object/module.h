@@ -4,7 +4,7 @@
 #include <marlais/common.h>
 
 struct marlais_module {
-    ObjectHeader header;
+    marlais_header_t header;
     Object sym;
     struct environment *namespace;
     Object exported_bindings;

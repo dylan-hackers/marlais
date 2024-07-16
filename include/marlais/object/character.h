@@ -40,7 +40,7 @@
 
 #if defined(MARLAIS_OBJECT_MODEL_BOXED)
 struct marlais_bchar {
-    ObjectHeader header;
+    marlais_header_t header;
     char bchar_value;
 };
 #define CHARVAL(obj)       (((struct marlais_bchar *)obj)->bchar_value)
@@ -48,7 +48,7 @@ struct marlais_bchar {
 
 #if defined(MARLAIS_OBJECT_MODEL_BOXED) && defined(MARLAIS_ENABLE_WCHAR)
 struct marlais_wchar {
-    ObjectHeader header;
+    marlais_header_t header;
     wchar_t wchar_value;
 };
 #define WCHARVAL(obj)       (((struct marlais_wchar *)obj)->wchar_value)
@@ -56,7 +56,7 @@ struct marlais_wchar {
 
 #if defined(MARLAIS_OBJECT_MODEL_BOXED) && defined(MARLAIS_ENABLE_UCHAR)
 struct marlais_uchar {
-    ObjectHeader header;
+    marlais_header_t header;
     UChar32 uchar_value;
 };
 #define UCHARVAL(obj)       (((struct marlais_uchar *)obj)->uchar_value)

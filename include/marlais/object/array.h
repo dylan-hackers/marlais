@@ -39,7 +39,7 @@
 /* Data structures */
 
 struct marlais_array {
-    ObjectHeader header;
+    marlais_header_t header;
     int     array_size;
     Object  array_dimensions;
     Object *array_elements;

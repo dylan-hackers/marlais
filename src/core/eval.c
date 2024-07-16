@@ -33,11 +33,7 @@ marlais_eval (Object obj)
     }
 #endif
 
-#ifdef MARLAIS_OBJECT_MODEL_TAGGED
-    switch (POINTERTYPE (obj))
-#else
-    switch (object_type (obj))
-#endif
+    switch (marlais_object_repr (obj))
     {
     case Values:
         return marlais_error ("Trying to eval a values object (this is a bug)",

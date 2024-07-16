@@ -4,7 +4,7 @@
 #include <marlais/common.h>
 
 struct marlais_stdio_handle {
-  ObjectHeader header;
+  marlais_header_t header;
   bool owned;
   FILE *file;
 };

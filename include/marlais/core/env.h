@@ -40,7 +40,7 @@
 #define TOP_LEVEL_SIZE 1024
 
 struct environment {
-    ObjectHeader header;
+    marlais_header_t header;
     int size;
     Object owner;
     struct binding **bindings;

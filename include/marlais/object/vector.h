@@ -39,7 +39,7 @@
 /* Data structures */
 
 struct marlais_vector {
-    ObjectHeader header;
+    marlais_header_t header;
     int     vector_size;
     Object *vector_elements;
 };

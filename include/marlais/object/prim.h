@@ -52,7 +52,7 @@ struct primitive {
     Object (*fun) ();
 };
 struct prim {
-    ObjectHeader header;
+    marlais_header_t header;
     struct primitive p;
 };
 

@@ -37,7 +37,7 @@
 #include <marlais/common.h>
 
 struct marlais_values {
-    ObjectHeader header;
+    marlais_header_t header;
     int     values_size;
     Object *values_elts;
 };
