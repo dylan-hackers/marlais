@@ -151,10 +151,14 @@ struct marlais_instance {
 /* Allocate an object */
 extern Object marlais_allocate_object (ObjectType type, size_t size);
 
-extern ObjectType marlais_object_type (Object obj);
 
+/* Determine the representation of an object */
+extern ObjectType marlais_object_repr (Object obj);
+
+/* Determine the object class of an object */
 extern Object marlais_object_class (Object obj);
 
-extern Object marlais_make_handle (Object an_object);
+/* Make a handle for the given object */
+extern Object marlais_make_handle (Object obj);
 
 #endif

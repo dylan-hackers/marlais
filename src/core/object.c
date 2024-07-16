@@ -22,7 +22,7 @@ marlais_allocate_object (ObjectType type, size_t size)
 #ifdef MARLAIS_OBJECT_MODEL_TAGGED
 
 ObjectType
-marlais_object_type (Object obj)
+marlais_object_repr (Object obj)
 {
   if (POINTERP (obj)) {
     return (POINTERTYPE (obj));
@@ -62,7 +62,7 @@ marlais_object_type (Object obj)
 #else
 
 ObjectType
-marlais_object_type (Object obj) {
+marlais_object_repr (Object obj) {
   return POINTERTYPE(obj);
 }
 
@@ -71,7 +71,7 @@ marlais_object_type (Object obj) {
 Object
 marlais_object_class (Object obj)
 {
-  switch (marlais_object_type (obj)) {
+  switch (marlais_object_repr (obj)) {
   case Integer:
     return (marlais_class_small_integer);
   case True:

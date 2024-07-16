@@ -69,7 +69,7 @@ marlais_print_object (Object fd, Object obj, int escaped)
   UFILE *ufp;
 #endif
 
-  switch (marlais_object_type (obj)) {
+  switch (marlais_object_repr (obj)) {
   case True:
     fprintf (fp, "#t");
     break;
@@ -784,7 +784,7 @@ print_type_name (Object fd, Object obj, int escaped)
 {
   FILE *fp = print_file_from_fd(fd);
 
-  switch (marlais_object_type (obj)) {
+  switch (marlais_object_repr (obj)) {
   case Class:
     fprintf (fp, "%s", SYMBOLNAME (CLASSNAME (obj)));
     break;
