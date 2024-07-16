@@ -92,6 +92,7 @@ add_library(marlais_lib
   core/globals.c
   core/object.c
   core/syntax.c
+  object/array.c
   object/bytevector.c
   object/condition.c
   object/deque.c

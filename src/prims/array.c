@@ -37,11 +37,6 @@
 #include <marlais/core/alloc.h>
 #include <marlais/object/prim.h>
 
-/* Internal function declarations */
-
-static Object array_make (Object dims, Object fill);
-static int    array_index (Object arr, Object indices, Object default_ob);
-
 /* Primitives */
 
 static Object array_size (Object arr);
@@ -78,118 +73,9 @@ marlais_register_array (void)
   marlais_register_prims (num, array_prims);
 }
 
-Object
-marlais_make_array_entrypoint (Object args)
-{
-  Object dim_obj, fill_obj, res;
-
-  dim_obj = NULL;
-  fill_obj = NULL;
-
-  while (!EMPTYLISTP (args)) {
-    if (FIRST (args) == dim_keyword) {
-      dim_obj = SECOND (args);
-    } else if (FIRST (args) == fill_keyword) {
-      fill_obj = SECOND (args);
-    } else {
-      marlais_error ("make: unsupported keyword for <object-array> class",
-                     FIRST (args), NULL);
-    }
-    args = CDR (CDR (args));
-  }
-  if (dim_obj) {
-    if (!LISTP (dim_obj)) {
-      marlais_error ("make: value of dimensions: argument must be a list of integers",
-                     dim_obj, NULL);
-    }
-  } else {
-    marlais_error ("make: dimensions: must be specified for <object-array>", args, NULL);
-  }
-  if (!fill_obj) {
-    fill_obj = MARLAIS_FALSE;
-  }
-  /* actually fabricate the array */
-  res = array_make (dim_obj, fill_obj);
-  return (res);
-}
-
-/* Static functions */
-
-static Object
-array_make (Object dims, Object fill)
-{
-  Object obj, dl, val;
-  unsigned int size, i;
-
-  obj = marlais_allocate_object (ObjectArray, sizeof (struct marlais_array));
-
-  ARRDIMS (obj) = dims;
-  dl = dims;
-  size = 1;
-  while (!EMPTYLISTP (dl)) {
-    val = CAR (dl);
-    if (!INTEGERP (val)) {
-      marlais_error ("make: array dimensions must be integers", dims, NULL);
-    }
-    size *= INTVAL (val);
-    dl = CDR (dl);
-  }
-  ARRELS (obj) = MARLAIS_MALLOC_ARRAY_GENERAL (size, Object);
-
-  ARRSIZE (obj) = size;
-  for (i = 0; i < size; ++i) {
-    ARRELS (obj)[i] = fill;
-  }
-  return (obj);
-}
-
-static int
-array_index (Object arr, Object indices, Object default_ob)
-{
-  Object dims, inds, ind, dim;
-  unsigned int offset, dim_val;
-  int ind_val;
-  unsigned int index_stride = 1;
-
-  dims = marlais_list_reverse (ARRDIMS (arr));
-  inds = marlais_list_reverse (indices);
-  offset = 0;
-
-  while (!EMPTYLISTP (dims) && !EMPTYLISTP (inds)) {
-    if (EMPTYLISTP (dims)) {
-      marlais_error ("element: too many indices for array", arr, indices, NULL);
-    }
-    if (EMPTYLISTP (inds)) {
-      marlais_error ("element: not enough indices given", arr, indices, NULL);
-    }
-    dim = CAR (dims);
-    ind = CAR (inds);
-    if (!INTEGERP (ind)) {
-      marlais_error ("element: array indices must be integers", ind, NULL);
-    }
-    dim_val = INTVAL (dim);
-    ind_val = INTVAL (ind);
-    if ((ind_val < 0) || (ind_val >= dim_val)) {
-      if (default_ob == marlais_default) {
-        marlais_error ("element: array indices out of range", indices,
-                       ARRDIMS (arr), NULL);
-      } else {
-        return -1;
-      }
-    }
-    offset += (ind_val * index_stride);
-    index_stride *= dim_val;
-    dims = CDR (dims);
-    inds = CDR (inds);
-  }
-  if (!EMPTYLISTP (dims)) {
-    marlais_error ("element: not enough indices for array", arr, indices, NULL);
-  }
-  if (!EMPTYLISTP (inds)) {
-    marlais_error ("element: too many indices given", arr, indices, NULL);
-  }
-  return offset;
-}
+/*
+ * Note that the key of an array collection is the list of indices.
+ */
 
 static Object
 array_size (Object arr)
@@ -197,20 +83,16 @@ array_size (Object arr)
   return marlais_make_integer (ARRSIZE (arr));
 }
 
-/*
- * Note that the key of an array collection is the list of indices.
- */
-
 static Object
 array_ref (Object arr, Object indices, Object default_ob)
 {
-  return (ARRELS (arr)[array_index (arr, indices, default_ob)]);
+  return (ARRELS (arr)[marlais_array_index (arr, indices, default_ob)]);
 }
 
 static Object
 array_ref_setter (Object arr, Object indices, Object new_val)
 {
-  ARRELS (arr)[array_index (arr, indices, marlais_default)] = new_val;
+  ARRELS (arr)[marlais_array_index (arr, indices, marlais_default)] = new_val;
   return (MARLAIS_UNSPECIFIED);
 }
 
@@ -287,5 +169,5 @@ array_current_element (Object arr, Object state)
 static Object
 array_row_major_index (Object arr, Object indices)
 {
-  return marlais_make_integer (array_index (arr, indices, marlais_default));
+  return marlais_make_integer (marlais_array_index (arr, indices, marlais_default));
 }

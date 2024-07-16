@@ -56,4 +56,8 @@ extern void marlais_register_array (void);
 /* Entrypoint for make(<array>) */
 extern Object marlais_make_array_entrypoint (Object args);
 
+extern Object marlais_make_array (Object dims, Object fill);
+extern int    marlais_array_size (Object arr);
+extern int    marlais_array_index (Object arr, Object indices, Object default_ob);
+
 #endif /* !MARLAIS_ARRAY_H */

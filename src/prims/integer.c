@@ -98,34 +98,6 @@ marlais_register_integer (void)
                       marlais_make_integer (MARLAIS_INTEGER_MAX), 1);
 }
 
-#ifndef MARLAIS_OBJECT_MODEL_SMALL
-/* small version is inline in marlais/number.h */
-Object
-marlais_make_integer (marlais_int_t i)
-{
-  Object obj;
-
-#if MARLAIS_CONFIG_INTEGER_CACHE > 0
-  if(i >= 0 && i < MARLAIS_CONFIG_INTEGER_CACHE) {
-    if(integer_cache[i] != NULL) {
-      return integer_cache[i];
-    }
-  }
-#endif
-
-  obj = marlais_allocate_object (Integer, sizeof (struct integer));
-  INTVAL (obj) = i;
-
-#if MARLAIS_CONFIG_INTEGER_CACHE > 0
-  if(i >= 0 && i < MARLAIS_CONFIG_INTEGER_CACHE) {
-    integer_cache[i] = obj;
-  }
-#endif
-
-  return (obj);
-}
-#endif
-
 /* Primitives */
 
 static Object
