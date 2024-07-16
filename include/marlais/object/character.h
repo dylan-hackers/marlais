@@ -41,25 +41,25 @@
 #if defined(MARLAIS_OBJECT_MODEL_LARGE)
 struct marlais_bchar {
     ObjectHeader header;
-    char val;
+    char bchar_value;
 };
-#define CHARVAL(obj)       (((struct marlais_bchar *)obj)->val)
+#define CHARVAL(obj)       (((struct marlais_bchar *)obj)->bchar_value)
 #endif
 
 #if defined(MARLAIS_OBJECT_MODEL_LARGE) && defined(MARLAIS_ENABLE_WCHAR)
 struct marlais_wchar {
     ObjectHeader header;
-    wchar_t val;
+    wchar_t wchar_value;
 };
-#define WCHARVAL(obj)       (((struct marlais_wchar *)obj)->val)
+#define WCHARVAL(obj)       (((struct marlais_wchar *)obj)->wchar_value)
 #endif
 
 #if defined(MARLAIS_OBJECT_MODEL_LARGE) && defined(MARLAIS_ENABLE_UCHAR)
 struct marlais_uchar {
     ObjectHeader header;
-    UChar32 val;
+    UChar32 uchar_value;
 };
-#define UCHARVAL(obj)       (((struct marlais_uchar *)obj)->val)
+#define UCHARVAL(obj)       (((struct marlais_uchar *)obj)->uchar_value)
 #endif
 
 /* Function declarations */

@@ -43,7 +43,7 @@ marlais_get_current_module (void)
 Object
 marlais_set_current_module (Object new_module)
 {
-  struct module *m = MODULE(new_module);
+  struct marlais_module *m = MODULE(new_module);
   Object old_module = marlais_get_current_module ();
 
   the_env = m->namespace;
@@ -61,10 +61,10 @@ marlais_set_current_module (Object new_module)
 Object
 marlais_make_module (Object module_name)
 {
-  struct module *module;
+  struct marlais_module *module;
 
   /* construct the module */
-  module = MARLAIS_ALLOCATE_OBJECT (Module, struct module);
+  module = MARLAIS_ALLOCATE_OBJECT (Module, struct marlais_module);
   module->sym = module_name;
   module->namespace = marlais_make_toplevel (module);
   module->exported_bindings = marlais_make_table (DEFAULT_TABLE_SIZE);
@@ -135,7 +135,7 @@ marlais_use_module (Object module_name,
   struct binding *binding;
   struct binding *bindings = NULL;
   struct binding *old_binding;
-  struct module *import_module;
+  struct marlais_module *import_module;
   unsigned i;
   int all_imports;
   char *prefix_string;

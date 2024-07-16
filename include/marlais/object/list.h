@@ -36,13 +36,13 @@
 
 #include <marlais/common.h>
 
-struct pair {
+struct marlais_pair {
     ObjectHeader header;
-    Object car, cdr;
+    Object pair_car, pair_cdr;
 };
 
-#define CAR(obj)          (((struct pair *)obj)->car)
-#define CDR(obj)          (((struct pair *)obj)->cdr)
+#define CAR(obj)          (((struct marlais_pair *)obj)->pair_car)
+#define CDR(obj)          (((struct marlais_pair *)obj)->pair_cdr)
 
 #define FIRST(obj)      (CAR(obj))
 #define SECOND(obj)     (CAR(CDR(obj)))

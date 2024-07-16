@@ -3,14 +3,14 @@
 
 #include <marlais/common.h>
 
-struct module {
+struct marlais_module {
     ObjectHeader header;
     Object sym;
     struct environment *namespace;
     Object exported_bindings;
 };
 
-#define MODULE(obj) ((struct module *)obj)
+#define MODULE(obj) ((struct marlais_module *)obj)
 
 /* TODO do we want these exposed? */
 extern Object marlais_all_modules;

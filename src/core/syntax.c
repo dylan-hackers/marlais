@@ -897,7 +897,7 @@ define_module_eval (Object form)
   Object clauses, clause;
   Object module_name;
   Object option;
-  struct module *the_module;
+  struct marlais_module *the_module;
 
   /* Bogus for now */
   if (PAIRP (form) && marlais_list_length (form) >= 2 && NAMEP (SECOND (form))) {

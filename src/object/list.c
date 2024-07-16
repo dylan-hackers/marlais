@@ -78,7 +78,7 @@ marlais_copy_list (Object lst)
 Object
 marlais_cons (Object car, Object cdr)
 {
-    Object obj = marlais_allocate_object (Pair, sizeof (struct pair));
+    Object obj = marlais_allocate_object (Pair, sizeof (struct marlais_pair));
 
     CAR (obj) = car;
     CDR (obj) = cdr;

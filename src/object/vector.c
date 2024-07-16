@@ -45,7 +45,7 @@ marlais_make_vector (int size, Object fill_obj)
   int i;
 
   /* allocate the object and the vector */
-  res = marlais_allocate_object (ObjectVector, sizeof (struct marlais_object_vector));
+  res = marlais_allocate_object (ObjectVector, sizeof (struct marlais_vector));
   SOVSIZE (res) = size;
   SOVELS (res) = MARLAIS_MALLOC_ARRAY_GENERAL (size, Object);
 
@@ -79,7 +79,7 @@ marlais_list_to_vector (Object list)
 
   /* TODO improve this - count first, allocate, overwrite */
 
-  obj = marlais_allocate_object (ObjectVector, sizeof (struct marlais_object_vector));
+  obj = marlais_allocate_object (ObjectVector, sizeof (struct marlais_vector));
 
   size = 0;
   els = list;

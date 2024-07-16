@@ -40,14 +40,14 @@
 
 struct marlais_array {
     ObjectHeader header;
-    int size;
-    Object dimensions;
-    Object *elements;
+    int     array_size;
+    Object  array_dimensions;
+    Object *array_elements;
 };
 
-#define ARRSIZE(obj)      (((struct marlais_array *)obj)->size)
-#define ARRDIMS(obj)      (((struct marlais_array *)obj)->dimensions)
-#define ARRELS(obj)       (((struct marlais_array *)obj)->elements)
+#define ARRSIZE(obj)      (((struct marlais_array *)obj)->array_size)
+#define ARRDIMS(obj)      (((struct marlais_array *)obj)->array_dimensions)
+#define ARRELS(obj)       (((struct marlais_array *)obj)->array_elements)
 
 /* Function declarations */
 
