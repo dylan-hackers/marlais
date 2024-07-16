@@ -232,22 +232,22 @@ marlais_register_float (void)
 }
 
 Object
-marlais_make_sfloat (float f)
+marlais_make_sfloat (marlais_sfloat_t value)
 {
     Object obj;
 
-    if(f == 0.0 && sfloat_zero) {
+    if(value == 0.0 && sfloat_zero) {
       return sfloat_zero;
-    } else if (f == 1.0 && sfloat_one) {
+    } else if (value == 1.0 && sfloat_one) {
       return sfloat_one;
     }
 
-    obj = marlais_allocate_object (SingleFloat, sizeof (struct single_float));
-    SFLOATVAL (obj) = f;
+    obj = marlais_allocate_object (SingleFloat, sizeof (struct marlais_sfloat));
+    SFLOATVAL (obj) = value;
 
-    if(f == 0.0) {
+    if(value == 0.0) {
       sfloat_zero = obj;
-    } else if (f == 1.0) {
+    } else if (value == 1.0) {
       sfloat_one = obj;
     }
 
@@ -255,22 +255,22 @@ marlais_make_sfloat (float f)
 }
 
 Object
-marlais_make_dfloat (double d)
+marlais_make_dfloat (double value)
 {
     Object obj;
 
-    if(d == 0.0 && dfloat_zero) {
+    if(value == 0.0 && dfloat_zero) {
       return dfloat_zero;
-    } else if (d == 1.0 && dfloat_one) {
+    } else if (value == 1.0 && dfloat_one) {
       return dfloat_one;
     }
 
-    obj = marlais_allocate_object (DoubleFloat, sizeof (struct double_float));
-    DFLOATVAL (obj) = d;
+    obj = marlais_allocate_object (DoubleFloat, sizeof (struct marlais_dfloat));
+    DFLOATVAL (obj) = value;
 
-    if(d == 0.0) {
+    if(value == 0.0) {
       dfloat_zero = obj;
-    } else if (d == 1.0) {
+    } else if (value == 1.0) {
       dfloat_one = obj;
     }
 
@@ -279,22 +279,22 @@ marlais_make_dfloat (double d)
 
 #ifdef MARLAIS_ENABLE_EFLOAT
 Object
-marlais_make_efloat (long double e)
+marlais_make_efloat (long double value)
 {
     Object obj;
 
-    if(e == 0.0 && efloat_zero) {
+    if(value == 0.0 && efloat_zero) {
       return efloat_zero;
-    } else if (e == 1.0 && efloat_one) {
+    } else if (value == 1.0 && efloat_one) {
       return efloat_one;
     }
 
-    obj = marlais_allocate_object (ExtendedFloat, sizeof (struct extended_float));
-    EFLOATVAL (obj) = e;
+    obj = marlais_allocate_object (ExtendedFloat, sizeof (struct marlais_efloat));
+    EFLOATVAL (obj) = value;
 
-    if(e == 0.0) {
+    if(value == 0.0) {
       efloat_zero = obj;
-    } else if (e == 1.0) {
+    } else if (value == 1.0) {
       efloat_one = obj;
     }
 

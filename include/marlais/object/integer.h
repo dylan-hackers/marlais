@@ -37,20 +37,20 @@
 #include <marlais/common.h>
 
 #if defined(MARLAIS_OBJECT_MODEL_LARGE)
-struct integer {
+struct marlais_small_integer {
     ObjectHeader header;
     marlais_int_t val;
 };
-#define INTVAL(obj)       (((struct integer *)obj)->val)
+#define INTVAL(obj)       (((struct marlais_small_integer *)obj)->val)
 #endif
 
-struct ratio {
+struct marlais_small_ratio {
     ObjectHeader header;
     marlais_int_t numerator, denominator;
 };
 
-#define RATIONUM(obj)     (((struct ratio *)obj)->numerator)
-#define RATIODEN(obj)     (((struct ratio *)obj)->denominator)
+#define RATIONUM(obj)     (((struct marlais_small_ratio *)obj)->numerator)
+#define RATIODEN(obj)     (((struct marlais_small_ratio *)obj)->denominator)
 
 /* Register integer primitives */
 extern void marlais_register_integer (void);

@@ -36,40 +36,46 @@
 
 #include <marlais/common.h>
 
+/* Types */
+
+typedef float marlais_sfloat_t;
+typedef double marlais_dfloat_t;
+typedef long double marlais_efloat_t;
+
 /* Data structures */
 
-struct single_float {
+struct marlais_sfloat {
     ObjectHeader header;
-    float val;
+    marlais_sfloat_t sfloat_value;
 };
 
-#define SFLOATVAL(obj)    (((struct single_float *)obj)->val)
+#define SFLOATVAL(obj)    (((struct marlais_sfloat *)obj)->sfloat_value)
 
-struct double_float {
+struct marlais_dfloat {
     ObjectHeader header;
-    double val;
+    marlais_dfloat_t dfloat_value;
 };
 
-#define DFLOATVAL(obj)    (((struct double_float *)obj)->val)
+#define DFLOATVAL(obj)    (((struct marlais_dfloat *)obj)->dfloat_value)
 
-struct extended_float {
+struct marlais_efloat {
     ObjectHeader header;
-    long double val;
+    marlais_efloat_t efloat_value;
 };
 
-#define EFLOATVAL(obj)    (((struct double_float *)obj)->val)
+#define EFLOATVAL(obj)    (((struct marlais_efloat *)obj)->efloat_value)
 
 /* Function declarations */
 
 /* Register number primitives */
 extern void marlais_register_float (void);
 /* Make a <single-float> */
-extern Object marlais_make_sfloat (float f);
+extern Object marlais_make_sfloat (marlais_sfloat_t value);
 /* Make a <double-float> */
-extern Object marlais_make_dfloat (double d);
+extern Object marlais_make_dfloat (marlais_dfloat_t value);
 #ifdef MARLAIS_ENABLE_EFLOAT
 /* Make an <extended-float> */
-extern Object marlais_make_efloat (long double d);
+extern Object marlais_make_efloat (marlais_efloat_t value);
 #endif
 
 #endif

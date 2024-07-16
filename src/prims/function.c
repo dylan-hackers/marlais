@@ -123,7 +123,7 @@ marlais_make_generic (Object name, Object params, Object methods)
 {
   Object obj;
 
-  obj = marlais_allocate_object (GenericFunction, sizeof (struct generic_function));
+  obj = marlais_allocate_object (GenericFunction, sizeof (struct marlais_generic_function));
 
   GFNAME (obj) = name;
   parse_generic_function_parameters (obj, params);
@@ -142,7 +142,7 @@ marlais_make_method (Object name, Object params, Object body, struct environment
 {
   Object obj, gf;
 
-  obj = marlais_allocate_object (Method, sizeof (struct method));
+  obj = marlais_allocate_object (Method, sizeof (struct marlais_method));
 
   if (name) {
     METHNAME (obj) = name;
@@ -242,7 +242,7 @@ marlais_make_next_method (Object generic, Object rest_methods, Object args)
 {
   Object obj;
 
-  obj = marlais_allocate_object (NextMethod, sizeof (struct next_method));
+  obj = marlais_allocate_object (NextMethod, sizeof (struct marlais_next_method));
 
 #ifdef MARLAIS_ENABLE_METHOD_CACHING
   NMGF (obj) = generic;
@@ -767,7 +767,7 @@ generic_function_make (Object arglist)
     }
   }
 
-  obj = marlais_allocate_object (GenericFunction, sizeof (struct generic_function));
+  obj = marlais_allocate_object (GenericFunction, sizeof (struct marlais_generic_function));
 
   GFNAME (obj) = MARLAIS_UNSPECIFIED;
   GFREQPARAMS (obj) = required;

@@ -37,7 +37,7 @@ marlais_make_foreign_ptr (void *ptr)
 {
     Object obj;
 
-    obj = marlais_allocate_object (ForeignPtr, sizeof (struct foreign_ptr));
+    obj = marlais_allocate_object (ForeignPtr, sizeof (struct marlais_foreign_ptr));
 
     FOREIGNPTR (obj) = ptr;
     return (obj);

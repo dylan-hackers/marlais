@@ -28,7 +28,7 @@ marlais_make_integer (marlais_int_t i)
   }
 #endif
 
-  obj = marlais_allocate_object (Integer, sizeof (struct integer));
+  obj = marlais_allocate_object (Integer, sizeof (struct marlais_integer));
   INTVAL (obj) = i;
 
 #if MARLAIS_CONFIG_INTEGER_CACHE > 0

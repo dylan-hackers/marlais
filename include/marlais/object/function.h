@@ -36,7 +36,7 @@
 
 #include <marlais/common.h>
 
-struct generic_function {
+struct marlais_generic_function {
     ObjectHeader header;
     Object name;
     unsigned char properties;
@@ -50,23 +50,23 @@ struct generic_function {
     Object active_next_methods;
 };
 
-#define GFNAME(obj)       (((struct generic_function *)obj)->name)
-#define GFNAME(obj)       (((struct generic_function *)obj)->name)
-#define GFPROPS(obj)      (((struct generic_function *)obj)->properties)
+#define GFNAME(obj)       (((struct marlais_generic_function *)obj)->name)
+#define GFNAME(obj)       (((struct marlais_generic_function *)obj)->name)
+#define GFPROPS(obj)      (((struct marlais_generic_function *)obj)->properties)
 #define GFALLKEYSMASK     0x01
 #define GFKEYSMASK        0x02
 #define GFHASKEYS(obj)    (GFPROPS(obj) & GFKEYSMASK)
 #define GFALLKEYS(obj)    (GFPROPS(obj) & GFALLKEYSMASK)
-#define GFREQPARAMS(obj)  (((struct generic_function *)obj)->required_params)
-#define GFKEYPARAMS(obj)  (((struct generic_function *)obj)->key_params)
-#define GFRESTPARAM(obj)  (((struct generic_function *)obj)->rest_param)
-#define GFREQVALUES(obj)  (((struct generic_function *)obj)->required_return_types)
-#define GFRESTVALUES(obj) (((struct generic_function *)obj)->rest_return_type)
-#define GFMETHODS(obj)    (((struct generic_function *)obj)->methods)
-#define GFCACHE(obj)      (((struct generic_function *)obj)->method_cache)
-#define GFACTIVENM(obj)   (((struct generic_function *)obj)->active_next_methods)
+#define GFREQPARAMS(obj)  (((struct marlais_generic_function *)obj)->required_params)
+#define GFKEYPARAMS(obj)  (((struct marlais_generic_function *)obj)->key_params)
+#define GFRESTPARAM(obj)  (((struct marlais_generic_function *)obj)->rest_param)
+#define GFREQVALUES(obj)  (((struct marlais_generic_function *)obj)->required_return_types)
+#define GFRESTVALUES(obj) (((struct marlais_generic_function *)obj)->rest_return_type)
+#define GFMETHODS(obj)    (((struct marlais_generic_function *)obj)->methods)
+#define GFCACHE(obj)      (((struct marlais_generic_function *)obj)->method_cache)
+#define GFACTIVENM(obj)   (((struct marlais_generic_function *)obj)->active_next_methods)
 
-struct method {
+struct marlais_method {
     ObjectHeader header;
     Object name;
     unsigned char properties;
@@ -81,21 +81,21 @@ struct method {
     struct environment *env;
 };
 
-#define METHNAME(obj)       (((struct method *)obj)->name)
-#define METHNEXTMETH(obj)   (((struct method *)obj)->next_method)
-#define METHPROPS(obj)      (((struct method *)obj)->properties)
+#define METHNAME(obj)       (((struct marlais_method *)obj)->name)
+#define METHNEXTMETH(obj)   (((struct marlais_method *)obj)->next_method)
+#define METHPROPS(obj)      (((struct marlais_method *)obj)->properties)
 #define METHALLKEYSMASK     0x01
 #define METHALLKEYS(obj)    (METHPROPS(obj) & METHALLKEYSMASK)
-#define METHREQPARAMS(obj)  (((struct method *)obj)->required_params)
-#define METHKEYPARAMS(obj)  (((struct method *)obj)->key_params)
-#define METHRESTPARAM(obj)  (((struct method *)obj)->rest_param)
-#define METHREQVALUES(obj)  (((struct method *)obj)->required_return_types)
-#define METHRESTVALUES(obj) (((struct method *)obj)->rest_return_type)
-#define METHBODY(obj)       (((struct method *)obj)->body)
-#define METHENV(obj)        (((struct method *)obj)->env)
-#define METHHANDLE(obj)     (((struct method *)obj)->my_handle)
+#define METHREQPARAMS(obj)  (((struct marlais_method *)obj)->required_params)
+#define METHKEYPARAMS(obj)  (((struct marlais_method *)obj)->key_params)
+#define METHRESTPARAM(obj)  (((struct marlais_method *)obj)->rest_param)
+#define METHREQVALUES(obj)  (((struct marlais_method *)obj)->required_return_types)
+#define METHRESTVALUES(obj) (((struct marlais_method *)obj)->rest_return_type)
+#define METHBODY(obj)       (((struct marlais_method *)obj)->body)
+#define METHENV(obj)        (((struct marlais_method *)obj)->env)
+#define METHHANDLE(obj)     (((struct marlais_method *)obj)->my_handle)
 
-struct next_method {
+struct marlais_next_method {
     ObjectHeader header;
     Object generic_function;
     Object next_method_;
@@ -103,10 +103,10 @@ struct next_method {
     Object args;
 };
 
-#define NMGF(obj)         (((struct next_method *)obj)->generic_function)
-#define NMMETH(obj)       (((struct next_method *)obj)->next_method_)
-#define NMREST(obj)       (((struct next_method *)obj)->rest_methods)
-#define NMARGS(obj)       (((struct next_method *)obj)->args)
+#define NMGF(obj)         (((struct marlais_next_method *)obj)->generic_function)
+#define NMMETH(obj)       (((struct marlais_next_method *)obj)->next_method_)
+#define NMREST(obj)       (((struct marlais_next_method *)obj)->rest_methods)
+#define NMARGS(obj)       (((struct marlais_next_method *)obj)->args)
 
 extern void marlais_register_function (void);
 

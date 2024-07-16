@@ -34,12 +34,12 @@
 
 #include <marlais/common.h>
 
-struct foreign_ptr {
+struct marlais_foreign_ptr {
     ObjectHeader header;
     void *ptr;
 };
 
-#define FOREIGNPTR(obj)      (((struct foreign_ptr *)obj)->ptr)
+#define FOREIGNPTR(obj)      (((struct marlais_foreign_ptr *)obj)->ptr)
 
 extern Object marlais_make_foreign_ptr (void *ptr);
 
