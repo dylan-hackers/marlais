@@ -303,8 +303,8 @@ static Object
 hash_vector (Object vector)
 {
   int i, h = 0;
-  for (i = 0; i < SOVSIZE (vector); ++i) {
-    h += marlais_get_int (equal_hash (SOVELS (vector)[i]));
+  for (i = 0; i < marlais_vector_size (vector); ++i) {
+    h += marlais_get_int (equal_hash (marlais_vector_get (vector, i, NULL)));
   }
   return (marlais_make_integer (h));
 }
@@ -399,10 +399,10 @@ table_vectors_equal (Object vec1, Object vec2)
 {
   int i;
 
-  if (SOVSIZE (vec1) != SOVSIZE (vec2))
+  if (marlais_vector_size (vec1) != marlais_vector_size (vec2))
     return (0);
-  for (i = 0; i < SOVSIZE (vec1); i++) {
-    if (SOVELS (vec1)[i] != SOVELS (vec2)[i])
+  for (i = 0; i < marlais_vector_size (vec1); i++) {
+    if (marlais_vector_get(vec1,i,NULL) != marlais_vector_get(vec2,i,NULL))
       return (0);
   }
   return (1);

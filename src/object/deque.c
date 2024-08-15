@@ -173,7 +173,7 @@ marlais_deque_to_vector (Object deq)
   Object v = marlais_make_vector (n, MARLAIS_FALSE);
   Object de = DEQUEFIRST (deq);
   while(!marlais_is_nil_p (de)) {
-    SOVELS(v)[i++] = DEVALUE (de);
+    marlais_vector_set(v, i++, DEVALUE (de));
     de = DENEXT (de);
   }
   return v;
@@ -195,9 +195,10 @@ Object
 marlais_vector_to_deque (Object vec)
 {
   Object d = marlais_make_deque ();
-  int n = SOVSIZE (vec), i;
+  marlais_size_t n = marlais_vector_size (vec);
+  marlais_index_t i;
   for(i = 0; i < n; i++) {
-    marlais_deque_push_last (d, SOVELS(vec)[i]);
+    marlais_deque_push_last (d, marlais_vector_get(vec, i, NULL));
   }
   return d;
 }

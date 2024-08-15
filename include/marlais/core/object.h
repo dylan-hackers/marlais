@@ -18,6 +18,9 @@ typedef uintptr_t marlais_uint_t;
 #endif
 #define MARLAIS_UINT_PRI    PRIuPTR
 
+typedef uintptr_t marlais_size_t;
+typedef uintptr_t marlais_index_t;
+
 typedef enum {
     Uninitialized = 0,
 
@@ -129,8 +132,11 @@ struct marlais_handle {
 #include <marlais/core/globals.h>
 
 /* Allocate an object with casting */
-#define MARLAIS_ALLOCATE_OBJECT(_repr, _type)           \
+#define MARLAIS_ALLOCATE_OBJECT(_repr, _type)                   \
   ((_type *)marlais_allocate_object(_repr, sizeof(_type)))
+/* Allocate an object with extra space and casting */
+#define MARLAIS_ALLOCATE_OBJECT_EXTRA(_repr, _type, _extra)     \
+  ((_type *)marlais_allocate_object(_repr, sizeof(_type) + (_extra)))
 
 /* Cast an object */
 #define MARLAIS_CAST_OBJECT(_obj, _repr, _type) \

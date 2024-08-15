@@ -401,9 +401,9 @@ print_vector (Object fd, Object vec, int escaped)
   FILE *fp = print_file_from_fd(fd);
 
   fprintf (fp, "#[");
-  for (i = 0; i < SOVSIZE (vec); ++i) {
-    apply_print (fd, SOVELS (vec)[i], escaped);
-    if (i < (SOVSIZE (vec) - 1)) {
+  for (i = 0; i < marlais_vector_size(vec); ++i) {
+    apply_print (fd, marlais_vector_ref_const (vec)[i], escaped);
+    if (i < (marlais_vector_size(vec) - 1)) {
       fprintf (fp, ", ");
     }
   }

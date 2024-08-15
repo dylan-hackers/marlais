@@ -77,37 +77,21 @@ prim_vector (Object rest)
 static Object
 prim_vector_size (Object vec)
 {
-  return marlais_make_integer (SOVSIZE (vec));
+  return marlais_make_integer (marlais_vector_size (vec));
 }
 
 static Object
-prim_vector_element (Object vec, Object index, Object default_ob)
+prim_vector_element (Object vec, Object idx, Object def)
 {
-  int i, size;
-
-  i = marlais_get_int (index);
-  size = SOVSIZE (vec);
-  if ((i < 0) || (i >= size)) {
-    if (default_ob == marlais_default) {
-      marlais_error ("element: index out of range", vec, index, NULL);
-    } else {
-      return default_ob;
-    }
-  }
-  return (SOVELS (vec)[i]);
+  marlais_index_t i = marlais_get_int (idx);
+  return marlais_vector_get(vec,i,def);
 }
 
 static Object
-prim_vector_element_setter (Object vec, Object index, Object val)
+prim_vector_element_setter (Object vec, Object idx, Object val)
 {
-  int i, size;
-
-  i = marlais_get_int (index);
-  size = SOVSIZE (vec);
-  if ((i < 0) || (i >= size)) {
-    marlais_error ("element-setter: index out of range", vec, index, NULL);
-  }
-  return (SOVELS (vec)[i] = val);
+  marlais_index_t i = marlais_get_int (idx);
+  return marlais_vector_set(vec, i, val);
 }
 
 static Object

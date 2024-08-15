@@ -524,7 +524,7 @@ get_specializers (Object gen, Object args)
     if (marlais_is_nil_p (tmp)) {
       marlais_error ("Missing Required Arguments", gen, args, NULL);
     }
-    SOVELS (result)[i] = marlais_object_class (CAR (tmp));
+    marlais_vector_set(result, i, marlais_object_class (CAR (tmp)));
     tmp = CDR (tmp);
   }
   return (result);

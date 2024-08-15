@@ -39,13 +39,10 @@
 /* Data structures */
 
 struct marlais_vector {
-    marlais_header_t header;
-    int     vector_size;
-    Object *vector_elements;
+  marlais_header_t header;
+  marlais_size_t   vector_size;
+  Object           vector_elements[] __marlais_counted_by(vector_size);
 };
-
-#define SOVSIZE(obj)      (((struct marlais_vector *)obj)->vector_size)
-#define SOVELS(obj)       (((struct marlais_vector *)obj)->vector_elements)
 
 /* Function declarations */
 
@@ -53,14 +50,46 @@ struct marlais_vector {
 extern void marlais_register_vector (void);
 
 /* Make a <vector> */
-extern Object marlais_make_vector (int size, Object fill_obj);
+extern Object marlais_make_vector (marlais_size_t size, Object fill);
 /* Entrypoint for make(<vector>) */
 extern Object marlais_make_vector_entrypoint (Object args);
 
+/* Get the size of the the vector */
+static inline marlais_size_t marlais_vector_size (Object vec) {
+  return ((struct marlais_vector*)vec)->vector_size;
+}
 /* Get an element from the vector */
-extern Object marlais_vector_get (Object vec, unsigned index, Object def);
+static inline Object marlais_vector_get (Object vec, marlais_index_t idx, Object def) {
+  struct marlais_vector *v = (struct marlais_vector *)vec;
+  size_t size = v->vector_size;
+  if (idx >= size) {
+    if (def == marlais_default) {
+      marlais_error ("element: index out of range", vec, marlais_make_integer(idx), NULL);
+    } else {
+      return def;
+    }
+  }
+  return v->vector_elements[idx];
+}
 /* Set an element in the vector */
-extern Object marlais_vector_set (Object vec, unsigned index, Object val);
+static inline Object marlais_vector_set (Object vec, marlais_index_t idx, Object val) {
+  struct marlais_vector *v = (struct marlais_vector *)vec;
+  size_t size = v->vector_size;
+  if (idx >= size) {
+    marlais_error ("element-setter: index out of range", vec, marlais_make_integer(idx), NULL);
+  }
+  v->vector_elements[idx] = val;
+  return val;
+}
+
+/* Get a const pointer to the elements array of a vector */
+static inline const Object* marlais_vector_ref_const (Object vec) {
+  return ((struct marlais_vector*)vec)->vector_elements;
+}
+/* Get a mutable pointer to the elements array of a vector */
+static inline Object* marlais_vector_ref_mutable (Object vec) {
+  return ((struct marlais_vector*)vec)->vector_elements;
+}
 
 /* Make a vector from a list */
 extern Object marlais_list_to_vector (Object list);

@@ -39,19 +39,18 @@
 /* Exported functions */
 
 Object
-marlais_make_vector (int size, Object fill_obj)
+marlais_make_vector (marlais_size_t size, Object fill_obj)
 {
-  Object res;
+  struct marlais_vector *res;
   int i;
 
   /* allocate the object and the vector */
-  res = marlais_allocate_object (ObjectVector, sizeof (struct marlais_vector));
-  SOVSIZE (res) = size;
-  SOVELS (res) = MARLAIS_MALLOC_ARRAY_GENERAL (size, Object);
+  res = MARLAIS_ALLOCATE_OBJECT_EXTRA (ObjectVector, struct marlais_vector, size*sizeof(Object));
+  res->vector_size = size;
 
   /* fill the vector */
   for (i = 0; i < size; ++i) {
-    SOVELS (res)[i] = fill_obj;
+    res->vector_elements[i] = fill_obj;
   }
 
   /* return the result */
@@ -74,29 +73,29 @@ marlais_make_vector_entrypoint (Object args)
 Object
 marlais_list_to_vector (Object list)
 {
-  Object obj, els;
-  int size, i;
+  marlais_size_t size;
+  marlais_index_t i;
+  struct marlais_vector *vec;
+  Object els;
 
   /* TODO improve this - count first, allocate, overwrite */
-
-  obj = marlais_allocate_object (ObjectVector, sizeof (struct marlais_vector));
-
   size = 0;
   els = list;
   while (marlais_is_pair_p (els)) {
     size++;
     els = CDR (els);
   }
-  SOVSIZE (obj) = size;
-  SOVELS (obj) = (Object *) MARLAIS_MALLOC_ARRAY_GENERAL (size, Object);
+
+  vec = MARLAIS_ALLOCATE_OBJECT_EXTRA (ObjectVector, struct marlais_vector, size*sizeof(Object));
+  vec->vector_size = size;
 
   els = list;
   i = 0;
   while (marlais_is_pair_p (els)) {
-    SOVELS (obj)[i++] = CAR (els);
+    vec->vector_elements[i++] = CAR (els);
     els = CDR (els);
   }
-  return (obj);
+  return (vec);
 }
 
 Object
@@ -105,8 +104,8 @@ marlais_vector_to_list (Object vec)
   int i;
   Object first = MARLAIS_NIL, cur = MARLAIS_NIL, acons;
 
-  for (i = 0; i < SOVSIZE (vec); ++i) {
-    acons = marlais_cons (SOVELS (vec)[i], MARLAIS_NIL);
+  for (i = 0; i < marlais_vector_size (vec); ++i) {
+    acons = marlais_cons (marlais_vector_get (vec, i, NULL), MARLAIS_NIL);
     if (!marlais_is_nil_p (cur)) {
       CDR (cur) = acons;
     } else {

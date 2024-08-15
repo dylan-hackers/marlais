@@ -1148,8 +1148,8 @@ sort_methods (Object methods, Object sample_args)
 
   if (marlais_is_pair_p (CDR (methods))) {
     method_vector = marlais_list_to_vector (methods);
-    qsort (SOVELS (method_vector),
-           SOVSIZE (method_vector),
+    qsort (marlais_vector_ref_mutable (method_vector),
+           marlais_vector_size (method_vector),
            sizeof (Object),
            (sortfun) sort_driver);
 

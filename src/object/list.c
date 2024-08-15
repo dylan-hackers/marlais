@@ -124,10 +124,10 @@ marlais_cdr (Object lst)
     return (marlais_is_nil_p (lst) ? MARLAIS_NIL : CDR (lst));
 }
 
-int
+marlais_size_t
 marlais_list_length (Object lst)
 {
-    int len;
+    marlais_size_t len;
     Object fore_list, back_list, next;
 
     if (marlais_is_nil_p (lst)) {

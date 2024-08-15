@@ -77,7 +77,7 @@ extern Object marlais_make_list_entrypoint (Object args);
 extern Object marlais_car (Object lst);
 extern Object marlais_cdr (Object lst);
 
-extern int marlais_list_length (Object lst);
+extern marlais_size_t marlais_list_length (Object lst);
 
 extern Object marlais_second (Object lst);
 extern Object marlais_third (Object lst);
