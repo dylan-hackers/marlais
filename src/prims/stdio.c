@@ -50,7 +50,7 @@ prim_stdio_fseek (Object fpo, Object offset, Object whence)
   int res;
   FILE *fp = STDIOFILE (fpo);
 
-  res = fseek (fp, INTVAL (offset), INTVAL (whence));
+  res = fseek (fp, marlais_get_int (offset), marlais_get_int (whence));
 
   return MARLAIS_UNSPECIFIED;
 }

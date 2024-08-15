@@ -724,7 +724,7 @@ marlais_make_class (Object obj,
     /* only one superclass */
     CLASSSUBS (supers) = marlais_cons (obj, CLASSSUBS (supers));
   } else {
-    while (PAIRP (supers)) {
+    while (marlais_is_pair_p (supers)) {
       super = CAR (supers);
       CLASSSUBS (super) = marlais_cons (obj, CLASSSUBS (super));
       supers = CDR (supers);
@@ -743,7 +743,7 @@ marlais_make_class (Object obj,
   allsuperclasses = marlais_list_reverse (CDR (CLASSPRECLIST (obj)));
 
   sg_names = MARLAIS_NIL;
-  while (!EMPTYLISTP (allsuperclasses)) {
+  while (!marlais_is_nil_p (allsuperclasses)) {
     /* TODO reintroduce sealing once libraries/modules are ready */
     /* check for sealed superclass */
     //if (SEALEDP (CAR (allsuperclasses))) {
@@ -761,7 +761,7 @@ marlais_make_class (Object obj,
   }
   CLASSSUBS (obj) = MARLAIS_NIL;
 
-  for (tmp = slot_descriptors; PAIRP (tmp); tmp = CDR (tmp)) {
+  for (tmp = slot_descriptors; marlais_is_pair_p (tmp); tmp = CDR (tmp)) {
     slot = CAR (tmp);
     if (SLOTDALLOCATION (slot) == instance_symbol) {
       append_one_slot_descriptor (slot, &s_tmp_ptr, &sg_names);
@@ -815,7 +815,7 @@ marlais_make_slot_descriptor_list (Object slots, int do_eval)
 
   descriptors = MARLAIS_NIL;
   desc_ptr = &descriptors;
-  while (PAIRP (slots)) {
+  while (marlais_is_pair_p (slots)) {
     slot = CAR (slots);
 
     getter = NULL;
@@ -833,20 +833,20 @@ marlais_make_slot_descriptor_list (Object slots, int do_eval)
     properties = 0;
     inherited_slot = 0;
 
-    if (NAMEP (slot)) {
+    if (marlais_is_name_p (slot)) {
       /* simple slot descriptor */
       getter = slot;
     } else {
-      if (NAMEP (CAR (slot))) {
+      if (marlais_is_name_p (CAR (slot))) {
         /* first elt is getter name */
         getter = CAR (slot);
         slot = CDR (slot);
         getter_seen = 1;
       }
-      while (PAIRP (slot)) {
+      while (marlais_is_pair_p (slot)) {
         slotelt = CAR (slot);
         /* parse keyword-value pairs for slot initialization */
-        if (!SYMBOLP (slotelt) || EMPTYLISTP (CDR (slot))) {
+        if (!marlais_is_symbol_p (slotelt) || marlais_is_nil_p (CDR (slot))) {
           marlais_error ("malformed slot descriptor", slot, NULL);
         } else if (slotelt == getter_keyword) {
           if (getter_seen) {
@@ -909,7 +909,7 @@ marlais_make_slot_descriptor_list (Object slots, int do_eval)
                            SECOND (slot), NULL);
           }
           init_keyword = SECOND (slot);
-          if (!SYMBOLP (init_keyword)) {
+          if (!marlais_is_symbol_p (init_keyword)) {
             marlais_error ("init-keyword: value is not a keyword", init_keyword, NULL);
           }
         } else if (slotelt == required_init_keyword_keyword) {
@@ -918,7 +918,7 @@ marlais_make_slot_descriptor_list (Object slots, int do_eval)
                            SECOND (slot), NULL);
           }
           init_keyword = SECOND (slot);
-          if (!SYMBOLP (init_keyword)) {
+          if (!marlais_is_symbol_p (init_keyword)) {
             marlais_error ("required-init-keyword: value is not a keyword",
                            init_keyword, NULL);
           }
@@ -973,12 +973,12 @@ marlais_make_getter_setter_gfs (Object slotds)
 {
   Object getter, setter;
 
-  while (PAIRP (slotds)) {
+  while (marlais_is_pair_p (slotds)) {
 
     /* Fix up the getter first */
 
     getter = SLOTDGETTER (CAR (slotds));
-    if (NAMEP (getter)) {
+    if (marlais_is_name_p (getter)) {
       if (NULL == marlais_symbol_value (getter)) {
         SLOTDGETTER (CAR (slotds)) =
           marlais_make_generic (getter,
@@ -988,7 +988,7 @@ marlais_make_getter_setter_gfs (Object slotds)
                                          NULL),
                                  MARLAIS_NIL);
         marlais_add_export (getter, SLOTDGETTER (CAR (slotds)), 1);
-      } else if (!GFUNP (marlais_symbol_value (getter))) {
+      } else if (!marlais_is_generic_p (marlais_symbol_value (getter))) {
         marlais_error ("Getter symbol not bound to a generic function",
                        getter,
                        marlais_symbol_value (getter),
@@ -1011,7 +1011,7 @@ marlais_make_getter_setter_gfs (Object slotds)
           SLOTDSETTER (CAR (slotds)) =
           marlais_make_setter_symbol (getter);
       }
-      if (NAMEP (setter)) {
+      if (marlais_is_name_p (setter)) {
         if (NULL == marlais_symbol_value (setter)) {
           SLOTDSETTER (CAR (slotds)) =
             marlais_make_generic (setter,
@@ -1024,7 +1024,7 @@ marlais_make_getter_setter_gfs (Object slotds)
           marlais_add_export (setter,
                                  SLOTDSETTER (CAR (slotds)),
                                  1);
-        } else if (!GFUNP (marlais_symbol_value (setter))) {
+        } else if (!marlais_is_generic_p (marlais_symbol_value (setter))) {
           marlais_error ("Setter symbol not bound to a generic function",
                          setter,
                          marlais_symbol_value (setter),
@@ -1076,7 +1076,7 @@ make_class_entrypoint (Object args)
   debug_obj = NULL;
   abstract_obj = MARLAIS_FALSE;
 
-  while (!EMPTYLISTP (args)) {
+  while (!marlais_is_nil_p (args)) {
     if (FIRST (args) == super_classes_keyword) {
       supers_obj = SECOND (args);
     } else if (FIRST (args) == slots_keyword) {
@@ -1093,10 +1093,10 @@ make_class_entrypoint (Object args)
   if (!debug_obj) {
     marlais_warning ("make <class> no debug-name specified", NULL);
     debug_obj = marlais_empty_string;
-  } else if (!BYTESTRP (debug_obj)) {
+  } else if (!marlais_is_bstring_p (debug_obj)) {
     marlais_error ("make <class> debug-name: must be a string", NULL);
   }
-  if (EMPTYLISTP (supers_obj)) {
+  if (marlais_is_nil_p (supers_obj)) {
     supers_obj = marlais_class_object;
   }
   obj = marlais_allocate_object (Class, sizeof (struct marlais_class));
@@ -1145,11 +1145,11 @@ initialize_slots (Object slot_descriptors, Object initializers)
    */
   initializers = pair_list_reverse (initializers);
 
-  if (PAIRP (initializers)) {
+  if (marlais_is_pair_p (initializers)) {
     init_slotds = marlais_copy_list (slot_descriptors);
-    while (!EMPTYLISTP (initializers)) {
+    while (!marlais_is_nil_p (initializers)) {
       initializer = CAR (initializers);
-      if (SYMBOLP (initializer) && !EMPTYLISTP (CDR (initializers))) {
+      if (marlais_is_symbol_p (initializer) && !marlais_is_nil_p (CDR (initializers))) {
         extra = replace_slotd_init (init_slotds,
                                     initializer,
                                     SECOND (initializers));
@@ -1178,7 +1178,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
    * that may be passed to initialize.
    */
   for (tmp_slotds = init_slotds;
-       !EMPTYLISTP (tmp_slotds);
+       !marlais_is_nil_p (tmp_slotds);
        tmp_slotds = CDR (tmp_slotds)) {
     slotd = CAR (tmp_slotds);
     if (SLOTDINITKEYWORD (slotd)) {
@@ -1201,7 +1201,7 @@ initialize_slots (Object slot_descriptors, Object initializers)
   slots = MARLAIS_MALLOC_ARRAY_GENERAL (marlais_list_length (init_slotds), Object);
 
   tmp_slotds = init_slotds;
-  for (i = 0; PAIRP (tmp_slotds); tmp_slotds = CDR (tmp_slotds), i++) {
+  for (i = 0; marlais_is_pair_p (tmp_slotds); tmp_slotds = CDR (tmp_slotds), i++) {
     slotd = CAR (tmp_slotds);
     slots[i] = marlais_make_list (marlais_slot_init_value (slotd), SLOTDSLOTTYPE (slotd), NULL);
   }
@@ -1214,7 +1214,7 @@ add_slot_descriptor_names (Object sd_list, Object *sg_names_ptr)
 {
   Object sd;
 
-  while (!EMPTYLISTP (sd_list)) {
+  while (!marlais_is_nil_p (sd_list)) {
     sd = CAR (sd_list);
     if (SLOTDSETTER (sd) != MARLAIS_FALSE) {
       if (member_2 (SLOTDGETTER (sd), SLOTDSETTER (sd), *sg_names_ptr)) {
@@ -1231,7 +1231,7 @@ static void
 append_slot_descriptors (Object sd_list, Object **new_sd_list_insert_ptr,
                          Object *sg_names_ptr)
 {
-  while (!EMPTYLISTP (sd_list)) {
+  while (!marlais_is_nil_p (sd_list)) {
     append_one_slot_descriptor (CAR (sd_list),
                                 new_sd_list_insert_ptr,
                                 sg_names_ptr);
@@ -1272,7 +1272,7 @@ replace_slotd_init (Object init_slotds, Object keyword, Object init)
   Object slotd;
   Object new_slotd;
 
-  while (PAIRP (init_slotds)) {
+  while (marlais_is_pair_p (init_slotds)) {
     slotd = CAR (init_slotds);
 
     if (SLOTDINITKEYWORD (slotd) == keyword) {
@@ -1307,7 +1307,7 @@ pair_list_reverse (Object lst)
   Object result;
 
   result = MARLAIS_NIL;
-  while (PAIRP (lst) && PAIRP (CDR (lst))) {
+  while (marlais_is_pair_p (lst) && marlais_is_pair_p (CDR (lst))) {
     result = marlais_cons (CAR (lst), marlais_cons (SECOND (lst), result));
     lst = CDR (CDR (lst));
   }
@@ -1331,7 +1331,7 @@ initialize_slotds (Object class)
      * (e.g. it might be abstract)
      */
   for (superclasses = CLASSSUPERS (class);
-       PAIRP (superclasses);
+       marlais_is_pair_p (superclasses);
        superclasses = CDR (superclasses)) {
     if (CLASSUNINITIALIZED (CAR (superclasses))) {
       initialize_slotds (CAR (superclasses));
@@ -1361,7 +1361,7 @@ eval_slotds (Object slotds)
 {
   Object slotd;
 
-  while (PAIRP (slotds)) {
+  while (marlais_is_pair_p (slotds)) {
     slotd = CAR (slotds);
     SLOTDSLOTTYPE (slotd) = marlais_eval (SLOTDSLOTTYPE (slotd));
     if (SLOTDDEFERREDTYPE (slotd)) {
@@ -1377,7 +1377,7 @@ eval_slotds (Object slotds)
 static int
 member_2 (Object obj1, Object obj2, Object obj_list)
 {
-  while (PAIRP (obj_list)) {
+  while (marlais_is_pair_p (obj_list)) {
     if (obj1 == CAR (obj_list) || obj2 == CAR (obj_list)) {
       return 1;
     }
@@ -1405,7 +1405,7 @@ make_getters_setters (Object class, Object slotds)
   Object slotd;
   int slot_num = 0;
 
-  while (!EMPTYLISTP (slotds)) {
+  while (!marlais_is_nil_p (slotds)) {
     slotd = CAR (slotds);
     make_getter_method (slotd, class, slot_num);
     if (SLOTDALLOCATION (slotd) != constant_symbol) {
@@ -1428,7 +1428,7 @@ make_getter_method (Object slot, Object class, int slot_num)
   Object params, body, slot_location, allocation;
   Object class_location;
 
-  if (!GFUNP (SLOTDGETTER (slot))) {
+  if (!marlais_is_generic_p (SLOTDGETTER (slot))) {
     marlais_error ("Slot getter is not a generic function", SLOTDGETTER (slot), NULL);
   }
   if (CLASSNAME (class)) {
@@ -1478,7 +1478,7 @@ make_setter_method (Object slot, Object class, int slot_num)
   if (NULL == SLOTDSETTER (slot) || MARLAIS_FALSE == SLOTDSETTER (slot)) {
     return NULL;
   }
-  if (!GFUNP (SLOTDSETTER (slot))) {
+  if (!marlais_is_generic_p (SLOTDSETTER (slot))) {
     marlais_error ("Slot setter is not a generic function",
                    SLOTDSETTER (slot),
                    NULL);
@@ -1530,7 +1530,7 @@ merge_sorted_precedence_lists (Object class, Object supers)
    * copying of supers is not strictly relied upon, but tail sharing
    * in merged lists occurs below.
    */
-  if (!EMPTYLISTP (supers)) {
+  if (!marlais_is_nil_p (supers)) {
     new_list = CLASSSORTEDPRECS (CAR (supers));
     supers = CDR (supers);
   } else {
@@ -1538,7 +1538,7 @@ merge_sorted_precedence_lists (Object class, Object supers)
     supers = MARLAIS_NIL;
   }
 
-  while (!EMPTYLISTP (supers)) {
+  while (!marlais_is_nil_p (supers)) {
     new_list = merge_class_lists (new_list,
                                   CLASSSORTEDPRECS (CAR (supers)));
     supers = CDR (supers);
@@ -1554,7 +1554,7 @@ merge_class_lists (Object left, Object right)
 
   new_list_ptr = &new_list;
 
-  while (!EMPTYLISTP (left) && !EMPTYLISTP (right)) {
+  while (!marlais_is_nil_p (left) && !marlais_is_nil_p (right)) {
     if (CLASSINDEX (CAR (left)) < CLASSINDEX (CAR (right))) {
       *new_list_ptr = marlais_cons (CAR (left), MARLAIS_NIL);
       left = CDR (left);
@@ -1571,10 +1571,10 @@ merge_class_lists (Object left, Object right)
     }
   }
 
-  if (!EMPTYLISTP (left)) {
+  if (!marlais_is_nil_p (left)) {
     *new_list_ptr = left;
   }
-  if (!EMPTYLISTP (right)) {
+  if (!marlais_is_nil_p (right)) {
     *new_list_ptr = right;
   }
   return new_list;

@@ -28,7 +28,7 @@ marlais_eval (Object obj)
     Object val;
 
 #ifdef MARLAIS_OBJECT_MODEL_TAGGED
-    if (!POINTERP (obj)) {
+    if (!marlais_object_pointer_p (obj)) {
         return (obj);
     }
 #endif
@@ -63,7 +63,7 @@ marlais_tail_eval (Object obj)
                          eval_stack->next->context,
                          0);
     }
-    if (PAIRP (obj)) {
+    if (marlais_is_pair_p (obj)) {
         the_eval_obj = obj;
         if (marlais_tail_jump == NULL) {
             marlais_error ("tail_eval called without a prior eval in progress.", NULL);

@@ -97,7 +97,7 @@ array_ref_setter (Object arr, Object indices, Object new_val)
 static Object
 array_element (Object arr, Object index, Object default_ob)
 {
-  int ind_val = INTVAL (index);
+  int ind_val = marlais_get_int (index);
 
   if ((ind_val < 0) || (ind_val >= ARRSIZE (arr))) {
     if (default_ob == marlais_default) {
@@ -114,7 +114,7 @@ array_element (Object arr, Object index, Object default_ob)
 static Object
 array_element_setter (Object arr, Object index, Object new_val)
 {
-  int ind_val = INTVAL (index);
+  int ind_val = marlais_get_int (index);
 
   if ((ind_val < 0) || (ind_val >= ARRSIZE (arr))) {
     marlais_error ("element_setter: array index out of range", index,
@@ -144,12 +144,12 @@ array_next_state (Object arr, Object state)
 
   total_size = 1;
   dims = ARRDIMS (arr);
-  while (!EMPTYLISTP (dims)) {
+  while (!marlais_is_nil_p (dims)) {
     dim = CAR (dims);
-    total_size *= INTVAL (dim);
+    total_size *= marlais_get_int (dim);
     dims = CDR (dims);
   }
-  state_val = INTVAL (state);
+  state_val = marlais_get_int (state);
   state_val++;
   if (state_val >= total_size) {
     return (MARLAIS_FALSE);
@@ -161,7 +161,7 @@ array_next_state (Object arr, Object state)
 static Object
 array_current_element (Object arr, Object state)
 {
-  return (ARRELS (arr)[INTVAL (state)]);
+  return (ARRELS (arr)[marlais_get_int (state)]);
 }
 
 static Object

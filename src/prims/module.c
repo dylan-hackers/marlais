@@ -50,9 +50,9 @@ static Object prim_current_module (void)
 static Object prim_set_module (Object mod_or_sym)
 {
   Object mod;
-  if (SYMBOLP(mod_or_sym)) {
+  if (marlais_is_symbol_p(mod_or_sym)) {
     mod = marlais_find_module (marlais_symbol_to_name (mod_or_sym));
-  } else if (MODULEP(mod_or_sym)) {
+  } else if (marlais_is_module_p(mod_or_sym)) {
     mod = mod_or_sym;
   } else {
     marlais_fatal("%set-module: Invalid argument", mod_or_sym, NULL);

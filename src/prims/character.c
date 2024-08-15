@@ -307,7 +307,7 @@ marlais_make_uchar (wchar_t ch)
 static Object
 integer_to_character (Object i)
 {
-  return (marlais_make_character (INTVAL (i)));
+  return (marlais_make_character (marlais_get_int (i)));
 }
 
 static Object
@@ -353,7 +353,7 @@ DEFINE_CTYPE_PREDICATE(uppercase,    isupper);
 static Object
 integer_to_wchar (Object i)
 {
-  return (marlais_make_wchar (INTVAL (i)));
+  return (marlais_make_wchar (marlais_get_int (i)));
 }
 
 static Object
@@ -401,7 +401,7 @@ DEFINE_WCTYPE_PREDICATE(uppercase,    iswupper);
 static Object
 integer_to_uchar (Object i)
 {
-  return (marlais_make_uchar (INTVAL (i)));
+  return (marlais_make_uchar (marlais_get_int (i)));
 }
 
 static Object

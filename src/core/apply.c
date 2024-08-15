@@ -41,7 +41,7 @@ marlais_apply_internal (Object fun, Object args)
   if (marlais_trace_functions) {
     int i;
 
-    if (marlais_trace_primitives || (!PRIMP (fun))) {
+    if (marlais_trace_primitives || (!marlais_is_primitive_p (fun))) {
       printf ("; ");
       for (i = 0; i < marlais_trace_level; ++i) {
         putchar ('-');
@@ -54,7 +54,7 @@ marlais_apply_internal (Object fun, Object args)
     }
   }
 #ifdef MARLAIS_OBJECT_MODEL_TAGGED
-  if (!POINTERP (fun)) {
+  if (!marlais_object_pointer_p (fun)) {
     ret = marlais_error ("apply: cannot apply this object", fun, NULL);
     goto done;
   }
@@ -86,7 +86,7 @@ done:
   if (marlais_trace_functions && marlais_trace_level) {
     int i;
 
-    if (marlais_trace_primitives || (!PRIMP (fun))) {
+    if (marlais_trace_primitives || (!marlais_is_primitive_p (fun))) {
       marlais_trace_level--;
       printf ("; ");
       for (i = 0; i < marlais_trace_level; ++i) {
@@ -146,13 +146,13 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
   if (generic_apply) {
 
     /* re-calculate next methods if invalidated. */
-    if (PAIRP (rest_methods) && CAR (rest_methods) == MARLAIS_FALSE) {
+    if (marlais_is_pair_p (rest_methods) && CAR (rest_methods) == MARLAIS_FALSE) {
       rest_methods = marlais_recalc_next_methods (generic_apply, meth, args);
     }
 #endif
 
     /* install of next method object if there are next methods */
-    if (PAIRP (rest_methods)) {
+    if (marlais_is_pair_p (rest_methods)) {
       /* check use of empty_list vs. NULL!! */
       Object next_method;
 
@@ -174,7 +174,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
   hit_rest = hit_key = hit_values = 0;
 
   /* first process required parameters */
-  while ((PAIRP (params) && PAIRP (args))
+  while ((marlais_is_pair_p (params) && marlais_is_pair_p (args))
          && (!hit_rest) && (!hit_key) && !(hit_values)) {
     param = CAR (params);
     if (param == hash_rest_symbol) {
@@ -185,7 +185,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
       hit_values = 1;
     } else {
       val = CAR (args);
-      if (NAMEP (param)) {
+      if (marlais_is_name_p (param)) {
         sym = param;
       } else {
         sym = FIRST (param);
@@ -205,15 +205,15 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
   if ((rest_var = METHRESTPARAM (meth)) != NULL) {
     marlais_add_local (rest_var, args, 0, the_env);
   }
-  if (PAIRP (METHKEYPARAMS (meth))) {
+  if (marlais_is_pair_p (METHKEYPARAMS (meth))) {
     /* copy keys */
     keys = marlais_copy_list (METHKEYPARAMS (meth));
     dup_list = MARLAIS_NIL; /* For duplicate keywords */
 
     /* Bind each of the keyword args that is present. */
-    while (!EMPTYLISTP (args)) {
+    while (!marlais_is_nil_p (args)) {
       keyword = FIRST (args);
-      if (!SYMBOLP (keyword)) {
+      if (!marlais_is_symbol_p (keyword)) {
         /* jnw -- check this out! */
         if (!rest_var) {
           marlais_error ("apply: argument to method must be keyword", meth, keyword, NULL);
@@ -230,13 +230,13 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
        */
 
       for (tmp_ptr = &keys;
-           PAIRP (*tmp_ptr);
+           marlais_is_pair_p (*tmp_ptr);
            tmp_ptr = &CDR (*tmp_ptr)) {
         if (CAR (CAR (*tmp_ptr)) == keyword) {
           break;
         }
       }
-      if (EMPTYLISTP (*tmp_ptr)) {
+      if (marlais_is_nil_p (*tmp_ptr)) {
         if (marlais_member_p (keyword, dup_list)) {
           marlais_warning ("Duplicate keyword value ignored",
                            keyword,
@@ -255,7 +255,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
       args = CDR (CDR (args));
     }
     /* Bind the missing keyword args to default_object */
-    while (PAIRP (keys)) {
+    while (marlais_is_pair_p (keys)) {
       marlais_add_local (SECOND (CAR (keys)),
                    marlais_eval (THIRD (CAR (keys))),
                    0,
@@ -264,7 +264,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
     }
 
   }
-  if (PAIRP (args) && !rest_var) {
+  if (marlais_is_pair_p (args) && !rest_var) {
     /*
      * Shouldn't check for all args used if applying method through
      * a generic function or as a next method.
@@ -272,11 +272,11 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
      */
     if (METHALLKEYS (meth)) {
       /* skip rest of parameters if they are keywords */
-      while (PAIRP (args)) {
-        if (!SYMBOLP (CAR (args))) {
+      while (marlais_is_pair_p (args)) {
+        if (!marlais_is_symbol_p (CAR (args))) {
           marlais_error ("apply: keyword argument expected", CAR (args),
                          NULL);
-        } else if (!PAIRP (CDR (args))) {
+        } else if (!marlais_is_pair_p (CDR (args))) {
           marlais_error ("apply: keyword has no associated argument value",
                          CAR (args), NULL);
         }
@@ -286,16 +286,16 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
       marlais_error ("Arguments have no matching parameters", args, NULL);
     }
   }
-  if (PAIRP (params)) {
+  if (marlais_is_pair_p (params)) {
     marlais_error ("Required parameters have no matching arguments", params,
                    NULL);
   }
-  while (!EMPTYLISTP (body)) {
+  while (!marlais_is_nil_p (body)) {
     Object form = CAR (body);
 
 #ifdef MARLAIS_ENABLE_TAIL_CALL_OPTIMIZATION
     /* when in tail form, we use tail_eval */
-    if (EMPTYLISTP (CDR (body))) {
+    if (marlais_is_nil_p (CDR (body))) {
       if (marlais_trace_functions) {
         if (marlais_trace_primitives)
           marlais_warning ("tail position: ", form, NULL);
@@ -330,7 +330,7 @@ marlais_apply_method (Object meth, Object args, Object rest_methods, Object gene
 
 #ifdef MARLAIS_ENABLE_METHOD_CACHING
   /* pop out the next method that I put in the GF. */
-  if (generic_apply && PAIRP (rest_methods)) {
+  if (generic_apply && marlais_is_pair_p (rest_methods)) {
 
     /* case controlling push */
     GFACTIVENM (generic_apply) = CDR (GFACTIVENM (generic_apply));
@@ -369,12 +369,12 @@ marlais_return_check (Object ret,
      */
     marlais_error ("return value is invalid", NULL);
   }
-  if (!VALUESP (ret)) {
+  if (!marlais_is_values_p (ret)) {
     ret = marlais_values_list (marlais_make_list (ret, NULL));
   }
   /* check return values (not done for non VALUESTYPE values yet */
   for (i = 0;
-       i < VALUESNUM (ret) && PAIRP (required_values);
+       i < VALUESNUM (ret) && marlais_is_pair_p (required_values);
        i++, required_values = CDR (required_values)) {
     if (!marlais_instance_p (VALUESELS (ret)[i], CAR (required_values))) {
       marlais_error ("in value return: return value is not of correct type",
@@ -399,9 +399,9 @@ marlais_return_check (Object ret,
       /* Discard the extra values by ignoring them. */
       VALUESNUM (ret) = i;
     }
-  } else if (PAIRP (required_values)) {
+  } else if (marlais_is_pair_p (required_values)) {
     /* Add default values */
-    for (j = 0; PAIRP (required_values); j++, required_values = CDR (required_values)) {
+    for (j = 0; marlais_is_pair_p (required_values); j++, required_values = CDR (required_values)) {
       if (!marlais_instance_p (MARLAIS_FALSE, CAR (required_values))) {
         marlais_error ("in value return: default value doesn't match return type",
                        CAR (required_values),
@@ -432,10 +432,10 @@ marlais_return_check (Object ret,
 static void
 devalue_args (Object args)
 {
-  while (!EMPTYLISTP (args)) {
+  while (!marlais_is_nil_p (args)) {
     Object arg = CAR (args);
 
-    if (VALUESP (arg)) {
+    if (marlais_is_values_p (arg)) {
       if (VALUESNUM (arg) > 0) {
         CAR (args) = VALUESELS (arg)[0];
       } else {
@@ -457,10 +457,10 @@ narrow_value_types (Object *values_list_ptr,
   /* First check each value common to both lists.
    * If a new value is a subtype, substitute it.
    */
-  for (; !EMPTYLISTP (*values_list_ptr);
+  for (; !marlais_is_nil_p (*values_list_ptr);
        values_list_ptr = &CDR (*values_list_ptr),
          new_values_list = CDR (new_values_list)) {
-    if (EMPTYLISTP (new_values_list)) {
+    if (marlais_is_nil_p (new_values_list)) {
       break;
     }
     if (marlais_subtype_p (CAR (new_values_list), CAR (*values_list_ptr))) {
@@ -468,14 +468,14 @@ narrow_value_types (Object *values_list_ptr,
     }
   }
 
-  if (EMPTYLISTP (*values_list_ptr)) {
+  if (marlais_is_nil_p (*values_list_ptr)) {
     /* We had enough values in the new list to match all the old ones */
 
     /* If there were more new_values than old.
      * They must match the rest type of the old list, and must
      * be added to the list.
      */
-    while (!EMPTYLISTP (new_values_list)) {
+    while (!marlais_is_nil_p (new_values_list)) {
       if (marlais_subtype_p (CAR (new_values_list), *rest_type)) {
         *values_list_ptr = marlais_cons (CAR (new_values_list),
                                  MARLAIS_NIL);
@@ -494,7 +494,7 @@ narrow_value_types (Object *values_list_ptr,
       marlais_error ("Incompatible value specification in call", NULL);
     }
     values_list = *values_list_ptr;
-    while (!EMPTYLISTP (values_list)) {
+    while (!marlais_is_nil_p (values_list)) {
       if (marlais_subtype_p (new_rest_type, CAR (values_list))) {
         CAR (values_list) = new_rest_type;
       }
@@ -521,7 +521,7 @@ get_specializers (Object gen, Object args)
   length = marlais_list_length (marlais_function_specializers (gen));
   result = marlais_make_vector (length, NULL);
   for (i = 0; i < length; i++) {
-    if (EMPTYLISTP (tmp)) {
+    if (marlais_is_nil_p (tmp)) {
       marlais_error ("Missing Required Arguments", gen, args, NULL);
     }
     SOVELS (result)[i] = marlais_object_class (CAR (tmp));
@@ -557,13 +557,13 @@ build_rest_methods (Object cache_tail, Object args)
 {
   Object method_found, method_group;
 
-  if (EMPTYLISTP (cache_tail)) {
+  if (marlais_is_nil_p (cache_tail)) {
     return (MARLAIS_NIL);
   }
   /* possible ambiguous point - put recalc signal here */
   method_found = 0;
   method_group = CAR (cache_tail);
-  while (!EMPTYLISTP (method_group)) {
+  while (!marlais_is_nil_p (method_group)) {
     if (method_found) {
       return MARLAIS_NIL;
     }
@@ -605,9 +605,9 @@ apply_generic (Object gen, Object args)
   }
   method = NULL;
   /* find the first applicable method */
-  while (!EMPTYLISTP (cacheEntry)) {
+  while (!marlais_is_nil_p (cacheEntry)) {
     currentGroup = CAR (cacheEntry);
-    while (!EMPTYLISTP (currentGroup)) {
+    while (!marlais_is_nil_p (currentGroup)) {
       if (marlais_applicable_method_p (HDLOBJ (CAR (currentGroup)), args, 0)
           == MARLAIS_TRUE) {
         if (method) {
@@ -630,7 +630,7 @@ apply_generic (Object gen, Object args)
 #else
   methods = GFMETHODS (gen);
   sorted_methods = FIRSTVAL (marlais_sorted_applicable_methods (gen, args));
-  if (EMPTYLISTP (sorted_methods)) {
+  if (marlais_is_nil_p (sorted_methods)) {
     return marlais_error ("Ambiguous methods in apply generic function", gen, args, NULL);
   } else {
     return marlais_apply_method (CAR (sorted_methods),
@@ -677,7 +677,7 @@ apply_next (Object next_method, Object args)
   rest_methods = CDR (rest_methods);
 #endif
 
-  if (EMPTYLISTP (args)) {
+  if (marlais_is_nil_p (args)) {
     real_args = NMARGS (next_method);
   } else {
     real_args = args;

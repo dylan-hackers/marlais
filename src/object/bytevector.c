@@ -31,12 +31,12 @@ marlais_make_bytevector_entrypoint (Object args)
   marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<byte-vector>");
 
   // TODO errors
-  if(fill_obj == MARLAIS_FALSE || !UNSIGNEDP(fill_obj)) {
+  if(fill_obj == MARLAIS_FALSE || !marlais_uint_p(fill_obj)) {
     fill_obj = marlais_make_integer(0);
   }
-  if(size_obj == NULL || !UNSIGNEDP(size_obj)) {
+  if(size_obj == NULL || !marlais_uint_p(size_obj)) {
     size_obj = marlais_make_integer(0);
   }
 
-  return marlais_make_bytevector (INTVAL(size_obj), INTVAL(fill_obj));
+  return marlais_make_bytevector (marlais_get_int(size_obj), marlais_get_int(fill_obj));
 }

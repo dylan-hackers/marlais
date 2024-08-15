@@ -83,7 +83,7 @@ marlais_deque_size (Object d)
 {
   int res = 0;
   Object de = DEQUEFIRST(d);
-  while(!EMPTYLISTP(de)) {
+  while(!marlais_is_nil_p(de)) {
     res++;
     de = DENEXT (de);
   }
@@ -95,7 +95,7 @@ Object
 marlais_deque_push (Object d, Object new)
 {
   Object new_entry = deque_make_entry(MARLAIS_NIL, new, DEQUEFIRST (d));
-  if (EMPTYLISTP (DEQUEFIRST (d))) {
+  if (marlais_is_nil_p (DEQUEFIRST (d))) {
     DEQUEFIRST (d) = DEQUELAST (d) = new_entry;
   } else {
     DEPREV (DEQUEFIRST (d)) = new_entry;
@@ -109,12 +109,12 @@ marlais_deque_pop (Object d)
 {
   Object ret;
 
-  if (EMPTYLISTP (DEQUEFIRST (d))) {
+  if (marlais_is_nil_p (DEQUEFIRST (d))) {
     marlais_error ("pop: cannot pop empty <deque>", d, NULL);
   }
   ret = DEVALUE (DEQUEFIRST (d));
   DEQUEFIRST (d) = DENEXT (DEQUEFIRST (d));
-  if (!EMPTYLISTP (DEQUEFIRST (d))) {
+  if (!marlais_is_nil_p (DEQUEFIRST (d))) {
     DEPREV (DEQUEFIRST (d)) = MARLAIS_NIL;
   }
   return (ret);
@@ -124,7 +124,7 @@ Object
 marlais_deque_push_last (Object d, Object new)
 {
   Object new_entry = deque_make_entry (DEQUELAST (d), new, MARLAIS_NIL);
-  if (EMPTYLISTP (DEQUEFIRST (d))) {
+  if (marlais_is_nil_p (DEQUEFIRST (d))) {
     DEQUEFIRST (d) = DEQUELAST (d) = new_entry;
   } else {
     DENEXT (DEQUELAST (d)) = new_entry;
@@ -139,7 +139,7 @@ marlais_deque_pop_last (Object d)
 {
   Object res;
 
-  if (EMPTYLISTP (DEQUEFIRST (d))) {
+  if (marlais_is_nil_p (DEQUEFIRST (d))) {
     marlais_error ("pop-list: cannot pop empty <deque>", d, NULL);
   }
   res = DEVALUE (DEQUELAST (d));
@@ -147,7 +147,7 @@ marlais_deque_pop_last (Object d)
     DEQUEFIRST (d) = DEQUELAST (d) = MARLAIS_NIL;
   } else {
     DEQUELAST (d) = DEPREV (DEQUELAST (d));
-    if (!EMPTYLISTP (DEQUELAST (d))) {
+    if (!marlais_is_nil_p (DEQUELAST (d))) {
       DENEXT (DEQUELAST (d)) = MARLAIS_NIL;
     }
   }
@@ -159,7 +159,7 @@ marlais_deque_to_list (Object deq)
 {
   Object l = MARLAIS_NIL;
   Object de = DEQUELAST(deq);
-  while(!EMPTYLISTP (de)) {
+  while(!marlais_is_nil_p (de)) {
     l = marlais_cons (DEVALUE (de), l);
     de = DEPREV (de);
   }
@@ -172,7 +172,7 @@ marlais_deque_to_vector (Object deq)
   int n = marlais_deque_size (deq), i = 0;
   Object v = marlais_make_vector (n, MARLAIS_FALSE);
   Object de = DEQUEFIRST (deq);
-  while(!EMPTYLISTP (de)) {
+  while(!marlais_is_nil_p (de)) {
     SOVELS(v)[i++] = DEVALUE (de);
     de = DENEXT (de);
   }
@@ -184,7 +184,7 @@ marlais_list_to_deque (Object lst)
 {
   Object d = marlais_make_deque ();
   Object l = lst;
-  while(!EMPTYLISTP (l)) {
+  while(!marlais_is_nil_p (l)) {
     marlais_deque_push_last (d, CAR (l));
     l = CDR (l);
   }

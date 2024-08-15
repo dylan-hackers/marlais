@@ -40,13 +40,13 @@ static void
 print_dylan_error_helper(const char* kind, Object msg_str, Object rest)
 {
   fprintf (stderr, "%s: %s", kind, BYTESTRVAL (msg_str));
-  if (!EMPTYLISTP (rest)) {
+  if (!marlais_is_nil_p (rest)) {
     fprintf (stderr, ": ");
   }
-  while (!EMPTYLISTP (rest)) {
+  while (!marlais_is_nil_p (rest)) {
     marlais_print_object (marlais_standard_error, CAR (rest), 0);
     rest = CDR (rest);
-    if (!EMPTYLISTP (rest)) {
+    if (!marlais_is_nil_p (rest)) {
       fprintf (stderr, ", ");
     }
   }

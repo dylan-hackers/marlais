@@ -180,7 +180,7 @@ nonempty_body
 	  nonempty_constituents
 
 	  {
-	   if (INTVAL (bindings_top ()) > 0) {
+	   if (marlais_get_int (bindings_top ()) > 0) {
 	       $$ = marlais_cons (unbinding_begin_symbol,
 			 marlais_cons (bindings_top(), $2));
 	   } else if (marlais_list_length ($2) > 1) {
@@ -219,7 +219,7 @@ expression
 	: binary_operand	{ $$ = $1; }
 /*	| unparenthesized_operand COLON_EQUAL expression */
 	| expression COLON_EQUAL expression
-	   { if (NAMEP ( $1)) {
+	   { if (marlais_is_name_p ( $1)) {
 		 $$ = marlais_make_list (set_bang_symbol, $1, $3, NULL);
 	     } else {
 		 $$ = make_setter_expr ($1, $3);
@@ -440,7 +440,7 @@ case_body
 	| case_label
 	  { push_bindings (); }
 	  case_tail SEMICOLON_opt
-	  { $$ =  marlais_cons (marlais_cons ($1, !EMPTYLISTP (CAR ($3))
+	  { $$ =  marlais_cons (marlais_cons ($1, !marlais_is_nil_p (CAR ($3))
 				  ? marlais_cons (marlais_cons (unbinding_begin_symbol,
 						marlais_cons (bindings_top (),
 						      CAR ($3))),
@@ -457,7 +457,7 @@ case_tail
 	{ push_bindings (); }
 	case_tail
 	{ $$ = marlais_cons (MARLAIS_NIL,
-		     marlais_cons (marlais_cons ($2, !EMPTYLISTP (CAR ($4))
+		     marlais_cons (marlais_cons ($2, !marlais_is_nil_p (CAR ($4))
 				     ? marlais_cons (marlais_cons (unbinding_begin_symbol,
 						   marlais_cons (bindings_top(),
 							 CAR ($4))),
@@ -477,7 +477,7 @@ case_tail
 	| constituent ';' case_label { push_bindings(); }
 	   case_tail
 	{ $$ = marlais_cons (marlais_cons ($1, MARLAIS_NIL),
-		     marlais_cons ( marlais_cons ($3, !EMPTYLISTP (CAR ($5))
+		     marlais_cons ( marlais_cons ($3, !marlais_is_nil_p (CAR ($5))
 				     ? marlais_cons (marlais_cons (unbinding_begin_symbol,
 						   marlais_cons (bindings_top(),
 							 CAR ($5))),
@@ -513,7 +513,7 @@ select_body
 	| select_label
 	  { push_bindings (); }
 	  select_tail SEMICOLON_opt
-	  { $$ =  marlais_cons (marlais_cons ($1, !EMPTYLISTP (CAR ($3))
+	  { $$ =  marlais_cons (marlais_cons ($1, !marlais_is_nil_p (CAR ($3))
 				  ? marlais_cons (marlais_cons (unbinding_begin_symbol,
 						marlais_cons (bindings_top (),
 						      CAR ($3))),
@@ -529,7 +529,7 @@ select_tail
 	{ push_bindings (); }
 	select_tail
 	{ $$ = marlais_cons (MARLAIS_NIL,
-		     marlais_cons (marlais_cons ($2, !EMPTYLISTP (CAR ($4))
+		     marlais_cons (marlais_cons ($2, !marlais_is_nil_p (CAR ($4))
 				     ? marlais_cons (marlais_cons (unbinding_begin_symbol,
 						   marlais_cons (bindings_top(),
 							 CAR ($4))),
@@ -549,7 +549,7 @@ select_tail
 	| constituent ';' select_label { push_bindings(); }
 	   select_tail
 	{ $$ = marlais_cons (marlais_cons ($1, MARLAIS_NIL),
-		     marlais_cons ( marlais_cons ($3, !EMPTYLISTP (CAR ($5))
+		     marlais_cons ( marlais_cons ($3, !marlais_is_nil_p (CAR ($5))
 				     ? marlais_cons (marlais_cons (unbinding_begin_symbol,
 						   marlais_cons (bindings_top(),
 							 CAR ($5))),
@@ -659,7 +659,7 @@ block_statement
 		cleanup_opt
 		exceptions
 			{ marlais_lexer_pop_intermediate_words ();
-			  if (! EMPTYLISTP ($9)) {
+			  if (! marlais_is_nil_p ($9)) {
 				marlais_warning ("Exceptions not yet implemented!",
 					 NULL);
 				}
@@ -763,7 +763,7 @@ defining_form
 		{ marlais_lexer_push_intermediate_words ($3); }
 	  class_definition
 		{ marlais_lexer_pop_intermediate_words ();
-		  if (EMPTYLISTP ($2)) {
+		  if (marlais_is_nil_p ($2)) {
 			$$ = marlais_cons (define_class_symbol, $5);
 		  } else {
 			$$ = marlais_cons (define_class_symbol,
@@ -810,7 +810,7 @@ slot_spec
 		  dynamism = marlais_cons (dynamism_keyword,
 				   marlais_cons (open_symbol,
 					 MARLAIS_NIL));
-		  if (PAIRP ($3)) {
+		  if (marlais_is_pair_p ($3)) {
 		      getter_name = CAR ($3);
 		      slot_type_specified = 1;
 		      SECOND (slot_type) = SECOND ($3);
@@ -818,7 +818,7 @@ slot_spec
 		      getter_name = $3;
 		  }
 		  mods = $1;
-		  while ( PAIRP (mods)) {
+		  while ( marlais_is_pair_p (mods)) {
 		      mod = CAR (mods);
 		      if (mod == open_symbol) {
 			  if (dynamism_specified) {
@@ -836,7 +836,7 @@ slot_spec
 			  }
 			  allocation_specified = 1;
 			  SECOND (allocation) = mod;
-			  if ( ! EMPTYLISTP (CDR (mods))) {
+			  if ( ! marlais_is_nil_p (CDR (mods))) {
 			      marlais_error ("Slot modifiers follow allocation",
 				     mods, NULL);
 			  }
@@ -1323,7 +1323,7 @@ nelistem (Object car,...)
 	el = va_arg (args, Object);
 
 	while (el) {
-	    if (!EMPTYLISTP (el)) {
+	    if (!marlais_is_nil_p (el)) {
 		acons = marlais_cons (el, MARLAIS_NIL);
 		CDR (cur) = acons;
 		cur = acons;
@@ -1356,7 +1356,7 @@ bindings_top ()
 static void
 bindings_increment ()
 {
-    CAR (marlais_yybindings) = marlais_make_integer (INTVAL (CAR (marlais_yybindings)) + 1);
+    CAR (marlais_yybindings) = marlais_make_integer (marlais_get_int (CAR (marlais_yybindings)) + 1);
 }
 
 static Object
@@ -1364,7 +1364,7 @@ make_setter_expr (Object place, Object value)
 {
     Object newsym;
 
-    if ( ! PAIRP (place)) {
+    if ( ! marlais_is_pair_p (place)) {
 	marlais_error("Trying to make a setter from something that's not a place",
 	      place, NULL);
     }
@@ -1422,9 +1422,9 @@ symtab_insert_bindings (Object bindings)
      *	#( #( variable1, variable2, ... , variablen, values))
      */
     bindings = CAR (bindings);
-    while ( !EMPTYLISTP (CDR (bindings))) {
+    while ( !marlais_is_nil_p (CDR (bindings))) {
 	variable = CAR (bindings);
-	if (PAIRP (variable)) {
+	if (marlais_is_pair_p (variable)) {
 #if 0
 	    marlais_warning ("	symtab element",
 		     CAR (variable),
@@ -1449,13 +1449,13 @@ symtab_push_parameters (Object parameters)
     marlais_warning ("Got symtab_insert_parameters", parameters, NULL);
 #endif
 
-    while (PAIRP (parameters)) {
+    while (marlais_is_pair_p (parameters)) {
 	variable = CAR (parameters);
-	if (! PAIRP (variable) && ! NAMEP (variable) ) {
+	if (! marlais_is_pair_p (variable) && ! marlais_is_name_p (variable) ) {
 	    /* we got to a keyword parameter or a hash-word */
 	    break;
 	}
-	if (PAIRP (variable)) {
+	if (marlais_is_pair_p (variable)) {
 #if 0
    marlais_warning ("  symtab element",
 		     CAR (variable),

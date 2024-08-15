@@ -115,7 +115,7 @@ static Object
 prim_list_first (Object lst, Object default_ob)
 {
   return nth(lst, default_ob, "first",
-             PAIRP(lst),
+             marlais_is_pair_p(lst),
              marlais_car);
 }
 
@@ -123,7 +123,7 @@ static Object
 prim_list_second (Object lst, Object default_ob)
 {
   return nth(lst, default_ob, "second",
-             PAIRP(lst) && PAIRP(CDR(lst)),
+             marlais_is_pair_p(lst) && marlais_is_pair_p(CDR(lst)),
              marlais_second);
 }
 
@@ -131,7 +131,7 @@ static Object
 prim_list_third (Object lst, Object default_ob)
 {
   return nth(lst, default_ob, "third",
-             PAIRP (lst) && PAIRP (CDR (lst)) && PAIRP (CDR (CDR (lst))),
+             marlais_is_pair_p (lst) && marlais_is_pair_p (CDR (lst)) && marlais_is_pair_p (CDR (CDR (lst))),
              marlais_third);
 }
 
@@ -140,14 +140,14 @@ prim_list_last (Object lst, Object default_ob)
 {
     Object last = MARLAIS_UNSPECIFIED;
 
-    if (EMPTYLISTP (lst)) {
+    if (marlais_is_nil_p (lst)) {
         if (default_ob == marlais_default) {
             marlais_error ("attempt to get last of empty list", NULL);
         } else {
             return default_ob;
         }
     }
-    while (!EMPTYLISTP (lst)) {
+    while (!marlais_is_nil_p (lst)) {
         last = CAR (lst);
         lst = CDR (lst);
     }
@@ -192,9 +192,9 @@ prim_list_element (Object pair, Object index, Object default_ob)
     int i;
     Object lst;
 
-    i = INTVAL (index);
+    i = marlais_get_int (index);
     lst = pair;
-    if (EMPTYLISTP (lst)) {
+    if (marlais_is_nil_p (lst)) {
         if (default_ob == marlais_default) {
             marlais_error ("element: no such element", index, pair, NULL);
         } else {
@@ -204,7 +204,7 @@ prim_list_element (Object pair, Object index, Object default_ob)
     while (i) {
         i--;
         lst = CDR (lst);
-        if (EMPTYLISTP (lst)) {
+        if (marlais_is_nil_p (lst)) {
             if (default_ob == marlais_default) {
                 marlais_error ("element: no such element", index, pair, NULL);
             } else {
@@ -222,12 +222,12 @@ prim_list_element_setter (Object pair, Object index, Object obj)
     Object lst;
 
     i = 0;
-    el = INTVAL (index);
+    el = marlais_get_int (index);
     lst = pair;
-    if (EMPTYLISTP (lst)) {
+    if (marlais_is_nil_p (lst)) {
         return marlais_error ("element-setter: list is empty", NULL);
     }
-    while (!EMPTYLISTP (lst)) {
+    while (!marlais_is_nil_p (lst)) {
         if (i == el) {
             CAR (lst) = obj;
             return (obj);
@@ -247,7 +247,7 @@ prim_list_reduce (Object fun, Object init, Object lst)
     Object val;
 
     val = init;
-    while (!EMPTYLISTP (lst)) {
+    while (!marlais_is_nil_p (lst)) {
         val = marlais_apply (fun, marlais_make_list (val, CAR (lst), NULL));
         lst = CDR (lst);
     }

@@ -335,7 +335,7 @@ aint (double x)
 static Object
 prim_int_to_double (Object n)
 {
-    return (marlais_make_dfloat (INTVAL (n)));
+    return (marlais_make_dfloat (marlais_get_int (n)));
 }
 
 static Object

@@ -18,7 +18,7 @@ static Object integer_cache[MARLAIS_CONFIG_INTEGER_CACHE];
 Object
 marlais_make_integer (marlais_int_t i)
 {
-  Object obj;
+  struct marlais_integer *obj;
 
 #if MARLAIS_CONFIG_INTEGER_CACHE > 0
   if(i >= 0 && i < MARLAIS_CONFIG_INTEGER_CACHE) {
@@ -28,8 +28,8 @@ marlais_make_integer (marlais_int_t i)
   }
 #endif
 
-  obj = marlais_allocate_object (Integer, sizeof (struct marlais_integer));
-  INTVAL (obj) = i;
+  obj = MARLAIS_ALLOCATE_OBJECT (Integer, struct marlais_integer);
+  obj->integer_value = i;
 
 #if MARLAIS_CONFIG_INTEGER_CACHE > 0
   if(i >= 0 && i < MARLAIS_CONFIG_INTEGER_CACHE) {

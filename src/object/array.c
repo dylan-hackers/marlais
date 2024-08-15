@@ -44,7 +44,7 @@ marlais_make_array_entrypoint (Object args)
   dim_obj = NULL;
   fill_obj = NULL;
 
-  while (!EMPTYLISTP (args)) {
+  while (!marlais_is_nil_p (args)) {
     if (FIRST (args) == dim_keyword) {
       dim_obj = SECOND (args);
     } else if (FIRST (args) == fill_keyword) {
@@ -85,12 +85,12 @@ marlais_make_array (Object dims, Object fill)
   ARRDIMS (obj) = dims;
   dl = dims;
   size = 1;
-  while (!EMPTYLISTP (dl)) {
+  while (!marlais_is_nil_p (dl)) {
     val = CAR (dl);
-    if (!INTEGERP (val)) {
+    if (!marlais_is_integer_p (val)) {
       marlais_error ("make: array dimensions must be integers", dims, NULL);
     }
-    size *= INTVAL (val);
+    size *= marlais_get_int (val);
     dl = CDR (dl);
   }
   ARRELS (obj) = MARLAIS_MALLOC_ARRAY_GENERAL (size, Object);
@@ -120,20 +120,20 @@ marlais_array_index (Object arr, Object indices, Object default_ob)
   inds = marlais_list_reverse (indices);
   offset = 0;
 
-  while (!EMPTYLISTP (dims) && !EMPTYLISTP (inds)) {
-    if (EMPTYLISTP (dims)) {
+  while (!marlais_is_nil_p (dims) && !marlais_is_nil_p (inds)) {
+    if (marlais_is_nil_p (dims)) {
       marlais_error ("element: too many indices for array", arr, indices, NULL);
     }
-    if (EMPTYLISTP (inds)) {
+    if (marlais_is_nil_p (inds)) {
       marlais_error ("element: not enough indices given", arr, indices, NULL);
     }
     dim = CAR (dims);
     ind = CAR (inds);
-    if (!INTEGERP (ind)) {
+    if (!marlais_is_integer_p (ind)) {
       marlais_error ("element: array indices must be integers", ind, NULL);
     }
-    dim_val = INTVAL (dim);
-    ind_val = INTVAL (ind);
+    dim_val = marlais_get_int (dim);
+    ind_val = marlais_get_int (ind);
     if ((ind_val < 0) || (ind_val >= dim_val)) {
       if (default_ob == marlais_default) {
         marlais_error ("element: array indices out of range", indices,
@@ -147,10 +147,10 @@ marlais_array_index (Object arr, Object indices, Object default_ob)
     dims = CDR (dims);
     inds = CDR (inds);
   }
-  if (!EMPTYLISTP (dims)) {
+  if (!marlais_is_nil_p (dims)) {
     marlais_error ("element: not enough indices for array", arr, indices, NULL);
   }
-  if (!EMPTYLISTP (inds)) {
+  if (!marlais_is_nil_p (inds)) {
     marlais_error ("element: too many indices given", arr, indices, NULL);
   }
   return offset;

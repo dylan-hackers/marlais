@@ -68,7 +68,7 @@ marlais_copy_list (Object lst)
     result = MARLAIS_NIL;
     tmp_ptr = &result;
     for (tmp_ptr = &result;
-         PAIRP (lst);
+         marlais_is_pair_p (lst);
          tmp_ptr = &CDR (*tmp_ptr), lst = CDR (lst)) {
         *tmp_ptr = marlais_cons (CAR (lst), MARLAIS_NIL);
     }
@@ -115,13 +115,13 @@ marlais_make_list_entrypoint (Object args)
 Object
 marlais_car (Object lst)
 {
-    return (EMPTYLISTP (lst) ? MARLAIS_NIL : CAR (lst));
+    return (marlais_is_nil_p (lst) ? MARLAIS_NIL : CAR (lst));
 }
 
 Object
 marlais_cdr (Object lst)
 {
-    return (EMPTYLISTP (lst) ? MARLAIS_NIL : CDR (lst));
+    return (marlais_is_nil_p (lst) ? MARLAIS_NIL : CDR (lst));
 }
 
 int
@@ -130,7 +130,7 @@ marlais_list_length (Object lst)
     int len;
     Object fore_list, back_list, next;
 
-    if (EMPTYLISTP (lst)) {
+    if (marlais_is_nil_p (lst)) {
         return 0;
     } else if (CDR (lst) == lst) {
         return -1;
@@ -143,21 +143,21 @@ marlais_list_length (Object lst)
         /* TODO don't modify the list */
 
         /* Reverse pointers in the list and see if we end up at the head. */
-        while (PAIRP (fore_list)) {
+        while (marlais_is_pair_p (fore_list)) {
             next = CDR (fore_list);
             CDR (fore_list) = back_list;
             back_list = fore_list;
             fore_list = next;
             len++;
         }
-        if ((back_list == lst) && (PAIRP (CDR (back_list)))) {
+        if ((back_list == lst) && (marlais_is_pair_p (CDR (back_list)))) {
             /* We ended up at the head and had at least 2 elements,
              *  thus there must be a cycle.
 	     */
           len = -1;
         }
         /* Reverse the pointers again to repair the list. */
-        while (PAIRP (back_list)) {
+        while (marlais_is_pair_p (back_list)) {
             next = CDR (back_list);
             CDR (back_list) = fore_list;
             fore_list = back_list;
@@ -182,7 +182,7 @@ marlais_third (Object lst)
 Object
 marlais_map1 (Object (*fun) (Object), Object lst)
 {
-    if (EMPTYLISTP (lst)) {
+    if (marlais_is_nil_p (lst)) {
         return (MARLAIS_NIL);
     } else {
         return (marlais_cons ((*fun) (CAR (lst)), marlais_map1 (fun, CDR (lst))));
@@ -192,7 +192,7 @@ marlais_map1 (Object (*fun) (Object), Object lst)
 Object
 marlais_map2 (Object (*fun) (Object, Object), Object l1, Object l2)
 {
-    if (EMPTYLISTP (l1) || EMPTYLISTP (l2)) {
+    if (marlais_is_nil_p (l1) || marlais_is_nil_p (l2)) {
         return (MARLAIS_NIL);
     } else {
         return (marlais_cons ((*fun) (CAR (l1), CAR (l2)), marlais_map2 (fun, CDR (l1), CDR (l2))));
@@ -202,7 +202,7 @@ marlais_map2 (Object (*fun) (Object, Object), Object l1, Object l2)
 Object
 marlais_map_apply1 (Object fun, Object lst)
 {
-    if (EMPTYLISTP (lst)) {
+    if (marlais_is_nil_p (lst)) {
         return (MARLAIS_NIL);
     } else {
         return (marlais_cons (marlais_apply (fun, marlais_cons (CAR (lst), MARLAIS_NIL)),
@@ -213,7 +213,7 @@ marlais_map_apply1 (Object fun, Object lst)
 Object
 marlais_map_apply2 (Object fun, Object l1, Object l2)
 {
-    if (EMPTYLISTP (l1) || EMPTYLISTP (l2)) {
+    if (marlais_is_nil_p (l1) || marlais_is_nil_p (l2)) {
         return (MARLAIS_NIL);
     } else {
         return (marlais_cons (marlais_apply (fun, marlais_make_list (CAR (l1), CAR (l2),
@@ -225,7 +225,7 @@ marlais_map_apply2 (Object fun, Object l1, Object l2)
 Object
 marlais_append (Object l1, Object l2)
 {
-    if (EMPTYLISTP (l1)) {
+    if (marlais_is_nil_p (l1)) {
         return (l2);
     } else {
         return (marlais_cons (CAR (l1), marlais_append (CDR (l1), l2)));
@@ -237,10 +237,10 @@ marlais_append_bang(Object l1, Object l2)
 {
     Object res = l1;
 
-    if (EMPTYLISTP (l1)) {
+    if (marlais_is_nil_p (l1)) {
         return (l2);
     }
-    while (PAIRP (CDR (l1))) {
+    while (marlais_is_pair_p (CDR (l1))) {
         l1 = CDR (l1);
     }
     CDR (l1) = l2;
@@ -253,7 +253,7 @@ marlais_list_reverse (Object lst)
     Object last;
 
     last = MARLAIS_NIL;
-    while (!EMPTYLISTP (lst)) {
+    while (!marlais_is_nil_p (lst)) {
         last = marlais_cons (CAR (lst), last);
         lst = CDR (lst);
     }
@@ -266,7 +266,7 @@ marlais_list_reverse_bang (Object lst)
     Object cur, next;
 
     cur = MARLAIS_NIL;
-    while (!EMPTYLISTP (lst)) {
+    while (!marlais_is_nil_p (lst)) {
         next = CDR (lst);
         CDR (lst) = cur;
         cur = lst;
@@ -278,7 +278,7 @@ marlais_list_reverse_bang (Object lst)
 bool
 marlais_member_p (Object obj, Object lst)
 {
-    while (PAIRP (lst)) {
+    while (marlais_is_pair_p (lst)) {
         if (marlais_identical_p (obj, CAR (lst))) {
             return true;
         }
@@ -291,7 +291,7 @@ bool
 marlais_member_test_p (Object obj, Object lst, Object test)
 {
     Object l = lst;
-    while (!EMPTYLISTP (l)) {
+    while (!marlais_is_nil_p (l)) {
         if (test != MARLAIS_FALSE) {
             if (marlais_apply (test, marlais_make_list (obj, CAR (l), NULL)) != MARLAIS_FALSE) {
                 return true;

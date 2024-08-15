@@ -11,29 +11,29 @@ marlais_instance_p (Object obj, Object type)
 {
   Object objtype;
 
-  if (SINGLETONP (type)) {
+  if (marlais_is_singleton_p (type)) {
     return marlais_identical_p (obj, SINGLEVAL (type));
-  } else if (LIMINTP (type)) {
-    if (INTEGERP (obj) &&
+  } else if (marlais_is_limint_p (type)) {
+    if (marlais_is_integer_p (obj) &&
         ((!LIMINTHASMIN (type)) ||
-         INTVAL (obj) >= LIMINTMIN (type)) &&
+         marlais_get_int (obj) >= LIMINTMIN (type)) &&
         ((!LIMINTHASMAX (type)) ||
-         INTVAL (obj) <= LIMINTMAX (type))) {
+         marlais_get_int (obj) <= LIMINTMAX (type))) {
       return true;
     } else {
       return false;
     }
-  } else if (UNIONP (type)) {
+  } else if (marlais_is_union_p (type)) {
     Object ptr;
 
-    for (ptr = UNIONLIST (type); PAIRP (ptr); ptr = CDR (ptr)) {
+    for (ptr = UNIONLIST (type); marlais_is_pair_p (ptr); ptr = CDR (ptr)) {
       if (marlais_instance_p (obj, (CAR (ptr)))) {
         return true;
       }
     }
     return false;
-  } else if (SUBCLASSP (type)) {
-    if (CLASSP (obj)) {
+  } else if (marlais_is_subclass_p (type)) {
+    if (marlais_is_class_p (obj)) {
       return marlais_subtype_p (obj, SUBCLASSVAL (type));
     } else {
       return false;
@@ -57,10 +57,10 @@ marlais_subtype_p (Object type1, Object type2)
 
   if (type1 == type2) {
     return 1;
-  } else if (SINGLETONP (type1)) {
+  } else if (marlais_is_singleton_p (type1)) {
     return (marlais_instance_p (SINGLEVAL (type1), type2));
-  } else if (LIMINTP (type1)) {
-    if (LIMINTP (type2)) {
+  } else if (marlais_is_limint_p (type1)) {
+    if (marlais_is_limint_p (type2)) {
       if (((!LIMINTHASMIN (type2)) ||
            (LIMINTHASMIN (type1) &&
             (LIMINTMIN (type1) >= LIMINTMIN (type2))))
@@ -75,26 +75,26 @@ marlais_subtype_p (Object type1, Object type2)
     } else {
       return (marlais_subtype_p (marlais_class_integer, type2));
     }
-  } else if (UNIONP (type1)) {
+  } else if (marlais_is_union_p (type1)) {
     Object ptr;
 
-    for (ptr = UNIONLIST (type1); PAIRP (ptr); ptr = CDR (ptr)) {
+    for (ptr = UNIONLIST (type1); marlais_is_pair_p (ptr); ptr = CDR (ptr)) {
       if (!marlais_subtype_p (CAR (ptr), type2)) {
         return 0;
       }
     }
     return 1;
-  } else if (UNIONP (type2)) {
+  } else if (marlais_is_union_p (type2)) {
     Object ptr;
 
-    for (ptr = UNIONLIST (type2); PAIRP (ptr); ptr = CDR (ptr)) {
+    for (ptr = UNIONLIST (type2); marlais_is_pair_p (ptr); ptr = CDR (ptr)) {
       if (marlais_subtype_p (type1, CAR (ptr))) {
         return 1;
       }
     }
     return 0;
-  } else if (SUBCLASSP (type1)) {
-    if (SUBCLASSP (type2)) {
+  } else if (marlais_is_subclass_p (type1)) {
+    if (marlais_is_subclass_p (type2)) {
       return marlais_subtype_p (SUBCLASSVAL (type1), SUBCLASSVAL (type2));
     } else {
       return marlais_subtype_p (marlais_class_class, type2);
@@ -104,7 +104,7 @@ marlais_subtype_p (Object type1, Object type2)
     if (!supers) {
       return 0;
     }
-    while (!EMPTYLISTP (supers)) {
+    while (!marlais_is_nil_p (supers)) {
       if (marlais_subtype_p (CAR (supers), type2)) {
         return 1;
       }
@@ -141,19 +141,19 @@ marlais_make_limited_integer (Object args)
 
   obj = marlais_allocate_object (LimitedIntType, sizeof (struct limited_int_type));
 
-  while (!EMPTYLISTP (args)) {
+  while (!marlais_is_nil_p (args)) {
     if (FIRST (args) == min_keyword) {
       if (LIMINTHASMIN (obj)) {
         marlais_error ("Minimum value for limited type specified twice", NULL);
       } else {
-        LIMINTMIN (obj) = INTVAL (SECOND (args));
+        LIMINTMIN (obj) = marlais_get_int (SECOND (args));
         LIMINTPROPS (obj) |= LIMMINMASK;
       }
     } else if (FIRST (args) == max_keyword) {
       if (LIMINTHASMAX (obj)) {
         marlais_error ("Maximum value for limited type specified twice", NULL);
       } else {
-        LIMINTMAX (obj) = INTVAL (SECOND (args));
+        LIMINTMAX (obj) = marlais_get_int (SECOND (args));
         LIMINTPROPS (obj) |= LIMMAXMASK;
       }
     } else {
@@ -196,9 +196,9 @@ marlais_make_union (Object typelist)
 
   union_types = MARLAIS_NIL;
 
-  for (ptr = typelist; PAIRP (ptr); ptr = CDR (ptr)) {
-    if (UNIONP (CAR (ptr))) {
-      for (qtr = UNIONLIST (CAR (ptr)); PAIRP (qtr); qtr = CDR (qtr)) {
+  for (ptr = typelist; marlais_is_pair_p (ptr); ptr = CDR (ptr)) {
+    if (marlais_is_union_p (CAR (ptr))) {
+      for (qtr = UNIONLIST (CAR (ptr)); marlais_is_pair_p (qtr); qtr = CDR (qtr)) {
         union_types = marlais_cons (CAR (qtr), union_types);
       }
     } else {

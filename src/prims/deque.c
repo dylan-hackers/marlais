@@ -109,7 +109,7 @@ deque_size (Object d)
 static Object
 deque_first (Object d, Object default_ob)
 {
-  if (EMPTYLISTP (DEQUEFIRST (d))) {
+  if (marlais_is_nil_p (DEQUEFIRST (d))) {
     if (default_ob == marlais_default) {
       marlais_error ("first: empty <deque>", d, NULL);
     } else {
@@ -122,7 +122,7 @@ deque_first (Object d, Object default_ob)
 static Object
 deque_last (Object d, Object default_ob)
 {
-  if (EMPTYLISTP (DEQUELAST (d))) {
+  if (marlais_is_nil_p (DEQUELAST (d))) {
     if (default_ob == marlais_default) {
       marlais_error ("last: empty <deque>", d, NULL);
     } else {
@@ -138,12 +138,12 @@ deque_element (Object d, Object index, Object default_ob)
   int i;
   Object el;
 
-  i = INTVAL (index);
+  i = marlais_get_int (index);
   el = DEQUEFIRST (d);
   while (i) {
     i--;
     el = DENEXT (el);
-    if (EMPTYLISTP (el)) {
+    if (marlais_is_nil_p (el)) {
       if (default_ob == marlais_default) {
         marlais_error ("element: out of range", index, d, NULL);
       } else {
@@ -160,15 +160,15 @@ deque_element_setter (Object d, Object index, Object new)
   int i;
   Object el;
 
-  i = INTVAL (index);
+  i = marlais_get_int (index);
   el = DEQUEFIRST (d);
-  if (EMPTYLISTP (el)) {
+  if (marlais_is_nil_p (el)) {
     marlais_error ("attempt to set element of empty deque", NULL);
   }
   while (i) {
     i--;
     el = DENEXT (el);
-    if (EMPTYLISTP (el)) {
+    if (marlais_is_nil_p (el)) {
       marlais_error ("element: out of range", index, d, NULL);
     }
   }
@@ -179,7 +179,7 @@ deque_element_setter (Object d, Object index, Object new)
 static Object
 deque_first_entry (Object d)
 {
-  if (EMPTYLISTP (DEQUEFIRST (d))) {
+  if (marlais_is_nil_p (DEQUEFIRST (d))) {
     return (MARLAIS_FALSE);
   } else {
     return (DEQUEFIRST (d));
@@ -189,7 +189,7 @@ deque_first_entry (Object d)
 static Object
 deque_last_entry (Object d)
 {
-  if (EMPTYLISTP (DEQUELAST (d))) {
+  if (marlais_is_nil_p (DEQUELAST (d))) {
     return (MARLAIS_FALSE);
   } else {
     return (DEQUELAST (d));
@@ -199,7 +199,7 @@ deque_last_entry (Object d)
 static Object
 deque_entry_next (Object de)
 {
-  if (EMPTYLISTP (DENEXT (de))) {
+  if (marlais_is_nil_p (DENEXT (de))) {
     return (MARLAIS_FALSE);
   } else {
     return (DENEXT (de));
@@ -209,7 +209,7 @@ deque_entry_next (Object de)
 static Object
 deque_entry_previous (Object de)
 {
-  if (EMPTYLISTP (DEPREV (de))) {
+  if (marlais_is_nil_p (DEPREV (de))) {
     return (MARLAIS_FALSE);
   } else {
     return (DEPREV (de));

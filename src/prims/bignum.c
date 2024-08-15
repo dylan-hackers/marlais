@@ -274,17 +274,17 @@ marlais_make_mpf_from_number(Object value)
   prim_mpf_set_bang(res, value);
 #else
   /* Faster version using combined init and set */
-  if (INTEGERP(value)) {
-    mpf_init_set_si (MPFVAL(res), INTVAL(value));
-  } else if (SFLOATP(value)) {
+  if (marlais_is_integer_p(value)) {
+    mpf_init_set_si (MPFVAL(res), marlais_get_int(value));
+  } else if (marlais_is_sfloat_p(value)) {
     mpf_init_set_d (MPFVAL(res), SFLOATVAL(value));
-  } else if (DFLOATP(value)) {
+  } else if (marlais_is_dfloat_p(value)) {
     mpf_init_set_d (MPFVAL(res), DFLOATVAL(value));
-  } else if (MPFP(value)) {
+  } else if (marlais_is_mpf_p(value)) {
     mpf_init_set (MPFVAL(res), MPFVAL(value));
   } else {
     mpf_init (MPFVAL(res));
-    if(RATIOP(value)) {
+    if(marlais_is_ratio_p(value)) {
       /* create temporary mpq and set from that */
       /* TODO is it faster to set the mpf and divide? */
       mpq_t q;
@@ -292,9 +292,9 @@ marlais_make_mpf_from_number(Object value)
       mpq_set_si (q, RATIONUM(value), RATIODEN(value));
       mpf_set_q (MPFVAL(res), MPQVAL(value));
       mpq_clear(q);
-    } else if (MPQP(value)) {
+    } else if (marlais_is_mpq_p(value)) {
       mpf_set_q (MPFVAL(res), MPQVAL(value));
-    } else if (MPZP(value)) {
+    } else if (marlais_is_mpz_p(value)) {
       mpf_set_z (MPFVAL(res), MPZVAL(value));
     } else {
       marlais_fatal("%number->mpf: Wrong first argument", value, NULL);
@@ -391,7 +391,7 @@ gmp_gc_free (void *obj, size_t old_size) {
 
 static Object prim_string_to_mpf(Object str, Object base)
 {
-  return marlais_make_mpf_from_string(BYTESTRVAL(str), INTVAL(base));
+  return marlais_make_mpf_from_string(BYTESTRVAL(str), marlais_get_int(base));
 }
 
 static Object
@@ -403,26 +403,26 @@ prim_mpf_precision(Object obj)
 static Object
 prim_mpf_precision_setter(Object obj, Object value)
 {
-  mpf_set_prec(MPFVAL(obj), INTVAL(value));
+  mpf_set_prec(MPFVAL(obj), marlais_get_int(value));
   return value;
 }
 
 static Object
 prim_mpf_set_bang(Object obj, Object value)
 {
-  if (INTEGERP(value)) {
-    mpf_set_si (MPFVAL(obj), INTVAL(value));
-  } else if (SFLOATP(value)) {
+  if (marlais_is_integer_p(value)) {
+    mpf_set_si (MPFVAL(obj), marlais_get_int(value));
+  } else if (marlais_is_sfloat_p(value)) {
     mpf_set_d (MPFVAL(obj), SFLOATVAL(value));
-  } else if (DFLOATP(value)) {
+  } else if (marlais_is_dfloat_p(value)) {
     mpf_set_d (MPFVAL(obj), DFLOATVAL(value));
-  } else if (MPFP(value)) {
+  } else if (marlais_is_mpf_p(value)) {
     mpf_set (MPFVAL(obj), MPFVAL(value));
-  } else if (MPQP(value)) {
+  } else if (marlais_is_mpq_p(value)) {
     mpf_set_q (MPFVAL(obj), MPQVAL(value));
-  } else if (MPZP(value)) {
+  } else if (marlais_is_mpz_p(value)) {
     mpf_set_z (MPFVAL(obj), MPZVAL(value));
-  } else if (RATIOP(value)) {
+  } else if (marlais_is_ratio_p(value)) {
     /* convert ratio to temporary <mp-ratio> */
     /* TODO do this locally */
     prim_mpf_set_bang(obj, marlais_make_mpq_from_number(value));
@@ -435,25 +435,25 @@ prim_mpf_set_bang(Object obj, Object value)
 static Object
 prim_string_to_mpq(Object str, Object base)
 {
-  return marlais_make_mpq_from_string(BYTESTRVAL(str), INTVAL(base));
+  return marlais_make_mpq_from_string(BYTESTRVAL(str), marlais_get_int(base));
 }
 
 static Object
 prim_mpq_set_bang(Object obj, Object value)
 {
-  if (INTEGERP(value)) {
-    mpq_set_si (MPQVAL(obj), INTVAL(value), 1);
-  } else if (SFLOATP(value)) {
+  if (marlais_is_integer_p(value)) {
+    mpq_set_si (MPQVAL(obj), marlais_get_int(value), 1);
+  } else if (marlais_is_sfloat_p(value)) {
     mpq_set_d (MPQVAL(obj), SFLOATVAL(value));
-  } else if (DFLOATP(value)) {
+  } else if (marlais_is_dfloat_p(value)) {
     mpq_set_d (MPQVAL(obj), DFLOATVAL(value));
-  } else if (RATIOP(value)) {
+  } else if (marlais_is_ratio_p(value)) {
     mpq_set_si (MPQVAL(obj), RATIONUM(value), RATIODEN(value));
-  } else if (MPFP(value)) {
+  } else if (marlais_is_mpf_p(value)) {
     mpq_set_f (MPQVAL(obj), MPFVAL(value));
-  } else if (MPQP(value)) {
+  } else if (marlais_is_mpq_p(value)) {
     mpq_set (MPQVAL(obj), MPQVAL(value));
-  } else if (MPZP(value)) {
+  } else if (marlais_is_mpz_p(value)) {
     mpq_set_z (MPQVAL(obj), MPZVAL(value));
   } else {
     marlais_fatal("%mpq-set!: Wrong second argument", value, NULL);
@@ -464,25 +464,25 @@ prim_mpq_set_bang(Object obj, Object value)
 static Object
 prim_string_to_mpz(Object str, Object base)
 {
-  return marlais_make_mpz_from_string(BYTESTRVAL(str), INTVAL(base));
+  return marlais_make_mpz_from_string(BYTESTRVAL(str), marlais_get_int(base));
 }
 
 static Object
 prim_mpz_set_bang(Object obj, Object value)
 {
-  if (INTEGERP(value)) {
-    mpz_set_si (MPZVAL(obj), INTVAL(value));
-  } else if (SFLOATP(value)) {
+  if (marlais_is_integer_p(value)) {
+    mpz_set_si (MPZVAL(obj), marlais_get_int(value));
+  } else if (marlais_is_sfloat_p(value)) {
     mpz_set_d (MPZVAL(obj), SFLOATVAL(value));
-  } else if (DFLOATP(value)) {
+  } else if (marlais_is_dfloat_p(value)) {
     mpz_set_d (MPZVAL(obj), DFLOATVAL(value));
-  } else if (MPFP(value)) {
+  } else if (marlais_is_mpf_p(value)) {
     mpz_set_f (MPZVAL(obj), MPFVAL(value));
-  } else if (MPQP(value)) {
+  } else if (marlais_is_mpq_p(value)) {
     mpz_set_q (MPZVAL(obj), MPQVAL(value));
-  } else if (MPZP(value)) {
+  } else if (marlais_is_mpz_p(value)) {
     mpz_set (MPZVAL(obj), MPZVAL(value));
-  } else if (RATIOP(value)) {
+  } else if (marlais_is_ratio_p(value)) {
     /* convert ratio to temporary <mp-ratio> */
     /* TODO do this locally */
     prim_mpz_set_bang(obj, marlais_make_mpq_from_number(value));
@@ -575,11 +575,11 @@ typedef struct marlais_biginteger mpz_obj;
     if (!_mp(a)) {                                                      \
       marlais_fatal("%" #_mt "-" #_op ": Wrong arguments", NULL);       \
     }                                                                   \
-    if (!UNSIGNEDP(b)) {                                                \
+    if (!marlais_uint_p(b)) {                                           \
       marlais_fatal("%" #_mt "-" #_op ": Wrong arguments", NULL);       \
     }                                                                   \
     /* operate */                                                       \
-    _mt ## _ ## _op ## _ui (_mg(res), _mg(a), INTVAL(b));               \
+    _mt ## _ ## _op ## _ui (_mg(res), _mg(a), marlais_get_uint(b));     \
     /* return */                                                        \
     return res;                                                         \
   }                                                                     \
@@ -609,8 +609,8 @@ typedef struct marlais_biginteger mpz_obj;
     /* operate */                                                       \
     if (_mp(i)) {                                                       \
       _mt ## _ ## _op (_mg(res), _mg(m), _mg(i));                       \
-    } else if (UNSIGNEDP(i)) {                                          \
-      _mt ## _ ## _op ## _ui (_mg(res), _mg(m), INTVAL(i));             \
+    } else if (marlais_uint_p(i)) {                                     \
+      _mt ## _ ## _op ## _ui (_mg(res), _mg(m), marlais_get_uint(i));   \
     } else {                                                            \
       marlais_fatal("%" #_mt "-" #_op ": Wrong arguments", NULL);       \
     }                                                                   \
@@ -636,8 +636,8 @@ typedef struct marlais_biginteger mpz_obj;
     /* operate */                                                       \
     if (_mp(b)) {                                                       \
       _mt ## _ ## _op (_mg(res), _mg(a), _mg(b));                       \
-    } else if (UNSIGNEDP(b)) {                                          \
-      _mt ## _ ## _op ## _ui (_mg(res), _mg(a), INTVAL(b));             \
+    } else if (marlais_uint_p(b)) {                                     \
+      _mt ## _ ## _op ## _ui (_mg(res), _mg(a), marlais_get_uint(b));   \
     } else {                                                            \
       marlais_fatal("%" #_mt "-" #_op ": Wrong arguments", NULL);       \
     }                                                                   \
@@ -659,10 +659,10 @@ typedef struct marlais_biginteger mpz_obj;
     /* operate */                                                       \
     if (_mp(a) && _mp(b)) {                                             \
       _mt ## _ ## _op (_mg(res), _mg(a), _mg(b));                       \
-    } else if (_mp(a) && UNSIGNEDP(b)) {                                \
-      _mt ## _ ## _op ## _ui (_mg(res), _mg(a), INTVAL(b));             \
-    } else if (UNSIGNEDP(a) && _mp(b)) {                                \
-      _mt ## _ui_ ## _op (_mg(res), INTVAL(a), _mg(b));                 \
+    } else if (_mp(a) && marlais_uint_p(b)) {                           \
+      _mt ## _ ## _op ## _ui (_mg(res), _mg(a), marlais_get_uint(b));   \
+    } else if (marlais_uint_p(a) && _mp(b)) {                           \
+      _mt ## _ui_ ## _op (_mg(res), marlais_get_uint(a), _mg(b));       \
     } else {                                                            \
       marlais_fatal("%" #_mt "-" #_op ": Wrong arguments", NULL);       \
     }                                                                   \
@@ -684,8 +684,8 @@ typedef struct marlais_biginteger mpz_obj;
     /* operate */                                                       \
     if (_mp(a) && _mp(b)) {                                             \
       _mt ## _ ## _op (_mg(q), _mg(r), _mg(a), _mg(b));                 \
-    } else if (_mp(a) && UNSIGNEDP(b)) {                                \
-      _mt ## _ ## _op ## _ui (_mg(q), _mg(r), _mg(a), INTVAL(b));       \
+    } else if (_mp(a) && marlais_uint_p(b)) {                           \
+      _mt ## _ ## _op ## _ui (_mg(q), _mg(r), _mg(a), marlais_get_uint(b)); \
     } else {                                                            \
       marlais_fatal("%" #_mt "-" #_op ": Wrong arguments", NULL);       \
     }                                                                   \
@@ -706,118 +706,118 @@ typedef struct marlais_biginteger mpz_obj;
 
 /* Primitives on <big-float> */
 
-DEFINE_COMPARE_MP_MP(mpf, BigFloat, MPFP, MPFVAL);
-DEFINE_BINARY_MP_MPUI_COM(mpf, BigFloat, MPFP, MPFVAL, add);
-DEFINE_BINARY_MPUI_MPUI(mpf, BigFloat, MPFP, MPFVAL, sub);
-DEFINE_BINARY_MP_MPUI_COM(mpf, BigFloat, MPFP, MPFVAL, mul);
-DEFINE_BINARY_MPUI_MPUI(mpf, BigFloat, MPFP, MPFVAL, div);
-DEFINE_BINARY_MP_UI(mpf, BigFloat, MPFP, MPFVAL, pow);
-DEFINE_UNARY_MP(mpf, BigFloat, MPFP, MPFVAL, neg);
-DEFINE_UNARY_MP(mpf, BigFloat, MPFP, MPFVAL, abs);
-DEFINE_UNARY_MP(mpf, BigFloat, MPFP, MPFVAL, ceil);
-DEFINE_UNARY_MP(mpf, BigFloat, MPFP, MPFVAL, floor);
-DEFINE_UNARY_MP(mpf, BigFloat, MPFP, MPFVAL, trunc);
-DEFINE_UNARY_MP(mpf, BigFloat, MPFP, MPFVAL, sqrt);
+DEFINE_COMPARE_MP_MP(mpf, BigFloat, marlais_is_mpf_p, MPFVAL);
+DEFINE_BINARY_MP_MPUI_COM(mpf, BigFloat, marlais_is_mpf_p, MPFVAL, add);
+DEFINE_BINARY_MPUI_MPUI(mpf, BigFloat, marlais_is_mpf_p, MPFVAL, sub);
+DEFINE_BINARY_MP_MPUI_COM(mpf, BigFloat, marlais_is_mpf_p, MPFVAL, mul);
+DEFINE_BINARY_MPUI_MPUI(mpf, BigFloat, marlais_is_mpf_p, MPFVAL, div);
+DEFINE_BINARY_MP_UI(mpf, BigFloat, marlais_is_mpf_p, MPFVAL, pow);
+DEFINE_UNARY_MP(mpf, BigFloat, marlais_is_mpf_p, MPFVAL, neg);
+DEFINE_UNARY_MP(mpf, BigFloat, marlais_is_mpf_p, MPFVAL, abs);
+DEFINE_UNARY_MP(mpf, BigFloat, marlais_is_mpf_p, MPFVAL, ceil);
+DEFINE_UNARY_MP(mpf, BigFloat, marlais_is_mpf_p, MPFVAL, floor);
+DEFINE_UNARY_MP(mpf, BigFloat, marlais_is_mpf_p, MPFVAL, trunc);
+DEFINE_UNARY_MP(mpf, BigFloat, marlais_is_mpf_p, MPFVAL, sqrt);
 
 static Object
 prim_mpf_zero_p (Object a)
 {
-  return marlais_make_boolean(MPFP(a) && mpf_sgn(MPFVAL(a)) == 0);
+  return marlais_make_boolean(marlais_is_mpf_p(a) && mpf_sgn(MPFVAL(a)) == 0);
 }
 
 static Object
 prim_mpf_positive_p (Object a)
 {
-  return marlais_make_boolean(MPFP(a) && mpf_sgn(MPFVAL(a)) > 0);
+  return marlais_make_boolean(marlais_is_mpf_p(a) && mpf_sgn(MPFVAL(a)) > 0);
 }
 
 static Object
 prim_mpf_negative_p (Object a)
 {
-  return marlais_make_boolean(MPFP(a) && mpf_sgn(MPFVAL(a)) < 0);
+  return marlais_make_boolean(marlais_is_mpf_p(a) && mpf_sgn(MPFVAL(a)) < 0);
 }
 
 /* Primitives on <big-ratio> */
 
-DEFINE_COMPARE_MP_MP(mpq, BigRatio, MPQP, MPQVAL);
-DEFINE_BINARY_MP_MP(mpq, BigRatio, MPQP, MPQVAL, add);
-DEFINE_BINARY_MP_MP(mpq, BigRatio, MPQP, MPQVAL, sub);
-DEFINE_BINARY_MP_MP(mpq, BigRatio, MPQP, MPQVAL, mul);
-DEFINE_BINARY_MP_MP(mpq, BigRatio, MPQP, MPQVAL, div);
-DEFINE_UNARY_MP(mpq, BigRatio, MPQP, MPQVAL, neg);
-DEFINE_UNARY_MP(mpq, BigRatio, MPQP, MPQVAL, abs);
-DEFINE_UNARY_MP(mpq, BigRatio, MPQP, MPQVAL, inv);
+DEFINE_COMPARE_MP_MP(mpq, BigRatio, marlais_is_mpq_p, MPQVAL);
+DEFINE_BINARY_MP_MP(mpq, BigRatio, marlais_is_mpq_p, MPQVAL, add);
+DEFINE_BINARY_MP_MP(mpq, BigRatio, marlais_is_mpq_p, MPQVAL, sub);
+DEFINE_BINARY_MP_MP(mpq, BigRatio, marlais_is_mpq_p, MPQVAL, mul);
+DEFINE_BINARY_MP_MP(mpq, BigRatio, marlais_is_mpq_p, MPQVAL, div);
+DEFINE_UNARY_MP(mpq, BigRatio, marlais_is_mpq_p, MPQVAL, neg);
+DEFINE_UNARY_MP(mpq, BigRatio, marlais_is_mpq_p, MPQVAL, abs);
+DEFINE_UNARY_MP(mpq, BigRatio, marlais_is_mpq_p, MPQVAL, inv);
 
 static Object
 prim_mpq_zero_p (Object a)
 {
-  return marlais_make_boolean(MPQP(a) && mpq_sgn(MPQVAL(a)) == 0);
+  return marlais_make_boolean(marlais_is_mpq_p(a) && mpq_sgn(MPQVAL(a)) == 0);
 }
 
 static Object
 prim_mpq_positive_p (Object a)
 {
-  return marlais_make_boolean(MPQP(a) && mpq_sgn(MPQVAL(a)) > 0);
+  return marlais_make_boolean(marlais_is_mpq_p(a) && mpq_sgn(MPQVAL(a)) > 0);
 }
 
 static Object
 prim_mpq_negative_p (Object a)
 {
-  return marlais_make_boolean(MPQP(a) && mpq_sgn(MPQVAL(a)) < 0);
+  return marlais_make_boolean(marlais_is_mpq_p(a) && mpq_sgn(MPQVAL(a)) < 0);
 }
 
 /* Primitives on <big-integer> */
 
-DEFINE_COMPARE_MP_MP(mpz, BigInteger, MPZP, MPZVAL);
-DEFINE_BINARY_MP_MPUI_COM(mpz, BigInteger, MPZP, MPZVAL, add);
-DEFINE_BINARY_MPUI_MPUI(mpz, BigInteger, MPZP, MPZVAL, sub);
-DEFINE_BINARY_MP_MPUI_COM(mpz, BigInteger, MPZP, MPZVAL, mul);
-DEFINE_BINARY_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, cdiv_q);
-DEFINE_BINARY_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, cdiv_r);
-DEFINE_DIVIDE_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, cdiv_qr);
-DEFINE_BINARY_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, fdiv_q);
-DEFINE_BINARY_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, fdiv_r);
-DEFINE_DIVIDE_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, fdiv_qr);
-DEFINE_BINARY_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, tdiv_q);
-DEFINE_BINARY_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, tdiv_r);
-DEFINE_DIVIDE_MP_MPUI(mpz, BigInteger, MPZP, MPZVAL, tdiv_qr);
-DEFINE_UNARY_MP(mpz, BigInteger, MPZP, MPZVAL, neg);
-DEFINE_UNARY_MP(mpz, BigInteger, MPZP, MPZVAL, abs);
-DEFINE_UNARY_MP(mpz, BigInteger, MPZP, MPZVAL, com);
-DEFINE_BINARY_MP_MP(mpz, BigInteger, MPZP, MPZVAL, and);
-DEFINE_BINARY_MP_MP(mpz, BigInteger, MPZP, MPZVAL, ior);
-DEFINE_BINARY_MP_MP(mpz, BigInteger, MPZP, MPZVAL, xor);
-DEFINE_BINARY_MP_MP(mpz, BigInteger, MPZP, MPZVAL, gcd);
-DEFINE_BINARY_MP_MPUI_COM(mpz, BigInteger, MPZP, MPZVAL, lcm);
+DEFINE_COMPARE_MP_MP(mpz, BigInteger, marlais_is_mpz_p, MPZVAL);
+DEFINE_BINARY_MP_MPUI_COM(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, add);
+DEFINE_BINARY_MPUI_MPUI(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, sub);
+DEFINE_BINARY_MP_MPUI_COM(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, mul);
+DEFINE_BINARY_MP_MPUI(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, cdiv_q);
+DEFINE_BINARY_MP_MPUI(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, cdiv_r);
+DEFINE_DIVIDE_MP_MPUI(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, cdiv_qr);
+DEFINE_BINARY_MP_MPUI(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, fdiv_q);
+DEFINE_BINARY_MP_MPUI(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, fdiv_r);
+DEFINE_DIVIDE_MP_MPUI(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, fdiv_qr);
+DEFINE_BINARY_MP_MPUI(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, tdiv_q);
+DEFINE_BINARY_MP_MPUI(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, tdiv_r);
+DEFINE_DIVIDE_MP_MPUI(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, tdiv_qr);
+DEFINE_UNARY_MP(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, neg);
+DEFINE_UNARY_MP(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, abs);
+DEFINE_UNARY_MP(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, com);
+DEFINE_BINARY_MP_MP(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, and);
+DEFINE_BINARY_MP_MP(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, ior);
+DEFINE_BINARY_MP_MP(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, xor);
+DEFINE_BINARY_MP_MP(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, gcd);
+DEFINE_BINARY_MP_MPUI_COM(mpz, BigInteger, marlais_is_mpz_p, MPZVAL, lcm);
 
 static Object
 prim_mpz_zero_p (Object a)
 {
-  return marlais_make_boolean(MPZP(a) && mpz_sgn(MPZVAL(a)) == 0);
+  return marlais_make_boolean(marlais_is_mpz_p(a) && mpz_sgn(MPZVAL(a)) == 0);
 }
 
 static Object
 prim_mpz_positive_p (Object a)
 {
-  return marlais_make_boolean(MPZP(a) && mpz_sgn(MPZVAL(a)) > 0);
+  return marlais_make_boolean(marlais_is_mpz_p(a) && mpz_sgn(MPZVAL(a)) > 0);
 }
 
 static Object
 prim_mpz_negative_p (Object a)
 {
-  return marlais_make_boolean(MPZP(a) && mpz_sgn(MPZVAL(a)) < 0);
+  return marlais_make_boolean(marlais_is_mpz_p(a) && mpz_sgn(MPZVAL(a)) < 0);
 }
 
 static Object
 prim_mpz_even_p (Object a)
 {
-  return marlais_make_boolean(MPZP(a) && mpz_even_p(MPZVAL(a)));
+  return marlais_make_boolean(marlais_is_mpz_p(a) && mpz_even_p(MPZVAL(a)));
 }
 
 static Object
 prim_mpz_odd_p (Object a)
 {
-  return marlais_make_boolean(MPZP(a) && mpz_odd_p(MPZVAL(a)));
+  return marlais_make_boolean(marlais_is_mpz_p(a) && mpz_odd_p(MPZVAL(a)));
 }
 
 static Object
@@ -830,7 +830,7 @@ static Object
 prim_mpz_gcdext_bang(Object g, Object s, Object t, Object a, Object b)
 {
   /* operate */
-  if (MPZP(a) && MPZP(b)) {
+  if (marlais_is_mpz_p(a) && marlais_is_mpz_p(b)) {
     mpz_gcdext(MPZVAL(g), MPZVAL(s), MPZVAL(t), MPZVAL(g), MPZVAL(b));
   } else {
     marlais_fatal("%mpz-gcdext: Wrong arguments", NULL);

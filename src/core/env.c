@@ -86,7 +86,7 @@ marlais_add_locals (Object syms, Object vals, int constant, struct environment *
 
   sym_list = syms;
   num_bindings = 0;
-  while (!EMPTYLISTP (sym_list)) {
+  while (!marlais_is_nil_p (sym_list)) {
     num_bindings++;
     sym_list = CDR (sym_list);
   }
@@ -129,7 +129,7 @@ marlais_add_local (Object sym, Object val, int constant, struct environment *to_
   struct binding *binding;
 
   binding = MARLAIS_MALLOC_GENERAL (struct binding);
-  if (PAIRP (sym)) {
+  if (marlais_is_pair_p (sym)) {
     binding->sym = CAR (sym);
     binding->type = marlais_eval (SECOND (sym));
   } else {
@@ -267,7 +267,7 @@ marlais_unwind_to_exit (Object exit_proc)
       if (tmp_eval_stack->context == unwind_protect_symbol) {
         body = UNWINDBODY (*(frame->bindings[0]->val));
         the_env = tmp_eval_stack->frame;
-        while (!EMPTYLISTP (body)) {
+        while (!marlais_is_nil_p (body)) {
           marlais_eval (CAR (body));
           body = CDR (body);
         }

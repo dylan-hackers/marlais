@@ -49,7 +49,7 @@ load_internal (Object filename)
 
     close_file (fp);
 
-    while (PAIRP (expr_list)) {
+    while (marlais_is_pair_p (expr_list)) {
 	res = marlais_eval (CAR (expr_list));
 	expr_list = CDR (expr_list);
     }
@@ -81,7 +81,7 @@ marlais_load (Object filename)
 void
 marlais_close_open_files (void)
 {
-  while (PAIRP (marlais_loading_files)) {
+  while (marlais_is_pair_p (marlais_loading_files)) {
     fclose ((FILE *) FOREIGNPTR (CAR (marlais_loading_files)));
     marlais_loading_files = CDR (marlais_loading_files);
   }
@@ -95,7 +95,7 @@ open_file (Object filename)
   char *str;
   FILE *fp;
 
-  if (!BYTESTRP (filename)) {
+  if (!marlais_is_bstring_p (filename)) {
     marlais_error ("load: argument must be a filename", filename, NULL);
   }
   str = BYTESTRVAL (filename);

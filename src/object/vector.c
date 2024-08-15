@@ -83,7 +83,7 @@ marlais_list_to_vector (Object list)
 
   size = 0;
   els = list;
-  while (PAIRP (els)) {
+  while (marlais_is_pair_p (els)) {
     size++;
     els = CDR (els);
   }
@@ -92,7 +92,7 @@ marlais_list_to_vector (Object list)
 
   els = list;
   i = 0;
-  while (PAIRP (els)) {
+  while (marlais_is_pair_p (els)) {
     SOVELS (obj)[i++] = CAR (els);
     els = CDR (els);
   }
@@ -107,7 +107,7 @@ marlais_vector_to_list (Object vec)
 
   for (i = 0; i < SOVSIZE (vec); ++i) {
     acons = marlais_cons (SOVELS (vec)[i], MARLAIS_NIL);
-    if (!EMPTYLISTP (cur)) {
+    if (!marlais_is_nil_p (cur)) {
       CDR (cur) = acons;
     } else {
       first = acons;

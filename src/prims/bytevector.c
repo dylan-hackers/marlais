@@ -40,7 +40,7 @@ prim_bytevector_element (Object vec, Object index, Object default_obj)
   struct marlais_bytevector *v = MARLAIS_CAST_BYTEVECTOR(vec);
   int i, size;
 
-  i = INTVAL (index);
+  i = marlais_get_int (index);
   size = v->bv_size;
   if ((i < 0) || (i >= size)) {
     if (default_obj == marlais_default) {
@@ -59,11 +59,11 @@ prim_bytevector_element_setter (Object vec, Object index, Object value)
   int i, size;
   uint8_t new;
 
-  i = INTVAL (index);
+  i = marlais_get_int (index);
   size = v->bv_size;
   if ((i < 0) || (i >= size)) {
     marlais_error ("element-setter: index out of range", vec, index, NULL);
   }
-  new = INTVAL (value) & 0xFF;
+  new = marlais_get_int (value) & 0xFF;
   return marlais_make_integer (v->bv_data[i] = new);
 }

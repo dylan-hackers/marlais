@@ -24,12 +24,12 @@ marlais_allocate_object (marlais_repr_t type, size_t size)
 marlais_repr_t
 marlais_object_repr (Object obj)
 {
-  if (POINTERP (obj)) {
+  if (marlais_object_pointer_p (obj)) {
     return (POINTERTYPE (obj));
-  } else if (INTEGERP (obj)) {
+  } else if (marlais_is_integer_p (obj)) {
     return (Integer);
-  } else if (IMMEDP (obj)) {
-    switch (SUBPART (obj)) {
+  } else if (marlais_object_immediate_p (obj)) {
+    switch (marlais_get_subtag (obj)) {
     case MARLAIS_SUB_TRUE:
       return (True);
     case MARLAIS_SUB_FALSE:

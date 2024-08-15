@@ -85,7 +85,7 @@ prim_vector_element (Object vec, Object index, Object default_ob)
 {
   int i, size;
 
-  i = INTVAL (index);
+  i = marlais_get_int (index);
   size = SOVSIZE (vec);
   if ((i < 0) || (i >= size)) {
     if (default_ob == marlais_default) {
@@ -102,7 +102,7 @@ prim_vector_element_setter (Object vec, Object index, Object val)
 {
   int i, size;
 
-  i = INTVAL (index);
+  i = marlais_get_int (index);
   size = SOVSIZE (vec);
   if ((i < 0) || (i >= size)) {
     marlais_error ("element-setter: index out of range", vec, index, NULL);

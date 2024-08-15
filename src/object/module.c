@@ -82,7 +82,7 @@ marlais_find_module (Object module_name)
   Object l;
 
   l = marlais_all_modules;
-  while(!EMPTYLISTP(l)) {
+  while(!marlais_is_nil_p(l)) {
     Object m = CAR(l);
     if (MODULE(m)->sym == module_name) {
       return m;
@@ -175,7 +175,7 @@ marlais_use_module (Object module_name,
    * hand, if imports != all, we might want to just look at the
    * symbols to be imported.
    */
-  if (NAMEP (module_name)) {
+  if (marlais_is_name_p (module_name)) {
 
     import_module = marlais_find_module (module_name);
     if (import_module == MARLAIS_FALSE) {
@@ -223,14 +223,14 @@ marlais_use_module (Object module_name,
            */
           old_binding = marlais_symbol_binding_top_level (new_sym);
           if (old_binding != NULL) {
-            if (GFUNP (*(old_binding->val))
-                && GFUNP (*(bindings->val))) {
+            if (marlais_is_generic_p (*(old_binding->val))
+                && marlais_is_generic_p (*(bindings->val))) {
               Object new_methods;
 
               marlais_warning ("Adding methods to generic function", NULL);
               /* Add methods to generic function */
               for (new_methods = GFMETHODS (*(bindings->val));
-                   !EMPTYLISTP (new_methods);
+                   !marlais_is_nil_p (new_methods);
                    new_methods = CDR (new_methods)) {
                 marlais_add_method (*(old_binding->val),
                             CAR (new_methods));
@@ -324,7 +324,7 @@ marlais_add_module_binding(Object sym, Object val, int constant, int exported)
 
   binding = MARLAIS_MALLOC_GENERAL (struct binding);
 
-  if (PAIRP (sym)) {
+  if (marlais_is_pair_p (sym)) {
     binding->sym = CAR (sym);
     binding->type = marlais_eval (SECOND (sym));
   } else {
@@ -380,9 +380,9 @@ marlais_fill_imports_table_from_property_set (Object imports_table,
 {
   Object the_element;
 
-  while (!EMPTYLISTP (imports_set)) {
+  while (!marlais_is_nil_p (imports_set)) {
     the_element = CAR (imports_set);
-    if (PAIRP (the_element)) {
+    if (marlais_is_pair_p (the_element)) {
       marlais_table_element_setter (imports_table, the_element, the_element);
       marlais_table_element_setter (renames_table,
                                     CAR (the_element),

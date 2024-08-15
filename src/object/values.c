@@ -79,7 +79,7 @@ marlais_values_list (Object vals)
 
   num = marlais_list_length(vals);
 
-  if(EMPTYLISTP(vals)) {
+  if(marlais_is_nil_p(vals)) {
     obj = MARLAIS_UNSPECIFIED;
 #if 0
   } else if(num == 1) {
@@ -99,9 +99,9 @@ marlais_values_list (Object vals)
 Object
 marlais_values (Object rest)
 {
-  if (EMPTYLISTP(rest)) {
+  if (marlais_is_nil_p(rest)) {
     return MARLAIS_UNSPECIFIED;
-  } else if (PAIRP(CDR(rest))) {
+  } else if (marlais_is_pair_p(CDR(rest))) {
     return marlais_values_list(rest);
   } else {
     return (CAR(rest));
@@ -111,7 +111,7 @@ marlais_values (Object rest)
 Object
 marlais_devalue (Object val)
 {
-  if (VALUESP(val)) {
+  if (marlais_is_values_p(val)) {
     if (VALUESNUM(val)) {
       return VALUESELS(val)[0];
     } else {

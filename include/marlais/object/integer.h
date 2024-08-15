@@ -64,11 +64,11 @@ static inline Object marlais_make_integer(marlais_int_t i) {
 extern Object marlais_make_integer (marlais_int_t i);
 #endif
 
-static inline bool ZEROP(Object obj) {
-  return INTEGERP(obj) && (INTVAL(obj) == 0);
+static inline bool marlais_zero_p(Object obj) {
+  return marlais_is_integer_p(obj) && (marlais_get_int(obj) == 0);
 }
-static inline bool UNSIGNEDP(Object obj) {
-  return INTEGERP(obj) && (INTVAL(obj) >= 0);
+static inline bool marlais_uint_p(Object obj) {
+  return marlais_is_integer_p(obj) && (marlais_get_int(obj) >= 0);
 }
 
 #endif

@@ -99,9 +99,9 @@ marlais_function_specializers (Object func)
 {
   Object params;
 
-  if (METHODP (func)) {
+  if (marlais_is_method_p (func)) {
     params = METHREQPARAMS (func);
-  } else if (GFUNP (func)) {
+  } else if (marlais_is_generic_p (func)) {
     params = GFREQPARAMS (func);
   } else {
     marlais_fatal ("function-specializers: arg. must be a method or generic function", func, NULL);
@@ -112,7 +112,7 @@ marlais_function_specializers (Object func)
 Object
 marlais_generic_methods (Object gen)
 {
-  if (!GFUNP (gen)) {
+  if (!marlais_is_generic_p (gen)) {
     marlais_fatal ("generic-function-methods: argument must be a generic function", gen, NULL);
   }
   return (GFMETHODS (gen));
@@ -189,7 +189,7 @@ marlais_add_method (Object generic, Object method)
 #ifdef MARLAIS_ENABLE_METHOD_CACHING
   /* invalidate next methods when new method added. */
   next_meth_list = GFACTIVENM (generic);
-  while (PAIRP (next_meth_list)) {
+  while (marlais_is_pair_p (next_meth_list)) {
     NMREST (CAR (next_meth_list)) = marlais_cons (MARLAIS_FALSE,
                                           MARLAIS_NIL);
     next_meth_list = CDR (next_meth_list);
@@ -206,7 +206,7 @@ marlais_add_method (Object generic, Object method)
   }
   methods = GFMETHODS (generic);
   last = 0;
-  while (!EMPTYLISTP (methods)) {
+  while (!marlais_is_nil_p (methods)) {
     old_specs = marlais_function_specializers (CAR (methods));
     if (same_specializers (new_specs, old_specs)) {
       old_method = CAR (methods);
@@ -267,10 +267,10 @@ marlais_applicable_method_p (Object argfun, Object sample_args, int strict_check
   int num_required, i, check_keywords = 1;
   Object funs, fun;
 
-  if (!METHODP (argfun) && !GFUNP (argfun)) {
+  if (!marlais_is_method_p (argfun) && !marlais_is_generic_p (argfun)) {
     marlais_fatal ("applicable-method?: first argument must be a generic function or method", argfun, NULL);
   }
-  if (METHODP (argfun)) {
+  if (marlais_is_method_p (argfun)) {
     funs = marlais_cons (argfun, MARLAIS_NIL);
   } else {
     strict_check = 0;
@@ -278,17 +278,17 @@ marlais_applicable_method_p (Object argfun, Object sample_args, int strict_check
   }
 
  fail:
-  if (EMPTYLISTP (funs)) {
+  if (marlais_is_nil_p (funs)) {
     return MARLAIS_FALSE;
   }
-  while (PAIRP (funs)) {
+  while (marlais_is_pair_p (funs)) {
     fun = CAR (funs);
     funs = CDR (funs);
     args = function_arguments (fun);
     specs = marlais_function_specializers (fun);
 
     /* Are there more sample args than required args? */
-    num_required = INTVAL (FIRSTVAL (args));
+    num_required = marlais_get_int (FIRSTVAL (args));
     if (marlais_list_length (sample_args) < num_required) {
       return (MARLAIS_FALSE);
     }
@@ -304,10 +304,10 @@ marlais_applicable_method_p (Object argfun, Object sample_args, int strict_check
       specs = CDR (specs);
     }
 
-    if (PAIRP (samples)) {
+    if (marlais_is_pair_p (samples)) {
       keywords = THIRDVAL (args);
       /* If the method accepts keywords, make sure supplied keywords match */
-      if (PAIRP (keywords) || keywords == all_symbol) {
+      if (marlais_is_pair_p (keywords) || keywords == all_symbol) {
         if (keywords == all_symbol) {
           check_keywords = 0;
         }
@@ -315,9 +315,9 @@ marlais_applicable_method_p (Object argfun, Object sample_args, int strict_check
          * are keyword specified, and that all keywords
          * in sample_args are in the keyword list
          */
-        while (PAIRP (samples)) {
-          if (!SYMBOLP (CAR (samples)) ||
-              EMPTYLISTP (CDR (samples))) {
+        while (marlais_is_pair_p (samples)) {
+          if (!marlais_is_symbol_p (CAR (samples)) ||
+              marlais_is_nil_p (CDR (samples))) {
             /* Has non keyword where our method needs one */
             goto fail;
             /* return (MARLAIS_FALSE); */
@@ -350,14 +350,14 @@ marlais_sorted_applicable_methods (Object fun, Object sample_args)
 
   methods = GFMETHODS (fun);
   app_methods = MARLAIS_NIL;
-  while (!EMPTYLISTP (methods)) {
+  while (!marlais_is_nil_p (methods)) {
     method = CAR (methods);
     if (marlais_applicable_method_p (method, sample_args, 0) != MARLAIS_FALSE) {
       app_methods = marlais_cons (method, app_methods);
     }
     methods = CDR (methods);
   }
-  if (EMPTYLISTP (app_methods)) {
+  if (marlais_is_nil_p (app_methods)) {
     return marlais_error ("No applicable methods", fun, sample_args, NULL);
   }
   return split_sorted_methods (app_methods, sample_args);
@@ -376,7 +376,7 @@ keyword_list_insert (Object *list, Object key_binding)
   /* Search for insert point, then break */
 
   tmp_ptr = list;
-  while (PAIRP (*tmp_ptr)) {
+  while (marlais_is_pair_p (*tmp_ptr)) {
     compare = strcmp (key_name, SYMBOLNAME (CAR (CAR (*tmp_ptr))));
     if (compare < 0) {
       tmp_ptr = &CDR (*tmp_ptr);
@@ -394,7 +394,7 @@ keyword_list_insert (Object *list, Object key_binding)
 static int
 next_parameter_is(Object params, Object type)
 {
-  return PAIRP(params) && (CAR(params) == type);
+  return marlais_is_pair_p(params) && (CAR(params) == type);
 }
 
 static void
@@ -404,13 +404,13 @@ parse_function_required_parameters (Object *params, Object *tmp_ptr)
 
   *tmp_ptr = MARLAIS_NIL;
 
-  while (PAIRP (*params)) { /* CONTAINS BREAK! */
+  while (marlais_is_pair_p (*params)) { /* CONTAINS BREAK! */
     entry = CAR (*params);
     if (entry == hash_rest_symbol || entry == key_symbol ||
         entry == hash_values_symbol || entry == next_symbol) {
       break;
     }
-    if (PAIRP (entry)) {
+    if (marlais_is_pair_p (entry)) {
       (*tmp_ptr) = marlais_cons (marlais_make_list (CAR (entry),
                                  marlais_eval (SECOND (entry)),
                                  NULL),
@@ -429,7 +429,7 @@ parse_method_next_parameter (Object meth_obj, Object *params)
 {
   if (next_parameter_is(*params, next_symbol)) {
     *params = CDR (*params);
-    if (PAIRP (*params)) {
+    if (marlais_is_pair_p (*params)) {
       METHNEXTMETH (meth_obj) = CAR (*params);
       *params = CDR (*params);
     } else {
@@ -446,7 +446,7 @@ parse_function_rest_parameter (Object fn_obj, Object *params,
 {
   if (next_parameter_is(*params, hash_rest_symbol)) {
     *params = CDR (*params);
-    if (PAIRP (*params)) {
+    if (marlais_is_pair_p (*params)) {
       assign_fn (fn_obj, CAR (*params));
       *params = CDR (*params);
     } else {
@@ -468,7 +468,7 @@ static void
 gf_rest_return_assign(Object gf_obj, Object params)
 {
   if(params == NULL) return;
-  if (PAIRP (CAR (params))) {
+  if (marlais_is_pair_p (CAR (params))) {
     GFRESTVALUES (gf_obj) = marlais_eval (SECOND (CAR (params)));
   } else {
     GFRESTVALUES (gf_obj) = marlais_class_object;
@@ -485,7 +485,7 @@ static void
 method_rest_return_assign(Object meth_obj, Object params)
 {
   if(params == NULL) return;
-  if (PAIRP (CAR (params))) {
+  if (marlais_is_pair_p (CAR (params))) {
     METHRESTVALUES (meth_obj) = marlais_eval (SECOND (CAR (params)));
   } else {
     METHRESTVALUES (meth_obj) = marlais_class_object;
@@ -501,12 +501,12 @@ parse_function_return_parameters(Object functor, Object* params,
   *params = CDR (*params);
   *tmp_ptr = MARLAIS_NIL;
 
-  while (PAIRP (*params)) { /* CONTAINS BREAK! */
+  while (marlais_is_pair_p (*params)) { /* CONTAINS BREAK! */
     entry = CAR (*params);
     if (entry == hash_rest_symbol) {
       break;
     }
-    if (PAIRP (entry)) {
+    if (marlais_is_pair_p (entry)) {
       result_type = marlais_eval (SECOND (entry));
     } else {
       result_type = marlais_class_object;
@@ -527,38 +527,38 @@ parse_function_key_parameters(Object functor, Object* params,
   Object entry;
 
   *get_params_fn (functor) = MARLAIS_NIL;
-  if (PAIRP (*params) && CAR (*params) == key_symbol) {
+  if (marlais_is_pair_p (*params) && CAR (*params) == key_symbol) {
     bit_mask_fn(functor, 0);
     *params = CDR (*params);
-    while (PAIRP (*params) && (CAR (*params) != hash_values_symbol)) {
+    while (marlais_is_pair_p (*params) && (CAR (*params) != hash_values_symbol)) {
       /* CONTAINS BREAK! */
       entry = CAR (*params);
       if (entry == allkeys_symbol) {
         break;
       }
       /* get a keyword-parameter pair */
-      if (NAMEP (entry)) {
+      if (marlais_is_name_p (entry)) {
         keyword_list_insert (get_params_fn (functor),
                              marlais_make_list (param_name_to_keyword (entry),
                                      entry,
                                      MARLAIS_FALSE,
                                      NULL));
-      } else if (PAIRP (entry) && is_param_name (CAR (entry)) &&
+      } else if (marlais_is_pair_p (entry) && is_param_name (CAR (entry)) &&
                  marlais_list_length (entry) == 2) {
         keyword_list_insert (get_params_fn (functor),
                              marlais_make_list (param_name_to_keyword (CAR (entry)),
                                      CAR (entry),
                                      SECOND (entry),
                                      NULL));
-      } else if (PAIRP (entry) && SYMBOLP (CAR (entry))) {
+      } else if (marlais_is_pair_p (entry) && marlais_is_symbol_p (CAR (entry))) {
         xform_key_fn(functor, entry);
       }
       *params = CDR(*params);
     }
-    if (PAIRP (*params) && CAR (*params) == allkeys_symbol) {
+    if (marlais_is_pair_p (*params) && CAR (*params) == allkeys_symbol) {
       bit_mask_fn(functor, 1);
       *params = CDR (*params);
-      if (PAIRP (*params) && CAR (*params) != hash_values_symbol) {
+      if (marlais_is_pair_p (*params) && CAR (*params) != hash_values_symbol) {
         marlais_error ("parameters follow #all-keys", *params);
       }
     }
@@ -639,7 +639,7 @@ parse_generic_function_parameters (Object gf_obj, Object params)
     GFRESTVALUES (gf_obj) = marlais_class_object;
   }
 
-  if (PAIRP (params)) {
+  if (marlais_is_pair_p (params)) {
     marlais_error ("objects encountered after parameter list", params, NULL);
   }
   if (marlais_trace_functions) {
@@ -681,7 +681,7 @@ parse_method_parameters (Object meth_obj, Object params)
     METHRESTVALUES (meth_obj) = marlais_class_object;
   }
 
-  if (PAIRP (params)) {
+  if (marlais_is_pair_p (params)) {
     marlais_error ("objects encountered after parameter list", params, NULL);
   }
   if (marlais_trace_functions) {
@@ -705,12 +705,12 @@ create_generic_parameters (Object params)
   gf_params = MARLAIS_NIL;
 
   /* first get required params */
-  while (PAIRP (params)) { /* CONTAINS BREAK! */
+  while (marlais_is_pair_p (params)) { /* CONTAINS BREAK! */
     entry = CAR (params);
 
     if (entry == hash_rest_symbol) { /* skip #rest */
       params = CDR (params);
-      if (PAIRP (params)) {
+      if (marlais_is_pair_p (params)) {
         params = CDR (params);
       } else {
         marlais_error ("method #rest designator not followed by a parameter", NULL);
@@ -721,7 +721,7 @@ create_generic_parameters (Object params)
     if (entry == key_symbol || entry == hash_values_symbol) {
       break;
     }
-    if (PAIRP (entry)) {
+    if (marlais_is_pair_p (entry)) {
       entry = CAR (entry);
     }
     gf_params = marlais_append (gf_params, marlais_make_list (entry, NULL));
@@ -736,7 +736,7 @@ create_generic_parameters (Object params)
   /* I believe that all other parts of the generic function parameters
   ** should be the same as the initial method's
   */
-  if (PAIRP (params)) {
+  if (marlais_is_pair_p (params)) {
     gf_params = marlais_append (gf_params, params);
   }
   return (gf_params);
@@ -757,8 +757,8 @@ generic_function_make (Object arglist)
   arglist = CDR (arglist);
   allkeys = FIRST (arglist);
 
-  for (ptr = required; PAIRP (ptr); ptr = CDR (ptr)) {
-    if (!CLASSP (CAR (ptr))) {
+  for (ptr = required; marlais_is_pair_p (ptr); ptr = CDR (ptr)) {
+    if (!marlais_is_class_p (CAR (ptr))) {
       marlais_error ("make: generic function specializer is not a class",
                      CAR (ptr),
                      NULL);
@@ -806,7 +806,7 @@ marlais_make_generic_entrypoint (Object args)
 static int
 sub_specializers (Object s1, Object s2)
 {
-  while (!EMPTYLISTP (s1) && !EMPTYLISTP (s2)) {
+  while (!marlais_is_nil_p (s1) && !marlais_is_nil_p (s2)) {
     if (!marlais_subtype_p (CAR (s1), CAR (s2))) {
       return (0);
     }
@@ -814,7 +814,7 @@ sub_specializers (Object s1, Object s2)
     s2 = CDR (s2);
   }
 
-  if (!EMPTYLISTP (s1) || !EMPTYLISTP (s2))
+  if (!marlais_is_nil_p (s1) || !marlais_is_nil_p (s2))
     return (0);
 
   return (1);
@@ -832,10 +832,10 @@ function_values (Object func)
 {
   Object vals, rest;
 
-  if (METHODP (func)) {
+  if (marlais_is_method_p (func)) {
     vals = METHREQVALUES (func);
     rest = METHRESTVALUES (func);
-  } else if (GFUNP (func)) {
+  } else if (marlais_is_generic_p (func)) {
     vals = GFREQVALUES (func);
     rest = GFRESTVALUES (func);
   } else {
@@ -853,7 +853,7 @@ make_specializers_from_params (Object params)
   Object specs, *tmp_ptr;
 
   for (specs = MARLAIS_NIL, tmp_ptr = &specs;
-       PAIRP (params);
+       marlais_is_pair_p (params);
        tmp_ptr = &CDR (*tmp_ptr), params = CDR (params)) {
     *tmp_ptr = marlais_cons (SECOND (CAR (params)), MARLAIS_NIL);
   }
@@ -915,7 +915,7 @@ find_keyword_in_list (Object keyword, Object keyword_list)
   if (keyword_list == all_symbol) {
     return 1;
   } else {
-    while (PAIRP (keyword_list)) {
+    while (marlais_is_pair_p (keyword_list)) {
       if (keyword == CAR (CAR (keyword_list))) {
         return 1;
       }
@@ -944,7 +944,7 @@ marlais_recalc_next_methods (Object fun, Object meth, Object sample_args)
   app_methods = MARLAIS_NIL;
 
   /* add all applicable methods */
-  while (!EMPTYLISTP (methods)) {
+  while (!marlais_is_nil_p (methods)) {
     method = CAR (methods);
     if (marlais_applicable_method_p (method, sample_args, 0) != MARLAIS_FALSE) {
       if (meth == method) {
@@ -955,7 +955,7 @@ marlais_recalc_next_methods (Object fun, Object meth, Object sample_args)
     }
     methods = CDR (methods);
   }
-  if (EMPTYLISTP (app_methods)) {
+  if (marlais_is_nil_p (app_methods)) {
     return (MARLAIS_NIL);
   }
   /* add current method if not there (could have been deleted? */
@@ -965,7 +965,7 @@ marlais_recalc_next_methods (Object fun, Object meth, Object sample_args)
   sorted_methods = FIRSTVAL (split_sorted_methods (app_methods, sample_args));
 
   /* blow away list up to first method after current method */
-  while (!EMPTYLISTP (sorted_methods)) {
+  while (!marlais_is_nil_p (sorted_methods)) {
     if (meth == (CAR (sorted_methods))) {
       sorted_methods = CDR (sorted_methods);
       break;
@@ -974,7 +974,7 @@ marlais_recalc_next_methods (Object fun, Object meth, Object sample_args)
   }
   /* need to check for replacement of myself leaving my new self in the list
    * (If you can dig that) */
-  if (!EMPTYLISTP (sorted_methods)) {
+  if (!marlais_is_nil_p (sorted_methods)) {
     /* my handle should point to my new self (if there is one) */
     if (HDLOBJ (METHHANDLE (meth)) == (CAR (sorted_methods))) {
       sorted_methods = CDR (sorted_methods);
@@ -988,15 +988,15 @@ build_sorted_handles (Object methods, Object current_group)
 /* recursively build the cache entry */
 {
   /* end case */
-  if (EMPTYLISTP (methods)) {
-    if (EMPTYLISTP (current_group)) {
+  if (marlais_is_nil_p (methods)) {
+    if (marlais_is_nil_p (current_group)) {
       return (MARLAIS_NIL);
     } else {
       return (marlais_cons (current_group, MARLAIS_NIL));
     }
   }
   /* add to current group or build new group into list */
-  if (EMPTYLISTP (current_group) ||
+  if (marlais_is_nil_p (current_group) ||
       specializer_compare (marlais_function_specializers (HDLOBJ (CAR (current_group))),
                            marlais_function_specializers (CAR (methods))) == 0) {
     return (build_sorted_handles (CDR (methods),
@@ -1016,16 +1016,16 @@ broad_class (Object obj)
 {
   Object class_list, union_types;
 
-  if (SINGLETONP (obj)) {
+  if (marlais_is_singleton_p (obj)) {
     return (marlais_object_class (SINGLEVAL (obj)));
-  } else if (SUBCLASSP (obj)) {
+  } else if (marlais_is_subclass_p (obj)) {
     return (marlais_class_class);
-  } else if (LIMINTP (obj)) {
+  } else if (marlais_is_limint_p (obj)) {
     return (marlais_class_integer);
-  } else if (UNIONP (obj)) {
+  } else if (marlais_is_union_p (obj)) {
     class_list = MARLAIS_NIL;
     union_types = UNIONLIST (obj);
-    while (!EMPTYLISTP (union_types)) {
+    while (!marlais_is_nil_p (union_types)) {
       class_list = marlais_cons (broad_class (CAR (union_types)), class_list);
       union_types = CDR (union_types);
     }
@@ -1048,7 +1048,7 @@ possible_method (Object meth, Object class_list)
 
   /* Are there more sample args than required args?
    */
-  num_required = INTVAL (FIRSTVAL (args));
+  num_required = marlais_get_int (FIRSTVAL (args));
   if (marlais_list_length (class_list) < num_required) {
     return (0);
   }
@@ -1071,7 +1071,7 @@ static Object
 make_class_list (Object args, int count)
 /* recursively build list of classes to match possible methods */
 {
-  if (EMPTYLISTP (args) || !count) {
+  if (marlais_is_nil_p (args) || !count) {
     return (MARLAIS_NIL);
   }
   return (marlais_cons (marlais_object_class (CAR (args)), make_class_list (CDR (args), count - 1)));
@@ -1086,17 +1086,17 @@ marlais_sorted_possible_method_handles (Object fun, Object sample_args)
     class_list;
 
   class_list = make_class_list (sample_args,
-                                INTVAL (FIRSTVAL (function_arguments (fun))));
+                                marlais_get_int (FIRSTVAL (function_arguments (fun))));
   methods = GFMETHODS (fun);
   maybe_methods = MARLAIS_NIL;
-  while (!EMPTYLISTP (methods)) {
+  while (!marlais_is_nil_p (methods)) {
     method = CAR (methods);
     if (possible_method (method, class_list)) {
       maybe_methods = marlais_cons (method, maybe_methods);
     }
     methods = CDR (methods);
   }
-  if (EMPTYLISTP (maybe_methods)) {
+  if (marlais_is_nil_p (maybe_methods)) {
     return marlais_error ("No applicable methods", fun, sample_args, NULL);
   }
   sorted_methods = sort_methods (maybe_methods, sample_args);
@@ -1117,7 +1117,7 @@ split_sorted_methods (Object methods, Object sample_args)
   methods = sort_methods (methods, sample_args);
 
   for (prev_ptr = &methods, next = CDR (methods);
-       PAIRP (next);
+       marlais_is_pair_p (next);
        prev_ptr = &CDR (*prev_ptr), next = CDR (next)) {
     if (specializer_compare (marlais_function_specializers (CAR (*prev_ptr)),
                              marlais_function_specializers (CAR (next))) == 0) {
@@ -1146,7 +1146,7 @@ sort_methods (Object methods, Object sample_args)
    */
   sort_driver_args____ = sample_args;
 
-  if (PAIRP (CDR (methods))) {
+  if (marlais_is_pair_p (CDR (methods))) {
     method_vector = marlais_list_to_vector (methods);
     qsort (SOVELS (method_vector),
            SOVSIZE (method_vector),
@@ -1172,14 +1172,14 @@ sort_driver (Object *pmeth1, Object *pmeth2)
 static int
 same_specializers (Object s1, Object s2)
 {
-  while (!EMPTYLISTP (s1) && !EMPTYLISTP (s2)) {
+  while (!marlais_is_nil_p (s1) && !marlais_is_nil_p (s2)) {
     if (!marlais_same_class_p (CAR (s1), CAR (s2))) {
       return (0);
     }
     s1 = CDR (s1);
     s2 = CDR (s2);
   }
-  if (!EMPTYLISTP (s1) || !EMPTYLISTP (s2))
+  if (!marlais_is_nil_p (s1) || !marlais_is_nil_p (s2))
     return (0);
   return (1);
 }
@@ -1194,7 +1194,7 @@ specializer_compare (Object s1, Object s2)
   specs2 = s2;
   args = sort_driver_args____;
 
-  while (!EMPTYLISTP (specs1)) {
+  while (!marlais_is_nil_p (specs1)) {
     spec1 = CAR (specs1);
     spec2 = CAR (specs2);
     arg = CAR (args);
@@ -1220,9 +1220,9 @@ specializer_compare (Object s1, Object s2)
         /* We previously saw an indication of less than. */
         return 0;
       }
-    } else if (CLASSP (spec1) && CLASSP (spec2)) {
+    } else if (marlais_is_class_p (spec1) && marlais_is_class_p (spec2)) {
       for (class_list = CLASSPRECLIST (marlais_object_class (arg));
-           PAIRP (class_list);
+           marlais_is_pair_p (class_list);
            class_list = CDR (class_list)) {
         if (spec1 == CAR (class_list)) {
           if (ret <= 0) {
@@ -1260,7 +1260,7 @@ find_method (Object generic, Object spec_list)
   Object methods;
 
   for (methods = GFMETHODS (generic);
-       PAIRP (methods);
+       marlais_is_pair_p (methods);
        methods = CDR (methods)) {
     if (same_specializers (marlais_function_specializers (CAR (methods)),
                            spec_list)) {
@@ -1276,7 +1276,7 @@ remove_method (Object generic, Object method)
   Object *tmp_ptr;
 
     for (tmp_ptr = &GFMETHODS (generic);
-         PAIRP (*tmp_ptr);
+         marlais_is_pair_p (*tmp_ptr);
          tmp_ptr = &CDR (*tmp_ptr)) {
       /* need to add test for sealed function, when available */
       if (method == CAR (*tmp_ptr)) {
@@ -1298,13 +1298,13 @@ debug_name_setter (Object method, Object name)
 static int
 is_param_name (Object parameter_name)
 {
-  return NAMEP (parameter_name) ||
-    (PAIRP (parameter_name) && NAMEP (CAR (parameter_name)));
+  return marlais_is_name_p (parameter_name) ||
+    (marlais_is_pair_p (parameter_name) && marlais_is_name_p (CAR (parameter_name)));
 }
 
 static Object
 param_name_to_keyword (Object param_name)
 {
-  return marlais_name_to_symbol (NAMEP (param_name) ? param_name
+  return marlais_name_to_symbol (marlais_is_name_p (param_name) ? param_name
                                  : CAR (param_name));
 }

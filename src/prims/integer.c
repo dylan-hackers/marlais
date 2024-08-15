@@ -103,23 +103,23 @@ marlais_register_integer (void)
 static Object
 prim_int_less_than (Object n1, Object n2)
 {
-    if (INTEGERP (n1)) {
-        if (INTEGERP (n2)) {
-            if (INTVAL (n1) < INTVAL (n2)) {
+    if (marlais_is_integer_p (n1)) {
+        if (marlais_is_integer_p (n2)) {
+            if (marlais_get_int (n1) < marlais_get_int (n2)) {
                 return (MARLAIS_TRUE);
             } else {
                 return (MARLAIS_FALSE);
             }
         } else {
-            if (INTVAL (n1) < DFLOATVAL (n2)) {
+            if (marlais_get_int (n1) < DFLOATVAL (n2)) {
                 return (MARLAIS_TRUE);
             } else {
                 return (MARLAIS_FALSE);
             }
         }
     } else {
-        if (INTEGERP (n2)) {
-            if (DFLOATVAL (n1) < INTVAL (n2)) {
+        if (marlais_is_integer_p (n2)) {
+            if (DFLOATVAL (n1) < marlais_get_int (n2)) {
                 return (MARLAIS_TRUE);
             } else {
                 return (MARLAIS_FALSE);
@@ -137,7 +137,7 @@ prim_int_less_than (Object n1, Object n2)
 static Object
 prim_int_odd_p (Object n)
 {
-    if ((INTVAL (n) % 2) == 1) {
+    if ((marlais_get_int (n) % 2) == 1) {
         return (MARLAIS_TRUE);
     } else {
         return (MARLAIS_FALSE);
@@ -147,7 +147,7 @@ prim_int_odd_p (Object n)
 static Object
 prim_int_even_p (Object n)
 {
-    if ((INTVAL (n) % 2) == 0) {
+    if ((marlais_get_int (n) % 2) == 0) {
         return (MARLAIS_TRUE);
     } else {
         return (MARLAIS_FALSE);
@@ -157,7 +157,7 @@ prim_int_even_p (Object n)
 static Object
 prim_int_zero_p (Object n)
 {
-    if (INTVAL (n) == 0) {
+    if (marlais_get_int (n) == 0) {
         return (MARLAIS_TRUE);
     } else {
         return (MARLAIS_FALSE);
@@ -167,7 +167,7 @@ prim_int_zero_p (Object n)
 static Object
 prim_int_positive_p (Object n)
 {
-    if (INTVAL (n) > 0) {
+    if (marlais_get_int (n) > 0) {
         return (MARLAIS_TRUE);
     } else {
         return (MARLAIS_FALSE);
@@ -177,7 +177,7 @@ prim_int_positive_p (Object n)
 static Object
 prim_int_negative_p (Object n)
 {
-    if (INTVAL (n) < 0) {
+    if (marlais_get_int (n) < 0) {
         return (MARLAIS_TRUE);
     } else {
         return (MARLAIS_FALSE);
@@ -187,37 +187,37 @@ prim_int_negative_p (Object n)
 static Object
 prim_int_negative (Object n)
 {
-    return marlais_make_integer (-INTVAL (n));
+    return marlais_make_integer (-marlais_get_int (n));
 }
 
 static Object
 prim_int_inverse (Object n)
 {
-    return marlais_make_dfloat (1.0 / INTVAL (n));
+    return marlais_make_dfloat (1.0 / marlais_get_int (n));
 }
 
 static Object
 prim_int_add (Object n1, Object n2)
 {
-    return marlais_make_integer (INTVAL (n1) + INTVAL (n2));
+    return marlais_make_integer (marlais_get_int (n1) + marlais_get_int (n2));
 }
 
 static Object
 prim_int_sub (Object n1, Object n2)
 {
-    return marlais_make_integer (INTVAL (n1) - INTVAL (n2));
+    return marlais_make_integer (marlais_get_int (n1) - marlais_get_int (n2));
 }
 
 static Object
 prim_int_mul (Object n1, Object n2)
 {
-    return marlais_make_integer (INTVAL (n1) * INTVAL (n2));
+    return marlais_make_integer (marlais_get_int (n1) * marlais_get_int (n2));
 }
 
 static Object
 prim_int_div (Object n1, Object n2)
 {
-    return marlais_make_integer (INTVAL (n1) / INTVAL (n2));
+    return marlais_make_integer (marlais_get_int (n1) / marlais_get_int (n2));
 }
 
 static Object
@@ -225,7 +225,7 @@ prim_int_sqrt (Object n)
 {
     double ans;
 
-    ans = sqrt (INTVAL (n));
+    ans = sqrt (marlais_get_int (n));
     if ((ans - floor (ans)) == 0) {
         return (marlais_make_integer (ans));
     } else {
@@ -238,7 +238,7 @@ prim_int_cbrt (Object n)
 {
     double ans;
 
-    ans = cbrt (INTVAL (n));
+    ans = cbrt (marlais_get_int (n));
     if ((ans - floor (ans)) == 0) {
         return (marlais_make_integer (ans));
     } else {
@@ -251,7 +251,7 @@ prim_int_abs (Object n)
 {
     int val;
 
-    val = INTVAL (n);
+    val = marlais_get_int (n);
     if (val < 0) {
         return (marlais_make_integer (-val));
     } else {
@@ -262,7 +262,7 @@ prim_int_abs (Object n)
 static Object
 prim_int_quotient (Object n1, Object n2)
 {
-    return (marlais_make_integer (INTVAL (n1) / INTVAL (n2)));
+    return (marlais_make_integer (marlais_get_int (n1) / marlais_get_int (n2)));
 }
 
 static Object
@@ -270,33 +270,33 @@ prim_int_ash (Object n, Object count)
 {
     int num;
 
-    num = INTVAL (count);
-    return (marlais_make_integer ((num > 0) ? (INTVAL (n) << num)
-                          : (INTVAL (n) >> -num)));
+    num = marlais_get_int (count);
+    return (marlais_make_integer ((num > 0) ? (marlais_get_int (n) << num)
+                          : (marlais_get_int (n) >> -num)));
 }
 
 static Object
 prim_int_lognot (Object n1)
 {
-    return (marlais_make_integer (~INTVAL (n1)));
+    return (marlais_make_integer (~marlais_get_int (n1)));
 }
 
 static Object
 prim_int_logand (Object n1, Object n2)
 {
-    return (marlais_make_integer (INTVAL (n1) & INTVAL (n2)));
+    return (marlais_make_integer (marlais_get_int (n1) & marlais_get_int (n2)));
 }
 
 static Object
 prim_int_logior (Object n1, Object n2)
 {
-    return (marlais_make_integer (INTVAL (n1) | INTVAL (n2)));
+    return (marlais_make_integer (marlais_get_int (n1) | marlais_get_int (n2)));
 }
 
 static Object
 prim_int_logxor (Object n1, Object n2)
 {
-    return (marlais_make_integer (INTVAL (n1) ^ INTVAL (n2)));
+    return (marlais_make_integer (marlais_get_int (n1) ^ marlais_get_int (n2)));
 }
 
 #if 0
@@ -309,8 +309,8 @@ prim_sign (int x)
 static Object
 prim_mod (Object i1, Object i2)
 {
-    int i1val = INTVAL (i1);
-    int i2val = INTVAL (i2);
+    int i1val = marlais_get_int (i1);
+    int i2val = marlais_get_int (i2);
     int q = (i1val / i2val);
     int r = (i1val - i2val * q);
 
@@ -329,7 +329,7 @@ prim_int_mod (Object i1, Object i2)
 {
     double d1val;
     double d2val;
-    double tmp = (d1val = INTVAL (i1)) / (d2val = (float) INTVAL (i2));
+    double tmp = (d1val = marlais_get_int (i1)) / (d2val = (float) marlais_get_int (i2));
 
     return marlais_make_integer ((marlais_int_t) (d1val - d2val * floor (tmp)));
 }
@@ -341,7 +341,7 @@ prim_int_rem (Object i1, Object i2)
 {
     int i1val;
     int i2val;
-    int quotient = (int) ((float) (i1val = INTVAL (i1)) / (i2val = INTVAL (i2)));
+    int quotient = (int) ((float) (i1val = marlais_get_int (i1)) / (i2val = marlais_get_int (i2)));
 
     return marlais_make_integer (i1val - i2val * quotient);
 }
@@ -351,7 +351,7 @@ prim_int_truncate_divide (Object i1, Object i2)
 {
     int i1val;
     int i2val;
-    int quotient = (int) ((float) (i1val = INTVAL (i1)) / (i2val = INTVAL (i2)));
+    int quotient = (int) ((float) (i1val = marlais_get_int (i1)) / (i2val = marlais_get_int (i2)));
 
     return marlais_values_args (2,
                                      marlais_make_integer (quotient),

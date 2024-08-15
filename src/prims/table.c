@@ -108,18 +108,18 @@ marlais_make_table_entrypoint (Object rest)
 {
   Object size;
 
-  if (EMPTYLISTP (rest)) {
+  if (marlais_is_nil_p (rest)) {
     return (marlais_make_table (DEFAULT_TABLE_SIZE));
   } else if (CAR (rest) == size_keyword) {
     rest = CDR (rest);
-    if (EMPTYLISTP (rest)) {
+    if (marlais_is_nil_p (rest)) {
       marlais_error ("make: no argument given to size keyword", NULL);
     }
     size = CAR (rest);
-    if (!INTEGERP (size)) {
+    if (!marlais_is_integer_p (size)) {
       marlais_error ("make: argument to size keyword must be an integer", size, NULL);
     }
-    return (marlais_make_table (INTVAL (size)));
+    return (marlais_make_table (marlais_get_int (size)));
   } else {
     return marlais_error ("make: bad keywords or arguments", rest, NULL);
   }
@@ -143,7 +143,7 @@ marlais_table_element_setter (Object table, Object key, Object val)
     *element_handle = val;
   } else {
     hval = equal_hash (key);
-    h = labs (INTVAL (hval)) % TABLESIZE (table);
+    h = labs (marlais_get_int (hval)) % TABLESIZE (table);
     entry = make_table_entry (h, key, val, TABLETABLE (table)[h]);
     TABLETABLE (table)[h] = entry;
   }
@@ -157,7 +157,7 @@ marlais_table_element_by_vector (Object table, Object key)
   int h;
 
   hval = equal_hash (key);
-  h = labs (INTVAL (hval)) % TABLESIZE (table);
+  h = labs (marlais_get_int (hval)) % TABLESIZE (table);
   entry = TABLETABLE (table)[h];
 
   while (entry) {
@@ -181,7 +181,7 @@ marlais_table_element_setter_by_vector (Object table, Object key, Object val)
     *element_handle = val;
   } else {
     hval = equal_hash (key);
-    h = labs (INTVAL (hval)) % TABLESIZE (table);
+    h = labs (marlais_get_int (hval)) % TABLESIZE (table);
 
     entry = make_table_entry (h, key, val, TABLETABLE (table)[h]);
     TABLETABLE (table)[h] = entry;
@@ -199,9 +199,9 @@ marlais_table_fill_properties (Object the_table, Object the_set)
 {
   Object the_element;
 
-  while (!EMPTYLISTP (the_set)) {
+  while (!marlais_is_nil_p (the_set)) {
     the_element = CAR (the_set);
-    if (PAIRP (the_element)) {
+    if (marlais_is_pair_p (the_element)) {
       marlais_table_element_setter (the_table,
                                     CAR (the_element),
                                     CDR (the_element));
@@ -269,7 +269,7 @@ table_current_element_setter (Object table, Object state, Object value)
 static Object
 hash_pair (Object pair)
 {
-  int h = INTVAL (equal_hash (CAR (pair))) + INTVAL (equal_hash (CDR (pair)));
+  int h = marlais_get_int (equal_hash (CAR (pair))) + marlais_get_int (equal_hash (CDR (pair)));
   return (marlais_make_integer (h));
 }
 
@@ -280,8 +280,8 @@ hash_deque (Object deq)
   Object entry;
 
   entry = DEQUEFIRST (deq);
-  while (!EMPTYLISTP (entry)) {
-    h += INTVAL (equal_hash (DEVALUE (entry)));
+  while (!marlais_is_nil_p (entry)) {
+    h += marlais_get_int (equal_hash (DEVALUE (entry)));
     entry = DENEXT (entry);
   }
   return (marlais_make_integer (h));
@@ -304,7 +304,7 @@ hash_vector (Object vector)
 {
   int i, h = 0;
   for (i = 0; i < SOVSIZE (vector); ++i) {
-    h += INTVAL (equal_hash (SOVELS (vector)[i]));
+    h += marlais_get_int (equal_hash (SOVELS (vector)[i]));
   }
   return (marlais_make_integer (h));
 }
@@ -314,7 +314,7 @@ equal_hash (Object key)
 {
   Object hashfun;
 
-  if (INSTANCEP (key)) {
+  if (marlais_is_instance_p (key)) {
     hashfun = marlais_symbol_value (equal_hash_symbol);
     /*
      * Need to be able to hash arbitrary instances here!
@@ -324,25 +324,25 @@ equal_hash (Object key)
     }
     return (marlais_apply (hashfun, marlais_cons (key, MARLAIS_NIL)));
   } else {
-    if (INTEGERP (key)) {
+    if (marlais_is_integer_p (key)) {
       return (key);
-    } else if (CHARP (key)) {
+    } else if (marlais_is_bchar_p (key)) {
       return (marlais_make_integer (CHARVAL (key)));
-    } else if (TRUEP (key)) {
+    } else if (marlais_is_true_p (key)) {
       return (marlais_make_integer (1));
-    } else if (FALSEP (key)) {
+    } else if (marlais_is_false_p (key)) {
       return (marlais_make_integer (0));
-    } else if (EMPTYLISTP (key)) {
+    } else if (marlais_is_nil_p (key)) {
       return (marlais_make_integer (2));
-    } else if (PAIRP (key)) {
+    } else if (marlais_is_pair_p (key)) {
       return (hash_pair (key));
-    } else if (DEQUEP (key)) {
+    } else if (marlais_is_deque_p (key)) {
       return (hash_deque (key));
-    } else if (BYTESTRP (key)) {
+    } else if (marlais_is_bstring_p (key)) {
       return (hash_string (key));
-    } else if (SOVP (key)) {
+    } else if (marlais_is_vector_p (key)) {
       return (hash_vector (key));
-    } else if (NAMEP (key) || SYMBOLP (key)) {
+    } else if (marlais_is_name_p (key) || marlais_is_symbol_p (key)) {
       return (marlais_make_integer ((marlais_int_t)key));
     } else {
       /* marlais_error ("=hash: don't know how to hash object", key, NULL);  */
@@ -373,7 +373,7 @@ table_element_handle (Object table, Object key, Object *default_val)
   struct environment *old_env;
 
   hval = equal_hash (key);
-  h = labs (INTVAL (hval)) % TABLESIZE (table);
+  h = labs (marlais_get_int (hval)) % TABLESIZE (table);
   entry = TABLETABLE (table)[h];
 
   /* TODO this should be a lookup in the dylan module */

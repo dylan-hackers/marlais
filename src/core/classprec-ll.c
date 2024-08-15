@@ -129,7 +129,7 @@ build_l_graph (Object class,
     int class_index = get_class_index (class, graph);
     int direct_superclass_index;
 
-    while (!EMPTYLISTP (direct_superclasses)) {
+    while (!marlais_is_nil_p (direct_superclasses)) {
       direct_superclass = CAR (direct_superclasses);
       direct_superclass_index = get_class_index (direct_superclass,
                                                  graph);
@@ -143,7 +143,7 @@ build_l_graph (Object class,
                                                 graph);
 
         superclasses = CDR (superclasses);
-        while (!EMPTYLISTP (superclasses)) {
+        while (!marlais_is_nil_p (superclasses)) {
           current_class_index = next_class_index;
           next_class_index = get_class_index (CAR (superclasses),
                                               graph);

@@ -40,32 +40,32 @@ marlais_identical_p (Object obj1, Object obj2)
 {
   if (obj1 == obj2) {
     return true;
-  } else if (SFLOATP (obj1) && SFLOATP (obj2)) {
+  } else if (marlais_is_sfloat_p (obj1) && marlais_is_sfloat_p (obj2)) {
     return (SFLOATVAL (obj1) == SFLOATVAL (obj2));
-  } else if (DFLOATP (obj1) && DFLOATP (obj2)) {
+  } else if (marlais_is_dfloat_p (obj1) && marlais_is_dfloat_p (obj2)) {
     return (DFLOATVAL (obj1) == DFLOATVAL (obj2));
 
 #ifdef MARLAIS_ENABLE_EFLOAT
 
-  } else if (EFLOATP (obj1) && EFLOATP (obj2)) {
+  } else if (marlais_is_efloat_p (obj1) && marlais_is_efloat_p (obj2)) {
     return (EFLOATVAL (obj1) == EFLOATVAL (obj2));
 
 #endif /* MARLAIS_ENABLE_EFLOAT */
 
 #ifdef MARLAIS_OBJECT_MODEL_BOXED
 
-  } else if (INTEGERP (obj1) && INTEGERP (obj2)) {
-    return (INTVAL (obj1) == INTVAL (obj2));
-  } else if (CHARP (obj1) && CHARP (obj2)) {
+  } else if (marlais_is_integer_p (obj1) && marlais_is_integer_p (obj2)) {
+    return (marlais_get_int (obj1) == marlais_get_int (obj2));
+  } else if (marlais_is_bchar_p (obj1) && marlais_is_bchar_p (obj2)) {
     return (CHARVAL (obj1) == CHARVAL (obj2));
 
 #ifdef MARLAIS_ENABLE_WCHAR
-  } else if (WCHARP (obj1) && WCHARP (obj2)) {
+  } else if (marlais_is_wchar_p (obj1) && marlais_is_wchar_p (obj2)) {
     return (WCHARVAL (obj1) == WCHARVAL (obj2));
 #endif /* MARLAIS_ENABLE_WCHAR */
 
 #ifdef MARLAIS_ENABLE_UCHAR
-  } else if (UCHARP (obj1) && UCHARP (obj2)) {
+  } else if (marlais_is_uchar_p (obj1) && marlais_is_uchar_p (obj2)) {
     return (UCHARVAL (obj1) == UCHARVAL (obj2));
 #endif /* MARLAIS_ENABLE_UCHAR */
 

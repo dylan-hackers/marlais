@@ -36,10 +36,10 @@ marlais_register_slot (void)
 Object
 marlais_slot_name (Object slot)
 {
-  if (!PAIRP (slot)) {
+  if (!marlais_is_pair_p (slot)) {
     return (slot);
   } else {
-    if (NAMEP (CAR (slot))) {
+    if (marlais_is_name_p (CAR (slot))) {
       return (CAR (slot));
     } else {
       marlais_error ("Slot has no name but needs one", slot, NULL);
@@ -51,7 +51,7 @@ marlais_slot_name (Object slot)
 Object
 marlais_slot_getter (Object slot)
 {
-  if (!PAIRP (slot)) {
+  if (!marlais_is_pair_p (slot)) {
     return (NULL);
   } else {
     return (find_keyword (getter_keyword, slot));
@@ -61,7 +61,7 @@ marlais_slot_getter (Object slot)
 Object
 marlais_slot_setter (Object slot)
 {
-  if (!PAIRP (slot)) {
+  if (!marlais_is_pair_p (slot)) {
     return (NULL);
   } else {
     return (find_keyword (setter_keyword, slot));
@@ -71,7 +71,7 @@ marlais_slot_setter (Object slot)
 Object
 marlais_slot_type (Object slot)
 {
-  if (!PAIRP (slot)) {
+  if (!marlais_is_pair_p (slot)) {
     return (NULL);
   } else {
     return (find_keyword (type_keyword, slot));
@@ -92,7 +92,7 @@ marlais_slot_init_value (Object slotd)
 Object
 marlais_slot_init_function (Object slot)
 {
-  if (!PAIRP (slot)) {
+  if (!marlais_is_pair_p (slot)) {
     return (NULL);
   } else {
     return (find_keyword (init_function_keyword, slot));
@@ -102,7 +102,7 @@ marlais_slot_init_function (Object slot)
 Object
 marlais_slot_init_keyword (Object slot)
 {
-  if (!PAIRP (slot)) {
+  if (!marlais_is_pair_p (slot)) {
     return (NULL);
   } else {
     return (find_keyword (init_keyword_keyword, slot));
@@ -112,7 +112,7 @@ marlais_slot_init_keyword (Object slot)
 Object
 marlais_slot_required_init_keyword (Object slot)
 {
-  if (!PAIRP (slot)) {
+  if (!marlais_is_pair_p (slot)) {
     return (NULL);
   } else {
     return (find_keyword (required_init_keyword_keyword, slot));
@@ -122,7 +122,7 @@ marlais_slot_required_init_keyword (Object slot)
 Object
 marlais_slot_allocation (Object slot)
 {
-  if (!PAIRP (slot)) {
+  if (!marlais_is_pair_p (slot)) {
     return (NULL);
   } else {
     return (find_keyword (allocation_keyword, slot));
@@ -132,13 +132,13 @@ marlais_slot_allocation (Object slot)
 Object
 marlais_slot_value (Object instance, Object slot_num)
 {
-    return CAR (INSTSLOTS (instance)[INTVAL (slot_num)]);
+    return CAR (INSTSLOTS (instance)[marlais_get_int (slot_num)]);
 }
 
 Object
 marlais_set_slot_value (Object instance, Object slot_num, Object val)
 {
-    CAR (INSTSLOTS (instance)[INTVAL (slot_num)]) = val;
+    CAR (INSTSLOTS (instance)[marlais_get_int (slot_num)]) = val;
     return val;
 }
 
@@ -183,8 +183,8 @@ find_keyword (Object keyword, Object lst)
   if (!LISTP (lst)) {
     return (NULL);
   }
-  while (!EMPTYLISTP (lst)) {
-    if (CAR (lst) == keyword && !EMPTYLISTP (CDR (lst))) {
+  while (!marlais_is_nil_p (lst)) {
+    if (CAR (lst) == keyword && !marlais_is_nil_p (CDR (lst))) {
       return SECOND (lst);
     }
     lst = CDR (lst);

@@ -59,10 +59,10 @@ static Object prim_gc_enabled_p (void)
 
 static Object prim_gc_expand (Object amount)
 {
-  if(!UNSIGNEDP (amount)) {
+  if(!marlais_uint_p (amount)) {
     marlais_error("%gc-expand: amount must be an unsigned integer\n", amount, NULL);
   }
-  GC_expand_hp(INTVAL(amount));
+  GC_expand_hp(marlais_get_uint(amount));
   return MARLAIS_UNSPECIFIED;
 }
 

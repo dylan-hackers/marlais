@@ -16,7 +16,7 @@ typedef void *Object;
 extern marlais_repr_t marlais_object_repr (Object obj);
 
 /* Type for handling value tags */
-typedef marlais_uint_t MarlaisTag;
+typedef uintptr_t marlais_tag_t;
 #define MARLAIS_TAG_SHIFT         (0)
 #define MARLAIS_TAG_WIDTH         (2)
 #define MARLAIS_TAG_POINTER       (0x0)
@@ -25,7 +25,7 @@ typedef marlais_uint_t MarlaisTag;
 #define MARLAIS_TAG_MASK          (0x3)
 
 /* Type for handling value subtags */
-typedef marlais_uint_t MarlaisSub;
+typedef uintptr_t marlais_subtag_t;
 #define MARLAIS_SUB_COUNT         (16)
 #define MARLAIS_SUB_SHIFT         (2)
 #define MARLAIS_SUB_WIDTH         (4)
@@ -63,78 +63,74 @@ typedef marlais_uint_t MarlaisSub;
 #define MARLAIS_INTEGER_PRI    MARLAIS_INT_PRI
 
 /* Immediate constants */
-#define TRUEVAL         ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_TRUE))
-#define FALSEVAL        ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_FALSE))
-#define EMPTYLISTVAL    ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_EMPTYLIST))
-#define EOFVAL          ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_EOF))
-#define UNSPECVAL       ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_UNSPECIFIED))
-#define UNINITVAL       ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_UNINITIALIZED))
-
-#define MARLAIS_TRUE  (TRUEVAL)
-#define MARLAIS_FALSE (FALSEVAL)
-#define MARLAIS_NIL (EMPTYLISTVAL)
-#define MARLAIS_EOF (EOFVAL)
-#define MARLAIS_UNSPECIFIED (UNSPECVAL)
-#define MARLAIS_UNINITIALIZED (UNINITVAL)
+#define MARLAIS_TRUE          ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_TRUE))
+#define MARLAIS_FALSE         ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_FALSE))
+#define MARLAIS_NIL           ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_EMPTYLIST))
+#define MARLAIS_EOF           ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_EOF))
+#define MARLAIS_UNSPECIFIED   ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_UNSPECIFIED))
+#define MARLAIS_UNINITIALIZED ((Object)(MARLAIS_TAG_IMMEDIATE|MARLAIS_SUB_UNINITIALIZED))
 
 /* Field extraction */
-static inline marlais_uint_t TAGPART(Object obj) {
+static inline marlais_tag_t marlais_get_tag(Object obj) {
   return (((marlais_uint_t)obj) & MARLAIS_TAG_MASK);
 }
-static inline marlais_uint_t SUBPART(Object obj) {
+static inline marlais_subtag_t marlais_get_subtag(Object obj) {
   return (((marlais_uint_t)obj) & MARLAIS_SUB_MASK);
 }
-static inline marlais_uint_t INTEGERPART(Object obj) {
-  return (((marlais_uint_t)obj) >> MARLAIS_INTEGER_SHIFT);
-}
-static inline marlais_int_t INTVAL(Object obj) {
+static inline marlais_int_t marlais_get_int(Object obj) {
   return (((marlais_int_t)obj) >> MARLAIS_INTEGER_SHIFT);
 }
-static inline marlais_uint_t IMMEDPART(Object obj) {
+static inline marlais_uint_t marlais_get_uint(Object obj) {
+  return (((marlais_uint_t)obj) >> MARLAIS_INTEGER_SHIFT);
+}
+static inline marlais_uint_t marlais_untag_immediate(Object obj) {
   return (((marlais_uint_t)obj) >> MARLAIS_IMMEDIATE_SHIFT);
+}
+static inline marlais_repr_t marlais_pointer_repr (Object obj) {
+  return ((const marlais_header_t *)obj)->object_repr;
 }
 
 /* Tag type predicates */
-static inline bool POINTERP(Object obj) {
-  return (TAGPART(obj) == MARLAIS_TAG_POINTER);
+static inline bool marlais_object_pointer_p(Object obj) {
+  return (marlais_get_tag(obj) == MARLAIS_TAG_POINTER);
 }
-static inline bool IMMEDP(Object obj) {
-  return (TAGPART(obj) == MARLAIS_TAG_IMMEDIATE);
+static inline bool marlais_object_immediate_p(Object obj) {
+  return (marlais_get_tag(obj) == MARLAIS_TAG_IMMEDIATE);
 }
-static inline bool INTEGERP(Object obj) {
-  return (TAGPART(obj) == MARLAIS_TAG_INTEGER);
+static inline bool marlais_is_integer_p(Object obj) {
+  return (marlais_get_tag(obj) == MARLAIS_TAG_INTEGER);
 }
 
 /* Immediate extraction */
 static inline char CHARVAL(Object obj) {
-  return ((char)(IMMEDPART(obj) & 0xFF));
+  return ((char)(marlais_untag_immediate(obj) & 0xFF));
 }
 #ifdef MARLAIS_ENABLE_WCHAR
 static inline wchar_t WCHARVAL(Object obj) {
-  return ((wchar_t)IMMEDPART(obj));
+  return ((wchar_t)marlais_untag_immediate(obj));
 }
 #endif
 #ifdef MARLAIS_ENABLE_UCHAR
 static inline UChar32 UCHARVAL(Object obj) {
-  return ((UChar32)IMMEDPART(obj));
+  return ((UChar32)marlais_untag_immediate(obj));
 }
 #endif
 
 /* Immediate composition */
-static inline Object MAKE_IMMEDIATE(MarlaisSub sub, marlais_uint_t val) {
+static inline Object marlais_make_immediate(marlais_subtag_t sub, marlais_uint_t val) {
   return (Object)(MARLAIS_TAG_IMMEDIATE|sub|(val << MARLAIS_IMMEDIATE_SHIFT));
 }
 static inline Object MAKE_CHAR(char ch) {
-  return MAKE_IMMEDIATE(MARLAIS_SUB_CHARACTER, (ch & 0xFF));
+  return marlais_make_immediate(MARLAIS_SUB_CHARACTER, (ch & 0xFF));
 }
 #ifdef MARLAIS_ENABLE_WCHAR
 static inline Object MAKE_WCHAR(wchar_t ch) {
-  return MAKE_IMMEDIATE(MARLAIS_SUB_WCHAR, ch);
+  return marlais_make_immediate(MARLAIS_SUB_WCHAR, ch);
 }
 #endif
 #ifdef MARLAIS_ENABLE_UCHAR
 static inline Object MAKE_UCHAR(UChar32 ch) {
-  return MAKE_IMMEDIATE(MARLAIS_SUB_UCHAR, ch);
+  return marlais_make_immediate(MARLAIS_SUB_UCHAR, ch);
 }
 #endif
 static inline Object MAKE_INT(marlais_int_t ch) {
@@ -142,64 +138,66 @@ static inline Object MAKE_INT(marlais_int_t ch) {
 }
 
 /* Immediate type predicates */
-#define DEFINE_IMMEDP_PREDICATE(_name, _sub)        \
-  static inline bool _name(Object obj) {            \
-    return (IMMEDP(obj) && (SUBPART(obj) == _sub)); \
+#define DEFINE_IMMEDP_PREDICATE(_name, _sub)            \
+  static inline bool _name(Object obj) {                \
+    return (marlais_object_immediate_p(obj)             \
+            && (marlais_get_subtag(obj) == (_sub)));    \
   }
-DEFINE_IMMEDP_PREDICATE(TRUEP, MARLAIS_SUB_TRUE);
-DEFINE_IMMEDP_PREDICATE(FALSEP, MARLAIS_SUB_FALSE);
-DEFINE_IMMEDP_PREDICATE(EMPTYLISTP, MARLAIS_SUB_EMPTYLIST);
-DEFINE_IMMEDP_PREDICATE(EOFP, MARLAIS_SUB_EOF);
-DEFINE_IMMEDP_PREDICATE(UNSPECP, MARLAIS_SUB_UNSPECIFIED);
-DEFINE_IMMEDP_PREDICATE(UNINITSLOTP, MARLAIS_SUB_UNINITIALIZED);
-DEFINE_IMMEDP_PREDICATE(CHARP, MARLAIS_SUB_CHARACTER);
-DEFINE_IMMEDP_PREDICATE(WCHARP, MARLAIS_SUB_WCHAR);
-DEFINE_IMMEDP_PREDICATE(UCHARP, MARLAIS_SUB_UCHAR);
+DEFINE_IMMEDP_PREDICATE(marlais_is_true_p, MARLAIS_SUB_TRUE);
+DEFINE_IMMEDP_PREDICATE(marlais_is_false_p, MARLAIS_SUB_FALSE);
+DEFINE_IMMEDP_PREDICATE(marlais_is_nil_p, MARLAIS_SUB_EMPTYLIST);
+DEFINE_IMMEDP_PREDICATE(marlais_is_eof_p, MARLAIS_SUB_EOF);
+DEFINE_IMMEDP_PREDICATE(marlais_is_unspec_p, MARLAIS_SUB_UNSPECIFIED);
+DEFINE_IMMEDP_PREDICATE(marlais_is_uninit_p, MARLAIS_SUB_UNINITIALIZED);
+DEFINE_IMMEDP_PREDICATE(marlais_is_bchar_p, MARLAIS_SUB_CHARACTER);
+DEFINE_IMMEDP_PREDICATE(marlais_is_wchar_p, MARLAIS_SUB_WCHAR);
+DEFINE_IMMEDP_PREDICATE(marlais_is_uchar_p, MARLAIS_SUB_UCHAR);
 #undef DEFINE_IMMEDP_PREDICATE
 
 /* Pointer type predicates */
-#define DEFINE_POINTERP_PREDICATE(_name, _type)            \
-  static inline bool _name(Object obj) {                   \
-    return (POINTERP(obj) && (POINTERTYPE(obj) == _type)); \
+#define DEFINE_POINTERP_PREDICATE(_name, _repr)                         \
+  static inline bool _name(Object obj) {                                \
+    return (marlais_object_pointer_p(obj)                               \
+            && (marlais_pointer_repr(obj) == (_repr)));                 \
   }
-DEFINE_POINTERP_PREDICATE(SFLOATP, SingleFloat);
-DEFINE_POINTERP_PREDICATE(DFLOATP, DoubleFloat);
-DEFINE_POINTERP_PREDICATE(EFLOATP, ExtendedFloat);
-DEFINE_POINTERP_PREDICATE(RATIOP, Ratio);
-DEFINE_POINTERP_PREDICATE(PAIRP, Pair);
-DEFINE_POINTERP_PREDICATE(BYTEVP, ByteVector);
-DEFINE_POINTERP_PREDICATE(SOVP, ObjectVector);
-DEFINE_POINTERP_PREDICATE(ARRAYP, ObjectArray);
-DEFINE_POINTERP_PREDICATE(TABLEP, ObjectTable);
-DEFINE_POINTERP_PREDICATE(TEP, ObjectTableEntry);
-DEFINE_POINTERP_PREDICATE(DEQUEP, ObjectDeque);
-DEFINE_POINTERP_PREDICATE(DEP, ObjectDequeEntry);
-DEFINE_POINTERP_PREDICATE(BYTESTRP, ByteString);
-DEFINE_POINTERP_PREDICATE(WIDESTRP, WideString);
-DEFINE_POINTERP_PREDICATE(USTRP, UnicodeString);
-DEFINE_POINTERP_PREDICATE(CONDP, Condition);
-DEFINE_POINTERP_PREDICATE(NAMEP, Name);
-DEFINE_POINTERP_PREDICATE(SYMBOLP, Symbol);
-DEFINE_POINTERP_PREDICATE(SLOTDP, SlotDescriptor);
-DEFINE_POINTERP_PREDICATE(INSTANCEP, Instance);
-DEFINE_POINTERP_PREDICATE(CLASSP, Class);
-DEFINE_POINTERP_PREDICATE(SINGLETONP, Singleton);
-DEFINE_POINTERP_PREDICATE(SUBCLASSP, Subclass);
-DEFINE_POINTERP_PREDICATE(LIMINTP, LimitedIntType);
-DEFINE_POINTERP_PREDICATE(UNIONP, UnionType);
-DEFINE_POINTERP_PREDICATE(PRIMP, Primitive);
-DEFINE_POINTERP_PREDICATE(GFUNP, GenericFunction);
-DEFINE_POINTERP_PREDICATE(METHODP, Method);
-DEFINE_POINTERP_PREDICATE(NMETHP, NextMethod);
-DEFINE_POINTERP_PREDICATE(VALUESP, Values);
-DEFINE_POINTERP_PREDICATE(EXITP, UnwindFunction);
-DEFINE_POINTERP_PREDICATE(UNWINDP, UnwindProtect);
-DEFINE_POINTERP_PREDICATE(FOREIGNP, ForeignPtr);
-DEFINE_POINTERP_PREDICATE(ENVIRONMENTP, Environment);
-DEFINE_POINTERP_PREDICATE(MODULEP, Module);
-DEFINE_POINTERP_PREDICATE(STDIOP, StdioHandle);
-DEFINE_POINTERP_PREDICATE(HDLP, ObjectHandle);
-DEFINE_POINTERP_PREDICATE(MPFP, BigFloat);
-DEFINE_POINTERP_PREDICATE(MPQP, BigRatio);
-DEFINE_POINTERP_PREDICATE(MPZP, BigInteger);
+DEFINE_POINTERP_PREDICATE(marlais_is_sfloat_p, SingleFloat);
+DEFINE_POINTERP_PREDICATE(marlais_is_dfloat_p, DoubleFloat);
+DEFINE_POINTERP_PREDICATE(marlais_is_efloat_p, ExtendedFloat);
+DEFINE_POINTERP_PREDICATE(marlais_is_ratio_p, Ratio);
+DEFINE_POINTERP_PREDICATE(marlais_is_pair_p, Pair);
+DEFINE_POINTERP_PREDICATE(marlais_is_bytevector_p, ByteVector);
+DEFINE_POINTERP_PREDICATE(marlais_is_array_p, ObjectArray);
+DEFINE_POINTERP_PREDICATE(marlais_is_table_p, ObjectTable);
+DEFINE_POINTERP_PREDICATE(marlais_is_tableentry_p, ObjectTableEntry);
+DEFINE_POINTERP_PREDICATE(marlais_is_deque_p, ObjectDeque);
+DEFINE_POINTERP_PREDICATE(marlais_is_dequeentry_p, ObjectDequeEntry);
+DEFINE_POINTERP_PREDICATE(marlais_is_vector_p, ObjectVector);
+DEFINE_POINTERP_PREDICATE(marlais_is_bstring_p, ByteString);
+DEFINE_POINTERP_PREDICATE(marlais_is_wstring_p, WideString);
+DEFINE_POINTERP_PREDICATE(marlais_is_ustring_p, UnicodeString);
+DEFINE_POINTERP_PREDICATE(marlais_is_condition_p, Condition);
+DEFINE_POINTERP_PREDICATE(marlais_is_name_p, Name);
+DEFINE_POINTERP_PREDICATE(marlais_is_symbol_p, Symbol);
+DEFINE_POINTERP_PREDICATE(marlais_is_slotd_p, SlotDescriptor);
+DEFINE_POINTERP_PREDICATE(marlais_is_instance_p, Instance);
+DEFINE_POINTERP_PREDICATE(marlais_is_class_p, Class);
+DEFINE_POINTERP_PREDICATE(marlais_is_singleton_p, Singleton);
+DEFINE_POINTERP_PREDICATE(marlais_is_subclass_p, Subclass);
+DEFINE_POINTERP_PREDICATE(marlais_is_limint_p, LimitedIntType);
+DEFINE_POINTERP_PREDICATE(marlais_is_union_p, UnionType);
+DEFINE_POINTERP_PREDICATE(marlais_is_primitive_p, Primitive);
+DEFINE_POINTERP_PREDICATE(marlais_is_generic_p, GenericFunction);
+DEFINE_POINTERP_PREDICATE(marlais_is_method_p, Method);
+DEFINE_POINTERP_PREDICATE(marlais_is_nextmethod_p, NextMethod);
+DEFINE_POINTERP_PREDICATE(marlais_is_values_p, Values);
+DEFINE_POINTERP_PREDICATE(marlais_is_unwindfunction_p, UnwindFunction);
+DEFINE_POINTERP_PREDICATE(marlais_is_unwindprotect_p, UnwindProtect);
+DEFINE_POINTERP_PREDICATE(marlais_is_foreignptr_p, ForeignPtr);
+DEFINE_POINTERP_PREDICATE(marlais_is_environment_p, Environment);
+DEFINE_POINTERP_PREDICATE(marlais_is_module_p, Module);
+DEFINE_POINTERP_PREDICATE(marlais_is_stdio_p, StdioHandle);
+DEFINE_POINTERP_PREDICATE(marlais_is_handle_p, ObjectHandle);
+DEFINE_POINTERP_PREDICATE(marlais_is_mpf_p, BigFloat);
+DEFINE_POINTERP_PREDICATE(marlais_is_mpq_p, BigRatio);
+DEFINE_POINTERP_PREDICATE(marlais_is_mpz_p, BigInteger);
 #undef DEFINE_POINTERP_PREDICATE

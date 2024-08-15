@@ -168,7 +168,7 @@ marlais_make_bytestring_entrypoint (Object args)
   marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<byte-string>");
 
   if (fill_obj != MARLAIS_FALSE) {
-    if (!CHARP (fill_obj)) {
+    if (!marlais_is_bchar_p (fill_obj)) {
       marlais_error ("make: value of fill: must be a character for <string> class",
                      fill_obj, NULL);
     }
@@ -212,7 +212,7 @@ marlais_make_wstring_entrypoint (Object args)
   marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<wide-string>");
 
   if (fill_obj != MARLAIS_FALSE) {
-    if (!WCHARP (fill_obj)) {
+    if (!marlais_is_wchar_p (fill_obj)) {
       marlais_error ("make: value of fill: must be a <wide-character> for <wide-string> class",
                      fill_obj, NULL);
     }
@@ -260,7 +260,7 @@ marlais_make_ustring_entrypoint (Object args)
   marlais_make_sequence_entry(args, &size, &size_obj, &fill_obj, "<unicode-string>");
 
   if (fill_obj != MARLAIS_FALSE) {
-    if (!UCHARP (fill_obj)) {
+    if (!marlais_is_uchar_p (fill_obj)) {
       marlais_error ("make: value of fill: must be a <unicode-character> for <unicode-string> class",
                      fill_obj, NULL);
     }
@@ -323,7 +323,7 @@ bstring_element (Object string, Object index, Object default_ob)
 {
     int i;
 
-    i = INTVAL (index);
+    i = marlais_get_int (index);
     if ((i < 0) || (i >= BYTESTRSIZE (string))) {
       if (default_ob == marlais_default) {
         marlais_error ("element: argument out of range", string, index, NULL);
@@ -339,7 +339,7 @@ bstring_element_setter (Object string, Object index, Object val)
 {
     int i;
 
-    i = INTVAL (index);
+    i = marlais_get_int (index);
     if ((i < 0) || (i >= BYTESTRSIZE (string))) {
       marlais_error ("element-setter: argument out of range", string, index, NULL);
     }
@@ -429,7 +429,7 @@ wstring_element (Object string, Object index, Object default_ob)
 {
     int i;
 
-    i = INTVAL (index);
+    i = marlais_get_int (index);
     if ((i < 0) || (i >= WIDESTRSIZE (string))) {
       if (default_ob == marlais_default) {
         marlais_error ("element: argument out of range", string, index, NULL);
@@ -445,7 +445,7 @@ wstring_element_setter (Object string, Object index, Object val)
 {
     int i;
 
-    i = INTVAL (index);
+    i = marlais_get_int (index);
     if ((i < 0) || (i >= WIDESTRSIZE (string))) {
       marlais_error ("element-setter: argument out of range", string, index, NULL);
     }
@@ -566,7 +566,7 @@ ustring_element (Object string, Object index, Object default_ob)
 {
     int i;
 
-    i = INTVAL (index);
+    i = marlais_get_int (index);
     if ((i < 0) || (i >= USTRSIZE (string))) {
       if (default_ob == marlais_default) {
         marlais_error ("element: argument out of range", string, index, NULL);
@@ -582,7 +582,7 @@ ustring_element_setter (Object string, Object index, Object val)
 {
     int i;
 
-    i = INTVAL (index);
+    i = marlais_get_int (index);
     if ((i < 0) || (i >= USTRSIZE (string))) {
       marlais_error ("element-setter: argument out of range", string, index, NULL);
     }

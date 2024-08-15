@@ -52,7 +52,7 @@ stream_eof_object_p (Object obj)
 static Object
 stream_write(Object fd_obj, Object str)
 {
-  int fd = INTVAL(fd_obj);
+  int fd = marlais_get_int(fd_obj);
   write(fd, BYTESTRVAL(str), BYTESTRSIZE(str));
   return MARLAIS_UNSPECIFIED;
 }
@@ -60,7 +60,7 @@ stream_write(Object fd_obj, Object str)
 Object
 stream_close (Object fd_obj)
 {
-  int fd = INTVAL(fd_obj);
+  int fd = marlais_get_int(fd_obj);
   if(fd > 2) { /* ignore closing input/output/error */
     close (fd);
   }

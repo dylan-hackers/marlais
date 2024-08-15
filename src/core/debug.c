@@ -263,10 +263,10 @@ debug_show_bindings (Object args)
   struct binding **bindings, *binding;
   int frame_number;
 
-  if (marlais_list_length (args) != 1 || !INTEGERP (CAR (args))) {
+  if (marlais_list_length (args) != 1 || !marlais_is_integer_p (CAR (args))) {
     marlais_error ("show_bindings: requires a single <integer> argument", NULL);
   }
-  frame_number = INTVAL (CAR (args));
+  frame_number = marlais_get_int (CAR (args));
 
   for (frame = the_env, i = frame_number;
        i > 0 && frame != NULL;

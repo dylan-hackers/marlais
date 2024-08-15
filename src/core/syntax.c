@@ -233,15 +233,15 @@ bind_variables (Object init_list,
   Object first, last, new;
   int i, value_count;
 
-  if (!PAIRP (init_list) || EMPTYLISTP (CDR (init_list))) {
+  if (!marlais_is_pair_p (init_list) || marlais_is_nil_p (CDR (init_list))) {
     marlais_error ("Initializer list requires at least two elements", init_list, NULL);
   }
   variables = init = init_list;
-  while (!EMPTYLISTP (CDR (init))) {
+  while (!marlais_is_nil_p (CDR (init))) {
     init = CDR (init);
   }
   val = marlais_eval (CAR (init));
-  if (VALUESP (val)) {
+  if (marlais_is_values_p (val)) {
     value_count = 0;
     while (variables != init) {
       variable = CAR (variables);
@@ -322,8 +322,8 @@ add_variable_binding (Object var,
 {
   Object type;
 
-  if (PAIRP (var)) {
-    if (!PAIRP (CDR (var))) {
+  if (marlais_is_pair_p (var)) {
+    if (!marlais_is_pair_p (CDR (var))) {
       marlais_error ("badly formed variable", var, NULL);
     }
     type = marlais_eval (SECOND (var));
@@ -357,10 +357,10 @@ eval_body (Object body, Object null_body_result_value)
 {
     Object result = null_body_result_value;
 
-    while (!EMPTYLISTP (body)) {
+    while (!marlais_is_nil_p (body)) {
       Object next = CDR (body);
 
-      if (EMPTYLISTP (next)) {
+      if (marlais_is_nil_p (next)) {
         result = marlais_tail_eval (CAR (body));
       } else {
         result = marlais_eval (CAR (body));
@@ -377,7 +377,7 @@ and_eval (Object form)
     Object clauses, val, ret;
 
     clauses = CDR (form);
-    while (!EMPTYLISTP (clauses)) {
+    while (!marlais_is_nil_p (clauses)) {
       /* evaluate one expression */
       val = ret = marlais_eval (CAR (clauses));
       /* return last value */
@@ -385,7 +385,7 @@ and_eval (Object form)
         break;
       }
       /* extract first value */
-      if (VALUESP (ret)) {
+      if (marlais_is_values_p (ret)) {
         if(!FIRSTVALP (ret)) {
           marlais_error("and: expression returned no values\n");
         }
@@ -417,7 +417,7 @@ bind_eval (Object form)
     struct environment *enclosing_env;
     struct environment *binding_env;
 
-    if (EMPTYLISTP (CDR (form))) {
+    if (marlais_is_nil_p (CDR (form))) {
       marlais_error ("malformed bind form", form, NULL);
     }
     bindings = SECOND (form);
@@ -426,7 +426,7 @@ bind_eval (Object form)
     /* <pcb> rather than pop the environements, just restore at the end. */
     initial_env = the_env;
 
-    while (!EMPTYLISTP (bindings)) {
+    while (!marlais_is_nil_p (bindings)) {
       /* <pcb> some hackery to make bind work correctly. */
       enclosing_env = the_env;
       marlais_push_scope (CAR (form));
@@ -456,7 +456,7 @@ local_bind_eval (Object form)
     struct environment *enclosing_env;
     struct environment *binding_env;
 
-    if (EMPTYLISTP (CDR (form))) {
+    if (marlais_is_nil_p (CDR (form))) {
       marlais_error ("malformed local binding", form, NULL);
     }
     bindings = SECOND (form);
@@ -467,7 +467,7 @@ local_bind_eval (Object form)
     binding_env = the_env;
     the_env = enclosing_env;
 
-    while (!EMPTYLISTP (bindings)) {
+    while (!marlais_is_nil_p (bindings)) {
       bind_variables (CAR (bindings), 0, 0, binding_env);
       bindings = CDR (bindings);
     }
@@ -481,14 +481,14 @@ local_bind_rec_eval (Object form)
 {
     Object bindings;
 
-    if (EMPTYLISTP (CDR (form))) {
+    if (marlais_is_nil_p (CDR (form))) {
       marlais_error ("malformed local binding", form, NULL);
     }
     bindings = SECOND (form);
 
     marlais_push_scope (CAR (form));
 
-    while (!EMPTYLISTP (bindings)) {
+    while (!marlais_is_nil_p (bindings)) {
       bind_variables (CAR (bindings), 0, 0, the_env);
       bindings = CDR (bindings);
     }
@@ -508,14 +508,14 @@ unbinding_begin_eval (Object form)
     if (marlais_list_length (form) < 2) {
       marlais_error ("Bad unbinding-begin form", form, NULL);
     }
-    i = INTVAL (SECOND (form));
+    i = marlais_get_int (SECOND (form));
 
     res = MARLAIS_UNSPECIFIED;
     form = CDR (CDR (form));
-    while (PAIRP (form)) {
+    while (marlais_is_pair_p (form)) {
       Object next_form = CDR (form);
 
-      if (EMPTYLISTP (next_form)) {
+      if (marlais_is_nil_p (next_form)) {
         res = marlais_tail_eval (CAR (form));
       } else {
         res = marlais_eval (CAR (form));
@@ -536,16 +536,16 @@ bind_exit_eval (Object form)
     int err;
     Object exit_obj, sym, body, sec, ret;
 
-    if (EMPTYLISTP (CDR (form))) {
+    if (marlais_is_nil_p (CDR (form))) {
       marlais_error ("malformed bind-exit form", form, NULL);
     }
     sec = SECOND (form);
-    if (!PAIRP (sec)) {
+    if (!marlais_is_pair_p (sec)) {
       marlais_error ("bind-exit: second argument must be a list containing a symbol", sec, NULL);
     }
     sym = CAR (sec);
     body = CDR (CDR (form));
-    if (!NAMEP (sym)) {
+    if (!marlais_is_name_p (sym)) {
       marlais_error ("bind-exit: bad exit procedure name", sym, NULL);
     }
 
@@ -567,7 +567,7 @@ bind_exit_eval (Object form)
       /* evaluate without tail calls */
       /* TODO consider different implementation? */
       ret = MARLAIS_FALSE;
-      while (!EMPTYLISTP (body)) {
+      while (!marlais_is_nil_p (body)) {
         ret = marlais_eval (CAR (body));
         body = CDR (body);
       }
@@ -585,7 +585,7 @@ bind_methods_eval (Object form)
   Object specs, body, spec, ret;
   Object name, params, method_body, method;
 
-  if (EMPTYLISTP (CDR (form))) {
+  if (marlais_is_nil_p (CDR (form))) {
     marlais_error ("bind-methods: bad form", form, NULL);
   }
   specs = SECOND (form);
@@ -593,12 +593,12 @@ bind_methods_eval (Object form)
 
   marlais_push_scope (CAR (form));
   /* first bind method names to dummy values */
-  if (!PAIRP (specs)) {
+  if (!marlais_is_pair_p (specs)) {
     marlais_error ("bind-methods: First argument must be a list of method bindings",
                    specs,
                    NULL);
   }
-  while (!EMPTYLISTP (specs)) {
+  while (!marlais_is_nil_p (specs)) {
     spec = CAR (specs);
     name = FIRST (spec);
     marlais_add_local (name, MARLAIS_FALSE, 0, the_env);
@@ -607,10 +607,10 @@ bind_methods_eval (Object form)
 
   /* now, actually make the methods */
   specs = SECOND (form);
-  while (!EMPTYLISTP (specs)) {
+  while (!marlais_is_nil_p (specs)) {
     spec = CAR (specs);
     name = FIRST (spec);
-    if (EMPTYLISTP (CDR (spec))) {
+    if (marlais_is_nil_p (CDR (spec))) {
       marlais_error ("bind-methods: incomplete method specification", spec, NULL);
     }
     params = SECOND (spec);
@@ -631,11 +631,11 @@ boundp_eval (Object form)
   Object cdr = CDR (form);
   Object sym;
 
-  if (EMPTYLISTP (cdr)) {
+  if (marlais_is_nil_p (cdr)) {
     marlais_error ("bound?: missing symbol", form, NULL);
   }
   sym = CAR (cdr);
-  if (!NAMEP (sym)) {
+  if (!marlais_is_name_p (sym)) {
     marlais_error ("bound?: argument must be a symbol", sym, NULL);
   }
   return (marlais_symbol_value (sym) == NULL ? MARLAIS_FALSE : MARLAIS_TRUE);
@@ -647,38 +647,38 @@ case_eval (Object form)
   Object target_form, branches, branch;
   Object match_list, consequents, ret;
 
-  if (EMPTYLISTP (CDR (form))) {
+  if (marlais_is_nil_p (CDR (form))) {
     marlais_error ("malformed case", form, NULL);
   }
   target_form = marlais_eval (CAR (CDR (form)));
 
-  if (EMPTYLISTP (CDR (CDR (form)))) {
+  if (marlais_is_nil_p (CDR (CDR (form)))) {
     marlais_error ("malformed case", form, NULL);
   }
   branches = CDR (CDR (form));
-  while (!EMPTYLISTP (branches)) {
+  while (!marlais_is_nil_p (branches)) {
     branch = CAR (branches);
-    if (!PAIRP (branch)) {
+    if (!marlais_is_pair_p (branch)) {
       marlais_error ("case: malformed branch", branch, NULL);
     }
     match_list = CAR (branch);
     if ((match_list == MARLAIS_TRUE) || (match_list == else_keyword)) {
       consequents = CDR (branch);
       ret = MARLAIS_FALSE;
-      while (!EMPTYLISTP (consequents)) {
+      while (!marlais_is_nil_p (consequents)) {
         ret = marlais_eval (CAR (consequents));
         consequents = CDR (consequents);
       }
       return (ret);
     }
-    if (!PAIRP (match_list)) {
+    if (!marlais_is_pair_p (match_list)) {
       marlais_error ("select: malformed test expression", match_list, NULL);
     }
-    while (!EMPTYLISTP (match_list)) {
+    while (!marlais_is_nil_p (match_list)) {
       if (marlais_identical_p (CAR (match_list), target_form)) {
         consequents = CDR (branch);
         ret = MARLAIS_FALSE;
-        while (!EMPTYLISTP (consequents)) {
+        while (!marlais_is_nil_p (consequents)) {
           ret = marlais_eval (CAR (consequents));
           consequents = CDR (consequents);
         }
@@ -697,11 +697,11 @@ cond_eval (Object form)
   Object clauses, clause, test, ret;
 
   clauses = CDR (form);
-  while (!EMPTYLISTP (clauses)) {
+  while (!marlais_is_nil_p (clauses)) {
     clause = CAR (clauses);
     test = CAR (clause);
     ret = marlais_eval (test);
-    if (VALUESP (ret)) {
+    if (marlais_is_values_p (ret)) {
       ret = FIRSTVAL (ret);
     }
     if (ret != MARLAIS_FALSE) {
@@ -715,7 +715,7 @@ cond_eval (Object form)
 
 static void define_eval_helper(Object form, int top_level, int constant)
 {
-  if (EMPTYLISTP (CDR (form)) || EMPTYLISTP (CDR (CDR (form)))) {
+  if (marlais_is_nil_p (CDR (form)) || marlais_is_nil_p (CDR (CDR (form)))) {
     marlais_error ("DEFINE form requires at least two args: (define {<var>} <init>)",
                    form, NULL);
   } else {
@@ -753,17 +753,17 @@ define_class_eval (Object form)
   int primary_class = 0, primary_free_seen = 0;
   int flags = MARLAIS_CLASS_DEFAULT;
 
-  if (EMPTYLISTP (CDR (tmp_form))) {
+  if (marlais_is_nil_p (CDR (tmp_form))) {
     marlais_error ("malfored define-class (no arguments)", form, NULL);
   }
   tmp_form = CDR (tmp_form);
-  if (PAIRP (CAR (tmp_form))) {
+  if (marlais_is_pair_p (CAR (tmp_form))) {
     modifiers = CAR (tmp_form);
     if (CAR (modifiers) != modifiers_keyword) {
       marlais_error ("malformed define-class (bad modifiers)", form, NULL);
     }
     for (modifiers = CDR (modifiers);
-         PAIRP (modifiers);
+         marlais_is_pair_p (modifiers);
          modifiers = CDR (modifiers)) {
       modifier = CAR (modifiers);
       if (modifier == abstract_symbol || modifier == concrete_symbol) {
@@ -795,7 +795,7 @@ define_class_eval (Object form)
   }
   name = CAR (tmp_form);
   tmp_form = CDR (tmp_form);
-  if (EMPTYLISTP (tmp_form)) {
+  if (marlais_is_nil_p (tmp_form)) {
     marlais_error ("malformed define-class (no superclass)", form, NULL);
   }
   /*
@@ -807,7 +807,7 @@ define_class_eval (Object form)
   CLASSNAME (obj) = name;
   marlais_add_export (name, obj, 0);
   supers = marlais_map1 (marlais_eval, CAR (tmp_form));
-  if(EMPTYLISTP(supers)) supers = marlais_cons (marlais_class_object, MARLAIS_NIL);
+  if(marlais_is_nil_p(supers)) supers = marlais_cons (marlais_class_object, MARLAIS_NIL);
   slots = marlais_make_slot_descriptor_list (CDR (tmp_form), 1);
   marlais_make_getter_setter_gfs (slots);
 
@@ -841,12 +841,12 @@ check_function_syntax (Object form, Object* name, Object* params, char* def)
   strcpy(err_msg, def);
   strcat(err_msg, ": ");
 
-  if (EMPTYLISTP (CDR (form))) {
+  if (marlais_is_nil_p (CDR (form))) {
     strcat(err_msg, "missing name");
     marlais_error (err_msg, form, NULL);
   }
   *name = SECOND (form);
-  if (EMPTYLISTP (CDR (CDR (form)))) {
+  if (marlais_is_nil_p (CDR (CDR (form)))) {
     strcat(err_msg, "missing parameters");
     marlais_error (err_msg, form, NULL);
   }
@@ -900,13 +900,13 @@ define_module_eval (Object form)
   struct marlais_module *the_module;
 
   /* Bogus for now */
-  if (PAIRP (form) && marlais_list_length (form) >= 2 && NAMEP (SECOND (form))) {
+  if (marlais_is_pair_p (form) && marlais_list_length (form) >= 2 && marlais_is_name_p (SECOND (form))) {
     the_module = marlais_make_module (SECOND (form));
     clauses = CDR (CDR (form));
 
-    while (PAIRP (clauses)) {
+    while (marlais_is_pair_p (clauses)) {
       clause = CAR (clauses);
-      if (PAIRP (clause)) {
+      if (marlais_is_pair_p (clause)) {
         if (CAR (clause) == use_symbol) {
           Object imports = all_symbol;
           Object exclusions = MARLAIS_NIL;
@@ -924,9 +924,9 @@ define_module_eval (Object form)
           if (marlais_list_length (clause) >= 2) {
             module_name = SECOND (clause);
             clause = CDR (CDR (clause));
-            while (PAIRP (clause)) {
+            while (marlais_is_pair_p (clause)) {
               option = CAR (clause);
-              if (PAIRP (option)) {
+              if (marlais_is_pair_p (option)) {
                 if (CAR (option) == import_keyword &&
                     !imports_specified) {
                   imports = CDR (option);
@@ -998,25 +998,25 @@ dotimes_eval (Object form)
   Object clause, var, intval, resform, body, res;
   int i;
 
-  if (EMPTYLISTP (CDR (form))) {
+  if (marlais_is_nil_p (CDR (form))) {
     marlais_error ("malformed dotimes expression", form, NULL);
   }
   clause = CAR (CDR (form));
-  if (!PAIRP (clause)) {
+  if (!marlais_is_pair_p (clause)) {
     marlais_error ("second arg to dotimes must be a list", clause, NULL);
   }
   var = CAR (clause);
-  if (!NAMEP (var)) {
+  if (!marlais_is_name_p (var)) {
     marlais_error ("dotimes: first value in spec clause must be a symbol", var, NULL);
   }
-  if (EMPTYLISTP (CDR (clause))) {
+  if (marlais_is_nil_p (CDR (clause))) {
     marlais_error ("dotimes: must specifiy an upper bound", form, NULL);
   }
   intval = marlais_eval (CAR (CDR (clause)));
-  if (!INTEGERP (intval)) {
+  if (!marlais_is_integer_p (intval)) {
     marlais_error ("dotimes: upper bound must an integer", intval, NULL);
   }
-  if (!EMPTYLISTP (CDR (CDR (clause)))) {
+  if (!marlais_is_nil_p (CDR (CDR (clause)))) {
     resform = CAR (CDR (CDR (clause)));
   } else {
     resform = NULL;
@@ -1024,10 +1024,10 @@ dotimes_eval (Object form)
 
   marlais_push_scope (CAR (form));
   marlais_add_local (var, MARLAIS_FALSE, 0, the_env);
-  for (i = 0; i < INTVAL (intval); ++i) {
+  for (i = 0; i < marlais_get_int (intval); ++i) {
     marlais_change_binding (var, marlais_make_integer (i));
     body = CDR (CDR (form));
-    while (!EMPTYLISTP (body)) {
+    while (!marlais_is_nil_p (body)) {
       res = marlais_eval (CAR (body));
       body = CDR (body);
     }
@@ -1095,9 +1095,9 @@ for_eval (Object form)
   Object var_forms, test_form, return_forms;
   Object clause_types, vars, inits, body, ret;
 
-  if ((!PAIRP (CDR (form))) ||
-      (!PAIRP (CDR (CDR (form)))) ||
-      (!PAIRP (THIRD (form)))) {
+  if ((!marlais_is_pair_p (CDR (form))) ||
+      (!marlais_is_pair_p (CDR (CDR (form)))) ||
+      (!marlais_is_pair_p (THIRD (form)))) {
     marlais_error ("malformed FOR", form, NULL);
   }
   test_form = FIRST (THIRD (form));
@@ -1134,7 +1134,7 @@ for_eval (Object form)
       }
       /* IRM Step 6 */
       body = CDR (CDR (CDR (form)));
-      while (!EMPTYLISTP (body)) {
+      while (!marlais_is_nil_p (body)) {
         marlais_eval (CAR (body));
         body = CDR (body);
       }
@@ -1153,10 +1153,10 @@ for_eval (Object form)
     } while (1);
     marlais_pop_scope (); /* To get rid of collection variables */
   }
-  if (!PAIRP (return_forms)) {
+  if (!marlais_is_pair_p (return_forms)) {
     ret = MARLAIS_FALSE;
   } else {
-    while (PAIRP (return_forms)) {
+    while (marlais_is_pair_p (return_forms)) {
       ret = marlais_eval (CAR (return_forms));
       return_forms = CDR (return_forms);
     }
@@ -1168,8 +1168,8 @@ for_eval (Object form)
 static Object
 get_variable (Object var_spec)
 {
-  if ((PAIRP (var_spec) && (marlais_list_length (var_spec) != 2)) &&
-      (!NAMEP (var_spec))) {
+  if ((marlais_is_pair_p (var_spec) && (marlais_list_length (var_spec) != 2)) &&
+      (!marlais_is_name_p (var_spec))) {
     marlais_error ("Bad variable specification", var_spec, NULL);
   }
   return var_spec;
@@ -1178,7 +1178,7 @@ get_variable (Object var_spec)
 static Object
 variable_name (Object var_spec)
 {
-  return (PAIRP (var_spec)) ? CAR (var_spec) : var_spec;
+  return (marlais_is_pair_p (var_spec)) ? CAR (var_spec) : var_spec;
 }
 
 static void
@@ -1191,10 +1191,10 @@ get_vars_and_inits (Object var_forms,
   Object clause_type, var, init;
   Object rest, by, start, termination, bound, negative;
 
-  while (PAIRP (var_forms)) {
+  while (marlais_is_pair_p (var_forms)) {
     var_form = CAR (var_forms);
     var_spec = CAR (var_form);
-    if (PAIRP (var_spec) || NAMEP (var_spec)) {
+    if (marlais_is_pair_p (var_spec) || marlais_is_name_p (var_spec)) {
 
       /* Explicit Step Clause: init is of form
        *    (init-value . next-value)
@@ -1227,9 +1227,9 @@ get_vars_and_inits (Object var_forms,
       start = marlais_eval (CAR (rest));
       rest = CDR (rest);
       bound = MARLAIS_FALSE;
-      if (PAIRP (rest)) {
+      if (marlais_is_pair_p (rest)) {
         termination = CAR (rest);
-        if (PAIRP (CDR (rest)) &&
+        if (marlais_is_pair_p (CDR (rest)) &&
             (termination == to_symbol || termination == above_symbol ||
              termination == below_symbol)) {
           bound = CAR (CDR (rest));
@@ -1238,8 +1238,8 @@ get_vars_and_inits (Object var_forms,
           marlais_error ("for: badly formed numeric clause", var_form, NULL);
         }
       }
-      if (PAIRP (rest)) {
-        if (PAIRP (CDR (rest)) && CAR (rest) == by_symbol) {
+      if (marlais_is_pair_p (rest)) {
+        if (marlais_is_pair_p (CDR (rest)) && CAR (rest) == by_symbol) {
           by = marlais_eval (CAR (CDR (rest)));
         } else {
           marlais_error ("for: badly formed numeric clause", var_form, NULL);
@@ -1247,7 +1247,7 @@ get_vars_and_inits (Object var_forms,
       }
       switch (marlais_object_repr (by)) {
       case Integer:
-        negative = (INTVAL (by) >= 0) ? MARLAIS_FALSE : MARLAIS_TRUE;
+        negative = (marlais_get_int (by) >= 0) ? MARLAIS_FALSE : MARLAIS_TRUE;
         break;
       case DoubleFloat:
         negative = (DFLOATVAL (by) >= 0) ? MARLAIS_FALSE : MARLAIS_TRUE;
@@ -1291,7 +1291,7 @@ initialize_step_and_numeric_vars (Object clause_types,
                                   Object vars,
                                   Object inits)
 {
-  while (PAIRP (clause_types)) {
+  while (marlais_is_pair_p (clause_types)) {
     if (CAR (clause_types) == variable_keyword) {
       /* explicit step clause */
       marlais_add_local (CAR (vars), CAR (CAR (inits)), 0, the_env);
@@ -1316,7 +1316,7 @@ initialize_collection_inits (Object clause_types,
 {
   Object clause_type, protocol;
 
-  while (PAIRP (clause_types)) {
+  while (marlais_is_pair_p (clause_types)) {
     clause_type = CAR (clause_types);
     if (clause_type == collection_keyword) {
       protocol = marlais_eval (marlais_cons (forward_iteration_protocol_symbol,
@@ -1351,7 +1351,7 @@ exhausted_numeric_or_collection_clauses (Object clause_types,
   Object protocol;
   Object init, current, increment, negative, termination, bound;
 
-  while (PAIRP (clause_types)) {
+  while (marlais_is_pair_p (clause_types)) {
     clause_type = CAR (clause_types);
     if (clause_type == collection_keyword) {
       protocol = FIRST (CAR (inits));
@@ -1431,7 +1431,7 @@ initialize_collection_variables (Object clause_types,
 {
   Object protocol;
 
-  while (PAIRP (clause_types)) {
+  while (marlais_is_pair_p (clause_types)) {
     if (CAR (clause_types) == collection_keyword) {
       protocol = FIRST (CAR (inits));
 
@@ -1461,7 +1461,7 @@ update_explicit_and_numeric_clauses (Object clause_types,
   vars_copy = vars;
   new_values_ptr = &new_values;
 
-  while (PAIRP (clause_types)) {
+  while (marlais_is_pair_p (clause_types)) {
     new_value = MARLAIS_NIL;
     clause_type = CAR (clause_types);
     if (clause_type == variable_keyword) {
@@ -1487,8 +1487,8 @@ update_explicit_and_numeric_clauses (Object clause_types,
   }
 
   /* Do the bindings */
-  while (PAIRP (vars_copy)) {
-    if (!EMPTYLISTP (new_values)) {
+  while (marlais_is_pair_p (vars_copy)) {
+    if (!marlais_is_nil_p (new_values)) {
       marlais_modify_value (variable_name (CAR (vars_copy)),
                     CAR (new_values));
       vars_copy = CDR (vars_copy);
@@ -1504,7 +1504,7 @@ update_collection_variables (Object clause_types,
 {
   Object protocol;
 
-  while (PAIRP (clause_types)) {
+  while (marlais_is_pair_p (clause_types)) {
     if (CAR (clause_types) == collection_keyword) {
       protocol = FIRST (CAR (inits));
 
@@ -1546,10 +1546,10 @@ for_each_eval (Object form)
   if (!cur_el_fun) {
     marlais_error ("for-each: no current-element function defined", NULL);
   }
-  if (EMPTYLISTP (CDR (form))) {
+  if (marlais_is_nil_p (CDR (form))) {
     marlais_error ("malformed FOR-EACH", form, NULL);
   }
-  if (EMPTYLISTP (CDR (CDR (form)))) {
+  if (marlais_is_nil_p (CDR (CDR (form)))) {
     marlais_error ("malformed FOR-EACH", form, NULL);
   }
   test_form = FIRST (THIRD (form));
@@ -1570,7 +1570,7 @@ for_each_eval (Object form)
 
   while (marlais_eval (test_form) == MARLAIS_FALSE) {
     body = CDR (CDR (CDR (form)));
-    while (!EMPTYLISTP (body)) {
+    while (!marlais_is_nil_p (body)) {
       marlais_eval (CAR (body));
       body = CDR (body);
     }
@@ -1583,14 +1583,14 @@ for_each_eval (Object form)
 
     /* modify bindings */
     temp_vars = vars;
-    while (!EMPTYLISTP (temp_vars)) {
+    while (!marlais_is_nil_p (temp_vars)) {
       marlais_modify_value (CAR (temp_vars), CAR (vals));
       temp_vars = CDR (temp_vars);
       vals = CDR (vals);
     }
   }
 
-  if (EMPTYLISTP (return_forms)) {
+  if (marlais_is_nil_p (return_forms)) {
     return (MARLAIS_FALSE);
   } else {
     ret = eval_body (return_forms, MARLAIS_FALSE);
@@ -1604,19 +1604,19 @@ if_eval (Object form)
 {
   Object testval, thenform, elseform;
 
-  if (EMPTYLISTP (CDR (form))) {
+  if (marlais_is_nil_p (CDR (form))) {
     marlais_error ("malformed if expression", form, NULL);
   }
   testval = SECOND (form);
-  if (EMPTYLISTP (CDR (CDR (form)))) {
+  if (marlais_is_nil_p (CDR (CDR (form)))) {
     marlais_error ("malformed if expression", form, NULL);
   }
   thenform = THIRD (form);
-  if (EMPTYLISTP (CDR (CDR (CDR (form))))) {
+  if (marlais_is_nil_p (CDR (CDR (CDR (form))))) {
     marlais_error ("if expression must have else clause", form, NULL);
   }
   elseform = FOURTH (form);
-  if (!EMPTYLISTP (CDR (CDR (CDR (CDR (form)))))) {
+  if (!marlais_is_nil_p (CDR (CDR (CDR (CDR (form)))))) {
     marlais_error ("if: too many arguments", NULL);
   }
   testval = marlais_eval (testval);
@@ -1633,7 +1633,7 @@ method_eval (Object form)
 {
   Object params, body, method;
 
-  if (EMPTYLISTP (CDR (form))) {
+  if (marlais_is_nil_p (CDR (form))) {
     marlais_error ("method: missing parameters", form, NULL);
   }
   params = SECOND (form);
@@ -1648,13 +1648,13 @@ or_eval (Object form)
   Object clauses, ret;
 
   clauses = CDR (form);
-  while (!EMPTYLISTP (clauses)) {
-    if (EMPTYLISTP (CDR (clauses))) {
+  while (!marlais_is_nil_p (clauses)) {
+    if (marlais_is_nil_p (CDR (clauses))) {
       return marlais_tail_eval (CAR (clauses));
     }
     ret = marlais_eval (CAR (clauses));
-    if (VALUESP (ret)) {
-      if (PAIRP (CDR (clauses))) {
+    if (marlais_is_values_p (ret)) {
+      if (marlais_is_pair_p (CDR (clauses))) {
         ret = FIRSTVAL (ret);
       } else {
         return (ret);
@@ -1681,29 +1681,29 @@ qq_help (Object skel)
 {
   Object head, tmp, tail;
 
-  if (EMPTYLISTP (skel) || NAMEP (skel) || !PAIRP (skel)) {
+  if (marlais_is_nil_p (skel) || marlais_is_name_p (skel) || !marlais_is_pair_p (skel)) {
     return skel;
   } else {
     head = skel;
     tail = CDR (skel);
     if (CAR (head) == unquote_symbol) {
-      if (!EMPTYLISTP (tail)) {
-        if (!EMPTYLISTP (CDR (tail))) {
+      if (!marlais_is_nil_p (tail)) {
+        if (!marlais_is_nil_p (CDR (tail))) {
           marlais_error ("Too many arguments to unquote", NULL);
         }
         return marlais_eval (CAR (tail));
       } else {
         return marlais_error ("missing argument to unquote", NULL);
       }
-    } else if (PAIRP (CAR (head))
+    } else if (marlais_is_pair_p (CAR (head))
                && CAR (CAR (head)) == unquote_splicing_symbol) {
 
-      if (!EMPTYLISTP (CDR (CAR (head)))) {
+      if (!marlais_is_nil_p (CDR (CAR (head)))) {
         tmp = marlais_eval (CAR (CDR (CAR (head))));
         CAR (head) = CAR (tmp);
         CDR (head) = CDR (tmp);
         tmp = head;
-        while (!EMPTYLISTP (CDR (tmp))) {
+        while (!marlais_is_nil_p (CDR (tmp))) {
           tmp = CDR (tmp);
         }
         CDR (tmp) = qq_help (tail);
@@ -1729,43 +1729,43 @@ select_eval (Object form)
   Object target_form, test, branches, branch;
   Object match_list, consequents, ret;
 
-  if (EMPTYLISTP (CDR (form))) {
+  if (marlais_is_nil_p (CDR (form))) {
     marlais_error ("malformed select", form, NULL);
   }
   target_form = marlais_eval (CAR (CDR (form)));
 
-  if (EMPTYLISTP (CDR (CDR (form)))) {
+  if (marlais_is_nil_p (CDR (CDR (form)))) {
     marlais_error ("malformed select", form, NULL);
   }
   test = marlais_eval (CAR (CDR (CDR (form))));
 
-  if (EMPTYLISTP (CDR (CDR (CDR (form))))) {
+  if (marlais_is_nil_p (CDR (CDR (CDR (form))))) {
     marlais_error ("malformed select", form, NULL);
   }
   branches = CDR (CDR (CDR (form)));
-  while (!EMPTYLISTP (branches)) {
+  while (!marlais_is_nil_p (branches)) {
     branch = CAR (branches);
-    if (!PAIRP (branch)) {
+    if (!marlais_is_pair_p (branch)) {
       marlais_error ("select: malformed branch", branch, NULL);
     }
     match_list = CAR (branch);
     if ((match_list == MARLAIS_TRUE) || (match_list == else_keyword)) {
       consequents = CDR (branch);
-      while (!EMPTYLISTP (consequents)) {
+      while (!marlais_is_nil_p (consequents)) {
         ret = marlais_eval (CAR (consequents));
         consequents = CDR (consequents);
       }
       return (ret);
     }
-    if (!PAIRP (match_list)) {
+    if (!marlais_is_pair_p (match_list)) {
       marlais_error ("select: malformed test expression", match_list, NULL);
     }
-    while (!EMPTYLISTP (match_list)) {
+    while (!marlais_is_nil_p (match_list)) {
       ret = MARLAIS_FALSE;
       if (marlais_apply (test, marlais_make_list (target_form, marlais_eval (CAR (match_list)),
                                        NULL)) != MARLAIS_FALSE) {
         consequents = CDR (branch);
-        while (!EMPTYLISTP (consequents)) {
+        while (!marlais_is_nil_p (consequents)) {
           ret = marlais_eval (CAR (consequents));
           consequents = CDR (consequents);
         }
@@ -1783,12 +1783,12 @@ set_eval (Object form)
 {
   Object sym, val;
 
-  if (EMPTYLISTP (CDR (form))) {
+  if (marlais_is_nil_p (CDR (form))) {
     marlais_error ("set!: missing forms", form, NULL);
   }
   sym = SECOND (form);
 
-  if (PAIRP (sym)) {
+  if (marlais_is_pair_p (sym)) {
     /*
      * <pcb> let's keep things in the spirit of the old language.
      * (set! (slot obj ...) new-value) should become
@@ -1798,7 +1798,7 @@ set_eval (Object form)
                        marlais_devalue (marlais_cons (THIRD (form), CDR (sym)))));
 
   }
-  if (EMPTYLISTP (CDR (CDR (form)))) {
+  if (marlais_is_nil_p (CDR (CDR (form)))) {
     marlais_error ("set!: missing forms", form, NULL);
   }
   val = marlais_devalue (marlais_eval (THIRD (form)));
@@ -1809,7 +1809,7 @@ set_eval (Object form)
 static Object
 set_module_eval (Object form)
 {
-  if (PAIRP (form) && marlais_list_length (form) == 2 && SYMBOLP (SECOND (form))) {
+  if (marlais_is_pair_p (form) && marlais_list_length (form) == 2 && marlais_is_symbol_p (SECOND (form))) {
     Object sym = marlais_devalue (CDR (form));
     Object mod = marlais_find_module (sym);
     if (mod == MARLAIS_FALSE) {
@@ -1827,7 +1827,7 @@ unless_eval (Object form)
 {
   Object test, body;
 
-  if (EMPTYLISTP (CDR (form))) {
+  if (marlais_is_nil_p (CDR (form))) {
     marlais_error ("unless: missing forms", form, NULL);
   }
   test = SECOND (form);
@@ -1843,7 +1843,7 @@ until_eval (Object form)
 {
   Object test, body, forms;
 
-  if (EMPTYLISTP (CDR (form))) {
+  if (marlais_is_nil_p (CDR (form))) {
     marlais_error ("malformed until statment", form, NULL);
   }
   test = CAR (CDR (form));
@@ -1851,7 +1851,7 @@ until_eval (Object form)
 
   while (marlais_eval (test) == MARLAIS_FALSE) {
     forms = body;
-    while (!EMPTYLISTP (forms)) {
+    while (!marlais_is_nil_p (forms)) {
       marlais_eval (CAR (forms));
       forms = CDR (forms);
     }
@@ -1864,7 +1864,7 @@ unwind_protect_eval (Object form)
 {
   Object protected, cleanups, unwind, ret;
 
-  if (EMPTYLISTP (CDR (form))) {
+  if (marlais_is_nil_p (CDR (form))) {
     marlais_error ("unwind-protect: missing forms", form, NULL);
   }
   protected = SECOND (form);
@@ -1888,7 +1888,7 @@ while_eval (Object form)
 {
   Object test, body, forms;
 
-  if (EMPTYLISTP (CDR (form))) {
+  if (marlais_is_nil_p (CDR (form))) {
     marlais_error ("malformed while statment", form, NULL);
   }
   test = CAR (CDR (form));
@@ -1896,7 +1896,7 @@ while_eval (Object form)
 
   while (marlais_eval (test) != MARLAIS_FALSE) {
     forms = body;
-    while (!EMPTYLISTP (forms)) {
+    while (!marlais_is_nil_p (forms)) {
       marlais_eval (CAR (forms));
       forms = CDR (forms);
     }

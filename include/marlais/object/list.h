@@ -51,10 +51,10 @@ struct marlais_pair {
 #define FIFTH(obj)      (CAR(CDR(CDR(CDR(CDR(obj))))))
 
 static inline bool NULLP(Object obj) {
-  return EMPTYLISTP(obj);
+  return marlais_is_nil_p(obj);
 }
 static inline bool LISTP(Object obj) {
-  return NULLP(obj)||PAIRP(obj);
+  return NULLP(obj)||marlais_is_pair_p(obj);
 }
 
 /* Register list primitives */

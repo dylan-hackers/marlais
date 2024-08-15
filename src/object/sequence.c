@@ -44,7 +44,7 @@ void marlais_make_sequence_entry
   *size_obj = NULL;
   *fill_obj = MARLAIS_FALSE;
 
-  while (!EMPTYLISTP (args)) {
+  while (!marlais_is_nil_p (args)) {
     if (FIRST (args) == size_keyword) {
       *size_obj = SECOND (args);
     } else if (FIRST (args) == fill_keyword) {
@@ -57,10 +57,10 @@ void marlais_make_sequence_entry
     args = CDR (CDR (args));
   }
   if (*size_obj) {
-    if (!INTEGERP (*size_obj)) {
+    if (!marlais_is_integer_p (*size_obj)) {
       marlais_error ("make: value of size: argument must be an integer",
                      size_obj, NULL);
     }
-    *size = INTVAL (*size_obj);
+    *size = marlais_get_int (*size_obj);
   }
 }

@@ -80,7 +80,7 @@ marlais_print_object (Object fd, Object obj, int escaped)
     fprintf (fp, "#()");
     break;
   case Integer:
-    fprintf (fp, "%"MARLAIS_INTEGER_PRI, INTVAL (obj));
+    fprintf (fp, "%"MARLAIS_INTEGER_PRI, marlais_get_int (obj));
     break;
   case Ratio:
     fprintf (fp, "%"MARLAIS_INTEGER_PRI "/%" MARLAIS_INTEGER_PRI,
@@ -187,7 +187,7 @@ marlais_print_object (Object fd, Object obj, int escaped)
     fprintf (fp, "{union");
     {
       Object ptr;
-      for (ptr = UNIONLIST (obj); PAIRP (ptr); ptr = CDR (ptr)) {
+      for (ptr = UNIONLIST (obj); marlais_is_pair_p (ptr); ptr = CDR (ptr)) {
         fprintf (fp, " ");
         marlais_print_object (fd, CAR (ptr), escaped);
       }
@@ -308,7 +308,7 @@ apply_print (Object fd, Object obj, int escaped)
   } else {
     Object stream;
     print_file_from_fd(fd);
-    if(INTVAL(fd) == 1) {
+    if(marlais_get_int(fd) == 1) {
       stream = standard_output_symbol;
     } else {
       stream = standard_error_symbol;
@@ -326,7 +326,7 @@ apply_print (Object fd, Object obj, int escaped)
 static FILE*
 print_file_from_fd(Object fd)
 {
-  switch(INTVAL(fd)) {
+  switch(marlais_get_int(fd)) {
   case 0:
     marlais_error ("print_object: cannot send output to input-stream", fd, NULL);
     break;
@@ -349,12 +349,12 @@ print_pair (Object fd, Object pair, int escaped)
   fprintf (fp, "#(");
   apply_print (fd, CAR (pair), escaped);
   cdr = CDR (pair);
-  while (PAIRP (cdr)) {
+  while (marlais_is_pair_p (cdr)) {
     fprintf (fp, ", ");
     apply_print (fd, CAR (cdr), escaped);
     cdr = CDR (cdr);
   }
-  if (!EMPTYLISTP (cdr)) {
+  if (!marlais_is_nil_p (cdr)) {
     fprintf (fp, " . ");
     apply_print (fd, cdr, escaped);
   }
@@ -433,11 +433,11 @@ print_slot_values (Object fd, Object instance, Object slotds, int escaped)
   int i;
   FILE *fp = print_file_from_fd(fd);
 
-  if (EMPTYLISTP (slotds))
+  if (marlais_is_nil_p (slotds))
     return;
 
   for (i = 0;
-       PAIRP (slotds);
+       marlais_is_pair_p (slotds);
        i++, slotds = CDR (slotds)) {
     fprintf (fp, ", ");
     marlais_print_object (fd, GFNAME (SLOTDGETTER (CAR (slotds))), escaped);
@@ -453,11 +453,11 @@ print_constant_slot_values (Object fd, Object const_slotds, int escaped)
   int i;
   FILE *fp = print_file_from_fd(fd);
 
-  if (EMPTYLISTP (const_slotds))
+  if (marlais_is_nil_p (const_slotds))
     return;
 
   for (i = 0;
-       PAIRP (const_slotds);
+       marlais_is_pair_p (const_slotds);
        i++, const_slotds = CDR (const_slotds)) {
     slotd = CAR (const_slotds);
     fprintf (fp, ", ");
@@ -476,11 +476,11 @@ print_virtual_slot_values (Object fd, Object instance, Object slotds,
   Object slotd;
   FILE *fp = print_file_from_fd(fd);
 
-  if (EMPTYLISTP (slotds))
+  if (marlais_is_nil_p (slotds))
     return;
 
   for (slotd = CAR (slotds);
-       !EMPTYLISTP (slotds);
+       !marlais_is_nil_p (slotds);
        slotds = CDR (slotds)) {
     fprintf (fp, ", ");
     marlais_print_object (fd, SLOTDGETTER (slotd), escaped);
@@ -505,7 +505,7 @@ print_class_slot_values (Object fd, Object class, int escaped, int first)
                      escaped);
 
   for (supers = CLASSSUPERS (class);
-       PAIRP (supers);
+       marlais_is_pair_p (supers);
        supers = CDR (supers)) {
     print_class_slot_values (fd, CAR (supers), escaped, 0);
   }
@@ -566,10 +566,10 @@ print_list_helper(Object fd, Object members, int escaped,
 {
   FILE *fp = print_file_from_fd(fd);
 
-  if (PAIRP (members)) {
+  if (marlais_is_pair_p (members)) {
     print_fn (fd, CAR (members), escaped);
     members = CDR (members);
-    while (PAIRP (members)) {
+    while (marlais_is_pair_p (members)) {
       fprintf (fp, "%s", separator);
       print_fn (fd, CAR (members), escaped);
       members = CDR (members);
@@ -595,13 +595,13 @@ print_generic_function (Object fd, Object gf, int escaped)
   int some_args_printed = 0;
   FILE *fp = print_file_from_fd(fd);
 
-  if (NAMEP (GFNAME (gf))) {
+  if (marlais_is_name_p (GFNAME (gf))) {
     fprintf (fp, "{the generic function %s (", SYMBOLNAME (GFNAME (gf)));
   } else {
     fprintf (fp, "{an anonymous generic function (");
   }
 
-  if (PAIRP (GFREQPARAMS (gf))) {
+  if (marlais_is_pair_p (GFREQPARAMS (gf))) {
     print_param_list (fd, GFREQPARAMS (gf), escaped);
     some_args_printed = 1;
   }
@@ -613,7 +613,7 @@ print_generic_function (Object fd, Object gf, int escaped)
     }
     some_args_printed = 1;
   }
-  if (PAIRP (GFKEYPARAMS (gf))) {
+  if (marlais_is_pair_p (GFKEYPARAMS (gf))) {
     if (some_args_printed) {
       fprintf (fp, ", #key ");
     } else {
@@ -638,7 +638,7 @@ print_method (Object fd, Object method, int escaped)
   } else {
     fprintf (fp, "{an anonymous method (");
   }
-  if (PAIRP (METHREQPARAMS (method))) {
+  if (marlais_is_pair_p (METHREQPARAMS (method))) {
     print_param_list (fd, METHREQPARAMS (method), escaped);
     some_args_printed = 1;
   }
@@ -650,7 +650,7 @@ print_method (Object fd, Object method, int escaped)
     }
     some_args_printed = 1;
   }
-  if (PAIRP (METHKEYPARAMS (method)) || METHALLKEYS (method)) {
+  if (marlais_is_pair_p (METHKEYPARAMS (method)) || METHALLKEYS (method)) {
     if (some_args_printed) {
       fprintf (fp, ", #key ");
     } else {
@@ -733,12 +733,12 @@ print_array_help (Object fd, Object dims, Object *els, int escaped)
   FILE *fp = print_file_from_fd(fd);
 
   fprintf (fp, "#(");
-  if (EMPTYLISTP (dims)) {
+  if (marlais_is_nil_p (dims)) {
     apply_print (fd, els[cur_el++], escaped);
     return;
   }
-  dim_val = INTVAL (CAR (dims));
-  if (EMPTYLISTP (CDR (dims))) {
+  dim_val = marlais_get_int (CAR (dims));
+  if (marlais_is_nil_p (CDR (dims))) {
     for (i = 0; i < dim_val; ++i) {
       apply_print (fd, els[cur_el++], escaped);
       if (i < (dim_val - 1)) {

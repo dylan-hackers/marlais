@@ -98,12 +98,12 @@ marlais_compute_class_precedence_list (Object class)
 
   precedence_list_rev = MARLAIS_NIL;
   minimal_element_set = marlais_cons (CAR (slist), MARLAIS_NIL);
-  while (PAIRP (minimal_element_set)) {
+  while (marlais_is_pair_p (minimal_element_set)) {
 
 #if EBUG
     fprintf (stdout, " ** Minimal elements **\n   ");
     for (a_set = minimal_element_set;
-         PAIRP (a_set);
+         marlais_is_pair_p (a_set);
          a_set = CDR (a_set)) {
       marlais_print_object (standard_output_symbol,
                             CLASSNAME (PNODE_CLASS (CAR (a_set))),
@@ -112,7 +112,7 @@ marlais_compute_class_precedence_list (Object class)
     }
     fprintf (stderr, "\n");
 #endif
-    if (EMPTYLISTP (CDR (minimal_element_set))) {
+    if (marlais_is_nil_p (CDR (minimal_element_set))) {
       /*
        * There is a unique minimal element in the graph.
        *  Add it to the precedence list, remove it from the
@@ -133,17 +133,17 @@ marlais_compute_class_precedence_list (Object class)
        * the one that is closest to the head of precedence_list_rev.
        */
       for (class_list = precedence_list_rev;
-           PAIRP (class_list);
+           marlais_is_pair_p (class_list);
            class_list = CDR (class_list)) {
         for (candidate_list_ptr = &minimal_element_set;
-             PAIRP (*candidate_list_ptr);
+             marlais_is_pair_p (*candidate_list_ptr);
              candidate_list_ptr = &CDR (*candidate_list_ptr)) {
           if (direct_superclassp (PNODE_CLASS (CAR (*candidate_list_ptr)),
                                   CAR (class_list))) {
             break;
           }
         }
-        if (PAIRP (*candidate_list_ptr)) {
+        if (marlais_is_pair_p (*candidate_list_ptr)) {
           /* We found the right candidate.
            * Remove the predecessor arcs for this node.
            * Remove it from the slist.
@@ -162,7 +162,7 @@ marlais_compute_class_precedence_list (Object class)
            * desirable than the class ordering that is yielded
            * by the normal rule.
            */
-          if (EMPTYLISTP (minimal_element_set)) {
+          if (marlais_is_nil_p (minimal_element_set)) {
             minimal_element_set = find_minimal_elements (slist);
           }
 #else
@@ -171,13 +171,13 @@ marlais_compute_class_precedence_list (Object class)
           break;
         }
       }
-      if (EMPTYLISTP (class_list)) {
+      if (marlais_is_nil_p (class_list)) {
         marlais_error ("Whoa!  the class list was empty making precedence list",
                        NULL);
       }
     }
   }
-  if (PAIRP (slist)) {
+  if (marlais_is_pair_p (slist)) {
     marlais_error ("Unable to construct class precedence list", class, NULL);
   }
   /* Cache the result */
@@ -195,14 +195,14 @@ print_pnode (Object pnode)
   fprintf (stderr, "[%s]\n Successors: ",
            SYMBOLNAME (CLASSNAME (PNODE_CLASS (pnode))));
   for (nlist = PNODE_SUCCESSORS (pnode);
-       PAIRP (nlist);
+       marlais_is_pair_p (nlist);
        nlist = CDR (nlist)) {
     fprintf (stderr, "%s ",
              SYMBOLNAME (CLASSNAME (PNODE_CLASS (CAR (nlist)))));
   }
   fprintf (stderr, "\n Predecessors: ");
   for (nlist = PNODE_PREDECESSORS (pnode);
-       PAIRP (nlist);
+       marlais_is_pair_p (nlist);
        nlist = CDR (nlist)) {
     fprintf (stderr, "%s ",
              SYMBOLNAME (CLASSNAME (PNODE_CLASS (CAR (nlist)))));
@@ -215,7 +215,7 @@ print_slist (Object slist)
 {
   Object p;
 
-  for (p = slist; PAIRP (p); p = CDR (p)) {
+  for (p = slist; marlais_is_pair_p (p); p = CDR (p)) {
     marlais_print_object (standard_output_symbol, CLASSNAME (PNODE_CLASS (CAR (p))), 0);
     fprintf (stdout, " ");
   }
@@ -227,16 +227,16 @@ construct_slist (Object *sptr, Object class)
   Object *tmp_sptr = sptr;
   Object sclist;
 
-  while (PAIRP (*tmp_sptr)) {
+  while (marlais_is_pair_p (*tmp_sptr)) {
     if (class == PNODE_CLASS (CAR (*tmp_sptr)))
       break;
     tmp_sptr = &CDR (*tmp_sptr);
   }
-  if (EMPTYLISTP (*tmp_sptr)) {
+  if (marlais_is_nil_p (*tmp_sptr)) {
     *tmp_sptr = marlais_cons (MAKE_PNODE (class), MARLAIS_NIL);
   }
   for (sclist = CLASSSUPERS (class);
-       PAIRP (sclist);
+       marlais_is_pair_p (sclist);
        sclist = CDR (sclist)) {
     construct_slist (sptr, CAR (sclist));
   }
@@ -247,7 +247,7 @@ add_new_at_end (Object *lst, Object elt)
 {
     Object ret = *lst;
 
-    while (PAIRP (*lst)) {
+    while (marlais_is_pair_p (*lst)) {
         if (CAR (*lst) == elt) {
             return ret;
         }
@@ -291,11 +291,11 @@ decorate_slist_with_precedence (Object slist, Object class)
   Object q, p;
 
   for (q = marlais_cons (class, MARLAIS_NIL), p = CLASSSUPERS (class);
-       PAIRP (p);
+       marlais_is_pair_p (p);
        q = p, p = CDR (p)) {
     record_precedence (slist, CAR (q), CAR (p));
   }
-  for (p = CLASSSUPERS (class); PAIRP (p); p = CDR (p)) {
+  for (p = CLASSSUPERS (class); marlais_is_pair_p (p); p = CDR (p)) {
     decorate_slist_with_precedence (slist, CAR (p));
   }
 }
@@ -306,7 +306,7 @@ remove_predecessor_arcs (Object node)
   Object succ_list;
 
   for (succ_list = PNODE_SUCCESSORS (node);
-       PAIRP (succ_list);
+       marlais_is_pair_p (succ_list);
        succ_list = CDR (succ_list)) {
     remove_one_predecessor_arc (CAR (succ_list), node);
   }
@@ -342,7 +342,7 @@ remove_successor_from_predecessors (Object node)
   Object pred_list;
 
   for (pred_list = PNODE_PREDECESSORS (node);
-       PAIRP (pred_list);
+       marlais_is_pair_p (pred_list);
        pred_list = CDR (pred_list)) {
     remove_one_successor_arc (CAR (pred_list), node);
   }
@@ -354,7 +354,7 @@ remove_node_from_slist (Object *slist, Object node)
   Object *tmp_ptr;
 
   tmp_ptr = slist;
-  while (PAIRP (*tmp_ptr)) {
+  while (marlais_is_pair_p (*tmp_ptr)) {
     if (CAR (*tmp_ptr) == node) {
       *tmp_ptr = CDR (*tmp_ptr);
       return;
@@ -374,7 +374,7 @@ direct_superclassp (Object super, Object sub)
   Object supers;
 
   for (supers = CLASSSUPERS (sub);
-       PAIRP (supers);
+       marlais_is_pair_p (supers);
        supers = CDR (supers)) {
     if (CAR (supers) == super)
       return 1;
@@ -387,8 +387,8 @@ find_minimal_elements (Object slist)
 {
   Object mins = MARLAIS_NIL;
 
-  while (PAIRP (slist)) {
-    if (EMPTYLISTP (PNODE_PREDECESSORS (CAR (slist)))) {
+  while (marlais_is_pair_p (slist)) {
+    if (marlais_is_nil_p (PNODE_PREDECESSORS (CAR (slist)))) {
       mins = marlais_cons (CAR (slist), mins);
     }
     slist = CDR (slist);

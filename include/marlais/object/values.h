@@ -61,13 +61,13 @@ struct marlais_values {
 /* Iterate multiple values */
 #define MARLAIS_VALUES_FOREACH(_values,_idxvar,_valvar)                 \
   for(_idxvar = 0,                                                      \
-        _valvar = (VALUESP((_values))                                   \
+        _valvar = (marlais_is_values_p((_values))                                   \
                    ? VALUESELS((_values))[_idxvar]                      \
                    : (_values));                                        \
-      (VALUESP((_values)) && _idxvar < VALUESNUM((_values)))            \
-        ||((!VALUESP((_values))) && _idxvar < 1);                       \
+      (marlais_is_values_p((_values)) && _idxvar < VALUESNUM((_values)))            \
+        ||((!marlais_is_values_p((_values))) && _idxvar < 1);                       \
       _idxvar++,                                                        \
-        _valvar=VALUESP((_values))                                      \
+        _valvar=marlais_is_values_p((_values))                                      \
         ? VALUESELS((_values))[_idxvar]                                 \
         : MARLAIS_UNSPECIFIED)
 

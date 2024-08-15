@@ -116,7 +116,7 @@ prim_eq (Object obj1, Object obj2, Object rest)
   }
 
   /* iterate through the rest */
-  while (!EMPTYLISTP (rest)) {
+  while (!marlais_is_nil_p (rest)) {
     obj1 = obj2;
     obj2 = CAR(rest);
     rest = CDR(rest);
